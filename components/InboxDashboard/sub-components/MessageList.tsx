@@ -1,0 +1,213 @@
+// MessageList component with virtualization
+
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ChatCircle } from "@phosphor-icons/react";
+import { VariableSizeList as List } from "react-window";
+import type { Conversation, Message } from "../types";
+import { getMessageItemSize } from "../utils/channelUtils";
+import MessageRow from "./MessageRow";
+
+interface MessageListProps {
+  messages: Message[];
+  selectedConversation?: Conversation;
+  isLoading: boolean;
+  typingUsers: string[];
+  onlineUsers: string[];
+}
+
+/**
+ * Virtualized message list component
+ */
+export const MessageList: React.FC<MessageListProps> = ({
+  messages,
+  selectedConversation,
+  isLoading,
+  typingUsers,
+  onlineUsers,
+}) => {
+  const [hoveredMessage, setHoveredMessage] = useState<string | null>(null);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<List>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prevMessageCountRef = useRef(0);
+
+  // Auto-scroll to bottom when new messages arrive (but not on initial load)
+  useEffect(() => {
+    if (messages.length > 0) {
+      if (isInitialLoad) {
+        // On initial load, scroll to bottom without animation and mark as loaded
+        setTimeout(() => {
+          if (listRef.current) {
+            listRef.current.scrollToItem(messages.length - 1, "end");
+          } else {
+            messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+          }
+          setIsInitialLoad(false);
+        }, 100);
+      } else if (messages.length > prevMessageCountRef.current) {
+        // Only auto-scroll if new messages were added (not initial load)
+        scrollToBottom();
+      }
+      prevMessageCountRef.current = messages.length;
+    }
+  }, [messages.length, isInitialLoad]);
+
+  // Handle scroll to detect if user is at bottom
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    const isAtBottom = scrollHeight - scrollTop <= clientHeight + 100;
+    setShowScrollToBottom(!isAtBottom && messages.length > 0);
+  };
+
+  // Scroll to bottom function
+  const scrollToBottom = (smooth = true) => {
+    if (listRef.current) {
+      listRef.current.scrollToItem(messages.length - 1, "end");
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto" });
+    }
+    setShowScrollToBottom(false);
+  };
+
+  // Loading skeleton
+  const LoadingSkeleton = () => (
+    <div className="flex space-x-3 spacing-3">
+      <div className="animate-pulse">
+        <div className="h-8 w-8 rounded-ds-full bg-gray-300"></div>
+      </div>
+      <div className="flex-1 animate-pulse space-y-2">
+        <div className="h-4 w-1/4 rounded bg-gray-300"></div>
+        <div className="h-16 w-3/4 rounded-ds-lg bg-gray-300"></div>
+      </div>
+    </div>
+  );
+
+  // Empty state
+  const EmptyState = () => (
+    <div className="flex h-full flex-col items-center justify-center text-[var(--fl-color-text-muted)]">
+      <ChatCircle className="mb-4 h-16 w-16" />
+      <h3 className="mb-2 text-lg font-medium">Start the conversation</h3>
+      <p className="max-w-sm text-center">
+        Send a message to {selectedConversation?.customer_name} to begin the conversation.
+      </p>
+    </div>
+  );
+
+  // Typing indicator component
+  const TypingIndicator = () => {
+    if (typingUsers.length === 0) return null;
+
+    return (
+      <div className="flex space-x-3 spacing-3">
+        <div className="flex-shrink-0">
+          <img
+            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+              selectedConversation?.customer_name || "User"
+            )}&size=32&background=e5e7eb&color=374151`}
+            alt="Customer"
+            className="h-8 w-8 rounded-ds-full"
+          />
+        </div>
+        <div className="flex-1">
+          <div className="bg-background max-w-xs rounded-ds-lg px-4 py-2">
+            <div className="flex space-x-1">
+              <div className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400"></div>
+              <div className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400" style={{ animationDelay: "0.1s" }}></div>
+              <div className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400" style={{ animationDelay: "0.2s" }}></div>
+            </div>
+          </div>
+          <p className="mt-1 text-tiny text-[var(--fl-color-text-muted)]">
+            {typingUsers.length === 1 ? `${typingUsers[0]} is typing...` : `${typingUsers.length} people are typing...`}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  // Row renderer for virtualization
+  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const message = messages[index];
+    return (
+      <MessageRow
+        key={message.id}
+        message={message}
+        selectedConversation={selectedConversation}
+        hoveredMessage={hoveredMessage}
+        setHoveredMessage={setHoveredMessage}
+        style={style}
+      />
+    );
+  };
+
+  // Determine if we should use virtualization
+  const shouldVirtualize = messages.length > 100;
+
+  return (
+    <div className="message-container messages relative flex min-h-0 flex-1 flex-col bg-[var(--fl-color-background-subtle)]" data-testid="messages">
+      {/* Connection status removed - was showing inappropriate warnings */}
+
+      {/* Messages container */}
+      <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto" onScroll={handleScroll}>
+        {isLoading ? (
+          <div className="space-y-3 spacing-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <LoadingSkeleton key={i} />
+            ))}
+          </div>
+        ) : messages.length === 0 ? (
+          <EmptyState />
+        ) : shouldVirtualize ? (
+          // Use virtualization for large message lists
+          <List
+            ref={listRef}
+            height={Math.max(400, window.innerHeight - 400)} // Ensure minimum height with dynamic calculation
+            width="100%" // Required prop for react-window
+            itemCount={messages.length}
+            itemSize={getMessageItemSize}
+            itemData={messages}
+            className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300"
+          >
+            {Row}
+          </List>
+        ) : (
+          // Regular rendering for smaller lists
+          <div className="overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+            <div className="space-y-0">
+              {messages.map((message) => (
+                <MessageRow
+                  key={message.id}
+                  message={message}
+                  selectedConversation={selectedConversation}
+                  hoveredMessage={hoveredMessage}
+                  setHoveredMessage={setHoveredMessage}
+                />
+              ))}
+            </div>
+
+            {/* Typing indicator */}
+            <TypingIndicator />
+
+            {/* Scroll anchor */}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      {/* Scroll to bottom button */}
+      {showScrollToBottom && (
+        <button
+          onClick={() => scrollToBottom()}
+          className="bg-primary absolute bottom-4 right-4 z-10 rounded-ds-full spacing-3 text-white shadow-card-deep transition-colors hover:bg-blue-700"
+          aria-label="Scroll to bottom"
+        >
+          <ArrowDown className="h-5 w-5" />
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default MessageList;

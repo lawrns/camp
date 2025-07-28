@@ -1,0 +1,662 @@
+/**
+ * INBOX ULTIMATE - Consolidated Professional Styling
+ * 
+ * Single source of truth for all inbox UI
+ * Matches Intercom/LiveChat quality standards
+ * 
+ * Architecture:
+ * - Design tokens from tokens.css
+ * - Mobile-first responsive design
+ * - Glass morphism effects
+ * - 60fps smooth animations
+ * - Accessibility compliant
+ */
+
+@import './tokens.css';
+
+/* ============================================================================
+   INBOX LAYOUT SYSTEM - Professional Grid Architecture
+   ============================================================================ */
+
+.inbox-ultimate-container {
+    /* Core layout */
+    height: 100vh;
+    max-height: 100vh;
+    display: grid;
+    grid-template-areas:
+        "sidebar main details";
+    grid-template-columns:
+        minmax(280px, 320px) 1fr minmax(300px, 380px);
+    gap: 0;
+    overflow: hidden;
+
+    /* Glass morphism background */
+    background: linear-gradient(135deg,
+            rgba(248, 250, 252, 0.95) 0%,
+            rgba(241, 245, 249, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* Performance optimizations */
+    contain: layout style paint;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 768px) {
+    .inbox-ultimate-container {
+        grid-template-areas:
+            "main"
+            "navigation";
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        height: 100dvh;
+        /* Dynamic viewport height */
+    }
+}
+
+@media (max-width: 1024px) {
+    .inbox-ultimate-container {
+        grid-template-areas:
+            "sidebar main";
+        grid-template-columns:
+            minmax(260px, 280px) 1fr;
+    }
+}
+
+/* ============================================================================
+   CONVERSATION LIST - Professional Card Design
+   ============================================================================ */
+
+.conversation-list-panel {
+    grid-area: sidebar;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.9) 0%,
+            rgba(248, 250, 252, 0.95) 100%);
+    border-right: 1px solid var(--fl-color-border);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--fl-color-border-interactive) transparent;
+}
+
+.conversation-list-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.conversation-list-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.conversation-list-panel::-webkit-scrollbar-thumb {
+    background: var(--fl-color-border-interactive);
+    border-radius: 3px;
+    transition: background var(--fl-duration-150) var(--fl-ease-out);
+}
+
+.conversation-list-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--fl-color-border-strong);
+}
+
+/* Conversation card hover effects */
+.conversation-item {
+    position: relative;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+    will-change: transform, box-shadow;
+}
+
+.conversation-item:hover {
+    transform: translateY(-1px) scale(1.005);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.conversation-item:active {
+    transform: translateY(0) scale(0.995);
+    transition: transform 100ms ease-out;
+}
+
+/* Unread indicator animation */
+.conversation-item.unread::before {
+    animation: pulse-unread 2s ease-in-out infinite;
+}
+
+@keyframes pulse-unread {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* ============================================================================
+   CHAT VIEW - Modern Message Interface
+   ============================================================================ */
+
+.chat-main-panel {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--fl-color-border);
+    padding: var(--fl-space-4);
+    flex-shrink: 0;
+    z-index: 10;
+
+    /* Sticky header effect */
+    position: sticky;
+    top: 0;
+}
+
+.chat-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--fl-space-4);
+    scroll-behavior: smooth;
+
+    /* Performance optimizations */
+    contain: layout style;
+    will-change: scroll-position;
+}
+
+/* Message bubbles with enhanced styling */
+.message-bubble {
+    position: relative;
+    margin-bottom: var(--fl-space-4);
+    animation: message-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: bottom left;
+}
+
+@keyframes message-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.message-bubble.agent .message-content {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--fl-color-border);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.message-bubble.customer .message-content {
+    background: linear-gradient(135deg,
+            var(--fl-color-brand) 0%,
+            var(--fl-color-brand-hover) 100%);
+    color: white;
+    box-shadow:
+        0 4px 12px rgba(59, 130, 246, 0.25),
+        0 2px 4px rgba(59, 130, 246, 0.15);
+}
+
+/* ============================================================================
+   DETAILS SIDEBAR - Information Architecture
+   ============================================================================ */
+
+.details-sidebar-panel {
+    grid-area: details;
+    background: rgba(250, 251, 252, 0.95);
+    border-left: 1px solid var(--fl-color-border);
+    overflow-y: auto;
+
+    /* Glass effect */
+    backdrop-filter: blur(20px);
+}
+
+.details-section {
+    padding: var(--fl-space-6);
+    border-bottom: 1px solid var(--fl-color-border-subtle);
+}
+
+.details-section:last-child {
+    border-bottom: none;
+}
+
+.details-card {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--fl-color-border);
+    border-radius: var(--fl-radius-lg);
+    padding: var(--fl-space-4);
+    margin-bottom: var(--fl-space-4);
+    backdrop-filter: blur(10px);
+    transition: all 200ms ease-out;
+}
+
+.details-card:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--fl-color-border-interactive);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================================
+   MESSAGE COMPOSER - Enhanced Input Experience
+   ============================================================================ */
+
+.message-composer {
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid var(--fl-color-border);
+    padding: var(--fl-space-4);
+    backdrop-filter: blur(20px);
+    position: relative;
+    z-index: 5;
+}
+
+.composer-input-container {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--fl-space-3);
+    background: var(--fl-color-surface);
+    border: 2px solid var(--fl-color-border);
+    border-radius: var(--fl-radius-xl);
+    padding: var(--fl-space-3);
+    transition: all 200ms ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.composer-input-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(248, 250, 252, 0.05) 100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+}
+
+.composer-input-container:focus-within {
+    border-color: var(--fl-color-focus);
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.composer-input-container:focus-within::before {
+    opacity: 1;
+}
+
+.composer-textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--fl-color-text);
+    min-height: 44px;
+    max-height: 120px;
+    padding: var(--fl-space-2) 0;
+}
+
+.composer-textarea::placeholder {
+    color: var(--fl-color-text-placeholder);
+}
+
+/* Composer action buttons */
+.composer-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-2);
+}
+
+.composer-action-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--fl-color-text-subtle);
+    border-radius: var(--fl-radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 150ms ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.composer-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--fl-color-brand);
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+    border-radius: inherit;
+}
+
+.composer-action-btn:hover {
+    color: var(--fl-color-brand);
+    background: var(--fl-color-brand-subtle);
+    transform: scale(1.05);
+}
+
+.composer-action-btn:hover::before {
+    opacity: 0.1;
+}
+
+.composer-send-btn {
+    background: var(--fl-color-brand);
+    color: white;
+}
+
+.composer-send-btn:hover {
+    background: var(--fl-color-brand-hover);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.composer-send-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================================================
+   STATUS INDICATORS & BADGES
+   ============================================================================ */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fl-space-1);
+    padding: var(--fl-space-1) var(--fl-space-2);
+    border-radius: var(--fl-radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.status-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
+    transition: left 500ms ease-out;
+}
+
+.status-badge:hover::before {
+    left: 100%;
+}
+
+/* Status variants */
+.status-badge.online {
+    background: var(--fl-color-success);
+    border-color: var(--fl-color-success);
+    color: white;
+}
+
+.status-badge.away {
+    background: var(--fl-color-warning);
+    border-color: var(--fl-color-warning);
+    color: white;
+}
+
+.status-badge.offline {
+    background: var(--fl-color-text-subtle);
+    border-color: var(--fl-color-border);
+    color: white;
+}
+
+/* ============================================================================
+   ANIMATIONS & TRANSITIONS
+   ============================================================================ */
+
+/* Fade in animation for new elements */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide up animation for modals */
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            var(--fl-color-background-subtle) 0%,
+            var(--fl-color-background-muted) 50%,
+            var(--fl-color-background-subtle) 100%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+/* Focus indicators */
+.focus-ring {
+    outline: none;
+    position: relative;
+}
+
+.focus-ring:focus-visible::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid var(--fl-color-focus);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .conversation-item {
+        border: 2px solid;
+    }
+
+    .message-bubble {
+        border: 2px solid;
+    }
+
+    .status-badge {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================================================
+   DARK MODE SUPPORT (Future Enhancement)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+    .inbox-ultimate-container {
+        background: linear-gradient(135deg,
+                rgba(15, 23, 42, 0.95) 0%,
+                rgba(30, 41, 59, 0.98) 100%);
+    }
+
+    .conversation-list-panel {
+        background: linear-gradient(135deg,
+                rgba(30, 41, 59, 0.9) 0%,
+                rgba(15, 23, 42, 0.95) 100%);
+    }
+
+    .chat-main-panel {
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    .details-sidebar-panel {
+        background: rgba(30, 41, 59, 0.95);
+    }
+}
+
+/* ============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================================ */
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Optimize rendering for large lists */
+.virtualized-list {
+    contain: layout style paint;
+    overflow-anchor: none;
+}
+
+/* Optimize scrolling performance */
+.smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.elevation-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.elevation-2 {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.elevation-3 {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--fl-color-brand), var(--fl-color-brand-hover));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+@media (max-width: 480px) {
+    .inbox-ultimate-container {
+        height: 100dvh;
+        grid-template-rows: 1fr;
+    }
+
+    .conversation-list-panel,
+    .details-sidebar-panel {
+        display: none;
+    }
+
+    .chat-main-panel {
+        grid-area: main;
+    }
+
+    .composer-input-container {
+        border-radius: var(--fl-radius-lg);
+    }
+}
+
+@media (max-width: 640px) {
+    .details-section {
+        padding: var(--fl-space-4);
+    }
+
+    .chat-header {
+        padding: var(--fl-space-3);
+    }
+
+    .message-composer {
+        padding: var(--fl-space-3);
+    }
+}

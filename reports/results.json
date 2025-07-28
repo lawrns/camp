@@ -1,0 +1,365 @@
+{
+  "config": {
+    "configFile": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/playwright.config.ts",
+    "rootDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "../reports/html"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../reports/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "../reports/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Tablet",
+        "name": "Tablet",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth/basic-auth.spec.ts",
+      "file": "auth/basic-auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic Authentication Tests",
+          "file": "auth/basic-auth.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should login successfully with jam@jam.com",
+              "ok": true,
+              "tags": [
+                "jam.com"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9992,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "PAGE LOG: PostHog analytics disabled - no valid API key provided\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] Initializing auth state\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [ExtensionIsolation] Global extension isolation initialized\n"
+                        },
+                        {
+                          "text": "PAGE LOG: Failed to load resource: the server responded with a status of 401 (Unauthorized)\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] Session check failed: {status: 401, success: false, authenticated: false, error: No valid session found}\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] No authenticated session found (401)\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] Dashboard context, setting user to null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Fast Refresh] done in NaNms\n"
+                        },
+                        {
+                          "text": "PAGE LOG: 🔐 Auth state change: INITIAL_SESSION undefined\n"
+                        },
+                        {
+                          "text": "PAGE LOG: 🔐 Auth state change: SIGNED_IN 6f9916c7-3575-4a81-b58e-624ab066bebc\n"
+                        },
+                        {
+                          "text": "PAGE LOG: 🔐 Auth state change too recent, debouncing\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Fast Refresh] rebuilding\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Fast Refresh] done in 130ms\n"
+                        },
+                        {
+                          "text": "Dashboard content not found, checking other indicators...\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Realtime] Channel manager destroyed\n"
+                        },
+                        {
+                          "text": "PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n"
+                        },
+                        {
+                          "text": "PAGE LOG: PostHog analytics disabled - no valid API key provided\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] Initializing auth state\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [ExtensionIsolation] Global extension isolation initialized\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] User found: jam@jam.com\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [AuthProvider] User data: {id: 6f9916c7-3575-4a81-b58e-624ab066bebc, organizationId: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e, organizationRole: undefined}\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Realtime] Created new channel: org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [ConversationStats] Fetching stats for organization: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                        },
+                        {
+                          "text": "PAGE LOG: 🔐 Auth state change: INITIAL_SESSION 6f9916c7-3575-4a81-b58e-624ab066bebc\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [ConversationStats] Query result: {conversationCount: 0, hasError: false, errorCode: undefined, errorMessage: undefined}\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                        },
+                        {
+                          "text": "Successfully navigated to dashboard - authentication successful\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
+                        },
+                        {
+                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-28T17:48:40.771Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e5a5b64bdca758b1a06a-f8646da54a36ef38a0a7",
+              "file": "auth/basic-auth.spec.ts",
+              "line": 46,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-28T17:48:40.457Z",
+    "duration": 10654.805,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

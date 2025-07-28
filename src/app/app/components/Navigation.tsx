@@ -1,0 +1,89 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { ChatCircle, Fire, House, Gear as Settings, TestTube, User } from "@phosphor-icons/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navigationItems = [
+  {
+    name: "Dashboard",
+    href: "/app/dashboard",
+    icon: House,
+  },
+  {
+    name: "Live Chat",
+    href: "/app/chat",
+    icon: ChatCircle,
+  },
+  {
+    name: "Auth Test",
+    href: "/auth-test",
+    icon: TestTube,
+  },
+  {
+    name: "Auth Debug",
+    href: "/app/auth-debug",
+    icon: TestTube,
+  },
+  {
+    name: "Profile",
+    href: "/app/profile",
+    icon: User,
+  },
+  {
+    name: "Settings",
+    href: "/app/settings",
+    icon: Settings,
+  },
+];
+
+export function Navigation() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="ds-bg-surface ds-border-r ds-border-border ds-w-64 ds-min-h-screen ds-p-4 ds-shadow-md">
+      {/* Enhanced Logo with Design System */}
+      <div className="ds-flex ds-items-center ds-gap-3 ds-mb-8 ds-px-2">
+        <Fire size={32} weight="fill" className="ds-text-primary-500" />
+        <div>
+          <h1 className="ds-text-xl ds-font-bold ds-text-foreground">Campfire</h1>
+          <p className="ds-text-xs ds-text-muted-foreground">Customer Support</p>
+        </div>
+      </div>
+
+      {/* Enhanced Navigation Items with Design System */}
+      <div className="space-y-2">
+        {navigationItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
+                isActive
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              )}
+            >
+              <Icon size={20} weight={isActive ? "fill" : "regular"} />
+              {item.name}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Enhanced Status with Design System */}
+      <div className="ds-mt-8 ds-p-3 ds-bg-success-50 ds-rounded-lg ds-border ds-border-success-200">
+        <div className="ds-flex ds-items-center ds-gap-2 ds-mb-2">
+          <div className="ds-h-2 ds-w-2 ds-bg-success-500 ds-rounded-full"></div>
+          <span className="ds-text-sm ds-font-medium ds-text-success-800">System Status</span>
+        </div>
+        <p className="ds-text-xs ds-text-success-600">All systems operational</p>
+      </div>
+    </nav>
+  );
+}

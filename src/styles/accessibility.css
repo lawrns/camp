@@ -1,0 +1,545 @@
+/**
+ * WCAG 2.1 AA Accessibility Styles
+ * 
+ * Comprehensive accessibility support for widget consolidation:
+ * - High contrast mode support
+ * - Reduced motion preferences
+ * - Focus management
+ * - Screen reader optimizations
+ * - Keyboard navigation indicators
+ */
+
+/* ===== SCREEN READER UTILITIES ===== */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: inherit;
+}
+
+/* ===== FOCUS MANAGEMENT ===== */
+/* Enhanced focus indicators for better visibility */
+.focus-visible,
+*:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-widget-surface, #ffffff),
+    0 0 0 4px var(--color-primary-500, #3b82f6);
+  border-radius: var(--radius-md, 0.375rem);
+}
+
+/* Focus indicators for different element types */
+button:focus-visible,
+[role="button"]:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-widget-surface, #ffffff),
+    0 0 0 4px var(--color-primary-500, #3b82f6);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-widget-surface, #ffffff),
+    0 0 0 4px var(--color-primary-500, #3b82f6);
+  border-color: var(--color-primary-500, #3b82f6);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary-500, #3b82f6);
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
+/* Skip links for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary-600, #2563eb);
+  color: white;
+  padding: 8px 16px;
+  border-radius: var(--radius-md, 0.375rem);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium, 500);
+  z-index: 9999;
+  transition: top var(--duration-fast, 150ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* ===== HIGH CONTRAST MODE SUPPORT ===== */
+@media (prefers-contrast: high) {
+  :root {
+    /* Enhanced contrast ratios */
+  }
+
+  /* Ensure all interactive elements have visible borders */
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  a {
+    border: 2px solid currentColor;
+  }
+
+  /* Enhanced focus indicators */
+  *:focus-visible {
+    outline: 3px solid #000000;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  /* Remove subtle styling that may not be visible */
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none;
+    border: 2px solid currentColor;
+  }
+
+  /* Ensure sufficient contrast for gradients */
+  .bg-gradient-to-r,
+  .bg-gradient-to-b,
+  .bg-gradient-to-l,
+  .bg-gradient-to-t {
+    background: var(--color-primary-600, #2563eb);
+  }
+}
+
+/* Windows High Contrast Mode (forced-colors) */
+@media (forced-colors: active) {
+
+  /* Use system colors */
+  :root {}
+
+  /* Ensure borders are visible */
+  .widget-panel,
+  .widget-button {
+    border: 1px solid CanvasText;
+  }
+
+  /* Focus indicators */
+  *:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* Remove background images and gradients */
+  * {
+    background-image: none;
+  }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  /* Disable all animations and transitions */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+
+  /* Remove transform animations */
+  .widget-enter,
+  .widget-exit,
+  .fade-in,
+  .slide-in,
+  .scale-in {
+    animation: none;
+    transform: none;
+  }
+
+  /* Disable parallax and auto-playing media */
+  .parallax {
+    transform: none;
+  }
+
+  video,
+  audio {
+    autoplay: false;
+  }
+}
+
+/* ===== KEYBOARD NAVIGATION INDICATORS ===== */
+/* Show navigation hints for keyboard users */
+.keyboard-user .navigation-hint {
+  display: block;
+}
+
+.navigation-hint {
+  display: none;
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-neutral-600, #4b5563);
+  margin-top: var(--spacing-1, 0.25rem);
+}
+
+/* Keyboard navigation for lists */
+[role="listbox"] [role="option"]:focus,
+[role="menu"] [role="menuitem"]:focus,
+[role="tablist"] [role="tab"]:focus {
+  background-color: var(--color-primary-50, #eff6ff);
+  outline: 2px solid var(--color-primary-500, #3b82f6);
+  outline-offset: -2px;
+}
+
+/* ===== TOUCH TARGET SIZING ===== */
+/* Ensure minimum 44px touch targets for mobile accessibility */
+@media (pointer: coarse) {
+
+  button,
+  [role="button"],
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Adjust padding for smaller elements */
+  .btn-sm {
+    padding: 12px 16px;
+  }
+}
+
+/* ===== ERROR AND STATUS INDICATORS ===== */
+/* Accessible error styling */
+.error,
+[aria-invalid="true"] {
+  border-color: var(--color-error-500, #ef4444);
+  box-shadow: 0 0 0 1px var(--color-error-500, #ef4444);
+}
+
+.error-message {
+  color: var(--color-error-700, #b91c1c);
+  font-size: var(--font-size-sm, 0.875rem);
+  margin-top: var(--spacing-1, 0.25rem);
+}
+
+/* Success indicators */
+.success,
+[aria-invalid="false"] {
+  border-color: var(--color-success-500, #10b981);
+}
+
+.success-message {
+  color: var(--color-success-700, #047857);
+  font-size: var(--font-size-sm, 0.875rem);
+  margin-top: var(--spacing-1, 0.25rem);
+}
+
+/* Loading states */
+.loading {
+  position: relative;
+  color: transparent;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid var(--color-neutral-300, #d1d5db);
+  border-top-color: var(--color-primary-500, #3b82f6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disable loading animation for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .loading::after {
+    animation: none;
+    border-top-color: var(--color-primary-500, #3b82f6);
+  }
+}
+
+/* ===== LIVE REGIONS ===== */
+/* Styling for live regions that announce changes */
+[aria-live] {
+  /* Ensure live regions are positioned but not visible */
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Exception for visible live regions */
+[aria-live].visible {
+  position: static;
+  left: auto;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* ===== WIDGET-SPECIFIC ACCESSIBILITY ===== */
+/* Widget button accessibility */
+.widget-button {
+  /* Ensure minimum touch target */
+  min-width: 60px;
+  min-height: 60px;
+}
+
+.widget-button:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-widget-surface, #ffffff),
+    0 0 0 4px var(--color-primary-500, #3b82f6),
+    var(--shadow-widget, 0 20px 25px -5px rgb(0 0 0 / 0.1));
+}
+
+/* Widget panel accessibility */
+.widget-panel {
+  /* Ensure proper focus management */
+  isolation: isolate;
+}
+
+.widget-panel:focus-within {
+  /* Subtle indication when panel has focus */
+  box-shadow:
+    var(--shadow-widget, 0 20px 25px -5px rgb(0 0 0 / 0.1)),
+    0 0 0 1px var(--color-primary-500, #3b82f6);
+}
+
+/* Message accessibility */
+.message {
+  /* Ensure messages are properly announced */
+  scroll-margin-top: var(--spacing-4, 1rem);
+}
+
+.message[data-sender="ai"] {
+  /* Distinguish AI messages for screen readers */
+  position: relative;
+}
+
+.message[data-sender="ai"]::before {
+  content: "AI Assistant: ";
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ===== RESPONSIVE ACCESSIBILITY ===== */
+/* Adjust accessibility features for different screen sizes */
+@media (max-width: 480px) {
+
+  /* Larger touch targets on mobile */
+  button,
+  [role="button"],
+  a {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Larger focus indicators on mobile */
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  /* Adjust widget for mobile accessibility */
+  .widget-panel {
+    /* Ensure panel doesn't interfere with system navigation */
+    bottom: env(safe-area-inset-bottom, 20px);
+  }
+}
+
+/* ===== CROSS-BROWSER COMPATIBILITY ===== */
+/* Browser-specific fixes and fallbacks */
+
+/* Safari-specific fixes */
+.browser-safari .widget-panel {
+  /* Fix Safari backdrop-filter performance */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  /* Fix Safari border-radius with overflow */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.browser-safari.is-mobile .widget-panel {
+  /* Fix iOS Safari viewport height issues */
+  height: calc(var(--vh, 1vh) * 60);
+  max-height: calc(var(--vh, 1vh) * 80);
+}
+
+/* Firefox-specific fixes */
+.browser-firefox .widget-panel {
+  /* Fix Firefox scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-400) transparent;
+}
+
+.browser-firefox input,
+.browser-firefox textarea {
+  /* Fix Firefox input styling */
+  -moz-appearance: none;
+}
+
+/* Chrome/Edge-specific optimizations */
+.browser-chrome .widget-panel,
+.browser-edge .widget-panel {
+  /* Use hardware acceleration */
+  will-change: transform, opacity;
+}
+
+/* Mobile-specific optimizations */
+.is-mobile .widget-panel {
+  /* Larger touch targets on mobile */
+  --min-touch-target: 44px;
+}
+
+.is-mobile button,
+.is-mobile [role="button"] {
+  min-height: var(--min-touch-target, 44px);
+  min-width: var(--min-touch-target, 44px);
+}
+
+.is-mobile input,
+.is-mobile textarea {
+  /* Prevent zoom on iOS */
+  font-size: 16px;
+}
+
+/* Tablet-specific optimizations */
+.is-tablet .widget-panel {
+  /* Adjust size for tablet */
+  width: min(420px, 90vw);
+  height: min(650px, 80vh);
+}
+
+/* Landscape orientation adjustments */
+.landscape.is-mobile .widget-panel {
+  height: min(400px, 80vh);
+  width: min(500px, 90vw);
+}
+
+/* Keyboard open state */
+.keyboard-open .widget-panel {
+  /* Adjust height when keyboard is open */
+  height: 50vh;
+  bottom: 10px;
+}
+
+/* Touch device optimizations */
+.touch-device {
+  /* Disable text selection on touch devices */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.touch-device input,
+.touch-device textarea,
+.touch-device [contenteditable] {
+  /* Re-enable text selection for inputs */
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Slow connection optimizations */
+.slow-connection * {
+  /* Disable animations on slow connections */
+  animation-duration: 0ms;
+  transition-duration: 0ms;
+}
+
+.slow-connection .widget-panel {
+  /* Simplify styling for better performance */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* CSS Grid fallbacks */
+.no-css-grid .grid-layout {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.no-css-grid .grid-item {
+  flex: 1 1 auto;
+}
+
+/* Sticky position fallbacks */
+.no-sticky-position .sticky-header {
+  position: relative;
+}
+
+/* ===== PRINT ACCESSIBILITY ===== */
+@media print {
+
+  /* Ensure important content is visible when printed */
+  .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    clip: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide interactive elements that don't work in print */
+  .widget-button,
+  .widget-panel {
+    display: none;
+  }
+}
+
+/* ===== ENHANCED FOCUS RING ===== */
+.ds-focus-ring:focus,
+.ds-focus-ring:focus-visible {
+  outline: 2px solid var(--ds-color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Enhanced reduced motion for dashboard elements */
+@media (prefers-reduced-motion: reduce) {
+
+  .ds-metrics-bar,
+  .ds-dashboard-card {
+    transition: none !important;
+  }
+}

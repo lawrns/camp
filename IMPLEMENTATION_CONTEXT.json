@@ -1,0 +1,480 @@
+{
+  "project": {
+    "name": "Campfire v2 - AI-Powered Customer Support Platform",
+    "version": "2.0.0",
+    "description": "Enterprise-grade AI customer support platform with seamless human handoffs",
+    "repository": "/campfire-v2/",
+    "tech_stack": {
+      "frontend": "Next.js 15.4.4 + TypeScript + Tailwind CSS",
+      "backend": "Supabase + Drizzle ORM + tRPC",
+      "ai": "OpenAI GPT-4 + Anthropic Claude + RAG",
+      "realtime": "Supabase Realtime + WebSockets",
+      "testing": "Jest + Cypress + Playwright + Visual Testing"
+    }
+  },
+  "quality_standards": {
+    "code_quality": {
+      "typescript_strict": true,
+      "eslint_compliance": "error-free",
+      "prettier_formatting": "enforced",
+      "test_coverage": ">90%",
+      "code_review": "mandatory",
+      "documentation": "comprehensive"
+    },
+    "performance_benchmarks": {
+      "ai_response_time": "<2 seconds",
+      "realtime_latency": "<100ms",
+      "page_load_time": "<3 seconds",
+      "lighthouse_score": ">90",
+      "core_web_vitals": "all green",
+      "concurrent_users": "1000+",
+      "messages_per_hour": "10,000+"
+    },
+    "accessibility": {
+      "wcag_compliance": "AA level",
+      "keyboard_navigation": "full support",
+      "screen_reader": "optimized",
+      "color_contrast": "4.5:1 minimum",
+      "focus_management": "proper",
+      "aria_labels": "comprehensive"
+    },
+    "security": {
+      "data_encryption": "end-to-end",
+      "authentication": "multi-factor",
+      "authorization": "role-based",
+      "input_validation": "strict",
+      "csrf_protection": "enabled",
+      "rate_limiting": "implemented"
+    }
+  },
+  "ui_ux_standards": {
+    "design_system": {
+      "component_library": "Flame UI + Radix UI",
+      "design_tokens": "consistent spacing, colors, typography",
+      "responsive_design": "mobile-first approach",
+      "dark_mode": "full support",
+      "animations": "smooth, purposeful, <300ms",
+      "micro_interactions": "delightful, functional"
+    },
+    "user_experience": {
+      "navigation": "intuitive, max 3 clicks to any feature",
+      "loading_states": "skeleton screens, progress indicators",
+      "error_handling": "graceful, helpful messages",
+      "empty_states": "engaging, actionable",
+      "feedback": "immediate, clear, contextual",
+      "onboarding": "progressive, guided"
+    },
+    "visual_hierarchy": {
+      "typography": "clear hierarchy, readable fonts",
+      "color_usage": "semantic, accessible",
+      "spacing": "consistent, breathing room",
+      "iconography": "consistent style, clear meaning",
+      "imagery": "high quality, purposeful",
+      "layout": "grid-based, balanced"
+    }
+  },
+  "testing_requirements": {
+    "unit_testing": {
+      "framework": "Jest + React Testing Library",
+      "coverage_target": ">90%",
+      "test_types": ["component", "utility", "hook", "service"],
+      "mock_strategy": "comprehensive API/service mocking",
+      "snapshot_testing": "critical components only"
+    },
+    "integration_testing": {
+      "api_testing": "all endpoints tested",
+      "database_testing": "CRUD operations verified",
+      "auth_flows": "complete user journeys",
+      "realtime_testing": "WebSocket connections",
+      "ai_integration": "model responses validated"
+    },
+    "e2e_testing": {
+      "framework": "Cypress + Playwright",
+      "critical_paths": [
+        "user registration/login",
+        "AI chat conversation",
+        "human handoff process",
+        "dashboard analytics",
+        "widget integration",
+        "knowledge base management"
+      ],
+      "cross_browser": ["Chrome", "Firefox", "Safari", "Edge"],
+      "mobile_testing": "iOS Safari, Android Chrome",
+      "performance_testing": "load, stress, endurance"
+    },
+    "visual_testing": {
+      "screenshot_comparison": "pixel-perfect regression detection",
+      "responsive_testing": "all breakpoints validated",
+      "theme_testing": "light/dark mode consistency",
+      "component_isolation": "Storybook integration",
+      "accessibility_testing": "automated a11y checks"
+    }
+  },
+  "implementation_guidelines": {
+    "architecture": {
+      "component_structure": "atomic design principles",
+      "state_management": "Zustand for client, React Query for server",
+      "api_design": "tRPC for type safety, REST for external",
+      "database_design": "normalized schema, proper indexing",
+      "caching_strategy": "multi-layer caching",
+      "error_boundaries": "comprehensive error handling"
+    },
+    "development_workflow": {
+      "git_strategy": "feature branches, PR reviews",
+      "commit_convention": "conventional commits",
+      "ci_cd": "automated testing, deployment",
+      "code_review": "mandatory, checklist-based",
+      "documentation": "inline comments, README updates",
+      "monitoring": "error tracking, performance metrics"
+    },
+    "ai_implementation": {
+      "model_routing": "intelligent fallback system",
+      "context_management": "conversation history preservation",
+      "rag_integration": "vector embeddings, semantic search",
+      "handoff_logic": "confidence thresholds, escalation rules",
+      "response_quality": "tone consistency, accuracy validation",
+      "performance_optimization": "streaming responses, caching"
+    }
+  },
+  "feature_specifications": {
+    "authentication": {
+      "requirements": [
+        "Multi-tenant organization support",
+        "Role-based access control (Admin, Agent, Viewer)",
+        "SSO integration ready",
+        "Session management",
+        "Password policies",
+        "Account verification"
+      ],
+      "files": [
+        "/app/login/page.tsx",
+        "/app/register/page.tsx",
+        "/components/auth/",
+        "/lib/auth/",
+        "/middleware.ts"
+      ]
+    },
+    "ai_chat_system": {
+      "requirements": [
+        "Real-time AI responses <2s",
+        "Multi-model support (GPT-4, Claude)",
+        "Context-aware conversations",
+        "RAG-powered knowledge integration",
+        "Confidence scoring",
+        "Response streaming"
+      ],
+      "files": [
+        "/components/chat/ChatView.tsx",
+        "/components/ai/",
+        "/lib/ai/core.ts",
+        "/lib/ai/chat.ts",
+        "/lib/ai/rag/"
+      ]
+    },
+    "handoff_system": {
+      "requirements": [
+        "Seamless AI-to-human transition",
+        "Context preservation",
+        "Queue management",
+        "Agent notifications",
+        "Handoff analytics",
+        "Priority routing"
+      ],
+      "files": [
+        "/components/shared/handoff/",
+        "/lib/ai/handoff.ts",
+        "/components/assignment/",
+        "/components/notifications/"
+      ]
+    },
+    "realtime_communication": {
+      "requirements": [
+        "WebSocket connections",
+        "Typing indicators",
+        "Message delivery status",
+        "Presence indicators",
+        "Connection recovery",
+        "Offline support"
+      ],
+      "files": [
+        "/lib/realtime/",
+        "/components/ui/TypingDots.tsx",
+        "/components/messaging/",
+        "/lib/supabase/"
+      ]
+    },
+    "dashboard_analytics": {
+      "requirements": [
+        "Real-time metrics",
+        "Performance monitoring",
+        "AI usage analytics",
+        "Customer satisfaction tracking",
+        "Response time analysis",
+        "Agent productivity metrics"
+      ],
+      "files": [
+        "/app/dashboard/page.tsx",
+        "/components/MetricCard.tsx",
+        "/components/MemoryMonitor.tsx",
+        "/components/analytics/",
+        "/components/charts/"
+      ]
+    },
+    "widget_system": {
+      "requirements": [
+        "Embeddable chat widget",
+        "Customizable themes",
+        "Mobile responsive",
+        "File upload support",
+        "Offline messaging",
+        "GDPR compliance"
+      ],
+      "files": [
+        "/components/widget/",
+        "/components/widget/core/",
+        "/components/widget/config/",
+        "/lib/widget/"
+      ]
+    }
+  },
+  "testing_scenarios": {
+    "critical_user_flows": [
+      {
+        "name": "New User Registration & Onboarding",
+        "steps": [
+          "Visit landing page",
+          "Click sign up",
+          "Fill registration form",
+          "Verify email",
+          "Complete organization setup",
+          "Configure first mailbox",
+          "Test AI chat",
+          "Invite team members"
+        ],
+        "success_criteria": [
+          "Account created successfully",
+          "Organization configured",
+          "AI responds within 2s",
+          "Team invitations sent"
+        ]
+      },
+      {
+        "name": "Customer Support Conversation",
+        "steps": [
+          "Customer opens widget",
+          "Types initial question",
+          "AI provides response",
+          "Customer asks follow-up",
+          "AI escalates to human",
+          "Agent receives notification",
+          "Agent takes over conversation",
+          "Issue resolved"
+        ],
+        "success_criteria": [
+          "Widget loads <3s",
+          "AI responds <2s",
+          "Handoff preserves context",
+          "Agent notified immediately",
+          "Conversation history intact"
+        ]
+      },
+      {
+        "name": "Knowledge Base Management",
+        "steps": [
+          "Admin uploads documents",
+          "System processes content",
+          "Creates embeddings",
+          "Tests AI responses",
+          "Validates accuracy",
+          "Publishes to production"
+        ],
+        "success_criteria": [
+          "Documents processed successfully",
+          "Embeddings generated",
+          "AI uses new knowledge",
+          "Response quality improved"
+        ]
+      }
+    ],
+    "performance_scenarios": [
+      {
+        "name": "High Load Stress Test",
+        "description": "1000 concurrent users, 10K messages/hour",
+        "metrics": [
+          "Response time <2s maintained",
+          "No message loss",
+          "WebSocket connections stable",
+          "Database performance optimal"
+        ]
+      },
+      {
+        "name": "AI Model Failover",
+        "description": "Primary AI model unavailable",
+        "metrics": [
+          "Automatic fallback to secondary",
+          "No service interruption",
+          "Response quality maintained",
+          "User experience unaffected"
+        ]
+      }
+    ],
+    "security_scenarios": [
+      {
+        "name": "Data Isolation Test",
+        "description": "Verify tenant data separation",
+        "validation": [
+          "Organization A cannot access Organization B data",
+          "API endpoints respect tenant boundaries",
+          "Database queries include tenant filters",
+          "File uploads isolated by organization"
+        ]
+      },
+      {
+        "name": "Authentication Security",
+        "description": "Test auth vulnerabilities",
+        "validation": [
+          "Session hijacking prevented",
+          "CSRF attacks blocked",
+          "Rate limiting effective",
+          "Password policies enforced"
+        ]
+      }
+    ]
+  },
+  "deployment_requirements": {
+    "environments": {
+      "development": {
+        "url": "http://localhost:3001",
+        "database": "local Supabase",
+        "ai_models": "development keys",
+        "monitoring": "console logging"
+      },
+      "staging": {
+        "url": "https://staging.campfire.ai",
+        "database": "staging Supabase",
+        "ai_models": "production keys",
+        "monitoring": "full monitoring stack"
+      },
+      "production": {
+        "url": "https://app.campfire.ai",
+        "database": "production Supabase",
+        "ai_models": "production keys",
+        "monitoring": "comprehensive monitoring"
+      }
+    },
+    "infrastructure": {
+      "hosting": "Vercel/Netlify",
+      "database": "Supabase PostgreSQL",
+      "cdn": "Vercel Edge Network",
+      "monitoring": "Sentry + PostHog",
+      "analytics": "PostHog + Custom",
+      "error_tracking": "Sentry"
+    }
+  },
+  "success_metrics": {
+    "technical_kpis": {
+      "performance": {
+        "ai_response_time": "<2 seconds (target: 1.5s)",
+        "realtime_latency": "<100ms (target: 50ms)",
+        "uptime": "99.9% (target: 99.95%)",
+        "error_rate": "<0.1% (target: 0.05%)"
+      },
+      "quality": {
+        "test_coverage": ">90% (target: 95%)",
+        "lighthouse_score": ">90 (target: 95)",
+        "accessibility_score": "100% WCAG AA",
+        "security_score": "A+ rating"
+      }
+    },
+    "business_kpis": {
+      "user_experience": {
+        "customer_satisfaction": ">90% (target: 95%)",
+        "first_contact_resolution": ">85% (target: 90%)",
+        "handoff_success_rate": ">95% (target: 98%)",
+        "user_retention": ">80% (target: 85%)"
+      },
+      "operational": {
+        "cost_reduction": "60% (target: 70%)",
+        "agent_productivity": "3x increase (target: 4x)",
+        "scalability": "10x customer support (target: 15x)",
+        "response_consistency": "95% (target: 98%)"
+      }
+    }
+  },
+  "implementation_checklist": {
+    "phase_1_foundation": [
+      "✅ Project setup and configuration",
+      "✅ Database schema implementation",
+      "✅ Authentication system",
+      "✅ Basic UI components",
+      "✅ Testing infrastructure",
+      "🔄 AI core integration",
+      "🔄 Real-time communication",
+      "🔄 Basic chat interface"
+    ],
+    "phase_2_core_features": [
+      "🔄 AI-human handoff system",
+      "🔄 Knowledge base integration",
+      "🔄 Dashboard analytics",
+      "🔄 Widget system",
+      "🔄 Multi-tenant architecture",
+      "📝 Comprehensive testing",
+      "📝 Performance optimization",
+      "📝 Security hardening"
+    ],
+    "phase_3_integrations": [
+      "📝 Email integration",
+      "📝 Slack integration",
+      "📝 File management",
+      "📝 Advanced analytics",
+      "📝 Mobile optimization",
+      "📝 Accessibility compliance",
+      "📝 Documentation",
+      "📝 Deployment automation"
+    ],
+    "phase_4_launch": [
+      "📝 Load testing",
+      "📝 Security audit",
+      "📝 Performance optimization",
+      "📝 User acceptance testing",
+      "📝 Production deployment",
+      "📝 Monitoring setup",
+      "📝 Support documentation",
+      "📝 Team training"
+    ]
+  },
+  "quality_gates": {
+    "code_quality": [
+      "All TypeScript errors resolved",
+      "ESLint passes with zero warnings",
+      "Prettier formatting applied",
+      "Test coverage >90%",
+      "No console.log statements in production",
+      "All TODO comments addressed"
+    ],
+    "performance": [
+      "Lighthouse score >90",
+      "Core Web Vitals all green",
+      "Bundle size optimized",
+      "Images optimized",
+      "Lazy loading implemented",
+      "Caching strategy effective"
+    ],
+    "security": [
+      "No security vulnerabilities",
+      "Authentication tested",
+      "Authorization verified",
+      "Input validation complete",
+      "CSRF protection enabled",
+      "Rate limiting implemented"
+    ],
+    "accessibility": [
+      "WCAG AA compliance verified",
+      "Keyboard navigation tested",
+      "Screen reader optimized",
+      "Color contrast validated",
+      "Focus management proper",
+      "ARIA labels comprehensive"
+    ]
+  }
+}

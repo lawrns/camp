@@ -1,0 +1,74 @@
+/* Customer Details Sidebar Mobile Styles */
+
+.sidebar {
+  @apply flex h-full flex-col border-l border-gray-200 bg-white transition-all duration-300;
+}
+
+/* Mobile overlay */
+@media (max-width: 768px) {
+  .sidebar.mobile {
+    @apply fixed inset-0 z-50;
+  }
+
+  .sidebar.mobile.collapsed {
+    @apply translate-x-full;
+  }
+}
+
+/* Desktop collapsed state */
+@media (min-width: 769px) {
+  .sidebar.collapsed {
+    @apply w-0 overflow-hidden;
+  }
+}
+
+/* Responsive tabs */
+@media (max-width: 640px) {
+  .tabsList {
+    @apply text-xs;
+  }
+
+  .tabsList button {
+    @apply px-2 py-1 text-xs;
+  }
+}
+
+/* Responsive cards */
+@media (max-width: 640px) {
+  .statsGrid {
+    @apply grid-cols-2 gap-2;
+  }
+
+  .card {
+    @apply shadow-sm;
+  }
+
+  .cardHeader {
+    @apply p-3;
+  }
+
+  .cardContent {
+    @apply p-3;
+  }
+}
+
+/* Loading skeleton animations */
+.skeleton {
+  @apply animate-pulse rounded bg-gray-200;
+}
+
+/* Smooth transitions */
+.fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <!-- Apple touch icon version with rounded corners and padding -->
+  <rect width="180" height="180" rx="40" fill="#1a1a1a"/>
+  
+  <!-- Large flame centered -->
+  <g transform="translate(90,90) scale(2.5)">
+    <path d="M0 24 C-10 24 -16 18 -16 8 C-16 2 -12 -4 -8 -8 C-12 -12 -14 -16 -12 -20 C-8 -24 -2 -20 0 -24 C2 -20 8 -24 12 -20 C14 -16 12 -12 8 -8 C12 -4 16 2 16 8 C16 18 10 24 0 24 Z" fill="#ff6b35"/>
+    <path d="M0 18 C-6 18 -10 14 -10 8 C-10 4 -8 0 -4 -2 C-6 -4 -7 -6 -6 -8 C-4 -10 0 -8 0 -12 C0 -8 4 -10 6 -8 C7 -6 6 -4 4 -2 C8 0 10 4 10 8 C10 14 6 18 0 18 Z" fill="#f7931e"/>
+    <circle cx="0" cy="4" r="4" fill="#ffcc02" opacity="0.8"/>
+  </g>
+</svg>

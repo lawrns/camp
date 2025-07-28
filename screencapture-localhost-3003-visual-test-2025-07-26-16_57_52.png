@@ -1,0 +1,473 @@
+PRD
+
+# 🚀 **Campfire - AI-Powered Customer Support Platform PRD**
+
+## �� **1. Exact Problem Statement**
+
+**Primary Problem:** Customer support teams struggle with:
+- **Response Time:** Manual responses take 15-30 minutes, customers expect instant replies
+- **Quality Consistency:** Human agents provide inconsistent support quality and tone
+- **Scalability:** Support teams can't handle high-volume inquiries without massive hiring
+- **Knowledge Management:** Critical support information is scattered across multiple systems
+- **Handoff Complexity:** Seamless transition between AI and human agents is often jarring
+
+**Solution:** Campfire is an AI-powered customer support platform that provides:
+- **Instant AI Responses** with human-like conversation quality
+- **Seamless AI-Human Handoffs** with context preservation
+- **Real-time Collaboration** between AI and human agents
+- **Knowledge Base Integration** with RAG-powered responses
+- **Multi-channel Support** (web widget, email, Slack integration)
+
+---
+
+## 🛠️ **2. Tech Stack, Dependencies & APIs**
+
+### **Frontend Framework**
+- **Next.js 15.3.1** with App Router
+- **TypeScript 5.8.3** (strict mode)
+- **React 18** with Server Components
+- **Tailwind CSS** with custom Flame UI system
+
+### **UI Component Libraries**
+- **Radix UI** (Dialog, Dropdown, Tooltip, Select, Popover, Tabs)
+- **Lucide React** (Icons)
+- **Framer Motion** (Animations)
+- **Recharts** (Data visualization)
+- **TipTap** (Rich text editor)
+
+### **State Management & Data Fetching**
+- **Zustand** (Client state)
+- **TanStack React Query** (Server state)
+- **tRPC** (Type-safe APIs)
+
+### **Backend & Database**
+- **Supabase** (PostgreSQL database, auth, real-time)
+- **Drizzle ORM** (Type-safe database queries)
+- **Next.js API Routes** (REST endpoints)
+
+### **AI & Machine Learning**
+- **OpenAI GPT-4** (Primary AI model)
+- **Anthropic Claude** (Fallback model)
+- **Perplexity AI** (Research and context)
+- **Vector embeddings** (RAG implementation)
+- **Custom AI pipeline** (Multi-model routing)
+
+### **Real-time Communication**
+- **Supabase Realtime** (WebSocket connections)
+- **Bidirectional typing indicators**
+- **Live collaboration features**
+
+### **External APIs & Integrations**
+- **Slack API** (Team notifications)
+- **Gmail API** (Email integration)
+- **Stripe API** (Payment processing)
+- **Sentry** (Error monitoring)
+- **PostHog** (Analytics)
+
+### **Development Tools**
+- **ESLint** (Code linting)
+- **Prettier** (Code formatting)
+- **Jest** (Unit testing)
+- **Playwright** (E2E testing)
+- **Cypress** (Integration testing)
+
+---
+
+## 🗄️ **3. Complete Backend Database Schema**
+
+### **Core Entities (58 Tables)**
+
+#### **Organizations & Users**
+```sql
+-- Organizations (Multi-tenant)
+organizations: id, name, slug, plan, settings, created_at, updated_at
+
+-- User Profiles
+profiles: user_id, organization_id, email, full_name, avatar_url, role, created_at, updated_at
+
+-- Organization Members
+organization_members: id, organization_id, user_id, role, permissions, joined_at
+
+-- Organization Invitations
+organization_invitations: id, organization_id, email, role, token, expires_at, created_at
+```
+
+#### **Mailboxes & Conversations**
+```sql
+-- Mailboxes (Support channels)
+mailboxes: id, name, slug, organization_id, settings, created_at, updated_at
+
+-- Conversations
+conversations: id, mailbox_id, customer_email, subject, status, priority, assigned_to, created_at, updated_at
+
+-- Conversation Messages
+conversation_messages: id, conversation_id, sender_type, sender_id, content, attachments, created_at
+
+-- Message Delivery Status
+message_delivery_status: id, message_id, status, error_message, retry_count, delivered_at
+
+-- Message Read Status
+message_read_status: id, message_id, user_id, read_at
+```
+
+#### **AI & Automation**
+```sql
+-- AI Feedback
+ai_feedback: id, conversation_id, message_id, rating, feedback_text, created_at
+
+-- AI Training Data
+ai_training_data: id, conversation_id, input_text, output_text, quality_score, created_at
+
+-- AI Usage Events
+ai_usage_events: id, organization_id, model, tokens_used, cost, created_at
+
+-- AI Jobs
+ai_jobs: id, organization_id, type, status, data, result, created_at, completed_at
+```
+
+#### **Knowledge Base**
+```sql
+-- Knowledge Documents
+knowledge_documents: id, organization_id, title, content, category, created_at, updated_at
+
+-- Knowledge Chunks
+knowledge_chunks: id, document_id, content, embedding, created_at
+
+-- RAG Profiles
+rag_profiles: id, organization_id, name, settings, created_at, updated_at
+```
+
+#### **Tickets & Support**
+```sql
+-- Tickets
+tickets: id, mailbox_id, title, description, status, priority, assigned_to, created_at, updated_at
+
+-- Ticket Comments
+ticket_comments: id, ticket_id, user_id, comment, created_at
+
+-- Ticket History
+ticket_history: id, ticket_id, action, field_name, old_value, new_value, created_at
+```
+
+#### **Widget & Real-time**
+```sql
+-- Widget Settings
+widget_settings: id, mailbox_id, theme, position, welcome_message, created_at, updated_at
+
+-- Widget File Attachments
+widget_file_attachments: id, conversation_id, file_name, file_size, file_type, url, created_at
+
+-- Typing Indicators
+typing_indicators: id, conversation_id, user_id, sender_type, is_typing, created_at
+
+-- User Presence
+user_presence: id, user_id, status, last_seen_at, created_at, updated_at
+```
+
+#### **Integrations & Webhooks**
+```sql
+-- Webhooks
+webhooks: id, organization_id, name, url, events, secret, is_active, created_at, updated_at
+
+-- Webhook Deliveries
+webhook_deliveries: id, webhook_id, event_type, payload, response_status, created_at
+
+-- Tools (API integrations)
+tools: id, mailbox_id, name, type, settings, is_active, created_at, updated_at
+
+-- Tool APIs
+tool_apis: id, mailbox_id, name, base_url, schema, created_at, updated_at
+```
+
+#### **Analytics & Monitoring**
+```sql
+-- Conversation Events
+conversation_events: id, conversation_id, event_type, data, created_at
+
+-- Message Notifications
+message_notifications: id, user_id, conversation_id, type, read_at, created_at
+
+-- Notification Settings
+notification_settings: id, user_id, email_enabled, push_enabled, created_at, updated_at
+```
+
+---
+
+## 🎯 **4. Scope Definition**
+
+### **In Scope (MVP Features)**
+
+#### **Core AI Support**
+- ✅ AI-powered instant responses
+- ✅ Multi-model AI routing (GPT-4, Claude, Perplexity)
+- ✅ RAG-powered knowledge base integration
+- ✅ Human-like conversation quality
+- ✅ Context-aware responses
+
+#### **Real-time Communication**
+- ✅ Live chat widget
+- ✅ Real-time typing indicators
+- ✅ Instant message delivery
+- ✅ Bidirectional communication
+- ✅ WebSocket connections
+
+#### **AI-Human Handoff**
+- ✅ Seamless AI to human transition
+- ✅ Context preservation during handoffs
+- ✅ Queue management for human agents
+- ✅ Handoff analytics and metrics
+
+#### **Multi-tenant Architecture**
+- ✅ Organization-based isolation
+- ✅ Role-based access control
+- ✅ Team collaboration features
+- ✅ Secure data separation
+
+#### **Knowledge Management**
+- ✅ Knowledge base creation and management
+- ✅ RAG-powered responses
+- ✅ Document embedding and search
+- ✅ Knowledge analytics
+
+#### **Support Channels**
+- ✅ Web widget integration
+- ✅ Email support integration
+- ✅ Slack integration
+- ✅ Multi-channel conversation management
+
+#### **Analytics & Reporting**
+- ✅ Conversation analytics
+- ✅ AI performance metrics
+- ✅ Response time tracking
+- ✅ Customer satisfaction metrics
+
+### **Out of Scope (Future Features)**
+
+#### **Advanced AI Features**
+- ❌ Voice/audio support
+- ❌ Video call integration
+- ❌ Advanced sentiment analysis
+- ❌ Predictive analytics
+- ❌ Custom AI model training
+
+#### **Enterprise Features**
+- ❌ SSO integration
+- ❌ Advanced RBAC
+- ❌ Audit logging
+- ❌ Compliance reporting
+- ❌ Advanced security features
+
+#### **Integrations**
+- ❌ CRM integrations (Salesforce, HubSpot)
+- ❌ Help desk integrations (Zendesk, Freshdesk)
+- ❌ Social media integrations
+- ❌ SMS/WhatsApp integration
+- ❌ Advanced automation workflows
+
+#### **Advanced Analytics**
+- ❌ Predictive customer behavior
+- ❌ Advanced reporting dashboards
+- ❌ Custom analytics queries
+- ❌ Data export capabilities
+- ❌ Advanced visualization
+
+---
+
+## 🔄 **5. User Flow Diagrams**
+
+### **Customer Support Flow**
+```
+Customer Inquiry
+    ↓
+Web Widget / Email / Slack
+    ↓
+AI Response Generation
+    ↓
+[AI can handle?]
+    ↓ YES → AI Response → Customer
+    ↓ NO
+    ↓
+Queue for Human Agent
+    ↓
+Human Agent Assignment
+    ↓
+Context Transfer
+    ↓
+Human Response
+    ↓
+Customer Satisfaction
+```
+
+### **AI-Human Handoff Flow**
+```
+AI Conversation
+    ↓
+[Complexity Threshold Reached?]
+    ↓ YES
+    ↓
+Handoff Trigger
+    ↓
+Context Preservation
+    ↓
+Human Agent Notification
+    ↓
+Agent Accepts Assignment
+    ↓
+Seamless Transition
+    ↓
+Human Continues Conversation
+```
+
+### **Knowledge Base Management Flow**
+```
+Document Upload
+    ↓
+Content Processing
+    ↓
+Chunking & Embedding
+    ↓
+Vector Storage
+    ↓
+RAG Integration
+    ↓
+AI Training
+    ↓
+Response Improvement
+```
+
+### **Multi-tenant Organization Flow**
+```
+Organization Creation
+    ↓
+User Invitation
+    ↓
+Role Assignment
+    ↓
+Mailbox Setup
+    ↓
+Widget Configuration
+    ↓
+Knowledge Base Setup
+    ↓
+AI Training
+    ↓
+Go Live
+```
+
+---
+
+## 📋 **6. Functional & Non-Functional Requirements**
+
+### **Functional Requirements**
+
+#### **AI Support System**
+- **FR1:** System shall provide instant AI responses within 2 seconds
+- **FR2:** System shall support multiple AI models (GPT-4, Claude, Perplexity)
+- **FR3:** System shall integrate with knowledge base for RAG-powered responses
+- **FR4:** System shall maintain conversation context across multiple messages
+- **FR5:** System shall provide human-like conversation quality
+
+#### **Real-time Communication**
+- **FR6:** System shall support real-time typing indicators
+- **FR7:** System shall provide instant message delivery
+- **FR8:** System shall support bidirectional communication
+- **FR9:** System shall maintain WebSocket connections
+- **FR10:** System shall handle connection failures gracefully
+
+#### **AI-Human Handoff**
+- **FR11:** System shall detect when AI cannot handle requests
+- **FR12:** System shall preserve conversation context during handoffs
+- **FR13:** System shall queue requests for human agents
+- **FR14:** System shall notify human agents of new assignments
+- **FR15:** System shall provide seamless transition experience
+
+#### **Multi-tenant Architecture**
+- **FR16:** System shall support multiple organizations
+- **FR17:** System shall provide data isolation between organizations
+- **FR18:** System shall support role-based access control
+- **FR19:** System shall allow organization-specific configurations
+- **FR20:** System shall support team collaboration features
+
+#### **Knowledge Management**
+- **FR21:** System shall allow knowledge base creation and management
+- **FR22:** System shall support document embedding and search
+- **FR23:** System shall integrate RAG with AI responses
+- **FR24:** System shall provide knowledge analytics
+- **FR25:** System shall support knowledge base versioning
+
+#### **Support Channels**
+- **FR26:** System shall provide web widget integration
+- **FR27:** System shall support email integration
+- **FR28:** System shall integrate with Slack
+- **FR29:** System shall manage multi-channel conversations
+- **FR30:** System shall provide channel-specific configurations
+
+### **Non-Functional Requirements**
+
+#### **Performance**
+- **NFR1:** System shall respond to AI queries within 2 seconds
+- **NFR2:** System shall support 1000+ concurrent users
+- **NFR3:** System shall handle 10,000+ messages per hour
+- **NFR4:** System shall maintain 99.9% uptime
+- **NFR5:** System shall support real-time updates with <100ms latency
+
+#### **Scalability**
+- **NFR6:** System shall scale horizontally to support growth
+- **NFR7:** System shall support 100+ organizations
+- **NFR8:** System shall handle 1M+ messages per month
+- **NFR9:** System shall support 100+ concurrent AI conversations
+- **NFR10:** System shall scale database operations efficiently
+
+#### **Security**
+- **NFR11:** System shall encrypt all data in transit and at rest
+- **NFR12:** System shall implement secure authentication
+- **NFR13:** System shall provide data isolation between tenants
+- **NFR14:** System shall comply with GDPR requirements
+- **NFR15:** System shall implement secure API access
+
+#### **Reliability**
+- **NFR16:** System shall handle AI service failures gracefully
+- **NFR17:** System shall provide automatic failover
+- **NFR18:** System shall maintain data consistency
+- **NFR19:** System shall provide backup and recovery
+- **NFR20:** System shall handle network interruptions
+
+#### **Usability**
+- **NFR21:** System shall provide intuitive user interface
+- **NFR22:** System shall support mobile responsiveness
+- **NFR23:** System shall provide accessibility compliance (WCAG AA)
+- **NFR24:** System shall support multiple languages
+- **NFR25:** System shall provide comprehensive documentation
+
+#### **Maintainability**
+- **NFR26:** System shall use TypeScript for type safety
+- **NFR27:** System shall follow clean code practices
+- **NFR28:** System shall provide comprehensive testing
+- **NFR29:** System shall support easy deployment
+- **NFR30:** System shall provide monitoring and logging
+
+---
+
+## 🎯 **Success Metrics**
+
+### **Customer Experience**
+- **Response Time:** <2 seconds for AI responses
+- **Customer Satisfaction:** >90% satisfaction rate
+- **Resolution Rate:** >85% first-contact resolution
+- **Handoff Quality:** >95% context preservation
+
+### **Business Metrics**
+- **Cost Reduction:** 60% reduction in support costs
+- **Efficiency:** 3x increase in agent productivity
+- **Scalability:** Support 10x more customers
+- **Quality:** Consistent support quality across all interactions
+
+### **Technical Metrics**
+- **Uptime:** 99.9% availability
+- **Performance:** <100ms real-time latency
+- **Scalability:** 1000+ concurrent users
+- **Reliability:** <0.1% error rate
+
+---
+
+**This PRD defines Campfire as a comprehensive AI-powered customer support platform that transforms how businesses handle customer inquiries through intelligent automation, seamless human handoffs, and real-time collaboration.** 🚀

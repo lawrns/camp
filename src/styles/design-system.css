@@ -1,0 +1,1040 @@
+/**
+ * CAMPFIRE DESIGN SYSTEM - SINGLE SOURCE OF TRUTH
+ * 
+ * This file contains ALL design tokens, styling rules, and fixes for the entire application.
+ * No other CSS files should override these rules.
+ * 
+ * Goals:
+ * - Professional, consistent UI
+ * - WCAG AA compliance
+ * - 8px grid system
+ * - Performance optimized
+ * - Zero visual inconsistencies
+ */
+
+:root {
+    /* ===== CORE SYSTEM TOKENS ===== */
+    --ds-base-unit: 0.5rem;
+    /* 8px */
+
+    /* ===== ADVANCED ANIMATION TOKENS ===== */
+    --ds-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ds-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ds-ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ds-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-ease-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+
+    /* ===== CRITICAL LAYOUT VARIABLES ===== */
+    --ds-inbox-height: calc(100vh - 4rem);
+    --ds-inbox-height-mobile: calc(100vh - 3rem);
+    --ds-sidebar-width: 320px;
+
+    /* ===== DASHBOARD-SPECIFIC TOKENS ===== */
+    --ds-padding-dashboard: var(--ds-spacing-6);
+    --ds-gap-dashboard: var(--ds-spacing-6);
+
+    /* ===== SPACING TOKENS (8px grid) ===== */
+    --ds-spacing-0: 0rem;
+    /* 0px */
+    --ds-spacing-1: 0.25rem;
+    /* 4px */
+    --ds-spacing-2: 0.5rem;
+    /* 8px - base unit */
+    --ds-spacing-3: 0.75rem;
+    /* 12px */
+    --ds-spacing-4: 1rem;
+    /* 16px */
+    --ds-spacing-5: 1.25rem;
+    /* 20px */
+    --ds-spacing-6: 1.5rem;
+    /* 24px */
+    --ds-spacing-8: 2rem;
+    /* 32px */
+    --ds-spacing-10: 2.5rem;
+    /* 40px */
+    --ds-spacing-12: 3rem;
+    /* 48px */
+    --ds-spacing-16: 4rem;
+    /* 64px */
+    --ds-spacing-20: 5rem;
+    /* 80px */
+    --ds-spacing-24: 6rem;
+    /* 96px */
+    --ds-spacing-32: 8rem;
+    /* 128px */
+
+    /* ===== BORDER RADIUS TOKENS ===== */
+    --ds-radius-none: 0;
+    --ds-radius-xs: 0.125rem;
+    /* 2px */
+    --ds-radius-sm: 0.25rem;
+    /* 4px */
+    --ds-radius-md: 0.375rem;
+    /* 6px */
+    --ds-radius-lg: 0.5rem;
+    /* 8px */
+    --ds-radius-xl: 0.75rem;
+    /* 12px */
+    --ds-radius-2xl: 1rem;
+    /* 16px */
+    --ds-radius-3xl: 1.5rem;
+    /* 24px */
+    /* ===== LEGACY VARIABLE ALIASES ===== */
+    --spacing-0: var(--ds-spacing-0);
+    --spacing-1: var(--ds-spacing-1);
+    --spacing-2: var(--ds-spacing-2);
+    --spacing-3: var(--ds-spacing-3);
+    --spacing-4: var(--ds-spacing-4);
+    --spacing-5: var(--ds-spacing-5);
+    --spacing-6: var(--ds-spacing-6);
+    --spacing-8: var(--ds-spacing-8);
+    --spacing-10: var(--ds-spacing-10);
+    --spacing-12: var(--ds-spacing-12);
+    --spacing-16: var(--ds-spacing-16);
+    --spacing-20: var(--ds-spacing-20);
+    --spacing-24: var(--ds-spacing-24);
+    --spacing-32: var(--ds-spacing-32);
+    --radius-none: var(--ds-radius-none);
+    --radius-xs: var(--ds-radius-xs);
+    --radius-sm: var(--ds-radius-sm);
+    --radius-md: var(--ds-radius-md);
+    --radius-lg: var(--ds-radius-lg);
+    --radius-xl: var(--ds-radius-xl);
+    --radius-2xl: var(--ds-radius-2xl);
+    --radius-3xl: var(--ds-radius-3xl);
+    --radius-full: var(--ds-radius-full);
+    --ds-radius-full: 9999px;
+    /* ===== TAILWIND COMPATIBILITY VARIABLES ===== */
+    --color-primary: var(--ds-color-primary-500);
+    --color-primary-50: var(--ds-color-primary-50);
+    --color-primary-100: var(--ds-color-primary-100);
+    --color-primary-200: var(--ds-color-primary-200);
+    --color-primary-300: var(--ds-color-primary-300);
+    --color-primary-400: var(--ds-color-primary-400);
+    --color-primary-500: var(--ds-color-primary-500);
+    --color-primary-600: var(--ds-color-primary-600);
+    --color-primary-700: var(--ds-color-primary-700);
+    --color-primary-800: var(--ds-color-primary-800);
+    --color-primary-900: var(--ds-color-primary-900);
+    --color-neutral-50: var(--ds-color-neutral-50);
+    --color-neutral-100: var(--ds-color-neutral-100);
+    --color-neutral-200: var(--ds-color-neutral-200);
+    --color-neutral-300: var(--ds-color-neutral-300);
+    --color-neutral-400: var(--ds-color-neutral-400);
+    --color-neutral-500: var(--ds-color-neutral-500);
+    --color-neutral-600: var(--ds-color-neutral-600);
+    --color-neutral-700: var(--ds-color-neutral-700);
+    --color-neutral-800: var(--ds-color-neutral-800);
+    --color-neutral-900: var(--ds-color-neutral-900);
+    --color-background: var(--ds-color-background);
+    --color-background-muted: var(--ds-color-background-muted);
+    --color-background-subtle: var(--ds-color-background-subtle);
+    --color-surface: var(--ds-color-surface);
+    --color-text: var(--ds-color-text);
+    --color-text-muted: var(--ds-color-text-muted);
+    --color-text-subtle: var(--ds-color-text-subtle);
+    --color-foreground: var(--ds-color-text);
+    --color-border: var(--ds-color-border);
+    --color-border-interactive: var(--ds-color-border-interactive);
+    --color-border-subtle: var(--ds-color-border-subtle);
+    --color-border-focus: var(--ds-color-primary-500);
+    --color-success-500: var(--ds-color-success-500);
+
+    /* ===== ADDITIONAL CSS VARIABLES FOR DASHBOARD COMPATIBILITY ===== */
+    --color-card: var(--ds-color-surface);
+    --color-card-foreground: var(--ds-color-text);
+    --color-popover: var(--ds-color-surface);
+    --color-popover-foreground: var(--ds-color-text);
+    --color-secondary: var(--ds-color-background-muted);
+    --color-secondary-foreground: var(--ds-color-text);
+    --color-accent: var(--ds-color-background-muted);
+    --color-accent-foreground: var(--ds-color-text);
+    --color-destructive: var(--ds-color-error-500);
+    --color-destructive-foreground: var(--ds-color-error-50);
+    --color-input: var(--ds-color-border);
+    --color-ring: var(--ds-color-primary-500);
+    --color-text-inverse: var(--ds-color-text-inverse);
+
+    /* ===== HSL FORMAT VARIABLES FOR TAILWIND COMPATIBILITY ===== */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    --color-success-600: var(--ds-color-success-600);
+    --color-warning-500: var(--ds-color-warning-500);
+    --color-warning-600: var(--ds-color-warning-600);
+    --color-error-500: var(--ds-color-error-500);
+    --color-error-600: var(--ds-color-error-600);
+    --color-info-500: var(--ds-color-info-500);
+    --color-info-600: var(--ds-color-info-600);
+    /* ===== LEGACY COLOR VARIABLES ===== */
+    --color-background: var(--ds-color-background);
+    --color-surface: var(--ds-color-surface);
+    --color-background-muted: var(--ds-color-background-muted);
+    --color-background-subtle: var(--ds-color-background-subtle);
+    --color-text: var(--ds-color-text);
+    --color-text-muted: var(--ds-color-text-muted);
+    --color-text-subtle: var(--ds-color-text-subtle);
+    --color-primary-500: var(--ds-color-primary-500);
+    --color-primary-600: var(--ds-color-primary-600);
+    --color-primary-700: var(--ds-color-primary-700);
+    --color-neutral-100: var(--ds-color-neutral-100);
+    --color-neutral-900: var(--ds-color-neutral-900);
+    --color-border-interactive: var(--ds-color-border-interactive);
+    --color-border-subtle: var(--ds-color-border-subtle);
+    --color-success-500: var(--ds-color-success-500);
+    --color-success-600: var(--ds-color-success-600);
+    --color-warning-500: var(--ds-color-warning-500);
+    --color-warning-600: var(--ds-color-warning-600);
+    --color-error-500: var(--ds-color-error-500);
+    --color-error-600: var(--ds-color-error-600);
+    --color-info-500: var(--ds-color-info-500);
+    --color-info-600: var(--ds-color-info-600);
+
+    /* ===== COLOR TOKENS (WCAG AA compliant) ===== */
+    /* Primary Colors */
+    --ds-color-primary-50: #eff6ff;
+    --ds-color-primary-100: #dbeafe;
+    --ds-color-primary-200: #bfdbfe;
+    --ds-color-primary-300: #93c5fd;
+    --ds-color-primary-400: #60a5fa;
+    --ds-color-primary-500: #3b82f6;
+    --ds-color-primary-600: #2563eb;
+    --ds-color-primary-700: #1d4ed8;
+    --ds-color-primary-800: #1e40af;
+    --ds-color-primary-900: #1e3a8a;
+    --ds-color-primary: var(--ds-color-primary-600);
+
+    /* Neutral Colors */
+    --ds-color-neutral-50: #f8fafc;
+    --ds-color-neutral-100: #f1f5f9;
+    --ds-color-neutral-200: #e2e8f0;
+    --ds-color-neutral-300: #cbd5e1;
+    --ds-color-neutral-400: #94a3b8;
+    --ds-color-neutral-500: #64748b;
+    --ds-color-neutral-600: #475569;
+    --ds-color-neutral-700: #334155;
+    --ds-color-neutral-800: #1e293b;
+    --ds-color-neutral-900: #0f172a;
+
+    /* Semantic Colors */
+    --ds-color-success-50: #f0fdf4;
+    --ds-color-success-500: #22c55e;
+    --ds-color-success-600: #16a34a;
+    --ds-color-success-700: #15803d;
+
+    --ds-color-warning-50: #fffbeb;
+    --ds-color-warning-500: #f59e0b;
+    --ds-color-warning-600: #d97706;
+    --ds-color-warning-700: #b45309;
+
+    --ds-color-error-50: #fef2f2;
+    --ds-color-error-500: #ef4444;
+    --ds-color-error-600: #dc2626;
+    --ds-color-error-700: #b91c1c;
+
+    --ds-color-info-50: #eff6ff;
+    --ds-color-info-500: #3b82f6;
+    --ds-color-info-600: #2563eb;
+    --ds-color-info-700: #1d4ed8;
+
+    /* ===== PREMIUM COLOR EXTENSIONS ===== */
+    /* Subtle Background Colors */
+    --ds-color-success-subtle: #f0fdf4;
+    --ds-color-warning-subtle: #fffbeb;
+    --ds-color-error-subtle: #fef2f2;
+    --ds-color-info-subtle: #f0f9ff;
+    --ds-color-primary-subtle: #eff6ff;
+
+    /* Interactive State Colors */
+    --ds-color-hover-primary: var(--ds-color-primary-600);
+    --ds-color-hover-success: var(--ds-color-success-600);
+    --ds-color-hover-warning: var(--ds-color-warning-600);
+    --ds-color-hover-error: var(--ds-color-error-600);
+
+    --ds-color-active-primary: var(--ds-color-primary-700);
+    --ds-color-active-success: var(--ds-color-success-700);
+    --ds-color-active-warning: var(--ds-color-warning-700);
+    --ds-color-active-error: var(--ds-color-error-700);
+
+    /* Gradient Colors */
+    --ds-color-gradient-primary: linear-gradient(135deg, var(--ds-color-primary-500), var(--ds-color-primary-700));
+    --ds-color-gradient-success: linear-gradient(135deg, var(--ds-color-success-500), var(--ds-color-success-700));
+    --ds-color-gradient-warning: linear-gradient(135deg, var(--ds-color-warning-500), var(--ds-color-warning-700));
+    --ds-color-gradient-error: linear-gradient(135deg, var(--ds-color-error-500), var(--ds-color-error-700));
+
+    /* Surface Colors */
+    --ds-color-surface: #ffffff;
+    --ds-color-surface-muted: #f8fafc;
+    --ds-color-surface-elevated: #ffffff;
+    --ds-color-surface-overlay: rgba(0, 0, 0, 0.5);
+
+    /* Background Colors */
+    --ds-color-background: #ffffff;
+    --ds-color-background-muted: #f1f5f9;
+    --ds-color-background-elevated: #ffffff;
+
+    /* Border Colors */
+    --ds-color-border: #e2e8f0;
+    --ds-color-border-muted: #f1f5f9;
+    --ds-color-border-interactive: var(--ds-color-primary-500);
+    --ds-color-border-strong: #d1d5db;
+    --ds-color-border-subtle: #f3f4f6;
+    --ds-color-background-subtle: var(--ds-color-neutral-100);
+    --ds-color-surface-rgb: 255, 255, 255;
+    --ds-color-border-focus: var(--ds-color-primary-500);
+
+    /* Focus and Interaction */
+    --ds-color-focus: #3b82f6;
+    --ds-focus-ring-width: 2px;
+    --ds-focus-ring-color: var(--ds-color-focus);
+    --ds-focus-ring-offset: 2px;
+
+    /* Text Colors */
+    --ds-color-text: #0f172a;
+    --ds-color-text-muted: #64748b;
+    --ds-color-text-subtle: #94a3b8;
+    --ds-color-text-inverse: #ffffff;
+
+    /* ===== TYPOGRAPHY TOKENS ===== */
+    --ds-font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ds-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Cascadia Code', monospace;
+
+    --ds-font-size-xs: 0.75rem;
+    /* 12px */
+    --ds-font-size-sm: 0.875rem;
+    /* 14px */
+    --ds-font-size-base: 1rem;
+    /* 16px */
+    --ds-font-size-lg: 1.125rem;
+    /* 18px */
+    --ds-font-size-xl: 1.25rem;
+    /* 20px */
+    --ds-font-size-2xl: 1.5rem;
+    /* 24px */
+    --ds-font-size-3xl: 1.875rem;
+    /* 30px */
+    --ds-font-size-4xl: 2.25rem;
+    /* 36px */
+    --ds-font-size-5xl: 3rem;
+    /* 48px */
+    --ds-font-size-6xl: 3.75rem;
+    /* 60px */
+
+    --ds-font-weight-normal: 400;
+    --ds-font-weight-medium: 500;
+    --ds-font-weight-semibold: 600;
+    --ds-font-weight-bold: 700;
+
+    --ds-line-height-tight: 1.25;
+    --ds-line-height-normal: 1.5;
+    --ds-line-height-relaxed: 1.75;
+
+    /* ===== SOPHISTICATED SHADOW SYSTEM ===== */
+    /* Base Shadows */
+    --ds-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --ds-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --ds-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --ds-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --ds-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --ds-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    
+    /* Premium Shadows */
+    --ds-shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --ds-shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --ds-shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    --ds-shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+    --ds-shadow-glow-success: 0 0 20px rgba(34, 197, 94, 0.15);
+    --ds-shadow-glow-warning: 0 0 20px rgba(245, 158, 11, 0.15);
+    --ds-shadow-glow-error: 0 0 20px rgba(239, 68, 68, 0.15);
+    
+    /* Specialized Shadows */
+    --ds-shadow-dashboard: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --ds-shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --ds-shadow-card-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --ds-shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --ds-shadow-dropdown: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* ===== ACCENT GRADIENTS ===== */
+    --ds-color-accent-gradient: linear-gradient(to right, var(--ds-color-primary-500), var(--ds-color-primary-700));
+
+    /* ===== TRANSITION TOKENS ===== */
+    --ds-duration-fast: 150ms;
+    --ds-duration-normal: 300ms;
+    --ds-duration-slow: 500ms;
+    --ds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ===== COMPONENT SPECIFIC TOKENS ===== */
+    --ds-button-padding-sm: 0.5rem 1rem;
+    --ds-button-padding-md: 0.75rem 1.5rem;
+    --ds-button-padding-lg: 1rem 2rem;
+
+    --ds-card-padding: 1.5rem;
+    --ds-card-padding-sm: 1rem;
+    --ds-card-padding-lg: 2rem;
+
+    --ds-input-padding: 0.75rem 1rem;
+    --ds-input-padding-sm: 0.5rem 0.75rem;
+    --ds-input-padding-lg: 1rem 1.25rem;
+
+    /* ===== WIDGET LAYOUT TOKENS ===== */
+    --ds-widget-offset-bottom: 1.5rem;
+    --ds-widget-offset-right: 1.5rem;
+
+    /* ===== Z-INDEX TOKENS ===== */
+    --ds-z-dropdown: 1000;
+    --ds-z-sticky: 1020;
+    --ds-z-fixed: 1030;
+    --ds-z-modal-backdrop: 1040;
+    --ds-z-modal: 1050;
+    --ds-z-popover: 1060;
+    --ds-z-tooltip: 1070;
+    --ds-z-toast: 1080;
+
+    /* ===== LEGACY FLAME UI TOKEN MAPPINGS ===== */
+    /* These provide backward compatibility for existing components */
+
+    /* Legacy Color Mappings */
+    --fl-color-primary: var(--ds-color-primary);
+    --fl-color-background: var(--ds-color-background);
+    --fl-color-surface: var(--ds-color-surface);
+    --fl-color-border: var(--ds-color-border);
+    --fl-color-border-strong: var(--ds-color-border-strong);
+    --fl-color-border-subtle: var(--ds-color-border-subtle);
+    --fl-color-text: var(--ds-color-text);
+    --fl-color-text-muted: var(--ds-color-text-muted);
+    --fl-color-text-subtle: var(--ds-color-text-subtle);
+    --fl-color-background-muted: var(--ds-color-surface-muted);
+    --fl-color-background-subtle: var(--ds-color-surface-subtle);
+    --fl-color-focus: var(--ds-color-focus);
+
+    /* Legacy Status Colors */
+    --fl-color-success: var(--ds-color-success);
+    --fl-color-warning: var(--ds-color-warning);
+    --fl-color-error: var(--ds-color-error);
+    --fl-color-info: var(--ds-color-primary);
+    --fl-color-danger: var(--ds-color-error);
+
+    /* Legacy Border Radius Mappings */
+    --fl-radius-sm: var(--ds-radius-sm);
+    --fl-radius-md: var(--ds-radius-md);
+    --fl-radius-lg: var(--ds-radius-lg);
+    --fl-radius-xl: var(--ds-radius-xl);
+    --fl-radius-full: var(--ds-radius-full);
+
+    /* Legacy Shadow Mappings */
+    --fl-shadow-sm: var(--ds-shadow-sm);
+    --fl-shadow-md: var(--ds-shadow-md);
+    --fl-shadow-lg: var(--ds-shadow-lg);
+    --fl-shadow-xl: var(--ds-shadow-xl);
+
+    /* Legacy Spacing Mappings */
+    --fl-spacing-0: var(--ds-spacing-0);
+    --fl-spacing-1: var(--ds-spacing-1);
+    --fl-spacing-2: var(--ds-spacing-2);
+    --fl-spacing-3: var(--ds-spacing-3);
+    --fl-spacing-4: var(--ds-spacing-4);
+    --fl-spacing-5: var(--ds-spacing-5);
+    --fl-spacing-6: var(--ds-spacing-6);
+    --fl-spacing-8: var(--ds-spacing-8);
+    --fl-spacing-10: var(--ds-spacing-10);
+    --fl-spacing-12: var(--ds-spacing-12);
+
+    /* ===== COMPONENT HEIGHT TOKENS ===== */
+    --button-height-sm: 2rem;      /* 32px */
+    --button-height-md: 2.5rem;    /* 40px */
+    --button-height-lg: 3rem;      /* 48px */
+    --input-height: 2.5rem;        /* 40px */
+}
+
+/* ===== ACCESSIBILITY STYLES ===== */
+/* WCAG 2.1 AA Accessibility Support */
+
+/* Screen Reader Utilities */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: inherit;
+}
+
+/* Focus Management */
+.focus-visible,
+*:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px var(--color-surface),
+        0 0 0 4px var(--color-primary-500);
+    border-radius: var(--radius-md);
+}
+
+button:focus-visible,
+[role="button"]:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--color-surface),
+        0 0 0 4px var(--color-primary-500);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    box-shadow:
+        0 0 0 2px var(--color-surface),
+        0 0 0 4px var(--color-primary-500);
+    border-color: var(--color-primary-500);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+    text-decoration: underline;
+}
+
+/* Skip Links */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--color-primary-600);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    z-index: 9999;
+    transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+
+    button,
+    [role="button"],
+    input,
+    textarea,
+    select {
+        border: 2px solid currentColor;
+    }
+
+    *:focus-visible {
+        outline: 3px solid currentColor;
+        outline-offset: 2px;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ===== COMPONENT STYLES ===== */
+
+/* Typography Classes */
+.page-header-h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-6);
+}
+
+.page-header-h2 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-5);
+}
+
+.page-header-h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-4);
+}
+
+.page-header-h4 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-4);
+}
+
+.section-header {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-4);
+}
+
+.component-header {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-3);
+}
+
+/* Component Padding */
+.component-padding {
+    padding: var(--spacing-4) var(--spacing-6);
+}
+
+/* Button Heights */
+.btn-height-sm {
+    min-height: 36px;
+    padding: var(--spacing-2) var(--spacing-3);
+}
+
+.btn-height-md {
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+.btn-height-lg {
+    min-height: 48px;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* ===== FOCUS AND ACCESSIBILITY STYLES ===== */
+*:focus-visible {
+    outline: 2px solid var(--ds-color-primary-500);
+    outline-offset: 2px;
+    border-radius: var(--ds-radius-sm);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+    outline: 2px solid var(--ds-color-primary-500);
+    outline-offset: 2px;
+}
+
+/* Ensure interactive elements have proper hover states */
+button:hover,
+[role="button"]:hover {
+    transition: all var(--ds-duration-fast) var(--ds-ease-out);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    *:focus-visible {
+        outline: 3px solid;
+        outline-offset: 3px;
+    }
+}
+
+/* Input Heights */
+.input-height-sm {
+    min-height: 36px;
+    padding: var(--spacing-2) var(--spacing-3);
+}
+
+.input-height-md {
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+.input-height-lg {
+    min-height: 48px;
+    padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* Message Bubble Styles */
+.message-bubble {
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-3);
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.message-bubble.user {
+    background: var(--color-primary-500);
+    color: var(--color-text-inverse);
+}
+
+.message-bubble.agent {
+    background: var(--color-background-muted);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+/* ===== LAYOUT UTILITIES ===== */
+
+/* Spacing Utilities */
+.spacing-1 {
+    padding: var(--spacing-1);
+}
+
+.spacing-2 {
+    padding: var(--spacing-2);
+}
+
+.spacing-3 {
+    padding: var(--spacing-3);
+}
+
+.spacing-4 {
+    padding: var(--spacing-4);
+}
+
+.spacing-5 {
+    padding: var(--spacing-5);
+}
+
+.spacing-6 {
+    padding: var(--spacing-6);
+}
+
+.spacing-8 {
+    padding: var(--spacing-8);
+}
+
+
+
+/* Border Radius Utilities */
+.radius-xs {
+    border-radius: var(--radius-xs);
+}
+
+.radius-sm {
+    border-radius: var(--radius-sm);
+}
+
+.radius-md {
+    border-radius: var(--radius-md);
+}
+
+.radius-lg {
+    border-radius: var(--radius-lg);
+}
+
+.radius-xl {
+    border-radius: var(--radius-xl);
+}
+
+.radius-2xl {
+    border-radius: var(--radius-2xl);
+}
+
+.radius-3xl {
+    border-radius: var(--radius-3xl);
+}
+
+.radius-full {
+    border-radius: var(--radius-full);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .component-padding {
+        padding: var(--spacing-3) var(--spacing-4);
+    }
+
+    .page-header-h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .page-header-h2 {
+        font-size: var(--font-size-2xl);
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+/* Hardware acceleration for animations */
+.animate-transform {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Optimized transitions */
+.transition-optimized {
+    transition: all var(--duration-normal) var(--ease-out);
+    will-change: auto;
+}
+
+/* ===== BROWSER COMPATIBILITY ===== */
+
+/* Safari-specific fixes */
+@supports (-webkit-appearance: none) {
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+    .focus-visible {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+    .sr-only {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: inherit;
+        margin: inherit;
+        overflow: visible;
+        clip: auto;
+        white-space: inherit;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* ===== ENHANCED DASHBOARD COMPONENT CLASSES ===== */
+
+/* Dashboard Cards */
+.ds-dashboard-card {
+    background: var(--ds-color-surface);
+    border-radius: var(--ds-radius-lg);
+    padding: var(--ds-spacing-6);
+    box-shadow: var(--ds-shadow-sm);
+    border: 1px solid var(--ds-color-border);
+    transition: all var(--ds-duration-fast) var(--ds-ease-out);
+}
+
+.ds-dashboard-card:hover {
+    box-shadow: var(--ds-shadow-dashboard);
+    transform: translateY(-1px);
+}
+
+/* Metrics Bar */
+.ds-metrics-bar {
+    height: var(--ds-spacing-4);
+    border-radius: var(--ds-radius-full);
+    overflow: hidden;
+    background: var(--ds-color-background-muted);
+    position: relative;
+}
+
+.ds-metrics-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--ds-color-accent-gradient);
+    border-radius: inherit;
+    transition: width var(--ds-duration-normal) var(--ds-ease-out);
+}
+
+/* Enhanced Message Bubbles */
+.message-bubble {
+    border-radius: var(--ds-radius-lg);
+    padding: var(--ds-spacing-3);
+    margin-bottom: var(--ds-spacing-2);
+    max-width: 70%;
+    word-wrap: break-word;
+    transition: all var(--ds-duration-fast) var(--ds-ease-out);
+}
+
+.message-bubble.user {
+    background: var(--ds-color-primary-500);
+    color: var(--ds-color-primary-50);
+    margin-left: auto;
+}
+
+.message-bubble.agent {
+    background: var(--ds-color-surface);
+    color: var(--ds-color-text);
+    border: 1px solid var(--ds-color-border);
+}
+
+/* Chat Layout Classes */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--ds-color-background);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--ds-spacing-4);
+    background: var(--ds-color-background-muted);
+}
+
+.chat-input {
+    flex-shrink: 0;
+    padding: var(--ds-spacing-4);
+    background: var(--ds-color-surface);
+    border-top: 1px solid var(--ds-color-border);
+}
+
+/* ===== LIGHT MODE EXPLICIT OVERRIDES ===== */
+@media (prefers-color-scheme: light) {
+    :root {
+        --ds-color-background: #ffffff;
+        --ds-color-foreground: #0f172a;
+        --ds-color-text: #0f172a;
+        --ds-color-text-muted: #64748b;
+        --ds-color-text-subtle: #94a3b8;
+        --ds-color-surface: #ffffff;
+        --ds-color-border: #e2e8f0;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ds-color-background: #0f172a;
+        --ds-color-foreground: #f8fafc;
+        --ds-color-text: #f8fafc;
+        --ds-color-text-muted: #94a3b8;
+        --ds-color-text-subtle: #64748b;
+
+        --ds-color-border: #334155;
+        --ds-color-border-strong: #475569;
+        --ds-color-border-interactive: #3b82f6;
+        --ds-color-border-subtle: #1e293b;
+
+        --ds-color-surface: #1e293b;
+        --ds-color-surface-muted: #0f172a;
+        --ds-color-surface-subtle: #1e293b;
+
+        --ds-color-primary: #3b82f6;
+        --ds-color-primary-50: #1e40af;
+        --ds-color-primary-100: #1e3a8a;
+        --ds-color-primary-200: #1e40af;
+        --ds-color-primary-300: #3b82f6;
+        --ds-color-primary-400: #60a5fa;
+        --ds-color-primary-500: #3b82f6;
+        --ds-color-primary-600: #60a5fa;
+        --ds-color-primary-700: #93c5fd;
+        --ds-color-primary-hover: #60a5fa;
+        --ds-color-primary-muted: #1e3a8a;
+        --ds-color-primary-subtle: #1e40af;
+
+        --ds-color-success: #10b981;
+        --ds-color-success-50: #047857;
+        --ds-color-success-100: #065f46;
+        --ds-color-success-200: #047857;
+        --ds-color-success-300: #10b981;
+        --ds-color-success-400: #34d399;
+        --ds-color-success-500: #10b981;
+        --ds-color-success-600: #34d399;
+        --ds-color-success-700: #6ee7b7;
+        --ds-color-success-hover: #34d399;
+        --ds-color-success-muted: #065f46;
+        --ds-color-success-subtle: #047857;
+
+        --ds-color-warning: #f59e0b;
+        --ds-color-warning-50: #b45309;
+        --ds-color-warning-100: #92400e;
+        --ds-color-warning-200: #b45309;
+        --ds-color-warning-300: #f59e0b;
+        --ds-color-warning-400: #fbbf24;
+        --ds-color-warning-500: #f59e0b;
+        --ds-color-warning-600: #fbbf24;
+        --ds-color-warning-700: #fcd34d;
+        --ds-color-warning-hover: #fbbf24;
+        --ds-color-warning-muted: #92400e;
+        --ds-color-warning-subtle: #b45309;
+
+        --ds-color-error: #ef4444;
+        --ds-color-error-50: #dc2626;
+        --ds-color-error-100: #991b1b;
+        --ds-color-error-200: #dc2626;
+        --ds-color-error-300: #ef4444;
+        --ds-color-error-400: #f87171;
+        --ds-color-error-500: #ef4444;
+        --ds-color-error-600: #f87171;
+        --ds-color-error-700: #fca5a5;
+        --ds-color-error-hover: #f87171;
+        --ds-color-error-muted: #991b1b;
+        --ds-color-error-subtle: #dc2626;
+
+        --ds-color-neutral: #94a3b8;
+        --ds-color-neutral-50: #0f172a;
+        --ds-color-neutral-100: #1e293b;
+        --ds-color-neutral-200: #334155;
+        --ds-color-neutral-300: #475569;
+        --ds-color-neutral-400: #64748b;
+        --ds-color-neutral-500: #94a3b8;
+        --ds-color-neutral-600: #cbd5e1;
+        --ds-color-neutral-700: #e2e8f0;
+        --ds-color-neutral-800: #f1f5f9;
+        --ds-color-neutral-900: #f8fafc;
+    }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --ds-duration-fast: 0ms;
+        --ds-duration-normal: 0ms;
+        --ds-duration-slow: 0ms;
+    }
+}
+
+/* ===== HIGH CONTRAST SUPPORT ===== */
+@media (prefers-contrast: high) {
+    :root {
+        --ds-color-border: #000000;
+        --ds-color-border-strong: #000000;
+        --ds-color-text-muted: #000000;
+        --ds-color-text-subtle: #000000;
+    }
+}

@@ -1,0 +1,2237 @@
+<testsuites id="" name="" tests="100" failures="50" skipped="0" errors="0" time="107.383345">
+<testsuite name="dashboard-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="chromium" tests="6" failures="3" skipped="0" time="46.24" errors="0">
+<testcase name="Dashboard Visual Testing › dashboard should load with proper layout" classname="dashboard-visual.spec.ts" time="8.795">
+<failure message="dashboard-visual.spec.ts:9:7 dashboard should load with proper layout" type="FAILURE">
+<![CDATA[  [chromium] › dashboard-visual.spec.ts:9:7 › Dashboard Visual Testing › dashboard should load with proper layout 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+       9 |   test('dashboard should load with proper layout', async ({ page }) => {
+      10 |     // Test main dashboard elements
+    > 11 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      12 |     
+      13 |     // Check for sidebar or navigation
+      14 |     const sidebar = page.locator('nav, [role="navigation"], aside');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:11:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper typography" classname="dashboard-visual.spec.ts" time="5.081">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should be responsive" classname="dashboard-visual.spec.ts" time="11.66">
+<failure message="dashboard-visual.spec.ts:44:7 dashboard should be responsive" type="FAILURE">
+<![CDATA[  [chromium] › dashboard-visual.spec.ts:44:7 › Dashboard Visual Testing › dashboard should be responsive 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      48 |     
+      49 |     // Verify layout still works
+    > 50 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      51 |     
+      52 |     // Test mobile viewport
+      53 |     await page.setViewportSize({ width: 375, height: 667 });
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:50:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper spacing and layout" classname="dashboard-visual.spec.ts" time="5.098">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should handle loading states gracefully" classname="dashboard-visual.spec.ts" time="10.664">
+<failure message="dashboard-visual.spec.ts:80:7 dashboard should handle loading states gracefully" type="FAILURE">
+<![CDATA[  [chromium] › dashboard-visual.spec.ts:80:7 › Dashboard Visual Testing › dashboard should handle loading states gracefully 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      90 |     
+      91 |     // Verify content is loaded
+    > 92 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      93 |   });
+      94 |
+      95 |   test('dashboard should have proper interactive elements', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:92:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper interactive elements" classname="dashboard-visual.spec.ts" time="4.942">
+</testcase>
+</testsuite>
+<testsuite name="design-system-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="chromium" tests="8" failures="3" skipped="0" time="26.677" errors="0">
+<testcase name="Design System Visual Testing › design system CSS variables should be properly defined" classname="design-system-visual.spec.ts" time="5.115">
+</testcase>
+<testcase name="Design System Visual Testing › typography should be consistent across the app" classname="design-system-visual.spec.ts" time="3.569">
+</testcase>
+<testcase name="Design System Visual Testing › color scheme should be consistent" classname="design-system-visual.spec.ts" time="2.849">
+</testcase>
+<testcase name="Design System Visual Testing › spacing should be consistent" classname="design-system-visual.spec.ts" time="2.915">
+</testcase>
+<testcase name="Design System Visual Testing › border radius should be consistent" classname="design-system-visual.spec.ts" time="2.795">
+<failure message="design-system-visual.spec.ts:107:7 border radius should be consistent" type="FAILURE">
+<![CDATA[  [chromium] › design-system-visual.spec.ts:107:7 › Design System Visual Testing › border radius should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "0px"
+
+      118 |       // Should have defined border radius
+      119 |       expect(borderRadius).toBeTruthy();
+    > 120 |       expect(borderRadius).not.toBe('0px');
+          |                                ^
+      121 |     }
+      122 |   });
+      123 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:120:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › shadows should be consistent" classname="design-system-visual.spec.ts" time="2.95">
+<failure message="design-system-visual.spec.ts:124:7 shadows should be consistent" type="FAILURE">
+<![CDATA[  [chromium] › design-system-visual.spec.ts:124:7 › Design System Visual Testing › shadows should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      135 |       // Should have defined shadow
+      136 |       expect(boxShadow).toBeTruthy();
+    > 137 |       expect(boxShadow).not.toBe('none');
+          |                             ^
+      138 |     }
+      139 |   });
+      140 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:137:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › responsive breakpoints should work" classname="design-system-visual.spec.ts" time="3.795">
+<failure message="design-system-visual.spec.ts:141:7 responsive breakpoints should work" type="FAILURE">
+<![CDATA[  [chromium] › design-system-visual.spec.ts:141:7 › Design System Visual Testing › responsive breakpoints should work 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('main, body') resolved to 2 elements:
+        1) <body class="inter_e4842bbd-module__r7o-_q__className min-h-screen bg-background text-foreground antialiased">…</body> aka locator('body')
+        2) <main>…</main> aka getByRole('main')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main, body')
+
+
+      153 |       
+      154 |       // Verify layout still works
+    > 155 |       await expect(page.locator('main, body')).toBeVisible();
+          |                                                ^
+      156 |       
+      157 |       // Check that content is properly sized
+      158 |       const mainElement = page.locator('main, body');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:155:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › interactive states should be consistent" classname="design-system-visual.spec.ts" time="2.689">
+</testcase>
+</testsuite>
+<testsuite name="homepage-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="chromium" tests="6" failures="4" skipped="0" time="28.2" errors="0">
+<testcase name="Homepage Visual Testing › homepage should load with proper visual elements" classname="homepage-visual.spec.ts" time="8.179">
+<failure message="homepage-visual.spec.ts:10:7 homepage should load with proper visual elements" type="FAILURE">
+<![CDATA[  [chromium] › homepage-visual.spec.ts:10:7 › Homepage Visual Testing › homepage should load with proper visual elements 
+
+    Error: Timed out 5000ms waiting for expect(locator).toContainText(expected)
+
+    Locator: locator('h1')
+    Expected string: "Campfire"
+    Received string: "Transform Customer Service Into Your Competitive Advantage"
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('h1')
+        9 × locator resolved to <h1 class="page-header-h1 text-ds-color-text">…</h1>
+          - unexpected value "Transform Customer Service Into Your Competitive Advantage"
+
+
+      16 |     // Test hero section
+      17 |     await expect(page.locator('h1')).toBeVisible();
+    > 18 |     await expect(page.locator('h1')).toContainText('Campfire');
+         |                                      ^
+      19 |     
+      20 |     // Test CTA buttons
+      21 |     const ctaButtons = page.locator('button:has-text("Get Started"), a:has-text("Get Started")');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:18:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › design system tokens should be applied correctly" classname="homepage-visual.spec.ts" time="1.641">
+</testcase>
+<testcase name="Homepage Visual Testing › responsive design should work on mobile" classname="homepage-visual.spec.ts" time="3.243">
+<failure message="homepage-visual.spec.ts:45:7 responsive design should work on mobile" type="FAILURE">
+<![CDATA[  [chromium] › homepage-visual.spec.ts:45:7 › Homepage Visual Testing › responsive design should work on mobile 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 375
+    Received:   375
+
+      54 |     const heroText = page.locator('h1');
+      55 |     const heroBox = await heroText.boundingBox();
+    > 56 |     expect(heroBox?.width).toBeLessThan(375);
+         |                            ^
+      57 |   });
+      58 |
+      59 |   test('accessibility features should be present', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:56:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › accessibility features should be present" classname="homepage-visual.spec.ts" time="7.009">
+<failure message="homepage-visual.spec.ts:59:7 accessibility features should be present" type="FAILURE">
+<![CDATA[  [chromium] › homepage-visual.spec.ts:59:7 › Homepage Visual Testing › accessibility features should be present 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+    Expected: visible
+    Received: hidden
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+        9 × locator resolved to <div hidden="">…</div>
+          - unexpected value "hidden"
+
+
+      71 |     // Check for proper contrast (basic check)
+      72 |     const textElements = page.locator('p, h1, h2, h3, h4, h5, h6, span, div');
+    > 73 |     await expect(textElements.first()).toBeVisible();
+         |                                        ^
+      74 |   });
+      75 |
+      76 |   test('interactive elements should be properly styled', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:73:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › interactive elements should be properly styled" classname="homepage-visual.spec.ts" time="3.056">
+<failure message="homepage-visual.spec.ts:76:7 interactive elements should be properly styled" type="FAILURE">
+<![CDATA[  [chromium] › homepage-visual.spec.ts:76:7 › Homepage Visual Testing › interactive elements should be properly styled 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "pointer"
+    Received: "default"
+
+      92 |       });
+      93 |       
+    > 94 |       expect(hoverStyles.cursor).toBe('pointer');
+         |                                  ^
+      95 |     }
+      96 |   });
+      97 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:94:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › loading states should be smooth" classname="homepage-visual.spec.ts" time="5.072">
+</testcase>
+</testsuite>
+<testsuite name="dashboard-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="firefox" tests="6" failures="3" skipped="0" time="52.94" errors="0">
+<testcase name="Dashboard Visual Testing › dashboard should load with proper layout" classname="dashboard-visual.spec.ts" time="9.581">
+<failure message="dashboard-visual.spec.ts:9:7 dashboard should load with proper layout" type="FAILURE">
+<![CDATA[  [firefox] › dashboard-visual.spec.ts:9:7 › Dashboard Visual Testing › dashboard should load with proper layout 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+       9 |   test('dashboard should load with proper layout', async ({ page }) => {
+      10 |     // Test main dashboard elements
+    > 11 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      12 |     
+      13 |     // Check for sidebar or navigation
+      14 |     const sidebar = page.locator('nav, [role="navigation"], aside');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:11:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper typography" classname="dashboard-visual.spec.ts" time="5.299">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should be responsive" classname="dashboard-visual.spec.ts" time="12.543">
+<failure message="dashboard-visual.spec.ts:44:7 dashboard should be responsive" type="FAILURE">
+<![CDATA[  [firefox] › dashboard-visual.spec.ts:44:7 › Dashboard Visual Testing › dashboard should be responsive 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      48 |     
+      49 |     // Verify layout still works
+    > 50 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      51 |     
+      52 |     // Test mobile viewport
+      53 |     await page.setViewportSize({ width: 375, height: 667 });
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:50:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper spacing and layout" classname="dashboard-visual.spec.ts" time="5.959">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should handle loading states gracefully" classname="dashboard-visual.spec.ts" time="11.927">
+<failure message="dashboard-visual.spec.ts:80:7 dashboard should handle loading states gracefully" type="FAILURE">
+<![CDATA[  [firefox] › dashboard-visual.spec.ts:80:7 › Dashboard Visual Testing › dashboard should handle loading states gracefully 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      90 |     
+      91 |     // Verify content is loaded
+    > 92 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      93 |   });
+      94 |
+      95 |   test('dashboard should have proper interactive elements', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:92:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper interactive elements" classname="dashboard-visual.spec.ts" time="7.631">
+</testcase>
+</testsuite>
+<testsuite name="design-system-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="firefox" tests="8" failures="3" skipped="0" time="38.672" errors="0">
+<testcase name="Design System Visual Testing › design system CSS variables should be properly defined" classname="design-system-visual.spec.ts" time="5.924">
+</testcase>
+<testcase name="Design System Visual Testing › typography should be consistent across the app" classname="design-system-visual.spec.ts" time="4.318">
+</testcase>
+<testcase name="Design System Visual Testing › color scheme should be consistent" classname="design-system-visual.spec.ts" time="4.701">
+</testcase>
+<testcase name="Design System Visual Testing › spacing should be consistent" classname="design-system-visual.spec.ts" time="4.813">
+</testcase>
+<testcase name="Design System Visual Testing › border radius should be consistent" classname="design-system-visual.spec.ts" time="5.816">
+<failure message="design-system-visual.spec.ts:107:7 border radius should be consistent" type="FAILURE">
+<![CDATA[  [firefox] › design-system-visual.spec.ts:107:7 › Design System Visual Testing › border radius should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "0px"
+
+      118 |       // Should have defined border radius
+      119 |       expect(borderRadius).toBeTruthy();
+    > 120 |       expect(borderRadius).not.toBe('0px');
+          |                                ^
+      121 |     }
+      122 |   });
+      123 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:120:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › shadows should be consistent" classname="design-system-visual.spec.ts" time="4.48">
+<failure message="design-system-visual.spec.ts:124:7 shadows should be consistent" type="FAILURE">
+<![CDATA[  [firefox] › design-system-visual.spec.ts:124:7 › Design System Visual Testing › shadows should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      135 |       // Should have defined shadow
+      136 |       expect(boxShadow).toBeTruthy();
+    > 137 |       expect(boxShadow).not.toBe('none');
+          |                             ^
+      138 |     }
+      139 |   });
+      140 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:137:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › responsive breakpoints should work" classname="design-system-visual.spec.ts" time="3.587">
+<failure message="design-system-visual.spec.ts:141:7 responsive breakpoints should work" type="FAILURE">
+<![CDATA[  [firefox] › design-system-visual.spec.ts:141:7 › Design System Visual Testing › responsive breakpoints should work 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('main, body') resolved to 2 elements:
+        1) <body class="inter_e4842bbd-module__r7o-_q__className min-h-screen bg-background text-foreground antialiased">…</body> aka locator('body')
+        2) <main>…</main> aka getByRole('main')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main, body')
+
+
+      153 |       
+      154 |       // Verify layout still works
+    > 155 |       await expect(page.locator('main, body')).toBeVisible();
+          |                                                ^
+      156 |       
+      157 |       // Check that content is properly sized
+      158 |       const mainElement = page.locator('main, body');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:155:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › interactive states should be consistent" classname="design-system-visual.spec.ts" time="5.033">
+</testcase>
+</testsuite>
+<testsuite name="homepage-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="firefox" tests="6" failures="4" skipped="0" time="40.821" errors="0">
+<testcase name="Homepage Visual Testing › homepage should load with proper visual elements" classname="homepage-visual.spec.ts" time="8.453">
+<failure message="homepage-visual.spec.ts:10:7 homepage should load with proper visual elements" type="FAILURE">
+<![CDATA[  [firefox] › homepage-visual.spec.ts:10:7 › Homepage Visual Testing › homepage should load with proper visual elements 
+
+    Error: Timed out 5000ms waiting for expect(locator).toContainText(expected)
+
+    Locator: locator('h1')
+    Expected string: "Campfire"
+    Received string: "Transform Customer Service Into Your Competitive Advantage"
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('h1')
+        8 × locator resolved to <h1 class="page-header-h1 text-ds-color-text">…</h1>
+          - unexpected value "Transform Customer Service Into Your Competitive Advantage"
+
+
+      16 |     // Test hero section
+      17 |     await expect(page.locator('h1')).toBeVisible();
+    > 18 |     await expect(page.locator('h1')).toContainText('Campfire');
+         |                                      ^
+      19 |     
+      20 |     // Test CTA buttons
+      21 |     const ctaButtons = page.locator('button:has-text("Get Started"), a:has-text("Get Started")');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:18:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › design system tokens should be applied correctly" classname="homepage-visual.spec.ts" time="4.604">
+</testcase>
+<testcase name="Homepage Visual Testing › responsive design should work on mobile" classname="homepage-visual.spec.ts" time="5.281">
+<failure message="homepage-visual.spec.ts:45:7 responsive design should work on mobile" type="FAILURE">
+<![CDATA[  [firefox] › homepage-visual.spec.ts:45:7 › Homepage Visual Testing › responsive design should work on mobile 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 375
+    Received:   375
+
+      54 |     const heroText = page.locator('h1');
+      55 |     const heroBox = await heroText.boundingBox();
+    > 56 |     expect(heroBox?.width).toBeLessThan(375);
+         |                            ^
+      57 |   });
+      58 |
+      59 |   test('accessibility features should be present', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:56:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › accessibility features should be present" classname="homepage-visual.spec.ts" time="9.881">
+<failure message="homepage-visual.spec.ts:59:7 accessibility features should be present" type="FAILURE">
+<![CDATA[  [firefox] › homepage-visual.spec.ts:59:7 › Homepage Visual Testing › accessibility features should be present 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+    Expected: visible
+    Received: hidden
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+        8 × locator resolved to <div hidden="">…</div>
+          - unexpected value "hidden"
+
+
+      71 |     // Check for proper contrast (basic check)
+      72 |     const textElements = page.locator('p, h1, h2, h3, h4, h5, h6, span, div');
+    > 73 |     await expect(textElements.first()).toBeVisible();
+         |                                        ^
+      74 |   });
+      75 |
+      76 |   test('interactive elements should be properly styled', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:73:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › interactive elements should be properly styled" classname="homepage-visual.spec.ts" time="5.187">
+<failure message="homepage-visual.spec.ts:76:7 interactive elements should be properly styled" type="FAILURE">
+<![CDATA[  [firefox] › homepage-visual.spec.ts:76:7 › Homepage Visual Testing › interactive elements should be properly styled 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "pointer"
+    Received: "default"
+
+      92 |       });
+      93 |       
+    > 94 |       expect(hoverStyles.cursor).toBe('pointer');
+         |                                  ^
+      95 |     }
+      96 |   });
+      97 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:94:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › loading states should be smooth" classname="homepage-visual.spec.ts" time="7.415">
+</testcase>
+</testsuite>
+<testsuite name="dashboard-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="webkit" tests="6" failures="3" skipped="0" time="44.677" errors="0">
+<testcase name="Dashboard Visual Testing › dashboard should load with proper layout" classname="dashboard-visual.spec.ts" time="10.97">
+<failure message="dashboard-visual.spec.ts:9:7 dashboard should load with proper layout" type="FAILURE">
+<![CDATA[  [webkit] › dashboard-visual.spec.ts:9:7 › Dashboard Visual Testing › dashboard should load with proper layout 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+       9 |   test('dashboard should load with proper layout', async ({ page }) => {
+      10 |     // Test main dashboard elements
+    > 11 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      12 |     
+      13 |     // Check for sidebar or navigation
+      14 |     const sidebar = page.locator('nav, [role="navigation"], aside');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:11:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper typography" classname="dashboard-visual.spec.ts" time="3.17">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should be responsive" classname="dashboard-visual.spec.ts" time="11.055">
+<failure message="dashboard-visual.spec.ts:44:7 dashboard should be responsive" type="FAILURE">
+<![CDATA[  [webkit] › dashboard-visual.spec.ts:44:7 › Dashboard Visual Testing › dashboard should be responsive 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      48 |     
+      49 |     // Verify layout still works
+    > 50 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      51 |     
+      52 |     // Test mobile viewport
+      53 |     await page.setViewportSize({ width: 375, height: 667 });
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:50:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper spacing and layout" classname="dashboard-visual.spec.ts" time="5.012">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should handle loading states gracefully" classname="dashboard-visual.spec.ts" time="8.388">
+<failure message="dashboard-visual.spec.ts:80:7 dashboard should handle loading states gracefully" type="FAILURE">
+<![CDATA[  [webkit] › dashboard-visual.spec.ts:80:7 › Dashboard Visual Testing › dashboard should handle loading states gracefully 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      90 |     
+      91 |     // Verify content is loaded
+    > 92 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      93 |   });
+      94 |
+      95 |   test('dashboard should have proper interactive elements', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:92:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper interactive elements" classname="dashboard-visual.spec.ts" time="6.082">
+</testcase>
+</testsuite>
+<testsuite name="design-system-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="webkit" tests="8" failures="3" skipped="0" time="36.653" errors="0">
+<testcase name="Design System Visual Testing › design system CSS variables should be properly defined" classname="design-system-visual.spec.ts" time="6.37">
+</testcase>
+<testcase name="Design System Visual Testing › typography should be consistent across the app" classname="design-system-visual.spec.ts" time="4.201">
+</testcase>
+<testcase name="Design System Visual Testing › color scheme should be consistent" classname="design-system-visual.spec.ts" time="3.257">
+</testcase>
+<testcase name="Design System Visual Testing › spacing should be consistent" classname="design-system-visual.spec.ts" time="4.222">
+</testcase>
+<testcase name="Design System Visual Testing › border radius should be consistent" classname="design-system-visual.spec.ts" time="4.457">
+<failure message="design-system-visual.spec.ts:107:7 border radius should be consistent" type="FAILURE">
+<![CDATA[  [webkit] › design-system-visual.spec.ts:107:7 › Design System Visual Testing › border radius should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "0px"
+
+      118 |       // Should have defined border radius
+      119 |       expect(borderRadius).toBeTruthy();
+    > 120 |       expect(borderRadius).not.toBe('0px');
+          |                                ^
+      121 |     }
+      122 |   });
+      123 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:120:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › shadows should be consistent" classname="design-system-visual.spec.ts" time="3.756">
+<failure message="design-system-visual.spec.ts:124:7 shadows should be consistent" type="FAILURE">
+<![CDATA[  [webkit] › design-system-visual.spec.ts:124:7 › Design System Visual Testing › shadows should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      135 |       // Should have defined shadow
+      136 |       expect(boxShadow).toBeTruthy();
+    > 137 |       expect(boxShadow).not.toBe('none');
+          |                             ^
+      138 |     }
+      139 |   });
+      140 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:137:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › responsive breakpoints should work" classname="design-system-visual.spec.ts" time="5.426">
+<failure message="design-system-visual.spec.ts:141:7 responsive breakpoints should work" type="FAILURE">
+<![CDATA[  [webkit] › design-system-visual.spec.ts:141:7 › Design System Visual Testing › responsive breakpoints should work 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('main, body') resolved to 2 elements:
+        1) <body class="inter_e4842bbd-module__r7o-_q__className min-h-screen bg-background text-foreground antialiased">…</body> aka locator('body')
+        2) <main>…</main> aka getByRole('main')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main, body')
+
+
+      153 |       
+      154 |       // Verify layout still works
+    > 155 |       await expect(page.locator('main, body')).toBeVisible();
+          |                                                ^
+      156 |       
+      157 |       // Check that content is properly sized
+      158 |       const mainElement = page.locator('main, body');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:155:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › interactive states should be consistent" classname="design-system-visual.spec.ts" time="4.964">
+</testcase>
+</testsuite>
+<testsuite name="homepage-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="webkit" tests="6" failures="4" skipped="0" time="41.434" errors="0">
+<testcase name="Homepage Visual Testing › homepage should load with proper visual elements" classname="homepage-visual.spec.ts" time="8.732">
+<failure message="homepage-visual.spec.ts:10:7 homepage should load with proper visual elements" type="FAILURE">
+<![CDATA[  [webkit] › homepage-visual.spec.ts:10:7 › Homepage Visual Testing › homepage should load with proper visual elements 
+
+    Error: Timed out 5000ms waiting for expect(locator).toContainText(expected)
+
+    Locator: locator('h1')
+    Expected string: "Campfire"
+    Received string: "Transform Customer Service Into Your Competitive Advantage"
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('h1')
+        8 × locator resolved to <h1 class="page-header-h1 text-ds-color-text">…</h1>
+          - unexpected value "Transform Customer Service Into Your Competitive Advantage"
+
+
+      16 |     // Test hero section
+      17 |     await expect(page.locator('h1')).toBeVisible();
+    > 18 |     await expect(page.locator('h1')).toContainText('Campfire');
+         |                                      ^
+      19 |     
+      20 |     // Test CTA buttons
+      21 |     const ctaButtons = page.locator('button:has-text("Get Started"), a:has-text("Get Started")');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:18:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › design system tokens should be applied correctly" classname="homepage-visual.spec.ts" time="4.864">
+</testcase>
+<testcase name="Homepage Visual Testing › responsive design should work on mobile" classname="homepage-visual.spec.ts" time="4.992">
+<failure message="homepage-visual.spec.ts:45:7 responsive design should work on mobile" type="FAILURE">
+<![CDATA[  [webkit] › homepage-visual.spec.ts:45:7 › Homepage Visual Testing › responsive design should work on mobile 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 375
+    Received:   375
+
+      54 |     const heroText = page.locator('h1');
+      55 |     const heroBox = await heroText.boundingBox();
+    > 56 |     expect(heroBox?.width).toBeLessThan(375);
+         |                            ^
+      57 |   });
+      58 |
+      59 |   test('accessibility features should be present', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:56:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › accessibility features should be present" classname="homepage-visual.spec.ts" time="8.161">
+<failure message="homepage-visual.spec.ts:59:7 accessibility features should be present" type="FAILURE">
+<![CDATA[  [webkit] › homepage-visual.spec.ts:59:7 › Homepage Visual Testing › accessibility features should be present 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+    Expected: visible
+    Received: hidden
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+        8 × locator resolved to <div hidden="">…</div>
+          - unexpected value "hidden"
+
+
+      71 |     // Check for proper contrast (basic check)
+      72 |     const textElements = page.locator('p, h1, h2, h3, h4, h5, h6, span, div');
+    > 73 |     await expect(textElements.first()).toBeVisible();
+         |                                        ^
+      74 |   });
+      75 |
+      76 |   test('interactive elements should be properly styled', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:73:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › interactive elements should be properly styled" classname="homepage-visual.spec.ts" time="4.636">
+<failure message="homepage-visual.spec.ts:76:7 interactive elements should be properly styled" type="FAILURE">
+<![CDATA[  [webkit] › homepage-visual.spec.ts:76:7 › Homepage Visual Testing › interactive elements should be properly styled 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "pointer"
+    Received: "default"
+
+      92 |       });
+      93 |       
+    > 94 |       expect(hoverStyles.cursor).toBe('pointer');
+         |                                  ^
+      95 |     }
+      96 |   });
+      97 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:94:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › loading states should be smooth" classname="homepage-visual.spec.ts" time="10.049">
+</testcase>
+</testsuite>
+<testsuite name="dashboard-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Chrome" tests="6" failures="3" skipped="0" time="40.426" errors="0">
+<testcase name="Dashboard Visual Testing › dashboard should load with proper layout" classname="dashboard-visual.spec.ts" time="9.433">
+<failure message="dashboard-visual.spec.ts:9:7 dashboard should load with proper layout" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › dashboard-visual.spec.ts:9:7 › Dashboard Visual Testing › dashboard should load with proper layout 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+       9 |   test('dashboard should load with proper layout', async ({ page }) => {
+      10 |     // Test main dashboard elements
+    > 11 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      12 |     
+      13 |     // Check for sidebar or navigation
+      14 |     const sidebar = page.locator('nav, [role="navigation"], aside');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:11:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper typography" classname="dashboard-visual.spec.ts" time="4.023">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should be responsive" classname="dashboard-visual.spec.ts" time="9.461">
+<failure message="dashboard-visual.spec.ts:44:7 dashboard should be responsive" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › dashboard-visual.spec.ts:44:7 › Dashboard Visual Testing › dashboard should be responsive 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      48 |     
+      49 |     // Verify layout still works
+    > 50 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      51 |     
+      52 |     // Test mobile viewport
+      53 |     await page.setViewportSize({ width: 375, height: 667 });
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:50:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper spacing and layout" classname="dashboard-visual.spec.ts" time="2.494">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should handle loading states gracefully" classname="dashboard-visual.spec.ts" time="8.564">
+<failure message="dashboard-visual.spec.ts:80:7 dashboard should handle loading states gracefully" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › dashboard-visual.spec.ts:80:7 › Dashboard Visual Testing › dashboard should handle loading states gracefully 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      90 |     
+      91 |     // Verify content is loaded
+    > 92 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      93 |   });
+      94 |
+      95 |   test('dashboard should have proper interactive elements', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:92:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper interactive elements" classname="dashboard-visual.spec.ts" time="6.451">
+</testcase>
+</testsuite>
+<testsuite name="design-system-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Chrome" tests="8" failures="3" skipped="0" time="27.063" errors="0">
+<testcase name="Design System Visual Testing › design system CSS variables should be properly defined" classname="design-system-visual.spec.ts" time="3.667">
+</testcase>
+<testcase name="Design System Visual Testing › typography should be consistent across the app" classname="design-system-visual.spec.ts" time="4.564">
+</testcase>
+<testcase name="Design System Visual Testing › color scheme should be consistent" classname="design-system-visual.spec.ts" time="3.724">
+</testcase>
+<testcase name="Design System Visual Testing › spacing should be consistent" classname="design-system-visual.spec.ts" time="2.903">
+</testcase>
+<testcase name="Design System Visual Testing › border radius should be consistent" classname="design-system-visual.spec.ts" time="2.874">
+<failure message="design-system-visual.spec.ts:107:7 border radius should be consistent" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › design-system-visual.spec.ts:107:7 › Design System Visual Testing › border radius should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "0px"
+
+      118 |       // Should have defined border radius
+      119 |       expect(borderRadius).toBeTruthy();
+    > 120 |       expect(borderRadius).not.toBe('0px');
+          |                                ^
+      121 |     }
+      122 |   });
+      123 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:120:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › shadows should be consistent" classname="design-system-visual.spec.ts" time="2.591">
+<failure message="design-system-visual.spec.ts:124:7 shadows should be consistent" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › design-system-visual.spec.ts:124:7 › Design System Visual Testing › shadows should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      135 |       // Should have defined shadow
+      136 |       expect(boxShadow).toBeTruthy();
+    > 137 |       expect(boxShadow).not.toBe('none');
+          |                             ^
+      138 |     }
+      139 |   });
+      140 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:137:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › responsive breakpoints should work" classname="design-system-visual.spec.ts" time="3.307">
+<failure message="design-system-visual.spec.ts:141:7 responsive breakpoints should work" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › design-system-visual.spec.ts:141:7 › Design System Visual Testing › responsive breakpoints should work 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('main, body') resolved to 2 elements:
+        1) <body class="inter_e4842bbd-module__r7o-_q__className min-h-screen bg-background text-foreground antialiased">…</body> aka locator('body')
+        2) <main>…</main> aka getByRole('main')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main, body')
+
+
+      153 |       
+      154 |       // Verify layout still works
+    > 155 |       await expect(page.locator('main, body')).toBeVisible();
+          |                                                ^
+      156 |       
+      157 |       // Check that content is properly sized
+      158 |       const mainElement = page.locator('main, body');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:155:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › interactive states should be consistent" classname="design-system-visual.spec.ts" time="3.433">
+</testcase>
+</testsuite>
+<testsuite name="homepage-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Chrome" tests="6" failures="4" skipped="0" time="27.602" errors="0">
+<testcase name="Homepage Visual Testing › homepage should load with proper visual elements" classname="homepage-visual.spec.ts" time="6.994">
+<failure message="homepage-visual.spec.ts:10:7 homepage should load with proper visual elements" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › homepage-visual.spec.ts:10:7 › Homepage Visual Testing › homepage should load with proper visual elements 
+
+    Error: Timed out 5000ms waiting for expect(locator).toContainText(expected)
+
+    Locator: locator('h1')
+    Expected string: "Campfire"
+    Received string: "Transform Customer Service Into Your Competitive Advantage"
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('h1')
+        9 × locator resolved to <h1 class="page-header-h1 text-ds-color-text">…</h1>
+          - unexpected value "Transform Customer Service Into Your Competitive Advantage"
+
+
+      16 |     // Test hero section
+      17 |     await expect(page.locator('h1')).toBeVisible();
+    > 18 |     await expect(page.locator('h1')).toContainText('Campfire');
+         |                                      ^
+      19 |     
+      20 |     // Test CTA buttons
+      21 |     const ctaButtons = page.locator('button:has-text("Get Started"), a:has-text("Get Started")');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:18:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › design system tokens should be applied correctly" classname="homepage-visual.spec.ts" time="1.944">
+</testcase>
+<testcase name="Homepage Visual Testing › responsive design should work on mobile" classname="homepage-visual.spec.ts" time="3.793">
+<failure message="homepage-visual.spec.ts:45:7 responsive design should work on mobile" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › homepage-visual.spec.ts:45:7 › Homepage Visual Testing › responsive design should work on mobile 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 375
+    Received:   375
+
+      54 |     const heroText = page.locator('h1');
+      55 |     const heroBox = await heroText.boundingBox();
+    > 56 |     expect(heroBox?.width).toBeLessThan(375);
+         |                            ^
+      57 |   });
+      58 |
+      59 |   test('accessibility features should be present', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:56:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › accessibility features should be present" classname="homepage-visual.spec.ts" time="7.074">
+<failure message="homepage-visual.spec.ts:59:7 accessibility features should be present" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › homepage-visual.spec.ts:59:7 › Homepage Visual Testing › accessibility features should be present 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+    Expected: visible
+    Received: hidden
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+        9 × locator resolved to <div hidden="">…</div>
+          - unexpected value "hidden"
+
+
+      71 |     // Check for proper contrast (basic check)
+      72 |     const textElements = page.locator('p, h1, h2, h3, h4, h5, h6, span, div');
+    > 73 |     await expect(textElements.first()).toBeVisible();
+         |                                        ^
+      74 |   });
+      75 |
+      76 |   test('interactive elements should be properly styled', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:73:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › interactive elements should be properly styled" classname="homepage-visual.spec.ts" time="3.048">
+<failure message="homepage-visual.spec.ts:76:7 interactive elements should be properly styled" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › homepage-visual.spec.ts:76:7 › Homepage Visual Testing › interactive elements should be properly styled 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "pointer"
+    Received: "default"
+
+      92 |       });
+      93 |       
+    > 94 |       expect(hoverStyles.cursor).toBe('pointer');
+         |                                  ^
+      95 |     }
+      96 |   });
+      97 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:94:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › loading states should be smooth" classname="homepage-visual.spec.ts" time="4.749">
+</testcase>
+</testsuite>
+<testsuite name="dashboard-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Safari" tests="6" failures="3" skipped="0" time="30.788" errors="0">
+<testcase name="Dashboard Visual Testing › dashboard should load with proper layout" classname="dashboard-visual.spec.ts" time="7.187">
+<failure message="dashboard-visual.spec.ts:9:7 dashboard should load with proper layout" type="FAILURE">
+<![CDATA[  [Mobile Safari] › dashboard-visual.spec.ts:9:7 › Dashboard Visual Testing › dashboard should load with proper layout 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+       9 |   test('dashboard should load with proper layout', async ({ page }) => {
+      10 |     // Test main dashboard elements
+    > 11 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      12 |     
+      13 |     // Check for sidebar or navigation
+      14 |     const sidebar = page.locator('nav, [role="navigation"], aside');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:11:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-9b98f-uld-load-with-proper-layout-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper typography" classname="dashboard-visual.spec.ts" time="2.442">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should be responsive" classname="dashboard-visual.spec.ts" time="8.559">
+<failure message="dashboard-visual.spec.ts:44:7 dashboard should be responsive" type="FAILURE">
+<![CDATA[  [Mobile Safari] › dashboard-visual.spec.ts:44:7 › Dashboard Visual Testing › dashboard should be responsive 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      48 |     
+      49 |     // Verify layout still works
+    > 50 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      51 |     
+      52 |     // Test mobile viewport
+      53 |     await page.setViewportSize({ width: 375, height: 667 });
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:50:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-72290-hboard-should-be-responsive-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper spacing and layout" classname="dashboard-visual.spec.ts" time="2.337">
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should handle loading states gracefully" classname="dashboard-visual.spec.ts" time="7.62">
+<failure message="dashboard-visual.spec.ts:80:7 dashboard should handle loading states gracefully" type="FAILURE">
+<![CDATA[  [Mobile Safari] › dashboard-visual.spec.ts:80:7 › Dashboard Visual Testing › dashboard should handle loading states gracefully 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('main')
+    Expected: visible
+    Received: <element(s) not found>
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main')
+
+
+      90 |     
+      91 |     // Verify content is loaded
+    > 92 |     await expect(page.locator('main')).toBeVisible();
+         |                                        ^
+      93 |   });
+      94 |
+      95 |   test('dashboard should have proper interactive elements', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/dashboard-visual.spec.ts:92:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/dashboard-visual-Dashboard-f164b-e-loading-states-gracefully-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Dashboard Visual Testing › dashboard should have proper interactive elements" classname="dashboard-visual.spec.ts" time="2.643">
+</testcase>
+</testsuite>
+<testsuite name="design-system-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Safari" tests="8" failures="3" skipped="0" time="23.616" errors="0">
+<testcase name="Design System Visual Testing › design system CSS variables should be properly defined" classname="design-system-visual.spec.ts" time="2.369">
+</testcase>
+<testcase name="Design System Visual Testing › typography should be consistent across the app" classname="design-system-visual.spec.ts" time="2.42">
+</testcase>
+<testcase name="Design System Visual Testing › color scheme should be consistent" classname="design-system-visual.spec.ts" time="2.439">
+</testcase>
+<testcase name="Design System Visual Testing › spacing should be consistent" classname="design-system-visual.spec.ts" time="3.294">
+</testcase>
+<testcase name="Design System Visual Testing › border radius should be consistent" classname="design-system-visual.spec.ts" time="2.987">
+<failure message="design-system-visual.spec.ts:107:7 border radius should be consistent" type="FAILURE">
+<![CDATA[  [Mobile Safari] › design-system-visual.spec.ts:107:7 › Design System Visual Testing › border radius should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "0px"
+
+      118 |       // Should have defined border radius
+      119 |       expect(borderRadius).toBeTruthy();
+    > 120 |       expect(borderRadius).not.toBe('0px');
+          |                                ^
+      121 |     }
+      122 |   });
+      123 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:120:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-063f2-radius-should-be-consistent-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › shadows should be consistent" classname="design-system-visual.spec.ts" time="2.884">
+<failure message="design-system-visual.spec.ts:124:7 shadows should be consistent" type="FAILURE">
+<![CDATA[  [Mobile Safari] › design-system-visual.spec.ts:124:7 › Design System Visual Testing › shadows should be consistent 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      135 |       // Should have defined shadow
+      136 |       expect(boxShadow).toBeTruthy();
+    > 137 |       expect(boxShadow).not.toBe('none');
+          |                             ^
+      138 |     }
+      139 |   });
+      140 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:137:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-b6241-hadows-should-be-consistent-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › responsive breakpoints should work" classname="design-system-visual.spec.ts" time="3.573">
+<failure message="design-system-visual.spec.ts:141:7 responsive breakpoints should work" type="FAILURE">
+<![CDATA[  [Mobile Safari] › design-system-visual.spec.ts:141:7 › Design System Visual Testing › responsive breakpoints should work 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('main, body') resolved to 2 elements:
+        1) <body class="inter_e4842bbd-module__r7o-_q__className min-h-screen bg-background text-foreground antialiased">…</body> aka locator('body')
+        2) <main>…</main> aka getByRole('main')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('main, body')
+
+
+      153 |       
+      154 |       // Verify layout still works
+    > 155 |       await expect(page.locator('main, body')).toBeVisible();
+          |                                                ^
+      156 |       
+      157 |       // Check that content is properly sized
+      158 |       const mainElement = page.locator('main, body');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/design-system-visual.spec.ts:155:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/design-system-visual-Desig-0ef67-ive-breakpoints-should-work-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Design System Visual Testing › interactive states should be consistent" classname="design-system-visual.spec.ts" time="3.65">
+</testcase>
+</testsuite>
+<testsuite name="homepage-visual.spec.ts" timestamp="2025-07-27T05:07:35.602Z" hostname="Mobile Safari" tests="6" failures="4" skipped="0" time="28.331" errors="0">
+<testcase name="Homepage Visual Testing › homepage should load with proper visual elements" classname="homepage-visual.spec.ts" time="8.053">
+<failure message="homepage-visual.spec.ts:10:7 homepage should load with proper visual elements" type="FAILURE">
+<![CDATA[  [Mobile Safari] › homepage-visual.spec.ts:10:7 › Homepage Visual Testing › homepage should load with proper visual elements 
+
+    Error: Timed out 5000ms waiting for expect(locator).toContainText(expected)
+
+    Locator: locator('h1')
+    Expected string: "Campfire"
+    Received string: "Transform Customer Service Into Your Competitive Advantage"
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('h1')
+        9 × locator resolved to <h1 class="page-header-h1 text-ds-color-text">…</h1>
+          - unexpected value "Transform Customer Service Into Your Competitive Advantage"
+
+
+      16 |     // Test hero section
+      17 |     await expect(page.locator('h1')).toBeVisible();
+    > 18 |     await expect(page.locator('h1')).toContainText('Campfire');
+         |                                      ^
+      19 |     
+      20 |     // Test CTA buttons
+      21 |     const ctaButtons = page.locator('button:has-text("Get Started"), a:has-text("Get Started")');
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:18:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-2fd45-with-proper-visual-elements-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › design system tokens should be applied correctly" classname="homepage-visual.spec.ts" time="2.887">
+</testcase>
+<testcase name="Homepage Visual Testing › responsive design should work on mobile" classname="homepage-visual.spec.ts" time="3.543">
+<failure message="homepage-visual.spec.ts:45:7 responsive design should work on mobile" type="FAILURE">
+<![CDATA[  [Mobile Safari] › homepage-visual.spec.ts:45:7 › Homepage Visual Testing › responsive design should work on mobile 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 375
+    Received:   375
+
+      54 |     const heroText = page.locator('h1');
+      55 |     const heroBox = await heroText.boundingBox();
+    > 56 |     expect(heroBox?.width).toBeLessThan(375);
+         |                            ^
+      57 |   });
+      58 |
+      59 |   test('accessibility features should be present', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:56:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-7cbad-esign-should-work-on-mobile-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › accessibility features should be present" classname="homepage-visual.spec.ts" time="7.339">
+<failure message="homepage-visual.spec.ts:59:7 accessibility features should be present" type="FAILURE">
+<![CDATA[  [Mobile Safari] › homepage-visual.spec.ts:59:7 › Homepage Visual Testing › accessibility features should be present 
+
+    Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+    Locator: locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+    Expected: visible
+    Received: hidden
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('p, h1, h2, h3, h4, h5, h6, span, div').first()
+        9 × locator resolved to <div hidden="">…</div>
+          - unexpected value "hidden"
+
+
+      71 |     // Check for proper contrast (basic check)
+      72 |     const textElements = page.locator('p, h1, h2, h3, h4, h5, h6, span, div');
+    > 73 |     await expect(textElements.first()).toBeVisible();
+         |                                        ^
+      74 |   });
+      75 |
+      76 |   test('interactive elements should be properly styled', async ({ page }) => {
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:73:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-38060--features-should-be-present-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › interactive elements should be properly styled" classname="homepage-visual.spec.ts" time="2.839">
+<failure message="homepage-visual.spec.ts:76:7 interactive elements should be properly styled" type="FAILURE">
+<![CDATA[  [Mobile Safari] › homepage-visual.spec.ts:76:7 › Homepage Visual Testing › interactive elements should be properly styled 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "pointer"
+    Received: "default"
+
+      92 |       });
+      93 |       
+    > 94 |       expect(hoverStyles.cursor).toBe('pointer');
+         |                                  ^
+      95 |     }
+      96 |   });
+      97 |
+        at /Users/lukatenbosch/Downloads/campfire/campfire-v2/visual-tests/homepage-visual.spec.ts:94:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|../test-results/homepage-visual-Homepage-V-f2329-s-should-be-properly-styled-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage Visual Testing › loading states should be smooth" classname="homepage-visual.spec.ts" time="3.67">
+</testcase>
+</testsuite>
+</testsuites>

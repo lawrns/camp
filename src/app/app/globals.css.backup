@@ -1,0 +1,514 @@
+/**
+ * CAMPFIRE UNIFIED CSS ENTRY POINT
+ *
+ * Clean foundation for polished inbox UI that rivals Intercom
+ * Architecture: Design Tokens → Tailwind → Consolidated Styles
+ * Target: ≤200KB gzipped CSS total
+ */
+
+/* Essential Design System Foundation - MUST BE FIRST */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import "../styles/design-tokens-unified.css";
+@import "../styles/accessibility.css";
+
+/* Tailwind CSS Layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * ESSENTIAL BROWSER NORMALIZATION
+ * Using design tokens for consistency
+ */
+@layer base {
+  :root {
+    /* BORDER RADIUS DESIGN TOKENS - CRITICAL */
+
+    /* Tailwind compatibility */
+
+  }
+
+  html {
+    /* Mobile viewport optimization */
+    --vh: 1vh;
+
+    /* Performance & UX */
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+
+    /* Hardware acceleration for smooth scrolling */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  body {
+    /* Design token integration */
+    background-color: hsl(var(--fl-color-background));
+    color: hsl(var(--fl-color-text));
+    font-family: var(--fl-font-family-sans);
+    line-height: var(--fl-line-height-normal);
+
+    /* Performance optimizations */
+    contain: layout style;
+    will-change: scroll-position;
+
+    /* Prevent overscroll on mobile */
+    overscroll-behavior: none;
+  }
+
+  /* Optimize all interactive elements for 60fps */
+  button,
+  [role="button"],
+  .clickable,
+  .conversation-card,
+  .message-bubble {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  /* Enhanced focus management */
+  :focus-visible {
+    outline: 2px solid hsl(var(--fl-color-focus));
+    outline-offset: 2px;
+  }
+
+  /* CRITICAL: Override Tailwind's preflight reset */
+  /* Tailwind's preflight might be resetting border-radius */
+  *:not(html):not(body) {
+    /* Don't let any global reset remove border-radius */
+  }
+
+  /* EMERGENCY: Force border-radius with hardcoded values if tokens fail */
+  .rounded-sm {
+    border-radius: 0.5rem !important;
+  }
+
+  .rounded {
+    border-radius: 0.75rem !important;
+  }
+
+  .rounded-md {
+    border-radius: 0.75rem !important;
+  }
+
+  .rounded-lg {
+    border-radius: 1rem !important;
+  }
+
+  .rounded-xl {
+    border-radius: 1.25rem !important;
+  }
+
+  .rounded-2xl {
+    border-radius: 1.5rem !important;
+  }
+
+  .rounded-3xl {
+    border-radius: 2rem !important;
+  }
+
+  .rounded-full {
+    border-radius: 9999px !important;
+  }
+
+  /* SITE-WIDE BORDER RADIUS RESTORATION */
+  /* Ensure common UI elements have proper rounded corners */
+  button:not(.rounded-none) {
+    border-radius: var(--fl-radius-md) !important;
+  }
+
+  input:not(.rounded-none):not([type="checkbox"]):not([type="radio"]) {
+    border-radius: var(--fl-radius-sm) !important;
+  }
+
+  textarea:not(.rounded-none) {
+    border-radius: var(--fl-radius-sm) !important;
+  }
+
+  select:not(.rounded-none) {
+    border-radius: var(--fl-radius-sm) !important;
+  }
+
+  .card:not(.rounded-none) {
+    border-radius: var(--fl-radius-lg) !important;
+  }
+
+  .modal:not(.rounded-none),
+  .dialog:not(.rounded-none) {
+    border-radius: var(--fl-radius-xl) !important;
+  }
+
+  .badge:not(.rounded-none),
+  .chip:not(.rounded-none),
+  .tag:not(.rounded-none) {
+    border-radius: var(--fl-radius-full) !important;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"] {
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* SOFTER BORDERS GLOBAL STYLES */
+  /* Ensure all borders are softer and more modern */
+  .border {
+    border-color: hsl(var(--fl-color-border) / 0.6) !important;
+  }
+
+  .border-gray-100 {
+    border-color: hsl(210 40% 96%) !important;
+  }
+
+  .border-gray-50 {
+    border-color: hsl(210 40% 98%) !important;
+  }
+
+  /* Enhanced shadow utilities for softer appearance */
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .shadow-soft-lg {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Widget-specific softer styling */
+  [data-testid="widget-panel"] {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+  }
+}
+
+/**
+ * COMPONENT LAYER ENHANCEMENTS
+ * Professional patterns for inbox UI
+ */
+@layer components {
+
+  /* Professional card pattern */
+  .professional-card {
+    @apply rounded-xl border border-fl-border bg-fl-surface shadow-sm;
+    @apply hover:border-fl-border-interactive hover:shadow-md;
+    @apply transition-all duration-200 ease-out;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Glass morphism utility */
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Enhanced button patterns */
+  .btn-primary {
+    @apply border-fl-brand bg-fl-brand text-white;
+    @apply hover:bg-fl-brand-hover hover:shadow-lg;
+    @apply transition-all duration-150 active:scale-95;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  }
+
+  .btn-secondary {
+    @apply border-fl-border bg-fl-surface text-fl-text;
+    @apply hover:border-fl-border-interactive hover:bg-fl-background-muted;
+    @apply transition-all duration-150 active:scale-95;
+  }
+
+  /* Status indicator patterns */
+  .status-indicator {
+    @apply inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-medium;
+    @apply border transition-all duration-200;
+  }
+
+  .status-online {
+    @apply border-fl-success/20 bg-fl-success/10 text-fl-success;
+  }
+
+  .status-away {
+    @apply border-fl-warning/20 bg-fl-warning/10 text-fl-warning;
+  }
+
+  .status-offline {
+    @apply border-fl-border bg-fl-text-subtle/10 text-fl-text-subtle;
+  }
+
+  /* Message bubble patterns */
+  .message-bubble-agent {
+    @apply rounded-2xl border border-fl-border bg-fl-surface p-4 shadow-sm;
+    backdrop-filter: blur(10px);
+  }
+
+  .message-bubble-customer {
+    @apply rounded-2xl bg-fl-brand p-4 text-white shadow-lg;
+    background: linear-gradient(135deg, hsl(var(--fl-color-brand)), hsl(var(--fl-color-brand-hover)));
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  }
+
+  /* Loading states */
+  .loading-shimmer {
+    background: linear-gradient(90deg,
+        hsl(var(--fl-color-background-subtle)) 0%,
+        hsl(var(--fl-color-background-muted)) 50%,
+        hsl(var(--fl-color-background-subtle)) 100%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+
+    100% {
+      background-position: calc(200px + 100%) 0;
+    }
+  }
+}
+
+/**
+ * UTILITY LAYER ADDITIONS
+ * Modern utility patterns
+ */
+@layer utilities {
+
+  /* Enhanced spacing utilities */
+  .space-y-responsive>*+* {
+    margin-top: clamp(0.5rem, 2vw, 1rem);
+  }
+
+  /* Touch-friendly targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* GPU acceleration */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Text gradient */
+  .text-gradient-brand {
+    background: linear-gradient(135deg, hsl(var(--fl-color-brand)), hsl(var(--fl-color-brand-hover)));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* BORDER RADIUS UTILITIES - MAXIMUM SPECIFICITY */
+  html .rounded-none,
+  body .rounded-none,
+  div .rounded-none {
+    border-radius: 0 !important;
+  }
+
+  html .rounded-xs,
+  body .rounded-xs,
+  div .rounded-xs {
+    border-radius: 0.25rem !important;
+  }
+
+  html .rounded-sm,
+  body .rounded-sm,
+  div .rounded-sm {
+    border-radius: 0.5rem !important;
+  }
+
+  html .rounded,
+  body .rounded,
+  div .rounded {
+    border-radius: 0.75rem !important;
+  }
+
+  html .rounded-md,
+  body .rounded-md,
+  div .rounded-md {
+    border-radius: 0.75rem !important;
+  }
+
+  html .rounded-lg,
+  body .rounded-lg,
+  div .rounded-lg {
+    border-radius: 1rem !important;
+  }
+
+  html .rounded-xl,
+  body .rounded-xl,
+  div .rounded-xl {
+    border-radius: 1.25rem !important;
+  }
+
+  html .rounded-2xl,
+  body .rounded-2xl,
+  div .rounded-2xl {
+    border-radius: 1.5rem !important;
+  }
+
+  html .rounded-3xl,
+  body .rounded-3xl,
+  div .rounded-3xl {
+    border-radius: 2rem !important;
+  }
+
+  html .rounded-full,
+  body .rounded-full,
+  div .rounded-full {
+    border-radius: 9999px !important;
+  }
+
+  /* Responsive text sizing */
+  .text-responsive {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+
+  /* Safe area utilities */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-x {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/**
+ * RESPONSIVE ENHANCEMENTS
+ * Mobile-first approach
+ */
+@media (max-width: 768px) {
+
+  /* Enhanced mobile touch targets */
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+  }
+
+  /* Improved mobile typography */
+  body {
+    font-size: 16px;
+    /* Prevent zoom on iOS */
+  }
+
+  /* Mobile-optimized scrolling */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/**
+ * ACCESSIBILITY ENHANCEMENTS
+ */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+
+  .professional-card,
+  .message-bubble-agent,
+  .message-bubble-customer {
+    border-width: 2px;
+  }
+
+  .status-indicator {
+    border-width: 2px;
+  }
+}
+
+/**
+ * PRINT OPTIMIZATIONS
+ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .professional-card {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+}
+
+/* Add missing gradients */
+@layer base {
+  .gradient-bg {
+    background: linear-gradient(135deg, hsl(var(--fl-color-background)) 0%, hsl(var(--fl-color-background-muted)) 100%);
+  }
+
+  /* Enhanced shadows */
+  .shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .shadow-medium {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}
+
+/* Update component layer */
+@layer components {
+
+  /* Professional inbox card */
+  .inbox-card {
+    @apply rounded-lg shadow-soft bg-white p-4;
+  }
+
+  /* Message bubble */
+  .message-bubble {
+    @apply rounded-2xl px-4 py-2 max-w-md;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  }
+
+  /* Button enhancements */
+  .btn {
+    @apply rounded-md shadow-soft transition-all duration-200;
+  }
+}

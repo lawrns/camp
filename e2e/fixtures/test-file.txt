@@ -1,0 +1,17 @@
+This is a test file for E2E testing of file upload functionality in the Campfire application.
+
+It contains:
+- Sample text content
+- Multiple lines
+- Special characters: !@#$%^&*()
+- Emojis: 😊 🚀 💻
+
+This file is used to test:
+1. File attachment functionality
+2. File upload in widget
+3. File handling in inbox
+4. File preview and download
+5. File size validation
+6. File type validation
+
+End of test file. 

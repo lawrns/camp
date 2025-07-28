@@ -1,0 +1,213 @@
+{
+  "context": {
+    "project": "Campfire v2 - Customer Support Platform",
+    "technology_stack": {
+      "database": "PostgreSQL with Supabase",
+      "orm": "Drizzle ORM",
+      "framework": "Next.js 15",
+      "auth": "Supabase Auth"
+    },
+    "current_issues": [
+      "Database tables missing (tickets table doesn't exist)",
+      "Column naming inconsistencies (organizationId vs organization_id)",
+      "Foreign key relationships not properly established",
+      "RLS policies may be blocking access",
+      "User organization membership not configured"
+    ]
+  },
+  "objectives": {
+    "primary": "Fix all database schema issues to achieve 100% API functionality",
+    "secondary": [
+      "Ensure proper multi-tenant organization isolation",
+      "Set up correct foreign key relationships",
+      "Configure RLS policies for security",
+      "Create necessary indexes for performance"
+    ]
+  },
+  "current_schema_analysis": {
+    "conversations_table": {
+      "issue": "Column 'organizationId' doesn't exist, should be 'organization_id'",
+      "current_schema": {
+        "table_name": "conversations",
+        "columns": ["id", "organizationId", "uid", "mailboxId", "subject", "status"],
+        "problem": "Column name mismatch between schema definition and actual database"
+      },
+      "required_fix": "Rename column from 'organizationId' to 'organization_id' or update queries"
+    },
+    "tickets_table": {
+      "issue": "Table 'public.tickets' does not exist",
+      "current_schema": {
+        "table_name": "tickets",
+        "status": "NOT_CREATED",
+        "problem": "Table was defined in schema but never migrated to database"
+      },
+      "required_fix": "Create tickets table with proper schema"
+    },
+    "foreign_key_relationships": {
+      "issue": "Foreign key relationships not established",
+      "missing_relationships": [
+        "conversations -> users (customer_id)",
+        "conversations -> users (assignee_id)",
+        "tickets -> conversations (conversation_id)",
+        "tickets -> users (assignee_id)"
+      ],
+      "required_fix": "Create proper foreign key constraints"
+    }
+  },
+  "required_actions": {
+    "schema_fixes": [
+      {
+        "action": "Fix column naming consistency",
+        "target": "conversations table",
+        "changes": [
+          "Ensure organizationId column is properly named",
+          "Update API queries to use correct column names",
+          "Verify all column names match between schema and database"
+        ]
+      },
+      {
+        "action": "Create missing tables",
+        "target": "tickets table",
+        "changes": [
+          "Create tickets table with proper schema",
+          "Include all required columns: id, ticketNumber, conversationId, mailboxId, title, description, status, priority, assigneeId, etc.",
+          "Set up proper indexes and constraints"
+        ]
+      },
+      {
+        "action": "Establish foreign key relationships",
+        "target": "All tables",
+        "changes": [
+          "Create foreign key constraints for conversations -> users",
+          "Create foreign key constraints for tickets -> conversations",
+          "Create foreign key constraints for tickets -> users",
+          "Create foreign key constraints for tickets -> mailboxes"
+        ]
+      }
+    ],
+    "data_setup": [
+      {
+        "action": "Create test organization",
+        "description": "Create a test organization for the jam@jam.com user",
+        "sql": "INSERT INTO organizations (id, name, slug) VALUES (gen_random_uuid(), 'Test Organization', 'test-org')"
+      },
+      {
+        "action": "Create organization membership",
+        "description": "Add jam@jam.com user to the test organization",
+        "sql": "INSERT INTO organization_members (user_id, organization_id, role) VALUES ('6f9916c7-3575-4a81-b58e-624ab066bebc', 'org_id_here', 'admin')"
+      },
+      {
+        "action": "Create test mailbox",
+        "description": "Create a test mailbox for the organization",
+        "sql": "INSERT INTO mailboxes (name, slug, organization_id, widget_hmac_secret) VALUES ('Test Mailbox', 'test-mailbox', 'org_id_here', 'test-secret')"
+      }
+    ],
+    "rls_policies": [
+      {
+        "action": "Configure RLS for conversations",
+        "description": "Ensure users can only access conversations from their organization",
+        "policy": "CREATE POLICY conversations_org_policy ON conversations FOR ALL USING (organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid()))"
+      },
+      {
+        "action": "Configure RLS for tickets",
+        "description": "Ensure users can only access tickets from their organization",
+        "policy": "CREATE POLICY tickets_org_policy ON tickets FOR ALL USING (mailbox_id IN (SELECT id FROM mailboxes WHERE organization_id IN (SELECT organization_id FROM organization_members WHERE user_id = auth.uid())))"
+      },
+      {
+        "action": "Configure RLS for organization_members",
+        "description": "Allow users to see their own organization memberships",
+        "policy": "CREATE POLICY org_members_policy ON organization_members FOR SELECT USING (user_id = auth.uid())"
+      }
+    ]
+  },
+  "api_endpoints_to_fix": {
+    "/api/auth/user": {
+      "current_status": "403 - Organization access denied",
+      "issue": "User doesn't have organization membership",
+      "fix_required": "Create organization membership for jam@jam.com"
+    },
+    "/api/conversations": {
+      "current_status": "500 - Column organizationId does not exist",
+      "issue": "Column name mismatch",
+      "fix_required": "Update query to use 'organization_id' instead of 'organizationId'"
+    },
+    "/api/tickets": {
+      "current_status": "500 - Table tickets does not exist",
+      "issue": "Table not created",
+      "fix_required": "Create tickets table"
+    }
+  },
+  "success_criteria": {
+    "database": [
+      "All tables exist and are accessible",
+      "Foreign key relationships are properly established",
+      "RLS policies are configured and working",
+      "Column names are consistent across schema and queries"
+    ],
+    "api": [
+      "/api/auth/user returns 200 with user data",
+      "/api/conversations returns 200 with conversation list",
+      "/api/tickets returns 200 with ticket list",
+      "All endpoints properly handle authentication"
+    ],
+    "testing": [
+      "E2E tests show 90%+ success rate",
+      "No database-related 500 errors",
+      "Authentication works with both cookies and Authorization headers",
+      "Multi-tenant isolation is working"
+    ]
+  },
+  "migration_script_requirements": {
+    "format": "SQL migration files",
+    "location": "db/migrations/",
+    "naming": "YYYYMMDD_HHMMSS_description.sql",
+    "requirements": [
+      "Idempotent operations (can be run multiple times safely)",
+      "Proper rollback capabilities",
+      "Data preservation where possible",
+      "Clear documentation of changes"
+    ]
+  },
+  "verification_steps": {
+    "pre_migration": [
+      "Backup current database state",
+      "Document current schema",
+      "Identify any existing data that needs preservation"
+    ],
+    "post_migration": [
+      "Verify all tables exist",
+      "Test foreign key constraints",
+      "Verify RLS policies are working",
+      "Test API endpoints return expected responses",
+      "Run comprehensive E2E tests"
+    ]
+  },
+  "environment_considerations": {
+    "development": {
+      "database_url": "Supabase development database",
+      "backup_required": false,
+      "rollback_plan": "Reset database to clean state"
+    },
+    "production": {
+      "database_url": "Supabase production database",
+      "backup_required": true,
+      "rollback_plan": "Use database backups and migration rollbacks"
+    }
+  },
+  "instructions": {
+    "step_1": "Analyze current database schema and identify all discrepancies",
+    "step_2": "Create migration scripts to fix schema issues",
+    "step_3": "Set up proper foreign key relationships",
+    "step_4": "Configure RLS policies for security",
+    "step_5": "Create test data for jam@jam.com user",
+    "step_6": "Test all API endpoints after changes",
+    "step_7": "Verify E2E tests pass with 90%+ success rate"
+  },
+  "expected_outcome": {
+    "success_rate": "90%+ on E2E tests",
+    "api_status": "All endpoints return proper status codes (200/401/403, not 500)",
+    "authentication": "Works with both cookies and Authorization headers",
+    "multi_tenant": "Proper organization isolation working",
+    "performance": "Queries optimized with proper indexes"
+  }
+} 

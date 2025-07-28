@@ -1,0 +1,60 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="10.654805">
+<testsuite name="auth/basic-auth.spec.ts" timestamp="2025-07-28T17:48:40.490Z" hostname="chromium" tests="1" failures="0" skipped="0" time="9.992" errors="0">
+<testcase name="Basic Authentication Tests › should login successfully with jam@jam.com" classname="auth/basic-auth.spec.ts" time="9.992">
+<system-out>
+<![CDATA[PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+PAGE LOG: PostHog analytics disabled - no valid API key provided
+PAGE LOG: [AuthProvider] Initializing auth state
+PAGE LOG: [ExtensionIsolation] Global extension isolation initialized
+PAGE LOG: Failed to load resource: the server responded with a status of 401 (Unauthorized)
+PAGE LOG: [AuthProvider] Session check failed: {status: 401, success: false, authenticated: false, error: No valid session found}
+PAGE LOG: [AuthProvider] No authenticated session found (401)
+PAGE LOG: [AuthProvider] Dashboard context, setting user to null
+PAGE LOG: [Fast Refresh] done in NaNms
+PAGE LOG: 🔐 Auth state change: INITIAL_SESSION undefined
+PAGE LOG: 🔐 Auth state change: SIGNED_IN 6f9916c7-3575-4a81-b58e-624ab066bebc
+PAGE LOG: 🔐 Auth state change too recent, debouncing
+PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus
+PAGE LOG: [Fast Refresh] rebuilding
+PAGE LOG: [Fast Refresh] done in 130ms
+Dashboard content not found, checking other indicators...
+PAGE LOG: [Realtime] Channel manager destroyed
+PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+PAGE LOG: PostHog analytics disabled - no valid API key provided
+PAGE LOG: [AuthProvider] Initializing auth state
+PAGE LOG: [ExtensionIsolation] Global extension isolation initialized
+PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus
+PAGE LOG: [AuthProvider] User found: jam@jam.com
+PAGE LOG: [AuthProvider] User data: {id: 6f9916c7-3575-4a81-b58e-624ab066bebc, organizationId: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e, organizationRole: undefined}
+PAGE LOG: [Realtime] Created new channel: org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations
+PAGE LOG: [ConversationStats] Fetching stats for organization: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e
+PAGE LOG: [InboxDashboard] Conversations: []
+PAGE LOG: [InboxDashboard] Selected Conversation: null
+PAGE LOG: [InboxDashboard] Messages: []
+PAGE LOG: [InboxDashboard] Messages Loading: false
+PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED
+PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED
+PAGE LOG: [InboxDashboard] Conversations: []
+PAGE LOG: [InboxDashboard] Selected Conversation: null
+PAGE LOG: [InboxDashboard] Messages: []
+PAGE LOG: [InboxDashboard] Messages Loading: false
+PAGE LOG: [InboxDashboard] Conversations: []
+PAGE LOG: [InboxDashboard] Selected Conversation: null
+PAGE LOG: [InboxDashboard] Messages: []
+PAGE LOG: [InboxDashboard] Messages Loading: false
+PAGE LOG: 🔐 Auth state change: INITIAL_SESSION 6f9916c7-3575-4a81-b58e-624ab066bebc
+PAGE LOG: [ConversationStats] Query result: {conversationCount: 0, hasError: false, errorCode: undefined, errorMessage: undefined}
+PAGE LOG: [InboxDashboard] Conversations: []
+PAGE LOG: [InboxDashboard] Selected Conversation: null
+PAGE LOG: [InboxDashboard] Messages: []
+PAGE LOG: [InboxDashboard] Messages Loading: false
+Successfully navigated to dashboard - authentication successful
+PAGE LOG: [InboxDashboard] Conversations: []
+PAGE LOG: [InboxDashboard] Selected Conversation: null
+PAGE LOG: [InboxDashboard] Messages: []
+PAGE LOG: [InboxDashboard] Messages Loading: false
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

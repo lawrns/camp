@@ -1,0 +1,198 @@
+{
+  "project": "Campfire v2 - Customer Communication Platform",
+  "objective": "Bring the codebase up to industry-leading standards comparable to Intercom and LiveChat",
+  "current_state": {
+    "architecture": "Next.js 15 with App Router, Supabase, TypeScript",
+    "database": "PostgreSQL with Drizzle ORM",
+    "real_time": "Supabase Realtime with standardized patterns",
+    "authentication": "Supabase Auth with JWT tokens",
+    "ui_framework": "React with custom design system"
+  },
+  "standards_to_implement": {
+    "naming_conventions": {
+      "database_columns": "camelCase (organizationId, createdAt, senderType)",
+      "api_fields": "camelCase to match database schema",
+      "components": "PascalCase (WidgetPanel, MessageList)",
+      "hooks": "camelCase with 'use' prefix (useRealtime, useAuth)",
+      "constants": "UPPER_SNAKE_CASE (MAX_MESSAGE_LENGTH, API_TIMEOUT)",
+      "files": "PascalCase for components, camelCase for utilities"
+    },
+    "database_schema": {
+      "table_naming": "snake_case plural (conversations, messages, tickets)",
+      "column_naming": "camelCase (organizationId, customerEmail, createdAt)",
+      "relationships": "Every table must have organizationId for multi-tenancy",
+      "timestamps": "createdAt, updatedAt, deletedAt (soft deletes)",
+      "foreign_keys": "{table}Id pattern (conversationId, assigneeId)"
+    },
+    "api_standards": {
+      "response_format": "Direct data return, not wrapped objects",
+      "error_handling": "Structured error responses with codes",
+      "authentication": "JWT validation on all protected endpoints",
+      "organization_context": "Always include organizationId in queries",
+      "rate_limiting": "Implement on all public endpoints"
+    },
+    "real_time_communication": {
+      "channel_naming": "org:${organizationId}:conv:${conversationId}",
+      "event_types": "message.created, conversation.updated, typing.start",
+      "connection_management": "Exponential backoff, channel pooling",
+      "cleanup": "Unsubscribe on component unmount"
+    },
+    "component_architecture": {
+      "state_management": "React hooks with proper cleanup",
+      "performance": "Memoization, virtualization for long lists",
+      "accessibility": "ARIA labels, keyboard navigation, screen reader support",
+      "loading_states": "Skeleton loaders for all async content"
+    },
+    "security_standards": {
+      "input_sanitization": "DOMPurify for all user input",
+      "authentication": "Supabase Auth with JWT validation",
+      "authorization": "Row Level Security (RLS) on all tables",
+      "data_protection": "HTTPS only, secure headers, rate limiting"
+    },
+    "performance_requirements": {
+      "widget_load_time": "<100ms",
+      "bundle_size": "<30KB for widget",
+      "message_latency": "<100ms",
+      "lighthouse_score": ">95",
+      "memory_management": "Cleanup subscriptions, limit message history"
+    },
+    "testing_standards": {
+      "unit_testing": "80% coverage minimum",
+      "e2e_testing": "Critical user paths (widget, messaging, AI handover)",
+      "test_naming": "ComponentName.test.tsx",
+      "mocking": "Supabase client, real-time subscriptions"
+    },
+    "error_handling": {
+      "structured_errors": "Consistent error codes and messages",
+      "user_friendly": "Map technical errors to user messages",
+      "logging": "Structured logging with context",
+      "monitoring": "Performance metrics, error tracking"
+    }
+  },
+  "specific_improvements_needed": {
+    "database_queries": {
+      "fix_field_names": "Change organization_id to organizationId in all queries",
+      "add_organization_context": "Include organizationId in all database operations",
+      "standardize_timestamps": "Use createdAt, updatedAt consistently",
+      "implement_rls": "Enable RLS on all tables with proper policies"
+    },
+    "api_endpoints": {
+      "standardize_responses": "Return direct data, not wrapped objects",
+      "add_authentication": "JWT validation on all protected routes",
+      "error_handling": "Consistent error response format",
+      "rate_limiting": "Implement on widget and public endpoints"
+    },
+    "real_time_system": {
+      "use_standardized_patterns": "Follow lib/realtime/standardized-realtime.ts",
+      "channel_management": "Implement proper cleanup and pooling",
+      "event_consistency": "Use standardized event types",
+      "connection_recovery": "Exponential backoff for reconnections"
+    },
+    "component_quality": {
+      "accessibility": "Add ARIA labels, keyboard navigation",
+      "loading_states": "Implement skeleton loaders",
+      "error_boundaries": "Add error boundaries for all components",
+      "performance": "Memoize expensive operations, virtualize lists"
+    },
+    "security_enhancements": {
+      "input_validation": "Zod schemas for all API inputs",
+      "sanitization": "DOMPurify for all user-generated content",
+      "authentication": "Proper JWT validation and organization access",
+      "headers": "Security headers (CSP, HSTS, etc.)"
+    },
+    "testing_coverage": {
+      "unit_tests": "Add tests for all components and utilities",
+      "integration_tests": "Test API endpoints and database operations",
+      "e2e_tests": "Critical user flows (widget messaging, AI handover)",
+      "performance_tests": "Load testing for real-time features"
+    }
+  },
+  "implementation_priority": {
+    "critical": [
+      "Fix database field naming (organization_id → organizationId)",
+      "Standardize API response formats",
+      "Implement proper authentication on all endpoints",
+      "Add RLS policies to all database tables"
+    ],
+    "high": [
+      "Add comprehensive error handling",
+      "Implement loading states and skeleton loaders",
+      "Add accessibility features (ARIA, keyboard nav)",
+      "Set up proper testing infrastructure"
+    ],
+    "medium": [
+      "Optimize bundle size and performance",
+      "Add comprehensive logging and monitoring",
+      "Implement rate limiting and security headers",
+      "Add E2E tests for critical flows"
+    ],
+    "low": [
+      "Add advanced features (file uploads, AI integration)",
+      "Implement advanced analytics and metrics",
+      "Add internationalization support",
+      "Optimize for mobile and responsive design"
+    ]
+  },
+  "quality_gates": {
+    "before_deployment": [
+      "All TypeScript errors resolved",
+      "All API endpoints return consistent formats",
+      "All database queries include organization context",
+      "All components have proper error boundaries",
+      "All critical user flows have E2E tests",
+      "Performance benchmarks met (load time <100ms, bundle <30KB)",
+      "Security audit passed (authentication, input validation, RLS)",
+      "Accessibility audit passed (ARIA, keyboard navigation)"
+    ],
+    "monitoring_requirements": [
+      "Real-time error tracking and alerting",
+      "Performance monitoring (response times, bundle size)",
+      "Security monitoring (failed auth attempts, suspicious activity)",
+      "User experience metrics (conversion rates, satisfaction scores)"
+    ]
+  },
+  "success_metrics": {
+    "technical": {
+      "lighthouse_score": ">95",
+      "bundle_size": "<30KB for widget",
+      "load_time": "<100ms",
+      "test_coverage": ">80%",
+      "type_safety": "100% TypeScript coverage"
+    },
+    "user_experience": {
+      "message_latency": "<100ms",
+      "widget_uptime": ">99.9%",
+      "ai_response_accuracy": ">90%",
+      "customer_satisfaction": ">4.5/5"
+    },
+    "security": {
+      "vulnerability_scan": "0 critical/high vulnerabilities",
+      "penetration_test": "Passed",
+      "compliance": "GDPR, SOC2 compliant"
+    }
+  },
+  "tools_and_libraries": {
+    "required": [
+      "Next.js 15 with App Router",
+      "Supabase (Auth, Database, Realtime)",
+      "TypeScript (strict mode)",
+      "React Testing Library",
+      "Playwright for E2E testing",
+      "Zod for validation",
+      "DOMPurify for sanitization",
+      "Tailwind CSS for styling"
+    ],
+    "recommended": [
+      "Sentry for error tracking",
+      "Vercel Analytics for performance",
+      "Stripe for payments",
+      "OpenAI/Anthropic for AI features"
+    ]
+  },
+  "documentation_requirements": {
+    "code_documentation": "JSDoc comments for all public APIs",
+    "api_documentation": "OpenAPI/Swagger specs for all endpoints",
+    "component_documentation": "Storybook for all UI components",
+    "deployment_documentation": "Clear deployment and rollback procedures"
+  }
+} 

@@ -1,0 +1,31 @@
+/* ===== IMPORT DESIGN SYSTEM ===== */
+@import "../styles/design-system.css";
+
+/* ===== IMPORT TAILWIND ===== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== ESSENTIAL BASE STYLES ===== */
+/* Only styles not covered by design-system.css */
+@layer base {
+
+  /* Global box-sizing and reset */
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* App-specific body styles */
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
