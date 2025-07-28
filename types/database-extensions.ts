@@ -33,3 +33,22 @@ export type DatabaseResult<T> = {
   data: T | null;
   error: DatabaseError | null;
 };
+
+// Database function result types
+export interface SetActiveOrganizationResult {
+  success: boolean;
+  organization_id?: string;
+  organization_name?: string;
+  role?: string;
+  message?: string;
+  error?: string;
+}
+
+export interface GetUserAvailableOrganizationsResult {
+  organization_id: string;
+  organization_name: string;
+  role: string;
+  status: string;
+  member_count?: number;
+  created_at?: string;
+}

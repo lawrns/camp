@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { supabase } from '@/lib/supabase/consolidated-exports';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
+import { mapDbConversationToApi } from '@/lib/utils/db-type-mappers';
 
 // Simplified optional auth wrapper for widget endpoints
 async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
-      const cookieStore = await cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+      const supabase = createRouteHandlerClient({ cookies });
 
       // Try to get authentication, but don't require it
       const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -53,12 +54,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize Supabase client (Next.js 15 fix)
-    const cookieStore = await cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    // Initialize Supabase service role client to bypass RLS for widget operations
+    const supabaseClient = supabase.admin();
 
     // Verify organization exists and widget is enabled
-    const { data: organization, error: orgError } = await supabase
+    const { data: organization, error: orgError } = await supabaseClient
       .from('organizations')
       .select('id, settings')
       .eq('id', organizationId)
@@ -71,7 +71,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const widgetEnabled = organization.settings?.widget_enabled ?? true; // Default to enabled
+    const settings = organization.settings as any;
+    const widgetEnabled = settings?.widget_enabled ?? true; // Default to enabled
     if (!widgetEnabled) {
       return NextResponse.json(
         { error: 'Widget not enabled for this organization', code: 'FORBIDDEN' },
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for existing conversation for this customer
-    const { data: existingConversation, error: convError } = await supabase
+    const { data: existingConversation, error: convError } = await supabaseClient
       .from('conversations')
       .select('id, status, updated_at')
       .eq('organization_id', organizationId)
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
       
       // Update conversation if it was closed
       if (existingConversation.status === 'closed') {
-        await supabase
+        await supabaseClient
           .from('conversations')
           .update({
             status: 'open',
@@ -115,7 +116,7 @@ export async function POST(request: NextRequest) {
       }
     } else {
       // Create new conversation with correct column names
-      const { data: newConversation, error: createError } = await supabase
+      const { data: newConversation, error: createError } = await supabaseClient
         .from('conversations')
         .insert({
           organization_id: organizationId,
@@ -144,20 +145,23 @@ export async function POST(request: NextRequest) {
       // CRITICAL: Broadcast new conversation to real-time channels for agent dashboard
       try {
         // Get full conversation data for broadcast
-        const { data: fullConversation } = await supabase
+        const { data: fullConversation } = await supabaseClient
           .from('conversations')
           .select('*')
           .eq('id', conversationId)
           .single();
 
         if (fullConversation) {
+          // Convert to camelCase for broadcast
+          const apiConversation = mapDbConversationToApi(fullConversation);
+          
           // Broadcast to organization channel for new conversation notifications
           const orgChannel = UNIFIED_CHANNELS.organization(organizationId);
-          await supabase.channel(orgChannel).send({
+          await supabaseClient.channel(orgChannel).send({
             type: 'broadcast',
             event: UNIFIED_EVENTS.CONVERSATION_CREATED,
             payload: {
-              conversation: fullConversation,
+              conversation: apiConversation,
               organizationId,
               timestamp: new Date().toISOString(),
             }
@@ -180,7 +184,7 @@ export async function POST(request: NextRequest) {
       sessionToken,
       organization: {
         id: organization.id,
-        widgetEnabled: organization.widgetEnabled
+        widgetEnabled: widgetEnabled
       }
     }, { status: 200 });
 

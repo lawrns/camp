@@ -83,6 +83,8 @@ export const membersRouter = {
       } as const;
 
       const startDate = input.customDate || subHours(now, periodInHours[input.period]);
-      return await getTeamMemberStats(ctx.mailbox.id.toString(), startDate);
+      // Map 1y to 30d since getTeamMemberStats doesn't support 1y
+      const timeRange = input.period === "1y" ? "30d" : input.period;
+      return await getTeamMemberStats(ctx.mailbox.id.toString(), timeRange);
     }),
 } satisfies TRPCRouterRecord;

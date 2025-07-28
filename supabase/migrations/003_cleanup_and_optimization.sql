@@ -63,20 +63,38 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Function to set user's active organization
 CREATE OR REPLACE FUNCTION set_user_active_organization(org_id UUID)
-RETURNS BOOLEAN AS $$
+RETURNS JSON AS $$
+DECLARE
+    org_record RECORD;
+    member_record RECORD;
 BEGIN
-    -- Verify user is a member of the organization
-    IF EXISTS (
-        SELECT 1 FROM organization_members 
-        WHERE user_id = auth.uid() 
-        AND organization_id = org_id 
-        AND status = 'active'
-    ) THEN
-        -- Set the organization as active (you might want to store this in a separate table)
+    -- Verify user is a member of the organization and get details
+    SELECT om.role, om.status, o.name as organization_name
+    INTO member_record
+    FROM organization_members om
+    JOIN organizations o ON o.id = om.organization_id
+    WHERE om.user_id = auth.uid() 
+    AND om.organization_id = org_id 
+    AND om.status = 'active';
+    
+    IF FOUND THEN
+        -- Set the organization as active
         PERFORM set_config('app.current_organization_id', org_id::text, false);
-        RETURN true;
+        
+        -- Return success with organization details
+        RETURN json_build_object(
+            'success', true,
+            'organization_id', org_id::text,
+            'organization_name', member_record.organization_name,
+            'role', member_record.role,
+            'message', 'Organization set successfully'
+        );
     ELSE
-        RETURN false;
+        -- Return failure
+        RETURN json_build_object(
+            'success', false,
+            'error', 'User is not an active member of this organization'
+        );
     END IF;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -450,4 +468,4 @@ BEGIN
     RAISE NOTICE 'Migration completed successfully!';
     RAISE NOTICE 'Database is now ready for production use.';
     RAISE NOTICE 'All 80+ conflicting migrations have been replaced with 3 clean, essential migrations.';
-END $$; 
+END $$;

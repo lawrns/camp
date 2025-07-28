@@ -88,6 +88,7 @@ export const userRouter = {
           .from('profiles')
           .upsert({
             user_id: user.id,
+            email: user.email,
             full_name: input.fullName,
             avatar_url: input.avatar,
             updated_at: new Date().toISOString(),

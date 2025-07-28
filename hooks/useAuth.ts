@@ -3,18 +3,17 @@
  * This is a re-export of the core useAuth with additional safety features
  */
 
-import { useAuth as useCoreAuth, AuthContextType } from '@/lib/core/auth-provider';
-import { useAuthGuard } from '@/lib/auth/auth-guard';
+import { useAuth as useCoreAuth, AuthContextType } from '../src/lib/core/auth-provider';
 
 // Re-export the consolidated auth system for backward compatibility
-export { AuthProvider, useAuth, useAuthLoading, useUser } from "@/lib/core/auth-provider";
+export { AuthProvider, useAuth, useUser } from "../src/lib/core/auth-provider";
 
 /**
  * Enhanced useAuth hook that provides better error messages
  * and development-time guidance when auth context is missing
  */
 export function useAuthWithGuard(): AuthContextType {
-  return useAuthGuard();
+  return useCoreAuth();
 }
 
 /**
@@ -110,5 +109,5 @@ export function useAuthState() {
 }
 
 // Export types for convenience
-export type { AuthenticatedUser as AuthUser } from "@/lib/core/auth";
-export type { AuthContextType } from '@/lib/core/auth-provider';
+export type { AuthenticatedUser as AuthUser } from "../src/lib/core/auth";
+export type { AuthContextType } from '../src/lib/core/auth-provider';

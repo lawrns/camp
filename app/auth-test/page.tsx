@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/src/lib/core/auth-provider';
-import { supabaseClient } from '@/src/lib/core/supabase-client';
+import { useAuth } from '@/lib/core/auth-provider';
+import { supabaseClient } from '@/lib/supabase/client';
 
 export default function AuthTestPage() {
   const { user, loading } = useAuth();

@@ -452,4 +452,61 @@ describe('Integration Tests', () => {
     const health = monitor.getChannelHealth(channelName);
     expect(health.status).toBe('healthy');
   });
+
+  describe('Standardized Event Broadcasting', () => {
+    it('should use consistent event names across widget and dashboard', () => {
+      // Test that all message-related events use standardized names
+      expect(UNIFIED_EVENTS.MESSAGE_CREATED).toBe('message_created');
+      expect(UNIFIED_EVENTS.CONVERSATION_UPDATED).toBe('conversation_updated');
+      expect(UNIFIED_EVENTS.CONVERSATION_CREATED).toBe('conversation_created');
+      expect(UNIFIED_EVENTS.TYPING_START).toBe('typing_start');
+      expect(UNIFIED_EVENTS.TYPING_STOP).toBe('typing_stop');
+    });
+
+    it('should validate standardized event payloads', () => {
+      const messagePayload = {
+        message: { id: 'test-id', content: 'test' },
+        conversationId: 'conv-123',
+        organizationId: 'org-456',
+        timestamp: new Date().toISOString()
+      };
+
+      const typingPayload = {
+        conversationId: 'conv-123',
+        organizationId: 'org-456',
+        userId: 'user-789',
+        isTyping: true,
+        timestamp: new Date().toISOString()
+      };
+
+      expect(validateMessagePayload(messagePayload)).toBe(true);
+      expect(validateTypingPayload(typingPayload)).toBe(true);
+    });
+
+    it('should ensure widget and dashboard use same channel patterns', () => {
+      const orgId = 'test-org-123';
+      const convId = 'test-conv-456';
+
+      // Both widget and dashboard should use these exact channel names
+      const conversationChannel = UNIFIED_CHANNELS.conversation(orgId, convId);
+      const organizationChannel = UNIFIED_CHANNELS.organization(orgId);
+
+      expect(conversationChannel).toBe(`org:${orgId}:conv:${convId}`);
+      expect(organizationChannel).toBe(`org:${orgId}`);
+
+      // Validate channel name format
+      expect(isValidChannelName(conversationChannel)).toBe(true);
+      expect(isValidChannelName(organizationChannel)).toBe(true);
+    });
+
+    it('should extract correct metadata from standardized channels', () => {
+      const orgId = 'test-org-123';
+      const convId = 'test-conv-456';
+      const channelName = UNIFIED_CHANNELS.conversation(orgId, convId);
+
+      expect(extractOrgId(channelName)).toBe(orgId);
+      expect(extractResourceType(channelName)).toBe('conv');
+      expect(extractResourceId(channelName)).toBe(convId);
+    });
+  });
 });

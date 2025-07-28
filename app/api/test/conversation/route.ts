@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import { mapDbConversationToApi, mapDbMessageToApi } from '@/lib/utils/db-type-mappers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,11 +64,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create message' }, { status: 500 });
     }
 
+    // Convert snake_case database responses to camelCase API responses
+    const apiConversation = mapDbConversationToApi(conversation);
+    const apiMessage = mapDbMessageToApi(message);
+
     return NextResponse.json({
       success: true,
-      conversation,
-      message,
-      message: 'Test conversation and message created successfully'
+      conversation: apiConversation,
+      message: apiMessage,
+      successMessage: 'Test conversation and message created successfully'
     });
 
   } catch (error) {

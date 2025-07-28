@@ -25,9 +25,9 @@ export async function GET() {
     return NextResponse.json({
       id: user.id,
       email: user.email,
-      full_name: profile?.full_name || "Agent",
-      avatar_url: profile?.avatar_url,
-      organization_id: profile?.organization_id,
+      fullName: profile?.full_name || "Agent",
+      avatarUrl: profile?.avatar_url,
+      organizationId: profile?.organization_id,
       role: ((profile?.metadata as Record<string, any>)?.role as string) || "agent",
     });
   } catch (error) {

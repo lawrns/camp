@@ -112,7 +112,7 @@ export const githubRouter = {
         body: z.string(),
       })
     )
-    .mutation(async ({ ctx, input }: { ctx: GitHubRouterContext; input: { title: string; body: string } }) => {
+    .mutation(async ({ ctx, input }) => {
       if (!ctx.mailbox.githubInstallationId || !ctx.mailbox.githubRepoOwner || !ctx.mailbox.githubRepoName) {
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
@@ -143,7 +143,7 @@ export const githubRouter = {
 
         const currentUser = await authService.getCurrentUser();
         await addNote({
-          conversationId: ctx.conversation.id,
+          conversationId: ctx.conversation.id.toString(),
           message: `Created GitHub issue [#${issueNumber}](${issueUrl})`,
           user: currentUser,
         });
@@ -167,7 +167,7 @@ export const githubRouter = {
         issueNumber: z.number(),
       })
     )
-    .mutation(async ({ ctx, input }: { ctx: GitHubRouterContext; input: { issueNumber: number } }) => {
+    .mutation(async ({ ctx, input }) => {
       if (!ctx.mailbox.githubInstallationId || !ctx.mailbox.githubRepoOwner || !ctx.mailbox.githubRepoName) {
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
@@ -195,7 +195,7 @@ export const githubRouter = {
 
         const currentUser = await authService.getCurrentUser();
         await addNote({
-          conversationId: ctx.conversation.id,
+          conversationId: ctx.conversation.id.toString(),
           message: `Linked to GitHub issue [#${issue.number}](${issue.url})`,
           user: currentUser,
         });
@@ -218,7 +218,7 @@ export const githubRouter = {
         state: z.enum(["open", "closed", "all"]).default("open"),
       })
     )
-    .query(async ({ ctx, input }: { ctx: GitHubRouterContext; input: { state: "open" | "closed" | "all" } }) => {
+    .query(async ({ ctx, input }) => {
       if (!ctx.mailbox.githubInstallationId || !ctx.mailbox.githubRepoOwner || !ctx.mailbox.githubRepoName) {
         throw new TRPCError({
           code: "PRECONDITION_FAILED",

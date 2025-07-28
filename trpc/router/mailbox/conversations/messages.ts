@@ -109,7 +109,7 @@ export const messagesRouter = {
       };
 
       const id = await createReply({
-        conversationId: ctx.conversation.id,
+        conversationId: ctx.conversation.id.toString(),
         user: user,
         message,
         fileSlugs,

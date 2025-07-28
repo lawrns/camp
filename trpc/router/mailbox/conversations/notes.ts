@@ -16,7 +16,7 @@ export const notesRouter = {
     .mutation(async ({ input, ctx }) => {
       const user = assertDefined(ctx.user);
       const note = await addNote({
-        conversationId: ctx.conversation.id,
+        conversationId: ctx.conversation.id.toString(),
         message: input.message,
         fileSlugs: input.fileSlugs,
         user,

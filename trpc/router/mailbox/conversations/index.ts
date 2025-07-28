@@ -169,7 +169,7 @@ export const conversationsRouter = {
   }),
   get: conversationProcedure.query(async ({ ctx }) => {
     const conversation = ctx.conversation;
-    const draft = await getLastAiGeneratedDraft(conversation.id);
+    const draft = await getLastAiGeneratedDraft(conversation.id.toString());
     const user = assertDefined(ctx.user);
 
     return {
@@ -206,7 +206,7 @@ export const conversationsRouter = {
         .then(takeUniqueOrThrow);
 
       await createReply({
-        conversationId,
+        conversationId: conversationId.toString(),
         user: assertDefined(ctx.user),
         message: conversation.message?.trim() || null,
         fileSlugs: conversation.file_slugs,
@@ -289,7 +289,7 @@ export const conversationsRouter = {
     const metadata = (lastUserMessage.metadata as Record<string, unknown>) || {};
     const metadataObj = metadata ?? {};
 
-    const oldDraft = await getLastAiGeneratedDraft(ctx.conversation.id);
+    const oldDraft = await getLastAiGeneratedDraft(ctx.conversation.id.toString());
     const typedLastUserMessage = lastUserMessage as typeof lastUserMessage & {
       conversation: { subject: string | null };
     };
@@ -303,7 +303,7 @@ export const conversationsRouter = {
       if (oldDraft) {
         await tx.update(conversationMessages).set({ status: "sent" }).where(eq(conversationMessages.id, oldDraft.id));
       }
-      return await createAiDraft(ctx.conversation.id, draftResponse, lastUserMessage.id, promptInfo, tx);
+      return await createAiDraft(ctx.conversation.id.toString(), draftResponse, lastUserMessage.id, promptInfo, tx);
     });
 
     return serializeResponseAiDraft(newDraft, ctx.mailbox);
@@ -380,7 +380,7 @@ export const conversationsRouter = {
     let conversation = ctx.conversation;
     if (!conversation.embedding) {
       try {
-        const updatedConv = await createConversationEmbedding(Number(conversation.id));
+        const updatedConv = await createConversationEmbedding(conversation.id.toString());
         conversation = { ...conversation, ...updatedConv };
       } catch (e) {
         if (e instanceof PromptTooLongError) return null;

@@ -18,9 +18,15 @@ const eslintConfig = [
           'token-validation': await import('./lib/eslint-rules/design-token-validation.js').then(m => m.default),
         },
       },
+      'campfire': {
+        rules: {
+          'no-snakecase-supabase': await import('./lib/eslint-rules/no-snakecase-supabase.js').then(m => m.default),
+        },
+      },
     },
     rules: {
       'design-tokens/token-validation': 'error',
+      'campfire/no-snakecase-supabase': 'error',
     },
   },
 ];

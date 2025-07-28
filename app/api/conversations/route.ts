@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { withAuth, AuthenticatedUser } from '@/lib/auth/route-auth';
+import { mapDbConversationToApi, mapDbConversationsToApi } from '@/lib/utils/db-type-mappers';
 
 export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser) => {
   try {
@@ -43,7 +44,9 @@ export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser
       );
     }
 
-    return NextResponse.json(conversations);
+    // Convert snake_case database response to camelCase API response
+    const apiConversations = mapDbConversationsToApi(conversations || []);
+    return NextResponse.json(apiConversations);
 
   } catch (error) {
     console.error('[Conversations API] Unexpected error:', error);
@@ -83,11 +86,11 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       .from('conversations')
       .insert({
         organization_id: user.organizationId,
-        customerEmail,
-        customerDisplayName: customerName,
+        customer_email: customerEmail,
+        customer_name: customerName,
         subject,
         status: 'open',
-        createdBy: user.userId
+        created_by: user.userId
       })
       .select()
       .single();
@@ -119,7 +122,9 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       }
     }
 
-    return NextResponse.json(conversation, { status: 201 });
+    // Convert snake_case database response to camelCase API response
+    const apiConversation = mapDbConversationToApi(conversation);
+    return NextResponse.json(apiConversation, { status: 201 });
 
   } catch (error) {
     console.error('[Conversations API] Unexpected error:', error);
@@ -128,4 +133,4 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       { status: 500 }
     );
   }
-}); 
+});

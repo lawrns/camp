@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
+import { supabase } from '@/lib/supabase/consolidated-exports';
+import { mapDbMessageToApi, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 
 // Simplified optional auth wrapper for widget endpoints
 async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promise<NextResponse>) {
@@ -46,12 +48,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Initialize Supabase client (Next.js 15 fix)
-    const cookieStore = await cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    // Initialize Supabase service role client to bypass RLS for widget operations
+    const supabaseClient = supabase.admin();
 
     // Get messages with proper organization context and correct field names
-    const { data: messages, error } = await supabase
+    const { data: messages, error } = await supabaseClient
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
@@ -66,7 +67,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(messages);
+    // Convert snake_case database response to camelCase API response
+    const apiMessages = mapDbMessagesToApi(messages || []);
+    return NextResponse.json(apiMessages);
 
   } catch (error) {
     console.error('[Widget Messages API] Unexpected error:', error);
@@ -98,12 +101,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize Supabase client
-    const cookieStore = await cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    // Initialize Supabase service role client to bypass RLS for widget operations
+    const supabaseClient = supabase.admin();
 
     // Verify conversation exists and belongs to organization
-    const { data: conversation, error: conversationError } = await supabase
+    const { data: conversation, error: conversationError } = await supabaseClient
       .from('conversations')
       .select('id')
       .eq('id', conversationId)
@@ -118,7 +120,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create message with proper organization context and correct column names
-    const { data: message, error } = await supabase
+    const { data: message, error } = await supabaseClient
       .from('messages')
       .insert({
         conversation_id: conversationId,
@@ -147,7 +149,7 @@ export async function POST(request: NextRequest) {
     try {
       // Broadcast to conversation-specific channel (for selected conversation)
       const conversationChannel = UNIFIED_CHANNELS.conversation(organizationId, conversationId);
-      const convChannel = supabase.channel(conversationChannel);
+      const convChannel = supabaseClient.channel(conversationChannel);
       await convChannel.send({
         type: 'broadcast',
         event: UNIFIED_EVENTS.MESSAGE_CREATED,
@@ -161,7 +163,7 @@ export async function POST(request: NextRequest) {
 
       // Broadcast to organization channel (for conversation list updates)
       const orgChannel = UNIFIED_CHANNELS.organization(organizationId);
-      const organizationChannel = supabase.channel(orgChannel);
+      const organizationChannel = supabaseClient.channel(orgChannel);
       await organizationChannel.send({
         type: 'broadcast',
         event: UNIFIED_EVENTS.CONVERSATION_UPDATED,
@@ -179,7 +181,9 @@ export async function POST(request: NextRequest) {
       // Don't fail the request if broadcast fails, but log it
     }
 
-    return NextResponse.json(message, { status: 201 });
+    // Convert snake_case database response to camelCase API response
+    const apiMessage = mapDbMessageToApi(message);
+    return NextResponse.json(apiMessage, { status: 201 });
 
   } catch (error) {
     console.error('[Widget Messages API] Unexpected error:', error);

@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { withAuth, AuthenticatedUser } from '@/lib/auth/route-auth';
+import { mapDbTicketToApi, mapDbTicketsToApi } from '@/lib/utils/db-type-mappers';
 
 export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser) => {
   try {
@@ -91,7 +92,9 @@ export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser
         );
       }
 
-      return NextResponse.json(tickets);
+      // Convert snake_case database response to camelCase API response
+      const apiTickets = mapDbTicketsToApi(tickets || []);
+      return NextResponse.json(apiTickets);
     } catch (error) {
       // Handle any unexpected errors
       console.error('[Tickets API] Unexpected error:', error);
@@ -205,7 +208,9 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       );
     }
 
-    return NextResponse.json(ticket, { status: 201 });
+    // Convert snake_case database response to camelCase API response
+    const apiTicket = mapDbTicketToApi(ticket);
+    return NextResponse.json(apiTicket, { status: 201 });
 
   } catch (error) {
     console.error('[Tickets API] Unexpected error:', error);
@@ -214,4 +219,4 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       { status: 500 }
     );
   }
-}); 
+});

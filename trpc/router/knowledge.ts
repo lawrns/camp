@@ -447,7 +447,7 @@ export const knowledgeRouter = createTRPCRouter({
   updateDocument: publicProcedure
     .input(
       z.object({
-        mailboxId: z.number(),
+        mailboxId: z.string(),
         documentId: z.number(),
         document: knowledgeDocumentSchema.partial(),
       })
@@ -458,7 +458,7 @@ export const knowledgeRouter = createTRPCRouter({
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.updateDocument(validatedMailboxId || 1, input.documentId, input.document);
+        return await knowledgeService.updateDocument((validatedMailboxId || 1).toString(), input.documentId, input.document);
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -470,14 +470,14 @@ export const knowledgeRouter = createTRPCRouter({
 
   // Delete a knowledge document
   deleteDocument: publicProcedure
-    .input(z.object({ mailboxId: z.number(), documentId: z.number() }))
+    .input(z.object({ mailboxId: z.string(), documentId: z.number() }))
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin"] }))
     .use(createAuditMiddleware("knowledge.deleteDocument"))
     .mutation(async ({ ctx, input }) => {
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.deleteDocument(validatedMailboxId || 1, input.documentId);
+        return await knowledgeService.deleteDocument((validatedMailboxId || 1).toString(), input.documentId);
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -489,14 +489,14 @@ export const knowledgeRouter = createTRPCRouter({
 
   // Get categories
   getCategories: publicProcedure
-    .input(z.object({ mailboxId: z.number() }))
+    .input(z.object({ mailboxId: z.string() }))
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.getCategories"))
     .query(async ({ ctx, input }) => {
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.listCategories(validatedMailboxId || 1);
+        return await knowledgeService.listCategories((validatedMailboxId || 1).toString());
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -510,7 +510,7 @@ export const knowledgeRouter = createTRPCRouter({
   createCategory: publicProcedure
     .input(
       z.object({
-        mailboxId: z.number(),
+        mailboxId: z.string(),
         category: categorySchema,
       })
     )
@@ -520,7 +520,7 @@ export const knowledgeRouter = createTRPCRouter({
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.createCategory(validatedMailboxId || 1, input.category);
+        return await knowledgeService.createCategory((validatedMailboxId || 1).toString(), input.category);
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -534,7 +534,7 @@ export const knowledgeRouter = createTRPCRouter({
   updateCategory: publicProcedure
     .input(
       z.object({
-        mailboxId: z.number(),
+        mailboxId: z.string(),
         categoryId: z.number(),
         category: categorySchema.partial(),
       })
@@ -545,7 +545,7 @@ export const knowledgeRouter = createTRPCRouter({
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.updateCategory(validatedMailboxId || 1, input.categoryId, input.category);
+        return await knowledgeService.updateCategory((validatedMailboxId || 1).toString(), input.categoryId, input.category);
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -559,7 +559,7 @@ export const knowledgeRouter = createTRPCRouter({
   deleteCategory: publicProcedure
     .input(
       z.object({
-        mailboxId: z.number(),
+        mailboxId: z.string(),
         categoryId: z.number(),
       })
     )
@@ -569,7 +569,7 @@ export const knowledgeRouter = createTRPCRouter({
       const validatedMailboxId = (ctx as any).validatedMailboxId as number;
 
       try {
-        return await knowledgeService.deleteCategory(validatedMailboxId || 1, input.categoryId);
+        return await knowledgeService.deleteCategory((validatedMailboxId || 1).toString(), input.categoryId);
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

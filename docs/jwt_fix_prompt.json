@@ -1,0 +1,10 @@
+{
+  "context": "The JWT enrichment process in the application is failing with 'Failed to enrich JWT: {}'. This occurs in the enrichJWTWithOrganization function in src/lib/core/auth-provider.tsx, which calls the /api/auth/set-organization endpoint. The endpoint invokes the set_user_active_organization database function.",
+  "issue": "The database function set_user_active_organization returns a boolean, but the API route casts the result to SetActiveOrganizationResult, expecting a structured object with success, organization_id, organization_name, role, and message. This type mismatch causes the enrichment to fail as the returned data does not match the expected structure.",
+  "suggestions": [
+    "Modify the API route in app/api/auth/set-organization/route.ts to handle the boolean return value. If true, query the organization details separately from the organizations and organization_members tables to construct the SetOrganizationSuccess response.",
+    "Add error handling in the API route to manage cases where the RPC returns false, returning an appropriate SetOrganizationError.",
+    "Update the enrichJWTWithOrganization function to handle potential empty or error responses more gracefully, perhaps with retry logic or better logging.",
+    "Ensure that the type casting is adjusted or removed to match the actual return type from the database function."
+  ]
+}

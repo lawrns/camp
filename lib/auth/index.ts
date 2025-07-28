@@ -71,7 +71,7 @@ export const withAuth = (handler: any) => {
 export const withTenantGuard = withAuth; // Alias for compatibility
 
 // Re-export the core auth provider and hooks for components
-export { AuthProvider, useAuth, useAuthLoading, useUser } from "@/lib/core/auth-provider";
+export { AuthProvider, useAuth, useUser } from "../src/lib/core/auth-provider";
 
 // Re-export auth utilities and types
-export * from "@/lib/core/auth";
+export * from "../src/lib/core/auth";

@@ -619,7 +619,7 @@ export const Auth = {
 // ============================================================================
 
 // Re-export React components from separate client file to avoid server/client mixing
-export { AuthProvider, useAuth } from "./auth-provider";
+export { AuthProvider, useAuth } from "../../src/lib/core/auth-provider";
 
 // ============================================================================
 // ADDITIONAL EXPORTS FOR BACKWARD COMPATIBILITY

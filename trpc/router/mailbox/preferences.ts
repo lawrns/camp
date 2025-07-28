@@ -51,11 +51,17 @@ export const preferencesRouter = {
       const preferences: {
         confetti: boolean;
         theme?: {
-          background: string;
-          foreground: string;
-          primary: string;
-          accent: string;
-          sidebarBackground: string;
+          background?: string;
+          foreground?: string;
+          primary?: string;
+          accent?: string;
+          sidebarBackground?: string;
+        };
+        uiFeatures?: {
+          enhancedLayout?: boolean;
+          enhancedAnimations?: boolean;
+          enhancedMessageDelivery?: boolean;
+          enhancedTypingIndicators?: boolean;
         };
       } = {
         confetti: input.preferences.confetti,
@@ -64,6 +70,11 @@ export const preferencesRouter = {
       // Only add theme if it's defined
       if (input.preferences.theme !== undefined) {
         preferences.theme = input.preferences.theme;
+      }
+
+      // Only add uiFeatures if it's defined
+      if (input.preferences.uiFeatures !== undefined) {
+        preferences.uiFeatures = input.preferences.uiFeatures;
       }
 
       await db

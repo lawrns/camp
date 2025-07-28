@@ -56,9 +56,10 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
     const { organizationId } = validation.data;
 
     // Call the database function to set active organization using the scoped client
-    const { data, error } = (await scopedClient.rpc("set_user_active_organization", {
+    // Note: This function returns a boolean, not a structured object
+    const { data: isSuccess, error } = (await scopedClient.rpc("set_user_active_organization", {
       org_id: organizationId,
-    })) as { data: SetActiveOrganizationResult | null; error: any };
+    })) as { data: boolean | null; error: any };
 
     if (error) {
       console.error('[set-organization] Database function error:', error);
@@ -71,30 +72,73 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
       );
     }
 
-    // Check if the function returned an error
-    if (!data?.success) {
-      console.warn('[set-organization] Function returned failure:', data);
+    // Check if the function returned false (user doesn't have access)
+    if (!isSuccess) {
+      console.warn('[set-organization] Function returned false - user may not have access to organization:', organizationId);
       return NextResponse.json<SetOrganizationError>(
         {
           success: false,
-          error: data?.error || "Failed to set organization - user may not have access",
+          error: "Failed to set organization - user may not have access to this organization",
         },
-        { status: 400 }
+        { status: 403 }
+      );
+    }
+
+    // Function returned true, now fetch organization details to construct the response
+    const { data: orgDetails, error: orgError } = await scopedClient
+      .from('organizations')
+      .select('id, name')
+      .eq('id', organizationId)
+      .single();
+
+    if (orgError || !orgDetails) {
+      console.error('[set-organization] Failed to fetch organization details:', orgError);
+      return NextResponse.json<SetOrganizationError>(
+        {
+          success: false,
+          error: "Organization was set but failed to fetch details",
+        },
+        { status: 500 }
+      );
+    }
+
+    // Fetch user's role in the organization
+    const { data: memberDetails, error: memberError } = await scopedClient
+      .from('organization_members')
+      .select('role')
+      .eq('user_id', userId)
+      .eq('organization_id', organizationId)
+      .single();
+
+    if (memberError || !memberDetails) {
+      console.error('[set-organization] Failed to fetch member details:', memberError);
+      return NextResponse.json<SetOrganizationError>(
+        {
+          success: false,
+          error: "Organization was set but failed to fetch user role",
+        },
+        { status: 500 }
       );
     }
 
     // Log successful organization switch
+    console.log('[set-organization] Successfully set organization:', {
+      userId,
+      organizationId,
+      organizationName: orgDetails.name,
+      role: memberDetails.role
+    });
 
-    // Return success response
+    // Return success response with fetched details
     return NextResponse.json<SetOrganizationSuccess>(
       {
         success: true,
         organization: {
-          id: data.organization_id || organizationId,
-          name: data.organization_name || "Unknown",
-          role: data.role || "member",
+          id: orgDetails.id,
+          name: orgDetails.name,
+          role: memberDetails.role,
         },
-        message: data.message || "Organization set successfully",
+        message: "Organization set successfully",
       },
       { status: 200 }
     );

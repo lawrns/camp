@@ -82,12 +82,13 @@ export const createMailboxMiddleware = (options: { requiredRoles?: string[] }) =
   return <T extends Context>(opts: {
     ctx: T;
     next: (opts: { ctx: T & { validatedMailboxId: number } }) => Promise<any> | any;
-    input?: { mailboxId?: number };
+    input?: { mailboxId?: string | number };
   }) => {
     const { ctx, next, input } = opts;
 
-    // Basic validation - use input mailboxId if available
-    const validatedMailboxId = input?.mailboxId || 1; // Use input mailboxId or fallback
+    // Basic validation - use input mailboxId if available, convert string to number
+    const validatedMailboxId = input?.mailboxId ? 
+      (typeof input.mailboxId === 'string' ? parseInt(input.mailboxId, 10) : input.mailboxId) : 1;
 
     return next({
       ctx: {

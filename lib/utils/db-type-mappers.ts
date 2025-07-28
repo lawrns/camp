@@ -5,13 +5,54 @@
  * This ensures consistency between the database schema and the API layer
  */
 
-import type { Conversation, ConversationInsert, ConversationUpdate } from "@/types/entities/conversation";
-import type { Message, MessageInsert } from "@/types/entities/message";
+// Note: Using any types for now since the exact type paths may vary
+// These can be updated to use proper imports when the types are standardized
+
+// Ticket types
+export interface Ticket {
+  id: string;
+  organizationId: string;
+  mailboxId: string;
+  ticketNumber?: number;
+  conversationId?: string;
+  title: string;
+  description?: string;
+  status: string;
+  priority: string;
+  assigneeId?: string;
+  reporterId?: string;
+  customerId?: string;
+  dueDate?: string;
+  tags?: string[];
+  metadata?: any;
+  resolvedAt?: string;
+  closedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+}
+
+export interface TicketInsert {
+  organization_id: string;
+  mailbox_id: string;
+  conversation_id?: string;
+  title: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+  assignee_id?: string;
+  reporter_id?: string;
+  customer_id?: string;
+  due_date?: string;
+  tags?: string[];
+  metadata?: any;
+  created_by?: string;
+}
 
 /**
  * Maps database conversation record (snake_case) to API conversation type (camelCase)
  */
-export function mapDbConversationToApi(dbConversation: any): Conversation {
+export function mapDbConversationToApi(dbConversation: any): any {
   return {
     id: dbConversation.id,
     organizationId: dbConversation.organization_id || dbConversation.organizationId,
@@ -55,7 +96,7 @@ export function mapDbConversationToApi(dbConversation: any): Conversation {
 /**
  * Maps API conversation insert (camelCase) to database format (snake_case)
  */
-export function mapApiConversationToDbInsert(apiConversation: Partial<ConversationInsert>): any {
+export function mapApiConversationToDbInsert(apiConversation: any): any {
   // Only include fields that actually exist in the database schema
   const dbData: any = {
     organization_id: apiConversation.organization_id,
@@ -83,7 +124,7 @@ export function mapApiConversationToDbInsert(apiConversation: Partial<Conversati
 /**
  * Maps API conversation update (camelCase) to database format (snake_case)
  */
-export function mapApiConversationToDbUpdate(apiUpdate: Partial<ConversationUpdate>): any {
+export function mapApiConversationToDbUpdate(apiUpdate: any): any {
   const dbUpdate: any = {};
 
   if (apiUpdate.subject !== undefined) dbUpdate.subject = apiUpdate.subject;
@@ -110,7 +151,7 @@ export function mapApiConversationToDbUpdate(apiUpdate: Partial<ConversationUpda
 /**
  * Maps database message record (snake_case) to API message type (camelCase)
  */
-export function mapDbMessageToApi(dbMessage: any): Message {
+export function mapDbMessageToApi(dbMessage: any): any {
   return {
     id: dbMessage.id,
     conversationId: dbMessage.conversation_id || dbMessage.conversationId,
@@ -140,7 +181,7 @@ export function mapDbMessageToApi(dbMessage: any): Message {
 /**
  * Maps API message insert (camelCase) to database format (snake_case)
  */
-export function mapApiMessageToDbInsert(apiMessage: Partial<MessageInsert>, organizationId: string): any {
+export function mapApiMessageToDbInsert(apiMessage: any, organizationId: string): any {
   return {
     organization_id: organizationId,
     conversation_id: apiMessage.conversation_id,
@@ -162,11 +203,11 @@ export function mapApiMessageToDbInsert(apiMessage: Partial<MessageInsert>, orga
 /**
  * Batch conversion utilities
  */
-export function mapDbConversationsToApi(dbConversations: any[]): Conversation[] {
+export function mapDbConversationsToApi(dbConversations: any[]): any[] {
   return dbConversations.map(mapDbConversationToApi);
 }
 
-export function mapDbMessagesToApi(dbMessages: any[]): Message[] {
+export function mapDbMessagesToApi(dbMessages: any[]): any[] {
   return dbMessages.map(mapDbMessageToApi);
 }
 
@@ -190,4 +231,81 @@ export function normalizeQueryParams(params: any): any {
   normalized.endDate = params.end_date || params.endDate;
 
   return normalized;
+}
+
+/**
+ * Maps database ticket record (snake_case) to API ticket type (camelCase)
+ */
+export function mapDbTicketToApi(dbTicket: any): Ticket {
+  return {
+    id: dbTicket.id,
+    organizationId: dbTicket.organization_id || dbTicket.organizationId,
+    mailboxId: dbTicket.mailbox_id || dbTicket.mailboxId,
+    ticketNumber: dbTicket.ticket_number || dbTicket.ticketNumber,
+    conversationId: dbTicket.conversation_id || dbTicket.conversationId,
+    title: dbTicket.title,
+    description: dbTicket.description,
+    status: dbTicket.status || "open",
+    priority: dbTicket.priority || "medium",
+    assigneeId: dbTicket.assignee_id || dbTicket.assigneeId,
+    reporterId: dbTicket.reporter_id || dbTicket.reporterId,
+    customerId: dbTicket.customer_id || dbTicket.customerId,
+    dueDate: dbTicket.due_date || dbTicket.dueDate,
+    tags: dbTicket.tags || [],
+    metadata: dbTicket.metadata || {},
+    resolvedAt: dbTicket.resolved_at || dbTicket.resolvedAt,
+    closedAt: dbTicket.closed_at || dbTicket.closedAt,
+    createdAt: dbTicket.created_at || dbTicket.createdAt,
+    updatedAt: dbTicket.updated_at || dbTicket.updatedAt,
+    createdBy: dbTicket.created_by || dbTicket.createdBy,
+  };
+}
+
+/**
+ * Maps API ticket insert (camelCase) to database format (snake_case)
+ */
+export function mapApiTicketToDbInsert(apiTicket: Partial<TicketInsert>): any {
+  const dbData: any = {
+    organization_id: apiTicket.organization_id,
+    mailbox_id: apiTicket.mailbox_id,
+    title: apiTicket.title,
+    status: apiTicket.status || "open",
+    priority: apiTicket.priority || "medium",
+    metadata: apiTicket.metadata || {},
+  };
+
+  // Only add optional fields if they have values
+  if (apiTicket.conversation_id) {
+    dbData.conversation_id = apiTicket.conversation_id;
+  }
+  if (apiTicket.description) {
+    dbData.description = apiTicket.description;
+  }
+  if (apiTicket.assignee_id) {
+    dbData.assignee_id = apiTicket.assignee_id;
+  }
+  if (apiTicket.reporter_id) {
+    dbData.reporter_id = apiTicket.reporter_id;
+  }
+  if (apiTicket.customer_id) {
+    dbData.customer_id = apiTicket.customer_id;
+  }
+  if (apiTicket.due_date) {
+    dbData.due_date = apiTicket.due_date;
+  }
+  if (apiTicket.tags) {
+    dbData.tags = apiTicket.tags;
+  }
+  if (apiTicket.created_by) {
+    dbData.created_by = apiTicket.created_by;
+  }
+
+  return dbData;
+}
+
+/**
+ * Batch conversion utilities for tickets
+ */
+export function mapDbTicketsToApi(dbTickets: any[]): Ticket[] {
+  return dbTickets.map(mapDbTicketToApi);
 }
