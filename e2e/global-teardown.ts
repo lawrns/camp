@@ -7,6 +7,10 @@
  * - Cleans up authentication state
  */
 
+// Load environment variables
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+
 import { FullConfig } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';

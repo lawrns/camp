@@ -1,63 +1,19 @@
 /**
  * STANDARDIZED REALTIME SYSTEM
- * 
+ *
  * This is the single source of truth for all realtime communication.
  * All other realtime implementations should be deprecated and replaced with this.
  */
 
 import { supabase } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "./unified-channel-standards";
 
-// Standardized channel naming convention
-export const CHANNEL_PATTERNS = {
-  // Organization-wide channels
-  ORGANIZATION: (orgId: string) => `org:${orgId}`,
-  ORGANIZATION_CONVERSATIONS: (orgId: string) => `org:${orgId}:conversations`,
-  ORGANIZATION_MESSAGES: (orgId: string) => `org:${orgId}:messages`,
+// Re-export unified channels for backward compatibility
+export const CHANNEL_PATTERNS = UNIFIED_CHANNELS;
 
-  // Conversation-specific channels
-  CONVERSATION: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}`,
-  CONVERSATION_MESSAGES: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:messages`,
-  CONVERSATION_TYPING: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:typing`,
-
-  // User-specific channels
-  USER_PRESENCE: (orgId: string, userId: string) => `org:${orgId}:user:${userId}:presence`,
-  USER_NOTIFICATIONS: (orgId: string, userId: string) => `org:${orgId}:user:${userId}:notifications`,
-
-  // Widget channels (for customer-facing widget)
-  WIDGET_CONVERSATION: (orgId: string, convId: string) => `org:${orgId}:widget:${convId}`,
-} as const;
-
-// Event types for standardized communication
-export const EVENT_TYPES = {
-  // Message events
-  MESSAGE_CREATED: 'message_created',
-  MESSAGE_UPDATED: 'message_updated',
-  MESSAGE_DELETED: 'message_deleted',
-
-  // Conversation events
-  CONVERSATION_CREATED: 'conversation_created',
-  CONVERSATION_UPDATED: 'conversation_updated',
-  CONVERSATION_ASSIGNED: 'conversation_assigned',
-  CONVERSATION_STATUS_CHANGED: 'conversation_status_changed',
-
-  // Typing events
-  TYPING_START: 'typing_start',
-  TYPING_STOP: 'typing_stop',
-
-  // Presence events
-  USER_ONLINE: 'user_online',
-  USER_OFFLINE: 'user_offline',
-  USER_AWAY: 'user_away',
-
-  // Assignment events
-  AGENT_ASSIGNED: 'agent_assigned',
-  AI_HANDOVER: 'ai_handover',
-
-  // System events
-  SYSTEM_NOTIFICATION: 'system_notification',
-  ERROR: 'error',
-} as const;
+// Re-export unified events for backward compatibility
+export const EVENT_TYPES = UNIFIED_EVENTS;
 
 // Channel manager to prevent memory leaks
 class ChannelManager {
@@ -283,15 +239,15 @@ export const RealtimeHelpers = {
   // Broadcast message to conversation
   broadcastMessage: (orgId: string, convId: string, message: any) =>
     broadcastToChannel(
-      CHANNEL_PATTERNS.CONVERSATION(orgId, convId),
+      CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
       { message }
     ),
 
-  // Broadcast typing indicator
+  // Broadcast typing status
   broadcastTyping: (orgId: string, convId: string, userId: string, isTyping: boolean) =>
     broadcastToChannel(
-      CHANNEL_PATTERNS.CONVERSATION_TYPING(orgId, convId),
+      CHANNEL_PATTERNS.conversationTyping(orgId, convId),
       isTyping ? EVENT_TYPES.TYPING_START : EVENT_TYPES.TYPING_STOP,
       { userId, isTyping }
     ),
@@ -299,7 +255,7 @@ export const RealtimeHelpers = {
   // Broadcast conversation assignment
   broadcastAssignment: (orgId: string, convId: string, assigneeId: string, assignedBy: string) =>
     broadcastToChannel(
-      CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(orgId),
+      CHANNEL_PATTERNS.conversations(orgId),
       EVENT_TYPES.CONVERSATION_ASSIGNED,
       { conversationId: convId, assigneeId, assignedBy }
     ),
@@ -307,27 +263,27 @@ export const RealtimeHelpers = {
   // Subscribe to conversation messages
   subscribeToMessages: (orgId: string, convId: string, callback: (message: any) => void) =>
     subscribeToChannel(
-      CHANNEL_PATTERNS.CONVERSATION(orgId, convId),
+      CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
       callback
     ),
 
-  // Subscribe to typing indicators
+  // Subscribe to typing events
   subscribeToTyping: (orgId: string, convId: string, callback: (typing: any) => void) => {
-    const unsubscribeStart = subscribeToChannel(
-      CHANNEL_PATTERNS.CONVERSATION_TYPING(orgId, convId),
+    const startUnsubscriber = subscribeToChannel(
+      CHANNEL_PATTERNS.conversationTyping(orgId, convId),
       EVENT_TYPES.TYPING_START,
       callback
     );
-    const unsubscribeStop = subscribeToChannel(
-      CHANNEL_PATTERNS.CONVERSATION_TYPING(orgId, convId),
+    const stopUnsubscriber = subscribeToChannel(
+      CHANNEL_PATTERNS.conversationTyping(orgId, convId),
       EVENT_TYPES.TYPING_STOP,
       callback
     );
 
     return () => {
-      unsubscribeStart();
-      unsubscribeStop();
+      startUnsubscriber();
+      stopUnsubscriber();
     };
   },
 };

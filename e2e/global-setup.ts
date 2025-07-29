@@ -8,6 +8,10 @@
  * - Performance monitoring initialization
  */
 
+// Load environment variables
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+
 import { chromium, FullConfig } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 

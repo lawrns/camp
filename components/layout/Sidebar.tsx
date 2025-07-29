@@ -42,7 +42,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   // Primary Navigation
   { id: "dashboard", label: "Dashboard", icon: Home as any, href: "/dashboard", section: "primary" },
-  { id: "inbox", label: "Inbox", icon: Inbox as any, href: "/dashboard/inbox", section: "primary" },
+  { id: "inbox", label: "Inbox", icon: Inbox as any, href: "/inbox", section: "primary" },
   { id: "tickets", label: "Tickets", icon: Ticket as any, href: "/dashboard/tickets", section: "primary" },
   { id: "knowledge", label: "Knowledge", icon: BookOpen as any, href: "/dashboard/knowledge", section: "primary" },
   { id: "analytics", label: "Analytics", icon: BarChart3 as any, href: "/dashboard/analytics", section: "primary" },

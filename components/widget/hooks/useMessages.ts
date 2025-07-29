@@ -175,6 +175,69 @@ export function useMessages(
 
                 console.log("[useMessages] Message sent successfully:", confirmedMessage);
 
+                // Get AI response using enhanced AI service
+                try {
+                    const aiResponse = await fetch('/api/ai/enhanced-response', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            conversationId,
+                            organizationId,
+                            messageContent: content.trim(),
+                            messageId: confirmedMessage.id,
+                            conversationHistory: messages.map(msg => ({
+                                id: msg.id,
+                                content: msg.content,
+                                senderType: msg.senderType === 'visitor' ? 'customer' : msg.senderType,
+                                timestamp: msg.timestamp,
+                            })),
+                        }),
+                    });
+
+                    if (aiResponse.ok) {
+                        const aiResult = await aiResponse.json();
+
+                        // Add AI response to messages
+                        const aiMessage: Message = {
+                            id: `ai_${Date.now()}`,
+                            content: aiResult.response.content,
+                            senderType: 'ai',
+                            senderName: aiResult.response.metadata?.aiPersonality || 'Assistant',
+                            timestamp: new Date().toISOString(),
+                            conversation_id: conversationId,
+                            organization_id: organizationId,
+                            confidence: aiResult.response.confidence,
+                            metadata: {
+                                confidence: aiResult.response.confidence,
+                                shouldHandover: aiResult.response.shouldHandover,
+                                sentiment: aiResult.response.sentiment,
+                                sources: aiResult.response.sources,
+                                empathyScore: aiResult.response.metadata?.empathyScore,
+                            },
+                        };
+
+                        setMessages(prev => [...prev, aiMessage]);
+
+                        // If handover is needed, log it for now (UI notification can be added later)
+                        if (aiResult.response.shouldHandover) {
+                            console.log('[useMessages] AI handover triggered:', aiResult.response.handoverReason);
+                        }
+                    }
+                } catch (aiError) {
+                    console.error('[useMessages] Error getting AI response:', aiError);
+                    // Add fallback AI message
+                    const fallbackMessage: Message = {
+                        id: `ai_fallback_${Date.now()}`,
+                        content: "Thank you for your message. A team member will respond shortly.",
+                        senderType: 'ai',
+                        senderName: 'Assistant',
+                        timestamp: new Date().toISOString(),
+                        conversation_id: conversationId,
+                        organization_id: organizationId,
+                    };
+                    setMessages(prev => [...prev, fallbackMessage]);
+                }
+
                 // Reload messages to ensure they appear (fallback if real-time doesn't work)
                 setTimeout(() => {
                     loadMessages();

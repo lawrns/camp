@@ -4,7 +4,13 @@ import { ConditionalNavigation } from '@/components/ConditionalNavigation';
 import { AuthProviders } from '../src/app/app/client-providers';
 import { ExtensionIsolationProvider } from '@/components/system/ExtensionIsolationProvider';
 import { AuthDebugPanel } from '@/components/debug/AuthDebugPanel';
+import { initializeMonitoring } from '@/lib/monitoring/init';
 import type { Metadata } from 'next';
+
+// Initialize monitoring for production
+if (typeof window !== 'undefined') {
+  initializeMonitoring();
+}
 
 export const metadata: Metadata = { title: 'Campfire - Customer Support Platform' };
 

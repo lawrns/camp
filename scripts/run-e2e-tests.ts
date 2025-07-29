@@ -11,6 +11,10 @@
  * - CI/CD integration
  */
 
+// Load environment variables
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+
 import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';

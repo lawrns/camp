@@ -264,10 +264,38 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
   );
 
   // Handlers
-  const handleAssign = useCallback(() => {
-    // TODO: Implement assignment logic
+  const handleAssign = useCallback(async () => {
+    if (!selectedConversation || !effectiveUser) return;
 
-  }, []);
+    try {
+      const supabaseClient = supabase.browser();
+
+      // For now, assign to the current user
+      const { error } = await supabaseClient
+        .from("conversations")
+        .update({
+          assigned_to: effectiveUser.id,
+          status: "open"
+        })
+        .eq("id", selectedConversation.id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Update local state
+      setSelectedConversation(prev => prev ? {
+        ...prev,
+        assigned_to: effectiveUser.id,
+        status: "open"
+      } : null);
+
+      // Refresh conversations list
+      loadConversations();
+    } catch (error) {
+      setError("Failed to assign conversation");
+    }
+  }, [selectedConversation, effectiveUser, loadConversations]);
 
   const handleConvertToTicket = useCallback(() => {
     setShowConvertDialog(true);

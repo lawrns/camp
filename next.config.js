@@ -19,7 +19,7 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif']
   },
   
-  // Headers for security
+  // Headers for security and performance
   async headers() {
     return [
       {
@@ -40,6 +40,26 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          }
+        ]
+      },
+      // Cache static assets
+      {
+        source: '/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      // Cache API responses briefly
+      {
+        source: '/api/health',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60'
           }
         ]
       }
@@ -76,7 +96,43 @@ const nextConfig = {
       net: false,
       tls: false
     };
-    
+
+    // Performance optimizations
+    if (!dev && !isServer) {
+      // Enable tree shaking
+      config.optimization.usedExports = true;
+
+      // Split chunks for better caching
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      };
+    }
+
+    // Bundle analyzer (enable with ANALYZE=true)
+    if (process.env.ANALYZE === 'true' && !isServer) {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false,
+          reportFilename: '../bundle-analyzer-report.html',
+        })
+      );
+    }
+
     return config;
   },
   
@@ -97,6 +153,24 @@ const nextConfig = {
   
   // Output configuration
   output: 'standalone',
+
+  // Experimental features for performance
+  experimental: {
+    // Enable optimized package imports
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'recharts'],
+    // Enable server components logging in development
+    logging: {
+      level: process.env.NODE_ENV === 'development' ? 'verbose' : 'error',
+    },
+  },
+
+  // Compiler optimizations
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
   
   // Compression
   compress: true,

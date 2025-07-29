@@ -10,13 +10,13 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 
 // Standardized channel naming convention
 export const CHANNEL_PATTERNS = {
-  // Organization-wide channels
+  // Organization-level channels
   ORGANIZATION: (orgId: string) => `org:${orgId}`,
-  ORGANIZATION_CONVERSATIONS: (orgId: string) => `org:${orgId}:conversations`,
+  conversations: (orgId: string) => `org:${orgId}:conversations`,
   ORGANIZATION_MESSAGES: (orgId: string) => `org:${orgId}:messages`,
 
-  // Conversation-specific channels
-  CONVERSATION: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}`,
+  // Conversation-level channels
+  conversation: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}`,
   CONVERSATION_MESSAGES: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:messages`,
   CONVERSATION_TYPING: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:typing`,
 
@@ -254,7 +254,7 @@ export const RealtimeHelpers = {
   // Broadcast message to conversation
   broadcastMessage: (orgId: string, convId: string, message: any) =>
     broadcastToChannel(
-      CHANNEL_PATTERNS.CONVERSATION(orgId, convId),
+      CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
       { message }
     ),
@@ -270,7 +270,7 @@ export const RealtimeHelpers = {
   // Broadcast conversation assignment
   broadcastAssignment: (orgId: string, convId: string, assigneeId: string, assignedBy: string) =>
     broadcastToChannel(
-      CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(orgId),
+      CHANNEL_PATTERNS.conversations(orgId),
       EVENT_TYPES.CONVERSATION_ASSIGNED,
       { conversationId: convId, assigneeId, assignedBy }
     ),
@@ -278,7 +278,7 @@ export const RealtimeHelpers = {
   // Subscribe to conversation messages
   subscribeToMessages: (orgId: string, convId: string, callback: (message: any) => void) =>
     subscribeToChannel(
-      CHANNEL_PATTERNS.CONVERSATION(orgId, convId),
+      CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
       callback
     ),

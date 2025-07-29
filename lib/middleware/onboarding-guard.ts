@@ -3,7 +3,7 @@
  * Ensures users complete onboarding before accessing protected routes
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/index";
 import { NextRequest, NextResponse } from "next/server";
 
 interface OnboardingStatus {
@@ -67,11 +67,15 @@ export async function checkOnboardingStatus(request: NextRequest): Promise<Onboa
       };
     }
 
+    const isCompleted = !!progress.completed_at;
+    const currentStep = isCompleted ? "completed" : "business";
+    const completionPercentage = isCompleted ? 100 : 0;
+
     return {
-      isCompleted: progress.is_completed || false,
+      isCompleted,
       hasOrganization: true,
-      currentStep: progress.current_step || "business",
-      completionPercentage: progress.completion_percentage || 0,
+      currentStep,
+      completionPercentage,
     };
   } catch (error) {
     return null;

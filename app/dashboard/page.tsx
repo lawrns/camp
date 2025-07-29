@@ -25,11 +25,10 @@ export default function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Welcome back, {user?.email?.split('@')[0] || 'User'}!
-          </h1>
+      <div className="p-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Welcome back, {user?.email?.split('@')[0] || 'User'}!
+        </h1>
 
         {/* Metrics Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -87,7 +86,6 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <MemoryMonitor />
             {/* Additional widgets can be added here */}
-          </div>
           </div>
         </div>
       </div>

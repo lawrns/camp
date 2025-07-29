@@ -19,6 +19,7 @@ import {
   RealtimeHelpers,
   subscribeToChannel
 } from "@/lib/realtime/standardized-realtime";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import type { RealtimeMessagePayload } from "@/lib/realtime/constants";
 import { supabase } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
@@ -81,10 +82,10 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
       const unsubscribers: (() => void)[] = [];
 
       try {
-        // Subscribe to organization-wide events
+        // Subscribe to organization-wide events using unified channels
         const orgUnsubscriber = subscribeToChannel(
-          CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(organizationId),
-          EVENT_TYPES.CONVERSATION_UPDATED,
+          UNIFIED_CHANNELS.conversations(organizationId),
+          UNIFIED_EVENTS.CONVERSATION_UPDATED,
           (payload) => {
             setState(prev => ({ ...prev, lastActivity: new Date() }));
             // Handle organization-wide conversation updates
@@ -95,8 +96,8 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
         // Subscribe to conversation-specific events if conversationId is provided
         if (conversationId) {
           const messageUnsubscriber = subscribeToChannel(
-            CHANNEL_PATTERNS.CONVERSATION(organizationId, conversationId),
-            EVENT_TYPES.MESSAGE_CREATED,
+            UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+            UNIFIED_EVENTS.MESSAGE_CREATED,
             (payload) => {
               setState(prev => ({ ...prev, lastActivity: new Date() }));
               // Handle new messages
@@ -118,7 +119,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
 
         // Subscribe to assignment events
         const assignmentUnsubscriber = subscribeToChannel(
-          CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(organizationId),
+          CHANNEL_PATTERNS.conversations(organizationId),
           EVENT_TYPES.CONVERSATION_ASSIGNED,
           (payload) => {
             setState(prev => ({ ...prev, lastActivity: new Date() }));

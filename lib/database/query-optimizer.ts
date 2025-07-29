@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/lib/supabase/consolidated-exports";
+import { cacheService } from "@/lib/cache/redis-cache";
 
 interface QueryOptions {
   useCache?: boolean;

@@ -82,7 +82,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
       try {
         // Subscribe to organization-wide events
         const orgUnsubscriber = subscribeToChannel(
-          CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(organizationId),
+          CHANNEL_PATTERNS.conversations(organizationId),
           EVENT_TYPES.CONVERSATION_UPDATED,
           (payload) => {
             setState(prev => ({ ...prev, lastActivity: new Date() }));
@@ -94,7 +94,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
         // Subscribe to conversation-specific events if conversationId is provided
         if (conversationId) {
           const messageUnsubscriber = subscribeToChannel(
-            CHANNEL_PATTERNS.CONVERSATION(organizationId, conversationId),
+            CHANNEL_PATTERNS.conversation(organizationId, conversationId),
             EVENT_TYPES.MESSAGE_CREATED,
             (payload) => {
               setState(prev => ({ ...prev, lastActivity: new Date() }));
@@ -117,7 +117,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
 
         // Subscribe to assignment events
         const assignmentUnsubscriber = subscribeToChannel(
-          CHANNEL_PATTERNS.ORGANIZATION_CONVERSATIONS(organizationId),
+          CHANNEL_PATTERNS.conversations(organizationId),
           EVENT_TYPES.CONVERSATION_ASSIGNED,
           (payload) => {
             setState(prev => ({ ...prev, lastActivity: new Date() }));

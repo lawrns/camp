@@ -1,0 +1,86 @@
+/**
+ * Simplified Middleware with Basic Rate Limiting
+ * One auth check, trust Supabase RLS policies
+ * Added basic rate limiting for production readiness
+ */
+
+import { NextResponse, type NextRequest } from "next/server";
+
+// Simple in-memory rate limiting (for production, use Redis)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function rateLimit(ip: string, limit: number = 100, windowMs: number = 60000): boolean {
+  const now = Date.now();
+  const key = ip;
+
+  const current = rateLimitMap.get(key);
+
+  if (!current || now > current.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+
+  if (current.count >= limit) {
+    return false;
+  }
+
+  current.count++;
+  return true;
+}
+
+// Simple public routes - trust your tools, don't over-engineer
+const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/api/auth",
+  "/api/widget",
+  "/api/health",
+  "/widget",
+  "/api/webhooks",
+  "/api/inngest",
+  "/assets",
+  "/favicon.svg",
+  "/icon.svg",
+  "/_next",
+  "/static",
+];
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Get client IP for rate limiting
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
+  // Apply rate limiting (except for health checks)
+  if (pathname !== '/api/health' && !rateLimit(ip)) {
+    return NextResponse.json(
+      { error: 'Too many requests' },
+      { status: 429 }
+    );
+  }
+
+  // Check if route is public
+  const isPublicRoute = PUBLIC_ROUTES.some(route =>
+    pathname.startsWith(route)
+  );
+
+  if (isPublicRoute) {
+    return NextResponse.next();
+  }
+
+  // For protected routes, add basic security headers
+  const response = NextResponse.next();
+
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  return response;
+}
+
+export const config = {
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|widget).*)"],
+  runtime: 'nodejs',
+};
