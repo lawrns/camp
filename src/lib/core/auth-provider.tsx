@@ -11,6 +11,7 @@ import { User as SupabaseUser } from "@supabase/supabase-js";
 import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AuthenticatedUser } from "./auth";
 import { runAuthValidation } from "@/lib/auth/auth-validation";
+import { initializeAuthPersistence, forceSessionRecovery } from "@/lib/auth/auth-persistence-fix";
 
 // Extend Window interface for debug properties
 declare global {
@@ -82,7 +83,10 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
       },
       body: JSON.stringify({ organizationId }),
       credentials: "include", // Ensure cookies are sent
-    }).catch(() => ({ status: 401 })); // Suppress network errors for expected 401s
+    }).catch((networkError) => {
+      console.warn("🚨 Network error during JWT enrichment:", networkError.message);
+      return { status: 401, ok: false, json: () => Promise.resolve({ error: "Network error" }) };
+    });
 
     // Handle 401 Unauthorized - user not authenticated
     if (response.status === 401) {
@@ -90,23 +94,51 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
     }
 
     // Handle other non-OK responses
-    if ("ok" in response && !response.ok) {
-      console.log('[Auth] Login failed with status:', response.status);
-      const error = await response.json().catch(() => ({ error: "Unknown error" }));
-      console.error("🚨 Failed to enrich JWT:", error);
-        // Detailed logging for 400 errors
-        if (response.status === 400) {
-          console.error("🚨 JWT enrichment 400 details:", { organizationId, responseBody: error });
-        }
-      return { success: false, reason: "api_error", error };
+    if (!response.ok) {
+      console.log('[Auth] JWT enrichment failed with status:', response.status);
+
+      let errorDetails: any;
+      try {
+        errorDetails = await response.json();
+      } catch {
+        const statusText = 'statusText' in response ? response.statusText : 'Unknown error';
+        errorDetails = { error: `HTTP ${response.status}: ${statusText}` };
+      }
+
+      // Only log if we have meaningful error details
+      if (errorDetails && Object.keys(errorDetails).length > 0 && errorDetails.error !== "Unknown error") {
+        console.error("🚨 Failed to enrich JWT:", errorDetails);
+      } else {
+        const statusText = 'statusText' in response ? response.statusText : 'Unknown error';
+        console.error("🚨 Failed to enrich JWT: HTTP", response.status, statusText);
+      }
+
+      // Detailed logging for 400 errors
+      if (response.status === 400) {
+        console.error("🚨 JWT enrichment 400 details:", { organizationId, responseBody: errorDetails });
+      }
+      return { success: false, reason: "api_error", error: errorDetails };
     }
 
-    const result = "json" in response ? await response.json() : null;
+    // Parse the successful response
+    let result = null;
+    try {
+      result = await response.json();
+    } catch (parseError) {
+      console.warn("🚨 Failed to parse JWT enrichment response as JSON:", parseError);
+      return { success: false, reason: "parse_error", error: "Invalid JSON response" };
+    }
+
+    // Check if we got a valid result
+    if (!result || typeof result !== 'object') {
+      console.error("🚨 JWT enrichment returned invalid result:", result);
+      return { success: false, reason: "invalid_response", error: "Empty or invalid response" };
+    }
 
     // Check if the API returned a success flag
     if (!result.success) {
-      console.warn("🚨 JWT enrichment returned failure:", result.error);
-      return { success: false, reason: "enrichment_failed", error: result.error };
+      console.warn("🚨 JWT enrichment returned failure:", result.error || "Unknown error");
+      return { success: false, reason: "enrichment_failed", error: result.error || "Unknown error" };
     }
 
     console.log("✅ JWT enriched successfully:", result);
@@ -125,7 +157,16 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
 
     return { success: true, result };
   } catch (error) {
-    console.error("🚨 Error enriching JWT with organization:", error);
+    // Check if this is an extension-related error
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const isExtensionError = /extension|chrome-extension|moz-extension|1password|lastpass|bitwarden/i.test(errorMessage);
+
+    if (!isExtensionError) {
+      console.error("🚨 Error enriching JWT with organization:", error);
+    } else {
+      console.debug("🔇 Extension interference detected during JWT enrichment, suppressing error");
+    }
+
     return { success: false, reason: "network_error", error };
   }
 }
@@ -427,22 +468,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // CRITICAL: Enrich JWT with organization_id for RLS policies (skip for widget users)
         if (authUser.organizationId && !authUser.user_metadata?.widget_session) {
           authLogger.info("🔧 Enriching JWT after successful login...");
-          const enrichmentResult = await enrichJWTWithOrganization(authUser.organizationId);
+          try {
+            const enrichmentResult = await enrichJWTWithOrganization(authUser.organizationId);
 
-          if (!enrichmentResult.success) {
-            authLogger.warn("🚨 JWT enrichment failed, but continuing with basic auth:", enrichmentResult.reason);
-            // For test users without proper org membership, continue without blocking
-            if (enrichmentResult.reason === "enrichment_failed" || enrichmentResult.reason === "api_error") {
-              authLogger.info("📝 Test user detected - proceeding with default organization access");
+            if (!enrichmentResult.success) {
+              authLogger.warn("🚨 JWT enrichment failed, but continuing with basic auth:", enrichmentResult.reason);
+              // For test users without proper org membership, continue without blocking
+              if (enrichmentResult.reason === "enrichment_failed" || enrichmentResult.reason === "api_error") {
+                authLogger.info("📝 Test user detected - proceeding with default organization access");
+              }
+              // Store fallback context for debugging
+              if (typeof window !== "undefined") {
+                localStorage.setItem(
+                  "campfire_auth_fallback",
+                  JSON.stringify({
+                    reason: enrichmentResult.reason,
+                    organizationId: authUser.organizationId,
+                    timestamp: Date.now(),
+                  })
+                );
+              }
+            } else {
+              authLogger.info("✅ JWT enrichment completed successfully");
             }
+          } catch (enrichmentError) {
+            // Gracefully handle enrichment errors without breaking auth flow
+            authLogger.warn("🚨 JWT enrichment threw an error, continuing with basic auth:", enrichmentError);
+
             // Store fallback context for debugging
             if (typeof window !== "undefined") {
               localStorage.setItem(
                 "campfire_auth_fallback",
                 JSON.stringify({
-                  reason: enrichmentResult.reason,
-                  organizationId: authUser.organizationId,
+                  reason: "exception_thrown",
+                  error: enrichmentError instanceof Error ? enrichmentError.message : String(enrichmentError),
                   timestamp: Date.now(),
+                  organizationId: authUser.organizationId,
                 })
               );
             }
@@ -549,6 +610,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       try {
         console.log("[AuthProvider] Initializing auth state");
+
+        // Initialize auth persistence fix first
+        await initializeAuthPersistence({
+          enableExtensionIsolation: true,
+          enableFallbackStorage: true,
+          enableSessionRecovery: true,
+          sessionCheckInterval: 30000
+        });
+
         // Use user endpoint to get complete user data including organizationId
         const res = await fetch("/api/auth/user", {
           credentials: "include",
@@ -663,6 +733,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       } catch (err) {
         console.error("[AuthProvider] Auth initialization error:", err);
+
+        // Try session recovery as fallback
+        try {
+          console.log("[AuthProvider] Attempting session recovery...");
+          await forceSessionRecovery();
+
+          // Retry auth check after recovery
+          const retryRes = await fetch("/api/auth/user", {
+            credentials: "include",
+            headers: { "Cache-Control": "no-cache" },
+          });
+
+          if (retryRes.ok) {
+            const retryData = await retryRes.json();
+            if (retryData.user) {
+              console.log("[AuthProvider] Session recovery successful");
+              setUser(retryData.user);
+              return;
+            }
+          }
+        } catch (recoveryError) {
+          console.warn("[AuthProvider] Session recovery failed:", recoveryError);
+        }
 
         // Only try widget authentication if we're in a widget context
         const isWidgetContext = window.location.pathname.includes('/widget') ||

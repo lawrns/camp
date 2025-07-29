@@ -265,32 +265,52 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
   const cookieHeader = req.headers.get("cookie") || "";
   const cookies = cookieHeader.split(/;\s*/).map((c: any) => c.trim());
 
-  // Try sb-auth-token first (our standard auth cookie)
+  // Debug: Log available cookies (development only)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[UnifiedAuth] Available cookies:', cookies.map(c => c.split('=')[0]).join(', '));
+  }
+
+  // Try Supabase auth token (project-specific cookie name)
   let token: string | null = null;
 
-  // Check for standard auth token with enhanced error handling
-  const authTokenCookie = cookies.find((c: any) => c.startsWith("sb-auth-token="));
-  if (authTokenCookie) {
-    try {
-      const cookieValue = decodeURIComponent(authTokenCookie.split("=")[1]);
-      if (cookieValue.startsWith("base64-")) {
-        try {
-          const sessionData = JSON.parse(Buffer.from(cookieValue.substring(7), "base64").toString());
-          token = sessionData.access_token;
-        } catch (parseError) {
-          // Suppress cookie parsing errors to reduce console noise
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('[UnifiedAuth] Failed to parse base64 cookie:', parseError);
+  // Enhanced cookie parsing - try multiple cookie patterns
+  const cookiePatterns = [
+    /^sb-auth-token=/,
+    /^sb-.*-auth-token=/,
+    /^sb-access-token=/,
+    /-auth-token=/
+  ];
+
+  for (const pattern of cookiePatterns) {
+    const authTokenCookie = cookies.find((c: any) => pattern.test(c));
+    if (authTokenCookie) {
+      try {
+        const cookieValue = decodeURIComponent(authTokenCookie.split("=")[1]);
+        if (cookieValue.startsWith("base64-")) {
+          try {
+            const sessionData = JSON.parse(Buffer.from(cookieValue.substring(7), "base64").toString());
+            token = sessionData.access_token;
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[UnifiedAuth] Successfully parsed base64 cookie, got token');
+            }
+            break;
+          } catch (parseError) {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('[UnifiedAuth] Failed to parse base64 cookie:', parseError);
+            }
           }
+        } else {
+          // Direct token value
+          token = cookieValue;
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[UnifiedAuth] Using direct token from cookie');
+          }
+          break;
         }
-      } else {
-        // Direct token value
-        token = cookieValue;
-      }
-    } catch (cookieError) {
-      // Suppress cookie decoding errors
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[UnifiedAuth] Failed to decode cookie:', cookieError);
+      } catch (cookieError) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[UnifiedAuth] Failed to decode cookie:', cookieError);
+        }
       }
     }
   }
@@ -337,13 +357,25 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
 
   if (token) {
     try {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[UnifiedAuth] Attempting to validate token...');
+      }
+
       const {
         data: { user },
         error,
       } = await supabaseAdmin.auth.getUser(token);
 
-      if (!error && user) {
-        let organizationId = user.user_metadata?.organization_id;
+      if (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[UnifiedAuth] Token validation error:', error.message);
+        }
+      } else if (user) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[UnifiedAuth] Token validated successfully for user:', user.email);
+        }
+
+        let organizationId = user.user_metadata?.organization_id || user.app_metadata?.organization_id;
 
         if (!organizationId) {
           const { data: memberData } = await supabaseAdmin
@@ -357,10 +389,17 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
         }
 
         if (!organizationId) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[UnifiedAuth] No organization context found for user:', user.id);
+          }
           return {
             success: false,
             error: "No organization context found for user",
           };
+        }
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[UnifiedAuth] Authentication successful for org:', organizationId);
         }
 
         return {
@@ -370,7 +409,13 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
         };
       }
     } catch (error) {
-      // Ignore and fall through to failed auth below
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[UnifiedAuth] Token validation exception:', error);
+      }
+    }
+  } else {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('[UnifiedAuth] No token found in request');
     }
   }
 
@@ -557,15 +602,21 @@ export function withAuth<T extends Record<string, string | string[]> = Record<st
         console.log(`[UnifiedAuth] Allowing access with limited organization context for user ${authResult.user.id}`);
       }
 
+      // Create user-scoped client for RLS-enabled operations
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      const userScopedClient = supabase.server(cookieStore);
+
       // Create auth context
       const authContext: AuthContext = {
         user: authResult.user,
         organizationId: authResult.organizationId,
-        scopedClient: supabase.admin(),
+        scopedClient: userScopedClient,
       };
 
       return await handler(req, context, authContext);
     } catch (error) {
+      console.error('[UnifiedAuth] Handler error:', error);
       return createErrorResponse("Authentication failed", 500, "AUTH_ERROR");
     }
   };

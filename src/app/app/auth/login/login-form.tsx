@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm() {
   const router = useRouter();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("jam@jam.com");
   const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,48 +21,20 @@ export function LoginForm() {
     setError(null);
 
     try {
+      // Use our AuthProvider's signIn method
+      const result = await signIn(email, password);
 
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-
-
+      if (result.success) {
         // Set session storage flag to prevent redirect loop
         sessionStorage.setItem("campfire-login-success", "true");
-        
-        // Add debugging to see if router.push works
 
-
-        // Try both navigation methods for debugging
-        try {
-          router.push("/dashboard");
-
-          // Also try window.location as fallback after a delay
-          setTimeout(() => {
-
-            if (window.location.pathname === "/login") {
-
-              window.location.href = "/dashboard";
-            }
-          }, 2000);
-        } catch (navError) {
-
-          window.location.href = "/dashboard";
-        }
+        // Navigate to dashboard
+        router.push("/dashboard");
       } else {
-
-        setError(data.error || "Login failed");
+        setError(result.error || "Login failed");
       }
     } catch (err) {
-
+      console.error("Login error:", err);
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);

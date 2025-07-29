@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ConditionalNavigation } from '@/components/ConditionalNavigation';
 import { AuthProviders } from '../src/app/app/client-providers';
 import { ExtensionIsolationProvider } from '@/components/system/ExtensionIsolationProvider';
+import { AuthDebugPanel } from '@/components/debug/AuthDebugPanel';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = { title: 'Campfire - Customer Support Platform' };
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AuthProviders>
               <ConditionalNavigation />
               {children}
+              <AuthDebugPanel />
             </AuthProviders>
           </ThemeProvider>
         </ExtensionIsolationProvider>

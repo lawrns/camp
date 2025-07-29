@@ -53,12 +53,12 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
       );
     }
 
-    const { organizationId } = validation.data;
+    const { organizationId: targetOrgId } = validation.data;
 
     // Call the database function to set active organization using the scoped client
     // Note: This function returns a boolean, not a structured object
     const { data: isSuccess, error } = (await scopedClient.rpc("set_user_active_organization", {
-      org_id: organizationId,
+      org_id: targetOrgId,
     })) as { data: boolean | null; error: any };
 
     if (error) {
@@ -74,7 +74,7 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
 
     // Check if the function returned false (user doesn't have access)
     if (!isSuccess) {
-      console.warn('[set-organization] Function returned false - user may not have access to organization:', organizationId);
+      console.warn('[set-organization] Function returned false - user may not have access to organization:', targetOrgId);
       return NextResponse.json<SetOrganizationError>(
         {
           success: false,
@@ -88,7 +88,7 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
     const { data: orgDetails, error: orgError } = await scopedClient
       .from('organizations')
       .select('id, name')
-      .eq('id', organizationId)
+      .eq('id', targetOrgId)
       .single();
 
     if (orgError || !orgDetails) {
@@ -107,7 +107,7 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
       .from('organization_members')
       .select('role')
       .eq('user_id', userId)
-      .eq('organization_id', organizationId)
+      .eq('organization_id', targetOrgId)
       .single();
 
     if (memberError || !memberDetails) {
@@ -121,13 +121,15 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
       );
     }
 
-    // Log successful organization switch
-    console.log('[set-organization] Successfully set organization:', {
-      userId,
-      organizationId,
-      organizationName: orgDetails.name,
-      role: memberDetails.role
-    });
+    // Log successful organization switch (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[set-organization] Successfully set organization:', {
+        userId,
+        organizationId: targetOrgId,
+        organizationName: orgDetails.name,
+        role: memberDetails.role
+      });
+    }
 
     // Return success response with fetched details
     return NextResponse.json<SetOrganizationSuccess>(
@@ -143,7 +145,7 @@ export const POST = withAuth(async (request: NextRequest, { params }, { user, or
       { status: 200 }
     );
   } catch (error) {
-
+    console.error('[set-organization] Unexpected error:', error);
     return NextResponse.json<SetOrganizationError>(
       {
         success: false,

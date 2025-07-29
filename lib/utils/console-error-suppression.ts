@@ -29,15 +29,15 @@ const SUPPRESSED_PATTERNS: ErrorPattern[] = [
     description: 'Supabase cookie parsing function errors',
     level: 'warn'
   },
-  
+
   // Multiple client instance warnings
   {
     pattern: /Multiple GoTrueClient instances detected/,
     description: 'Multiple Supabase client instances warning',
     level: 'warn'
   },
-  
-  // Extension-related errors
+
+  // Extension-related errors (ENHANCED FOR YOUR SPECIFIC ERRORS)
   {
     pattern: /Extension context invalidated/,
     description: 'Browser extension context errors',
@@ -53,33 +53,75 @@ const SUPPRESSED_PATTERNS: ErrorPattern[] = [
     description: 'Browser extension runtime errors',
     level: 'warn'
   },
-  
+  {
+    pattern: /Could not establish connection\. Receiving end does not exist\./,
+    description: 'Browser extension connection errors',
+    level: 'error'
+  },
+  {
+    pattern: /The message port closed before a response was received\./,
+    description: 'Browser extension message port errors',
+    level: 'error'
+  },
+  {
+    pattern: /Failed to request.*accounts in requestAndUnlockAccountsFromApp/,
+    description: '1Password extension account request errors',
+    level: 'error'
+  },
+  {
+    pattern: /Could not get default saving location, resetting location\./,
+    description: '1Password extension saving location errors',
+    level: 'error'
+  },
+  {
+    pattern: /A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received/,
+    description: 'Browser extension async response errors',
+    level: 'error'
+  },
+  {
+    pattern: /\[LM\] Lock monitor stopped, without clearing alarm\./,
+    description: 'Browser extension lock monitor errors',
+    level: 'error'
+  },
+  {
+    pattern: /Failed to refresh keysets/,
+    description: 'Browser extension keyset refresh errors',
+    level: 'error'
+  },
+
   // WebSocket connection errors (non-critical)
   {
     pattern: /WebSocket connection to .* failed: WebSocket is closed/,
     description: 'WebSocket connection closed errors',
     level: 'warn'
   },
-  
+
   // PostHog analytics (non-critical)
   {
     pattern: /PostHog analytics disabled/,
     description: 'PostHog configuration warnings',
     level: 'warn'
   },
-  
+
   // React DevTools suggestion
   {
     pattern: /Download the React DevTools/,
     description: 'React DevTools suggestion',
     level: 'log'
   },
-  
+
   // Injected script errors
   {
     pattern: /Caught error handling <hide-notification> message/,
     description: 'Browser extension injected script errors',
     level: 'warn'
+  },
+
+  // Background script errors (common in extensions)
+  {
+    pattern: /background\.js/,
+    description: 'Browser extension background script errors',
+    level: 'error'
   }
 ];
 

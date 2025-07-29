@@ -3,6 +3,7 @@
 import { analytics } from "@/lib/analytics/posthog-client";
 import { SimpleQueryProvider } from "@/lib/react-query/SimpleQueryProvider";
 import { AuthProvider } from "@/lib/core/auth-provider";
+import { AuthErrorBoundary } from "@/components/system/AuthErrorBoundary";
 import { Component, ErrorInfo, ReactNode, useEffect } from "react";
 
 // Temporarily commented out to fix webpack module loading error
@@ -60,9 +61,11 @@ function AnalyticsInitializer({ children }: { children: ReactNode }) {
 export function AuthProviders({ children }: { children: ReactNode }) {
   return (
     <SimpleErrorBoundary>
-      <AuthProvider>
-        <SimpleQueryProvider>{children}</SimpleQueryProvider>
-      </AuthProvider>
+      <AuthErrorBoundary>
+        <AuthProvider>
+          <SimpleQueryProvider>{children}</SimpleQueryProvider>
+        </AuthProvider>
+      </AuthErrorBoundary>
     </SimpleErrorBoundary>
   );
 }
