@@ -67,13 +67,14 @@ export default function WidgetInterface() {
       }
 
       // Create or get existing conversation
-      const response = await fetch("/api/widget?action=create-conversation", {
+      const response = await fetch("/api/widget", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Organization-ID": organizationId,
         },
         body: JSON.stringify({
+          action: "create-conversation",
           visitorId: "visitor-" + Date.now(),
           organizationId,
           metadata: {
@@ -117,13 +118,14 @@ export default function WidgetInterface() {
 
     try {
       // Send message to widget API
-      const response = await fetch("/api/widget?action=send-message", {
+      const response = await fetch("/api/widget", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Organization-ID": organizationId,
         },
         body: JSON.stringify({
+          action: "send-message",
           conversationId,
           content: messageText,
           visitorId: "visitor-" + Date.now(), // Generate visitor ID

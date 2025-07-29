@@ -55,7 +55,7 @@ export function useMessages(
         setError(null);
 
         try {
-            const response = await fetch(`/api/widget?action=messages&conversationId=${conversationId}`, {
+            const response = await fetch(`/api/widget/messages?conversationId=${conversationId}`, {
                 method: "GET",
                 headers: {
                     "X-Organization-ID": organizationId,
@@ -68,10 +68,13 @@ export function useMessages(
 
             const data = await response.json();
             console.log("[useMessages] Raw API response:", data);
-            console.log("[useMessages] Messages array:", data.messages);
-            console.log("[useMessages] Messages count:", data.messages?.length || 0);
 
-            const transformedMessages = (data.messages || []).map((message: any) => ({
+            // The API returns the messages array directly, not wrapped in a messages property
+            const messagesArray = Array.isArray(data) ? data : [];
+            console.log("[useMessages] Messages array:", messagesArray);
+            console.log("[useMessages] Messages count:", messagesArray.length);
+
+            const transformedMessages = messagesArray.map((message: any) => ({
                 id: message.id,
                 content: message.content,
                 senderType: message.senderType || (message.sender_type === "visitor" ? "visitor" :
@@ -133,7 +136,7 @@ export function useMessages(
             setError(null);
 
             try {
-                const response = await fetch("/api/widget?action=send-message", {
+                const response = await fetch("/api/widget/messages", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -155,12 +158,19 @@ export function useMessages(
                 const result = await response.json();
                 console.log("[useMessages] API response:", result);
 
+                // Validate the API response structure
+                if (!result || !result.id) {
+                    console.error("[useMessages] Invalid API response structure:", result);
+                    throw new Error("Invalid response from server - missing message ID");
+                }
+
+                // The API returns the message directly, not wrapped in a message property
                 const confirmedMessage: Message = {
-                    id: result.message.id,
-                    content: result.message.content,
+                    id: result.id,
+                    content: result.content || content.trim(),
                     senderType: "visitor", // We know this is a visitor message
                     senderName: "You",
-                    timestamp: result.message.createdAt,
+                    timestamp: result.createdAt || new Date().toISOString(),
                     read_status: "sent",
                     attachments: [],
                     conversation_id: conversationId,
@@ -206,8 +216,8 @@ export function useMessages(
             if (!conversationId || !organizationId) return;
 
             try {
-                const response = await fetch("/api/widget?action=mark-read", {
-                    method: "POST",
+                const response = await fetch("/api/widget/messages", {
+                    method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
                         "X-Organization-ID": organizationId,

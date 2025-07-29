@@ -171,6 +171,7 @@ export const updateConversation = async (
 
       // Use broadcast instead of sendMessage for Supabase realtime
       const conversationChannel = realtimeClient.channel(conversationChannelName);
+      await conversationChannel.subscribe();
       await conversationChannel.send({
         type: "broadcast",
         event: "conversation_updated",
@@ -180,6 +181,7 @@ export const updateConversation = async (
           timestamp: new Date().toISOString(),
         },
       });
+      await conversationChannel.unsubscribe();
 
       // Also notify mailbox channel for broader updates
       if (updatedConversation.mailboxId) {
@@ -190,6 +192,7 @@ export const updateConversation = async (
         );
 
         const mailboxChannel = realtimeClient.channel(mailboxChannelName);
+        await mailboxChannel.subscribe();
         await mailboxChannel.send({
           type: "broadcast",
           event: "conversation_updated",
@@ -199,6 +202,7 @@ export const updateConversation = async (
             timestamp: new Date().toISOString(),
           },
         });
+        await mailboxChannel.unsubscribe();
       }
     } catch (error) {
       // Don't fail the operation if realtime fails

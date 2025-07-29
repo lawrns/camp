@@ -88,13 +88,14 @@ export function useWidgetState(
       
       // Try to create conversation via API, but fallback to mock if it fails
       try {
-        const response = await fetch('/api/widget?action=create-conversation', {
+        const response = await fetch('/api/widget', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-Organization-ID': organizationId,
           },
           body: JSON.stringify({
+            action: 'create-conversation',
             organizationId,
             visitorId: `visitor-${Date.now()}`,
             initialMessage: null

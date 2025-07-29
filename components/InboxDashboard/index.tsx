@@ -206,6 +206,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         try {
           const channelName = `org:${organizationId}:conv:${convId}`;
           const channel = supabase.browser().channel(channelName);
+          
+          // Subscribe to channel first (required for broadcasts)
+          await channel.subscribe();
 
           await channel.send({
             type: "broadcast",
@@ -217,6 +220,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
               sender_type: senderType,
             },
           });
+          
+          // Clean up the channel after sending
+          await channel.unsubscribe();
         } catch (broadcastError) {
           console.warn("Failed to broadcast message:", broadcastError);
           // Don't throw - message was saved successfully

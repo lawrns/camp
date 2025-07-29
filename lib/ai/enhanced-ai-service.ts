@@ -9,7 +9,7 @@ import { unifiedRAGService } from './rag/UnifiedRAGService';
 import { AIHandoverService } from './handover';
 import { confidenceAnalytics } from './confidence-analytics';
 import { openaiService } from './openai';
-import { analyseSentiment } from './sentiment';
+import { analyzeSentiment } from './sentiment';
 import { supabase } from '@/lib/supabase';
 import { enhancedAIAnalytics } from '@/lib/analytics/enhanced-ai-analytics';
 import { slackService } from '@/lib/integrations/enhanced-slack-service';
@@ -62,6 +62,22 @@ export class EnhancedAIService {
   }
 
   /**
+   * Convert SentimentAnalysis object to string representation
+   */
+  private sentimentToString(sentimentAnalysis: any): string {
+    if (typeof sentimentAnalysis === 'string') {
+      return sentimentAnalysis;
+    }
+    
+    const compound = sentimentAnalysis.sentiment?.compound || 0;
+    
+    if (compound >= 0.5) return 'positive';
+    if (compound <= -0.5) return 'negative';
+    if (compound <= -0.1) return 'frustrated';
+    return 'neutral';
+  }
+
+  /**
    * Process a customer message and generate an intelligent response
    */
   async processMessage(request: EnhancedAIRequest): Promise<EnhancedAIResponse> {
@@ -69,7 +85,8 @@ export class EnhancedAIService {
 
     try {
       // 1. Analyze sentiment and complexity
-      const sentiment = await analyseSentiment(request.messageContent);
+      const sentimentAnalysis = await analyzeSentiment(request.messageContent);
+      const sentiment = this.sentimentToString(sentimentAnalysis);
       const complexity = this.analyzeComplexity(request.messageContent, request.conversationHistory);
       const urgency = this.determineUrgency(request.messageContent, sentiment);
 
@@ -93,7 +110,7 @@ export class EnhancedAIService {
         },
       };
 
-      const ragResponse = await unifiedRAGService.processConversation(ragInput);
+      const ragResponse = await unifiedRAGService.processMessage(ragInput);
 
       // 4. Evaluate handover necessity
       const handoverContext = {
@@ -102,7 +119,17 @@ export class EnhancedAIService {
         customerId: request.customerInfo?.email,
         customerName: request.customerInfo?.name,
         customerEmail: request.customerInfo?.email,
-        aiPersonality: { id: 'default', name: 'Assistant', traits: [] },
+        aiPersonality: {
+          id: 'default',
+          name: 'Assistant',
+          description: 'AI Assistant for customer support',
+          systemPrompt: 'You are a helpful customer support assistant.',
+          responseStyle: 'professional',
+          specialties: ['general_support'],
+          traits: [],
+          empathyLevel: 0.8,
+          formalityLevel: 0.7
+        },
         messageHistory: request.conversationHistory,
         currentIssue: {
           category: this.categorizeIssue(request.messageContent),
@@ -111,11 +138,11 @@ export class EnhancedAIService {
           tags: this.extractTags(request.messageContent),
         },
         aiAnalysis: {
-          confidence: ragResponse.confidence,
+          confidence: ragResponse.confidence || 0.5,
           sentiment,
           complexity,
           suggestedActions: this.generateSuggestedActions(request.messageContent, sentiment),
-          escalationReasons: ragResponse.shouldHandover ? ['Low AI confidence'] : [],
+          escalationReasons: ragResponse.escalated ? [ragResponse.escalationReason || 'Low AI confidence'] : [],
         },
       };
 
@@ -131,39 +158,23 @@ export class EnhancedAIService {
         handoverTriggered: handoverResult.shouldHandover,
       });
 
-      // 5.1. Record enhanced AI analytics
-      await enhancedAIAnalytics.trackInteraction({
-        conversationId: request.conversationId,
-        organizationId: request.organizationId,
-        messageId: request.messageId,
-        aiResponseTime: Date.now() - startTime,
-        confidence: ragResponse.confidence,
-        sentiment,
-        handoverTriggered: handoverResult.shouldHandover,
-        handoverReason: handoverResult.reason,
-        sourcesUsed: ragResponse.sources?.length || 0,
-        empathyScore: ragResponse.empathyScore || 0.8,
-        responseCategory: this.determineResponseCategory(ragResponse.content, handoverResult.shouldHandover),
-        timestamp: new Date().toISOString(),
-      });
-
       // 6. Build enhanced response
       const response: EnhancedAIResponse = {
-        content: ragResponse.content,
-        confidence: ragResponse.confidence,
+        content: ragResponse.response || 'I apologize, but I was unable to generate a response.',
+        confidence: ragResponse.confidence || 0.5,
         shouldHandover: handoverResult.shouldHandover,
         handoverReason: handoverResult.reason,
         suggestedActions: handoverContext.aiAnalysis.suggestedActions,
         sentiment,
         responseTime: Date.now() - startTime,
-        sources: ragResponse.sources?.map(source => ({
+        sources: ragResponse.knowledgeUsed?.map((source: any) => ({
           title: source.title || 'Knowledge Base',
-          content: source.content,
+          content: source.content || '',
           relevance: source.relevance || 0.8,
-        })),
+        })) || [],
         metadata: {
-          aiPersonality: ragResponse.agentName || 'Assistant',
-          empathyScore: ragResponse.empathyScore || 0.8,
+          aiPersonality: ragResponse.suggestedAgent || 'Assistant',
+          empathyScore: 0.8,
           complexity,
           urgency,
         },
@@ -298,22 +309,23 @@ export class EnhancedAIService {
 
   private async getOrganizationContext(organizationId: string) {
     try {
-      const supabaseClient = supabase.server();
-      const { data, error } = await supabaseClient
+      const supabaseClient = supabase.admin();
+      const { data: organization } = await supabaseClient
         .from('organizations')
-        .select('name, settings')
+        .select('*')
         .eq('id', organizationId)
         .single();
 
-      if (error) throw error;
-
       return {
-        name: data.name,
-        persona: data.settings?.aiPersona || 'helpful',
+        persona: (organization as any)?.ai_persona || 'helpful',
+        settings: (organization as any)?.settings || {},
       };
     } catch (error) {
       console.error('Error fetching organization context:', error);
-      return { name: 'Organization', persona: 'helpful' };
+      return {
+        persona: 'helpful',
+        settings: {},
+      };
     }
   }
 

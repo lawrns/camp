@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { HeroSection } from '@/components/HeroSection';
 import { FeatureCard } from '@/components/FeatureCard';
 import { SafeClientOnly } from '@/components/SafeClientOnly';
+import { WidgetProvider } from '@/components/widget';
 import { Robot, Users, ChatCircle } from '@phosphor-icons/react';
 
 export default function HomePage() {
@@ -31,9 +32,9 @@ export default function HomePage() {
           </div>
         </section>
         <SafeClientOnly>
-          <div className="fixed bottom-4 right-4">
-            {/* Widget will be rendered here */}
-          </div>
+          <WidgetProvider organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd" debug={false}>
+            <div />
+          </WidgetProvider>
         </SafeClientOnly>
       </Suspense>
     </main>

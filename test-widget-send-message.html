@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Send Message Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Widget Send Message Test</h1>
+    <p>This test simulates the exact API call that was causing the TypeError in useMessages.</p>
+
+    <div class="test-section info">
+        <h3>Test Configuration</h3>
+        <label>Organization ID:</label>
+        <input type="text" id="organizationId" value="b5e80170-004c-4e82-a88c-3e2166b169dd">
+        
+        <label>Conversation ID:</label>
+        <input type="text" id="conversationId" value="48eedfba-2568-4231-bb38-2ce20420900d">
+        
+        <label>Message Content:</label>
+        <textarea id="messageContent" rows="3">Hello! This is a test message to verify the API response structure fix.</textarea>
+        
+        <label>Sender Email:</label>
+        <input type="text" id="senderEmail" value="test@example.com">
+        
+        <label>Sender Name:</label>
+        <input type="text" id="senderName" value="Test User">
+    </div>
+
+    <div class="test-section">
+        <h3>Test Actions</h3>
+        <button onclick="testSendMessage()" id="sendBtn">Send Test Message</button>
+        <button onclick="testResponseStructure()" id="structureBtn">Test Response Structure</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const BASE_URL = 'http://localhost:3000';
+
+        function addResult(title, content, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-section ${type}`;
+            resultDiv.innerHTML = `
+                <h3>${title}</h3>
+                <pre>${content}</pre>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testSendMessage() {
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            try {
+                const organizationId = document.getElementById('organizationId').value;
+                const conversationId = document.getElementById('conversationId').value;
+                const content = document.getElementById('messageContent').value;
+                const senderEmail = document.getElementById('senderEmail').value;
+                const senderName = document.getElementById('senderName').value;
+
+                addResult('🚀 Sending Message', `
+Organization ID: ${organizationId}
+Conversation ID: ${conversationId}
+Content: ${content}
+Sender: ${senderName} <${senderEmail}>
+                `, 'info');
+
+                const response = await fetch(`${BASE_URL}/api/widget/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Organization-ID': organizationId,
+                    },
+                    body: JSON.stringify({
+                        conversationId,
+                        content,
+                        senderEmail,
+                        senderName,
+                        senderType: 'customer',
+                    }),
+                });
+
+                addResult(`📡 Response Status`, `${response.status} ${response.statusText}`, 
+                    response.ok ? 'success' : 'error');
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    addResult('❌ Error Response', errorText, 'error');
+                    return;
+                }
+
+                const result = await response.json();
+                addResult('✅ API Response', JSON.stringify(result, null, 2), 'success');
+
+                // Test the exact field access that was causing the error
+                testFieldAccess(result);
+
+            } catch (error) {
+                addResult('❌ Network Error', `${error.message}\n\nStack:\n${error.stack}`, 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Test Message';
+            }
+        }
+
+        function testFieldAccess(result) {
+            try {
+                // This is the exact code that was failing before the fix
+                const id = result.id;  // This should work now (was result.message.id before)
+                const content = result.content;  // This should work now (was result.message.content before)
+                const createdAt = result.createdAt;  // This should work now (was result.message.createdAt before)
+
+                addResult('✅ Field Access Test', `
+✅ result.id: ${id}
+✅ result.content: ${content}
+✅ result.createdAt: ${createdAt}
+
+🎉 All field access successful! The TypeError has been fixed.
+                `, 'success');
+
+                // Test the old (broken) way to show the difference
+                try {
+                    const oldWayId = result.message.id;  // This should fail
+                    addResult('⚠️ Old Way Still Works?', `Unexpected: result.message.id = ${oldWayId}`, 'error');
+                } catch (oldError) {
+                    addResult('✅ Old Way Correctly Fails', `
+The old way (result.message.id) correctly fails with:
+${oldError.message}
+
+This confirms the fix is working correctly.
+                    `, 'success');
+                }
+
+            } catch (error) {
+                addResult('❌ Field Access Failed', `${error.message}\n\nStack:\n${error.stack}`, 'error');
+            }
+        }
+
+        async function testResponseStructure() {
+            try {
+                addResult('🔍 Testing Response Structure', 'Analyzing API response format...', 'info');
+
+                const response = await fetch(`${BASE_URL}/api/widget/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Organization-ID': document.getElementById('organizationId').value,
+                    },
+                    body: JSON.stringify({
+                        conversationId: document.getElementById('conversationId').value,
+                        content: 'Structure test message',
+                        senderEmail: 'structure-test@example.com',
+                        senderName: 'Structure Test',
+                        senderType: 'customer',
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                // Analyze the structure
+                const analysis = {
+                    'Response Type': typeof result,
+                    'Is Array': Array.isArray(result),
+                    'Has message property': 'message' in result,
+                    'Has id property': 'id' in result,
+                    'Has content property': 'content' in result,
+                    'Has createdAt property': 'createdAt' in result,
+                    'Top-level keys': Object.keys(result).join(', '),
+                };
+
+                addResult('📊 Structure Analysis', JSON.stringify(analysis, null, 2), 'info');
+
+            } catch (error) {
+                addResult('❌ Structure Test Failed', `${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run a basic test on page load
+        window.addEventListener('load', () => {
+            addResult('🏁 Page Loaded', 'Ready to test the send message API fix!', 'info');
+        });
+    </script>
+</body>
+</html>

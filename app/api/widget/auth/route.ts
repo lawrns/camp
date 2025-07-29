@@ -37,19 +37,19 @@ async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promi
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customerEmail, customerName, organizationId } = body;
+    const { customerEmail, customerName, organizationId, visitorId, sessionData } = body;
 
-    // Validate required fields
-    if (!customerEmail || !organizationId) {
+    // Validate required fields - organizationId is required, customerEmail is optional for widget auth
+    if (!organizationId) {
       return NextResponse.json(
         { 
           error: 'Missing required fields', 
           code: 'VALIDATION_ERROR',
           details: {
-            required: ['customerEmail', 'organizationId'],
+            required: ['organizationId'],
             provided: Object.keys(body)
           }
-        },
+        }, 
         { status: 400 }
       );
     }
@@ -80,108 +80,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for existing conversation for this customer
-    const { data: existingConversation, error: convError } = await supabaseClient
-      .from('conversations')
-      .select('id, status, updated_at')
-      .eq('organization_id', organizationId)
-      .eq('customer_email', customerEmail)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    let conversationId: string;
-
-    if (convError && convError.code !== 'PGRST116') {
-      console.error('[Widget Auth API] Conversation fetch error:', convError);
-      return NextResponse.json(
-        { error: 'Failed to check existing conversation', code: 'DATABASE_ERROR' },
-        { status: 500 }
-      );
-    }
-
-    if (existingConversation) {
-      // Use existing conversation
-      conversationId = existingConversation.id;
-      
-      // Update conversation if it was closed
-      if (existingConversation.status === 'closed') {
-        await supabaseClient
-          .from('conversations')
-          .update({
-            status: 'open',
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', conversationId);
-      }
-    } else {
-      // Create new conversation with correct column names
-      const { data: newConversation, error: createError } = await supabaseClient
+    // Generate or use existing visitor ID
+    const generatedVisitorId = visitorId || `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // For widget auth, we don't need to check existing conversations if no email is provided
+    let conversationId: string | null = null;
+    
+    if (customerEmail) {
+      // Check for existing conversation for this customer
+      const { data: existingConversation, error: convError } = await supabaseClient
         .from('conversations')
-        .insert({
-          organization_id: organizationId,
-          customer_email: customerEmail,
-          customer_name: customerName || customerEmail,
-          subject: `New conversation from ${customerEmail}`,
-          status: 'open',
-          metadata: {
-            source: 'widget',
-            timestamp: new Date().toISOString(),
-          },
-        })
-        .select('id')
+        .select('id, status, updated_at')
+        .eq('organization_id', organizationId)
+        .eq('customer_email', customerEmail)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .single();
 
-      if (createError) {
-        console.error('[Widget Auth API] Conversation creation error:', createError);
+      if (convError && convError.code !== 'PGRST116') {
+        console.error('[Widget Auth API] Conversation fetch error:', convError);
         return NextResponse.json(
-          { error: 'Failed to create conversation', code: 'DATABASE_ERROR' },
+          { error: 'Failed to check existing conversation', code: 'DATABASE_ERROR' },
           { status: 500 }
         );
       }
-
-      conversationId = newConversation.id;
-
-      // CRITICAL: Broadcast new conversation to real-time channels for agent dashboard
-      try {
-        // Get full conversation data for broadcast
-        const { data: fullConversation } = await supabaseClient
-          .from('conversations')
-          .select('*')
-          .eq('id', conversationId)
-          .single();
-
-        if (fullConversation) {
-          // Convert to camelCase for broadcast
-          const apiConversation = mapDbConversationToApi(fullConversation);
-          
-          // Broadcast to organization channel for new conversation notifications
-          const orgChannel = UNIFIED_CHANNELS.organization(organizationId);
-          await supabaseClient.channel(orgChannel).send({
-            type: 'broadcast',
-            event: UNIFIED_EVENTS.CONVERSATION_CREATED,
-            payload: {
-              conversation: apiConversation,
-              organizationId,
-              timestamp: new Date().toISOString(),
-            }
-          });
-
-          console.log('[Widget Auth API] New conversation broadcast sent successfully');
-        }
-      } catch (broadcastError) {
-        console.error('[Widget Auth API] New conversation broadcast failed:', broadcastError);
-        // Don't fail the request if broadcast fails, but log it
+      
+      if (existingConversation) {
+        conversationId = existingConversation.id;
       }
     }
 
-    // Generate a simple session token for widget authentication
+    // Generate a widget authentication token
     const sessionToken = `widget_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const userId = customerEmail ? `user_${customerEmail.replace('@', '_').replace('.', '_')}` : generatedVisitorId;
 
     return NextResponse.json({
       success: true,
-      conversationId,
-      sessionToken,
+      token: sessionToken,
+      userId: userId,
+      visitorId: generatedVisitorId,
+      conversationId: conversationId,
+      organizationId: organizationId,
+      user: {
+        id: userId,
+        email: customerEmail || null,
+        displayName: customerName || customerEmail || 'Anonymous User',
+        organizationId: organizationId
+      },
       organization: {
         id: organization.id,
         widgetEnabled: widgetEnabled
