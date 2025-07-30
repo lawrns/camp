@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 3
     },
     "preserveOutput": "always",
     "reporter": [
@@ -45,7 +45,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "chromium",
         "name": "chromium",
@@ -54,14 +54,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "firefox",
         "name": "firefox",
@@ -70,14 +70,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "webkit",
         "name": "webkit",
@@ -86,14 +86,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -102,14 +102,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -118,14 +118,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Tablet",
         "name": "Tablet",
@@ -134,7 +134,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 30000
       }
     ],
     "shard": null,
@@ -146,27 +146,27 @@
   },
   "suites": [
     {
-      "title": "auth/basic-auth.spec.ts",
-      "file": "auth/basic-auth.spec.ts",
+      "title": "auth/simple-login.spec.ts",
+      "file": "auth/simple-login.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Basic Authentication Tests",
-          "file": "auth/basic-auth.spec.ts",
+          "title": "Simple Login Test",
+          "file": "auth/simple-login.spec.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should login successfully with jam@jam.com",
+              "title": "should login with jam@jam.com",
               "ok": true,
               "tags": [
                 "jam.com"
               ],
               "tests": [
                 {
-                  "timeout": 60000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -176,166 +176,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9992,
+                      "duration": 2531,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n"
-                        },
-                        {
-                          "text": "PAGE LOG: PostHog analytics disabled - no valid API key provided\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] Initializing auth state\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [ExtensionIsolation] Global extension isolation initialized\n"
-                        },
-                        {
-                          "text": "PAGE LOG: Failed to load resource: the server responded with a status of 401 (Unauthorized)\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] Session check failed: {status: 401, success: false, authenticated: false, error: No valid session found}\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] No authenticated session found (401)\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] Dashboard context, setting user to null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Fast Refresh] done in NaNms\n"
-                        },
-                        {
-                          "text": "PAGE LOG: 🔐 Auth state change: INITIAL_SESSION undefined\n"
-                        },
-                        {
-                          "text": "PAGE LOG: 🔐 Auth state change: SIGNED_IN 6f9916c7-3575-4a81-b58e-624ab066bebc\n"
-                        },
-                        {
-                          "text": "PAGE LOG: 🔐 Auth state change too recent, debouncing\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Fast Refresh] rebuilding\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Fast Refresh] done in 130ms\n"
-                        },
-                        {
-                          "text": "Dashboard content not found, checking other indicators...\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Realtime] Channel manager destroyed\n"
-                        },
-                        {
-                          "text": "PAGE LOG: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold\n"
-                        },
-                        {
-                          "text": "PAGE LOG: PostHog analytics disabled - no valid API key provided\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] Initializing auth state\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [ExtensionIsolation] Global extension isolation initialized\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [EventBus] Development mode - eventBus available at window.__eventBus\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] User found: jam@jam.com\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [AuthProvider] User data: {id: 6f9916c7-3575-4a81-b58e-624ab066bebc, organizationId: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e, organizationRole: undefined}\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Realtime] Created new channel: org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [ConversationStats] Fetching stats for organization: c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [Realtime] Channel org:c5b81fe6-e7b5-4f37-93a0-cbd9e46ed97e:conversations status: CLOSED\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
-                        },
-                        {
-                          "text": "PAGE LOG: 🔐 Auth state change: INITIAL_SESSION 6f9916c7-3575-4a81-b58e-624ab066bebc\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [ConversationStats] Query result: {conversationCount: 0, hasError: false, errorCode: undefined, errorMessage: undefined}\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
-                        },
-                        {
-                          "text": "Successfully navigated to dashboard - authentication successful\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Conversations: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Selected Conversation: null\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages: []\n"
-                        },
-                        {
-                          "text": "PAGE LOG: [InboxDashboard] Messages Loading: false\n"
+                          "text": "✅ Login successful!\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-28T17:48:40.771Z",
+                      "startTime": "2025-07-30T19:13:24.082Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -343,9 +193,121 @@
                   "status": "expected"
                 }
               ],
-              "id": "e5a5b64bdca758b1a06a-f8646da54a36ef38a0a7",
-              "file": "auth/basic-auth.spec.ts",
-              "line": 46,
+              "id": "d6d101f8faf747e8f447-b37c5889a91f6b32ed42",
+              "file": "auth/simple-login.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should access inbox after login",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 2884,
+                      "error": {
+                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n",
+                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts:43:38",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
+                          "column": 38,
+                          "line": 43
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 41 |\u001b[39m     \u001b[90m// Verify we can access inbox\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/\\/inbox/\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 |\u001b[39m     \n \u001b[90m 45 |\u001b[39m     \u001b[90m// Take a screenshot\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ path\u001b[33m:\u001b[39m \u001b[32m'inbox-access.png'\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
+                            "column": 38,
+                            "line": 43
+                          },
+                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n\n\u001b[0m \u001b[90m 41 |\u001b[39m     \u001b[90m// Verify we can access inbox\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/\\/inbox/\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 |\u001b[39m     \n \u001b[90m 45 |\u001b[39m     \u001b[90m// Take a screenshot\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ path\u001b[33m:\u001b[39m \u001b[32m'inbox-access.png'\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts:43:38\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T19:13:24.085Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
+                        "column": 38,
+                        "line": 43
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d6d101f8faf747e8f447-02d14aa862a14cac0252",
+              "file": "auth/simple-login.spec.ts",
+              "line": 30,
+              "column": 7
+            },
+            {
+              "title": "should access widget after login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2707,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Widget access successful!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T19:13:24.085Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6d101f8faf747e8f447-94f39fdb3dbea00f494b",
+              "file": "auth/simple-login.spec.ts",
+              "line": 51,
               "column": 7
             }
           ]
@@ -355,11 +317,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-07-28T17:48:40.457Z",
-    "duration": 10654.805,
-    "expected": 1,
+    "startTime": "2025-07-30T19:13:23.636Z",
+    "duration": 3736.1079999999997,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

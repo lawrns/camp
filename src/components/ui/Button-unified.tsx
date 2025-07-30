@@ -101,10 +101,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
 
         {/* Content wrapper - hidden when loading */}
-        <span className={cn("flex items-center", loading && "opacity-0")}>
+        <span className={cn("flex items-center whitespace-nowrap", loading && "opacity-0")}>
           {leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
 
-          {children && <span className="flex-1">{children}</span>}
+          {children && <span className="flex-1 truncate">{children}</span>}
 
           {rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
         </span>
@@ -174,11 +174,11 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
         {...props}
       >
         {React.Children.map(children, (child) => {
-          if (React.isValidElement(child) && child.type === Button) {
+          if (React.isValidElement<ButtonProps>(child) && child.type === Button) {
             return React.cloneElement(child, {
               size: size || child.props.size,
               variant: variant || child.props.variant,
-            } as ButtonProps);
+            });
           }
           return child;
         })}
@@ -188,4 +188,4 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
 );
 ButtonGroup.displayName = "ButtonGroup";
 
-export { Button, ButtonGroup, buttonVariants, IconButton, LinkButton, LoadingButton, type ButtonProps };
+export { Button, ButtonGroup, buttonVariants, IconButton, LinkButton, LoadingButton };

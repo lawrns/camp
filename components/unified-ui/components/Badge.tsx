@@ -173,8 +173,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         }}
         {...props}
       >
-        {icon && <span className="mr-[var(--fl-space-1)] flex items-center">{icon}</span>}
-        <span>{children}</span>
+        {icon && <span className="mr-[var(--fl-space-1)] flex items-center flex-shrink-0">{icon}</span>}
+        <span className="whitespace-nowrap truncate">{children}</span>
         {onRemove && (
           <button
             type="button"

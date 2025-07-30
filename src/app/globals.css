@@ -30,32 +30,42 @@
   }
 }
 
-/* Simple fix for icon + text staying on one line */
-button {
+/* TARGETED ICON + TEXT NO-WRAP FIX */
+/* Only prevent wrapping for elements that contain both icons and text */
+
+/* Target flex containers with gaps that likely contain icon-text combinations */
+.flex.items-center[class*="gap-"],
+.inline-flex.items-center[class*="gap-"] {
   white-space: nowrap;
 }
 
-button svg {
-  flex-shrink: 0;
+/* Force all SVGs and icons to never shrink */
+svg,
+[class*="icon"],
+.icon {
+  flex-shrink: 0 !important;
 }
 
-/* Ensure buttons with icons don't wrap */
-.flex.items-center.gap-2,
-.flex.items-center.gap-3 {
+/* Button-specific fixes - only for buttons with gaps */
+button.flex[class*="gap-"],
+button.inline-flex[class*="gap-"],
+[role="button"].flex[class*="gap-"],
+[role="button"].inline-flex[class*="gap-"] {
   white-space: nowrap;
 }
 
-.flex.items-center.gap-2 svg,
-.flex.items-center.gap-3 svg {
-  flex-shrink: 0;
-}
-
-/* Navigation items should never wrap */
-nav a,
-nav button {
+/* Navigation elements with icons */
+nav .flex.items-center[class*="gap-"],
+nav .inline-flex.items-center[class*="gap-"] {
   white-space: nowrap;
 }
 
-nav svg {
-  flex-shrink: 0;
+/* Ensure icons with margins/padding don't wrap */
+svg[class*="mr-"],
+svg[class*="ml-"],
+svg[class*="mx-"],
+[class*="icon"][class*="mr-"],
+[class*="icon"][class*="ml-"],
+[class*="icon"][class*="mx-"] {
+  flex-shrink: 0 !important;
 }

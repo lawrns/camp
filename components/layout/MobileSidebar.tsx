@@ -11,6 +11,12 @@ import {
   Gear as Settings,
   Users,
   X,
+  House,
+  Tray,
+  Ticket,
+  BookOpen,
+  ChartBar,
+  Brain,
 } from "@phosphor-icons/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Button } from "@/components/ui/Button-unified";
@@ -27,15 +33,24 @@ interface MobileSidebarProps {
 }
 
 const navigation = [
-  { name: "Inbox", href: "/dashboard", icon: Inbox },
-  { name: "AI Assistant", href: "/dashboard/ai", icon: Bot },
-  { name: "Teams", href: "/teams", icon: Users },
-  { name: "Help", href: "/help", icon: HelpCircle },
+  { name: "Dashboard", href: "/dashboard", icon: House },
+  { name: "Inbox", href: "/dashboard/inbox", icon: Tray },
+  { name: "Tickets", href: "/dashboard/tickets", icon: Ticket },
+  { name: "Knowledge", href: "/dashboard/knowledge", icon: BookOpen },
+  { name: "Analytics", href: "/dashboard/analytics", icon: ChartBar },
+  { name: "AI Insights", href: "/dashboard/ai-insights", icon: Brain },
+];
+
+const secondaryNavigation = [
+  { name: "Team", href: "/dashboard/team", icon: Users },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "Integrations", href: "/dashboard/integrations", icon: CreditCard },
 ];
 
 const bottomNavigation = [
-  { name: "Settings", href: "/settings", icon: Settings },
-  { name: "Billing", href: "/settings/billing", icon: CreditCard },
+  { name: "Notifications", href: "/dashboard/notifications", icon: CreditCard },
+  { name: "Help", href: "/dashboard/help", icon: HelpCircle },
+  { name: "Profile", href: "/dashboard/profile", icon: Users },
 ];
 
 export function MobileSidebar({ className, isOpen = false, onOpenChange }: MobileSidebarProps) {
@@ -114,6 +129,23 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
                 >
                   <item.icon className="h-5 w-5 flex-shrink-0" />
                   <span className="truncate">{item.name}</span>
+                </Button>
+              ))}
+            </nav>
+
+            <Separator className="my-6" />
+
+            {/* Secondary Navigation */}
+            <nav className="space-y-1">
+              {secondaryNavigation.map((item: any) => (
+                <Button
+                  key={item.name}
+                  variant={isActive(item.href) ? "secondary" : "ghost"}
+                  className={cn("h-12 w-full justify-start gap-3 whitespace-nowrap min-w-0", isActive(item.href) && "bg-secondary font-medium")}
+                  onClick={() => handleNavigate(item.href)}
+                >
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
+                  {item.name}
                 </Button>
               ))}
             </nav>

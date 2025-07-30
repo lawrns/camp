@@ -7,7 +7,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3005';
 const SCREENSHOT_DIR = path.join(__dirname, 'screenshots');
 
 // Test configuration

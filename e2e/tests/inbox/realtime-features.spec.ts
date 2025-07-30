@@ -48,8 +48,8 @@ test.describe('Inbox Real-time Features', () => {
     await expect(page).toHaveURL(/\/dashboard/);
     
     // Navigate back to inbox
-    await page.goto('/inbox');
-    await expect(page).toHaveURL(/\/inbox/);
+    await page.goto('/dashboard/inbox');
+    await expect(page).toHaveURL(/\/dashboard\/inbox/);
     await expect(page.locator('h1')).toContainText('Inbox');
     
     console.log('✅ Page navigation with real-time works correctly');

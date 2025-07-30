@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "../../src/lib/utils";
 
 const badgeVariants = cva(
   // Base styles with design tokens
@@ -9,7 +9,7 @@ const badgeVariants = cva(
     "px-[var(--fl-space-3)] py-[var(--fl-space-1)]",
     "text-[var(--fl-font-size-xs)] font-[var(--fl-font-weight-semibold)]",
     "rounded-[var(--fl-rounded-ds-full)]",
-    "transition-all duration-[var(--fl-duration-200)] ease-[var(--fl-ease-out)]"
+    "transition-all duration-[var(--fl-duration-200)] ease-[var(--fl-ease-out)]",
     "focus:outline-none focus:ring-2 focus:ring-[var(--fl-color-focus)] focus:ring-offset-2",
     "select-none",
   ],
@@ -173,8 +173,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         }}
         {...props}
       >
-        {icon && <span className="mr-[var(--fl-space-1)] flex items-center">{icon}</span>}
-        <span>{children}</span>
+        {icon && <span className="mr-[var(--fl-space-1)] flex items-center flex-shrink-0">{icon}</span>}
+        <span className="whitespace-nowrap truncate">{children}</span>
         {onRemove && (
           <button
             type="button"

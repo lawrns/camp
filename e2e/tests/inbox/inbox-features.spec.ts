@@ -11,7 +11,7 @@ test.describe('Inbox Features and Functionalities', () => {
     
     // Wait for login to complete and navigate to inbox
     await page.waitForURL('/dashboard');
-    await page.goto('/inbox');
+    await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });
 

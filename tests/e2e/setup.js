@@ -8,7 +8,7 @@ jest.setTimeout(60000);
 
 // Global test configuration
 global.TEST_CONFIG = {
-  baseUrl: 'http://localhost:3002',
+  baseUrl: 'http://localhost:3005',
   timeout: 30000,
   slowMo: 100
 };

@@ -10,7 +10,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     
     // Wait for login to complete and navigate to inbox
     await page.waitForURL('/dashboard');
-    await page.goto('/inbox');
+    await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });
 
@@ -47,8 +47,8 @@ test.describe('Inbox Bidirectional Communication', () => {
     await expect(page).toHaveURL(/\/dashboard/);
     
     // Navigate back to inbox
-    await page.goto('/inbox');
-    await expect(page).toHaveURL(/\/inbox/);
+    await page.goto('/dashboard/inbox');
+    await expect(page).toHaveURL(/\/dashboard\/inbox/);
     await expect(page.locator('h1')).toContainText('Inbox');
     
     console.log('✅ Inbox navigation works correctly');

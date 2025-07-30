@@ -1,15 +1,9 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import React from 'react';
-import { AuthGuard } from '@/lib/auth/auth-guard';
-import UnifiedInboxDashboard from '@/components/inbox/UnifiedInboxDashboard';
-
-export default function InboxPage() {
-  return (
-    <AuthGuard requireAuth={true} requireOrganization={true}>
-      <div className="h-screen w-full">
-        <UnifiedInboxDashboard className="h-full w-full" />
-      </div>
-    </AuthGuard>
-  );
+/**
+ * Redirect from legacy /inbox route to standardized /dashboard/inbox route
+ * This ensures consistent URL patterns across the application
+ */
+export default function InboxRedirectPage() {
+  redirect('/dashboard/inbox');
 }

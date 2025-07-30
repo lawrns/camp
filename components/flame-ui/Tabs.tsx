@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "../../src/lib/utils";
 
 const Tabs = TabsPrimitive.Root;
 
@@ -173,8 +173,8 @@ const TabsWithIcons = React.forwardRef<HTMLDivElement, TabsWithIconsProps>(
               size={size}
               className="gap-[var(--fl-space-2)]"
             >
-              {tab.icon && <span className="flex items-center">{tab.icon}</span>}
-              <span>{tab.label}</span>
+              {tab.icon && <span className="flex items-center flex-shrink-0">{tab.icon}</span>}
+              <span className="whitespace-nowrap truncate">{tab.label}</span>
             </TabsTrigger>
           ))}
         </TabsList>

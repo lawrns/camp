@@ -19,6 +19,7 @@ import {
   Lightning as Zap,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 // Removed useOrganization import - using AuthProvider directly
 import { FadeIn } from "@/lib/telemetry/lightweight-animations";
@@ -72,6 +73,7 @@ const navItems: NavItem[] = [
 ];
 
 function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
+  const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(controlledExpanded ?? false);
   const [hovering, setHovering] = useState(false);
   const sidebarRef = React.useRef<HTMLElement>(null);
@@ -143,6 +145,7 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
     .filter((item: any) => item.section === "primary")
     .map((item: any) => ({
       ...item,
+      isActive: pathname === item.href || (item.href === "/dashboard/inbox" && pathname === "/inbox"),
       badge:
         item.id === "inbox"
           ? inboxUnreadCount > 0
@@ -154,11 +157,17 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
               : undefined
             : item.badge,
     }));
-  const secondaryItems = navItems.filter((item: any) => item.section === "secondary");
+  const secondaryItems = navItems
+    .filter((item: any) => item.section === "secondary")
+    .map((item: any) => ({
+      ...item,
+      isActive: pathname === item.href,
+    }));
   const bottomItems = navItems
     .filter((item: any) => item.section === "bottom")
     .map((item: any) => ({
       ...item,
+      isActive: pathname === item.href,
       badge: item.id === "notifications" ? (notificationCount > 0 ? notificationCount : undefined) : item.badge,
     }));
 

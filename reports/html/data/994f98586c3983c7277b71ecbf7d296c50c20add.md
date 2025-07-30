@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- alert
+- main:
+  - heading "Good afternoon, jam" [level=1]
+  - paragraph: Manage customer conversations and support requests
+  - img
+  - text: Inbox
+  - heading "Inbox (0)" [level=1]
+  - text: Connected 0.0ms
+  - img
+  - textbox "Search conversations..."
+  - combobox:
+    - option "All Status" [selected]
+    - option "Open"
+    - option "Pending"
+    - option "Resolved"
+    - option "Escalated"
+  - img
+  - combobox:
+    - option "All Priority" [selected]
+    - option "Urgent"
+    - option "High"
+    - option "Medium"
+    - option "Low"
+  - img
+  - button "Show keyboard shortcuts":
+    - img
+    - text: Shortcuts
+  - button "All"
+  - button "Unread"
+  - button "Unassigned"
+  - button "AI Managed"
+  - button "Human Managed"
+  - img
+  - heading "No conversations yet" [level=3]
+  - paragraph: New conversations will appear here when customers reach out
+  - text: 💬
+  - heading "Select a conversation" [level=3]
+  - paragraph: Choose a conversation from the list to start messaging with your customers.
+- button "🔍 Auth Debug"
+```

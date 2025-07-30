@@ -173,8 +173,8 @@ const TabsWithIcons = React.forwardRef<HTMLDivElement, TabsWithIconsProps>(
               size={size}
               className="gap-[var(--fl-space-2)]"
             >
-              {tab.icon && <span className="flex items-center">{tab.icon}</span>}
-              <span>{tab.label}</span>
+              {tab.icon && <span className="flex items-center flex-shrink-0">{tab.icon}</span>}
+              <span className="whitespace-nowrap truncate">{tab.label}</span>
             </TabsTrigger>
           ))}
         </TabsList>
@@ -214,8 +214,8 @@ const VerticalTabs = React.forwardRef<HTMLDivElement, TabsWithIconsProps & { con
               size={size}
               className="w-full justify-start gap-[var(--fl-space-2)]"
             >
-              {tab.icon && <span className="flex items-center">{tab.icon}</span>}
-              <span>{tab.label}</span>
+              {tab.icon && <span className="flex items-center flex-shrink-0">{tab.icon}</span>}
+              <span className="whitespace-nowrap truncate">{tab.label}</span>
             </TabsTrigger>
           ))}
         </TabsList>
