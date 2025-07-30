@@ -4,6 +4,7 @@ import { analytics } from "@/lib/analytics/posthog-client";
 import { SimpleQueryProvider } from "@/lib/react-query/SimpleQueryProvider";
 import { AuthProvider } from "@/lib/core/auth-provider";
 import { AuthErrorBoundary } from "@/components/system/AuthErrorBoundary";
+import TrpcProvider from "../../../src/lib/trpc/provider";
 import { Component, ErrorInfo, ReactNode, useEffect } from "react";
 
 // Temporarily commented out to fix webpack module loading error
@@ -63,7 +64,9 @@ export function AuthProviders({ children }: { children: ReactNode }) {
     <SimpleErrorBoundary>
       <AuthErrorBoundary>
         <AuthProvider>
-          <SimpleQueryProvider>{children}</SimpleQueryProvider>
+          <TrpcProvider>
+            <SimpleQueryProvider>{children}</SimpleQueryProvider>
+          </TrpcProvider>
         </AuthProvider>
       </AuthErrorBoundary>
     </SimpleErrorBoundary>

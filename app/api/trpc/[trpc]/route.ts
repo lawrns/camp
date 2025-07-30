@@ -10,8 +10,16 @@ import { type NextRequest } from 'next/server';
 import { appRouter } from '@/trpc/root';
 import { createTRPCContext } from '@/trpc/trpc';
 
-const handler = (req: NextRequest) =>
-  fetchRequestHandler({
+// Force dynamic rendering to ensure headers are preserved
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'default-no-store';
+
+const handler = (req: NextRequest) => {
+  // Debug: Log authorization header
+  const authHeader = req.headers.get('authorization')
+  console.log('[tRPC Route] Authorization header:', authHeader ? `${authHeader.substring(0, 50)}...` : 'none')
+
+  return fetchRequestHandler({
     endpoint: '/api/trpc',
     req,
     router: appRouter,
@@ -25,5 +33,6 @@ const handler = (req: NextRequest) =>
           }
         : undefined,
   });
+}
 
 export { handler as GET, handler as POST };

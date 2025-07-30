@@ -16,7 +16,7 @@ import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
-import { api } from "@/lib/trpc/client";
+import { api } from "@/lib/trpc/provider";
 import { Icon } from "@/lib/ui/Icon";
 import { useOrganization } from "@/store/domains/organization";
 import {
@@ -86,17 +86,17 @@ export default function TeamManagementPage() {
   // Use real organization members data
   const { members, loading: membersLoading, error: membersError } = useOrganizationMembers(organization?.id || "");
 
-  // Fetch real team analytics data
-  const { data: mailboxMembers } = api.mailbox.members.getMembers.useQuery(
-    { mailboxId: organization?.mailboxes?.[0]?.id || "" },
-    { enabled: !!organization?.mailboxes?.[0]?.id }
-  );
+  // TODO: Fetch real team analytics data - temporarily disabled until mailbox ID is available
+  // const { data: mailboxMembers } = api.mailbox.members.list.useQuery(
+  //   undefined, // list doesn't need parameters
+  //   { enabled: !!organization?.id }
+  // );
 
-  // Fetch team performance metrics
-  const { data: teamMetrics } = api.analytics.metrics.getTeamMetrics.useQuery(
-    { organizationId: organization?.id || "" },
-    { enabled: !!organization?.id }
-  );
+  // TODO: Fetch team performance metrics - temporarily disabled until mailbox ID is available
+  // const { data: teamMetrics } = api.ai.analytics.getDashboard.useQuery(
+  //   { mailboxId: 1 }, // placeholder mailbox ID
+  //   { enabled: !!organization?.id }
+  // );
 
   const [metrics, setMetrics] = useState<TeamMetrics>({
     totalAgents: 0,

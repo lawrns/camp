@@ -31,7 +31,11 @@ export function useOrganizationMembers(organizationId: string) {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!organizationId) return;
+    if (!organizationId) {
+      setLoading(false);
+      setMembers([]);
+      return;
+    }
 
     const fetchMembers = async () => {
       try {

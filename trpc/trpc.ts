@@ -29,11 +29,39 @@ export const createTRPCContext = async (opts: { headers: Headers }): Promise<Bas
   let tenantContext: TenantContext | null = null;
 
   try {
-    supabase = createApiClient();
-    const {
-      data: { user: supabaseUser },
-      error,
-    } = await supabase.auth.getUser();
+    // Extract authorization token from headers
+    const authHeader = opts.headers.get("authorization");
+    const token = authHeader?.replace("Bearer ", "");
+
+    let supabaseUser = null;
+    let error = null;
+
+    if (token) {
+      // Create authenticated Supabase client with the JWT token
+      const { createClient } = await import('@supabase/supabase-js');
+      supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          global: {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        }
+      );
+
+      // Validate the token by getting the user
+      const result = await supabase.auth.getUser();
+      supabaseUser = result.data.user;
+      error = result.error;
+    } else {
+      // No token provided, create unauthenticated client
+      supabase = createApiClient();
+      const result = await supabase.auth.getUser();
+      supabaseUser = result.data.user;
+      error = result.error;
+    }
 
     if (supabaseUser && !error) {
       // Get user's profile and organization membership
