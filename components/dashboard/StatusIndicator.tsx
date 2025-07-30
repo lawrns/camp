@@ -154,12 +154,12 @@ export function StatusIndicator({
 
   if (mode === "dot") {
     return (
-      <div className={cn("flex items-center gap-2", className)}>
+      <div className={cn("flex items-center gap-2 whitespace-nowrap", className)}>
         <div
-          className={cn("rounded-ds-full", customColor || config.color, sizeStyles.dot, animated && "animate-pulse")}
+          className={cn("rounded-ds-full flex-shrink-0", customColor || config.color, sizeStyles.dot, animated && "animate-pulse")}
           aria-label={displayLabel}
         />
-        {label && <span className="text-sm text-muted-foreground">{displayLabel}</span>}
+        {label && <span className="text-sm text-muted-foreground truncate">{displayLabel}</span>}
       </div>
     );
   }
@@ -168,10 +168,10 @@ export function StatusIndicator({
     return (
       <Badge
         variant={config.badgeVariant}
-        className={cn(config.badgeClass, sizeStyles.badge, "flex items-center gap-1", className)}
+        className={cn(config.badgeClass, sizeStyles.badge, "flex items-center gap-1 whitespace-nowrap", className)}
       >
-        {showIcon && <Icon icon={config.icon} className={sizeStyles.icon} />}
-        {displayLabel}
+        {showIcon && <Icon icon={config.icon} className={cn(sizeStyles.icon, "flex-shrink-0")} />}
+        <span className="truncate">{displayLabel}</span>
       </Badge>
     );
   }
@@ -180,15 +180,15 @@ export function StatusIndicator({
     return (
       <div
         className={cn(
-          "inline-flex items-center gap-2 rounded-ds-full px-3 py-1",
+          "inline-flex items-center gap-2 rounded-ds-full px-3 py-1 whitespace-nowrap",
           config.badgeClass,
           sizeStyles.badge,
           className
         )}
       >
-        <div className={cn("rounded-ds-full", customColor || config.color, sizeStyles.dot, animated && "animate-pulse")} />
-        {showIcon && <Icon icon={config.icon} className={sizeStyles.icon} />}
-        <span>{displayLabel}</span>
+        <div className={cn("rounded-ds-full flex-shrink-0", customColor || config.color, sizeStyles.dot, animated && "animate-pulse")} />
+        {showIcon && <Icon icon={config.icon} className={cn(sizeStyles.icon, "flex-shrink-0")} />}
+        <span className="truncate">{displayLabel}</span>
       </div>
     );
   }

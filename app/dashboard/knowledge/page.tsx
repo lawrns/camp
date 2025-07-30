@@ -303,16 +303,17 @@ export default function KnowledgePage() {
             <div className="flex gap-3">
               <Button
                 onClick={() => router.push('/dashboard/knowledge/editor')}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
               >
-                <Icon icon={Plus} className="mr-2 h-4 w-4" />
+                <Icon icon={Plus} className="h-4 w-4 flex-shrink-0" />
                 New Document
               </Button>
               <Button
                 onClick={() => setShowAddDocument(true)}
                 variant="outline"
+                className="flex items-center gap-2 whitespace-nowrap"
               >
-                <Icon icon={Upload} className="mr-2 h-4 w-4" />
+                <Icon icon={Upload} className="h-4 w-4 flex-shrink-0" />
                 Upload File
               </Button>
             </div>

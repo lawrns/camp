@@ -42,18 +42,29 @@ export function useConversationStats() {
                 });
 
                 if (convError) {
-                    console.error("Error fetching conversations for stats:", convError);
-                    // Return default stats instead of throwing error for empty results
-                    if (convError.code === 'PGRST116' || convError.message?.includes('no rows')) {
-                        console.log("[ConversationStats] No conversations found, returning default stats");
+                    console.error("Error fetching conversations for stats:", {
+                        error: convError,
+                        code: convError.code,
+                        message: convError.message,
+                        details: convError.details,
+                        hint: convError.hint,
+                        organizationId
+                    });
+
+                    // Return default stats instead of throwing error for empty results or permission issues
+                    if (convError.code === 'PGRST116' ||
+                        convError.message?.includes('no rows') ||
+                        convError.message?.includes('permission denied') ||
+                        convError.code === '42501') {
+                        console.log("[ConversationStats] No conversations found or permission denied, returning default stats");
                         return {
                             total: 0,
                             unassigned: 0,
                             assigned: 0,
                             resolved: 0,
                             messagesToday: 0,
-                            responseTime: 0,
-                            resolutionTime: 0
+                            averageResponseTime: 0,
+                            activeAgents: 0
                         };
                     }
                     throw new Error(`Failed to fetch conversations: ${convError.message || convError.code || 'Unknown error'}`);
@@ -71,7 +82,12 @@ export function useConversationStats() {
                     .gte("created_at", today.toISOString());
 
                 if (msgError) {
-                    console.error("Error fetching today's messages:", msgError);
+                    console.error("Error fetching today's messages:", {
+                        error: msgError,
+                        code: msgError.code,
+                        message: msgError.message,
+                        organizationId
+                    });
                     // Don't throw, just use 0 as fallback
                 }
 
@@ -102,11 +118,11 @@ export function useConversationStats() {
 
                 const averageResponseTime = responseCount > 0 ? totalResponseTime / responseCount : 0;
 
-                // Count active agents (users with assigned conversations)
+                // Count active agents (users with assigned conversations) - Fixed column name
                 const activeAgents = new Set(
                     conversations
-                        ?.filter(c => c.assignee_id)
-                        .map(c => c.assignee_id)
+                        ?.filter(c => c.assigned_to_user_id)
+                        .map(c => c.assigned_to_user_id)
                 ).size;
 
                 return {
@@ -119,7 +135,12 @@ export function useConversationStats() {
                     activeAgents,
                 };
             } catch (error) {
-                console.error("Error fetching conversation stats:", error);
+                console.error("Error fetching conversation stats:", {
+                    error,
+                    errorMessage: error instanceof Error ? error.message : 'Unknown error',
+                    errorStack: error instanceof Error ? error.stack : undefined,
+                    organizationId
+                });
                 // Return fallback stats on error
                 return {
                     total: 0,

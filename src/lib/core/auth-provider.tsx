@@ -66,11 +66,11 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
     return { success: false, reason: "no_organization_id" };
   }
 
-  // Validate UUID format to prevent 400 errors
+  // Validate organizationId format
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(organizationId)) {
-    console.error("🚨 Invalid organizationId format:", organizationId);
-    return { success: false, reason: "invalid_uuid", error: "Organization ID must be a valid UUID" };
+    console.warn("🚨 Invalid organizationId format for JWT enrichment:", organizationId);
+    return { success: false, reason: "invalid_organization_id" };
   }
 
   try {
@@ -105,12 +105,20 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
         errorDetails = { error: `HTTP ${response.status}: ${statusText}` };
       }
 
-      // Only log if we have meaningful error details
+      // Enhanced error logging with more context
       if (errorDetails && Object.keys(errorDetails).length > 0 && errorDetails.error !== "Unknown error") {
-        console.error("🚨 Failed to enrich JWT:", errorDetails);
+        console.error("🚨 Failed to enrich JWT:", {
+          status: response.status,
+          organizationId,
+          errorDetails,
+          url: "/api/auth/set-organization"
+        });
       } else {
         const statusText = 'statusText' in response ? response.statusText : 'Unknown error';
-        console.error("🚨 Failed to enrich JWT: HTTP", response.status, statusText);
+        console.error("🚨 Failed to enrich JWT: HTTP", response.status, statusText, {
+          organizationId,
+          url: "/api/auth/set-organization"
+        });
       }
 
       // Detailed logging for 400 errors
@@ -131,7 +139,12 @@ async function enrichJWTWithOrganization(organizationId: string | undefined) {
 
     // Check if we got a valid result
     if (!result || typeof result !== 'object') {
-      console.error("🚨 JWT enrichment returned invalid result:", result);
+      console.error("🚨 JWT enrichment returned invalid result:", {
+        result,
+        resultType: typeof result,
+        organizationId,
+        responseStatus: response.status
+      });
       return { success: false, reason: "invalid_response", error: "Empty or invalid response" };
     }
 

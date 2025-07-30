@@ -56,10 +56,10 @@ export const POST = withUserAuth(async (request: NextRequest, { params }, { user
     const { organizationId: targetOrgId } = validation.data;
 
     // Call the database function to set active organization using the scoped client
-    // Note: This function returns a boolean, not a structured object
-    const { data: isSuccess, error } = (await scopedClient.rpc("set_user_active_organization", {
+    // Note: This function may return boolean or JSON depending on the migration version
+    const { data: result, error } = await scopedClient.rpc("set_user_active_organization", {
       org_id: targetOrgId,
-    })) as { data: boolean | null; error: any };
+    });
 
     if (error) {
       console.error('[set-organization] Database function error:', error);
@@ -67,6 +67,37 @@ export const POST = withUserAuth(async (request: NextRequest, { params }, { user
         {
           success: false,
           error: `Failed to update organization context: ${error.message || 'Unknown database error'}`,
+        },
+        { status: 500 }
+      );
+    }
+
+    // Handle different return types from the database function
+    let isSuccess = false;
+    if (typeof result === 'boolean') {
+      // Function returns boolean
+      isSuccess = result;
+    } else if (typeof result === 'object' && result !== null) {
+      // Function returns JSON object
+      if ('success' in result) {
+        isSuccess = result.success;
+        if (!isSuccess && 'error' in result) {
+          return NextResponse.json<SetOrganizationError>(
+            {
+              success: false,
+              error: result.error || "Failed to set organization",
+            },
+            { status: 403 }
+          );
+        }
+      }
+    } else {
+      // Unexpected return type
+      console.error('[set-organization] Unexpected return type from database function:', typeof result, result);
+      return NextResponse.json<SetOrganizationError>(
+        {
+          success: false,
+          error: "Unexpected response from database function",
         },
         { status: 500 }
       );

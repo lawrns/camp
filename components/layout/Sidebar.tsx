@@ -265,7 +265,7 @@ function SidebarItem({ item, isExpanded }: SidebarItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          "group relative flex h-12 items-center overflow-hidden rounded-ds-lg transition-all duration-200",
+          "group relative flex h-12 items-center overflow-hidden rounded-ds-lg transition-all duration-200 whitespace-nowrap",
           item.isActive
             ? "bg-[var(--color-primary)] text-white shadow-[var(--shadow-level-2)]"
             : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
@@ -294,11 +294,11 @@ function SidebarItem({ item, isExpanded }: SidebarItemProps) {
         {/* FIXED: Label with consistent spacing */}
         <div
           className={cn(
-            "flex flex-1 items-center justify-between overflow-hidden transition-all duration-300",
+            "flex flex-1 items-center justify-between overflow-hidden transition-all duration-300 min-w-0",
             isExpanded ? "w-auto opacity-100" : "w-0 opacity-0"
           )}
         >
-          <span className="whitespace-nowrap text-sm font-medium">{item.label}</span>
+          <span className="truncate text-sm font-medium">{item.label}</span>
 
           {item.badge && isExpanded && (
             <span

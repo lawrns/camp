@@ -433,24 +433,24 @@ export default function TeamManagementPage() {
               <Button
                 variant="outline"
                 onClick={() => router.push('/dashboard/team/performance')}
-                className="mr-3"
+                className="flex items-center gap-2 whitespace-nowrap"
               >
-                <Icon icon={TrendUp} className="mr-2 h-4 w-4" />
+                <Icon icon={TrendUp} className="h-4 w-4 flex-shrink-0" />
                 Performance
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push('/dashboard/team/roles')}
-                className="mr-3"
+                className="flex items-center gap-2 whitespace-nowrap"
               >
-                <Icon icon={Shield} className="mr-2 h-4 w-4" />
+                <Icon icon={Shield} className="h-4 w-4 flex-shrink-0" />
                 Roles
               </Button>
               <Button
                 onClick={() => setShowAddAgent(true)}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
               >
-                <Icon icon={User} className="mr-2 h-4 w-4" />
+                <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
                 Invite Member
               </Button>
             </div>
@@ -575,9 +575,9 @@ export default function TeamManagementPage() {
               {!searchTerm && (
                 <Button
                   onClick={() => setShowAddAgent(true)}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
                 >
-                  <Icon icon={User} className="mr-2 h-4 w-4" />
+                  <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
                   Invite First Member
                 </Button>
               )}

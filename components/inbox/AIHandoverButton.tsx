@@ -186,16 +186,16 @@ export function AIHandoverButton({
         size="sm"
         onClick={handleHandoverClick}
         disabled={disabled || handover.isProcessing}
-        className="flex items-center gap-ds-2"
+        className="flex items-center gap-ds-2 whitespace-nowrap"
       >
         {handover.isProcessing ? (
-          <Icon icon={Clock} className="h-4 w-4 animate-spin" />
+          <Icon icon={Clock} className="h-4 w-4 animate-spin flex-shrink-0" />
         ) : handover.isAIActive ? (
-          <Icon icon={Robot} className="h-4 w-4" />
+          <Icon icon={Robot} className="h-4 w-4 flex-shrink-0" />
         ) : (
-          <Icon icon={User} className="h-4 w-4" />
+          <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
         )}
-        <span>{getButtonText()}</span>
+        <span className="truncate">{getButtonText()}</span>
         {showDetails && (
           <Badge variant="secondary" className="ml-1 text-tiny">
             {Math.round(currentConfidence * 100)}%

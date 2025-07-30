@@ -29,3 +29,33 @@
     flex-direction: column;
   }
 }
+
+/* Simple fix for icon + text staying on one line */
+button {
+  white-space: nowrap;
+}
+
+button svg {
+  flex-shrink: 0;
+}
+
+/* Ensure buttons with icons don't wrap */
+.flex.items-center.gap-2,
+.flex.items-center.gap-3 {
+  white-space: nowrap;
+}
+
+.flex.items-center.gap-2 svg,
+.flex.items-center.gap-3 svg {
+  flex-shrink: 0;
+}
+
+/* Navigation items should never wrap */
+nav a,
+nav button {
+  white-space: nowrap;
+}
+
+nav svg {
+  flex-shrink: 0;
+}
