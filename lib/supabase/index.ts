@@ -63,10 +63,20 @@ export function getBrowserClient() {
         persistSession: true,
         autoRefreshToken: true,
         storageKey: `sb-${env.url.split('//')[1]?.split('.')[0]}-auth-token`,
+        detectSessionInUrl: true,
+      },
+      realtime: {
+        params: {
+          eventsPerSecond: 10,
+        },
+        heartbeatIntervalMs: 30000,
+        reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
+        timeout: 20000,
       },
       global: {
         headers: {
-          'X-Client-Info': 'campfire-v2'
+          'X-Client-Info': 'campfire-v2',
+          'X-Client-Version': '2.0.0'
         }
       }
     });
@@ -97,6 +107,20 @@ function getServiceClient() {
         persistSession: false,
         autoRefreshToken: false,
       },
+      realtime: {
+        params: {
+          eventsPerSecond: 10,
+        },
+        heartbeatIntervalMs: 30000,
+        reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
+        timeout: 20000,
+      },
+      global: {
+        headers: {
+          'X-Client-Info': 'campfire-v2-service',
+          'X-Client-Version': '2.0.0'
+        }
+      }
     });
   }
 

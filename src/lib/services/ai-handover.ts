@@ -206,21 +206,58 @@ export class AIHandoverService {
   }
 
   /**
-   * Broadcast handover events via Supabase Realtime
+   * Broadcast handover events via Supabase Realtime with proper error handling
    */
   private async broadcastHandoverEvent(conversationId: string, organizationId: string, eventData: any): Promise<void> {
-    const channel = supabase.channel(`org:${organizationId}:conv:${conversationId}`);
+    try {
+      const channelName = `org:${organizationId}:conv:${conversationId}`;
+      const channel = supabase.channel(channelName, {
+        config: {
+          broadcast: { ack: true, self: false },
+          presence: { key: `handover_${Date.now()}` },
+        },
+      });
 
-    await channel.send({
-      type: "broadcast",
-      event: "ai_handover",
-      payload: {
-        conversation_id: conversationId,
-        organization_id: organizationId,
-        timestamp: new Date().toISOString(),
-        ...eventData,
-      },
-    });
+      // Subscribe to channel first
+      const subscriptionStatus = await new Promise((resolve) => {
+        channel.subscribe((status) => {
+          resolve(status);
+        });
+      });
+
+      if (subscriptionStatus !== 'SUBSCRIBED') {
+        console.warn(`[AI Handover] Failed to subscribe to channel ${channelName}, status: ${subscriptionStatus}`);
+        return;
+      }
+
+      // Send the broadcast with timeout
+      const broadcastPromise = channel.send({
+        type: "broadcast",
+        event: "ai_handover",
+        payload: {
+          conversation_id: conversationId,
+          organization_id: organizationId,
+          timestamp: new Date().toISOString(),
+          ...eventData,
+        },
+      });
+
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Broadcast timeout')), 5000);
+      });
+
+      await Promise.race([broadcastPromise, timeoutPromise]);
+
+      // Clean up channel after successful broadcast
+      setTimeout(() => {
+        supabase.removeChannel(channel);
+      }, 1000);
+
+    } catch (error) {
+      console.error(`[AI Handover] Broadcast error for conversation ${conversationId}:`, error);
+      // Don't throw - handover should continue even if broadcast fails
+    }
   }
 
   /**
