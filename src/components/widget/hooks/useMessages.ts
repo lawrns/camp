@@ -1,5 +1,6 @@
 import { useAuth } from "./useAuth";
 import { useCallback, useEffect, useState } from "react";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 
 export interface Message {
     id: string;
@@ -23,6 +24,7 @@ export interface UseMessagesReturn {
     error: string | null;
     reload: () => Promise<void>;
     markAsRead: (messageId: string) => Promise<void>;
+    agentIsTyping: boolean;
 }
 
 export function useMessages(
@@ -32,6 +34,7 @@ export function useMessages(
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [agentIsTyping, setAgentIsTyping] = useState(false);
     const { user } = useAuth(organizationId || 'default-org');
 
     // Load messages from API endpoint (consistent with InboxDashboard)
@@ -256,8 +259,8 @@ export function useMessages(
         // Load initial messages
         loadMessages();
 
-        // Set up Supabase realtime subscription using STANDARDIZED channel naming
-        const channelName = `org:${organizationId}:conv:${conversationId}`;
+        // Set up Supabase realtime subscription using UNIFIED channel naming standards
+        const channelName = UNIFIED_CHANNELS.conversation(organizationId, conversationId);
 
         // Import supabase dynamically to avoid build issues
         console.log("[useMessages] Setting up real-time subscription for conversation:", conversationId);
@@ -317,6 +320,56 @@ export function useMessages(
                         }
                     }
                 )
+                .on(
+                    "broadcast",
+                    { event: "MESSAGE_CREATED" },
+                    (payload) => {
+                        console.log("[useMessages] Broadcast message received:", payload);
+
+                        // Handle messages from dashboard (bidirectional communication)
+                        if (payload.payload?.message && payload.payload.source === 'dashboard') {
+                            const dashboardMessage = payload.payload.message;
+
+                            const newMessage: Message = {
+                                id: dashboardMessage.id,
+                                content: dashboardMessage.content,
+                                senderType: dashboardMessage.sender_type === "operator" ? "agent" : "visitor",
+                                senderName: dashboardMessage.sender_name || "Agent",
+                                timestamp: dashboardMessage.created_at,
+                                read_status: "sent",
+                                attachments: dashboardMessage.attachments || [],
+                                conversation_id: dashboardMessage.conversation_id,
+                                organization_id: dashboardMessage.organization_id,
+                            };
+
+                            // Add message to state with deduplication
+                            setMessages((prev) => {
+                                const filtered = prev.filter(msg => msg.id !== newMessage.id);
+                                return [...filtered, newMessage];
+                            });
+                        }
+                    }
+                )
+                .on(
+                    "broadcast",
+                    { event: UNIFIED_EVENTS.TYPING_UPDATE },
+                    (payload) => {
+                        console.log("[useMessages] Typing indicator received:", payload);
+
+                        // Handle typing indicators from dashboard agents
+                        if (payload.payload?.conversationId === conversationId &&
+                            payload.payload?.source === 'dashboard') {
+                            setAgentIsTyping(payload.payload.isTyping || false);
+
+                            // Auto-clear typing indicator after 5 seconds
+                            if (payload.payload.isTyping) {
+                                setTimeout(() => {
+                                    setAgentIsTyping(false);
+                                }, 5000);
+                            }
+                        }
+                    }
+                )
                 .subscribe();
 
             // Cleanup function
@@ -344,5 +397,6 @@ export function useMessages(
         error,
         reload,
         markAsRead,
+        agentIsTyping,
     };
 } 

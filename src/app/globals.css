@@ -33,13 +33,28 @@
 /* COMPREHENSIVE ICON + TEXT NO-WRAP FIX */
 /* Prevent wrapping for icon-text combinations while avoiding overflow */
 
-/* Target flex containers that likely contain icon-text combinations */
-.flex.items-center,
-.inline-flex.items-center {
+/* Target specific icon-text containers, not all flex containers */
+.flex.items-center:has(svg),
+.flex.items-center:has([class*="icon"]),
+.inline-flex.items-center:has(svg),
+.inline-flex.items-center:has([class*="icon"]) {
   white-space: nowrap;
 }
 
-/* But allow wrapping for containers that are likely to contain long text */
+/* Fallback for browsers without :has() support - target common icon-text patterns */
+@supports not selector(:has(*)) {
+  .flex.items-center > svg + *,
+  .flex.items-center > [class*="icon"] + *,
+  .inline-flex.items-center > svg + *,
+  .inline-flex.items-center > [class*="icon"] + * {
+    white-space: nowrap;
+  }
+}
+
+/* Explicitly allow wrapping for text content areas */
+p.flex.items-center,
+.text-content .flex.items-center,
+.prose .flex.items-center,
 .flex.items-center.flex-wrap,
 .flex.items-center[class*="wrap"],
 .flex.items-center.text-wrap,

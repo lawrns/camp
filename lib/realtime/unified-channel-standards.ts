@@ -134,6 +134,7 @@ export const UNIFIED_EVENTS = {
   MESSAGE_STATUS_DELIVERED: "message:status:delivered",
   MESSAGE_STATUS_READ: "message:status:read",
   MESSAGE_STATUS_FAILED: "message:status:failed",
+  READ_RECEIPT: "read:receipt",
   
   // ========================================
   // CONVERSATION EVENTS

@@ -14,6 +14,7 @@ interface UseWidgetStateReturn {
   state: WidgetState;
   messages: any[];
   isLoading: boolean;
+  agentIsTyping: boolean;
 
   // Actions
   openWidget: () => void;
@@ -50,7 +51,8 @@ export function useWidgetState(
     sendMessage: sendMessageViaHook,
     isLoading,
     error: messagesError,
-    reload: reloadMessages
+    reload: reloadMessages,
+    agentIsTyping
   } = useMessages(state.conversationId || undefined, organizationId);
 
   // Debug logging for conversation ID and messages
@@ -208,6 +210,7 @@ export function useWidgetState(
     state,
     messages,
     isLoading,
+    agentIsTyping,
     openWidget,
     closeWidget,
     sendMessage,

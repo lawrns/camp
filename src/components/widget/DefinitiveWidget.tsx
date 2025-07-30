@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { WidgetDebugger } from './debug/WidgetDebugger';
 import { useWidgetState } from './hooks/useWidgetState';
+import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
+import { ReadReceiptIndicator } from '../ui/ReadReceiptIndicator';
 
 interface DefinitiveWidgetProps {
   organizationId: string;
@@ -14,17 +16,35 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
   const [isMinimized, setIsMinimized] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [agentIsTyping, setAgentIsTyping] = useState(false);
   const [widgetError, setWidgetError] = useState<string | null>(null);
 
   const {
     state: widgetState,
     messages,
     isLoading,
+    agentIsTyping,
     sendMessage,
     openWidget,
     initializeConversation
   } = useWidgetState(organizationId);
+
+  // Read receipts functionality
+  const readerId = `visitor-${Date.now()}`; // TODO: Get from proper visitor identification
+  const {
+    readReceipts,
+    markAsRead,
+    getReadStatus,
+    isLoading: readReceiptsLoading,
+    error: readReceiptsError
+  } = useReadReceipts(widgetState.conversationId, organizationId, readerId);
+
+  // Auto-mark messages as read when they come into view
+  const messageIds = messages.map(m => m.id?.toString()).filter(Boolean) as string[];
+  useAutoMarkAsRead(messageIds, readerId, markAsRead, {
+    enabled: widgetState.isOpen && !isMinimized,
+    delay: 1500, // Wait 1.5 seconds before marking as read
+    threshold: 0.6 // 60% of message must be visible
+  });
 
   // Initialize conversation when widget mounts
   useEffect(() => {
@@ -53,12 +73,29 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     }
   }, [messages]);
 
-  // Typing indicator functions
-  const startTyping = () => {
-    if (!isTyping) {
+  // Typing indicator functions with real API integration
+  const startTyping = async () => {
+    if (!isTyping && widgetState.conversationId) {
       setIsTyping(true);
-      // TODO: Broadcast typing indicator via realtime
       console.log('[DefinitiveWidget] Started typing');
+
+      // Broadcast typing indicator via API
+      try {
+        await fetch('/api/widget/typing', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Organization-ID': organizationId,
+          },
+          body: JSON.stringify({
+            conversationId: widgetState.conversationId,
+            isTyping: true,
+            visitorId: `visitor-${Date.now()}`, // TODO: Get from auth
+          }),
+        });
+      } catch (error) {
+        console.error('[DefinitiveWidget] Failed to broadcast typing start:', error);
+      }
     }
 
     // Clear existing timeout
@@ -74,11 +111,28 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     setTypingTimeout(timeout);
   };
 
-  const stopTyping = () => {
-    if (isTyping) {
+  const stopTyping = async () => {
+    if (isTyping && widgetState.conversationId) {
       setIsTyping(false);
-      // TODO: Broadcast stop typing via realtime
       console.log('[DefinitiveWidget] Stopped typing');
+
+      // Broadcast stop typing via API
+      try {
+        await fetch('/api/widget/typing', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Organization-ID': organizationId,
+          },
+          body: JSON.stringify({
+            conversationId: widgetState.conversationId,
+            isTyping: false,
+            visitorId: `visitor-${Date.now()}`, // TODO: Get from auth
+          }),
+        });
+      } catch (error) {
+        console.error('[DefinitiveWidget] Failed to broadcast typing stop:', error);
+      }
     }
 
     if (typingTimeout) {
@@ -191,6 +245,8 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
             onClick={handleClose}
             className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
             title="Close"
+            data-testid="widget-close-button"
+            data-campfire-widget-close
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
@@ -239,6 +295,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
               data-testid="widget-message"
               data-campfire-message
               data-sender={message.senderType}
+              data-message-id={message.id}
             >
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-3 rounded-ds-lg shadow-sm ${message.senderType === 'visitor'
@@ -271,16 +328,21 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
                     message.content
                   )}
                 </div>
-                <div className="text-tiny opacity-50 mt-2 flex items-center space-x-spacing-sm">
+                <div className="text-tiny opacity-50 mt-2 flex items-center justify-between">
                   <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
-                  {message.read_status === 'sending' && (
-                    <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-ds-full animate-pulse"></div>
-                      <span className="text-tiny">Sending...</span>
-                    </div>
-                  )}
-                  {message.read_status === 'sent' && message.senderType === 'visitor' && (
-                    <span className="text-tiny text-green-600">✓</span>
+                  {message.id && (
+                    <ReadReceiptIndicator
+                      receipt={{
+                        messageId: message.id.toString(),
+                        status: message.read_status === 'sending' ? 'sent' :
+                               message.read_status === 'sent' ? 'delivered' : 'read',
+                        isRead: getReadStatus(message.id.toString()).isRead,
+                        readBy: getReadStatus(message.id.toString()).readBy,
+                        lastReadAt: getReadStatus(message.id.toString()).lastReadAt
+                      }}
+                      variant="widget"
+                      size="sm"
+                    />
                   )}
                 </div>
               </div>

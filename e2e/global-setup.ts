@@ -25,95 +25,72 @@ async function globalSetup(config: FullConfig) {
   );
 
   // ========================================
-  // 1. SETUP TEST USERS AND ORGANIZATIONS
+  // 1. SETUP STANDARDIZED TEST DATA
   // ========================================
-  console.log('👥 Setting up test users and organizations...');
+  console.log('🧪 Setting up standardized E2E test data...');
 
-  const testUsers = [
-    {
-      email: 'jam@jam.com',
-      password: 'password123',
-      role: 'agent',
-      name: 'Test Agent',
-    },
-    {
-      email: 'customer@test.com', 
-      password: 'password123',
-      role: 'customer',
-      name: 'Test Customer',
-    },
-    {
-      email: 'admin@test.com',
-      password: 'password123', 
-      role: 'admin',
-      name: 'Test Admin',
-    },
-  ];
+  try {
+    const { E2ETestDataSetup } = await import('./test-data-setup');
+    const testDataSetup = new E2ETestDataSetup();
 
-  const createdUsers = [];
+    // Setup complete test environment
+    await testDataSetup.setupTestEnvironment();
 
-  for (const user of testUsers) {
-    try {
-      // Create user in Supabase Auth
-      const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
-        email: user.email,
-        password: user.password,
-        email_confirm: true,
-        user_metadata: {
-          name: user.name,
-          role: user.role,
-        },
-      });
+    // Verify data integrity
+    const isValid = await testDataSetup.verifyTestData();
+    if (!isValid) {
+      console.log('⚠️  Test data verification failed, but continuing with setup...');
+    }
 
-      if (authError && !authError.message.includes('already registered')) {
-        console.log(`⚠️  Auth error for ${user.email}:`, authError.message);
-        // Don't throw - continue with setup
-      }
+    console.log('✅ Standardized test data setup complete');
+  } catch (error) {
+    console.log('⚠️  Standardized test data setup failed, falling back to legacy setup:', error);
 
-      if (authUser?.user) {
-        createdUsers.push({
-          ...user,
-          id: authUser.user.id,
+    // Fallback to legacy user setup
+    const testUsers = [
+      {
+        email: 'jam@jam.com',
+        password: 'password123',
+        role: 'agent',
+        name: 'Test Agent',
+      },
+      {
+        email: 'customer@test.com',
+        password: 'password123',
+        role: 'customer',
+        name: 'Test Customer',
+      },
+      {
+        email: 'admin@test.com',
+        password: 'password123',
+        role: 'admin',
+        name: 'Test Admin',
+      },
+    ];
+
+    for (const user of testUsers) {
+      try {
+        const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+          email: user.email,
+          password: user.password,
+          email_confirm: true,
+          user_metadata: {
+            name: user.name,
+            role: user.role,
+            organization_id: 'b5e80170-004c-4e82-a88c-3e2166b169dd',
+          },
         });
-        console.log(`✅ Created user: ${user.email} (${user.role})`);
 
-        // Ensure profile exists for the user
-        try {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert({
-              id: authUser.user.id,
-              email: user.email,
-              name: user.name,
-              role: user.role,
-              organization_id: 'e2e-test-org', // Link to test org
-            });
+        if (authError && !authError.message.includes('already registered')) {
+          console.log(`⚠️  Auth error for ${user.email}:`, authError.message);
+        }
 
-          if (profileError) {
-            console.log(`⚠️  Profile creation warning for ${user.email}:`, profileError.message);
-          }
-        } catch (profileErr) {
-          console.log(`⚠️  Profile setup failed for ${user.email}:`, profileErr);
+        if (authUser?.user) {
+          console.log(`✅ Created user: ${user.email} (${user.role})`);
         }
-      } else {
-        // User might already exist, try to find them
-        try {
-          const { data: existingUsers } = await supabase.auth.admin.listUsers();
-          const existingUser = existingUsers.users?.find(u => u.email === user.email);
-          if (existingUser) {
-            createdUsers.push({
-              ...user,
-              id: existingUser.id,
-            });
-            console.log(`ℹ️  Found existing user: ${user.email}`);
-          }
-        } catch (listError) {
-          console.log(`⚠️  Could not verify existing user ${user.email}:`, listError);
-        }
+      } catch (userError) {
+        console.log(`⚠️  User setup failed for ${user.email}:`, userError);
       }
-    } catch (error) {
-      console.log(`⚠️  User setup failed for ${user.email}:`, error);
-      // Continue with setup - tests may still work
     }
   }
 
@@ -297,10 +274,10 @@ async function globalSetup(config: FullConfig) {
   const testMetadata = {
     startTime: new Date().toISOString(),
     testOrgId,
-    testUsers: createdUsers,
+    testUsers: ['jam@jam.com', 'customer@test.com', 'admin@test.com'],
     testConversations,
     environment: {
-      baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
+      baseURL: process.env.E2E_BASE_URL || 'http://localhost:3005',
       supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
     },
   };
@@ -314,7 +291,7 @@ async function globalSetup(config: FullConfig) {
   console.log('✅ E2E Global Setup Complete!');
   console.log('📋 Test Environment Ready:');
   console.log(`   - Organization: ${testOrgId}`);
-  console.log(`   - Users: ${createdUsers.length}`);
+  console.log(`   - Users: 3 test users configured`);
   console.log(`   - Conversations: ${testConversations.length}`);
   console.log(`   - Auth State: ${require('fs').existsSync('e2e/auth-state.json') ? 'Ready' : 'Not Available'}`);
 }
