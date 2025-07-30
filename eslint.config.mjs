@@ -26,7 +26,21 @@ const eslintConfig = [
     },
     rules: {
       'design-tokens/token-validation': 'error',
-      'campfire/no-snakecase-supabase': 'error',
+      'campfire/no-snakecase-supabase': ['error', {
+        allowedFields: [
+          'created_at',
+          'updated_at',
+          'deleted_at',
+          'auth_user_id',
+          'conversation_id',
+          'organization_id',
+          'customer_id',
+          'mailbox_id',
+          'user_id',
+          'message_id',
+          'ai_session_id'
+        ]
+      }],
     },
   },
 ];

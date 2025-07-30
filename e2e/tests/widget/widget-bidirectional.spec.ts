@@ -7,16 +7,27 @@ test.describe('Widget Bidirectional Communication', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('should establish real-time connection in widget', async ({ page }) => {
+  test('should establish Supabase Realtime connection in widget', async ({ page }) => {
     // Wait for widget to load
     await page.waitForSelector('[data-testid="widget-container"]');
-    
-    // Wait for real-time connection
+
+    // Validate Supabase Realtime connection specifically
     await page.waitForFunction(() => {
-      return window.localStorage.getItem('campfire-realtime-status') === 'connected' ||
-             document.querySelector('[data-testid="connection-status"]')?.textContent?.includes('connected');
-    }, { timeout: 10000 });
-    
+      // Check for Supabase client in window
+      return window.supabase &&
+             window.supabase.realtime &&
+             window.supabase.realtime.channels &&
+             Object.keys(window.supabase.realtime.channels).length > 0;
+    }, { timeout: 15000 });
+
+    // Verify channel naming follows unified standards (org:orgId:conv:convId)
+    const channelNames = await page.evaluate(() => {
+      return Object.keys(window.supabase?.realtime?.channels || {});
+    });
+
+    expect(channelNames.some(name => name.match(/^org:.+:conv:.+$/))).toBeTruthy();
+
+    // Check connection status
     const connectionStatus = await page.locator('[data-testid="connection-status"]');
     await expect(connectionStatus).toContainText('connected');
   });

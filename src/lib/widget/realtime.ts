@@ -44,8 +44,8 @@ export class WidgetRealtimeClient {
 
   async connect(): Promise<void> {
     try {
-      // STANDARDIZED: Use consistent channel naming pattern
-      const channelName = `org:${this.config.organizationId}:conv:${this.config.sessionId}`;
+      // UNIFIED STANDARD: Use unified channel naming convention
+      const channelName = UNIFIED_CHANNELS.conversation(this.config.organizationId, this.config.sessionId);
 
       this.channel = this.supabase
         .channel(channelName)

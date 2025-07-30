@@ -91,9 +91,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className={`flex h-full flex-col ${className}`}>
+    <div className={`flex h-full flex-col ${className}`} data-testid="chat-interface">
       {/* Messages area */}
-      <div className="flex-1 space-y-3 overflow-y-auto spacing-3">
+      <div className="flex-1 space-y-3 overflow-y-auto spacing-3" data-testid="message-list">
         {messages.length === 0 ? (
           <div className="text-foreground-muted py-8 text-center">
             <p>Start a conversation!</p>
@@ -114,7 +114,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 }`}
               >
                 <div className="text-sm">{message.content}</div>
-                <div className={`mt-1 text-xs ${message.senderType === "visitor" ? "text-blue-100" : "text-gray-500"}`}>
+                <div
+                  className={`mt-1 text-xs ${message.senderType === "visitor" ? "text-blue-100" : "text-gray-500"}`}
+                  data-testid="message-timestamp"
+                >
                   {new Date(message.timestamp).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -171,6 +174,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               className="disabled:bg-background w-full resize-none rounded-ds-xl border border-[var(--fl-color-border-subtle)] px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed"
               rows={1}
               style={{ minHeight: "40px", maxHeight: "120px" }}
+              data-testid="message-input"
             />
           </div>
 
@@ -181,6 +185,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             className="bg-primary hover:bg-primary rounded-ds-lg p-spacing-sm text-white transition-colors disabled:cursor-not-allowed disabled:bg-gray-300"
             aria-label="Send message"
             type="button"
+            data-testid="widget-send-button"
           >
             <PaperPlaneTilt size={20} weight="fill" />
           </button>

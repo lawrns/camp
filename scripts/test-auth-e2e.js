@@ -26,13 +26,13 @@ async function testAuthE2E() {
   try {
     // Test 1: Check if we can access the registration page
     console.log('📝 Test 1: Registration Page Access');
-    const registrationResponse = await fetch('http://localhost:3000/register');
+    const registrationResponse = await fetch('http://localhost:3005/register');
     console.log(`   Status: ${registrationResponse.status}`);
     console.log(`   ✅ Registration page accessible\n`);
 
     // Test 2: Check if we can access the login page
     console.log('🔐 Test 2: Login Page Access');
-    const loginResponse = await fetch('http://localhost:3000/login');
+    const loginResponse = await fetch('http://localhost:3005/login');
     console.log(`   Status: ${loginResponse.status}`);
     console.log(`   ✅ Login page accessible\n`);
 

@@ -6,7 +6,7 @@
  */
 
 import { TONE_CONFIG, type AvailableTone } from "@/app/config/features";
-import { analyseSentiment, getRecommendedTone, type SentimentAnalysis } from "./sentiment";
+import { analyzeSentiment, getRecommendedTone, type SentimentAnalysis } from "./sentiment";
 
 export interface ToneContext {
   systemPrompt: string;
@@ -142,7 +142,7 @@ export function buildToneContext(
   conversationHistory: Array<{ content: string; sender_type: string }> = []
 ): ToneContext {
   // Analyze sentiment of the current message
-  const sentimentAnalysis = analyseSentiment(userMessage);
+  const sentimentAnalysis = analyzeSentiment(userMessage);
 
   // Get recommended tone based on sentiment
   const recommendedTone = getRecommendedTone(sentimentAnalysis);
@@ -185,7 +185,7 @@ export function buildAdvancedToneContext(input: ToneAdaptationInput): ToneContex
   } = input;
 
   // Analyze current message sentiment
-  const sentimentAnalysis = analyseSentiment(userMessage);
+  const sentimentAnalysis = analyzeSentiment(userMessage);
 
   // Get base tone recommendation
   let recommendedTone = getRecommendedTone(sentimentAnalysis) as AvailableTone;

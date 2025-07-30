@@ -5,7 +5,7 @@
  * when negative sentiment is detected or escalation risk is high.
  */
 
-import { analyseSentiment, analyzeConversationSentiment, type SentimentAnalysis } from "@/lib/ai/sentiment";
+import { analyzeSentiment, analyzeConversationSentiment, type SentimentAnalysis } from "@/lib/ai/sentiment";
 import { supabase } from "@/lib/supabase";
 
 const supabaseClient = supabase.admin();
@@ -43,7 +43,7 @@ export class RealTimeSentimentService {
   ): Promise<SentimentAlert | null> {
     try {
       // Analyze current message sentiment
-      const sentiment = analyseSentiment(content);
+      const sentiment = analyzeSentiment(content);
 
       // Get conversation history for trend analysis
       const { data: messages } = await supabase

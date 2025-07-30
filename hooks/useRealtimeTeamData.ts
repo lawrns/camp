@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/consolidated-exports';
+import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
 // Remove direct import: // import { RealtimeChannel } from '@supabase/supabase-js';
 
 interface TeamMember {
@@ -124,8 +125,8 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
 
     const client = supabase.client();
     
-    // Create channel for organization-wide updates
-    const realtimeChannel: any = client.channel(`team:${organizationId}`)
+    // Create channel for organization-wide updates using unified standards
+    const realtimeChannel: any = client.channel(UNIFIED_CHANNELS.organization(organizationId))
       .on('postgres_changes', {
         event: '*',
         schema: 'public',

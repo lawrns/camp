@@ -158,6 +158,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             disabled={disabled}
             className="w-full resize-none border-0 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder-gray-500 outline-none disabled:cursor-not-allowed"
             maxLength={1000}
+            data-testid="message-input"
           />
           {message.length > 800 && (
             <div className="absolute -top-6 right-0 text-tiny text-gray-400">{message.length}/1000</div>
@@ -171,6 +172,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           className="flex h-10 min-w-[40px] items-center justify-center rounded-ds-xl bg-gradient-to-r from-[#667eea] to-[#764ba2] p-spacing-sm text-white transition-all duration-200 hover:shadow-card-deep disabled:cursor-not-allowed disabled:opacity-50"
           whileHover={{ scale: disabled || !message.trim() ? 1 : 1.05 }}
           whileTap={{ scale: disabled || !message.trim() ? 1 : 0.95 }}
+          data-testid="widget-send-button"
         >
           {disabled ? (
             <div className="h-4 w-4 animate-spin rounded-ds-full border-2 border-white border-t-transparent" />

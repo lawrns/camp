@@ -18,7 +18,7 @@ import {
 import { getHumanAIConfig, isHumanAIModeEnabled, shouldBypassHumanAI } from "@/lib/ai/human-mode-helpers";
 import { openaiService } from "@/lib/ai/openai";
 import { personalize, phraseFilter, type PersonalizationContext } from "@/lib/ai/phrase-filter";
-import { analyseSentiment, analyzeConversationSentiment, getRecommendedTone } from "@/lib/ai/sentiment";
+import { analyzeSentiment, analyzeConversationSentiment, getRecommendedTone } from "@/lib/ai/sentiment";
 import { buildAdvancedToneContext, type ToneAdaptationInput } from "@/lib/ai/tone-adapter";
 import { calculateTypingTimings, simulateTyping } from "@/lib/ai/typing-sim";
 import { typoInjector } from "@/lib/ai/typo-injector";
@@ -125,7 +125,7 @@ export class HumanLikeAIPipeline {
       }
 
       // Step 2: Sentiment analysis
-      const sentimentAnalysis = analyseSentiment(input.messageContent);
+      const sentimentAnalysis = analyzeSentiment(input.messageContent);
       processingDetails.sentimentAnalysis = sentimentAnalysis;
 
       // Analyze conversation sentiment if history available

@@ -80,7 +80,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
           {children}
 
           {/* DEFINITIVE WIDGET - Single Source of Truth */}
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto" data-testid="widget-container">
             <DefinitiveButton
               onClick={() => setIsOpen(!isOpen)}
               isOpen={isOpen}

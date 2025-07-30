@@ -147,33 +147,43 @@ export async function POST(request: NextRequest) {
 
     // CRITICAL: Broadcast message to real-time channels for agent dashboard
     try {
-      // Broadcast to conversation-specific channel (for selected conversation)
-      const conversationChannel = UNIFIED_CHANNELS.conversation(organizationId, conversationId);
-      const convChannel = supabaseClient.channel(conversationChannel);
-      await convChannel.send({
-        type: 'broadcast',
-        event: UNIFIED_EVENTS.MESSAGE_CREATED,
-        payload: {
-          message,
-          conversationId,
-          organizationId,
-          timestamp: new Date().toISOString(),
-        }
-      });
+      // Use the standardized broadcast function for consistent real-time communication
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+
+      const messagePayload = {
+        message,
+        conversationId,
+        organizationId,
+        timestamp: new Date().toISOString(),
+        source: 'widget'
+      };
+
+      // Broadcast to conversation-specific channel (for agents viewing this conversation)
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
 
       // Broadcast to organization channel (for conversation list updates)
-      const orgChannel = UNIFIED_CHANNELS.organization(organizationId);
-      const organizationChannel = supabaseClient.channel(orgChannel);
-      await organizationChannel.send({
-        type: 'broadcast',
-        event: UNIFIED_EVENTS.CONVERSATION_UPDATED,
-        payload: {
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.organization(organizationId),
+        UNIFIED_EVENTS.CONVERSATION_UPDATED,
+        {
           conversationId,
           organizationId,
           lastMessage: message,
           timestamp: new Date().toISOString(),
+          source: 'widget'
         }
-      });
+      );
+
+      // Also broadcast to conversations channel for dashboard conversation list updates
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversations(organizationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
 
       console.log('[Widget Messages API] Real-time broadcast sent successfully');
     } catch (broadcastError) {

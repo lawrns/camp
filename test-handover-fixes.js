@@ -6,7 +6,7 @@
  * 2. AI Handover "Unknown error" in API endpoints
  */
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3005';
 
 async function testAIHandoverAPI() {
   console.log('🤖 Testing AI Handover API');

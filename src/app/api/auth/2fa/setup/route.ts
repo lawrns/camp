@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import QRCode from "qrcode";
 import speakeasy from "speakeasy";
 import { z } from "zod";
-import { withTenantGuard, type TenantContext } from "@/lib/auth";
+import { withTenantGuard, type TenantContext } from "@/lib/core/auth";
 import { supabase } from "@/lib/supabase";
 
 // Enable 2FA schema

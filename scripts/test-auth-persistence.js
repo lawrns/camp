@@ -14,7 +14,7 @@ try {
 }
 
 const TEST_CONFIG = {
-  baseUrl: process.env.TEST_URL || 'http://localhost:3000',
+  baseUrl: process.env.TEST_URL || 'http://localhost:3005',
   email: 'jam@jam.com',
   password: 'password123',
   headless: false, // Set to true for CI

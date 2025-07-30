@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { openaiService } from '@/lib/ai/openai';
-import { analyseSentiment } from '@/lib/ai/sentiment';
+import { analyzeSentiment } from '@/lib/ai/sentiment';
 
 interface SuggestionRequest {
   conversationId: string;
@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Analyze the customer message
-    const sentiment = await analyseSentiment(messageContent);
+    const sentimentAnalysis = await analyzeSentiment(messageContent);
+    const sentiment = sentimentAnalysis.sentiment.compound.toString();
     const urgency = determineUrgency(messageContent);
     const category = categorizeMessage(messageContent);
 
@@ -99,17 +100,20 @@ async function generateSuggestions({
     // Generate context-aware suggestions using OpenAI
     const contextPrompt = buildContextPrompt(messageContent, sentiment, urgency, category, conversationHistory);
     
-    const aiResponse = await openaiService.generateCompletion({
-      system: "You are an expert customer service assistant. Generate 3 different reply suggestions for the agent to choose from. Each should have a different tone and approach. Return as JSON array with fields: content, tone, category, reasoning.",
-      prompt: contextPrompt,
-      temperature: 0.7,
-      maxTokens: 800,
-      functionId: "reply-suggestions",
-    });
+    const aiResponse = await openaiService.createChatCompletion([
+      {
+        role: "system",
+        content: "You are an expert customer service assistant. Generate 3 different reply suggestions for the agent to choose from. Each should have a different tone and approach. Return as JSON array with fields: content, tone, category, reasoning."
+      },
+      {
+        role: "user",
+        content: contextPrompt
+      }
+    ]);
 
     // Parse AI response
     try {
-      const aiSuggestions = JSON.parse(aiResponse.text);
+      const aiSuggestions = JSON.parse(aiResponse.choices[0]?.message?.content || '');
       
       if (Array.isArray(aiSuggestions)) {
         aiSuggestions.forEach((suggestion, index) => {

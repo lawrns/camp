@@ -1,6 +1,9 @@
 /**
  * Channel naming and cleanup utilities for standardized realtime communication
+ * @deprecated Use UNIFIED_CHANNELS from @/lib/realtime/unified-channel-standards instead
  */
+
+import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
 
 export interface ChannelConfig {
     orgId: string;
@@ -11,23 +14,28 @@ export interface ChannelConfig {
 
 /**
  * Generate standardized channel names for realtime subscriptions
+ * @deprecated Use UNIFIED_CHANNELS directly instead
  */
 export function getChannelName(config: ChannelConfig): string {
     const { orgId, convId, type = 'messages', userId } = config;
 
     if (type === 'conversations') {
-        return `org:${orgId}:conversations`;
+        return UNIFIED_CHANNELS.conversations(orgId);
     }
 
     if (type === 'notifications') {
-        return `org:${orgId}:notifications${userId ? `:${userId}` : ''}`;
+        return userId ? UNIFIED_CHANNELS.userNotifications(orgId, userId) : UNIFIED_CHANNELS.notifications(orgId);
     }
 
     if (!convId) {
         throw new Error(`Conversation ID required for channel type: ${type}`);
     }
 
-    return `org:${orgId}:conversation:${convId}:${type}`;
+    if (type === 'typing') {
+        return UNIFIED_CHANNELS.conversationTyping(orgId, convId);
+    }
+
+    return UNIFIED_CHANNELS.conversation(orgId, convId);
 }
 
 /**

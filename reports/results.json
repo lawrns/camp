@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 3
+      "actualWorkers": 4
     },
     "preserveOutput": "always",
     "reporter": [
@@ -45,7 +45,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "chromium",
         "name": "chromium",
@@ -61,7 +61,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "firefox",
         "name": "firefox",
@@ -77,7 +77,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "webkit",
         "name": "webkit",
@@ -93,7 +93,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -109,7 +109,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -125,7 +125,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 3
+          "actualWorkers": 4
         },
         "id": "Tablet",
         "name": "Tablet",
@@ -146,24 +146,22 @@
   },
   "suites": [
     {
-      "title": "auth/simple-login.spec.ts",
-      "file": "auth/simple-login.spec.ts",
+      "title": "performance/web-vitals.spec.ts",
+      "file": "performance/web-vitals.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Simple Login Test",
-          "file": "auth/simple-login.spec.ts",
+          "title": "Performance - Core Web Vitals",
+          "file": "performance/web-vitals.spec.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should login with jam@jam.com",
-              "ok": true,
-              "tags": [
-                "jam.com"
-              ],
+              "title": "should meet LCP threshold",
+              "ok": false,
+              "tags": [],
               "tests": [
                 {
                   "timeout": 30000,
@@ -175,31 +173,62 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2531,
-                      "errors": [],
-                      "stdout": [
+                      "status": "failed",
+                      "duration": 381,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:5:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 5
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Performance - Core Web Vitals'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 4 |\u001b[39m   test(\u001b[32m'should meet LCP threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m     \n \u001b[90m 7 |\u001b[39m     \u001b[36mconst\u001b[39m lcp \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m       \u001b[36mreturn\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mPromise\u001b[39m((resolve) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
                         {
-                          "text": "✅ Login successful!\n"
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Performance - Core Web Vitals'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m 4 |\u001b[39m   test(\u001b[32m'should meet LCP threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 |\u001b[39m     \n \u001b[90m 7 |\u001b[39m     \u001b[36mconst\u001b[39m lcp \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m {\n \u001b[90m 8 |\u001b[39m       \u001b[36mreturn\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mPromise\u001b[39m((resolve) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:5:16\u001b[22m"
                         }
                       ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-30T19:13:24.082Z",
+                      "startTime": "2025-07-30T19:29:55.560Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 5
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "d6d101f8faf747e8f447-b37c5889a91f6b32ed42",
-              "file": "auth/simple-login.spec.ts",
+              "id": "3bfb90ff9f32a36673de-bd192ead3536e61d8514",
+              "file": "performance/web-vitals.spec.ts",
               "line": 4,
               "column": 7
             },
             {
-              "title": "should access inbox after login",
+              "title": "should meet FID threshold",
               "ok": false,
               "tags": [],
               "tests": [
@@ -214,67 +243,62 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "failed",
-                      "duration": 2884,
+                      "duration": 375,
                       "error": {
-                        "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n",
-                        "stack": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts:43:38",
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:22:16",
                         "location": {
-                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
-                          "column": 38,
-                          "line": 43
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 22
                         },
-                        "snippet": "\u001b[0m \u001b[90m 41 |\u001b[39m     \u001b[90m// Verify we can access inbox\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/\\/inbox/\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 |\u001b[39m     \n \u001b[90m 45 |\u001b[39m     \u001b[90m// Take a screenshot\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ path\u001b[33m:\u001b[39m \u001b[32m'inbox-access.png'\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 20 |\u001b[39m\n \u001b[90m 21 |\u001b[39m   test(\u001b[32m'should meet FID threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     \n \u001b[90m 24 |\u001b[39m     \u001b[90m// Wait for page to be interactive\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
-                            "column": 38,
-                            "line": 43
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 22
                           },
-                          "message": "Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:\n    1) <h1 class=\"text-2xl font-bold text-gray-900\">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })\n    2) <h1 data-testid=\"mobile-inbox-title\" class=\"component-header text-gray-900 truncate mr-4\">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')\n    3) <h1 class=\"component-header text-gray-900\">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\n\n\u001b[0m \u001b[90m 41 |\u001b[39m     \u001b[90m// Verify we can access inbox\u001b[39m\n \u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/\\/inbox/\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h1'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 |\u001b[39m     \n \u001b[90m 45 |\u001b[39m     \u001b[90m// Take a screenshot\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ path\u001b[33m:\u001b[39m \u001b[32m'inbox-access.png'\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts:43:38\u001b[22m"
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 20 |\u001b[39m\n \u001b[90m 21 |\u001b[39m   test(\u001b[32m'should meet FID threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     \n \u001b[90m 24 |\u001b[39m     \u001b[90m// Wait for page to be interactive\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:22:16\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-30T19:13:24.085Z",
+                      "startTime": "2025-07-30T19:29:55.560Z",
                       "annotations": [],
                       "attachments": [
                         {
                           "name": "screenshot",
                           "contentType": "image/png",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/test-failed-1.png"
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/test-failed-1.png"
                         },
                         {
                           "name": "video",
                           "contentType": "video/webm",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/error-context.md"
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/video.webm"
                         }
                       ],
                       "errorLocation": {
-                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts",
-                        "column": 38,
-                        "line": 43
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 22
                       }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "d6d101f8faf747e8f447-02d14aa862a14cac0252",
-              "file": "auth/simple-login.spec.ts",
-              "line": 30,
+              "id": "3bfb90ff9f32a36673de-a125347256c5ebc10688",
+              "file": "performance/web-vitals.spec.ts",
+              "line": 21,
               "column": 7
             },
             {
-              "title": "should access widget after login",
-              "ok": true,
+              "title": "should meet CLS threshold",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -287,27 +311,265 @@
                     {
                       "workerIndex": 2,
                       "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 2707,
-                      "errors": [],
-                      "stdout": [
+                      "status": "failed",
+                      "duration": 381,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:42:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 42
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m\n \u001b[90m 41 |\u001b[39m   test(\u001b[32m'should meet CLS threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \n \u001b[90m 44 |\u001b[39m     \u001b[36mconst\u001b[39m cls \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m {\n \u001b[90m 45 |\u001b[39m       \u001b[36mreturn\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mPromise\u001b[39m((resolve) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
                         {
-                          "text": "✅ Widget access successful!\n"
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 42
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/dashboard\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 40 |\u001b[39m\n \u001b[90m 41 |\u001b[39m   test(\u001b[32m'should meet CLS threshold'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \n \u001b[90m 44 |\u001b[39m     \u001b[36mconst\u001b[39m cls \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m {\n \u001b[90m 45 |\u001b[39m       \u001b[36mreturn\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mPromise\u001b[39m((resolve) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:42:16\u001b[22m"
                         }
                       ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-07-30T19:13:24.085Z",
+                      "startTime": "2025-07-30T19:29:55.564Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 42
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "d6d101f8faf747e8f447-94f39fdb3dbea00f494b",
-              "file": "auth/simple-login.spec.ts",
-              "line": 51,
+              "id": "3bfb90ff9f32a36673de-24626e2f6672d8cc1c7b",
+              "file": "performance/web-vitals.spec.ts",
+              "line": 41,
+              "column": 7
+            },
+            {
+              "title": "should load widget quickly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 375,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:60:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 60
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 58 |\u001b[39m   test(\u001b[32m'should load widget quickly'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 59 |\u001b[39m     \u001b[36mconst\u001b[39m startTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 60 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'[data-testid=\"widget-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 62 |\u001b[39m     \u001b[36mconst\u001b[39m loadTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow() \u001b[33m-\u001b[39m startTime\u001b[33m;\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 60
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 58 |\u001b[39m   test(\u001b[32m'should load widget quickly'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 59 |\u001b[39m     \u001b[36mconst\u001b[39m startTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 60 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'[data-testid=\"widget-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 62 |\u001b[39m     \u001b[36mconst\u001b[39m loadTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow() \u001b[33m-\u001b[39m startTime\u001b[33m;\u001b[39m\n \u001b[90m 63 |\u001b[39m     \u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:60:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T19:29:55.559Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 60
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3bfb90ff9f32a36673de-d3ac70b392e8227ef097",
+              "file": "performance/web-vitals.spec.ts",
+              "line": 58,
+              "column": 7
+            },
+            {
+              "title": "should handle rapid interactions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 144,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:69:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 69
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m\n \u001b[90m 68 |\u001b[39m   test(\u001b[32m'should handle rapid interactions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'[data-testid=\"widget-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 71 |\u001b[39m     \n \u001b[90m 72 |\u001b[39m     \u001b[36mconst\u001b[39m startTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 69
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 67 |\u001b[39m\n \u001b[90m 68 |\u001b[39m   test(\u001b[32m'should handle rapid interactions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'[data-testid=\"widget-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 71 |\u001b[39m     \n \u001b[90m 72 |\u001b[39m     \u001b[36mconst\u001b[39m startTime \u001b[33m=\u001b[39m \u001b[33mDate\u001b[39m\u001b[33m.\u001b[39mnow()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:69:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T19:29:56.504Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 69
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3bfb90ff9f32a36673de-4e5bd449a1c62e5163a4",
+              "file": "performance/web-vitals.spec.ts",
+              "line": 68,
+              "column": 7
+            },
+            {
+              "title": "should maintain performance under load",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 144,
+                      "error": {
+                        "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n",
+                        "stack": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:89:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                          "column": 16,
+                          "line": 89
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 87 |\u001b[39m\n \u001b[90m 88 |\u001b[39m   test(\u001b[32m'should maintain performance under load'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Simulate load by opening multiple elements\u001b[39m\n \u001b[90m 92 |\u001b[39m     \u001b[36mconst\u001b[39m promises \u001b[33m=\u001b[39m []\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                            "column": 16,
+                            "line": 89
+                          },
+                          "message": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3005/app/widget-test\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 87 |\u001b[39m\n \u001b[90m 88 |\u001b[39m   test(\u001b[32m'should maintain performance under load'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/app/widget-test'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Simulate load by opening multiple elements\u001b[39m\n \u001b[90m 92 |\u001b[39m     \u001b[36mconst\u001b[39m promises \u001b[33m=\u001b[39m []\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:89:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T19:29:56.506Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts",
+                        "column": 16,
+                        "line": 89
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3bfb90ff9f32a36673de-2bd797de8e6ef2acf88b",
+              "file": "performance/web-vitals.spec.ts",
+              "line": 88,
               "column": 7
             }
           ]
@@ -317,11 +579,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-07-30T19:13:23.636Z",
-    "duration": 3736.1079999999997,
-    "expected": 2,
+    "startTime": "2025-07-30T19:29:55.213Z",
+    "duration": 1547.583,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 6,
     "flaky": 0
   }
 }

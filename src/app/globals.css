@@ -30,13 +30,21 @@
   }
 }
 
-/* TARGETED ICON + TEXT NO-WRAP FIX */
-/* Only prevent wrapping for elements that contain both icons and text */
+/* COMPREHENSIVE ICON + TEXT NO-WRAP FIX */
+/* Prevent wrapping for icon-text combinations while avoiding overflow */
 
-/* Target flex containers with gaps that likely contain icon-text combinations */
-.flex.items-center[class*="gap-"],
-.inline-flex.items-center[class*="gap-"] {
+/* Target flex containers that likely contain icon-text combinations */
+.flex.items-center,
+.inline-flex.items-center {
   white-space: nowrap;
+}
+
+/* But allow wrapping for containers that are likely to contain long text */
+.flex.items-center.flex-wrap,
+.flex.items-center[class*="wrap"],
+.flex.items-center.text-wrap,
+.flex.items-center[class*="break"] {
+  white-space: normal !important;
 }
 
 /* Force all SVGs and icons to never shrink */
@@ -46,17 +54,19 @@ svg,
   flex-shrink: 0 !important;
 }
 
-/* Button-specific fixes - only for buttons with gaps */
-button.flex[class*="gap-"],
-button.inline-flex[class*="gap-"],
-[role="button"].flex[class*="gap-"],
-[role="button"].inline-flex[class*="gap-"] {
-  white-space: nowrap;
+/* Button-specific fixes */
+button,
+[role="button"],
+.btn,
+[class*="btn"] {
+  white-space: nowrap !important;
 }
 
-/* Navigation elements with icons */
-nav .flex.items-center[class*="gap-"],
-nav .inline-flex.items-center[class*="gap-"] {
+/* Navigation elements */
+nav .flex.items-center,
+nav .inline-flex.items-center,
+nav a,
+nav button {
   white-space: nowrap;
 }
 

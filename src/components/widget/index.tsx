@@ -111,7 +111,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
           />
 
           {/* Widget panel is always rendered but controlled by CSS */}
-          <div className={isOpen ? 'block' : 'hidden'}>
+          <div className={isOpen ? 'block' : 'hidden'} data-testid="widget-container">
             <DefinitiveWidget
               organizationId={organizationId}
               onClose={() => setIsOpen(false)}

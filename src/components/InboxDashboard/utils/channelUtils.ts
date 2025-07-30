@@ -23,8 +23,11 @@ function generateVisitorName(seed: string): string {
   return `${adjective} ${noun}`;
 }
 
+import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
+
 /**
  * Standard channel naming convention for Supabase real-time
+ * @deprecated Use UNIFIED_CHANNELS directly instead
  * @param type - Type of channel (conversations, conversation, typing)
  * @param organizationId - Organization ID
  * @param conversationId - Optional conversation ID for specific channels
@@ -37,11 +40,13 @@ export const getChannelName = (
 ): string => {
   switch (type) {
     case "conversations":
-      return `org:${organizationId}:conversations`;
+      return UNIFIED_CHANNELS.conversations(organizationId);
     case "conversation":
-      return `org:${organizationId}:conv:${conversationId}`;
+      if (!conversationId) throw new Error('Conversation ID required for conversation channel');
+      return UNIFIED_CHANNELS.conversation(organizationId, conversationId);
     case "typing":
-      return `org:${organizationId}:typing:${conversationId}`;
+      if (!conversationId) throw new Error('Conversation ID required for typing channel');
+      return UNIFIED_CHANNELS.conversationTyping(organizationId, conversationId);
     default:
       throw new Error(`Unknown channel type: ${type}`);
   }

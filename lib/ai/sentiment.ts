@@ -258,6 +258,39 @@ export function generateSentimentBasedSuggestions(sentiment: SentimentAnalysis):
 }
 
 /**
+ * Get recommended tone based on sentiment analysis
+ */
+export function getRecommendedTone(sentiment: SentimentAnalysis): "friendly" | "empathetic" | "technical" | "professional" {
+  // High negative sentiment suggests empathetic response
+  if (sentiment.sentiment.compound < -0.3) {
+    return "empathetic";
+  }
+
+  // Technical keywords suggest technical tone
+  const technicalKeywords = ["api", "code", "error", "bug", "technical", "integration", "configuration"];
+  const hasTechnicalContent = sentiment.keywords.some(keyword => 
+    technicalKeywords.some(tech => keyword.toLowerCase().includes(tech))
+  );
+  
+  if (hasTechnicalContent) {
+    return "technical";
+  }
+
+  // High urgency suggests professional tone
+  if (sentiment.urgency === "high") {
+    return "professional";
+  }
+
+  // Frustrated or confused emotions suggest empathetic tone
+  if (sentiment.emotions.anger > 0.5 || sentiment.emotions.sadness > 0.5) {
+    return "empathetic";
+  }
+
+  // Default to friendly for neutral/positive sentiment
+  return "friendly";
+}
+
+/**
  * Calculate sentiment velocity (rate of change)
  */
 export function calculateSentimentVelocity(sentimentTrend: Array<{ timestamp: Date; sentiment: number }>): number {

@@ -1,11 +1,16 @@
 /* eslint-disable no-restricted-syntax */
 /**
+ * @deprecated This file is deprecated. Use @/lib/realtime/unified-channel-standards instead.
+ *
  * Centralized real-time channel naming conventions
  * Ensures consistency across agent dashboard and widget communications
  *
  * This file is exempt from channel hardcoding restrictions as it defines
  * the authoritative channel naming patterns for the entire application.
  */
+
+// Re-export from unified standards for backward compatibility
+export { UNIFIED_CHANNELS as CHANNEL_PATTERNS, UNIFIED_EVENTS } from './unified-channel-standards';
 
 export const CHANNEL_PREFIXES = {
   // Core prefixes following org-scoped pattern

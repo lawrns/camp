@@ -2,6 +2,7 @@
 
 import { getBrowserClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
+import { UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 
 export interface DashboardMetrics {
   conversations: number;
@@ -223,7 +224,7 @@ export function useRealtimeDashboard() {
       .subscribe();
 
     const activitySubscription = supabase
-      .channel('activity-changes')
+      .channel(UNIFIED_CHANNELS.activity(organizationId))
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'activity_logs' },
         (payload) => {

@@ -6,7 +6,7 @@
  * 2. loadMessages expecting data.messages when API returns array directly
  */
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3005';
 
 async function testGetMessages() {
   console.log('🔍 Testing GET Messages (loadMessages fix)');

@@ -1,27 +1,29 @@
 /**
+ * @deprecated This file is deprecated. Use @/lib/realtime/unified-channel-standards instead.
+ *
  * Real-time Communication Channel Conventions
  * Follows GUIDE.md specifications for Supabase Realtime patterns
  */
 
 import { RealtimeChannel } from '@supabase/supabase-js';
 
-// ============================================================================
-// CHANNEL NAMING CONVENTIONS
-// ============================================================================
+// Re-export from unified standards for backward compatibility
+export { UNIFIED_CHANNELS as CHANNEL_PATTERNS, UNIFIED_EVENTS } from './unified-channel-standards';
 
-export const CHANNEL_PATTERNS = {
+// Legacy exports for backward compatibility
+export const LEGACY_CHANNEL_PATTERNS = {
   // Organization-wide channels
   ORGANIZATION_PRESENCE: (organizationId: string) => `org:${organizationId}:presence`,
   ORGANIZATION_NOTIFICATIONS: (organizationId: string) => `org:${organizationId}:notifications`,
-  
+
   // Conversation-specific channels
-  CONVERSATION: (organizationId: string, conversationId: string) => 
+  CONVERSATION: (organizationId: string, conversationId: string) =>
     `org:${organizationId}:conv:${conversationId}`,
-  CONVERSATION_TYPING: (organizationId: string, conversationId: string) => 
+  CONVERSATION_TYPING: (organizationId: string, conversationId: string) =>
     `org:${organizationId}:conv:${conversationId}:typing`,
-  
+
   // Agent-specific channels
-  AGENT: (organizationId: string, agentId: string) => 
+  AGENT: (organizationId: string, agentId: string) =>
     `org:${organizationId}:agent:${agentId}`,
   AGENT_STATUS: (organizationId: string, agentId: string) => 
     `org:${organizationId}:agent:${agentId}:status`,

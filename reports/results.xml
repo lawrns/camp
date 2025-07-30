@@ -1,58 +1,212 @@
-<testsuites id="" name="" tests="3" failures="1" skipped="0" errors="0" time="3.7361079999999998">
-<testsuite name="auth/simple-login.spec.ts" timestamp="2025-07-30T19:13:23.647Z" hostname="chromium" tests="3" failures="1" skipped="0" time="8.122" errors="0">
-<testcase name="Simple Login Test › should login with jam@jam.com" classname="auth/simple-login.spec.ts" time="2.531">
-<system-out>
-<![CDATA[✅ Login successful!
-]]>
-</system-out>
-</testcase>
-<testcase name="Simple Login Test › should access inbox after login" classname="auth/simple-login.spec.ts" time="2.884">
-<failure message="simple-login.spec.ts:30:7 should access inbox after login" type="FAILURE">
-<![CDATA[  [chromium] › auth/simple-login.spec.ts:30:7 › Simple Login Test › should access inbox after login 
+<testsuites id="" name="" tests="6" failures="6" skipped="0" errors="0" time="1.5475830000000002">
+<testsuite name="performance/web-vitals.spec.ts" timestamp="2025-07-30T19:29:55.278Z" hostname="chromium" tests="6" failures="6" skipped="0" time="1.8" errors="0">
+<testcase name="Performance - Core Web Vitals › should meet LCP threshold" classname="performance/web-vitals.spec.ts" time="0.381">
+<failure message="web-vitals.spec.ts:4:7 should meet LCP threshold" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:4:7 › Performance - Core Web Vitals › should meet LCP threshold 
 
-    Error: expect.toContainText: Error: strict mode violation: locator('h1') resolved to 3 elements:
-        1) <h1 class="text-2xl font-bold text-gray-900">Good afternoon, jam</h1> aka getByRole('heading', { name: 'Good afternoon, jam' })
-        2) <h1 data-testid="mobile-inbox-title" class="component-header text-gray-900 truncate mr-4">Inbox (0)</h1> aka getByTestId('mobile-inbox-title')
-        3) <h1 class="component-header text-gray-900">Inbox (0)</h1> aka getByRole('heading', { name: 'Inbox (0)' })
-
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard
     Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('h1')
+      - navigating to "http://localhost:3005/app/dashboard", waiting until "load"
 
 
-      41 |     // Verify we can access inbox
-      42 |     await expect(page).toHaveURL(/\/inbox/);
-    > 43 |     await expect(page.locator('h1')).toContainText('Inbox');
-         |                                      ^
-      44 |     
-      45 |     // Take a screenshot
-      46 |     await page.screenshot({ path: 'inbox-access.png' });
-        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/auth/simple-login.spec.ts:43:38
+      3 | test.describe('Performance - Core Web Vitals', () => {
+      4 |   test('should meet LCP threshold', async ({ page }) => {
+    > 5 |     await page.goto('/app/dashboard');
+        |                ^
+      6 |     
+      7 |     const lcp = await page.evaluate(() => {
+      8 |       return new Promise((resolve) => {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:5:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/test-failed-1.png
+    ../../test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/video.webm
+    ../../test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/error-context.md
 ]]>
 </failure>
 <system-out>
 <![CDATA[
-[[ATTACHMENT|../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/test-failed-1.png]]
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/test-failed-1.png]]
 
-[[ATTACHMENT|../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/video.webm]]
-
-[[ATTACHMENT|../test-results/auth-simple-login-Simple-L-ef2b8-ld-access-inbox-after-login-chromium/error-context.md]]
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-c4fa9-s-should-meet-LCP-threshold-chromium/video.webm]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Simple Login Test › should access widget after login" classname="auth/simple-login.spec.ts" time="2.707">
+<testcase name="Performance - Core Web Vitals › should meet FID threshold" classname="performance/web-vitals.spec.ts" time="0.375">
+<failure message="web-vitals.spec.ts:21:7 should meet FID threshold" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:21:7 › Performance - Core Web Vitals › should meet FID threshold 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard
+    Call log:
+      - navigating to "http://localhost:3005/app/dashboard", waiting until "load"
+
+
+      20 |
+      21 |   test('should meet FID threshold', async ({ page }) => {
+    > 22 |     await page.goto('/app/dashboard');
+         |                ^
+      23 |     
+      24 |     // Wait for page to be interactive
+      25 |     await page.waitForLoadState('networkidle');
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:22:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
-<![CDATA[✅ Widget access successful!
+<![CDATA[
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-7adac-s-should-meet-FID-threshold-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance - Core Web Vitals › should meet CLS threshold" classname="performance/web-vitals.spec.ts" time="0.381">
+<failure message="web-vitals.spec.ts:41:7 should meet CLS threshold" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:41:7 › Performance - Core Web Vitals › should meet CLS threshold 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/dashboard
+    Call log:
+      - navigating to "http://localhost:3005/app/dashboard", waiting until "load"
+
+
+      40 |
+      41 |   test('should meet CLS threshold', async ({ page }) => {
+    > 42 |     await page.goto('/app/dashboard');
+         |                ^
+      43 |     
+      44 |     const cls = await page.evaluate(() => {
+      45 |       return new Promise((resolve) => {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:42:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-751a5-s-should-meet-CLS-threshold-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance - Core Web Vitals › should load widget quickly" classname="performance/web-vitals.spec.ts" time="0.375">
+<failure message="web-vitals.spec.ts:58:7 should load widget quickly" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:58:7 › Performance - Core Web Vitals › should load widget quickly 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test
+    Call log:
+      - navigating to "http://localhost:3005/app/widget-test", waiting until "load"
+
+
+      58 |   test('should load widget quickly', async ({ page }) => {
+      59 |     const startTime = Date.now();
+    > 60 |     await page.goto('/app/widget-test');
+         |                ^
+      61 |     await page.waitForSelector('[data-testid="widget-button"]');
+      62 |     const loadTime = Date.now() - startTime;
+      63 |     
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:60:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-f4206--should-load-widget-quickly-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance - Core Web Vitals › should handle rapid interactions" classname="performance/web-vitals.spec.ts" time="0.144">
+<failure message="web-vitals.spec.ts:68:7 should handle rapid interactions" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:68:7 › Performance - Core Web Vitals › should handle rapid interactions 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test
+    Call log:
+      - navigating to "http://localhost:3005/app/widget-test", waiting until "load"
+
+
+      67 |
+      68 |   test('should handle rapid interactions', async ({ page }) => {
+    > 69 |     await page.goto('/app/widget-test');
+         |                ^
+      70 |     await page.waitForSelector('[data-testid="widget-button"]');
+      71 |     
+      72 |     const startTime = Date.now();
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:69:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-dd23f-d-handle-rapid-interactions-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Performance - Core Web Vitals › should maintain performance under load" classname="performance/web-vitals.spec.ts" time="0.144">
+<failure message="web-vitals.spec.ts:88:7 should maintain performance under load" type="FAILURE">
+<![CDATA[  [chromium] › performance/web-vitals.spec.ts:88:7 › Performance - Core Web Vitals › should maintain performance under load 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3005/app/widget-test
+    Call log:
+      - navigating to "http://localhost:3005/app/widget-test", waiting until "load"
+
+
+      87 |
+      88 |   test('should maintain performance under load', async ({ page }) => {
+    > 89 |     await page.goto('/app/widget-test');
+         |                ^
+      90 |     
+      91 |     // Simulate load by opening multiple elements
+      92 |     const promises = [];
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/performance/web-vitals.spec.ts:89:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/performance-web-vitals-Per-b7d24-tain-performance-under-load-chromium/video.webm]]
 ]]>
 </system-out>
 </testcase>

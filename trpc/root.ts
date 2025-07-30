@@ -21,7 +21,8 @@ const webhooksRouter = createTRPCRouter({});
 
 // Import knowledge router
 
-// Import realtime router from packages
+// Import realtime router
+import { realtimeRouter } from "./router/realtime";
 
 export const appRouter = createTRPCRouter({
   mailbox: mailboxRouter, // Re-enabled
@@ -34,7 +35,7 @@ export const appRouter = createTRPCRouter({
   apiKeys: apiKeysRouter,
   webhooks: webhooksRouter,
   knowledge: knowledgeRouter, // Re-enabled to fix schema compilation error
-  // realtime: realtimeRouter, // TODO: Enable when packages/api-router integration is ready
+  realtime: realtimeRouter, // ✅ ENABLED: Supabase Realtime integration
   ai: createTRPCRouter({
     trainingData: trainingDataRouter,
     fineTuning: fineTuningRouter,

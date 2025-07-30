@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Composer } from "@/components/InboxDashboard/sub-components/Composer";
 import { createApiClient } from "@/lib/supabase";
+import { UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 
 interface Message {
   id: string;
@@ -183,10 +184,10 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
     setIsOnline(true);
 
     // Subscribe to new messages
-    // FIXED: Use unified channel naming pattern
+    // STANDARDIZED: Use unified channel naming pattern
     const organizationId = "default-org"; // TODO: Get from auth context
     const messagesChannel = supabase
-      .channel(`org:${organizationId}:conversation:${conversationIdStr}`)
+      .channel(UNIFIED_CHANNELS.conversation(organizationId, conversationIdStr))
       .on(
         "postgres_changes",
         {
