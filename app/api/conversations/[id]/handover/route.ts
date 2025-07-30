@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createCampfireClient } from '@/lib/supabase';
 import { aiHandoverService } from '@/lib/ai/handover';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 
@@ -9,26 +10,16 @@ export async function POST(
   try {
     const conversationId = params.id;
     const body = await request.json();
-    console.log('[Conversation Handover] Received request:', body);
-
-    const {
-      organizationId,
-      reason,
-      context,
-      targetOperatorId,
-      metadata
-    } = body;
-
+    const { organizationId, reason, context } = body;
+    
     if (!conversationId) {
       return NextResponse.json(
         { error: 'Conversation ID is required' },
         { status: 400 }
       );
     }
-
-    // Try to extract organizationId from different sources
-    const orgId = organizationId || context?.organizationId || body.organization_id;
-    if (!orgId) {
+    
+    if (!organizationId) {
       return NextResponse.json(
         { error: 'Organization ID is required' },
         { status: 400 }
@@ -38,7 +29,7 @@ export async function POST(
     // Create handover context for this specific conversation
     const handoverContext = {
       conversationId,
-      organizationId: orgId,
+      organizationId,
       customerId: context?.customerId,
       customerName: context?.customerName,
       customerEmail: context?.customerEmail,
@@ -46,56 +37,35 @@ export async function POST(
       messageHistory: context?.messageHistory || [],
       currentIssue: {
         category: context?.category || 'general',
-        description: reason || 'Agent initiated AI handover',
+        description: reason || 'User requested human assistance',
         urgency: (context?.urgency || 'medium') as 'low' | 'medium' | 'high' | 'critical',
         tags: context?.tags || []
       },
       aiAnalysis: {
-        confidence: context?.confidence || 0.85,
+        confidence: context?.confidence || 0.5,
         sentiment: (context?.sentiment || 'neutral') as 'positive' | 'neutral' | 'negative' | 'frustrated' | 'angry',
         complexity: (context?.complexity || 'moderate') as 'simple' | 'moderate' | 'complex',
         suggestedActions: context?.suggestedActions || [],
-        escalationReasons: [reason || 'Agent initiated handover']
+        escalationReasons: [reason || 'User requested handover']
       }
     };
-
-    try {
-      // Evaluate and execute handover
-      const handoverResult = await aiHandoverService.evaluateHandover(handoverContext);
-
-      if (handoverResult.shouldHandover) {
-        await aiHandoverService.executeHandover(handoverContext, handoverResult);
-      }
-
-      return NextResponse.json({
-        success: true,
-        conversationId,
-        shouldHandover: handoverResult.shouldHandover,
-        reason: handoverResult.reason,
-        urgency: handoverResult.urgency,
-        message: handoverResult.handoverMessage,
-        contextSummary: handoverResult.contextSummary,
-        handoverId: `conv_${Date.now()}`,
-        sessionId: `session_${Date.now()}`,
-        targetOperatorId
-      });
-    } catch (handoverError) {
-      console.error(`[Conversation ${conversationId} Handover] Service error:`, handoverError);
-
-      // Return success even if handover service fails
-      return NextResponse.json({
-        success: true,
-        conversationId,
-        shouldHandover: true,
-        reason: 'Agent initiated handover',
-        urgency: 'medium',
-        message: 'AI handover initiated successfully',
-        contextSummary: 'Handover initiated by agent',
-        handoverId: `fallback_${Date.now()}`,
-        sessionId: `session_${Date.now()}`,
-        targetOperatorId
-      });
+    
+    // Evaluate and execute handover
+    const handoverResult = await aiHandoverService.evaluateHandover(handoverContext);
+    
+    if (handoverResult.shouldHandover) {
+      await aiHandoverService.executeHandover(handoverContext, handoverResult);
     }
+    
+    return NextResponse.json({
+      success: true,
+      conversationId,
+      shouldHandover: handoverResult.shouldHandover,
+      reason: handoverResult.reason,
+      urgency: handoverResult.urgency,
+      message: handoverResult.handoverMessage,
+      contextSummary: handoverResult.contextSummary
+    });
     
   } catch (error) {
     console.error(`[Conversation ${params.id} Handover] Error:`, error);
@@ -107,7 +77,7 @@ export async function POST(
 }
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
