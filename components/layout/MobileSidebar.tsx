@@ -71,7 +71,7 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
         className={cn("fixed left-4 top-4 z-50 md:hidden", className)}
         onClick={() => handleOpenChange(!sheetOpen)}
       >
-        {sheetOpen ? <Icon icon={X} className="h-5 w-5" /> : <Icon icon={Menu} className="h-5 w-5" />}
+        <Icon icon={sheetOpen ? X : Menu} className="h-5 w-5" />
       </Button>
 
       {/* Mobile Sidebar Sheet */}
@@ -109,11 +109,11 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
                 <Button
                   key={item.name}
                   variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn("h-12 w-full justify-start gap-3", isActive(item.href) && "bg-secondary font-medium")}
+                  className={cn("h-12 w-full justify-start gap-3 whitespace-nowrap overflow-hidden", isActive(item.href) && "bg-secondary font-medium")}
                   onClick={() => handleNavigate(item.href)}
                 >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
+                  <span className="truncate">{item.name}</span>
                 </Button>
               ))}
             </nav>
@@ -126,11 +126,11 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
                 <Button
                   key={item.name}
                   variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn("h-12 w-full justify-start gap-3", isActive(item.href) && "bg-secondary font-medium")}
+                  className={cn("h-12 w-full justify-start gap-3 whitespace-nowrap overflow-hidden", isActive(item.href) && "bg-secondary font-medium")}
                   onClick={() => handleNavigate(item.href)}
                 >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
+                  <span className="truncate">{item.name}</span>
                 </Button>
               ))}
             </nav>

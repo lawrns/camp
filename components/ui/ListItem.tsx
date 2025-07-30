@@ -33,11 +33,11 @@ const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-ds-2 font-semibold text-gray-900">
+          <div className="flex items-center gap-ds-2 font-semibold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">
             {title}
             {badge}
           </div>
-          {description && <div className="text-sm text-[var(--fl-color-text-muted)]">{description}</div>}
+          {description && <div className="text-sm text-[var(--fl-color-text-muted)] whitespace-nowrap overflow-hidden text-ellipsis">{description}</div>}
         </div>
         {chevron && <CaretRight className="h-5 w-5 flex-shrink-0 text-gray-400" />}
       </div>

@@ -108,7 +108,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <span className={cn("flex items-center", loading && "opacity-0")}>
           {leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
 
-          {children && <span className="flex-1">{children}</span>}
+          {children && <span className="flex-1 whitespace-nowrap overflow-hidden text-ellipsis">{children}</span>}
 
           {rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
         </span>
@@ -192,4 +192,4 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
 );
 ButtonGroup.displayName = "ButtonGroup";
 
-export { Button, ButtonGroup, buttonVariants, IconButton, LinkButton, LoadingButton, type ButtonProps };
+export { Button, ButtonGroup, buttonVariants, IconButton, LinkButton, LoadingButton };

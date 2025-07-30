@@ -44,6 +44,7 @@ import {
   Fire,
   Lightning,
   MagnifyingGlass,
+  Shield,
   Star,
   TrendUp,
   User,
@@ -154,6 +155,16 @@ export default function TeamManagementPage() {
     }
   );
 
+  // Fetch pending invitations
+  const { data: pendingInvitations, refetch: refetchInvitations } = api.mailbox.members.listInvitations.useQuery(
+    { mailboxSlug: "test-mailbox-dev" },
+    {
+      enabled: true,
+      retry: false,
+      refetchOnWindowFocus: false
+    }
+  );
+
   const [metrics, setMetrics] = useState<TeamMetrics>({
     totalAgents: 0,
     onlineAgents: 0,
@@ -236,6 +247,7 @@ export default function TeamManagementPage() {
   const [inviteRole, setInviteRole] = useState<"owner" | "admin" | "agent" | "viewer">("agent");
   const [isInviting, setIsInviting] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [newAgent, setNewAgent] = useState({
     name: "",
@@ -274,14 +286,10 @@ export default function TeamManagementPage() {
     }
   };
 
-  const handleInviteMember = async () => {
-    if (!inviteEmail) return;
-
-    setIsInviting(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log(`[TeamPage] Invited ${inviteEmail} as ${inviteRole}`);
+  // Team invitation mutation
+  const inviteMemberMutation = api.mailbox.members.invite.useMutation({
+    onSuccess: (data) => {
+      console.log(`[TeamPage] Successfully invited ${data.email} as ${data.role}`);
 
       // Reset form and show success
       setInviteEmail("");
@@ -291,10 +299,29 @@ export default function TeamManagementPage() {
 
       // Hide success message after 3 seconds
       setTimeout(() => setShowSuccessMessage(false), 3000);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('Failed to invite member:', error);
-    } finally {
-      setIsInviting(false);
+      setErrorMessage(error.message || "Failed to send invitation. Please try again.");
+
+      // Hide error message after 5 seconds
+      setTimeout(() => setErrorMessage(""), 5000);
+    },
+  });
+
+  const handleInviteMember = async () => {
+    if (!inviteEmail) return;
+
+    try {
+      await inviteMemberMutation.mutateAsync({
+        mailboxSlug: "test-mailbox-dev", // Use the same slug as other queries
+        email: inviteEmail,
+        role: inviteRole,
+        message: `You've been invited to join our team as a ${inviteRole}`,
+      });
+    } catch (error) {
+      // Error handling is done in the mutation's onError callback
+      console.error('Invitation failed:', error);
     }
   };
 
@@ -403,6 +430,22 @@ export default function TeamManagementPage() {
               </p>
             </div>
             <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => router.push('/dashboard/team/performance')}
+                className="mr-3"
+              >
+                <Icon icon={TrendUp} className="mr-2 h-4 w-4" />
+                Performance
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/dashboard/team/roles')}
+                className="mr-3"
+              >
+                <Icon icon={Shield} className="mr-2 h-4 w-4" />
+                Roles
+              </Button>
               <Button
                 onClick={() => setShowAddAgent(true)}
                 className="bg-blue-600 hover:bg-blue-700"
@@ -637,6 +680,63 @@ export default function TeamManagementPage() {
             </div>
           )}
         </div>
+
+        {/* Pending Invitations Section */}
+        {pendingInvitations && pendingInvitations.length > 0 && (
+          <div className="mb-8">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">Pending Invitations</h2>
+              <span className="text-sm text-gray-500">
+                {pendingInvitations.length} pending
+              </span>
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              {pendingInvitations.map((invitation) => (
+                <div key={invitation.id} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                      <Icon icon={Envelope} className="h-5 w-5 text-yellow-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{invitation.email}</h3>
+                      <p className="text-sm text-gray-500">
+                        Invited as {invitation.role} •
+                        {invitation.invitedAt.toLocaleDateString()} •
+                        Expires {invitation.expiresAt.toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      Pending
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        // TODO: Implement resend invitation
+                        console.log('Resend invitation:', invitation.id);
+                      }}
+                    >
+                      Resend
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        // TODO: Implement cancel invitation
+                        console.log('Cancel invitation:', invitation.id);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Success Notification */}
@@ -644,6 +744,20 @@ export default function TeamManagementPage() {
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
           <Icon icon={CheckCircle} className="h-5 w-5" />
           <span>Invitation sent successfully!</span>
+        </div>
+      )}
+
+      {/* Error Notification */}
+      {errorMessage && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+          <Icon icon={X} className="h-5 w-5" />
+          <span>{errorMessage}</span>
+          <button
+            onClick={() => setErrorMessage("")}
+            className="ml-2 text-white hover:text-gray-200"
+          >
+            <Icon icon={X} className="h-4 w-4" />
+          </button>
         </div>
       )}
 
@@ -702,10 +816,10 @@ export default function TeamManagementPage() {
               </Button>
               <Button
                 onClick={handleInviteMember}
-                disabled={!inviteEmail || isInviting}
+                disabled={!inviteEmail || inviteMemberMutation.isPending}
                 className="flex-1 bg-blue-600 hover:bg-blue-700"
               >
-                {isInviting ? "Inviting..." : "Send Invite"}
+                {inviteMemberMutation.isPending ? "Sending..." : "Send Invite"}
               </Button>
             </div>
           </div>

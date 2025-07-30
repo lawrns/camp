@@ -15,6 +15,7 @@ import { conversationsRouter } from "./conversations/index";
 import { customersRouter } from "./customers";
 import { faqsRouter } from "./faqs";
 import { githubRouter } from "./github";
+import { knowledgeRouter } from "./knowledge";
 import { membersRouter } from "./members";
 import { metadataEndpointRouter } from "./metadataEndpoint";
 import { preferencesRouter } from "./preferences";
@@ -99,6 +100,7 @@ export const mailboxRouter = {
     .query(({ ctx, input }) => getSessionsPaginated(ctx.mailbox.id, input.cursor || 1, input.limit)),
   conversations: conversationsRouter,
   faqs: faqsRouter,
+  knowledge: knowledgeRouter,
   members: membersRouter,
   slack: slackRouter,
   github: githubRouter,
