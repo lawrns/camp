@@ -44,6 +44,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const organizationId = user?.organizationId;
   const userId = user?.id;
 
+  // Debug logging
+  React.useEffect(() => {
+    console.log("[InboxDashboard] Auth state:", { user, authLoading, organizationId, userId });
+    console.log("[InboxDashboard] Using organizationId:", organizationId);
+  }, [user, authLoading, organizationId, userId]);
+
   // UI state
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);

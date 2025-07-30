@@ -41,9 +41,8 @@ interface InboxDashboardProps {
 export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }) => {
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
-  // TEMPORARY: Hardcode organizationId for testing
-  const organizationId = user?.organizationId || 'b5e80170-004c-4e82-a88c-3e2166b169dd';
-  const userId = user?.id || 'test-user-id';
+  const organizationId = user?.organizationId;
+  const userId = user?.id;
 
   // Debug logging
   React.useEffect(() => {
@@ -121,8 +120,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const { isConnected, connectionStatus, error: realtimeError } = realtimeState;
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
-  // Fetch conversations using the useConversations hook with organizationId
-  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations(organizationId);
+  // Fetch conversations using the useConversations hook
+  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();

@@ -537,6 +537,54 @@ export function withPublic<T extends Record<string, string | string[]> = Record<
   };
 }
 
+/**
+ * User-authenticated API routes - requires valid user session but NOT organizationId
+ * Used for organization setup endpoints like set-organization
+ */
+export function withUserAuth<T extends Record<string, string | string[]> = Record<string, string | string[]>>(
+  handler: AuthenticatedHandler<T>
+) {
+  return async (req: NextRequest, context: RouteContext<T>): Promise<Response> => {
+    try {
+      const authResult = await extractAuthFromRequest(req);
+
+      if (!authResult.success || !authResult.user) {
+        return createErrorResponse(authResult.error || "Authentication required", 401, "UNAUTHORIZED");
+      }
+
+      // For user-only auth, we don't require organizationId
+      // But we still validate organization access if organizationId is present
+      if (authResult.organizationId) {
+        const isWidgetUser =
+          authResult.user.user_metadata?.widget_session ||
+          authResult.user.id.startsWith("visitor_") ||
+          authResult.user.id.includes("widget_");
+        const orgValidation = await validateOrganizationAccess(
+          authResult.user.id,
+          authResult.organizationId,
+          isWidgetUser
+        );
+
+        if (!orgValidation.success) {
+          return createErrorResponse(orgValidation.error || "Organization access denied", 403, "FORBIDDEN");
+        }
+      }
+
+      // Create auth context (organizationId may be null)
+      const authContext: AuthContext = {
+        user: authResult.user,
+        organizationId: authResult.organizationId || null,
+        scopedClient: supabase.admin(),
+      };
+
+      return await handler(req, context, authContext);
+    } catch (error) {
+      console.error('[UnifiedAuth] Handler error:', error);
+      return createErrorResponse("Authentication failed", 500, "AUTH_ERROR");
+    }
+  };
+}
+
 // ============================================================================
 // LEGACY COMPATIBILITY
 // ============================================================================

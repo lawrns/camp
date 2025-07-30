@@ -619,8 +619,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           sessionCheckInterval: 30000
         });
 
-        // Use user endpoint to get complete user data including organizationId
-        const res = await fetch("/api/auth/user", {
+        // Use session endpoint to get user data without requiring organizationId
+        const res = await fetch("/api/auth/session", {
           credentials: "include",
           headers: {
             "Cache-Control": "no-cache",

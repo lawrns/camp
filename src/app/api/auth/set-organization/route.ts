@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { withAuth } from "@/lib/api/unified-auth";
+import { withUserAuth, withAuth } from "@/lib/api/unified-auth";
 import type { GetUserAvailableOrganizationsResult, SetActiveOrganizationResult } from "@/types/database-extensions";
 
 // Request validation schema
@@ -35,7 +35,7 @@ type SetOrganizationResponse = SetOrganizationSuccess | SetOrganizationError;
  * @param request - Contains organizationId in the request body
  * @returns Updated organization context or error
  */
-export const POST = withAuth(async (request: NextRequest, { params }, { user, organizationId, scopedClient }) => {
+export const POST = withUserAuth(async (request: NextRequest, { params }, { user, organizationId, scopedClient }) => {
   try {
     const userId = user.id;
 

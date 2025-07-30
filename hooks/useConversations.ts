@@ -39,11 +39,12 @@ export function useConversations() {
         .order("updated_at", { ascending: false });
 
       if (error) {
-
-
+        console.error("[useConversations] Supabase error:", error);
         throw error;
       }
 
+      console.log("[useConversations] Successfully fetched conversations:", data?.length || 0, "conversations");
+      console.log("[useConversations] Organization ID used:", organizationId);
       return data;
     },
     enabled: !!organizationId, // Only run query if organizationId is available
