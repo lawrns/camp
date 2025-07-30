@@ -208,32 +208,44 @@ async function verifySetup() {
 
   // Server connectivity check
   console.log('\n🌐 Checking server connectivity...');
-  try {
-    const response = await fetch('http://localhost:3005/health');
-    if (response.ok) {
-      console.log('✅ Development server is running');
-    } else {
-      console.log('⚠️  Development server responded but not OK');
-      warnings.push('Development server may not be running properly');
+  const ports = [3003, 3005, 3000]; // Check multiple common ports
+  let serverFound = false;
+  let serverPort = null;
+
+  for (const port of ports) {
+    try {
+      const response = await fetch(`http://localhost:${port}/widget-demo`);
+      if (response.ok) {
+        console.log(`✅ Development server is running on port ${port}`);
+        serverFound = true;
+        serverPort = port;
+        break;
+      }
+    } catch (error) {
+      // Continue to next port
     }
-  } catch (error) {
-    console.log('⚠️  Cannot connect to development server');
-    warnings.push('Development server is not running at localhost:3005');
+  }
+
+  if (!serverFound) {
+    console.log('⚠️  Cannot connect to development server on any common port');
+    warnings.push('Development server is not running on ports 3000, 3003, or 3005');
   }
 
   // Widget demo page check
-  console.log('\n🔧 Checking widget demo page...');
-  try {
-    const response = await fetch('http://localhost:3005/widget-demo');
-    if (response.ok) {
-      console.log('✅ Widget demo page is accessible');
-    } else {
-      console.log('⚠️  Widget demo page not accessible');
-      warnings.push('Widget demo page may not be working');
+  if (serverFound && serverPort) {
+    console.log('\n🔧 Checking widget demo page...');
+    try {
+      const response = await fetch(`http://localhost:${serverPort}/widget-demo`);
+      if (response.ok) {
+        console.log('✅ Widget demo page is accessible');
+      } else {
+        console.log('⚠️  Widget demo page not accessible');
+        warnings.push('Widget demo page may not be working');
+      }
+    } catch (error) {
+      console.log('⚠️  Cannot access widget demo page');
+      warnings.push('Widget demo page is not accessible');
     }
-  } catch (error) {
-    console.log('⚠️  Cannot access widget demo page');
-    warnings.push('Widget demo page is not accessible');
   }
 
   // Generate summary

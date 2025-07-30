@@ -18,12 +18,12 @@ export const DefinitiveButton: React.FC<DefinitiveButtonProps> = ({
       onClick={onClick}
       className={`
         fixed bottom-4 right-4 z-[9998]
-        w-14 h-14 bg-ds-color-primary-600 hover:bg-ds-color-primary-700
-        text-white ds-rounded-ds-full shadow-lg
+        w-14 h-14 bg-blue-600 hover:bg-blue-700
+        text-white rounded-full shadow-lg
         flex items-center justify-center
         transition-all duration-200 ease-out
         ${isOpen ? 'scale-95' : 'scale-100 hover:scale-105'}
-        focus:outline-none focus:ring-4 focus:ring-ds-color-primary-300
+        focus:outline-none focus:ring-4 focus:ring-blue-300
       `}
       data-testid="widget-button"
       data-campfire-widget-button
@@ -67,9 +67,9 @@ export const DefinitiveButton: React.FC<DefinitiveButtonProps> = ({
         </div>
       )}
 
-      {/* Pulse animation when closed */}
+      {/* Discrete pulse animation when closed */}
       {!isOpen && (
-        <div className="absolute inset-0 bg-primary rounded-ds-full animate-ping opacity-20"></div>
+        <div className="absolute inset-0 bg-blue-600 rounded-full animate-pulse opacity-10"></div>
       )}
     </button>
   );

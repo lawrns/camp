@@ -126,7 +126,7 @@ function Homepage() {
           <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
             {/* Left side - Content */}
             <div className="text-left">
-              <h1 className="text-5xl font-bold text-foreground">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
                 Transform Customer Service Into Your{" "}
                 <span className="bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-primary-700">
                   Competitive Advantage

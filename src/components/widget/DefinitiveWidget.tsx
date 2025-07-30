@@ -5,6 +5,7 @@ import { WidgetDebugger } from './debug/WidgetDebugger';
 import { useWidgetState } from './hooks/useWidgetState';
 import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
 import { ReadReceiptIndicator } from '../ui/ReadReceiptIndicator';
+import { useWidget } from './index';
 
 interface DefinitiveWidgetProps {
   organizationId: string;
@@ -12,11 +13,29 @@ interface DefinitiveWidgetProps {
 }
 
 export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetProps) {
+  console.log('[DefinitiveWidget] Component rendering with organizationId:', organizationId);
+
   const [messageText, setMessageText] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const [widgetError, setWidgetError] = useState<string | null>(null);
+
+  console.log('[DefinitiveWidget] About to call useWidget()');
+
+  // Get conversation ID from widget context
+  let contextConversationId = null;
+  try {
+    const widgetContext = useWidget();
+    contextConversationId = widgetContext.conversationId;
+    console.log('[DefinitiveWidget] Widget context:', widgetContext);
+    console.log('[DefinitiveWidget] Context conversation ID:', contextConversationId);
+    console.log('[DefinitiveWidget] Expected conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d');
+    console.log('[DefinitiveWidget] Context matches expected:', contextConversationId === '48eedfba-2568-4231-bb38-2ce20420900d');
+  } catch (error) {
+    console.error('[DefinitiveWidget] Error getting widget context:', error);
+    contextConversationId = null;
+  }
 
   const {
     state: widgetState,
@@ -26,7 +45,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     sendMessage,
     openWidget,
     initializeConversation
-  } = useWidgetState(organizationId);
+  } = useWidgetState(organizationId, contextConversationId || undefined);
 
   // Read receipts functionality
   const readerId = `visitor-${Date.now()}`; // TODO: Get from proper visitor identification

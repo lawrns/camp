@@ -23,6 +23,7 @@ import {
 import { ChatView } from '@/components/chat/ChatView';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 
 interface Conversation {
   id: string;
@@ -68,6 +69,62 @@ export function InboxDashboard({
   useEffect(() => {
     loadConversations();
   }, [currentUserId, statusFilter, priorityFilter]);
+
+  // Set up real-time subscriptions
+  useEffect(() => {
+    console.log('[InboxDashboard] Setting up real-time subscriptions...');
+
+    // Subscribe to conversation updates for the organization
+    const conversationChannel = supabase
+      .channel('inbox-conversations')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'conversations'
+        },
+        (payload) => {
+          console.log('[InboxDashboard] Conversation update:', payload);
+          // Reload conversations when any conversation changes
+          loadConversations();
+        }
+      )
+      .subscribe();
+
+    // Subscribe to message updates for all conversations
+    const messageChannel = supabase
+      .channel('inbox-messages')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages'
+        },
+        (payload) => {
+          console.log('[InboxDashboard] Message update:', payload);
+          // Reload conversations when messages change to update last message
+          loadConversations();
+
+          // If we have a selected conversation and the message is for it, refresh the chat view
+          if (selectedConversation && payload.new && payload.new.conversation_id === selectedConversation.id) {
+            console.log('[InboxDashboard] Message for selected conversation, refreshing chat view');
+            // The ChatView component should handle its own real-time updates
+          }
+        }
+      )
+      .subscribe();
+
+    console.log('[InboxDashboard] Real-time subscriptions established');
+
+    // Cleanup subscriptions
+    return () => {
+      console.log('[InboxDashboard] Cleaning up real-time subscriptions');
+      conversationChannel.unsubscribe();
+      messageChannel.unsubscribe();
+    };
+  }, [selectedConversation]); // Re-subscribe when selected conversation changes
 
   const loadConversations = async () => {
     try {

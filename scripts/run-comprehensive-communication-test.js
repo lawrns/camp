@@ -92,17 +92,25 @@ class ComprehensiveTestRunner {
     }
 
     // Check if server is running
-    try {
-      const response = await fetch('http://localhost:3005/health');
-      if (response.ok) {
-        console.log('✅ Development server is running');
-      } else {
-        this.results.warnings.push('Development server may not be running properly');
-        console.log('⚠️  Development server response not OK');
+    const ports = [3003, 3005, 3000];
+    let serverFound = false;
+
+    for (const port of ports) {
+      try {
+        const response = await fetch(`http://localhost:${port}/widget-demo`);
+        if (response.ok) {
+          console.log(`✅ Development server is running on port ${port}`);
+          serverFound = true;
+          break;
+        }
+      } catch (error) {
+        // Continue to next port
       }
-    } catch (error) {
+    }
+
+    if (!serverFound) {
       this.results.warnings.push('Cannot connect to development server');
-      console.log('⚠️  Cannot connect to development server at localhost:3005');
+      console.log('⚠️  Cannot connect to development server on any common port');
     }
 
     console.log('✅ Pre-flight checks completed');

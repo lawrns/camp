@@ -77,6 +77,57 @@ button,
   white-space: nowrap !important;
 }
 
+/* Fix nested flex containers in buttons that cause text wrapping */
+button .flex.items-center,
+button .inline-flex.items-center,
+[role="button"] .flex.items-center,
+[role="button"] .inline-flex.items-center,
+.btn .flex.items-center,
+.btn .inline-flex.items-center,
+[class*="btn"] .flex.items-center,
+[class*="btn"] .inline-flex.items-center {
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Prevent flex-1 from causing layout conflicts in buttons */
+button .flex-1,
+[role="button"] .flex-1,
+.btn .flex-1,
+[class*="btn"] .flex-1 {
+  flex: none !important;
+  white-space: nowrap !important;
+}
+
+/* Fix specific nested span structure in unified buttons */
+button span.flex.items-center span.flex-1,
+[role="button"] span.flex.items-center span.flex-1,
+.btn span.flex.items-center span.flex-1,
+[class*="btn"] span.flex.items-center span.flex-1 {
+  flex: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* Ensure proper flex container behavior for button content */
+button span.flex.items-center,
+[role="button"] span.flex.items-center,
+.btn span.flex.items-center,
+[class*="btn"] span.flex.items-center {
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Ensure button content stays on single line */
+button span,
+[role="button"] span,
+.btn span,
+[class*="btn"] span {
+  white-space: nowrap !important;
+}
+
 /* Navigation elements */
 nav .flex.items-center,
 nav .inline-flex.items-center,
@@ -93,4 +144,42 @@ svg[class*="mx-"],
 [class*="icon"][class*="ml-"],
 [class*="icon"][class*="mx-"] {
   flex-shrink: 0 !important;
+}
+
+/* Fix common UI components with flex layout issues */
+/* Badges, chips, and similar small components */
+.badge .flex.items-center,
+.chip .flex.items-center,
+.tag .flex.items-center,
+[class*="badge"] .flex.items-center,
+[class*="chip"] .flex.items-center,
+[class*="tag"] .flex.items-center {
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Menu items and dropdown options */
+.menu-item .flex.items-center,
+.dropdown-item .flex.items-center,
+[role="menuitem"] .flex.items-center,
+[role="option"] .flex.items-center {
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Toolbar and action bar items */
+.toolbar .flex.items-center,
+.action-bar .flex.items-center,
+[class*="toolbar"] .flex.items-center,
+[class*="action"] .flex.items-center {
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Tab components */
+.tab .flex.items-center,
+[role="tab"] .flex.items-center,
+[class*="tab"] .flex.items-center {
+  white-space: nowrap !important;
+  flex-wrap: nowrap !important;
 }

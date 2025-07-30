@@ -6,15 +6,20 @@ import { useWidgetState } from './hooks/useWidgetState';
 
 interface DefinitiveWidgetProps {
   organizationId: string;
+  conversationId?: string;
   onClose?: () => void;
 }
 
-export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetProps) {
+export function DefinitiveWidget({ organizationId, conversationId, onClose }: DefinitiveWidgetProps) {
   const [messageText, setMessageText] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const [agentIsTyping, setAgentIsTyping] = useState(false);
+
+  console.log('[DefinitiveWidget] Props received:', { organizationId, conversationId });
+  console.log('[DefinitiveWidget] Expected conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d');
+  console.log('[DefinitiveWidget] Props match expected:', conversationId === '48eedfba-2568-4231-bb38-2ce20420900d');
 
   const {
     state: widgetState,
@@ -23,7 +28,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     sendMessage,
     openWidget,
     initializeConversation
-  } = useWidgetState(organizationId);
+  } = useWidgetState(organizationId, conversationId);
 
   // Initialize conversation when widget mounts
   useEffect(() => {

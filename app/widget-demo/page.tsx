@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Widget } from '@/components/widget';
+import { WidgetProvider } from '@/components/widget';
 
 /**
  * Widget Demo Page
@@ -9,6 +9,7 @@ import { Widget } from '@/components/widget';
  */
 export default function WidgetDemoPage() {
   const TEST_ORG_ID = 'b5e80170-004c-4e82-a88c-3e2166b169dd';
+  const TEST_CONVERSATION_ID = '48eedfba-2568-4231-bb38-2ce20420900d';
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -188,9 +189,12 @@ export default function WidgetDemoPage() {
       </div>
 
       {/* Widget Component */}
-      <Widget organizationId={TEST_ORG_ID}>
+      <WidgetProvider
+        organizationId={TEST_ORG_ID}
+        conversationId={TEST_CONVERSATION_ID}
+      >
         {/* Widget will render its own UI */}
-      </Widget>
+      </WidgetProvider>
 
       {/* Debug Script */}
       <script

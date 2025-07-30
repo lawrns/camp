@@ -88,9 +88,9 @@ export const UNIFIED_CHANNELS = {
   // ========================================
   // WIDGET LEVEL CHANNELS
   // ========================================
-  
-  /** Widget-specific conversation channel */
-  widget: (orgId: string, convId: string) => `org:${orgId}:widget:${convId}`,
+
+  /** Widget-specific conversation channel - UNIFIED with conversation channel */
+  widget: (orgId: string, convId: string) => `org:${orgId}:conv:${convId}`,
   
   /** Widget visitor tracking */
   widgetVisitor: (orgId: string, visitorId: string) => `org:${orgId}:widget:visitor:${visitorId}`,

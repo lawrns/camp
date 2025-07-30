@@ -1,0 +1,56 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="24.535936">
+<testsuite name="tests/widget-dashboard-final.spec.ts" timestamp="2025-07-30T23:15:43.059Z" hostname="chromium" tests="1" failures="0" skipped="0" time="23.987" errors="0">
+<testcase name="Final Widget-Dashboard Integration › should complete widget to dashboard message flow" classname="tests/widget-dashboard-final.spec.ts" time="23.987">
+<system-out>
+<![CDATA[🚀 Starting final widget-dashboard integration test...
+📊 Setting up authenticated dashboard...
+✅ Dashboard authenticated successfully
+✅ Dashboard inbox loaded
+🔧 Setting up widget...
+✅ Widget demo page loaded
+💬 Opening widget and sending message...
+✅ Widget button clicked
+✅ Widget panel opened
+📝 Message typed: "Final integration test - 1753917354562"
+📤 Send button clicked
+📡 Verifying message via APIs...
+Widget messages API: 200
+✅ Widget API working - found 20 messages
+Widget API has test message: ✅
+Dashboard messages API: 200
+✅ Dashboard API working - found 20 messages
+Dashboard API has test message: ✅
+👀 Checking dashboard UI for message...
+Message in dashboard UI: ❌
+Dashboard content preview: (self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,"5:\"$Sreact.fragment\"\n"])self.__next_f.push([1,"1e:I[\"[project]/components/system/ExtensionIsolationProvider.tsx [app-client] (ecmascript)\",[\"/_next/static/chunks/node_modules_%40supabase_node-fetch_browser_b1ac0bb2.js\",\"/_next/static/chunks/_ace03bd4._.js\",\"/_next/static/chunks/node_modules_next_99a0e110._.js\",\"/_next/static/chunks/node_modules_%40tanstack_query-core_build_modern_3ea24ffc._.js\",\"/_next/static/chunks/...
+Found 71 conversation elements in dashboard
+Found 10 message elements in dashboard
+🧪 Testing direct API message sending...
+API send status: 201
+✅ API message sent successfully
+Message ID: 414d71c5-96ab-4c3e-8e38-fbabc04f81d0
+Conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d
+🔍 Final verification...
+API message in dashboard UI: ❌
+📋 Final Integration Test Summary:
+✅ Dashboard authentication: Working
+✅ Widget loading: Working
+✅ Widget UI interaction: Working
+✅ Widget API: Working
+✅ Dashboard API: Working
+✅ Widget API has message: Yes
+✅ Dashboard API has message: Yes
+❌ Message in dashboard UI: No
+✅ Direct API send: Working
+❌ API message in dashboard UI: No
+🔍 DIAGNOSIS: API sync working, UI real-time updates not working
+   - Messages are being stored correctly in database
+   - Both widget and dashboard APIs can access messages
+   - Issue is likely in dashboard UI real-time updates
+   - Check Supabase Realtime channel subscriptions in dashboard
+🎉 Final widget-dashboard integration test completed!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

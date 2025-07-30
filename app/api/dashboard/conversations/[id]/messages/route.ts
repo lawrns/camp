@@ -5,17 +5,79 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { mapDbMessageToApi, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 
-// Authentication wrapper for dashboard endpoints
-async function withAuth(handler: (req: NextRequest, user: any, conversationId: string) => Promise<NextResponse>) {
+// Custom cookie parser that handles both base64 and JSON formats
+function createCompatibleCookieStore() {
+  const cookieStore = cookies();
+
+  return {
+    get: (name: string) => {
+      const cookie = cookieStore.get(name);
+      if (!cookie) return undefined;
+
+      let value = cookie.value;
+
+      // Handle base64-encoded cookies
+      if (typeof value === 'string' && value.startsWith('base64-')) {
+        try {
+          const base64Content = value.substring(7); // Remove 'base64-' prefix
+          const decoded = Buffer.from(base64Content, 'base64').toString('utf-8');
+          console.log('[Dashboard Auth] Decoded base64 cookie:', name, 'decoded length:', decoded.length);
+          value = decoded; // Keep as string, let Supabase parse it
+        } catch (error) {
+          console.warn('[Dashboard Auth] Failed to decode base64 cookie:', name, error);
+          return undefined;
+        }
+      }
+
+      return { name: cookie.name, value };
+    },
+    getAll: () => {
+      return cookieStore.getAll().map(cookie => {
+        let value = cookie.value;
+
+        // Handle base64-encoded cookies
+        if (typeof value === 'string' && value.startsWith('base64-')) {
+          try {
+            const base64Content = value.substring(7);
+            const decoded = Buffer.from(base64Content, 'base64').toString('utf-8');
+            value = decoded; // Keep as string, let Supabase parse it
+          } catch (error) {
+            console.warn('[Dashboard Auth] Failed to decode base64 cookie:', cookie.name, error);
+          }
+        }
+
+        return { ...cookie, value };
+      });
+    },
+    set: cookieStore.set?.bind(cookieStore),
+    delete: cookieStore.delete?.bind(cookieStore)
+  };
+}
+
+// Authentication wrapper for dashboard endpoints (FIXED: removed async from function declaration)
+function withAuth(handler: (req: NextRequest, user: any, conversationId: string) => Promise<NextResponse>) {
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
-      const cookieStore = cookies();
-      const supabaseClient = createRouteHandlerClient({ cookies: () => cookieStore });
+      console.log('[Dashboard withAuth] Starting authentication for conversation:', params.id);
+
+      // Use compatible cookie store that handles base64 format
+      const compatibleCookieStore = createCompatibleCookieStore();
+      const supabaseClient = createRouteHandlerClient({ cookies: () => compatibleCookieStore });
+
+      console.log('[Dashboard withAuth] Supabase client created with compatible cookie store, getting session...');
 
       // Require authentication for dashboard endpoints
       const { data: { session }, error: authError } = await supabaseClient.auth.getSession();
-      
+
+      console.log('[Dashboard withAuth] Session result:', {
+        hasSession: !!session,
+        hasError: !!authError,
+        userId: session?.user?.id,
+        errorMessage: authError?.message
+      });
+
       if (authError || !session) {
+        console.log('[Dashboard withAuth] Authentication failed');
         return NextResponse.json(
           { error: 'Authentication required', code: 'UNAUTHORIZED' },
           { status: 401 }
@@ -24,7 +86,10 @@ async function withAuth(handler: (req: NextRequest, user: any, conversationId: s
 
       // Get user organization
       const organizationId = session.user.user_metadata?.organization_id;
+      console.log('[Dashboard withAuth] Organization ID:', organizationId);
+
       if (!organizationId) {
+        console.log('[Dashboard withAuth] No organization ID found');
         return NextResponse.json(
           { error: 'Organization not found', code: 'FORBIDDEN' },
           { status: 403 }
@@ -38,9 +103,18 @@ async function withAuth(handler: (req: NextRequest, user: any, conversationId: s
         name: session.user.user_metadata?.name || session.user.email
       };
 
-      return await handler(request, user, params.id);
+      console.log('[Dashboard withAuth] Calling handler with user:', {
+        userId: user.userId,
+        organizationId: user.organizationId,
+        email: user.email
+      });
+
+      const result = await handler(request, user, params.id);
+      console.log('[Dashboard withAuth] Handler completed successfully');
+      return result;
     } catch (error) {
       console.error('[Dashboard Auth Error]:', error);
+      console.error('[Dashboard Auth Error] Stack:', error instanceof Error ? error.stack : 'No stack trace');
       return NextResponse.json(
         { error: 'Authentication failed', code: 'AUTH_ERROR' },
         { status: 500 }
@@ -51,14 +125,30 @@ async function withAuth(handler: (req: NextRequest, user: any, conversationId: s
 
 export const GET = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
   try {
+    console.log('[Dashboard Messages API] Starting request for conversation:', conversationId);
+
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '50');
     const offset = parseInt(searchParams.get('offset') || '0');
 
-    // Initialize Supabase client
-    const supabaseClient = supabase.admin();
+    console.log('[Dashboard Messages API] Query params:', { limit, offset });
+
+    // Initialize Supabase client with error handling
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.admin();
+      console.log('[Dashboard Messages API] Supabase client initialized');
+    } catch (clientError) {
+      console.error('[Dashboard Messages API] Failed to initialize Supabase client:', clientError);
+      return NextResponse.json(
+        { error: 'Database connection failed', code: 'DATABASE_CONNECTION_ERROR' },
+        { status: 500 }
+      );
+    }
 
     // Verify conversation exists and belongs to user's organization
+    console.log('[Dashboard Messages API] Checking conversation access for user:', user.organizationId);
+
     const { data: conversation, error: conversationError } = await supabaseClient
       .from('conversations')
       .select('id, organization_id')
@@ -67,13 +157,22 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
       .single();
 
     if (conversationError || !conversation) {
+      console.log('[Dashboard Messages API] Conversation not found or access denied:', {
+        conversationId,
+        organizationId: user.organizationId,
+        error: conversationError
+      });
       return NextResponse.json(
         { error: 'Conversation not found', code: 'NOT_FOUND' },
         { status: 404 }
       );
     }
 
+    console.log('[Dashboard Messages API] Conversation access verified');
+
     // Fetch messages for the conversation
+    console.log('[Dashboard Messages API] Fetching messages...');
+
     const { data: messages, error } = await supabaseClient
       .from('messages')
       .select('*')
@@ -90,9 +189,22 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
       );
     }
 
+    console.log('[Dashboard Messages API] Messages fetched:', messages?.length || 0);
+
     // Convert snake_case database response to camelCase API response
-    const apiMessages = mapDbMessagesToApi(messages || []);
-    return NextResponse.json({
+    let apiMessages;
+    try {
+      apiMessages = mapDbMessagesToApi(messages || []);
+      console.log('[Dashboard Messages API] Messages mapped successfully');
+    } catch (mappingError) {
+      console.error('[Dashboard Messages API] Message mapping error:', mappingError);
+      return NextResponse.json(
+        { error: 'Failed to process messages', code: 'PROCESSING_ERROR' },
+        { status: 500 }
+      );
+    }
+
+    const response = {
       messages: apiMessages,
       pagination: {
         limit,
@@ -100,10 +212,14 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
         total: apiMessages.length,
         hasMore: apiMessages.length === limit
       }
-    });
+    };
+
+    console.log('[Dashboard Messages API] Returning response with', apiMessages.length, 'messages');
+    return NextResponse.json(response);
 
   } catch (error) {
     console.error('[Dashboard Messages API] Unexpected error:', error);
+    console.error('[Dashboard Messages API] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     return NextResponse.json(
       { error: 'Internal server error', code: 'INTERNAL_ERROR' },
       { status: 500 }

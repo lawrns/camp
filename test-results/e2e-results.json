@@ -1,0 +1,365 @@
+{
+  "config": {
+    "configFile": "/Users/lukatenbosch/Downloads/campfire-v2/playwright.config.ts",
+    "rootDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/e2e-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/e2e-results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 7,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tests/widget-dashboard-final.spec.ts",
+      "file": "tests/widget-dashboard-final.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Final Widget-Dashboard Integration",
+          "file": "tests/widget-dashboard-final.spec.ts",
+          "line": 16,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should complete widget to dashboard message flow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23987,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting final widget-dashboard integration test...\n"
+                        },
+                        {
+                          "text": "📊 Setting up authenticated dashboard...\n"
+                        },
+                        {
+                          "text": "✅ Dashboard authenticated successfully\n"
+                        },
+                        {
+                          "text": "✅ Dashboard inbox loaded\n"
+                        },
+                        {
+                          "text": "🔧 Setting up widget...\n"
+                        },
+                        {
+                          "text": "✅ Widget demo page loaded\n"
+                        },
+                        {
+                          "text": "💬 Opening widget and sending message...\n"
+                        },
+                        {
+                          "text": "✅ Widget button clicked\n"
+                        },
+                        {
+                          "text": "✅ Widget panel opened\n"
+                        },
+                        {
+                          "text": "📝 Message typed: \"Final integration test - 1753917354562\"\n"
+                        },
+                        {
+                          "text": "📤 Send button clicked\n"
+                        },
+                        {
+                          "text": "📡 Verifying message via APIs...\n"
+                        },
+                        {
+                          "text": "Widget messages API: 200\n"
+                        },
+                        {
+                          "text": "✅ Widget API working - found 20 messages\n"
+                        },
+                        {
+                          "text": "Widget API has test message: ✅\n"
+                        },
+                        {
+                          "text": "Dashboard messages API: 200\n"
+                        },
+                        {
+                          "text": "✅ Dashboard API working - found 20 messages\n"
+                        },
+                        {
+                          "text": "Dashboard API has test message: ✅\n"
+                        },
+                        {
+                          "text": "👀 Checking dashboard UI for message...\n"
+                        },
+                        {
+                          "text": "Message in dashboard UI: ❌\n"
+                        },
+                        {
+                          "text": "Dashboard content preview: (self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"5:\\\"$Sreact.fragment\\\"\\n\"])self.__next_f.push([1,\"1e:I[\\\"[project]/components/system/ExtensionIsolationProvider.tsx [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/node_modules_%40supabase_node-fetch_browser_b1ac0bb2.js\\\",\\\"/_next/static/chunks/_ace03bd4._.js\\\",\\\"/_next/static/chunks/node_modules_next_99a0e110._.js\\\",\\\"/_next/static/chunks/node_modules_%40tanstack_query-core_build_modern_3ea24ffc._.js\\\",\\\"/_next/static/chunks/...\n"
+                        },
+                        {
+                          "text": "Found 71 conversation elements in dashboard\n"
+                        },
+                        {
+                          "text": "Found 10 message elements in dashboard\n"
+                        },
+                        {
+                          "text": "🧪 Testing direct API message sending...\n"
+                        },
+                        {
+                          "text": "API send status: 201\n"
+                        },
+                        {
+                          "text": "✅ API message sent successfully\n"
+                        },
+                        {
+                          "text": "Message ID: 414d71c5-96ab-4c3e-8e38-fbabc04f81d0\n"
+                        },
+                        {
+                          "text": "Conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d\n"
+                        },
+                        {
+                          "text": "🔍 Final verification...\n"
+                        },
+                        {
+                          "text": "API message in dashboard UI: ❌\n"
+                        },
+                        {
+                          "text": "📋 Final Integration Test Summary:\n"
+                        },
+                        {
+                          "text": "✅ Dashboard authentication: Working\n"
+                        },
+                        {
+                          "text": "✅ Widget loading: Working\n"
+                        },
+                        {
+                          "text": "✅ Widget UI interaction: Working\n"
+                        },
+                        {
+                          "text": "✅ Widget API: Working\n"
+                        },
+                        {
+                          "text": "✅ Dashboard API: Working\n"
+                        },
+                        {
+                          "text": "✅ Widget API has message: Yes\n"
+                        },
+                        {
+                          "text": "✅ Dashboard API has message: Yes\n"
+                        },
+                        {
+                          "text": "❌ Message in dashboard UI: No\n"
+                        },
+                        {
+                          "text": "✅ Direct API send: Working\n"
+                        },
+                        {
+                          "text": "❌ API message in dashboard UI: No\n"
+                        },
+                        {
+                          "text": "🔍 DIAGNOSIS: API sync working, UI real-time updates not working\n"
+                        },
+                        {
+                          "text": "   - Messages are being stored correctly in database\n"
+                        },
+                        {
+                          "text": "   - Both widget and dashboard APIs can access messages\n"
+                        },
+                        {
+                          "text": "   - Issue is likely in dashboard UI real-time updates\n"
+                        },
+                        {
+                          "text": "   - Check Supabase Realtime channel subscriptions in dashboard\n"
+                        },
+                        {
+                          "text": "🎉 Final widget-dashboard integration test completed!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-30T23:15:43.329Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "12a682a8b5f3d1ef0cdd-104fe731efadfce58719",
+              "file": "tests/widget-dashboard-final.spec.ts",
+              "line": 17,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-30T23:15:43.046Z",
+    "duration": 24535.935999999998,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

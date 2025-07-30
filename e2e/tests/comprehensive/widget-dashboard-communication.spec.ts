@@ -13,6 +13,7 @@ const TEST_CONFIG = {
   TEST_CONVERSATION_ID: '48eedfba-2568-4231-bb38-2ce20420900d',
   WIDGET_DEMO_URL: '/widget-demo',
   DASHBOARD_URL: '/dashboard',
+  BASE_URL: 'http://localhost:3003', // Updated to use correct port
   TIMEOUTS: {
     MESSAGE_DELIVERY: 15000,
     TYPING_INDICATOR: 5000,
@@ -127,12 +128,12 @@ class CommunicationTestRunner {
 
     try {
       // Navigate to login
-      await this.dashboardPage.goto('/auth/login');
-      
+      await this.dashboardPage.goto(`${TEST_CONFIG.BASE_URL}/login`);
+
       // Login as agent
-      await this.dashboardPage.fill('[data-testid="email-input"], #email, input[type="email"]', TEST_CONFIG.AGENT_EMAIL);
-      await this.dashboardPage.fill('[data-testid="password-input"], #password, input[type="password"]', TEST_CONFIG.AGENT_PASSWORD);
-      await this.dashboardPage.click('[data-testid="login-button"], button[type="submit"], button:has-text("Sign in")');
+      await this.dashboardPage.fill('#email', TEST_CONFIG.AGENT_EMAIL);
+      await this.dashboardPage.fill('#password', TEST_CONFIG.AGENT_PASSWORD);
+      await this.dashboardPage.click('button[type="submit"]');
       
       // Wait for dashboard
       await this.dashboardPage.waitForURL('**/dashboard', { timeout: 15000 });
@@ -162,7 +163,7 @@ class CommunicationTestRunner {
 
     try {
       // Navigate to widget demo
-      await this.widgetPage.goto(TEST_CONFIG.WIDGET_DEMO_URL);
+      await this.widgetPage.goto(`${TEST_CONFIG.BASE_URL}${TEST_CONFIG.WIDGET_DEMO_URL}`);
       
       // Open widget
       await this.widgetPage.click('[data-testid="widget-button"]');

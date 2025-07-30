@@ -31,11 +31,15 @@ export function useWidgetState(
   organizationId: string,
   initialConversationId?: string
 ): UseWidgetStateReturn {
+  console.log('[useWidgetState] Called with:', { organizationId, initialConversationId });
+  console.log('[useWidgetState] Expected conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d');
+  console.log('[useWidgetState] Received matches expected:', initialConversationId === '48eedfba-2568-4231-bb38-2ce20420900d');
+
   const [state, setState] = useState<WidgetState>({
     isOpen: false,
     conversationId: initialConversationId || null,
     organizationId,
-    isInitialized: false,
+    isInitialized: !!initialConversationId, // Initialize as true if we have a conversation ID
     error: null,
     debugMode: process.env.NODE_ENV === 'development'
   });
@@ -79,6 +83,18 @@ export function useWidgetState(
   const initializeConversation = useCallback(async () => {
     if (state.conversationId) {
       logDebug('Conversation already exists', { conversationId: state.conversationId });
+      return;
+    }
+
+    // If we have an initialConversationId, use it instead of creating a new one
+    if (initialConversationId) {
+      setState(prev => ({
+        ...prev,
+        conversationId: initialConversationId,
+        isInitialized: true,
+        error: null
+      }));
+      logDebug('Using provided conversation ID', { conversationId: initialConversationId });
       return;
     }
 

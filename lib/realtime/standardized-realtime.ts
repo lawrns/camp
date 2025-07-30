@@ -67,7 +67,8 @@ class ChannelManager {
     }
 
     try {
-      const client = supabase.browser();
+      // Use appropriate client based on environment
+      const client = typeof window !== 'undefined' ? supabase.browser() : supabase.admin();
       const channel = client.channel(name, {
         ...config,
         // Enhanced error handling for WebSocket connections

@@ -126,3 +126,6 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
 // Export the definitive components
 export { DefinitiveButton as Button, DefinitiveWidget as Panel };
 
+// Export Widget as an alias for WidgetProvider for convenience
+export { WidgetProvider as Widget };
+

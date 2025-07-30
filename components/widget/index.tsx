@@ -90,6 +90,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
             {isOpen && (
               <DefinitiveWidget
                 organizationId={organizationId}
+                conversationId={conversationId}
                 onClose={() => setIsOpen(false)}
               />
             )}
