@@ -22,7 +22,7 @@ import MessageList from "./sub-components/MessageList";
 import ShortcutsModal from "./sub-components/ShortcutsModal";
 // Import types
 import type { AISuggestion, Conversation, FileAttachment } from "./types";
-import { debounce } from "./utils/channelUtils";
+import { debounce, mapConversation } from "./utils/channelUtils";
 import { handleFileDrop, handleFileInput } from "./utils/fileUtils";
 // NEW: Import dialog components
 import { AssignmentPanel } from "@/components/conversations/AssignmentPanel";
@@ -97,7 +97,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
   // Fetch conversations using the useConversations hook
-  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
+  const { conversations: rawConversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
+
+  // Process conversations with our name generation and other fixes
+  const conversations = React.useMemo(() => {
+    return (rawConversations || []).map(mapConversation);
+  }, [rawConversations]);
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
