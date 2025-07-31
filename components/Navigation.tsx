@@ -64,11 +64,11 @@ export function Navigation() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * (index + 1) }}
+                  whileHover={{ y: -2 }}
                 >
                   <Link
                     href={`/${item.toLowerCase()}`}
                     className="text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text)] px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    whileHover={{ y: -2 }}
                   >
                     {item}
                   </Link>

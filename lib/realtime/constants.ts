@@ -38,6 +38,7 @@ export type RealtimeEventType = (typeof REALTIME_EVENTS)[keyof typeof REALTIME_E
 
 /**
  * Channel Name Generators
+ * @deprecated Use UNIFIED_CHANNELS from @/lib/realtime/unified-channel-standards instead
  */
 export const CHANNELS = {
   organization: (orgId: string) => `org:${orgId}`,

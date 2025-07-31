@@ -68,6 +68,8 @@ export function getBrowserClient() {
       realtime: {
         params: {
           eventsPerSecond: 10,
+          // Add apikey for WebSocket authentication
+          apikey: env.anonKey,
         },
         heartbeatIntervalMs: 30000,
         reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
@@ -90,6 +92,43 @@ export function getBrowserClient() {
   }
 
   return browserClient;
+}
+
+/**
+ * Get widget client (browser-side only)
+ */
+function getWidgetClient() {
+  if (typeof window === "undefined") {
+    throw new Error("Widget client can only be used in browser environment");
+  }
+
+  const env = getEnv();
+
+  // Create widget-specific client with dedicated storage key
+  return createBrowserClient<Database>(env.url, env.anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      storageKey: 'supabase-widget-session',
+      detectSessionInUrl: false, // Disable for widget context
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+        // Add apikey for WebSocket authentication
+        apikey: env.anonKey,
+      },
+      heartbeatIntervalMs: 30000,
+      reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
+      timeout: 20000,
+    },
+    global: {
+      headers: {
+        'X-Client-Info': 'campfire-widget',
+        'X-Client-Version': '2.0.0'
+      }
+    }
+  });
 }
 
 /**
@@ -157,6 +196,7 @@ function getServerClient(cookies: any) {
 // Main export - simple and clean
 export const supabase = {
   browser: getBrowserClient,
+  widget: getWidgetClient,
   server: getServerClient,
   admin: getServiceClient,
 };

@@ -1,45 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 import { mapDbMessageToApi, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
+import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
 
-// Simplified optional auth wrapper for widget endpoints
-async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promise<NextResponse>) {
-  return async (request: NextRequest) => {
-    try {
-      const cookieStore = cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+// Widget authentication using unified Supabase sessions
 
-      // Try to get authentication, but don't require it
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
-      
-      let user = undefined;
-      if (!authError && session) {
-        const organizationId = session.user.user_metadata?.organization_id;
-        if (organizationId) {
-          user = {
-            userId: session.user.id,
-            organizationId,
-            email: session.user.email
-          };
-        }
-      }
-
-      return await handler(request, user);
-    } catch (error) {
-      console.error('[Auth Error]:', error);
-      return await handler(request, undefined);
-    }
-  };
-}
-
-export async function GET(request: NextRequest) {
+export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
-    const organizationId = request.headers.get('x-organization-id');
+    const organizationId = getOrganizationId(request, auth);
 
     if (!conversationId || !organizationId) {
       return NextResponse.json(
@@ -78,13 +49,13 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const body = await request.json();
     const { conversationId, content, senderEmail, senderName, senderType = 'customer' } = body;
-    const organizationId = request.headers.get('x-organization-id');
+    const organizationId = getOrganizationId(request, auth);
 
     // Validate required fields
     if (!conversationId || !content || !organizationId) {
@@ -202,4 +173,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});

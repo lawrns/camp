@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 
 export interface ReadReceiptStatus {
   messageId: string;
@@ -25,7 +25,8 @@ export interface UseReadReceiptsReturn {
 export function useReadReceipts(
   conversationId: string | undefined,
   organizationId: string,
-  readerId: string
+  readerId: string,
+  getAuthHeaders?: () => Promise<Record<string, string>>
 ): UseReadReceiptsReturn {
   const [readReceipts, setReadReceipts] = useState<Record<string, ReadReceiptStatus>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -77,16 +78,19 @@ export function useReadReceipts(
     if (!conversationId || !organizationId || messageIds.length === 0) return;
 
     try {
+      // Get authorization headers from auth hook
+      const authHeaders = getAuthHeaders ? await getAuthHeaders() : {};
+
       const response = await fetch('/api/widget/read-receipts', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          ...authHeaders,
           'X-Organization-ID': organizationId,
         },
         body: JSON.stringify({
           messageIds,
           conversationId,
-          readerId: currentReaderId,
+          readerId: readerId,
           readerType: 'visitor',
           sessionId: `session-${Date.now()}`,
           deviceId: `device-${navigator.userAgent.slice(0, 20)}`,
@@ -147,7 +151,7 @@ export function useReadReceipts(
   useEffect(() => {
     if (!conversationId || !organizationId) return;
 
-    const client = supabase.browser();
+    const client = supabase.widget();
     const channelName = UNIFIED_CHANNELS.conversation(organizationId, conversationId);
 
     console.log('[useReadReceipts] Setting up real-time subscription:', channelName);

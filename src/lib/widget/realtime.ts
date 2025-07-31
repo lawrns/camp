@@ -39,8 +39,8 @@ export class WidgetRealtimeClient {
 
   constructor(config: WidgetRealtimeConfig) {
     this.config = config;
-    // Use the browser client with the special realtime token
-    this.supabase = supabase.browser();
+    // Use the widget-specific client with dedicated storage
+    this.supabase = supabase.widget();
   }
 
   async connect(): Promise<void> {

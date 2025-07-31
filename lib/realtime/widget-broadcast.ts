@@ -3,7 +3,7 @@
  * Handles real-time broadcasting for widget messages
  */
 
-import { createWidgetClient } from "@/lib/supabase/widget-client";
+import { supabase } from "@/lib/supabase";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
 // Keep track of active channels with metadata for proper cleanup
@@ -34,8 +34,8 @@ const cleanupInterval = setInterval(() => {
     const channelInfo = activeChannels.get(name);
     if (channelInfo) {
       try {
-        const supabase = createWidgetClient();
-        supabase.removeChannel(channelInfo.channel);
+        const widgetClient = supabase.widget();
+        widgetClient.removeChannel(channelInfo.channel);
         activeChannels.delete(name);
 
       } catch (error) {
@@ -60,14 +60,14 @@ export async function widgetBroadcast(
 
   for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt++) {
     try {
-      const supabase = createWidgetClient();
+      const widgetClient = supabase.widget();
 
       // Get or create channel with improved management
       let channelInfo = activeChannels.get(channelName);
 
       if (!channelInfo) {
         // Create new channel with proper configuration
-        const channel = supabase.channel(channelName, {
+        const channel = widgetClient.channel(channelName, {
           config: {
             broadcast: {
               self: false, // Don't receive own messages
@@ -131,7 +131,7 @@ export async function widgetBroadcast(
       let orgChannelInfo = activeChannels.get(orgChannelName);
 
       if (!orgChannelInfo) {
-        const orgChannel = supabase.channel(orgChannelName);
+        const orgChannel = widgetClient.channel(orgChannelName);
         await new Promise<void>((resolve) => {
           orgChannel.subscribe((status: string) => {
             if (status === "SUBSCRIBED") {

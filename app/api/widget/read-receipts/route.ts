@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
+import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
 
 /**
  * Widget Read Receipts API
  * Handles read receipt tracking for widget messages
  */
 
-export async function POST(request: NextRequest) {
+export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const body = await request.json();
-    const organizationId = request.headers.get('x-organization-id');
+    const organizationId = getOrganizationId(request, auth);
 
     if (!organizationId) {
       return NextResponse.json(
@@ -195,12 +196,12 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
 
-export async function GET(request: NextRequest) {
+export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const { searchParams } = new URL(request.url);
-    const organizationId = request.headers.get('x-organization-id');
+    const organizationId = getOrganizationId(request, auth);
     const conversationId = searchParams.get('conversationId');
     const messageId = searchParams.get('messageId');
     const readerId = searchParams.get('readerId');
@@ -295,4 +296,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});

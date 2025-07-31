@@ -8,17 +8,20 @@
 import { supabase } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
+import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
+
 // Standardized channel naming convention
+// @deprecated Use UNIFIED_CHANNELS directly instead
 export const CHANNEL_PATTERNS = {
   // Organization-level channels
-  ORGANIZATION: (orgId: string) => `org:${orgId}`,
-  conversations: (orgId: string) => `org:${orgId}:conversations`,
+  ORGANIZATION: (orgId: string) => UNIFIED_CHANNELS.organization(orgId),
+  conversations: (orgId: string) => UNIFIED_CHANNELS.conversations(orgId),
   ORGANIZATION_MESSAGES: (orgId: string) => `org:${orgId}:messages`,
 
   // Conversation-level channels
-  conversation: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}`,
+  conversation: (orgId: string, convId: string) => UNIFIED_CHANNELS.conversation(orgId, convId),
   CONVERSATION_MESSAGES: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:messages`,
-  CONVERSATION_TYPING: (orgId: string, convId: string) => `org:${orgId}:conversation:${convId}:typing`,
+  CONVERSATION_TYPING: (orgId: string, convId: string) => UNIFIED_CHANNELS.conversationTyping(orgId, convId),
 
   // User-specific channels
   USER_PRESENCE: (orgId: string, userId: string) => `org:${orgId}:user:${userId}:presence`,

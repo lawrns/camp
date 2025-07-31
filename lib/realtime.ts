@@ -282,6 +282,7 @@ class RealtimeManager {
     agentId: string,
     callback: (payload: any) => void
   ): RealtimeChannel {
+    // TODO: Update to use UNIFIED_CHANNELS when organization context is available
     const channelName = `handoffs:${agentId}`;
     
     if (this.channels.has(channelName)) {

@@ -1,5 +1,6 @@
 // Channel utilities for Supabase real-time communication
 
+import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
 import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
 
 /**
@@ -16,11 +17,13 @@ export const getChannelName = (
 ): string => {
   switch (type) {
     case "conversations":
-      return `org:${organizationId}:conversations`;
+      return UNIFIED_CHANNELS.conversations(organizationId);
     case "conversation":
-      return `org:${organizationId}:conv:${conversationId}`;
+      if (!conversationId) throw new Error('Conversation ID required for conversation channel');
+      return UNIFIED_CHANNELS.conversation(organizationId, conversationId);
     case "typing":
-      return `org:${organizationId}:typing:${conversationId}`;
+      if (!conversationId) throw new Error('Conversation ID required for typing channel');
+      return UNIFIED_CHANNELS.conversationTyping(organizationId, conversationId);
     default:
       throw new Error(`Unknown channel type: ${type}`);
   }
