@@ -220,7 +220,7 @@ export function useWidgetState(
       logDebug('Message send failed', { error: errorMessage });
       throw error;
     }
-  }, [state.conversationId, initializeConversation, sendMessageViaHook, logDebug]);
+  }, [state.conversationId, initializeConversation, sendMessageViaHook]); // Removed logDebug to prevent infinite re-renders
 
   // Update error state when messages error changes
   useEffect(() => {
@@ -228,7 +228,7 @@ export function useWidgetState(
       setState(prev => ({ ...prev, error: messagesError }));
       logDebug('Messages error', { error: messagesError });
     }
-  }, [messagesError, logDebug]);
+  }, [messagesError]); // Removed logDebug to prevent infinite re-renders
 
   // Debug mode setter
   const setDebugMode = useCallback((enabled: boolean) => {
@@ -246,12 +246,12 @@ export function useWidgetState(
       }));
       logDebug('Initialized with provided conversation ID', { conversationId: initialConversationId });
     }
-  }, [initialConversationId, logDebug]);
+  }, [initialConversationId]); // Removed logDebug to prevent infinite re-renders
 
   // Log state changes
   useEffect(() => {
     logDebug('State updated', state);
-  }, [state, logDebug]);
+  }, [state]); // Removed logDebug to prevent infinite re-renders
 
   return {
     state,

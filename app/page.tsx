@@ -36,12 +36,24 @@ export default function HomePage() {
             organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
             debug={true}
             config={{
-              organizationName: "Jam Test Organization",
-              primaryColor: "#3B82F6",
-              welcomeMessage: "Hi! 👋 Welcome to Jam Test Organization. How can we help you today?",
+              organizationName: "Campfire Support",
+              primaryColor: "#3b82f6",
+              position: "bottom-right",
+              welcomeMessage: "Hi! How can we help you today?",
+              showWelcomeMessage: true,
+              enableFAQ: true,
+              enableHelp: true,
               contactInfo: {
-                email: "jam@jam.com",
-                website: "https://campfire.com",
+                email: "support@campfire.com",
+                businessHours: {
+                  monday: "9:00 AM - 6:00 PM",
+                  tuesday: "9:00 AM - 6:00 PM",
+                  wednesday: "9:00 AM - 6:00 PM",
+                  thursday: "9:00 AM - 6:00 PM",
+                  friday: "9:00 AM - 6:00 PM",
+                  saturday: "Closed",
+                  sunday: "Closed"
+                }
               }
             }}
           />

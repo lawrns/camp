@@ -1,7 +1,7 @@
 // Header component for inbox dashboard
 
 import { useAuth } from "@/hooks/useAuth";
-import { Bell, Filter, MagnifyingGlass, Menu, Plus, SortAscending, SortDescending, X } from "@phosphor-icons/react";
+import { Bell, Funnel, MagnifyingGlass, List, Plus, SortAscending, SortDescending, X } from "@phosphor-icons/react";
 import * as React from "react";
 import { useRef, useState } from "react";
 import { Icon } from "@/lib/ui/Icon";
@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : "bg-background border-[var(--fl-color-border-strong)] text-foreground hover:bg-background"
               }`}
             >
-              <Filter className="h-4 w-4" />
+              <Funnel className="h-4 w-4" />
               Filters
               {activeFilters > 0 && (
                 <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
@@ -153,7 +153,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="p-2 text-gray-400 hover:text-foreground transition-colors"
             title="Keyboard shortcuts"
           >
-            <Icon icon={Menu} className="h-5 w-5" />
+            <Icon icon={List} className="h-5 w-5" />
           </button>
 
           {/* New conversation */}
@@ -171,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setShowMobileMenu(!showMobileMenu)}
             className="p-2 text-gray-400 hover:text-foreground transition-colors"
           >
-            <Menu className="h-6 w-6" />
+            <List className="h-6 w-6" />
           </button>
           <h1 className="text-lg font-semibold text-gray-900">Inbox</h1>
         </div>

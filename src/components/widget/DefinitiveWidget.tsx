@@ -20,6 +20,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const [widgetError, setWidgetError] = useState<string | null>(null);
+  const [demoAgentIsTyping, setDemoAgentIsTyping] = useState(false);
 
   console.log('[DefinitiveWidget] About to call useWidget()');
 
@@ -60,7 +61,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
   // Auto-mark messages as read when they come into view
   const messageIds = messages.map(m => m.id?.toString()).filter(Boolean) as string[];
   useAutoMarkAsRead(messageIds, readerId, markAsRead, {
-    enabled: widgetState.isOpen && !isMinimized,
+    enabled: !isMinimized, // Widget is always open when this component is mounted
     delay: 1500, // Wait 1.5 seconds before marking as read
     threshold: 0.6 // 60% of message must be visible
   });
@@ -77,7 +78,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
         // Don't throw the error - just log it and continue
       });
     }
-  }, [widgetState.conversationId, initializeConversation]);
+  }, []); // Only run on mount - removed dependencies to prevent infinite re-renders
 
   // Debug logging for messages
   useEffect(() => {
@@ -235,10 +236,10 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           <button
             onClick={() => {
               // Demo: Toggle agent typing indicator
-              setAgentIsTyping(!agentIsTyping);
-              if (!agentIsTyping) {
+              setDemoAgentIsTyping(!demoAgentIsTyping);
+              if (!demoAgentIsTyping) {
                 // Auto-stop after 5 seconds
-                setTimeout(() => setAgentIsTyping(false), 5000);
+                setTimeout(() => setDemoAgentIsTyping(false), 5000);
               }
             }}
             className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"

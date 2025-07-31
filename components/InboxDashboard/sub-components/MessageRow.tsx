@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
-import { Clock, Download, Eye, Heart, MoreHorizontal, Reply, Share, ThumbsUp } from "@phosphor-icons/react";
+import { Clock, Download, Eye, Heart, DotsThree, ArrowBendUpLeft, Share, ThumbsUp } from "@phosphor-icons/react";
 import * as React from "react";
 import { useState } from "react";
 import type { Message } from "../types";
@@ -106,7 +106,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
       {showAvatar && (
         <div className="flex-shrink-0" data-testid="message-avatar">
           <img
-            src={getAvatarPath(message.sender_email || message.sender_name, "user")}
+            src={getAvatarPath(message.sender_name, "customer")}
             alt={message.sender_name}
             className="h-8 w-8 rounded-ds-full object-cover"
           />
@@ -144,7 +144,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
             title="Reply"
             data-testid="message-reply"
           >
-            <Reply className="h-3 w-3" />
+            <ArrowBendUpLeft className="h-3 w-3" />
           </button>
           <button
             onClick={() => onReact?.(message.id, "like")}
@@ -176,25 +176,12 @@ export const MessageRow: React.FC<MessageRowProps> = ({
             title="More options"
             data-testid="message-more"
           >
-            <MoreHorizontal className="h-3 w-3" />
+            <DotsThree className="h-3 w-3" />
           </button>
         </div>
 
-        {/* Message reactions */}
-        {message.reactions && message.reactions.length > 0 && (
-          <div className="flex items-center gap-1 mt-1" data-testid="message-reactions">
-            {message.reactions.map((reaction, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center gap-1 rounded-ds-full bg-gray-100 px-2 py-1 text-xs"
-                data-testid={`message-reaction-${index}`}
-              >
-                <span data-testid={`message-reaction-emoji-${index}`}>{reaction.emoji}</span>
-                <span data-testid={`message-reaction-count-${index}`}>{reaction.count}</span>
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Message reactions - disabled as reactions property doesn't exist on Message type */}
+        {/* TODO: Add reactions support when Message type is updated */}
 
         {/* Message attachments */}
         {message.attachments && message.attachments.length > 0 && (
@@ -211,7 +198,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
                 className="ml-auto hover:bg-background rounded p-1 text-gray-400 transition-colors"
                 data-testid="close-reactions"
               >
-                <MoreHorizontal className="h-4 w-4" />
+                <DotsThree className="h-4 w-4" />
               </button>
             </div>
             <div className="flex items-center gap-2 mt-2" data-testid="reactions-options">

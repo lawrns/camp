@@ -9,226 +9,161 @@ import {
   X, 
   Minus,
   ArrowsOut,
-  ArrowsIn
+  ArrowsIn,
+  PaperPlaneTilt
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { sanitizeInput } from '@/lib/security/input-sanitization';
-import { logWidgetEvent } from '@/lib/monitoring/widget-logger';
-import { useWidgetRealtime } from './useWidgetRealtime';
-import { WidgetMessageList, WidgetWelcomeMessage } from './WidgetMessageList';
-import { WidgetMessageComposer } from './WidgetMessageComposer';
-import { WidgetMessage } from './WidgetMessageBubble';
-import { WidgetFAQTab } from './WidgetFAQTab';
-import { WidgetHelpTab } from './WidgetHelpTab';
+import { WidgetConfig } from './EnhancedWidgetProvider';
 
-// Widget configuration interface
-export interface WidgetConfig {
-  organizationName: string;
-  primaryColor?: string;
-  position?: 'bottom-right' | 'bottom-left';
-  welcomeMessage?: string;
-  showWelcomeMessage?: boolean;
-  enableFAQ?: boolean;
-  enableHelp?: boolean;
-  contactInfo?: {
-    phone?: string;
-    email?: string;
-    website?: string;
-    address?: string;
-    businessHours?: any;
-  };
+interface EnhancedWidgetProps {
+  organizationId: string;
+  config: WidgetConfig;
+  debug?: boolean;
 }
 
-// Widget state interface
 interface WidgetState {
   isOpen: boolean;
   isMinimized: boolean;
   isExpanded: boolean;
   activeTab: 'chat' | 'faq' | 'help';
-  messages: WidgetMessage[];
-  isTyping: boolean;
-  unreadCount: number;
+  conversationId?: string;
 }
 
-interface EnhancedWidgetProps {
-  config: WidgetConfig;
-  organizationId: string;
-  onSendMessage?: (content: string, attachments?: File[]) => Promise<void>;
-  onStartTyping?: () => void;
-  onStopTyping?: () => void;
-  className?: string;
+interface Message {
+  id: string;
+  content: string;
+  sender: 'user' | 'agent' | 'system';
+  timestamp: Date;
+  isTyping?: boolean;
 }
 
-export function EnhancedWidget({
-  config,
+export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   organizationId,
-  onSendMessage,
-  onStartTyping,
-  onStopTyping,
-  className,
-}: EnhancedWidgetProps) {
+  config,
+  debug = false
+}) => {
   const [state, setState] = useState<WidgetState>({
     isOpen: false,
     isMinimized: false,
     isExpanded: false,
-    activeTab: 'chat',
-    messages: [],
-    isTyping: false,
-    unreadCount: 0,
+    activeTab: 'chat'
   });
 
-  // Real-time messaging integration
-  const {
-    isConnected,
-    conversationId,
-    isInitializing,
-    initializationError,
-    sendMessage: sendRealtimeMessage,
-    sendTypingIndicator,
-  } = useWidgetRealtime({
-    organizationId,
-    onMessage: (message) => {
-      setState(prev => ({
-        ...prev,
-        messages: [...prev.messages, message],
-        unreadCount: prev.isOpen ? 0 : prev.unreadCount + 1,
-      }));
-    },
-    onTyping: (isTyping, userName) => {
-      setState(prev => ({ ...prev, isTyping }));
-    },
-    onConnectionChange: (connected) => {
-      logWidgetEvent('widget_connection_status', { connected });
-    },
-    onMessageStatusUpdate: (messageId, status) => {
-      setState(prev => ({
-        ...prev,
-        messages: prev.messages.map(msg =>
-          msg.id === messageId ? { ...msg, status: status as any } : msg
-        ),
-      }));
-    },
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize with welcome message
+  // Initialize conversation
   useEffect(() => {
-    if (config.showWelcomeMessage !== false) {
-      const welcomeMessage: WidgetMessage = {
-        id: 'welcome',
-        content: config.welcomeMessage || `Hi! 👋 Welcome to ${config.organizationName}. How can we help you today?`,
-        senderType: 'agent',
-        senderName: 'Support Team',
-        timestamp: new Date().toISOString(),
-        status: 'sent',
-      };
-      setState(prev => ({ ...prev, messages: [welcomeMessage] }));
+    if (state.isOpen && !state.conversationId) {
+      initializeConversation();
     }
-  }, [config.welcomeMessage, config.organizationName, config.showWelcomeMessage]);
+  }, [state.isOpen]);
 
-  // Handle widget toggle
+  const initializeConversation = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/widget/conversations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          organizationId,
+          visitorId: `visitor-${Date.now()}`,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setState(prev => ({ ...prev, conversationId: data.conversationId }));
+        
+        // Add welcome message
+        if (config.showWelcomeMessage && config.welcomeMessage) {
+          setMessages([{
+            id: 'welcome',
+            content: config.welcomeMessage,
+            sender: 'system',
+            timestamp: new Date()
+          }]);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to initialize conversation:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!inputValue.trim() || !state.conversationId) return;
+
+    const userMessage: Message = {
+      id: `msg-${Date.now()}`,
+      content: inputValue,
+      sender: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsTyping(true);
+
+    try {
+      const response = await fetch('/api/widget/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          conversationId: state.conversationId,
+          content: inputValue,
+          senderType: 'visitor'
+        }),
+      });
+
+      if (response.ok) {
+        // Simulate agent response
+        setTimeout(() => {
+          const agentMessage: Message = {
+            id: `agent-${Date.now()}`,
+            content: "Thanks for your message! An agent will respond shortly.",
+            sender: 'agent',
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, agentMessage]);
+          setIsTyping(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      setIsTyping(false);
+    }
+  };
+
   const toggleWidget = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      isOpen: !prev.isOpen,
-      unreadCount: prev.isOpen ? prev.unreadCount : 0, // Clear unread when opening
-    }));
+    setState(prev => ({ ...prev, isOpen: !prev.isOpen }));
   }, []);
 
-  // Handle minimize/restore
-  const toggleMinimize = useCallback(() => {
+  const minimizeWidget = useCallback(() => {
     setState(prev => ({ ...prev, isMinimized: !prev.isMinimized }));
   }, []);
 
-  // Handle expand/collapse
-  const toggleExpand = useCallback(() => {
+  const expandWidget = useCallback(() => {
     setState(prev => ({ ...prev, isExpanded: !prev.isExpanded }));
   }, []);
 
-  // Handle tab change
-  const changeTab = useCallback((tab: 'chat' | 'faq' | 'help') => {
-    setState(prev => ({ ...prev, activeTab: tab }));
+  const closeWidget = useCallback(() => {
+    setState(prev => ({ ...prev, isOpen: false }));
   }, []);
 
-  // Handle message send with security and monitoring
-  const handleSendMessage = useCallback(async (content: string, attachments?: File[]) => {
-    try {
-      // Sanitize input content
-      const sanitizedContent = sanitizeInput(content);
-
-      // Log widget event
-      logWidgetEvent('message_sent', {
-        organizationName: config.organizationName,
-        messageLength: content.length,
-        hasAttachments: (attachments?.length || 0) > 0,
-        timestamp: new Date().toISOString(),
-      });
-
-      const newMessage: WidgetMessage = {
-        id: `msg-${Date.now()}`,
-        content: sanitizedContent,
-        senderType: 'user',
-        senderName: 'You',
-        timestamp: new Date().toISOString(),
-        status: 'sending',
-        attachments: attachments?.map((file, index) => ({
-          id: `att-${index}`,
-          type: file.type.startsWith('image/') ? 'image' : 'file',
-          url: URL.createObjectURL(file),
-          name: file.name,
-          size: file.size,
-        })) || [],
-      };
-
-      // Add optimistic message to UI
-      setState(prev => ({
-        ...prev,
-        messages: [...prev.messages, newMessage],
-      }));
-
-      // Send via real-time system
-      const sentMessage = await sendRealtimeMessage(sanitizedContent, attachments);
-
-      // Replace optimistic message with real message
-      setState(prev => ({
-        ...prev,
-        messages: prev.messages.map(msg =>
-          msg.id === newMessage.id
-            ? { ...newMessage, id: sentMessage.id, status: 'sent' }
-            : msg
-        ),
-      }));
-
-      // Also call the optional callback
-      await onSendMessage?.(content, attachments);
-
-    } catch (error) {
-      // Update message status to failed
-      setState(prev => ({
-        ...prev,
-        messages: prev.messages.map(msg =>
-          msg.status === 'sending' ? { ...msg, status: 'failed' } : msg
-        ),
-      }));
-      throw error;
-    }
-  }, [sendRealtimeMessage, onSendMessage, config.organizationName]);
-
-  // Handle start chat from other tabs
-  const handleStartChat = useCallback(() => {
-    changeTab('chat');
-  }, [changeTab]);
-
-  // Handle typing indicators
-  const handleStartTyping = useCallback(() => {
-    sendTypingIndicator(true);
-    onStartTyping?.();
-  }, [sendTypingIndicator, onStartTyping]);
-
-  const handleStopTyping = useCallback(() => {
-    sendTypingIndicator(false);
-    onStopTyping?.();
-  }, [sendTypingIndicator, onStopTyping]);
+  const switchTab = useCallback((tab: 'chat' | 'faq' | 'help') => {
+    setState(prev => ({ ...prev, activeTab: tab }));
+  }, []);
 
   // Get widget size classes
   const getWidgetSizeClasses = () => {
@@ -249,39 +184,133 @@ export function EnhancedWidget({
     }
   };
 
+  const renderChatTab = () => (
+    <div className="flex flex-col h-full">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={cn(
+              "flex",
+              message.sender === 'user' ? "justify-end" : "justify-start"
+            )}
+          >
+            <div
+              className={cn(
+                "max-w-[80%] rounded-lg px-3 py-2 text-sm",
+                message.sender === 'user'
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 text-gray-900"
+              )}
+            >
+              {message.content}
+            </div>
+          </div>
+        ))}
+        {isTyping && (
+          <div className="flex justify-start">
+            <div className="bg-gray-100 rounded-lg px-3 py-2 text-sm">
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="border-t p-4">
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            placeholder="Type your message..."
+            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-testid="widget-message-input"
+          />
+          <Button
+            onClick={sendMessage}
+            disabled={!inputValue.trim() || isLoading}
+            size="sm"
+            data-testid="widget-send-button"
+          >
+            <PaperPlaneTilt size={16} />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderFAQTab = () => (
+    <div className="p-4 space-y-4">
+      <h3 className="font-semibold text-lg">Frequently Asked Questions</h3>
+      <div className="space-y-3">
+        <div className="border rounded-lg p-3">
+          <h4 className="font-medium mb-2">How can I get help?</h4>
+          <p className="text-sm text-gray-600">You can start a chat with us or browse our help articles.</p>
+        </div>
+        <div className="border rounded-lg p-3">
+          <h4 className="font-medium mb-2">What are your business hours?</h4>
+          <p className="text-sm text-gray-600">
+            {config.contactInfo?.businessHours?.monday || "9:00 AM - 6:00 PM"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderHelpTab = () => (
+    <div className="p-4 space-y-4">
+      <h3 className="font-semibold text-lg">Contact Information</h3>
+      <div className="space-y-3">
+        {config.contactInfo?.email && (
+          <div>
+            <h4 className="font-medium">Email</h4>
+            <p className="text-sm text-gray-600">{config.contactInfo.email}</p>
+          </div>
+        )}
+        {config.contactInfo?.phone && (
+          <div>
+            <h4 className="font-medium">Phone</h4>
+            <p className="text-sm text-gray-600">{config.contactInfo.phone}</p>
+          </div>
+        )}
+        <div>
+          <h4 className="font-medium">Business Hours</h4>
+          <div className="text-sm text-gray-600 space-y-1">
+            {config.contactInfo?.businessHours && Object.entries(config.contactInfo.businessHours).map(([day, hours]) => (
+              <div key={day} className="flex justify-between">
+                <span className="capitalize">{day}:</span>
+                <span>{String(hours)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className={cn(getPositionClasses(), className)}>
+    <div className={getPositionClasses()}>
       {/* Widget Button */}
       <AnimatePresence>
         {!state.isOpen && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className="relative"
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            onClick={toggleWidget}
+            className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white hover:scale-110 transition-transform"
+            style={{ backgroundColor: config.primaryColor }}
+            data-testid="widget-button"
           >
-            <Button
-              onClick={toggleWidget}
-              className={cn(
-                'h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200',
-                'bg-blue-600 hover:bg-blue-700 text-white'
-              )}
-              style={{ backgroundColor: config.primaryColor }}
-            >
-              <ChatCircle className="h-6 w-6" />
-            </Button>
-            
-            {/* Unread badge */}
-            {state.unreadCount > 0 && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium"
-              >
-                {state.unreadCount > 9 ? '9+' : state.unreadCount}
-              </motion.div>
-            )}
-          </motion.div>
+            <ChatCircle size={24} />
+          </motion.button>
         )}
       </AnimatePresence>
 
@@ -289,190 +318,91 @@ export function EnhancedWidget({
       <AnimatePresence>
         {state.isOpen && (
           <motion.div
-            initial={{ scale: 0.8, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className={cn(
-              'bg-white rounded-lg shadow-2xl border overflow-hidden flex flex-col',
+              "bg-white rounded-lg shadow-2xl border overflow-hidden",
               getWidgetSizeClasses(),
-              state.isMinimized && 'h-12'
+              state.isMinimized && "h-12"
             )}
+            data-testid="widget-panel"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-3 border-b bg-gray-50">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="h-2 w-2 rounded-full bg-green-500"
+            <div className="bg-gray-50 border-b px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div
+                  className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: config.primaryColor }}
                 />
-                <span className="font-medium text-gray-900 text-sm">
-                  {config.organizationName}
-                </span>
+                <span className="font-medium text-sm">{config.organizationName}</span>
               </div>
-              
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleExpand}
-                  className="h-7 w-7 p-0 text-gray-500 hover:text-gray-700"
-                >
-                  {state.isExpanded ? (
-                    <ArrowsIn className="h-4 w-4" />
-                  ) : (
-                    <ArrowsOut className="h-4 w-4" />
-                  )}
+              <div className="flex items-center space-x-1">
+                <Button variant="ghost" size="sm" onClick={minimizeWidget}>
+                  <Minus size={16} />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleMinimize}
-                  className="h-7 w-7 p-0 text-gray-500 hover:text-gray-700"
-                >
-                  <Minus className="h-4 w-4" />
+                <Button variant="ghost" size="sm" onClick={expandWidget}>
+                  {state.isExpanded ? <ArrowsIn size={16} /> : <ArrowsOut size={16} />}
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleWidget}
-                  className="h-7 w-7 p-0 text-gray-500 hover:text-gray-700"
-                >
-                  <X className="h-4 w-4" />
+                <Button variant="ghost" size="sm" onClick={closeWidget}>
+                  <X size={16} />
                 </Button>
               </div>
             </div>
 
-            {/* Content (hidden when minimized) */}
             {!state.isMinimized && (
               <>
-                {/* Tab Navigation */}
-                <div className="flex border-b bg-gray-50">
-                  <button
-                    onClick={() => changeTab('chat')}
-                    className={cn(
-                      'flex-1 px-4 py-2 text-sm font-medium transition-colors',
-                      state.activeTab === 'chat'
-                        ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
-                        : 'text-gray-600 hover:text-gray-900'
+                {/* Tabs */}
+                <div className="border-b">
+                  <div className="flex">
+                    <button
+                      onClick={() => switchTab('chat')}
+                      className={cn(
+                        "flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                        state.activeTab === 'chat'
+                          ? "border-blue-500 text-blue-600"
+                          : "border-transparent text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      <ChatCircle size={16} className="inline mr-2" />
+                      Chat
+                    </button>
+                    {config.enableFAQ && (
+                      <button
+                        onClick={() => switchTab('faq')}
+                        className={cn(
+                          "flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                          state.activeTab === 'faq'
+                            ? "border-blue-500 text-blue-600"
+                            : "border-transparent text-gray-500 hover:text-gray-700"
+                        )}
+                      >
+                        <Question size={16} className="inline mr-2" />
+                        FAQ
+                      </button>
                     )}
-                  >
-                    <ChatCircle className="h-4 w-4 mx-auto mb-1" />
-                    Chat
-                  </button>
-                  
-                  {config.enableFAQ !== false && (
-                    <button
-                      onClick={() => changeTab('faq')}
-                      className={cn(
-                        'flex-1 px-4 py-2 text-sm font-medium transition-colors',
-                        state.activeTab === 'faq'
-                          ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
-                          : 'text-gray-600 hover:text-gray-900'
-                      )}
-                    >
-                      <Question className="h-4 w-4 mx-auto mb-1" />
-                      FAQ
-                    </button>
-                  )}
-                  
-                  {config.enableHelp !== false && (
-                    <button
-                      onClick={() => changeTab('help')}
-                      className={cn(
-                        'flex-1 px-4 py-2 text-sm font-medium transition-colors',
-                        state.activeTab === 'help'
-                          ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
-                          : 'text-gray-600 hover:text-gray-900'
-                      )}
-                    >
-                      <Phone className="h-4 w-4 mx-auto mb-1" />
-                      Help
-                    </button>
-                  )}
+                    {config.enableHelp && (
+                      <button
+                        onClick={() => switchTab('help')}
+                        className={cn(
+                          "flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                          state.activeTab === 'help'
+                            ? "border-blue-500 text-blue-600"
+                            : "border-transparent text-gray-500 hover:text-gray-700"
+                        )}
+                      >
+                        <Phone size={16} className="inline mr-2" />
+                        Help
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                {/* Tab Content */}
-                <div className="flex-1 flex flex-col min-h-0">
-                  <AnimatePresence mode="wait">
-                    {state.activeTab === 'chat' && (
-                      <motion.div
-                        key="chat"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
-                        className="flex-1 flex flex-col"
-                      >
-                        <WidgetMessageList
-                          messages={state.messages}
-                          isTyping={state.isTyping}
-                          className="flex-1"
-                        />
-                        <div className="p-3 border-t">
-                          {/* Connection Status */}
-                          {(isInitializing || initializationError) && (
-                            <div className="mb-3 p-2 rounded text-sm">
-                              {isInitializing && (
-                                <div className="flex items-center gap-2 text-blue-600">
-                                  <div className="h-3 w-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                                  Connecting...
-                                </div>
-                              )}
-                              {initializationError && (
-                                <div className="text-red-600">
-                                  Connection failed: {initializationError}
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          <WidgetMessageComposer
-                            onSend={handleSendMessage}
-                            onTyping={handleStartTyping}
-                            onStopTyping={handleStopTyping}
-                            disabled={isInitializing || !!initializationError}
-                            placeholder={
-                              isInitializing
-                                ? "Connecting..."
-                                : initializationError
-                                  ? "Connection failed"
-                                  : "Type your message..."
-                            }
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-
-                    {state.activeTab === 'faq' && (
-                      <motion.div
-                        key="faq"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
-                        className="flex-1"
-                      >
-                        <WidgetFAQTab onStartChat={handleStartChat} />
-                      </motion.div>
-                    )}
-
-                    {state.activeTab === 'help' && (
-                      <motion.div
-                        key="help"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
-                        className="flex-1"
-                      >
-                        <WidgetHelpTab 
-                          onStartChat={handleStartChat}
-                          organizationConfig={{
-                            name: config.organizationName,
-                            ...config.contactInfo,
-                          }}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                {/* Content */}
+                <div className="flex-1 overflow-hidden">
+                  {state.activeTab === 'chat' && renderChatTab()}
+                  {state.activeTab === 'faq' && renderFAQTab()}
+                  {state.activeTab === 'help' && renderHelpTab()}
                 </div>
               </>
             )}
@@ -481,4 +411,4 @@ export function EnhancedWidget({
       </AnimatePresence>
     </div>
   );
-}
+};
