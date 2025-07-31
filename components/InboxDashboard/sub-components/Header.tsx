@@ -1,12 +1,32 @@
 // Header component for inbox dashboard
 
-import { CaretDown, Keyboard, List, MagnifyingGlass, X } from "@phosphor-icons/react";
+import { useAuth } from "@/hooks/useAuth";
+import { Bell, Filter, MagnifyingGlass, Menu, Plus, SortAscending, SortDescending, X } from "@phosphor-icons/react";
 import * as React from "react";
-import { useState } from "react";
-import type { HeaderProps } from "../types";
+import { useRef, useState } from "react";
+import { Icon } from "@/lib/ui/Icon";
+import type { Conversation } from "../types";
+
+interface HeaderProps {
+  conversations: Conversation[];
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  statusFilter: string;
+  setStatusFilter: (filter: string) => void;
+  priorityFilter: string;
+  setPriorityFilter: (filter: string) => void;
+  setShowShortcuts: (show: boolean) => void;
+  searchInputRef: React.RefObject<HTMLInputElement>;
+  performanceMetrics?: {
+    responseTime: number;
+    memoryUsage: number;
+    cpuUsage: number;
+  };
+  connectionStatus: "error" | "connecting" | "connected" | "disconnected";
+}
 
 /**
- * Header component with search, filters, and shortcuts
+ * Header component with search, filters, and actions
  */
 export const Header: React.FC<HeaderProps> = ({
   conversations,
@@ -21,221 +41,312 @@ export const Header: React.FC<HeaderProps> = ({
   performanceMetrics,
   connectionStatus,
 }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Get unique statuses and priorities for filters
+  const statuses = [...new Set(conversations.map(c => c.status))];
+  const priorities = [...new Set(conversations.map(c => c.priority).filter(Boolean))];
+
+  // Handle search with debouncing
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("");
+    setPriorityFilter("");
+  };
+
+  // Get filter count
+  const activeFilters = [searchQuery, statusFilter, priorityFilter].filter(Boolean).length;
 
   return (
-    <div className="flex-shrink-0 border-b border-[var(--fl-color-border)] bg-background component-padding" data-testid="inbox-header">
-      {/* Mobile menu button */}
-      <div className="flex items-center justify-between lg:hidden mb-4" data-testid="mobile-header">
-        <h1 className="component-header text-gray-900 truncate mr-4" data-testid="mobile-inbox-title">Inbox ({conversations.length})</h1>
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="mobile-menu-toggle inline-flex items-center justify-center rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background spacing-3 text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out"
-          aria-label="Toggle mobile menu"
-          aria-expanded={isMobileMenuOpen}
-          data-testid="mobile-menu-button"
-        >
-          <div className={`transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : 'rotate-0'}`}>
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <List className="h-6 w-6" />}
-          </div>
-        </button>
-      </div>
-
-      {/* Mobile menu overlay */}
-      {isMobileMenuOpen && (
-        <div className="mobile-menu fixed inset-0 z-50 lg:hidden" data-testid="mobile-menu">
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Close menu"
-          />
-
-          <div className="fixed right-0 top-0 h-full w-full max-w-sm bg-background shadow-xl transform transition-transform duration-300 ease-in-out animate-slide-in-right">
-            <div className="flex items-center justify-between border-b border-[var(--fl-color-border)] p-spacing-md bg-background">
-              <h2 className="text-base font-semibold text-gray-900">Filters & Search</h2>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="inline-flex items-center justify-center rounded-ds-lg p-spacing-sm text-gray-400 hover:bg-background hover:text-foreground-muted active:bg-gray-200 btn-height-lg transition-colors duration-200"
-                aria-label="Close menu"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="p-spacing-md space-y-6 overflow-y-auto h-full pb-20" data-testid="mobile-menu-content">
-              {/* Mobile search */}
-              <div className="space-y-spacing-sm" data-testid="mobile-search-section">
-                <label className="block text-sm font-medium text-foreground" data-testid="mobile-search-label">Search Conversations</label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <MagnifyingGlass className="h-5 w-5 text-gray-400" data-testid="mobile-search-icon" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search conversations..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="block w-full rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background py-4 pl-10 pr-3 text-base placeholder-gray-500 focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-height-lg transition-colors duration-200"
-                    data-testid="mobile-search-input"
-                  />
-                </div>
-              </div>
-
-              {/* Mobile filters */}
-              <div className="space-y-spacing-sm" data-testid="mobile-status-filter-section">
-                <label className="block text-sm font-medium text-foreground" data-testid="mobile-status-filter-label">Status Filter</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="block w-full rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-4 text-base focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-height-lg transition-colors duration-200"
-                  data-testid="mobile-status-filter"
-                >
-                  <option value="">All Status</option>
-                  <option value="open">Open</option>
-                  <option value="pending">Pending</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="escalated">Escalated</option>
-                </select>
-              </div>
-
-              <div className="space-y-spacing-sm" data-testid="mobile-priority-filter-section">
-                <label className="block text-sm font-medium text-foreground" data-testid="mobile-priority-filter-label">Priority Filter</label>
-                <select
-                  value={priorityFilter}
-                  onChange={(e) => setPriorityFilter(e.target.value)}
-                  className="block w-full rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-4 text-base focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[48px] transition-colors duration-200"
-                  data-testid="mobile-priority-filter"
-                >
-                  <option value="">All Priority</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
-                </select>
-              </div>
-
-              {/* Mobile shortcuts button */}
-              <div className="pt-4 border-t border-[var(--fl-color-border)]" data-testid="mobile-shortcuts-section">
-                <button
-                  onClick={() => {
-                    setShowShortcuts(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="w-full inline-flex items-center justify-center rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-4 text-base font-medium text-foreground transition-all hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[48px]"
-                  data-testid="mobile-shortcuts-button"
-                >
-                  <Keyboard className="mr-3 h-5 w-5" data-testid="mobile-shortcuts-icon" />
-                  Keyboard Shortcuts
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Desktop layout */}
-      <div className="hidden lg:flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <h1 className="component-header text-gray-900">Inbox ({conversations.length})</h1>
-
-          {/* Performance Indicator */}
-          {performanceMetrics && (
-            <div className="flex items-center space-x-2 text-sm">
-              <div
-                className={`flex items-center space-x-1 rounded-ds-full px-2 py-1 ${connectionStatus === "connected"
-                  ? "bg-green-100 text-green-700"
-                  : connectionStatus === "connecting"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-                  }`}
-              >
-                <div
-                  className={`h-2 w-2 rounded-ds-full ${connectionStatus === "connected"
-                    ? "bg-green-500"
-                    : connectionStatus === "connecting"
-                      ? "bg-yellow-500"
-                      : "bg-red-500"
-                    }`}
-                />
-                <span className="text-xs font-medium">
-                  {connectionStatus === "connected"
-                    ? "Connected"
-                    : connectionStatus === "connecting"
-                      ? "Connecting"
-                      : "Disconnected"}
-                </span>
-              </div>
-              {connectionStatus === "connected" && (
-                <div className="text-gray-600">
-                  <span className="text-xs font-medium">{performanceMetrics.averageLatency.toFixed(1)}ms</span>
-                </div>
-              )}
-            </div>
-          )}
-
+    <div className="bg-background border-b border-[var(--fl-color-border-strong)] flex-shrink-0" data-testid="inbox-header">
+      {/* Desktop Header */}
+      <div className="hidden lg:flex items-center justify-between p-4 bg-background">
+        {/* Left side - Search and filters */}
+        <div className="flex items-center gap-4 flex-1 max-w-2xl">
           {/* Search */}
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <MagnifyingGlass className="h-4 w-4 text-gray-400" />
+          <div className="relative flex-1 max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MagnifyingGlass className="h-5 w-5 text-gray-400" />
             </div>
             <input
               ref={searchInputRef}
               type="text"
               placeholder="Search conversations..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-64 rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background py-3 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-height-md"
+              onChange={handleSearchChange}
+              className="w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
             />
+          </div>
+
+          {/* Filters */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`inline-flex items-center gap-2 px-3 py-2 rounded-ds-lg border text-sm font-medium transition-colors ${
+                showFilters || activeFilters > 0
+                  ? "bg-blue-50 border-blue-200 text-blue-700"
+                  : "bg-background border-[var(--fl-color-border-strong)] text-foreground hover:bg-background"
+              }`}
+            >
+              <Filter className="h-4 w-4" />
+              Filters
+              {activeFilters > 0 && (
+                <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                  {activeFilters}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out"
+            >
+              {sortOrder === "asc" ? (
+                <SortAscending className="h-4 w-4" />
+              ) : (
+                <SortDescending className="h-4 w-4" />
+              )}
+              Sort
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          {/* Status Filter */}
-          <div className="relative">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="appearance-none rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-3 py-3 pr-8 text-sm focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-height-md"
-            >
-              <option value="">All Status</option>
-              <option value="open">Open</option>
-              <option value="pending">Pending</option>
-              <option value="resolved">Resolved</option>
-              <option value="escalated">Escalated</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-              <CaretDown className="h-4 w-4 text-gray-400" />
+        {/* Right side - Actions */}
+        <div className="flex items-center gap-3">
+          {/* Performance indicator */}
+          {performanceMetrics && (
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className={`w-2 h-2 rounded-full ${
+                performanceMetrics.responseTime < 100 ? "bg-green-400" :
+                performanceMetrics.responseTime < 300 ? "bg-yellow-400" : "bg-red-400"
+              }`} />
+              <span>{performanceMetrics.responseTime}ms</span>
             </div>
+          )}
+
+          {/* Connection status */}
+          <div className="flex items-center gap-2 text-xs">
+            <div className={`w-2 h-2 rounded-full ${
+              connectionStatus === "connected" ? "bg-green-400" :
+              connectionStatus === "connecting" ? "bg-yellow-400" : "bg-red-400"
+            }`} />
+            <span className="capitalize">{connectionStatus}</span>
           </div>
 
-          {/* Priority Filter */}
-          <div className="relative">
-            <select
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="appearance-none rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-3 py-3 pr-8 text-sm focus:border-[var(--fl-color-brand)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-height-md"
-            >
-              <option value="">All Priority</option>
-              <option value="urgent">Urgent</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-              <CaretDown className="h-4 w-4 text-gray-400" />
-            </div>
-          </div>
+          {/* Notifications */}
+          <button className="relative p-2 text-gray-400 hover:text-foreground transition-colors">
+            <Bell className="h-5 w-5" />
+            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
+          </button>
 
-          {/* Shortcuts Button */}
+          {/* Shortcuts */}
           <button
             onClick={() => setShowShortcuts(true)}
-            className="inline-flex items-center rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-3 text-sm font-medium text-foreground transition-all hover:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[44px]"
-            aria-label="Show keyboard shortcuts"
+            className="p-2 text-gray-400 hover:text-foreground transition-colors"
+            title="Keyboard shortcuts"
           >
-            <Keyboard className="mr-2 h-5 w-5" />
-            Shortcuts
+            <Icon icon={Menu} className="h-5 w-5" />
+          </button>
+
+          {/* New conversation */}
+          <button className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors">
+            <Plus className="h-4 w-4" />
+            New Conversation
           </button>
         </div>
       </div>
+
+      {/* Mobile Header */}
+      <div className="lg:hidden flex items-center justify-between border-b border-[var(--fl-color-border)] p-4 bg-background">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="p-2 text-gray-400 hover:text-foreground transition-colors"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900">Inbox</h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button className="p-2 text-gray-400 hover:text-foreground transition-colors">
+            <Bell className="h-5 w-5" />
+          </button>
+          <button className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors">
+            <Plus className="h-4 w-4" />
+            New
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {showMobileMenu && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b border-[var(--fl-color-border)] p-4 bg-background">
+              <h2 className="text-lg font-semibold">Menu</h2>
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="inline-flex items-center justify-center rounded-ds-lg p-2 text-gray-400 hover:bg-background hover:text-foreground-muted active:bg-gray-200 btn-height-lg transition-colors duration-200"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="p-4 space-y-6 overflow-y-auto h-full pb-20" data-testid="mobile-menu-content">
+              {/* Search Section */}
+              <div className="space-y-2" data-testid="mobile-search-section">
+                <h3 className="text-sm font-medium text-gray-900">Search</h3>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <MagnifyingGlass className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search conversations..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-ds-lg text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Status Filter Section */}
+              <div className="space-y-2" data-testid="mobile-status-filter-section">
+                <h3 className="text-sm font-medium text-gray-900">Status</h3>
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setStatusFilter("")}
+                    className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
+                      statusFilter === "" ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                    }`}
+                  >
+                    All Statuses
+                  </button>
+                  {statuses.map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setStatusFilter(status)}
+                      className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
+                        statusFilter === status ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                      }`}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Priority Filter Section */}
+              <div className="space-y-2" data-testid="mobile-priority-filter-section">
+                <h3 className="text-sm font-medium text-gray-900">Priority</h3>
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setPriorityFilter("")}
+                    className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
+                      priorityFilter === "" ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                    }`}
+                  >
+                    All Priorities
+                  </button>
+                  {priorities.map((priority) => (
+                    <button
+                      key={priority}
+                      onClick={() => setPriorityFilter(priority)}
+                      className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
+                        priorityFilter === priority ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                      }`}
+                    >
+                      {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clear Filters */}
+              {activeFilters > 0 && (
+                <button
+                  onClick={clearFilters}
+                  className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-ds-lg transition-colors"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Filter Panel */}
+      {showFilters && (
+        <div className="border-t border-gray-200 bg-gray-50 p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-medium text-gray-900">Filters</h3>
+            <button
+              onClick={() => setShowFilters(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Status Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-ds-lg text-sm"
+              >
+                <option value="">All Statuses</option>
+                {statuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Priority Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+              <select
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-ds-lg text-sm"
+              >
+                <option value="">All Priorities</option>
+                {priorities.map((priority) => (
+                  <option key={priority} value={priority}>
+                    {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Clear Filters */}
+            <div className="flex items-end">
+              {activeFilters > 0 && (
+                <button
+                  onClick={clearFilters}
+                  className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-ds-lg transition-colors"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

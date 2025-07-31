@@ -154,10 +154,10 @@ export const Composer: React.FC<ComposerProps> = ({
         )}
 
         {/* Main composer */}
-        <div className="bg-background border-t border-[var(--color-border)]" style={{padding: 'var(--spacing-3)', boxShadow: 'var(--shadow-card-deep)'}} data-testid="composer-main">
-          <div className="flex items-end" style={{gap: 'var(--spacing-3)'}} data-testid="composer-input-row">
+        <div className="bg-background border-t border-[var(--color-border)] p-3 shadow-card-deep" data-testid="composer-main">
+          <div className="flex items-end gap-3" data-testid="composer-input-row">
             {/* Left side actions */}
-            <div className="flex items-center" style={{gap: 'var(--spacing-2)'}} data-testid="composer-actions-left">
+            <div className="flex items-center gap-2" data-testid="composer-actions-left">
               {/* Enhanced AI Handover Button */}
               {selectedConversation && (
                 <div data-testid="composer-ai-handover">
@@ -173,7 +173,7 @@ export const Composer: React.FC<ComposerProps> = ({
               {/* File Attachment */}
               <label className="cursor-pointer" aria-label="Attach files" data-testid="composer-attachment-button">
                 <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileInput} data-testid="composer-file-input" />
-                <div className="hover:bg-background hover:text-foreground rounded-ds-lg text-[var(--color-text-muted)] transition-all flex items-center justify-center" style={{padding: 'var(--spacing-3)', minHeight: 'var(--spacing-12)', minWidth: 'var(--spacing-12)'}}>
+                <div className="hover:bg-background hover:text-foreground rounded-ds-lg text-[var(--color-text-muted)] transition-all flex items-center justify-center w-12 h-12">
                   <Attachment className="h-5 w-5" data-testid="composer-attachment-icon" />
                 </div>
               </label>
@@ -181,10 +181,9 @@ export const Composer: React.FC<ComposerProps> = ({
               {/* Templates */}
               <button
                 onClick={() => setShowTemplates(!showTemplates)}
-                className={`rounded-ds-lg transition-colors flex items-center justify-center ${
+                className={`rounded-ds-lg transition-colors flex items-center justify-center w-12 h-12 ${
                   showTemplates ? "bg-[var(--color-primary-100)] text-[var(--color-primary-600)]" : "text-[var(--color-text-muted)] hover:bg-[var(--color-background-subtle)] hover:text-[var(--color-text)]"
                 }`}
-                style={{padding: 'var(--spacing-3)', minHeight: 'var(--spacing-12)', minWidth: 'var(--spacing-12)'}}
                 title="Quick templates"
                 aria-label="Quick templates"
                 data-testid="composer-templates-button"
@@ -195,12 +194,11 @@ export const Composer: React.FC<ComposerProps> = ({
               {/* AI Suggestions */}
               <button
                 onClick={generateAISuggestions}
-                className={`rounded-ds-lg transition-colors flex items-center justify-center ${
+                className={`rounded-ds-lg transition-colors flex items-center justify-center w-12 h-12 ${
                   showAISuggestions
                     ? "bg-[var(--color-primary-100)] text-[var(--color-primary-600)]"
                     : "text-[var(--color-text-muted)] hover:bg-[var(--color-background-subtle)] hover:text-[var(--color-text)]"
                 }`}
-                style={{padding: 'var(--spacing-3)', minHeight: 'var(--spacing-12)', minWidth: 'var(--spacing-12)'}}
                 title="AI suggestions"
                 aria-label="Generate AI suggestions"
                 data-testid="composer-ai-suggestions-button"
@@ -227,9 +225,9 @@ export const Composer: React.FC<ComposerProps> = ({
                 }`}
                 style={{
                   maxHeight: '120px',
-                  minHeight: 'var(--spacing-12)', // 48px proper touch target
-                  padding: 'var(--spacing-3)',
-                  paddingRight: 'var(--spacing-12)'
+                  minHeight: '48px', // 48px proper touch target
+                  padding: '12px',
+                  paddingRight: '48px'
                 }}
                 rows={1}
                 maxLength={maxCharacters}
@@ -240,11 +238,9 @@ export const Composer: React.FC<ComposerProps> = ({
               <button
                 type="button"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="hover:text-foreground absolute top-1/2 -translate-y-1/2 transform text-[var(--color-text-muted)] transition-colors flex items-center justify-center rounded-ds-lg"
+                className="hover:text-foreground absolute top-1/2 -translate-y-1/2 transform text-[var(--color-text-muted)] transition-colors flex items-center justify-center rounded-ds-lg w-12 h-12"
                 style={{
-                  right: 'var(--spacing-3)',
-                  minHeight: 'var(--spacing-12)',
-                  minWidth: 'var(--spacing-12)'
+                  right: '12px'
                 }}
                 aria-label="Add emoji"
               >
@@ -256,16 +252,11 @@ export const Composer: React.FC<ComposerProps> = ({
             <button
               onClick={sendMessage}
               disabled={!newMessage.trim() || isSending || isOverLimit}
-              className={`rounded-ds-xl transition-all flex items-center justify-center ${
+              className={`rounded-ds-xl transition-all flex items-center justify-center w-12 h-12 ${
                 newMessage.trim() && !isSending && !isOverLimit
                   ? "bg-[var(--color-primary-600)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-700)]"
                   : "cursor-not-allowed bg-[var(--color-background-subtle)] text-[var(--color-text-muted)]"
               }`}
-              style={{
-                padding: 'var(--spacing-3)',
-                minHeight: 'var(--spacing-12)',
-                minWidth: 'var(--spacing-12)'
-              }}
               aria-label="Send message"
             >
               {isSending ? (
@@ -278,7 +269,7 @@ export const Composer: React.FC<ComposerProps> = ({
 
           {/* Character count */}
           {isNearLimit && (
-            <div className={`text-right ${isOverLimit ? "text-[var(--color-error-600)]" : "text-[var(--color-warning-600)]"}`} style={{marginTop: 'var(--spacing-2)', fontSize: 'var(--font-size-xs)'}}>
+            <div className={`text-right ${isOverLimit ? "text-[var(--color-error-600)]" : "text-[var(--color-warning-600)]"}`} style={{marginTop: '8px', fontSize: 'var(--font-size-xs)'}}>
               {characterCount}/{maxCharacters}
             </div>
           )}

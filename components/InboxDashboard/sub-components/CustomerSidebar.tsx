@@ -113,10 +113,10 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
       <div className="border-b border-[var(--fl-color-border)]" data-testid={`customer-sidebar-section-${id}`}>
         <button
           onClick={() => toggleSection(id)}
-          className="flex w-full items-center justify-between p-spacing-md text-left transition-colors hover:bg-background"
+          className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-background"
           data-testid={`customer-sidebar-section-${id}-toggle`}
         >
-          <div className="flex items-center space-x-3" data-testid={`customer-sidebar-section-${id}-header`}>
+          <div className="flex items-center gap-3" data-testid={`customer-sidebar-section-${id}-header`}>
             <div data-testid={`customer-sidebar-section-${id}-icon`}>{icon}</div>
             <span className="text-sm font-medium text-gray-900" data-testid={`customer-sidebar-section-${id}-title`}>{title}</span>
           </div>
@@ -144,7 +144,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
         <h2 className="text-base font-semibold text-gray-900" data-testid="customer-sidebar-title">Customer Details</h2>
         <button
           onClick={onClose}
-          className="rounded-ds-lg p-spacing-sm text-gray-400 hover:bg-background hover:text-foreground transition-colors"
+          className="rounded-ds-lg p-2 text-gray-400 hover:bg-background hover:text-foreground transition-colors"
           aria-label="Close sidebar"
           data-testid="customer-sidebar-close"
         >
@@ -157,7 +157,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
       {/* Content */}
       <div className="flex-1 overflow-y-auto" data-testid="customer-sidebar-content">
         {isLoading ? (
-          <div className="space-y-3 p-spacing-md" data-testid="customer-sidebar-loading">
+          <div className="space-y-3 p-4" data-testid="customer-sidebar-loading">
             <div className="animate-pulse" data-testid="customer-sidebar-loading-skeleton">
               <div className="mx-auto mb-3 h-20 w-20 rounded-ds-full bg-gray-200" data-testid="customer-sidebar-loading-avatar"></div>
               <div className="mx-auto mb-2 h-4 w-3/4 rounded bg-gray-200" data-testid="customer-sidebar-loading-name"></div>
@@ -165,7 +165,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
             </div>
           </div>
         ) : error ? (
-          <div className="p-spacing-md text-center" data-testid="customer-sidebar-error">
+          <div className="p-4 text-center" data-testid="customer-sidebar-error">
             <p className="text-sm text-red-600" data-testid="customer-sidebar-error-message">Failed to load customer data</p>
             <button onClick={refetch} className="mt-2 text-sm text-blue-600 hover:underline" data-testid="customer-sidebar-error-retry">
               Try again
@@ -193,7 +193,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 </svg>
               }
             >
-              <div className="space-y-3" data-testid="customer-details-content">
+              <div className="space-y-4" data-testid="customer-details-content">
                 {/* Customer Avatar and Basic Info */}
                 <div className="text-center" data-testid="customer-basic-info">
                   <img
@@ -216,25 +216,25 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
 
                 {/* Contact Information */}
                 <div className="space-y-3" data-testid="customer-contact-info">
-                  <div className="flex items-center space-x-3" data-testid="customer-email-row">
+                  <div className="flex items-center gap-3" data-testid="customer-email-row">
                     <Envelope className="h-4 w-4 text-gray-400" data-testid="customer-email-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-email-text">
                       {customerData?.email || conversation.customer_email}
                     </span>
                   </div>
                   {customerData?.phone && (
-                    <div className="flex items-center space-x-3" data-testid="customer-phone-row">
+                    <div className="flex items-center gap-3" data-testid="customer-phone-row">
                       <Phone className="h-4 w-4 text-gray-400" data-testid="customer-phone-icon" />
                       <span className="text-sm text-gray-900" data-testid="customer-phone-text">{customerData.phone}</span>
                     </div>
                   )}
                   {customerData?.location && (
-                    <div className="flex items-center space-x-3" data-testid="customer-location-row">
+                    <div className="flex items-center gap-3" data-testid="customer-location-row">
                       <MapPin className="h-4 w-4 text-gray-400" data-testid="customer-location-icon" />
                       <span className="text-sm text-gray-900" data-testid="customer-location-text">{customerData.location}</span>
                     </div>
                   )}
-                  <div className="flex items-center space-x-3" data-testid="customer-joined-row">
+                  <div className="flex items-center gap-3" data-testid="customer-joined-row">
                     <Calendar className="h-4 w-4 text-gray-400" data-testid="customer-joined-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-joined-text">
                       Joined {formatDate(customerData?.joinDate || conversation.last_message_at)}
@@ -264,7 +264,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 </svg>
               }
             >
-              <div className="space-y-3" data-testid="ai-drawer-content">
+              <div className="space-y-4" data-testid="ai-drawer-content">
                 {/* AI Status */}
                 <div className="flex items-center justify-between" data-testid="ai-status-section">
                   <span className="text-foreground text-sm" data-testid="ai-status-label">AI Assistant Status</span>
@@ -278,7 +278,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 </div>
 
                 {/* AI Suggestions Placeholder */}
-                <div className="rounded-ds-lg border border-[var(--fl-color-info-muted)] bg-[var(--fl-color-info-subtle)] spacing-3" data-testid="ai-suggestions-section">
+                <div className="rounded-ds-lg border border-[var(--fl-color-info-muted)] bg-[var(--fl-color-info-subtle)] p-3" data-testid="ai-suggestions-section">
                   <h5 className="mb-2 text-sm font-medium text-blue-900" data-testid="ai-suggestions-title">AI Suggestions</h5>
                   <p className="text-tiny text-blue-700" data-testid="ai-suggestions-placeholder">
                     AI-powered response suggestions and customer insights will appear here.
@@ -286,9 +286,9 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 </div>
 
                 {/* Quick Actions */}
-                <div className="space-y-spacing-sm" data-testid="ai-quick-actions">
+                <div className="space-y-2" data-testid="ai-quick-actions">
                   <h5 className="text-sm font-medium text-gray-900" data-testid="ai-quick-actions-title">Quick Actions</h5>
-                  <div className="grid grid-cols-2 gap-ds-2" data-testid="ai-quick-actions-grid">
+                  <div className="grid grid-cols-2 gap-2" data-testid="ai-quick-actions-grid">
                     <button className="bg-background text-foreground rounded px-2 py-1 text-tiny transition-colors hover:bg-gray-200" data-testid="ai-generate-response-button">
                       Generate Response
                     </button>
@@ -307,7 +307,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 title="Tags"
                 icon={<Tag className="h-4 w-4 text-foreground-muted" />}
               >
-                <div className="flex flex-wrap gap-ds-2" data-testid="tags-content">
+                <div className="flex flex-wrap gap-2" data-testid="tags-content">
                   {conversation.tags.map((tag, index) => (
                     <span
                       key={index}
@@ -347,11 +347,11 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                   customerData.notes.map((note) => (
                     <div
                       key={note.id}
-                      className="rounded-ds-lg border border-[var(--fl-color-warning-muted)] bg-[var(--fl-color-warning-subtle)] spacing-3"
+                      className="rounded-ds-lg border border-[var(--fl-color-warning-muted)] bg-[var(--fl-color-warning-subtle)] p-3"
                       data-testid={`note-${note.id}`}
                     >
                       <p className="mb-2 text-sm text-gray-900" data-testid={`note-${note.id}-content`}>{note.content}</p>
-                      <div className="flex items-center space-x-spacing-sm text-tiny text-foreground" data-testid={`note-${note.id}-meta`}>
+                      <div className="flex items-center gap-2 text-tiny text-foreground" data-testid={`note-${note.id}-meta`}>
                         <Clock className="h-3 w-3" data-testid={`note-${note.id}-clock-icon`} />
                         <span data-testid={`note-${note.id}-date`}>{formatDate(note.createdAt)}</span>
                         <span>•</span>
@@ -365,16 +365,16 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
 
                 {/* Add note form */}
                 {isAddingNote ? (
-                  <div className="space-y-spacing-sm" data-testid="add-note-form">
+                  <div className="space-y-2" data-testid="add-note-form">
                     <textarea
                       value={newNote}
                       onChange={(e) => setNewNote(e.target.value)}
                       placeholder="Add a note about this customer..."
-                      className="border-ds-border-strong w-full resize-none rounded-ds-lg border p-spacing-sm text-sm"
+                      className="border-ds-border-strong w-full resize-none rounded-ds-lg border p-3 text-sm"
                       rows={3}
                       data-testid="add-note-textarea"
                     />
-                    <div className="flex space-x-spacing-sm" data-testid="add-note-actions">
+                    <div className="flex gap-2" data-testid="add-note-actions">
                       <button
                         onClick={handleAddNote}
                         disabled={!newNote.trim() || isAdding}
@@ -398,7 +398,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 ) : (
                   <button
                     onClick={() => setIsAddingNote(true)}
-                    className="w-full rounded-ds-lg border-2 border-dashed border-ds-border-strong p-spacing-sm text-left text-sm text-foreground transition-colors hover:border-gray-400 hover:text-gray-800"
+                    className="w-full rounded-ds-lg border-2 border-dashed border-ds-border-strong p-3 text-left text-sm text-foreground transition-colors hover:border-gray-400 hover:text-gray-800"
                     data-testid="add-note-trigger-button"
                   >
                     + Add a note
@@ -421,7 +421,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 {customerData?.averageRating && customerData.averageRating > 0 && (
                   <div className="flex items-center justify-between">
                     <span className="text-foreground text-sm">Average Rating</span>
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 text-yellow-400" />
                       <span className="text-sm font-medium text-gray-900">
                         {customerData.averageRating.toFixed(1)}

@@ -89,7 +89,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     <div className="chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="chat-header">
       <div className="flex items-center justify-between" data-testid="chat-header-content">
         {/* Left side - Customer info */}
-        <div className="flex items-center space-x-3" data-testid="chat-header-customer-info">
+        <div className="flex items-center gap-3" data-testid="chat-header-customer-info">
           {/* Avatar with online indicator */}
           <div className="relative" data-testid="chat-header-avatar-container">
             <img
@@ -106,7 +106,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
-            <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-customer-title-row">
+            <div className="flex items-center gap-2" data-testid="chat-header-customer-title-row">
               <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customer_name}</h2>
 
               {/* Status badge */}
@@ -148,13 +148,13 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               )}
             </div>
 
-            <div className="mt-1 flex items-center space-x-3" data-testid="chat-header-customer-meta">
+            <div className="mt-1 flex items-center gap-3" data-testid="chat-header-customer-meta">
               <p className="truncate text-sm text-[var(--fl-color-text-muted)]" data-testid="chat-header-customer-email">{conversation.customer_email}</p>
 
               {/* Connection status removed - was showing inappropriate warnings */}
 
               {/* Last activity */}
-              <div className="flex items-center space-x-1 text-tiny text-[var(--fl-color-text-muted)]" data-testid="chat-header-last-activity">
+              <div className="flex items-center gap-1 text-tiny text-[var(--fl-color-text-muted)]" data-testid="chat-header-last-activity">
                 <Clock className="h-3 w-3" data-testid="chat-header-activity-icon" />
                 <span data-testid="chat-header-activity-text">{formatLastActivity(conversation.last_message_at)}</span>
               </div>
@@ -162,8 +162,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
             {/* Typing indicator */}
             {typingUsers.length > 0 && (
-              <div className="mt-1 flex items-center space-x-1" data-testid="chat-header-typing-indicator">
-                <div className="flex space-x-1" data-testid="chat-header-typing-dots">
+              <div className="mt-1 flex items-center gap-1" data-testid="chat-header-typing-indicator">
+                <div className="flex gap-1" data-testid="chat-header-typing-dots">
                   <div className="bg-primary h-1 w-1 animate-bounce rounded-ds-full" data-testid="chat-header-typing-dot-1"></div>
                   <div
                     className="bg-primary h-1 w-1 animate-bounce rounded-ds-full"
@@ -208,12 +208,12 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-actions">
+        <div className="flex items-center gap-2" data-testid="chat-header-actions">
           {/* NEW: Assign Conversation Button */}
           {onAssignConversation && (
             <button
               onClick={onAssignConversation}
-              className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+              className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
               title="Assign conversation"
               aria-label="Assign conversation"
               data-testid="chat-header-assign-button"
@@ -226,7 +226,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {onConvertToTicket && (
             <button
               onClick={onConvertToTicket}
-              className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+              className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
               title="Convert to ticket"
               aria-label="Convert to ticket"
               data-testid="chat-header-convert-ticket-button"
@@ -252,7 +252,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* Call button */}
           <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+            className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
             title="Start voice call"
             aria-label="Start voice call"
             data-testid="chat-header-call-button"
@@ -262,7 +262,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* Video call button */}
           <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+            className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
             title="Start video call"
             aria-label="Start video call"
             data-testid="chat-header-video-button"
@@ -273,8 +273,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details toggle */}
           <button
             onClick={() => setShowCustomerDetails(!showCustomerDetails)}
-            className={`rounded-ds-lg spacing-2 transition-colors ${showCustomerDetails ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              }`}
+            className={`rounded-ds-lg p-2 transition-colors w-10 h-10 flex items-center justify-center ${
+              showCustomerDetails ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            }`}
             title="Toggle customer details"
             aria-label="Toggle customer details"
             data-testid="chat-header-details-toggle"
@@ -284,7 +285,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* More actions menu */}
           <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+            className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
             title="More actions"
             aria-label="More actions"
             data-testid="chat-header-more-actions"
