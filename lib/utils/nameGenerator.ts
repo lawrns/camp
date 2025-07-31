@@ -25,7 +25,9 @@
  * ```
  */
 
-const adjectives = [
+import { adjectives, colors, animals } from 'unique-names-generator';
+
+const legacyAdjectives = [
   "Friendly",
   "Happy",
   "Bright",
@@ -48,7 +50,7 @@ const adjectives = [
   "Radiant",
 ];
 
-const names = [
+const legacyNames = [
   "Alex",
   "Blake",
   "Casey",
@@ -94,7 +96,7 @@ export function generateFriendlyName(): string {
 }
 
 /**
- * Generates a deterministic friendly name based on a seed value
+ * Generates a deterministic friendly name based on a seed value using unique-names-generator
  *
  * Uses a simple hash function to ensure the same seed always produces
  * the same name. Perfect for generating consistent names for anonymous users.
@@ -115,10 +117,33 @@ export function generateDeterministicName(seed: string): string {
     hash = hash & hash; // Convert to 32-bit integer
   }
 
+  // Set a seed for the generator (not directly supported, so we'll use our hash)
   const adjIndex = Math.abs(hash) % adjectives.length;
-  const nameIndex = Math.abs(hash >> 8) % names.length;
+  const animalIndex = Math.abs(hash >> 8) % animals.length;
 
-  return `${adjectives[adjIndex]} ${names[nameIndex]}`;
+  return `${adjectives[adjIndex]} ${animals[animalIndex]}`;
+}
+
+/**
+ * Generate a visitor name using unique-names-generator with better variety
+ * 
+ * @param {string} seed - Seed value for deterministic generation
+ * @returns {string} A friendly visitor name
+ */
+export function generateVisitorName(seed: string): string {
+  // Simple hash function to convert string to number
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+
+  // Use unique-names-generator with color + animal combination
+  const adjIndex = Math.abs(hash) % colors.length;
+  const animalIndex = Math.abs(hash >> 8) % animals.length;
+
+  return `${colors[adjIndex]} ${animals[animalIndex]}`;
 }
 
 /**
@@ -141,7 +166,12 @@ export function isGeneratedName(name: string): boolean {
   if (parts.length !== 2) return false;
 
   const [adjective, namePart] = parts;
-  return adjectives.includes(adjective!) && names.includes(namePart!);
+  
+  // Check against both legacy and new name patterns
+  const isLegacyName = legacyAdjectives.includes(adjective!) && legacyNames.includes(namePart!);
+  const isNewName = (adjectives.includes(adjective!) || colors.includes(adjective!)) && animals.includes(namePart!);
+  
+  return isLegacyName || isNewName;
 }
 
 /**

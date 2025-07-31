@@ -3,6 +3,7 @@
 import { Clock, Robot, Tag } from "@phosphor-icons/react";
 import * as React from "react";
 import { memo } from "react";
+import { formatDistanceToNow } from "date-fns";
 import type { ConversationRowProps } from "../types";
 
 /**
@@ -12,7 +13,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
   const isSelected = conversation.id === selectedId;
   const isAIAssigned = conversation.assigned_to_ai;
 
-  // Format timestamp with error handling
+  // Format timestamp with improved error handling and relative time
   const formatTime = (timestamp: string) => {
     try {
       const date = new Date(timestamp);
@@ -20,16 +21,16 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
         return "Unknown time";
       }
 
+      // Check for invalid dates (Unix epoch, etc.)
       const now = new Date();
-      const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-
-      if (diffInHours < 1) {
-        return "Just now";
-      } else if (diffInHours < 24) {
-        return `${Math.floor(diffInHours)}h ago`;
-      } else {
-        return date.toLocaleDateString();
+      const diffInMs = now.getTime() - date.getTime();
+      
+      if (diffInMs < 0 || diffInMs > 100 * 365 * 24 * 60 * 60 * 1000) { // More than 100 years
+        return "Unknown time";
       }
+
+      // Use date-fns for better relative time formatting
+      return formatDistanceToNow(date, { addSuffix: true });
     } catch (error) {
       return "Unknown time";
     }
@@ -109,7 +110,9 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
               <img
                 src={(() => {
                   const { getAvatarPath } = require("@/lib/utils/avatar");
-                  return getAvatarPath(conversation.customer_email || conversation.customer_name, "customer");
+                  // Use conversation ID as unique identifier to ensure different avatars
+                  const uniqueId = conversation.id?.toString() || conversation.customer_email || conversation.customer_name;
+                  return getAvatarPath(uniqueId, "customer");
                 })()}
                 alt={conversation.customer_name}
                 className="rounded-ds-full cursor-pointer transition-all hover:ring-2 hover:ring-[var(--color-primary-300)]"

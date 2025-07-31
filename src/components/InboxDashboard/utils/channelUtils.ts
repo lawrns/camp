@@ -24,6 +24,7 @@ function generateVisitorName(seed: string): string {
 }
 
 import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
+import { generateVisitorName } from '@/lib/utils/nameGenerator';
 
 /**
  * Standard channel naming convention for Supabase real-time
@@ -107,27 +108,41 @@ export const mapConversation = (raw: any): any => {
     !customerName ||
     customerName.includes("@") ||
     customerName.startsWith("visitor_session_") ||
-    customerName === "Anonymous";
+    customerName === "Anonymous" ||
+    customerName === "Website Visitor" ||
+    customerName === "visitor@widget.com";
 
   if (needsNameGeneration) {
     // Generate a friendly visitor name using the customer email or conversation ID as seed
-    const seed = raw.customer_email || raw.id || "anonymous";
+    const seed = raw.customer_email || raw.id?.toString() || "anonymous";
     customerName = generateVisitorName(seed);
+  }
+
+  // Ensure we have a valid last_message_preview
+  let lastMessagePreview = raw.last_message_preview;
+  if (!lastMessagePreview || lastMessagePreview.trim() === "") {
+    lastMessagePreview = "No messages yet";
+  }
+
+  // Ensure we have a valid timestamp
+  let lastMessageAt = raw.last_message_at;
+  if (!lastMessageAt || lastMessageAt === "1969-12-31T00:00:00.000Z" || lastMessageAt === "1970-01-01T00:00:00.000Z") {
+    lastMessageAt = raw.updated_at || raw.created_at || new Date().toISOString();
   }
 
   return {
     id: raw.id,
     customer_name: customerName,
     customer_email: raw.customer_email,
-    status: raw.status,
-    last_message_at: raw.last_message_at,
-    unread_count: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : raw.unread_count,
-    last_message_preview: raw.last_message_preview,
+    status: raw.status || "open",
+    last_message_at: lastMessageAt,
+    unread_count: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : (raw.unread_count || 0),
+    last_message_preview: lastMessagePreview,
     metadata: raw.metadata,
     assigned_to_ai: raw.assigned_to_ai,
     ai_handover_session_id: raw.ai_handover_session_id,
-    priority: raw.priority,
-    tags: raw.tags,
+    priority: raw.priority || "medium",
+    tags: raw.tags || [],
   };
 };
 
