@@ -95,21 +95,17 @@ export function PerformanceMonitor() {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <Button variant="outline" size="sm" className="justify-start">
-                <Icon icon={BarChart3} className="mr-2 h-4 w-4" />
-                View Logs
+              <Button variant="outline" size="sm" className="justify-start" leftIcon={<Icon icon={BarChart3} className="h-4 w-4" />}>
+                Performance Metrics
               </Button>
-              <Button variant="outline" size="sm" className="justify-start">
-                <Icon icon={Globe} className="mr-2 h-4 w-4" />
-                WifiHighHigh Test
+              <Button variant="outline" size="sm" className="justify-start" leftIcon={<Icon icon={Globe} className="h-4 w-4" />}>
+                Network Status
               </Button>
-              <Button variant="outline" size="sm" className="justify-start">
-                <Icon icon={WifiHigh} className="mr-2 h-4 w-4" />
-                Connectivity
+              <Button variant="outline" size="sm" className="justify-start" leftIcon={<Icon icon={WifiHigh} className="h-4 w-4" />}>
+                Connection Health
               </Button>
-              <Button variant="outline" size="sm" className="justify-start">
-                <Icon icon={Zap} className="mr-2 h-4 w-4" />
-                Diagnostics
+              <Button variant="outline" size="sm" className="justify-start" leftIcon={<Icon icon={Zap} className="h-4 w-4" />}>
+                System Resources
               </Button>
             </div>
 

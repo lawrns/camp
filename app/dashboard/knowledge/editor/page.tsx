@@ -282,8 +282,8 @@ export default function DocumentEditorPage() {
             <Button
               variant="outline"
               onClick={() => setShowPreview(!showPreview)}
+              leftIcon={<Icon icon={Eye} className="h-4 w-4" />}
             >
-              <Icon icon={Eye} className="mr-2 h-4 w-4" />
               {showPreview ? 'Edit' : 'Preview'}
             </Button>
 
@@ -293,8 +293,8 @@ export default function DocumentEditorPage() {
               onClick={handleSave}
               disabled={isSaving || !document.title.trim()}
               className="bg-blue-600 hover:bg-blue-700"
+              leftIcon={<Icon icon={Save} className="h-4 w-4" />}
             >
-              <Icon icon={Save} className="mr-2 h-4 w-4" />
               {isSaving ? 'Saving...' : 'Save'}
             </PermissionButton>
 

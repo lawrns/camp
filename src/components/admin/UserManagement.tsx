@@ -334,12 +334,10 @@ export default function UserManagement({
           <p className="text-foreground">Manage team members and their permissions</p>
         </div>
         <div className="flex items-center gap-ds-2">
-          <Button variant="outline" size="sm">
-            <Icon icon={Download} className="mr-2 h-4 w-4" />
-            Export
+          <Button variant="outline" size="sm" leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
+            Export Users
           </Button>
-          <Button onClick={() => setIsCreateDialogOpen(true)}>
-            <Icon icon={UserPlus} className="mr-2 h-4 w-4" />
+          <Button onClick={() => setIsCreateDialogOpen(true)} leftIcon={<Icon icon={UserPlus} className="h-4 w-4" />}>
             Add User
           </Button>
         </div>

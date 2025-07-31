@@ -257,9 +257,8 @@ export function KnowledgeAnalytics({ data = mockAnalytics, className }: Knowledg
               <SelectItem value="1y">Last year</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm">
-            <Icon icon={Download} className="mr-2 h-4 w-4" />
-            Export
+          <Button variant="outline" size="sm" leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
+            Export Data
           </Button>
         </div>
       </div>

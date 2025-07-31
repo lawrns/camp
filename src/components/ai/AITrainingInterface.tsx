@@ -397,12 +397,10 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
                           rows={3}
                         />
                         <div className="flex gap-ds-2">
-                          <Button size="sm" onClick={() => handleImprovement(item.id, editedResponse)}>
-                            <Icon icon={Save} className="mr-1 h-3 w-3" />
+                          <Button size="sm" onClick={() => handleImprovement(item.id, editedResponse)} leftIcon={<Icon icon={Save} className="h-3 w-3" />}>
                             Save
                           </Button>
-                          <Button size="sm" variant="outline" onClick={cancelEditing}>
-                            <Icon icon={X} className="mr-1 h-3 w-3" />
+                          <Button size="sm" variant="outline" onClick={cancelEditing} leftIcon={<Icon icon={X} className="h-3 w-3" />}>
                             Cancel
                           </Button>
                         </div>
@@ -454,9 +452,8 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
 
                   {/* Improvement Button */}
                   {editingItem !== item.id && (
-                    <Button size="sm" variant="outline" onClick={() => startEditing(item)}>
-                      <Icon icon={Pencil} className="mr-1 h-3 w-3" />
-                      {item.suggestedImprovement ? "Edit" : "Improve"}
+                    <Button size="sm" variant="outline" onClick={() => startEditing(item)} leftIcon={<Icon icon={Pencil} className="h-3 w-3" />}>
+                      Edit
                     </Button>
                   )}
                 </div>

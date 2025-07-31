@@ -266,8 +266,7 @@ export default function DashboardTicketsPage() {
           <h1 className="text-3xl font-bold">Ticket Management</h1>
           <p className="text-gray-600">Manage and track customer support tickets</p>
         </div>
-        <Button data-testid="createTicketButton">
-          <Icon icon={Plus} className="mr-2 h-4 w-4" />
+        <Button data-testid="createTicketButton" leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
           Create Ticket
         </Button>
       </div>
@@ -362,8 +361,7 @@ export default function DashboardTicketsPage() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline" size="sm">
-              <Icon icon={FunnelSimple} className="mr-2 h-4 w-4" />
+            <Button variant="outline" size="sm" leftIcon={<Icon icon={FunnelSimple} className="h-4 w-4" />}>
               More Filters
             </Button>
           </div>

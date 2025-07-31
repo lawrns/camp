@@ -36,21 +36,32 @@ export default function RegisterPage() {
 
   // Create isolated registration handler that handles extension interference
   const performRegistration = async () => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          organization_name: organizationName,
-        },
+    console.log('[Register] Starting registration with API...');
+
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        email,
+        password,
+        fullName,
+        organizationName,
+      }),
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
+    const data = await response.json();
+    console.log('[Register] API response:', data);
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed');
+    }
+
+    if (data.success) {
       setSuccess(true);
+    } else {
+      throw new Error(data.error || 'Registration failed');
     }
   };
 
@@ -65,6 +76,31 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    // Client-side validation
+    if (!fullName.trim()) {
+      setError('Full name is required');
+      setLoading(false);
+      return;
+    }
+
+    if (!organizationName.trim()) {
+      setError('Organization name is required');
+      setLoading(false);
+      return;
+    }
+
+    if (!email.trim()) {
+      setError('Email is required');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      setLoading(false);
+      return;
+    }
 
     try {
       await isolatedRegistration();

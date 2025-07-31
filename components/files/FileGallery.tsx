@@ -257,9 +257,8 @@ export function FileGallery({
             <CardTitle>Files ({filteredAndSortedFiles.length})</CardTitle>
             <div className="flex items-center space-x-spacing-sm">
               {onUpload && (
-                <Button onClick={onUpload}>
-                  <Icon icon={Upload} className="mr-2 h-4 w-4" />
-                  Upload
+                <Button onClick={onUpload} leftIcon={<Icon icon={Upload} className="h-4 w-4" />}>
+                  Upload Files
                 </Button>
               )}
               <Button variant="outline" size="sm" onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}>
@@ -334,12 +333,10 @@ export function FileGallery({
                 <Button variant="outline" size="sm" onClick={clearSelection}>
                   Clear
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Icon icon={Download} className="mr-2 h-4 w-4" />
+                <Button variant="outline" size="sm" leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
                   Download
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Icon icon={Trash2} className="mr-2 h-4 w-4" />
+                <Button variant="outline" size="sm" leftIcon={<Icon icon={Trash2} className="h-4 w-4" />}>
                   Delete
                 </Button>
               </div>
@@ -358,8 +355,7 @@ export function FileGallery({
                   : "Upload some files to get started"}
               </p>
               {onUpload && (
-                <Button onClick={onUpload}>
-                  <Icon icon={Upload} className="mr-2 h-4 w-4" />
+                <Button onClick={onUpload} leftIcon={<Icon icon={Upload} className="h-4 w-4" />}>
                   Upload Files
                 </Button>
               )}

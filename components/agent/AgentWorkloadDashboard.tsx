@@ -154,8 +154,7 @@ export function AgentWorkloadDashboard({ organizationId, teamId }: AgentWorkload
       {/* Header with refresh button */}
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Agent Workload Dashboard</h2>
-        <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
-          <Icon icon={RefreshCw} className={cn("mr-2 h-4 w-4", refreshing && "animate-spin")} />
+        <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} leftIcon={<Icon icon={RefreshCw} className={`h-4 w-4 ${refreshing && "animate-spin"}`} />}>
           Refresh
         </Button>
       </div>

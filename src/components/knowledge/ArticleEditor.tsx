@@ -437,9 +437,8 @@ This concludes the overview of ${formData.title.toLowerCase()}.`;
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!formData.title.trim()}>
-            <Icon icon={Save} className="mr-2 h-4 w-4" />
-            Save Article
+          <Button onClick={handleSave} disabled={!formData.title.trim()} leftIcon={<Icon icon={Save} className="h-4 w-4" />}>
+            {isGeneratingContent ? 'Saving...' : 'Save'}
           </Button>
         </DialogFooter>
       </DialogContent>

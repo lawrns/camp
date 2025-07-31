@@ -212,8 +212,7 @@ export default function VectorStorageMonitoring({ organizationId }: { organizati
           <p className="text-muted-foreground">Monitor and manage vector embeddings storage and cleanup</p>
         </div>
         <div className="flex items-center gap-ds-2">
-          <Button variant="outline" size="sm" onClick={loadData} disabled={refreshing}>
-            <Icon icon={RefreshCw} className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+          <Button variant="outline" size="sm" onClick={loadData} disabled={refreshing} leftIcon={<Icon icon={RefreshCw} className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />}>
             Refresh
           </Button>
           {recommendation.recommend && (

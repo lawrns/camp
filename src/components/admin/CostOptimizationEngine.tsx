@@ -285,9 +285,8 @@ export default function CostOptimizationEngine() {
           <h2 className="text-3xl font-bold tracking-tight text-slate-900">Cost Optimization Engine</h2>
           <p className="text-foreground">Automated AI cost reduction and efficiency improvements</p>
         </div>
-        <Button onClick={loadOptimizationData} className="bg-primary text-white hover:bg-blue-700">
-          <Icon icon={RefreshCw} className="mr-2 h-4 w-4" />
-          Refresh
+        <Button onClick={loadOptimizationData} className="bg-primary text-white hover:bg-blue-700" leftIcon={<Icon icon={RefreshCw} className="h-4 w-4" />}>
+          Refresh Data
         </Button>
       </div>
 

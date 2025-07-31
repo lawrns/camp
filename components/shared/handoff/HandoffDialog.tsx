@@ -156,9 +156,8 @@ export function HandoffDialog({
 
           <div className="flex justify-between">
             {uiMode === "wizard" && currentStep > 1 && (
-              <Button variant="outline" onClick={() => setCurrentStep(currentStep - 1)} disabled={isLoading}>
-                <Icon icon={ArrowLeft} className="mr-2 h-4 w-4" />
-                Previous
+              <Button variant="outline" onClick={() => setCurrentStep(currentStep - 1)} disabled={isLoading} leftIcon={<Icon icon={ArrowLeft} className="h-4 w-4" />}>
+                Back
               </Button>
             )}
             <div className="ml-auto flex gap-ds-2">

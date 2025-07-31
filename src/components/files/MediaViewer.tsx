@@ -215,9 +215,8 @@ export function MediaViewer({
           <div className="mb-4 text-6xl">📄</div>
           <h3 className="mb-2 text-lg font-medium">{currentFile.name}</h3>
           <p className="text-foreground mb-4">This file type cannot be previewed</p>
-          <Button onClick={() => window.open(currentFile.url, "_blank")}>
-            <Icon icon={Download} className="mr-2 h-4 w-4" />
-            Download to View
+          <Button onClick={() => window.open(currentFile.url, "_blank")} leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
+            Download
           </Button>
         </div>
       </div>

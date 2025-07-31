@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { HeroSection } from '@/components/HeroSection';
 import { FeatureCard } from '@/components/FeatureCard';
 import { SafeClientOnly } from '@/components/SafeClientOnly';
-import { WidgetProvider } from '@/components/widget';
+import { EnhancedWidgetProvider } from '@/components/widget/enhanced';
 import { Robot, Users, ChatCircle } from '@phosphor-icons/react';
 
 export default function HomePage() {
@@ -32,9 +32,19 @@ export default function HomePage() {
           </div>
         </section>
         <SafeClientOnly>
-          <WidgetProvider organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd" debug={false}>
-            <div />
-          </WidgetProvider>
+          <EnhancedWidgetProvider
+            organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
+            debug={true}
+            config={{
+              organizationName: "Jam Test Organization",
+              primaryColor: "#3B82F6",
+              welcomeMessage: "Hi! 👋 Welcome to Jam Test Organization. How can we help you today?",
+              contactInfo: {
+                email: "jam@jam.com",
+                website: "https://campfire.com",
+              }
+            }}
+          />
         </SafeClientOnly>
       </Suspense>
     </main>

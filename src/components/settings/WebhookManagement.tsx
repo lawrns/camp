@@ -449,9 +449,8 @@ export function WebhookManagement({ organizationId }: WebhookManagementProps) {
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger>
-            <Button>
-              <Icon icon={Plus} className="mr-2 h-4 w-4" />
-              Create Webhook
+            <Button leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
+              Add Webhook
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
@@ -612,8 +611,7 @@ export function WebhookManagement({ organizationId }: WebhookManagementProps) {
               <Icon icon={Globe} className="mx-auto mb-4 h-12 w-12 text-gray-400" />
               <h3 className="mb-2 text-base font-medium text-gray-900">No webhooks configured</h3>
               <p className="text-foreground mb-4">Get started by creating your first webhook</p>
-              <Button onClick={() => setShowCreateDialog(true)}>
-                <Icon icon={Plus} className="mr-2 h-4 w-4" />
+              <Button onClick={() => setShowCreateDialog(true)} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
                 Create Webhook
               </Button>
             </div>

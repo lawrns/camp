@@ -60,13 +60,11 @@ export function WidgetImportExport({ config, onImport, onExport }: WidgetImportE
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Button variant="outline" onClick={handleExport} className="w-full">
-            <Icon icon={Download} className="mr-2 h-4 w-4" />
+          <Button variant="outline" onClick={handleExport} className="w-full" leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
             Export Configuration
           </Button>
 
-          <Button variant="outline" onClick={triggerImport} className="w-full">
-            <Icon icon={Upload} className="mr-2 h-4 w-4" />
+          <Button variant="outline" onClick={triggerImport} className="w-full" leftIcon={<Icon icon={Upload} className="h-4 w-4" />}>
             Import Configuration
           </Button>
 

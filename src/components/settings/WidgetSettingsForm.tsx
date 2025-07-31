@@ -503,8 +503,7 @@ export function WidgetSettingsForm({
         </CardHeader>
         <CardContent>
           <div className="mb-4 flex items-center gap-3">
-            <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview(!showPreview)}>
-              <Icon icon={Eye} className="mr-2 h-4 w-4" />
+            <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview(!showPreview)} leftIcon={<Icon icon={Eye} className="h-4 w-4" />}>
               {showPreview ? "Hide" : "Show"} Preview
             </Button>
             <div className="text-foreground flex items-center gap-ds-2 text-sm">

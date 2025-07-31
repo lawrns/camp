@@ -353,8 +353,7 @@ export function ConversationMetadata({
         {/* Save/Cancel Buttons */}
         {isEditing && (
           <div className="flex gap-ds-2 border-t pt-2">
-            <Button onClick={handleSave} size="sm" className="flex-1">
-              <Icon icon={Save} className="mr-1 h-4 w-4" />
+            <Button onClick={handleSave} size="sm" className="flex-1" leftIcon={<Icon icon={Save} className="h-4 w-4" />}>
               Save Changes
             </Button>
             <Button onClick={handleCancel} variant="outline" size="sm" className="flex-1">

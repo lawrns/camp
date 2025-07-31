@@ -172,9 +172,8 @@ export function WidgetConfiguration({ organizationId }: { organizationId: string
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold">Widget Configuration</h2>
         <div className="flex gap-ds-2">
-          <Button variant="outline" onClick={() => setShowPreview(!showPreview)}>
-            <Icon icon={Eye} className="mr-2 h-4 w-4" />
-            {showPreview ? "Hide" : "Show"} Preview
+          <Button variant="outline" onClick={() => setShowPreview(!showPreview)} leftIcon={<Icon icon={Eye} className="h-4 w-4" />}>
+            {showPreview ? 'Hide' : 'Preview'}
           </Button>
           <Button onClick={saveConfiguration} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save Changes"}

@@ -152,9 +152,8 @@ export function WorkflowBuilder() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold">Workflow Automation</h2>
-        <Button onClick={handleCreateNew}>
-          <Icon icon={Plus} className="mr-2 h-4 w-4" />
-          Create Workflow
+        <Button onClick={handleCreateNew} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
+          Create New Workflow
         </Button>
       </div>
 
@@ -258,8 +257,7 @@ export function WorkflowBuilder() {
                   <div className="space-y-spacing-sm">
                     <div className="flex items-center justify-between">
                       <Label>Conditions (all must be true)</Label>
-                      <Button variant="outline" size="sm" onClick={addCondition}>
-                        <Icon icon={Plus} className="mr-1 h-4 w-4" />
+                      <Button variant="outline" size="sm" onClick={addCondition} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
                         Add Condition
                       </Button>
                     </div>
@@ -315,8 +313,7 @@ export function WorkflowBuilder() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="text-base font-semibold">Actions</h4>
-                    <Button variant="outline" size="sm" onClick={addAction}>
-                      <Icon icon={Plus} className="mr-1 h-4 w-4" />
+                    <Button variant="outline" size="sm" onClick={addAction} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
                       Add Action
                     </Button>
                   </div>
@@ -411,8 +408,7 @@ export function WorkflowBuilder() {
                   >
                     Cancel
                   </Button>
-                  <Button onClick={handleSave}>
-                    <Icon icon={Save} className="mr-2 h-4 w-4" />
+                  <Button onClick={handleSave} leftIcon={<Icon icon={Save} className="h-4 w-4" />}>
                     Save Workflow
                   </Button>
                 </div>

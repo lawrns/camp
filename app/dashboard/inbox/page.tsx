@@ -68,7 +68,12 @@ export default function InboxPage(): JSX.Element {
         {/* Inbox Dashboard Component */}
         <div className="flex-1 overflow-hidden">
           <Suspense fallback={<div className="flex items-center justify-center h-full">Loading inbox...</div>}>
-            <InboxDashboard className="h-full w-full" />
+            <InboxDashboard
+              currentUserId={user?.id || ''}
+              currentUserName={userName}
+              currentUserRole="agent"
+              className="h-full w-full"
+            />
           </Suspense>
         </div>
       </div>

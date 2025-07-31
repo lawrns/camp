@@ -294,8 +294,7 @@ export function SuggestedReplies({
               className="w-full"
             />
             <div className="flex gap-ds-2">
-              <Button onClick={handleSendReply} disabled={!selectedReply.trim()} className="flex-1">
-                <Icon icon={Send} className="mr-2 h-4 w-4" />
+              <Button onClick={handleSendReply} disabled={!selectedReply.trim()} className="flex-1" leftIcon={<Icon icon={Send} className="h-4 w-4" />}>
                 Send Reply
               </Button>
               <Button onClick={() => setSelectedReply("")} variant="outline">

@@ -104,12 +104,10 @@ export function InboxDetailsPanel({ conversation, customerData }: InboxDetailsPa
 
         {/* Quick Actions */}
         <div className="flex gap-ds-2">
-          <Button variant="outline" size="sm" className="flex-1">
-            <Icon icon={Mail} className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" className="flex-1" leftIcon={<Icon icon={Mail} className="h-4 w-4" />}>
             Email
           </Button>
-          <Button variant="outline" size="sm" className="flex-1">
-            <Icon icon={Phone} className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" className="flex-1" leftIcon={<Icon icon={Phone} className="h-4 w-4" />}>
             Call
           </Button>
         </div>

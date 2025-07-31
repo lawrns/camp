@@ -272,8 +272,7 @@ export function SecurityAlertsDashboard({ organizationId, className }: SecurityA
               <CardTitle>Security Alerts</CardTitle>
               <CardDescription>Monitor and respond to security threats</CardDescription>
             </div>
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
-              <Icon icon={RefreshCw} className={cn("mr-2 h-4 w-4", refreshing && "animate-spin")} />
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} leftIcon={<Icon icon={RefreshCw} className={`h-4 w-4 ${refreshing && "animate-spin"}`} />}>
               Refresh
             </Button>
           </div>

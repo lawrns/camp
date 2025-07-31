@@ -20,10 +20,9 @@ import {
   CheckCircleIcon,
   XCircleIcon
 } from 'lucide-react';
-import { ChatView } from '@/components/chat/ChatView';
+import { DashboardChatView } from '@/components/chat/DashboardChatView';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 
 interface Conversation {
   id: string;
@@ -131,51 +130,40 @@ export function InboxDashboard({
       setIsLoading(true);
       setError(null);
 
-      let query = supabase
-        .from('conversations')
-        .select(`
-          *,
-          customer:customers(*),
-          messages(content, created_at, user_id)
-        `)
-        .order('updated_at', { ascending: false });
+      // Use dashboard API instead of direct Supabase queries
+      const response = await fetch('/api/dashboard/conversations', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies for authentication
+      });
 
-      // Apply filters
-      if (statusFilter !== 'all') {
-        query = query.eq('status', statusFilter);
+      if (!response.ok) {
+        throw new Error(`Failed to load conversations: ${response.statusText}`);
       }
 
-      if (priorityFilter !== 'all') {
-        query = query.eq('priority', priorityFilter);
-      }
+      const data = await response.json();
+      console.log('[InboxDashboard] Loaded conversations:', data.conversations?.length || 0);
 
-      // For agents, only show assigned conversations or unassigned ones
-      if (currentUserRole === 'agent') {
-        query = query.or(`assigned_agent.eq.${currentUserId},assigned_agent.is.null`);
-      }
-
-      const { data, error: fetchError } = await query;
-
-      if (fetchError) {
-        throw fetchError;
-      }
+      // Transform API response to match component interface
+      const conversations = data.conversations || [];
 
       // Transform data
-      const transformedConversations: Conversation[] = (data || []).map(conv => {
-        const lastMessage = conv.messages?.[0];
+      const transformedConversations: Conversation[] = conversations.map((conv: any) => {
         return {
           id: conv.id,
           customerId: conv.customer_id,
-          customerName: conv.customer?.name || 'Unknown Customer',
-          customerEmail: conv.customer?.email || '',
-          customerAvatar: conv.customer?.avatar_url,
+          customerName: conv.customerName || 'Unknown Customer',
+          customerEmail: conv.customer_email || '',
+          customerAvatar: undefined,
           subject: conv.subject || 'No Subject',
           status: conv.status,
           priority: conv.priority || 'medium',
           channel: conv.channel || 'chat',
           assignedAgent: conv.assigned_agent,
-          lastMessage: lastMessage?.content || 'No messages yet',
-          lastMessageAt: new Date(conv.updated_at),
+          lastMessage: conv.lastMessage || 'No messages yet',
+          lastMessageAt: new Date(conv.lastMessageAt || conv.updated_at),
           unreadCount: conv.unread_count || 0,
           tags: conv.tags || [],
           sentiment: conv.sentiment || 'neutral',
@@ -296,10 +284,7 @@ export function InboxDashboard({
     }
   };
 
-  const handleHandoffTriggered = () => {
-    // Refresh conversations to show updated status
-    loadConversations();
-  };
+
 
   if (error) {
     return (
@@ -424,11 +409,8 @@ export function InboxDashboard({
       {/* Main Content - Chat View */}
       <div className="flex-1">
         {selectedConversation ? (
-          <ChatView
+          <DashboardChatView
             conversationId={selectedConversation.id}
-            currentUserId={currentUserId}
-            currentUserName={currentUserName}
-            onHandoffTriggered={handleHandoffTriggered}
             className="h-full"
           />
         ) : (

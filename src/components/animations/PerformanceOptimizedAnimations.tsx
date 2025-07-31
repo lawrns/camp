@@ -698,9 +698,8 @@ export function AnimationShowcase({ config, className }: AnimationShowcaseProps)
         </div>
 
         <div className="flex items-center gap-ds-2">
-          <Button variant="outline" size="sm" onClick={() => setIsVisible(!isVisible)}>
-            <Icon icon={RotateCcw} className="mr-2 h-4 w-4" />
-            Reset
+          <Button variant="outline" size="sm" onClick={() => setIsVisible(!isVisible)} leftIcon={<Icon icon={RotateCcw} className="h-4 w-4" />}>
+            Toggle Animation
           </Button>
 
           <Button variant="outline" size="sm" onClick={() => setIsVisible(!isVisible)}>

@@ -185,9 +185,8 @@ export default function DashboardIntegrationsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Integrations</h1>
           <p className="mt-1 text-gray-600">Connect your favorite tools and streamline your workflow</p>
         </div>
-        <Button>
-          <Icon icon={Plus} className="mr-2 h-4 w-4" />
-          Request Integration
+        <Button leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
+          Add Integration
         </Button>
       </div>
 

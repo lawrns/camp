@@ -170,9 +170,8 @@ export function ExportReports() {
           <CardDescription>Download your data in various formats for analysis</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={() => setShowDialog(true)} className="w-full">
-            <Icon icon={FileText} className="mr-2 h-4 w-4" />
-            Create Export
+          <Button onClick={() => setShowDialog(true)} className="w-full" leftIcon={<Icon icon={FileText} className="h-4 w-4" />}>
+            Export Report
           </Button>
         </CardContent>
       </Card>

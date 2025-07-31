@@ -45,6 +45,16 @@ export const sanitizeMessageStrict = (content: string): string => {
   return simpleSanitize(content);
 };
 
+/**
+ * General input sanitization for widget use
+ */
+export const sanitizeInput = (input: string): string => {
+  if (typeof input !== 'string') {
+    return '';
+  }
+  return simpleSanitize(input.trim());
+};
+
 // ============================================================================
 // USER INPUT VALIDATION
 // ============================================================================

@@ -2,11 +2,17 @@ import { supabase } from "@/lib/supabase";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useAuth } from "./useAuth";
+import { usePathname } from "next/navigation";
 
 export function useConversations() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const organizationId = user?.organizationId;
+  const pathname = usePathname();
+
+  // Skip query on homepage to prevent unnecessary API calls
+  const isHomepage = pathname === '/' || pathname === '/app';
+  const shouldSkipQuery = isHomepage || !organizationId;
 
   const query = useQuery({
     queryKey: ["conversations", organizationId],
@@ -47,13 +53,13 @@ export function useConversations() {
       console.log("[useConversations] Organization ID used:", organizationId);
       return data;
     },
-    enabled: !!organizationId, // Only run query if organizationId is available
+    enabled: !shouldSkipQuery, // Skip on homepage and when no organizationId
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   // Set up real-time subscription
   useEffect(() => {
-    if (!organizationId) return;
+    if (shouldSkipQuery) return;
 
     const channel = supabase
       .browser()
@@ -114,7 +120,7 @@ export function useConversations() {
 
       supabase.browser().removeChannel(channel);
     };
-  }, [queryClient, organizationId]);
+  }, [queryClient, shouldSkipQuery]);
 
   const createConversation = useCallback(async (data: any) => {
     const { data: newConversation, error } = await supabase

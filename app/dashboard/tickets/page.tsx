@@ -263,8 +263,8 @@ export default function TicketsPage() {
               <Button
                 onClick={() => router.push("/dashboard/tickets/new")}
                 className="bg-blue-600 hover:bg-blue-700"
+                leftIcon={<Icon icon={Plus} className="h-4 w-4" />}
               >
-                <Icon icon={Plus} className="mr-2 h-4 w-4" />
                 New Ticket
               </Button>
             </div>
@@ -340,8 +340,7 @@ export default function TicketsPage() {
                   className="pl-10 w-64"
                 />
               </div>
-              <Button variant="outline" size="sm">
-                <Icon icon={FunnelSimple} className="mr-2 h-4 w-4" />
+              <Button variant="outline" size="sm" leftIcon={<Icon icon={FunnelSimple} className="h-4 w-4" />}>
                 Filters
               </Button>
             </div>
@@ -491,8 +490,7 @@ export default function TicketsPage() {
                 ? "Try adjusting your filters or search query."
                 : "Create your first ticket to get started."}
             </p>
-            <Button onClick={() => router.push("/dashboard/tickets/new")}>
-              <Icon icon={Plus} className="mr-2 h-4 w-4" />
+            <Button onClick={() => router.push("/dashboard/tickets/new")} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
               Create Ticket
             </Button>
           </div>

@@ -202,8 +202,7 @@ export function AIInsightsDashboard({ organizationId, className }: AIInsightsDas
           <h1 className="text-3xl font-bold">AI Insights</h1>
           <p className="text-muted-foreground">Monitor AI performance and conversation analytics</p>
         </div>
-        <Button onClick={handleRefresh} disabled={refreshing} variant="outline">
-          <Icon icon={RefreshCw} className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+        <Button onClick={handleRefresh} disabled={refreshing} variant="outline" leftIcon={<Icon icon={RefreshCw} className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />}>
           Refresh
         </Button>
       </div>

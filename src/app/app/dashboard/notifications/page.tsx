@@ -171,9 +171,8 @@ function NotificationsContent() {
               )}
               Refresh
             </Button>
-            <Button variant="outline" onClick={markAllAsRead} disabled={unreadCount === 0}>
-              <Icon icon={Checks} className="mr-2 h-4 w-4" />
-              Mark All Read
+            <Button variant="outline" onClick={markAllAsRead} disabled={unreadCount === 0} leftIcon={<Icon icon={Checks} className="h-4 w-4" />}>
+              Mark All as Read
             </Button>
           </div>
         </div>

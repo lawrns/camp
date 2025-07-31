@@ -220,8 +220,7 @@ export default function TicketDetailPage({ params }: TicketDetailPageProps) {
           <p className="mb-4 text-gray-600">
             The ticket you're looking for doesn't exist or you don't have access to it.
           </p>
-          <Button onClick={() => router.push("/dashboard/tickets")} variant="outline">
-            <Icon icon={ArrowLeft} className="mr-2 h-4 w-4" />
+          <Button onClick={() => router.push("/dashboard/tickets")} variant="outline" leftIcon={<Icon icon={ArrowLeft} className="h-4 w-4" />}>
             Back to Tickets
           </Button>
         </div>
@@ -238,9 +237,8 @@ export default function TicketDetailPage({ params }: TicketDetailPageProps) {
       {/* Header */}
       <div className="mb-6">
         <div className="mb-4 flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => router.push("/dashboard/tickets")}>
-            <Icon icon={ArrowLeft} className="mr-2 h-4 w-4" />
-            Back to Tickets
+          <Button variant="ghost" size="sm" onClick={() => router.push("/dashboard/tickets")} leftIcon={<Icon icon={ArrowLeft} className="h-4 w-4" />}>
+            Back
           </Button>
           <div className="flex items-center gap-2">
             <Icon icon={Ticket} className="h-5 w-5 text-gray-600" />

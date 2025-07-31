@@ -246,8 +246,7 @@ export function ApiKeysManagement({ organizationId }: ApiKeysManagementProps) {
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger>
-            <Button>
-              <Icon icon={Plus} className="mr-2 h-4 w-4" />
+            <Button leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
               Create API Key
             </Button>
           </DialogTrigger>
@@ -369,8 +368,7 @@ export function ApiKeysManagement({ organizationId }: ApiKeysManagementProps) {
               <Icon icon={Key} className="mx-auto mb-4 h-12 w-12 text-gray-400" />
               <h3 className="mb-2 text-base font-medium text-gray-900">No API keys</h3>
               <p className="text-foreground mb-4">Get started by creating your first API key</p>
-              <Button onClick={() => setShowCreateDialog(true)}>
-                <Icon icon={Plus} className="mr-2 h-4 w-4" />
+              <Button onClick={() => setShowCreateDialog(true)} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
                 Create API Key
               </Button>
             </div>

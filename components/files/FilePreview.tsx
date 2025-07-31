@@ -314,19 +314,13 @@ export function FilePreview({
                     </div>
                   </div>
                   <div className="flex space-x-spacing-sm">
-                    <button
-                      onClick={handleDownload}
-                      className="bg-primary rounded-ds-md px-3 py-1 text-sm text-white transition-colors hover:bg-blue-700"
-                    >
+                    <Button variant="outline" onClick={handleDownload} leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
                       Download
-                    </button>
+                    </Button>
                     {file.url && (
-                      <button
-                        onClick={handleOpenExternal}
-                        className="rounded-ds-md bg-neutral-600 px-3 py-1 text-sm text-white transition-colors hover:bg-neutral-700"
-                      >
+                      <Button variant="outline" onClick={handleOpenExternal} leftIcon={<Icon icon={ArrowSquareOut} className="h-4 w-4" />}>
                         Open in new tab
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -407,8 +401,7 @@ function ImagePreview({
           </Button>
         </div>
         {onFullscreen && (
-          <Button variant="outline" size="sm" onClick={() => onFullscreen(file)}>
-            <Icon icon={Eye} className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" onClick={() => onFullscreen(file)} leftIcon={<Icon icon={Eye} className="h-4 w-4" />}>
             Fullscreen
           </Button>
         )}
@@ -579,8 +572,7 @@ function DocumentPreview({ file, maxWidth, maxHeight }: { file: FileMetadata; ma
         <iframe src={`${file.url}#toolbar=0`} className="h-96 w-full" title={file.name} />
       </div>
       <div className="mt-2 text-center">
-        <Button variant="outline" onClick={() => window.open(file.url, "_blank")}>
-          <Icon icon={ArrowSquareOut} className="mr-2 h-4 w-4" />
+        <Button variant="outline" onClick={() => window.open(file.url, "_blank")} leftIcon={<Icon icon={ArrowSquareOut} className="h-4 w-4" />}>
           Open PDF
         </Button>
       </div>
@@ -608,8 +600,7 @@ function GenericFilePreview({ file }: { file: FileMetadata }) {
         {getFileTypeLabel(file.type)}
       </Badge>
       <p className="text-foreground mb-4">This file type cannot be previewed in the browser.</p>
-      <Button onClick={() => window.open(file.url, "_blank")}>
-        <Icon icon={Download} className="mr-2 h-4 w-4" />
+      <Button onClick={() => window.open(file.url, "_blank")} leftIcon={<Icon icon={Download} className="h-4 w-4" />}>
         Download to View
       </Button>
     </div>

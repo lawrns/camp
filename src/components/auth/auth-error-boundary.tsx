@@ -106,9 +106,8 @@ export class AuthErrorBoundary extends Component<Props, State> {
             </Alert>
 
             <div className="flex gap-3">
-              <Button onClick={this.handleReset} variant="primary" className="flex-1">
-                <Icon icon={RefreshCw} className="mr-2 h-4 w-4" />
-                Refresh Page
+              <Button onClick={this.handleReset} variant="primary" className="flex-1" leftIcon={<Icon icon={RefreshCw} className="h-4 w-4" />}>
+                Try Again
               </Button>
 
               {isAuthError && (

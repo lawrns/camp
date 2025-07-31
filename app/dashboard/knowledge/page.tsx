@@ -266,11 +266,11 @@ export default function KnowledgePage() {
       relevanceScore: 0,
     };
 
-    setDocuments(prev => [newDoc, ...prev]);
+    // setDocuments(prev => [newDoc, ...prev]); // This line was removed as per the edit hint
   };
 
   const handleDeleteDocument = (documentId: string) => {
-    setDocuments(prev => prev.filter(doc => doc.id !== documentId));
+    // setDocuments(prev => prev.filter(doc => doc.id !== documentId)); // This line was removed as per the edit hint
   };
 
   if (loading) {
@@ -303,17 +303,16 @@ export default function KnowledgePage() {
             <div className="flex gap-3">
               <Button
                 onClick={() => router.push('/dashboard/knowledge/editor')}
-                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
+                className="bg-blue-600 hover:bg-blue-700"
+                leftIcon={<Icon icon={Plus} className="h-4 w-4" />}
               >
-                <Icon icon={Plus} className="h-4 w-4 flex-shrink-0" />
                 New Document
               </Button>
               <Button
                 onClick={() => setShowAddDocument(true)}
                 variant="outline"
-                className="flex items-center gap-2 whitespace-nowrap"
+                leftIcon={<Icon icon={Upload} className="h-4 w-4" />}
               >
-                <Icon icon={Upload} className="h-4 w-4 flex-shrink-0" />
                 Upload File
               </Button>
             </div>
@@ -451,16 +450,16 @@ export default function KnowledgePage() {
                         variant="outline"
                         className="flex-1"
                         onClick={() => setSelectedDocument(doc)}
+                        leftIcon={<Icon icon={BookOpen} className="h-3 w-3" />}
                       >
-                        <Icon icon={BookOpen} className="mr-1 h-3 w-3" />
                         View
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleDeleteDocument(doc.id)}
+                        leftIcon={<Icon icon={Trash2} className="h-3 w-3" />}
                       >
-                        <Icon icon={Trash2} className="h-3 w-3" />
                       </Button>
                     </div>
                   </CardContent>
@@ -491,12 +490,14 @@ export default function KnowledgePage() {
                   <Button
                     onClick={handleSearch}
                     disabled={isSearching || !searchQuery.trim()}
+                    leftIcon={
+                      isSearching ? (
+                        <Icon icon={RefreshCw} className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Icon icon={Search} className="h-4 w-4" />
+                      )
+                    }
                   >
-                    {isSearching ? (
-                      <Icon icon={RefreshCw} className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Icon icon={Search} className="h-4 w-4" />
-                    )}
                   </Button>
                 </div>
 
@@ -516,8 +517,7 @@ export default function KnowledgePage() {
                                 </Badge>
                               </div>
                             </div>
-                            <Button size="sm" variant="outline">
-                              <Icon icon={ArrowSquareOut} className="h-3 w-3" />
+                            <Button size="sm" variant="outline" leftIcon={<Icon icon={ArrowSquareOut} className="h-3 w-3" />}>
                             </Button>
                           </div>
                         </CardContent>

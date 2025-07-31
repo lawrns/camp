@@ -93,8 +93,7 @@ export class SentryErrorBoundary extends Component<Props, State> {
           <div className="border-status-error-light rounded-ds-lg border bg-[var(--fl-color-danger-subtle)] spacing-3 text-center">
             <Icon icon={AlertTriangle} className="text-brand-mahogany-500 mx-auto mb-2 h-6 w-6" />
             <p className="text-red-600-dark mb-2 text-sm">Widget temporarily unavailable</p>
-            <Button size="sm" variant="outline" onClick={this.handleRetry} className="text-red-600-dark border-[var(--fl-color-danger-muted)]">
-              <Icon icon={RefreshCw} className="mr-2 h-4 w-4" />
+            <Button size="sm" variant="outline" onClick={this.handleRetry} className="text-red-600-dark border-[var(--fl-color-danger-muted)]" leftIcon={<Icon icon={RefreshCw} className="h-4 w-4" />}>
               Retry
             </Button>
           </div>
@@ -124,9 +123,8 @@ export class SentryErrorBoundary extends Component<Props, State> {
                 )}
 
                 <div className="flex space-x-spacing-sm">
-                  <Button onClick={this.handleRetry} className="flex-1">
-                    <Icon icon={RefreshCw} className="mr-2 h-4 w-4" />
-                    Try Again
+                  <Button onClick={this.handleRetry} className="flex-1" leftIcon={<Icon icon={RefreshCw} className="h-4 w-4" />}>
+                    Retry
                   </Button>
 
                   <Button variant="outline" onClick={this.handleReportProblem} className="flex-1">
