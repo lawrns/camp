@@ -4,6 +4,7 @@ import { Clock, Robot, Tag } from "@phosphor-icons/react";
 import * as React from "react";
 import { memo } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { StatusBadge } from "@/components/inbox/StatusBadge";
 import type { ConversationRowProps } from "../types";
 
 /**
@@ -33,38 +34,6 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
       return formatDistanceToNow(date, { addSuffix: true });
     } catch (error) {
       return "Unknown time";
-    }
-  };
-
-  // Get priority color
-  const getPriorityColor = (priority?: string) => {
-    switch (priority) {
-      case "urgent":
-        return "text-[var(--color-error-600)] bg-[var(--color-error-100)]";
-      case "high":
-        return "text-[var(--color-warning-600)] bg-[var(--color-warning-100)]";
-      case "medium":
-        return "text-[var(--color-warning-600)] bg-[var(--color-warning-100)]";
-      case "low":
-        return "text-[var(--color-success-600)] bg-[var(--color-success-100)]";
-      default:
-        return "text-[var(--color-neutral-600)] bg-[var(--color-neutral-100)]";
-    }
-  };
-
-  // Get status color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "open":
-        return "text-[var(--color-primary-600)] bg-[var(--color-primary-100)]";
-      case "pending":
-        return "text-[var(--color-warning-600)] bg-[var(--color-warning-100)]";
-      case "resolved":
-        return "text-[var(--color-success-600)] bg-[var(--color-success-100)]";
-      case "escalated":
-        return "text-[var(--color-error-600)] bg-[var(--color-error-100)]";
-      default:
-        return "text-[var(--color-neutral-600)] bg-[var(--color-neutral-100)]";
     }
   };
 
@@ -115,7 +84,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                   return getAvatarPath(uniqueId, "customer");
                 })()}
                 alt={conversation.customer_name}
-                className="rounded-ds-full cursor-pointer transition-all hover:ring-2 hover:ring-[var(--color-primary-300)]"
+                className="rounded-ds-full transition-all"
                 style={{
                   height: 'var(--spacing-10)', // 40px
                   width: 'var(--spacing-10)'
@@ -133,15 +102,19 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                   <h3 className="truncate font-medium text-[var(--color-text)]" style={{ fontSize: 'var(--font-size-sm)' }} data-testid="conversation-customer-name">{conversation.customer_name}</h3>
                   <div className="flex-shrink-0">
                     {isAIAssigned ? (
-                      <span className="inline-flex items-center rounded-ds-full bg-[var(--color-primary-100)] font-medium text-[var(--color-primary-800)]" style={{ padding: 'var(--spacing-1) var(--spacing-2)', fontSize: 'var(--font-size-xs)' }} data-testid="conversation-ai-badge">
-                        <Robot className="mr-1 h-3 w-3" data-testid="conversation-ai-icon" />
-                        AI
-                      </span>
+                      <StatusBadge 
+                        status="ai" 
+                        variant="compact" 
+                        size="sm" 
+                        className="flex-shrink-0"
+                      />
                     ) : (
-                      <span className="inline-flex items-center rounded-ds-full bg-[var(--color-primary-100)] font-medium text-[var(--color-primary-800)]" style={{ padding: 'var(--spacing-1) var(--spacing-2)', fontSize: 'var(--font-size-xs)' }} data-testid="conversation-human-badge">
-                        <Tag className="mr-1 h-3 w-3" data-testid="conversation-human-icon" />
-                        Human
-                      </span>
+                      <StatusBadge 
+                        status="human" 
+                        variant="compact" 
+                        size="sm" 
+                        className="flex-shrink-0"
+                      />
                     )}
                   </div>
                 </div>
@@ -163,7 +136,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                     {conversation.tags.slice(0, 2).map((tag, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center rounded-ds-full bg-background px-2 py-1 text-tiny font-medium text-gray-800 cursor-pointer hover:bg-gray-200 transition-colors"
+                        className="inline-flex items-center rounded-ds-full bg-background px-2 py-1 text-tiny font-medium text-gray-800 transition-colors"
                       >
                         <Tag className="mr-1 h-3 w-3" />
                         {tag}
@@ -175,20 +148,15 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                   </div>
                 )}
 
-                {/* Status and Priority badges */}
+                {/* Status and Priority badges using unified component */}
                 <div className="flex items-center gap-1">
-                  <span
-                    className={`inline-flex items-center rounded-ds-full px-2 py-1 text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity ${getStatusColor(conversation.status)}`}
-                  >
-                    {conversation.status}
-                  </span>
-                  {conversation.priority && (
-                    <span
-                      className={`inline-flex items-center rounded-ds-full px-2 py-1 text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity ${getPriorityColor(conversation.priority)}`}
-                    >
-                      {conversation.priority}
-                    </span>
-                  )}
+                  <StatusBadge 
+                    status={conversation.status} 
+                    priority={conversation.priority}
+                    variant="compact"
+                    size="sm"
+                    showIcon={false}
+                  />
                 </div>
               </div>
             </div>
@@ -204,7 +172,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
 
             {/* Unread count */}
             {conversation.unread_count > 0 && (
-              <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-blue-600 px-2 py-1 text-xs font-bold text-white cursor-pointer hover:bg-blue-700 transition-colors">
+              <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-blue-600 px-2 py-1 text-xs font-bold text-white transition-colors">
                 {conversation.unread_count > 99 ? "99+" : conversation.unread_count}
               </span>
             )}

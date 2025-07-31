@@ -103,7 +103,7 @@ export function InboxLayout({
               <Icon icon={Menu} className="text-foreground h-5 w-5" />
             </button>
 
-            <h2 className="flex-1 text-center font-semibold text-gray-900">Messages</h2>
+            <h2 className="flex-1 heading-center font-semibold text-gray-900">Messages</h2>
 
             {detailsPanel && (
               <button onClick={toggleDetails} className="hover:bg-background rounded-ds-lg spacing-1.5">

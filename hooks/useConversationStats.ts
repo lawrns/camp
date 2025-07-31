@@ -16,9 +16,17 @@ export function useConversationStats() {
     const { user } = useAuth();
     const organizationId = user?.organizationId;
 
+    // Check if we're in widget context and disable the hook
+    const isWidgetContext = typeof window !== 'undefined' && (
+        window.location.pathname.includes('/widget') ||
+        window.location.search.includes('widget=true') ||
+        (window as any).CampfireWidgetConfig ||
+        user?.isWidget
+    );
+
     return useQuery({
         queryKey: ["conversation-stats", organizationId],
-        enabled: !!organizationId, // Only run query when organizationId is available
+        enabled: !!organizationId && !isWidgetContext, // Disable in widget context
         queryFn: async (): Promise<ConversationStats> => {
             if (!organizationId) {
                 throw new Error("Organization ID is required to fetch conversation stats");

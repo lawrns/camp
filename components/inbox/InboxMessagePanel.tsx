@@ -17,10 +17,10 @@ import { useUIState } from "@/store/useInboxStore";
 // Flame styles now handled by design-system.css
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import type { Message } from "@/types/entities/message";
-import { DotsThreeVertical as MoreVertical, Sparkle as Sparkles, Note as StickyNote } from "@phosphor-icons/react";
+import { DotsThreeVertical as MoreVertical, Sparkle as Sparkles, Note as StickyNote, UserPlus } from "@phosphor-icons/react";
 import { formatDistanceToNow } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AssignmentPopover } from "./AssignmentPopover";
+import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
 
 interface Conversation {
   id: string;
@@ -67,6 +67,7 @@ export function InboxMessagePanel({
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isNearBottom, setIsNearBottom] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
+  const [showAssignmentDialog, setShowAssignmentDialog] = useState(false);
   const { showAIAssist, setShowAIAssist } = useUIState();
 
   // Handle scroll position and show/hide scroll button
@@ -316,14 +317,18 @@ export function InboxMessagePanel({
         </div>
 
         <div className="flex items-center gap-ds-2">
-          {/* Assignment Popover - Integrated into header */}
-          <AssignmentPopover
-            conversationId={conversation.id}
-            organizationId={conversation.organizationId || ""}
-            onAssigned={onAssignAgent}
-            variant="header"
+          {/* Assignment Button - Opens Dialog */}
+          <Button
+            variant="ghost"
             size="sm"
-          />
+            onClick={() => setShowAssignmentDialog(true)}
+            className="touch-target text-neutral-600 transition-all hover:text-neutral-900"
+            data-testid="assign-agent-button"
+            style={{ minWidth: 44, minHeight: 44 }}
+            aria-label="Assign conversation to agent"
+          >
+            <Icon icon={UserPlus} className="h-4 w-4" />
+          </Button>
 
           <Button
             variant="ghost"
@@ -661,6 +666,19 @@ export function InboxMessagePanel({
           enableEmoji={true}
         />
       </OptimizedMotion.div>
+
+      {/* Assignment Dialog */}
+      <AssignmentDialog
+        open={showAssignmentDialog}
+        onOpenChange={setShowAssignmentDialog}
+        conversationId={conversation.id}
+        currentAgentId={null}
+        organizationId={conversation.organizationId || ""}
+        onAssigned={(agentId) => {
+          onAssignAgent?.(agentId);
+          setShowAssignmentDialog(false);
+        }}
+      />
     </div>
   );
 }

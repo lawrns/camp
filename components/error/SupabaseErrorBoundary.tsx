@@ -61,7 +61,7 @@ export class SupabaseRuntimeErrorBoundary extends React.Component<Props, { hasEr
                   <Icon icon={AlertTriangle} className="h-6 w-6 text-red-600" />
                 </div>
               </div>
-              <h2 className="mb-2 text-center text-3xl font-bold text-gray-900">Supabase Connection Error</h2>
+              <h2 className="mb-2 heading-center text-3xl font-bold text-gray-900">Supabase Connection Error</h2>
               <p className="text-foreground mb-6 text-center">
                 We're having trouble connecting to our database. Please check your connection and try again.
               </p>

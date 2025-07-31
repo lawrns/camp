@@ -305,13 +305,17 @@ export function useWidgetAuth(organizationId: string) {
     }
 
     try {
-      const response = await fetch("/api/auth/user", {
+      // Use widget-specific refresh endpoint
+      const response = await fetch("/api/widget/refresh", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authState.token}`,
         },
-        body: JSON.stringify({ action: "refresh_session" }),
+        body: JSON.stringify({
+          action: "refresh_session",
+          organizationId: authState.user?.organizationId
+        }),
       });
 
       const result = await response.json();
@@ -324,12 +328,12 @@ export function useWidgetAuth(organizationId: string) {
         }));
 
         localStorage.setItem(STORAGE_KEYS.token, result.token);
-        authLogger.debugThrottled("✅ Session refreshed");
+        authLogger.debugThrottled("✅ Widget session refreshed");
       } else {
-        throw new Error(result.error || "Session refresh failed");
+        throw new Error(result.error || "Widget session refresh failed");
       }
     } catch (error) {
-      authLogger.error("Session refresh failed:", error);
+      authLogger.error("Widget session refresh failed:", error);
       // Fall back to full re-authentication
       authenticateWidget();
     }

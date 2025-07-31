@@ -30,6 +30,76 @@
   }
 }
 
+/* ===== CROSS-BROWSER CENTER ALIGNMENT FIXES ===== */
+@layer utilities {
+  /* Robust center alignment for text content */
+  .text-center-robust {
+    text-align: center !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Center alignment for hero sections */
+  .hero-center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ensure headings are properly centered across browsers */
+  .heading-center {
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100%;
+  }
+
+  /* Paragraph center alignment with proper spacing */
+  .paragraph-center {
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Container center alignment */
+  .container-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Fix for Safari and older browsers */
+  @supports not (display: flex) {
+    .hero-center,
+    .container-center {
+      text-align: center;
+      margin: 0 auto;
+    }
+  }
+
+  /* Ensure proper centering in grid layouts */
+  .grid-center {
+    place-items: center;
+    text-align: center;
+  }
+
+  /* Button center alignment */
+  .button-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+}
+
 /* COMPREHENSIVE ICON + TEXT NO-WRAP FIX */
 /* Prevent wrapping for icon-text combinations while avoiding overflow */
 

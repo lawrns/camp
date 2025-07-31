@@ -632,12 +632,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
           sessionCheckInterval: 30000
         });
 
-        // Use session endpoint to get user data without requiring organizationId
+        // Check if we're in widget context and have a widget token
+        const isWidgetContext = window.location.pathname.includes('/widget') ||
+          window.location.search.includes('widget=true') ||
+          (window as any).CampfireWidgetConfig;
+
+        const widgetToken = isWidgetContext ? localStorage.getItem("campfire_widget_token") : null;
+
+        // Prepare headers for session request
+        const sessionHeaders: Record<string, string> = {
+          "Cache-Control": "no-cache",
+        };
+
+        // Include widget token as Bearer token if available
+        if (widgetToken) {
+          sessionHeaders["Authorization"] = `Bearer ${widgetToken}`;
+          console.log("[AuthProvider] Including widget token in session request");
+        }
+
+        // Use session endpoint to get user data
         const res = await fetch("/api/auth/session", {
           credentials: "include",
-          headers: {
-            "Cache-Control": "no-cache",
-          },
+          headers: sessionHeaders,
         });
 
         if (cancelled) return;
@@ -647,7 +663,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const apiUser = data?.user;
 
           if (apiUser) {
-            console.log("[AuthProvider] User found:", apiUser.email);
+            console.log("[AuthProvider] User found:", apiUser.email || apiUser.displayName);
+
+            // Handle widget users differently
+            if (apiUser.isWidget) {
+              console.log("[AuthProvider] Widget user authenticated:", apiUser.visitorId);
+            }
             console.log("[AuthProvider] User data:", {
               id: apiUser.id,
               organizationId: apiUser.organizationId,

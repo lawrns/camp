@@ -323,3 +323,268 @@
 .chatMessages::-webkit-scrollbar-thumb:hover {
   background-color: rgba(156, 163, 175, 0.5);
 }
+
+/* Enhanced conversation list styling */
+
+.conversationList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.conversationListContainer {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Improved conversation card styling */
+.conversationCard {
+  min-height: 176px;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.conversationCard:hover {
+  background: var(--color-background-subtle);
+  transform: translateX(2px);
+}
+
+.conversationCard.selected {
+  background: var(--color-primary-50);
+  border-left: 4px solid var(--color-primary-600);
+}
+
+/* Main content layout */
+.conversationContent {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.conversationAvatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.2s ease-out;
+}
+
+.conversationAvatar:hover {
+  ring: 2px solid var(--color-primary-300);
+}
+
+.conversationDetails {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.conversationHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.conversationName {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.conversationBadge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--color-primary-100);
+  color: var(--color-primary-800);
+}
+
+.conversationEmail {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+.conversationPreview {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Filter bar improvements */
+.filterBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Scrollbar hiding for filter buttons */
+.scrollbarHide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbarHide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+  .conversationCard {
+    min-height: 160px;
+    padding: 0.75rem;
+  }
+  
+  .conversationAvatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .conversationName {
+    font-size: 0.8rem;
+  }
+  
+  .conversationEmail {
+    font-size: 0.7rem;
+  }
+  
+  .conversationPreview {
+    font-size: 0.8rem;
+  }
+}
+
+/* Touch-friendly improvements */
+.touchTarget {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Status badge improvements */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Animation improvements */
+.conversationCard {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus improvements for accessibility */
+.conversationCard:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Loading state improvements */
+.loadingSkeleton {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Mobile-first responsive layout */
+@media (max-width: 640px) {
+  /* Hide conversation list on mobile when chat is active */
+  .mobileChatActive .conversationList {
+    display: none;
+  }
+  
+  /* Full-width chat on mobile */
+  .mobileChatActive .chatArea {
+    width: 100%;
+  }
+  
+  /* Mobile navigation */
+  .mobileNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 0.5rem;
+    z-index: 50;
+  }
+}
+
+/* Tablet responsive layout */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .conversationList {
+    width: 280px;
+  }
+  
+  .chatArea {
+    flex: 1;
+  }
+}
+
+/* Desktop layout */
+@media (min-width: 1025px) {
+  .conversationList {
+    width: 320px;
+  }
+  
+  .chatArea {
+    flex: 1;
+  }
+  
+  .detailsPanel {
+    width: 320px;
+  }
+}

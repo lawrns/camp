@@ -13,7 +13,7 @@ const TEST_CONFIG = {
   TEST_CONVERSATION_ID: '48eedfba-2568-4231-bb38-2ce20420900d',
   WIDGET_DEMO_URL: '/widget-demo',
   DASHBOARD_URL: '/dashboard',
-  BASE_URL: 'http://localhost:3003', // Updated to use correct port
+  BASE_URL: 'http://localhost:3007', // Updated to use correct port
   TIMEOUTS: {
     MESSAGE_DELIVERY: 15000,
     TYPING_INDICATOR: 5000,

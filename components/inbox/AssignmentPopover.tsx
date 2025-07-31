@@ -98,7 +98,7 @@ export function AssignmentPopover({
 
       toast.success(`Assigned to ${agents.find((a) => a.user_id === agentId)?.full_name || "agent"}`);
       setIsOpen(false);
-      onAssigned?.(agentId);
+      onAssigned?.(data.assigneeId);
     } catch (error) {
       toast.error("Failed to assign agent");
     } finally {
@@ -153,26 +153,23 @@ export function AssignmentPopover({
   if (variant === "header") {
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="ghost"
-            size={size}
-            className={cn(
-              "touch-target text-neutral-600 transition-all hover:text-neutral-900",
-              "hover:bg-neutral-100",
-              className
-            )}
-            style={{ minWidth: 44, minHeight: 44 }}
-            aria-label="Assign conversation to agent"
-          >
-            <Icon icon={UserPlus} className="h-4 w-4" />
-          </Button>
+        <PopoverTrigger
+          className={cn(
+            "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            "disabled:pointer-events-none disabled:opacity-50",
+            "touch-target text-neutral-600 transition-all hover:text-neutral-900",
+            "hover:bg-neutral-100",
+            size === "sm" ? "h-8 w-8" : "h-10 w-10",
+            className
+          )}
+          style={{ minWidth: 44, minHeight: 44 }}
+          aria-label="Assign conversation to agent"
+        >
+          <Icon icon={UserPlus} className="h-4 w-4" />
         </PopoverTrigger>
-        <PopoverContent 
-          className="w-80 p-0 md:w-96" 
-          align="end"
-          side="bottom"
-          sideOffset={8}
+        <PopoverContent
+          className="w-80 p-0 md:w-96"
         >
           <div className="border-b spacing-3">
             <h4 className="text-sm font-medium">Assign to Agent</h4>
@@ -251,22 +248,24 @@ export function AssignmentPopover({
   // Button variant - full button with text
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size={size}
-          className={cn(
-            "border-status-info-light text-status-info-dark hover:bg-status-info-light",
-            "touch-target",
-            className
-          )}
-          aria-label="Assign conversation to agent"
-        >
-          <Icon icon={UserPlus} className="mr-1 h-4 w-4" />
-          Assign
-        </Button>
+      <PopoverTrigger
+        className={cn(
+          "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "disabled:pointer-events-none disabled:opacity-50",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "touch-target",
+          size === "sm" ? "h-8 px-3" : "h-10 px-4",
+          className
+        )}
+        style={{ minWidth: 44, minHeight: 44 }}
+      >
+        <Icon icon={UserPlus} className="mr-2 h-4 w-4" />
+        Assign Agent
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0 md:w-96">
+      <PopoverContent
+        className="w-80 p-0 md:w-96"
+      >
         <div className="border-b spacing-3">
           <h4 className="text-sm font-medium">Assign to Agent</h4>
           <p className="mt-1 text-tiny text-[var(--fl-color-text-muted)]">

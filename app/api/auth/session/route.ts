@@ -7,6 +7,7 @@
 
 import { applySecurityHeaders } from "@/lib/middleware/securityHeaders";
 import { supabase } from "@/lib/supabase";
+import { verifyWidgetToken } from "@/lib/auth/widget-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -38,15 +39,15 @@ export async function GET(request: NextRequest) {
     if (authHeader?.startsWith("Bearer ")) {
       const token = authHeader.substring(7);
 
-      // Handle widget/test tokens
-      if (token === 'test-token' || token.startsWith('widget_')) {
+      // Handle test tokens
+      if (token === 'test-token') {
         return NextResponse.json({
           success: true,
           authenticated: true,
           user: {
-            id: 'widget-user',
-            email: 'widget@example.com',
-            displayName: 'Widget User',
+            id: 'test-user',
+            email: 'test@example.com',
+            displayName: 'Test User',
             organizationId: 'b5e80170-004c-4e82-a88c-3e2166b169dd'
           },
           session: {
@@ -54,6 +55,34 @@ export async function GET(request: NextRequest) {
             expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
           },
         });
+      }
+
+      // Try to verify as widget JWT token first
+      try {
+        const widgetPayload = await verifyWidgetToken(token);
+        if (widgetPayload) {
+          return NextResponse.json({
+            success: true,
+            authenticated: true,
+            user: {
+              id: widgetPayload.sub,
+              email: widgetPayload.email,
+              displayName: widgetPayload.user_metadata?.visitor_id ?
+                `Visitor ${widgetPayload.user_metadata.visitor_id.slice(-6)}` :
+                'Widget User',
+              organizationId: widgetPayload.organization_id,
+              organizationRole: 'visitor',
+              isWidget: true,
+              visitorId: widgetPayload.user_metadata?.visitor_id,
+            },
+            session: {
+              isValid: true,
+              expiresAt: new Date(widgetPayload.exp * 1000).toISOString(),
+            },
+          });
+        }
+      } catch (widgetError) {
+        console.log("[Session] Not a valid widget token, trying Supabase auth:", widgetError.message);
       }
 
       try {

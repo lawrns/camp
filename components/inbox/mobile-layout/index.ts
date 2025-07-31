@@ -19,14 +19,13 @@ export { useSwipeGestures } from "./useSwipeGestures";
 
 // Types
 export type {
-  ActivePanel,
-  MobileHeaderState,
   MobileInboxLayoutProps,
   MobileLayoutConfig,
   PanelNavigationState,
-  PanelTransitionConfig,
-  SwipeConfig,
-  SwipeGestureState,
+  SwipeState,
+  PanelTransitionProps,
+  SwipeablePanelContainerProps,
+  MobileHeaderProps,
 } from "./types";
 
-export { DEFAULT_MOBILE_CONFIG, DEFAULT_SWIPE_CONFIG, DEFAULT_TRANSITION_CONFIG } from "./types";
+export { DEFAULT_MOBILE_CONFIG } from "./types";

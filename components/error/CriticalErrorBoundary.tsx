@@ -43,7 +43,7 @@ export class CriticalErrorBoundary extends Component<Props, State> {
                 <div className="mb-4 flex justify-center">
                   <Icon icon={AlertCircle} className="h-16 w-16 text-red-600" />
                 </div>
-                <h1 className="mb-2 text-center text-3xl font-bold text-red-900">Critical System Error</h1>
+                <h1 className="mb-2 heading-center text-3xl font-bold text-red-900">Critical System Error</h1>
                 <p className="text-foreground mb-6 text-center">
                   The application has encountered a critical error and cannot continue.
                 </p>

@@ -2,11 +2,13 @@
 
 import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator";
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
-import { AssignmentPopover } from "@/components/inbox/AssignmentPopover";
+import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
+import { StatusBadge } from "@/components/inbox/StatusBadge";
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
 import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
 import * as React from "react";
+import { useState } from "react";
 import type { Conversation } from "../types";
 
 interface ChatHeaderProps {
@@ -39,6 +41,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   // Get auth context to determine if user is an agent (not widget user)
   const { user } = useAuth();
   const isAgent = user && (user.organizationRole === "agent" || user.organizationRole === "admin");
+
+  // State for assignment dialog
+  const [showAssignmentDialog, setShowAssignmentDialog] = useState(false);
   // Format last activity with error handling
   const formatLastActivity = (timestamp: string) => {
     try {
@@ -64,22 +69,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     } catch (error) {
 
       return "Unknown activity";
-    }
-  };
-
-  // Get status indicator color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "open":
-        return "bg-green-400";
-      case "pending":
-        return "bg-yellow-400";
-      case "resolved":
-        return "bg-gray-400";
-      case "escalated":
-        return "bg-red-400";
-      default:
-        return "bg-gray-400";
     }
   };
 
@@ -110,31 +99,15 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <div className="flex items-center gap-2" data-testid="chat-header-customer-title-row">
               <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customer_name}</h2>
 
-              {/* Status badge */}
-              <span
-                className={`inline-flex items-center rounded-ds-full px-2 py-1 text-xs font-medium text-white ${getStatusColor(conversation.status)}`}
+              {/* Status badge using unified component */}
+              <StatusBadge 
+                status={conversation.status}
+                priority={conversation.priority}
+                variant="header"
+                size="sm"
+                showIcon={false}
                 data-testid="chat-header-status-badge"
-              >
-                <div className={`mr-1 h-2 w-2 rounded-ds-full ${getStatusColor(conversation.status)}`} data-testid="chat-header-status-indicator"></div>
-                {conversation.status}
-              </span>
-
-              {/* Priority badge */}
-              {conversation.priority && (
-                <span
-                  className={`inline-flex items-center rounded-ds-full px-2 py-1 text-xs font-medium ${conversation.priority === "urgent"
-                    ? "bg-red-100 text-red-800"
-                    : conversation.priority === "high"
-                      ? "bg-orange-100 text-orange-800"
-                      : conversation.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
-                  data-testid="chat-header-priority-badge"
-                >
-                  {conversation.priority}
-                </span>
-              )}
+              />
 
               {/* AI Confidence Indicator - Agent Only */}
               {isAgent && isAIActive && (
@@ -210,15 +183,17 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-2" data-testid="chat-header-actions">
-          {/* NEW: Assign Conversation Button with Popover */}
+          {/* NEW: Assign Conversation Button */}
           {onAssignConversation && (
-            <AssignmentPopover
-              conversationId={conversation.id}
-              organizationId={user?.organizationId || ""}
-              onAssigned={onAssignConversation}
-              variant="header"
-              size="sm"
-            />
+            <button
+              onClick={() => setShowAssignmentDialog(true)}
+              className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
+              title="Assign conversation"
+              aria-label="Assign conversation"
+              data-testid="chat-header-assign-button"
+            >
+              <Users className="h-4 w-4" />
+            </button>
           )}
 
           {/* NEW: Convert to Ticket Button */}
@@ -273,6 +248,19 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Assignment Dialog */}
+      <AssignmentDialog
+        open={showAssignmentDialog}
+        onOpenChange={setShowAssignmentDialog}
+        conversationId={conversation.id}
+        currentAgentId={conversation.assigneeId}
+        organizationId={user?.organizationId || ""}
+        onAssigned={(agentId) => {
+          onAssignConversation?.();
+          setShowAssignmentDialog(false);
+        }}
+      />
     </div>
   );
 };

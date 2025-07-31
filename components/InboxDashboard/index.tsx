@@ -8,7 +8,8 @@ import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
-import { Robot } from "@phosphor-icons/react";
+import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
+// AI icon removed due to deprecation
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
 // Import utilities
@@ -22,18 +23,13 @@ import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
 import ShortcutsModal from "./sub-components/ShortcutsModal";
 // Import types
-import type { AISuggestion, Conversation, FileAttachment } from "./types";
-import { debounce, mapConversation } from "./utils/channelUtils";
+import type { AISuggestion, Conversation, FileAttachment, Message } from "./types";
+import { debounce } from "./utils/channelUtils";
 import { handleFileDrop, handleFileInput } from "./utils/fileUtils";
 // NEW: Import dialog components
-import { AssignmentPanel } from "@/components/conversations/AssignmentPanel";
 import { ConvertToTicketDialog } from "@/components/conversations/ConvertToTicketDialog";
 import { useMessages } from "./hooks/useMessages";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "@/components/ui/dropdown-menu";
+
 
 // Import AI components (DASHBOARD-SIDE ONLY)
 
@@ -103,7 +99,23 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
   // Fetch conversations using the useConversations hook
-  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations(organizationId);
+  const { conversations: rawConversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
+
+  // Map raw conversations to expected Conversation type
+  const conversations: Conversation[] = rawConversations.map((conv: any) => ({
+    id: conv.id,
+    customer_name: conv.customer_name || "Unknown Customer",
+    customer_email: conv.customer_email || "",
+    status: conv.status || "open",
+    last_message_at: conv.last_message_at || conv.created_at,
+    unread_count: conv.unread_count || 0,
+    last_message_preview: conv.last_message_preview || "No messages yet",
+    metadata: conv.metadata,
+    assigned_to_ai: conv.assigned_to_ai || false,
+    ai_handover_session_id: conv.ai_handover_session_id,
+    priority: conv.priority,
+    tags: conv.tags || [],
+  }));
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
@@ -126,9 +138,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
   // Performance metrics using real stats
   const performanceMetrics = {
-    averageLatency: stats?.averageResponseTime || 0,
-    messageCount: stats?.messagesToday || 0,
-    reconnectionCount: 0
+    responseTime: stats?.averageResponseTime || 0,
+    memoryUsage: 0, // TODO: Implement actual memory usage tracking
+    cpuUsage: 0, // TODO: Implement actual CPU usage tracking
   };
 
   // Early return if auth is loading or missing required data
@@ -156,26 +168,21 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
   // Send message function with real-time broadcasting
   const sendMessageHP = useCallback(
-    async (convId: string, content: string, senderType: "customer" | "agent" = "agent") => {
+    async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<any> => {
       if (!organizationId || !content.trim()) return;
 
       try {
         // Create optimistic message for immediate UI update
         const tempId = `temp_${Date.now()}_${Math.random()}`;
-        const optimisticMessage = {
+        const optimisticMessage: Message = {
           id: tempId,
           conversation_id: convId,
-          organization_id: organizationId,
           content: content.trim(),
           sender_type: senderType,
           sender_name: senderType === "agent" ? "Support Agent" : "Customer",
           created_at: new Date().toISOString(),
-          metadata: {
-            source: "dashboard",
-            timestamp: new Date().toISOString(),
-          },
           attachments: [],
-          read_status: "sending" as const,
+          read_status: "sent",
         };
 
         // Add optimistic message to UI immediately
@@ -209,18 +216,33 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         setMessages(prev =>
           prev.map(msg =>
             msg.id === tempId
-              ? { ...data, attachments: [], read_status: "sent" as const }
+              ? {
+                  id: data.id,
+                  conversation_id: data.conversation_id,
+                  content: data.content,
+                  sender_type: data.sender_type as "agent" | "customer" | "visitor" | "ai",
+                  sender_name: data.sender_name || "Agent",
+                  created_at: data.created_at,
+                  attachments: [],
+                  read_status: "sent" as const,
+                } as Message
               : msg
           )
         );
 
-        // Broadcast real-time event using unified standards
+        // Broadcast real-time event using unified standards with monitoring
         try {
           const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
           const channel = supabase.browser().channel(channelName);
+          const connectionId = `dashboard-${organizationId}-${convId}`;
+          const startTime = performance.now();
+
+          // Track connection attempt
+          realtimeMonitor.trackConnection(channelName, connectionId);
 
           // Subscribe to channel first (required for broadcasts)
           await channel.subscribe();
+          realtimeMonitor.updateConnectionStatus(connectionId, "connected");
 
           await channel.send({
             type: "broadcast",
@@ -232,10 +254,18 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
               sender_type: senderType,
             },
           });
-          
+
+          const latency = performance.now() - startTime;
+          realtimeMonitor.trackBroadcast(connectionId, UNIFIED_EVENTS.MESSAGE_CREATED, true, latency);
+          RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
+
           // Clean up the channel after sending
           await channel.unsubscribe();
         } catch (broadcastError) {
+          const errorMessage = broadcastError instanceof Error ? broadcastError.message : String(broadcastError);
+          const connectionId = `dashboard-${organizationId}-${convId}`;
+          realtimeMonitor.trackBroadcast(connectionId, UNIFIED_EVENTS.MESSAGE_CREATED, false, undefined, errorMessage);
+          RealtimeLogger.error("message broadcast", broadcastError);
           console.warn("Failed to broadcast message:", broadcastError);
           // Don't throw - message was saved successfully
         }
@@ -467,20 +497,22 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           connectionStatus={connectionStatus as "error" | "connecting" | "connected" | "disconnected"}
         />
 
-        {/* Main content with proper layout */}
+        {/* Main content with responsive layout */}
         <div className="flex flex-1 overflow-hidden">
-          {/* Conversation list */}
-          <ConversationList
-            conversations={conversations}
-            selectedConversationId={selectedConversation?.id}
-            onSelectConversation={handleSelectConversation}
-            searchQuery={searchQuery}
-            statusFilter={statusFilter}
-            priorityFilter={priorityFilter}
-            isLoading={loadingConversations}
-          />
+          {/* Conversation list - responsive width */}
+          <div className="w-80 flex-shrink-0 border-r border-[var(--ds-color-border)] bg-[var(--ds-color-surface)] md:w-96 lg:w-[320px]">
+            <ConversationList
+              conversations={conversations}
+              selectedConversationId={selectedConversation?.id}
+              onSelectConversation={handleSelectConversation}
+              searchQuery={searchQuery}
+              statusFilter={statusFilter}
+              priorityFilter={priorityFilter}
+              isLoading={loadingConversations}
+            />
+          </div>
 
-          {/* Chat area */}
+          {/* Chat area - responsive */}
           <div className="bg-[var(--ds-color-background)] relative flex flex-1" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
             <div className="bg-[var(--ds-color-background)] flex flex-1 flex-col">
               {selectedConversation ? (
@@ -558,10 +590,10 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
             {/* Smart Reply Panel - AI-powered suggestions (DASHBOARD-SIDE ONLY) */}
             {showSmartReplies && selectedConversation && messages?.length > 0 && (
-              <div className="flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
+              <div className="hidden lg:flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
                 <div className="border-b border-gray-200 bg-blue-50 p-6">
                   <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-2">
-                    <Robot className="mr-2 h-5 w-5 text-blue-600" />
+                    <span className="mr-2 text-blue-600">✨</span>
                     Smart Replies
                   </h3>
                   <p className="text-sm text-gray-600">AI-powered suggestions coming soon</p>
@@ -576,59 +608,34 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
             )}
           </div>
         </div>
-
-        {/* Modals */}
-        {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
-
-        {/* NEW: Convert to Ticket Dialog */}
-        {showConvertDialog && selectedConversation && (
-          <ConvertToTicketDialog
-            open={showConvertDialog}
-            onOpenChange={setShowConvertDialog}
-            conversation={{
-              id: selectedConversation.id,
-              subject: selectedConversation.last_message_preview || "Conversation",
-              customer: {
-                name: selectedConversation.customer_name,
-                email: selectedConversation.customer_email,
-              },
-              messages: [], // TODO: Add actual messages when available
-              priority: selectedConversation.priority,
-              category: "",
-            }}
-            onConvert={async (ticketData) => {
-              console.log("Converting conversation to ticket:", ticketData);
-              setShowConvertDialog(false);
-              // TODO: Implement actual conversion logic
-            }}
-          />
-        )}
-
-        {/* NEW: Assignment Panel as Dropdown */}
-        {selectedConversation && (
-          <DropdownMenu open={showAssignmentPanel} onOpenChange={setShowAssignmentPanel}>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="fixed bottom-8 left-8 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
-                onClick={() => setShowAssignmentPanel((v) => !v)}
-                aria-label="Assign agent"
-              >
-                Assign Agent
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80 p-0">
-              <AssignmentPanel
-                conversationId={selectedConversation.id}
-                currentAgentId={undefined}
-                organizationId={user?.organizationId || ""}
-                onAssignmentChange={(agentId) => {
-                  setShowAssignmentPanel(false);
-                }}
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
       </div>
+
+      {/* Modals */}
+      {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
+
+      {/* NEW: Convert to Ticket Dialog */}
+      {showConvertDialog && selectedConversation && (
+        <ConvertToTicketDialog
+          open={showConvertDialog}
+          onOpenChange={setShowConvertDialog}
+          conversation={{
+            id: selectedConversation.id,
+            subject: selectedConversation.last_message_preview || "Conversation",
+            customer: {
+              name: selectedConversation.customer_name,
+              email: selectedConversation.customer_email,
+            },
+            messages: [], // TODO: Add actual messages when available
+            priority: selectedConversation.priority,
+            category: "",
+          }}
+          onConvert={async (ticketData) => {
+            console.log("Converting conversation to ticket:", ticketData);
+            setShowConvertDialog(false);
+            // TODO: Implement actual conversion logic
+          }}
+        />
+      )}
     </div>
   );
 };

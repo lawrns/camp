@@ -67,12 +67,12 @@ function Homepage() {
       <section className="pt-24 pb-16 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <div className="hero-center lg:text-left">
+              <h1 className="heading-center lg:text-left text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Transform Customer Service Into Your{" "}
                 <span className="text-blue-600">Competitive Advantage</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              <p className="paragraph-center lg:text-left text-xl text-gray-600 mb-8 leading-relaxed mx-auto lg:mx-0">
                 AI-powered customer support that combines human expertise with AI intelligence. 
                 Deliver exceptional experiences at scale with seamless AI-to-human handover.
               </p>

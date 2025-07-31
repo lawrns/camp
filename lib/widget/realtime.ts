@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { Message } from "@/types/entities/message";
 import { WidgetTypingIndicator } from "@/types/widget";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
+import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
 
 export interface WidgetRealtimeConfig {
   realtimeToken: string;
@@ -47,6 +48,11 @@ export class WidgetRealtimeClient {
     try {
       // UNIFIED STANDARD: Use unified channel naming convention
       const channelName = UNIFIED_CHANNELS.conversation(this.config.organizationId, this.config.sessionId);
+      const connectionId = `widget-${this.config.organizationId}-${this.config.sessionId}`;
+
+      // Track connection attempt
+      realtimeMonitor.trackConnection(channelName, connectionId);
+      RealtimeLogger.connection(channelName, "connecting");
 
       this.channel = this.supabase
         .channel(channelName)
@@ -59,6 +65,8 @@ export class WidgetRealtimeClient {
             filter: `conversation_id=eq.${this.config.sessionId}`,
           },
           (payload: any) => {
+            realtimeMonitor.trackMessage(connectionId, "received", "postgres_insert", true);
+            RealtimeLogger.message(channelName, "received", payload.new?.content);
 
             if (this.onMessage) {
               this.onMessage(payload.new);
@@ -77,6 +85,10 @@ export class WidgetRealtimeClient {
           }
         })
         .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+          const connectionId = `widget-${this.config.organizationId}-${this.config.sessionId}`;
+          realtimeMonitor.trackMessage(connectionId, "received", UNIFIED_EVENTS.MESSAGE_CREATED, true);
+          RealtimeLogger.message(channelName, "received", payload.payload.message?.content);
+
           if (this.onMessage && payload.payload.message) {
             this.onMessage(payload.payload.message);
           }
@@ -87,8 +99,16 @@ export class WidgetRealtimeClient {
           }
         })
         .subscribe((status: string) => {
+          const connectionId = `widget-${this.config.organizationId}-${this.config.sessionId}`;
+          const channelName = UNIFIED_CHANNELS.conversation(this.config.organizationId, this.config.sessionId);
 
           this.isConnected = status === "SUBSCRIBED";
+          realtimeMonitor.updateConnectionStatus(
+            connectionId,
+            status === "SUBSCRIBED" ? "connected" : "connecting"
+          );
+          RealtimeLogger.connection(channelName, status);
+
           if (this.onConnectionChange) {
             this.onConnectionChange(this.isConnected);
           }

@@ -60,7 +60,7 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-md">
           <Card className="shadow-xl">
             <CardHeader>
-              <h1 className="text-center text-2xl font-bold">Invalid Token</h1>
+              <h1 className="heading-center text-2xl font-bold">Invalid Token</h1>
             </CardHeader>
             <CardContent className="space-y-4 text-center">
               <p className="text-red-600">Invalid or expired token</p>
@@ -84,7 +84,7 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-md">
           <Card className="shadow-xl">
             <CardHeader>
-              <h1 className="text-semantic-success-dark text-center text-2xl font-bold">Success!</h1>
+              <h1 className="text-semantic-success-dark heading-center text-2xl font-bold">Success!</h1>
             </CardHeader>
             <CardContent className="space-y-4 text-center">
               <p>Your password has been reset successfully.</p>
@@ -111,7 +111,7 @@ export default function ResetPasswordPage() {
 
         <Card className="shadow-xl">
           <CardHeader>
-            <h2 className="text-center text-xl font-semibold">New Password</h2>
+            <h2 className="heading-center text-xl font-semibold">New Password</h2>
           </CardHeader>
           <CardContent>
             {error && (

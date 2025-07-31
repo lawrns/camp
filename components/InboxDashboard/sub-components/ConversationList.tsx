@@ -1,6 +1,6 @@
 // ConversationList component with virtualization
 
-import { ChatCircle, MagnifyingGlass } from "@phosphor-icons/react";
+import { ChatCircle, MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 import * as React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FixedSizeList as List } from "react-window";
@@ -40,7 +40,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         // Get the actual available height by subtracting the filter bar height
         const container = containerRef.current;
         const filterBar = container.querySelector('.filter-bar');
-        const filterBarHeight = filterBar ? filterBar.clientHeight : 60; // Default filter bar height
+        const filterBarHeight = filterBar ? filterBar.clientHeight : 80; // Increased default height for mobile
         const availableHeight = container.clientHeight - filterBarHeight;
         setContainerHeight(Math.max(availableHeight, 400)); // Minimum height of 400px
       }
@@ -115,16 +115,33 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     </div>
   );
 
-  // Empty state
+  // Empty state - styled to match chat area empty state
   const EmptyState = () => (
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-foreground-muted" data-testid="conversation-list-empty-state">
-      {searchQuery ? <MagnifyingGlass className="mb-4 h-12 w-12" data-testid="conversation-empty-search-icon" /> : <ChatCircle className="mb-4 h-12 w-12" data-testid="conversation-empty-chat-icon" />}
-      <h3 className="mb-2 text-base font-medium" data-testid="conversation-empty-title">{searchQuery ? "No conversations found" : "No conversations yet"}</h3>
-      <p className="max-w-sm text-center text-sm" data-testid="conversation-empty-message">
-        {searchQuery
-          ? "Try adjusting your search terms or filters"
-          : "New conversations will appear here when customers reach out"}
-      </p>
+    <div className="absolute inset-0 flex flex-col items-center justify-center" data-testid="conversation-list-empty-state">
+      <div className="text-center">
+        <div className="mb-4">
+          {searchQuery ? (
+            <MagnifyingGlass className="mx-auto h-16 w-16 text-neutral-300" data-testid="conversation-empty-search-icon" />
+          ) : (
+            <svg className="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-testid="conversation-empty-chat-icon">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+              />
+            </svg>
+          )}
+        </div>
+        <h3 className="mb-2 text-lg font-medium text-neutral-300" data-testid="conversation-empty-title">
+          {searchQuery ? "No conversations found" : "No conversations yet"}
+        </h3>
+        <p className="text-sm text-neutral-300 max-w-xs" data-testid="conversation-empty-message">
+          {searchQuery
+            ? "Try adjusting your search terms or filters"
+            : "New conversations will appear here when customers reach out"}
+        </p>
+      </div>
     </div>
   );
 
@@ -144,9 +161,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <div className="relative z-10 flex h-full min-h-0 flex-col border-r border-[var(--ds-color-border)] bg-[var(--ds-color-surface)]" style={{ width: 'var(--width-sidebar, 24rem)' }} data-testid="conversation-list-container" ref={containerRef}>
-      {/* Filter bar with improved mobile responsiveness */}
-      <div className="border-b border-[var(--ds-color-border)] p-3 sm:p-ds-4 filter-bar">
-        <div className="flex gap-1 sm:gap-2 overflow-x-auto">
+      {/* Filter bar with improved mobile responsiveness and overflow handling */}
+      <div className="border-b border-[var(--ds-color-border)] p-2 sm:p-3 lg:p-ds-4 filter-bar">
+        <div className="flex gap-1 sm:gap-2 overflow-x-auto scrollbar-hide">
           {[
             { key: "all", label: "All" },
             { key: "unread", label: "Unread" },
@@ -157,11 +174,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             <button
               key={filter.key}
               onClick={() => setActiveFilter(filter.key as any)}
-              className={`px-2 py-1.5 sm:px-3 sm:py-1 rounded-ds-md text-xs sm:text-sm font-medium transition-colors touch-target ${activeFilter === filter.key
+              className={`flex-shrink-0 px-2 py-1.5 sm:px-3 sm:py-1.5 lg:px-3 lg:py-1 rounded-ds-md text-xs sm:text-sm font-medium transition-colors touch-target ${activeFilter === filter.key
                   ? "bg-[var(--ds-color-primary-500)] text-white"
                   : "bg-[var(--ds-color-surface)] text-[var(--ds-color-text)] hover:bg-[var(--ds-color-background-muted)]"
                 }`}
-              style={{ minWidth: "44px", minHeight: "44px" }}
+              style={{ 
+                minWidth: "44px", 
+                minHeight: "44px",
+                whiteSpace: "nowrap"
+              }}
             >
               {filter.label}
             </button>

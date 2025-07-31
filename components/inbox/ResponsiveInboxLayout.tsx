@@ -1,3 +1,10 @@
+/**
+ * ResponsiveInboxLayout Component
+ *
+ * Provides responsive layout for inbox with mobile, tablet, and desktop layouts.
+ * Uses proper Tailwind classes instead of custom CSS classes.
+ */
+
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -76,7 +83,7 @@ export function ResponsiveInboxLayout({
   // Mobile layout with enhanced touch support
   if (layoutType === "mobile") {
     return (
-      <div className="mobile-inbox-container h-full w-full overflow-hidden">
+      <div className="h-full w-full overflow-hidden">
         <MobileInboxLayout
           conversationList={conversationList}
           chatPanel={chatPanel}
@@ -95,10 +102,10 @@ export function ResponsiveInboxLayout({
   // Tablet layout - 2 panels only
   if (layoutType === "tablet") {
     return (
-      <div className={cn("viewport-locked flex flex-1 bg-background", className)}>
+      <div className={cn("flex flex-1 bg-background", className)}>
         {/* Conversation List with collapse toggle */}
         <OptimizedMotion.div
-          className="panel-separator inbox-panel-layout relative flex-shrink-0 bg-background"
+          className="relative flex-shrink-0 bg-background border-r border-border"
           initial={false}
           animate={{
             width: isConversationListCollapsed ? 60 : Math.min(conversationListWidth * 0.85, 280),
@@ -122,19 +129,19 @@ export function ResponsiveInboxLayout({
           {/* Collapse toggle button */}
           <button
             onClick={() => setIsConversationListCollapsed(!isConversationListCollapsed)}
-            className="bg-background absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-1/2 rounded-ds-full border border-[var(--fl-color-border)] spacing-1 shadow-card-hover transition-shadow hover:shadow-card-deep dark:border-gray-700 dark:bg-neutral-800"
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-1/2 rounded-full border border-border bg-background p-1 shadow-md transition-shadow hover:shadow-lg"
             aria-label={isConversationListCollapsed ? "Expand conversation list" : "Collapse conversation list"}
           >
             {isConversationListCollapsed ? (
-              <CaretRight className="text-foreground h-4 w-4 dark:text-gray-400" />
+              <CaretRight className="h-4 w-4 text-foreground" />
             ) : (
-              <CaretLeft className="text-foreground h-4 w-4 dark:text-gray-400" />
+              <CaretLeft className="h-4 w-4 text-foreground" />
             )}
           </button>
         </OptimizedMotion.div>
 
         {/* Chat Panel - Takes remaining space */}
-        <div className="inbox-panel-layout flex-1">{chatPanel}</div>
+        <div className="flex-1">{chatPanel}</div>
 
         {/* Details Panel hidden on tablet to keep it simple */}
       </div>
@@ -142,15 +149,14 @@ export function ResponsiveInboxLayout({
   }
 
   // Desktop layout - 3 panels with collapsible panels
-
   return (
     <div
-      className={cn("inbox-container inbox-three-panel-layout viewport-locked", className)}
+      className={cn("flex h-full overflow-hidden", className)}
       data-component="ResponsiveInboxLayout"
     >
       {/* Conversation List Panel */}
       <OptimizedMotion.div
-        className="inbox-panel inbox-panel-conversations"
+        className="relative flex-shrink-0 bg-background border-r border-border"
         initial={false}
         animate={{
           width: isConversationListCollapsed ? 60 : conversationListWidth,
@@ -176,24 +182,24 @@ export function ResponsiveInboxLayout({
           variant="outline"
           size="sm"
           onClick={() => setIsConversationListCollapsed(!isConversationListCollapsed)}
-          className="absolute right-0 top-1/2 z-10 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-ds-full border-fl-border bg-fl-surface p-0 shadow-card-hover transition-shadow hover:shadow-card-deep"
+          className="absolute right-0 top-1/2 z-10 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-full border border-border bg-background p-0 shadow-md transition-shadow hover:shadow-lg"
           aria-label={isConversationListCollapsed ? "Expand conversation list" : "Collapse conversation list"}
         >
           {isConversationListCollapsed ? (
-            <CaretRight className="h-4 w-4 text-fl-text-muted" />
+            <CaretRight className="h-4 w-4 text-foreground" />
           ) : (
-            <CaretLeft className="h-4 w-4 text-fl-text-muted" />
+            <CaretLeft className="h-4 w-4 text-foreground" />
           )}
         </Button>
       </OptimizedMotion.div>
 
       {/* Chat Panel */}
-      <div className="inbox-panel inbox-panel-messages">{chatPanel}</div>
+      <div className="flex-1 bg-background">{chatPanel}</div>
 
       {/* Details Panel */}
       {hasSelectedConversation && (
         <OptimizedMotion.div
-          className="inbox-panel inbox-panel-details"
+          className="relative flex-shrink-0 bg-background border-l border-border"
           initial={false}
           animate={{
             width: isDetailsPanelCollapsed ? 60 : sidebarWidth,
@@ -219,13 +225,13 @@ export function ResponsiveInboxLayout({
             variant="outline"
             size="sm"
             onClick={() => setIsDetailsPanelCollapsed(!isDetailsPanelCollapsed)}
-            className="absolute left-0 top-1/2 z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-ds-full border-fl-border bg-fl-surface p-0 shadow-card-hover transition-shadow hover:shadow-card-deep"
+            className="absolute left-0 top-1/2 z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border bg-background p-0 shadow-md transition-shadow hover:shadow-lg"
             aria-label={isDetailsPanelCollapsed ? "Expand details panel" : "Collapse details panel"}
           >
             {isDetailsPanelCollapsed ? (
-              <CaretLeft className="h-4 w-4 text-fl-text-muted" />
+              <CaretLeft className="h-4 w-4 text-foreground" />
             ) : (
-              <CaretRight className="h-4 w-4 text-fl-text-muted" />
+              <CaretRight className="h-4 w-4 text-foreground" />
             )}
           </Button>
         </OptimizedMotion.div>
