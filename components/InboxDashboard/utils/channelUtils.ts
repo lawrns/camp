@@ -1,29 +1,6 @@
 // Channel utilities for Supabase real-time communication
 
-import { generateVisitorName } from '@/lib/utils/nameGenerator';
-
-// Simple name generator arrays
-const adjectives = ["Friendly", "Happy", "Curious", "Bright", "Clever", "Swift", "Gentle", "Brave", "Kind", "Wise"];
-const nouns = ["Visitor", "Guest", "Panda", "Eagle", "Fox", "Dolphin", "Tiger", "Bear", "Owl", "Wolf"];
-
-// Simple hash function for deterministic name generation
-function simpleHash(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  return Math.abs(hash);
-}
-
-// Generate deterministic visitor name
-function generateVisitorName(seed: string): string {
-  const hash = simpleHash(seed);
-  const adjective = adjectives[hash % adjectives.length];
-  const noun = nouns[Math.floor(hash / adjectives.length) % nouns.length];
-  return `${adjective} ${noun}`;
-}
+import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
 
 /**
  * Standard channel naming convention for Supabase real-time
@@ -111,7 +88,7 @@ export const mapConversation = (raw: any): any => {
   if (needsNameGeneration) {
     // Generate a friendly visitor name using the customer email or conversation ID as seed
     const seed = raw.customer_email || raw.id?.toString() || "anonymous";
-    customerName = generateVisitorName(seed);
+    customerName = generateUniqueVisitorName(seed);
   }
 
   // Ensure we have a valid last_message_preview

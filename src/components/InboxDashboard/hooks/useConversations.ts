@@ -34,7 +34,7 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
       // Query conversations with all needed fields
       const { data, error } = await client
         .from("conversations")
-        .select("id, subject, status, customer_name, customer_email, last_message_at, created_at, assigned_to_user_id, priority, tags, metadata")
+        .select("id, subject, status, customer_name, customer_email, last_message_at, last_message_preview, unread_count, created_at, updated_at, assigned_to_user_id, assigned_to_ai, priority, tags, metadata")
         .eq("organization_id", organizationId);
 
       if (error) {

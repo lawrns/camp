@@ -342,20 +342,22 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
 
   if (!conversationId) {
     return (
-      <div className="flex flex-1 items-center justify-center text-[var(--fl-color-text-muted)]">
-        <div className="text-center">
-          <div className="mb-4">
-            <svg className="mx-auto h-12 w-12 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-              />
-            </svg>
+      <div className="flex flex-1 items-center justify-center bg-[var(--fl-color-background-subtle)]">
+        <div className="bg-white rounded-ds-lg shadow-sm border border-[var(--fl-color-border)] p-8 max-w-sm mx-4">
+          <div className="text-center">
+            <div className="mb-4">
+              <svg className="mx-auto h-12 w-12 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-foreground text-base font-medium mb-2">Select a conversation</h3>
+            <p className="text-sm text-gray-500">Choose a conversation from the list to start messaging with your customers.</p>
           </div>
-          <h3 className="text-foreground text-sm font-medium">Select a conversation</h3>
-          <p className="text-tiny text-gray-400">Choose a conversation from the list to start chatting</p>
         </div>
       </div>
     );

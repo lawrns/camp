@@ -125,12 +125,12 @@ export function generateDeterministicName(seed: string): string {
 }
 
 /**
- * Generate a visitor name using unique-names-generator with better variety
+ * Generate a unique visitor name using unique-names-generator with better variety
  * 
  * @param {string} seed - Seed value for deterministic generation
  * @returns {string} A friendly visitor name
  */
-export function generateVisitorName(seed: string): string {
+export function generateUniqueVisitorName(seed: string): string {
   // Simple hash function to convert string to number
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
