@@ -6,18 +6,11 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type { WidgetSettings, BusinessHours } from '@/types/widget-settings';
+import type { Message } from '@/types/entities/message';
 
 // ============================================================================
 // TYPES
 // ============================================================================
-
-export interface Message {
-  id: string;
-  content: string;
-  senderType: 'customer' | 'agent' | 'ai';
-  timestamp: Date;
-  metadata?: Record<string, any>;
-}
 
 export interface TypingUser {
   id: string;
@@ -56,8 +49,8 @@ export interface WidgetState {
   closeWidget: () => void;
   setConversationId: (id: string | null) => void;
   addMessage: (message: Message) => void;
-  updateMessage: (id: string, updates: Partial<Message>) => void;
-  removeMessage: (id: string) => void;
+  updateMessage: (id: string | number, updates: Partial<Message>) => void;
+  removeMessage: (id: string | number) => void;
   setConnectionStatus: (status: WidgetState['connectionStatus']) => void;
   addTypingUser: (user: TypingUser) => void;
   removeTypingUser: (userId: string) => void;

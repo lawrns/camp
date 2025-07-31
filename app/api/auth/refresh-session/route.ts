@@ -23,20 +23,20 @@ export const POST = withAuditLogging(
         return createErrorResponse("Invalid session", 401, "INVALID_SESSION");
       }
 
-      // Get current user info (more secure than getSession)
+      // Get current session info
       const adminClient = supabase.admin();
       const {
-        data: { user: currentUser },
-        error: userError,
-      } = await adminClient.auth.getUser();
+        data: { session: currentSession },
+        error: sessionError,
+      } = await adminClient.auth.getSession();
 
-      if (userError || !currentUser) {
-        return createErrorResponse("User not found", 401, "USER_NOT_FOUND");
+      if (sessionError || !currentSession) {
+        return createErrorResponse("Session not found", 401, "SESSION_NOT_FOUND");
       }
 
       // Check if session is still valid
       const now = new Date();
-      const sessionExpiry = new Date(session.expires_at || 0);
+      const sessionExpiry = new Date(currentSession.expires_at || 0);
 
       if (sessionExpiry <= now) {
         return createErrorResponse("Session already expired", 401, "SESSION_EXPIRED");
@@ -147,8 +147,8 @@ export const GET = withAuth(async (req: NextRequest, { params }, { user, organiz
     return createSuccessResponse({
       session_status: {
         is_valid: !isExpired,
-        expires_at: session.expires_at,
-        expires_in: session.expires_in,
+        expires_at: sessionExpiry.toISOString(),
+        expires_in: Math.max(0, timeRemaining),
         time_remaining_ms: Math.max(0, timeRemaining),
         time_remaining_formatted: formatDuration(timeRemaining),
         is_expired: isExpired,

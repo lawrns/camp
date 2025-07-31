@@ -1,10 +1,11 @@
 /**
  * Inbox State Management
- * Follows GUIDE.md specifications for inbox state patterns
+ * Centralized state for inbox functionality
  */
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import type { Message } from '@/types/entities/message';
 
 // ============================================================================
 // TYPES
@@ -22,14 +23,6 @@ export interface Conversation {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
-  metadata?: Record<string, any>;
-}
-
-export interface Message {
-  id: string;
-  content: string;
-  senderType: 'customer' | 'agent' | 'ai';
-  timestamp: Date;
   metadata?: Record<string, any>;
 }
 
