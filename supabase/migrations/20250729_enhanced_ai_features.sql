@@ -2,6 +2,8 @@
 -- Extends existing tables for enhanced AI analytics, team assignments, and integrations
 
 -- Extend AIInteraction table with enhanced metrics
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'AIInteraction') THEN
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS confidence DECIMAL(3,2) DEFAULT 0.0;
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS sentiment VARCHAR(50) DEFAULT 'neutral';
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS handover_triggered BOOLEAN DEFAULT false;
@@ -12,16 +14,24 @@ ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS user_satisfaction INTEGER;
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS response_category VARCHAR(50) DEFAULT 'detailed_response';
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS response_time_ms INTEGER DEFAULT 0;
 ALTER TABLE "AIInteraction" ADD COLUMN IF NOT EXISTS organization_id UUID REFERENCES organizations(id);
+END IF;
+END $$;
 
 -- Indexes for enhanced AIInteraction table
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'AIInteraction') THEN
 CREATE INDEX IF NOT EXISTS idx_ai_interaction_org_date
     ON "AIInteraction"(organization_id, "createdAt");
 CREATE INDEX IF NOT EXISTS idx_ai_interaction_handover
     ON "AIInteraction"(handover_triggered, "createdAt");
 CREATE INDEX IF NOT EXISTS idx_ai_interaction_confidence
     ON "AIInteraction"(confidence, "createdAt");
+END IF;
+END $$;
 
 -- Extend MessageThread table for team assignments
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'MessageThread') THEN
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS assigned_to TEXT REFERENCES "User"(id);
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS assigned_by TEXT REFERENCES "User"(id);
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS priority VARCHAR(20) DEFAULT 'medium';
@@ -31,38 +41,70 @@ ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS assigned_at TIMESTAMP;
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS accepted_at TIMESTAMP;
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP;
 ALTER TABLE "MessageThread" ADD COLUMN IF NOT EXISTS organization_id UUID REFERENCES organizations(id);
+END IF;
+END $$;
 
 -- Indexes for enhanced MessageThread table
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'MessageThread') THEN
 CREATE INDEX IF NOT EXISTS idx_message_thread_assignment
     ON "MessageThread"(assigned_to, assignment_status);
 CREATE INDEX IF NOT EXISTS idx_message_thread_org
     ON "MessageThread"(organization_id, "updatedAt");
+END IF;
+END $$;
 
 -- Extend Channel table for integrations (since it already handles external channels)
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'Channel') THEN
 ALTER TABLE "Channel" ADD COLUMN IF NOT EXISTS integration_type VARCHAR(50);
 ALTER TABLE "Channel" ADD COLUMN IF NOT EXISTS integration_config JSONB DEFAULT '{}';
 ALTER TABLE "Channel" ADD COLUMN IF NOT EXISTS sync_status VARCHAR(20) DEFAULT 'pending';
 ALTER TABLE "Channel" ADD COLUMN IF NOT EXISTS error_message TEXT;
+END IF;
+END $$;
 
 -- Add new channel types for customer support integrations
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType' AND EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = pg_type.oid AND enumlabel = 'SLACK')) THEN
-        ALTER TYPE "ChannelType" ADD VALUE 'SLACK';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType' AND EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = pg_type.oid AND enumlabel = 'DISCORD')) THEN
-        ALTER TYPE "ChannelType" ADD VALUE 'DISCORD';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType' AND EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = pg_type.oid AND enumlabel = 'TEAMS')) THEN
-        ALTER TYPE "ChannelType" ADD VALUE 'TEAMS';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType' AND EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = pg_type.oid AND enumlabel = 'WEBHOOK')) THEN
-        ALTER TYPE "ChannelType" ADD VALUE 'WEBHOOK';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType' AND EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = pg_type.oid AND enumlabel = 'CHAT_WIDGET')) THEN
-        ALTER TYPE "ChannelType" ADD VALUE 'CHAT_WIDGET';
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'ChannelType') AND enumlabel = 'SLACK') THEN
+            ALTER TYPE "ChannelType" ADD VALUE 'SLACK';
+        END IF;
     END IF;
 END $$;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'ChannelType') AND enumlabel = 'DISCORD') THEN
+            ALTER TYPE "ChannelType" ADD VALUE 'DISCORD';
+        END IF;
+    END IF;
+END $$;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'ChannelType') AND enumlabel = 'TEAMS') THEN
+            ALTER TYPE "ChannelType" ADD VALUE 'TEAMS';
+        END IF;
+    END IF;
+END $$;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'ChannelType') AND enumlabel = 'WEBHOOK') THEN
+            ALTER TYPE "ChannelType" ADD VALUE 'WEBHOOK';
+        END IF;
+    END IF;
+END $$;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ChannelType') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_enum WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'ChannelType') AND enumlabel = 'CHAT_WIDGET') THEN
+            ALTER TYPE "ChannelType" ADD VALUE 'CHAT_WIDGET';
+        END IF;
+    END IF;
+END $$;;
 
 -- AI Reply Suggestions Cache Table (minimal addition)
 CREATE TABLE IF NOT EXISTS ai_reply_suggestions_cache (
@@ -115,10 +157,12 @@ $$ language 'plpgsql';
 -- Apply update trigger to MessageThread if it doesn't exist
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_message_thread_updated_at') THEN
-        CREATE TRIGGER update_message_thread_updated_at
-            BEFORE UPDATE ON "MessageThread"
-            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'MessageThread') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_message_thread_updated_at') THEN
+            CREATE TRIGGER update_message_thread_updated_at
+                BEFORE UPDATE ON "MessageThread"
+                FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        END IF;
     END IF;
 END $$;
 
@@ -152,24 +196,38 @@ CREATE POLICY "System can insert performance metrics" ON performance_metrics
 -- Comments for documentation
 COMMENT ON TABLE ai_reply_suggestions_cache IS 'Caches AI-generated reply suggestions';
 COMMENT ON TABLE performance_metrics IS 'Stores application performance metrics';
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'AIInteraction') THEN
 COMMENT ON COLUMN "AIInteraction".confidence IS 'AI confidence score (0.0 to 1.0)';
 COMMENT ON COLUMN "AIInteraction".sentiment IS 'Customer sentiment analysis result';
 COMMENT ON COLUMN "AIInteraction".handover_triggered IS 'Whether AI triggered handover to human';
+END IF;
+END $$;
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'MessageThread') THEN
 COMMENT ON COLUMN "MessageThread".assigned_to IS 'User ID of assigned team member';
 COMMENT ON COLUMN "MessageThread".assignment_status IS 'Current assignment status';
+END IF;
+END $$;
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'Channel') THEN
 COMMENT ON COLUMN "Channel".integration_type IS 'Type of external integration (slack, discord, etc.)';
+END IF;
+END $$;
 
 -- Insert sample data for testing (optional - only if tables are empty)
 DO $$
 BEGIN
-    -- Only insert if AIInteraction table is empty to avoid conflicts
-    IF NOT EXISTS (SELECT 1 FROM "AIInteraction" LIMIT 1) THEN
-        INSERT INTO "AIInteraction" (
-            id, "userId", "createdAt", "updatedAt", confidence, sentiment,
-            sources_used, empathy_score, response_category, response_time_ms
-        ) VALUES
-            (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.85, 'positive', 3, 0.8, 'detailed_response', 1200),
-            (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.92, 'neutral', 2, 0.7, 'quick_reply', 800),
-            (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.45, 'negative', 1, 0.9, 'escalation', 2100);
+    IF EXISTS (SELECT 1 FROM pg_tables WHERE tablename = 'AIInteraction') THEN
+        -- Only insert if AIInteraction table is empty to avoid conflicts
+        IF NOT EXISTS (SELECT 1 FROM "AIInteraction" LIMIT 1) THEN
+            INSERT INTO "AIInteraction" (
+                id, "userId", "createdAt", "updatedAt", confidence, sentiment,
+                sources_used, empathy_score, response_category, response_time_ms
+            ) VALUES
+                (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.85, 'positive', 3, 0.8, 'detailed_response', 1200),
+                (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.92, 'neutral', 2, 0.7, 'quick_reply', 800),
+                (gen_random_uuid()::text, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0.45, 'negative', 1, 0.9, 'escalation', 2100);
+        END IF;
     END IF;
 END $$;

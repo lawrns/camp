@@ -26,32 +26,43 @@ export const createWidgetAuthToken = async (
   organizationId: string,
   visitorId?: string,
   metadata?: any
-): Promise<string> => {
+): Promise<{
+  token: string;
+  userId: string;
+  visitorId: string;
+  organizationId: string;
+  expiresAt: Date;
+  session?: any;
+  user?: any;
+}> => {
   const client = createServerClient();
 
   // Generate unique visitor ID if not provided
   const finalVisitorId = visitorId || `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   // Create JWT payload with organization context
+  // CRITICAL: Use Supabase-compatible JWT structure for real-time access
   const jwtPayload = {
-    aud: "authenticated",
+    aud: "anon", // Use "anon" for anonymous widget sessions
     exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     iat: Math.floor(Date.now() / 1000),
-    iss: "campfire-widget",
+    iss: "supabase", // MUST be "supabase" for real-time WebSocket authentication
     sub: `widget_${finalVisitorId}`,
     email: `visitor@${organizationId}`,
     phone: "",
     app_metadata: {
       provider: "widget",
       providers: ["widget"],
+      organization_id: organizationId, // Add org context to app_metadata
     },
     user_metadata: {
       organization_id: organizationId,
       widget_session: true,
       visitor_id: finalVisitorId,
       metadata: metadata || {},
+      source: "widget", // Add source identifier
     },
-    role: "authenticated",
+    role: "anon", // Use "anon" role for widget sessions
     aal: "aal1",
     amr: [{ method: "widget", timestamp: Math.floor(Date.now() / 1000) }],
     session_id: `widget_${finalVisitorId}`,
@@ -59,13 +70,62 @@ export const createWidgetAuthToken = async (
     organization_id: organizationId,
   };
 
-  // Sign the JWT token with proper secret
-  const token = jwt.sign(jwtPayload, getJWTSecret(), {
-    algorithm: "HS256",
-    expiresIn: "24h",
-  });
+  // For Supabase real-time compatibility, we need to use Supabase's own JWT signing
+  // Instead of custom JWT, we'll use Supabase's signInAnonymously with metadata
+  const supabaseClient = createServerClient();
 
-  return token;
+  try {
+    // Sign in anonymously with widget metadata
+    const { data, error } = await supabaseClient.auth.signInAnonymously({
+      options: {
+        data: {
+          organization_id: organizationId,
+          widget_session: true,
+          visitor_id: finalVisitorId,
+          source: "widget",
+          metadata: metadata || {},
+        },
+      },
+    });
+
+    if (error) {
+      throw new Error(`Widget authentication failed: ${error.message}`);
+    }
+
+    if (!data.session?.access_token) {
+      throw new Error("No access token received from Supabase authentication");
+    }
+
+    // Return the Supabase-generated token and session data
+    return {
+      token: data.session.access_token,
+      userId: data.user?.id || `widget_${finalVisitorId}`,
+      visitorId: finalVisitorId,
+      organizationId,
+      expiresAt: new Date(data.session.expires_at ? data.session.expires_at * 1000 : Date.now() + 24 * 60 * 60 * 1000),
+      session: data.session,
+      user: data.user,
+    };
+  } catch (authError) {
+    console.error("Widget Supabase authentication error:", authError);
+
+    // Fallback to custom JWT if Supabase auth fails
+    console.warn("Falling back to custom JWT token for widget authentication");
+
+    // Sign the JWT token with proper secret as fallback
+    const token = jwt.sign(jwtPayload, getJWTSecret(), {
+      algorithm: "HS256",
+      expiresIn: "24h",
+    });
+
+    return {
+      token,
+      userId: `widget_${finalVisitorId}`,
+      visitorId: finalVisitorId,
+      organizationId,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    };
+  }
 };
 
 export const verifyWidgetToken = async (token: string) => {

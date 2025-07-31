@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS conversations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
     customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
-    assigned_agent_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    assigned_to_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     status TEXT DEFAULT 'open' CHECK (status IN ('open', 'pending', 'resolved', 'closed')),
     priority TEXT DEFAULT 'normal' CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
     subject TEXT,
@@ -96,7 +96,7 @@ CREATE INDEX IF NOT EXISTS idx_profiles_organization_id ON profiles(organization
 CREATE INDEX IF NOT EXISTS idx_customers_organization_id ON customers(organization_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_organization_id ON conversations(organization_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_status ON conversations(status);
-CREATE INDEX IF NOT EXISTS idx_conversations_assigned_agent_id ON conversations(assigned_agent_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_assigned_to_user_id ON conversations(assigned_to_user_id);
 CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);
 CREATE INDEX IF NOT EXISTS idx_activity_logs_organization_id ON activity_logs(organization_id);
@@ -115,6 +115,7 @@ ALTER TABLE metrics ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
 -- Organizations: Users can only access their own organization
+DROP POLICY IF EXISTS "Users can access their organization" ON organizations;
 CREATE POLICY "Users can access their organization" ON organizations
     FOR ALL USING (
         id IN (
@@ -124,6 +125,7 @@ CREATE POLICY "Users can access their organization" ON organizations
     );
 
 -- Profiles: Users can access profiles in their organization
+DROP POLICY IF EXISTS "Users can access profiles in their organization" ON profiles;
 CREATE POLICY "Users can access profiles in their organization" ON profiles
     FOR ALL USING (
         organization_id IN (
@@ -133,6 +135,7 @@ CREATE POLICY "Users can access profiles in their organization" ON profiles
     );
 
 -- Customers: Users can access customers in their organization
+DROP POLICY IF EXISTS "Users can access customers in their organization" ON customers;
 CREATE POLICY "Users can access customers in their organization" ON customers
     FOR ALL USING (
         organization_id IN (
@@ -142,6 +145,7 @@ CREATE POLICY "Users can access customers in their organization" ON customers
     );
 
 -- Conversations: Users can access conversations in their organization
+DROP POLICY IF EXISTS "Users can access conversations in their organization" ON conversations;
 CREATE POLICY "Users can access conversations in their organization" ON conversations
     FOR ALL USING (
         organization_id IN (
@@ -151,6 +155,7 @@ CREATE POLICY "Users can access conversations in their organization" ON conversa
     );
 
 -- Messages: Users can access messages in conversations they have access to
+DROP POLICY IF EXISTS "Users can access messages in their organization" ON messages;
 CREATE POLICY "Users can access messages in their organization" ON messages
     FOR ALL USING (
         conversation_id IN (
@@ -161,6 +166,7 @@ CREATE POLICY "Users can access messages in their organization" ON messages
     );
 
 -- Activity logs: Users can access activity logs in their organization
+DROP POLICY IF EXISTS "Users can access activity logs in their organization" ON activity_logs;
 CREATE POLICY "Users can access activity logs in their organization" ON activity_logs
     FOR ALL USING (
         organization_id IN (
@@ -170,6 +176,7 @@ CREATE POLICY "Users can access activity logs in their organization" ON activity
     );
 
 -- Metrics: Users can access metrics in their organization
+DROP POLICY IF EXISTS "Users can access metrics in their organization" ON metrics;
 CREATE POLICY "Users can access metrics in their organization" ON metrics
     FOR ALL USING (
         organization_id IN (
@@ -188,16 +195,20 @@ END;
 $$ language 'plpgsql';
 
 -- Triggers for updated_at
+DROP TRIGGER IF EXISTS update_organizations_updated_at ON organizations;
 CREATE TRIGGER update_organizations_updated_at BEFORE UPDATE ON organizations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+DROP TRIGGER IF EXISTS update_profiles_updated_at ON profiles;
 CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+DROP TRIGGER IF EXISTS update_customers_updated_at ON customers;
 CREATE TRIGGER update_customers_updated_at BEFORE UPDATE ON customers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+DROP TRIGGER IF EXISTS update_conversations_updated_at ON conversations;
 CREATE TRIGGER update_conversations_updated_at BEFORE UPDATE ON conversations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Enable realtime for tables
-ALTER PUBLICATION supabase_realtime ADD TABLE conversations;
-ALTER PUBLICATION supabase_realtime ADD TABLE messages;
-ALTER PUBLICATION supabase_realtime ADD TABLE activity_logs;
-ALTER PUBLICATION supabase_realtime ADD TABLE metrics;
+DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'conversations') THEN ALTER PUBLICATION supabase_realtime ADD TABLE conversations; END IF; END $$;
+DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'messages') THEN ALTER PUBLICATION supabase_realtime ADD TABLE messages; END IF; END $$;
+DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'activity_logs') THEN ALTER PUBLICATION supabase_realtime ADD TABLE activity_logs; END IF; END $$;
+DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'metrics') THEN ALTER PUBLICATION supabase_realtime ADD TABLE metrics; END IF; END $$;
 
 -- Insert sample data for development
 INSERT INTO organizations (id, name, slug) VALUES 

@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { UnifiedAuthWidget } from '@/components/widget/UnifiedAuthWidget';
+import { AuthConnectionTest } from '@/components/widget/debug/AuthConnectionTest';
 
 export default function TestUnifiedAuthPage() {
   const [organizationId, setOrganizationId] = useState('b5e80170-004c-4e82-a88c-3e2166b169dd');
@@ -147,6 +148,25 @@ export default function TestUnifiedAuthPage() {
                 debug={true}
               />
             </div>
+          </div>
+        )}
+
+        {/* Comprehensive Test Component */}
+        {showWidget && (
+          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <AuthConnectionTest
+              organizationId={organizationId}
+              onTestComplete={(results) => {
+                console.log('Test results:', results);
+                const allPassed = results.authTest && results.jwtEnrichmentTest &&
+                                 results.realtimeConnectionTest && results.messageFlowTest;
+                if (allPassed) {
+                  console.log('🎉 All tests passed!');
+                } else {
+                  console.log('⚠️ Some tests failed:', results.errors);
+                }
+              }}
+            />
           </div>
         )}
 

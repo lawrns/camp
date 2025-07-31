@@ -62,6 +62,10 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
   // Convert Supabase message to Widget message format
   const convertToWidgetMessage = useCallback((supabaseMessage: SupabaseMessage): WidgetMessage => {
+    if (!supabaseMessage) {
+      throw new Error('Cannot convert undefined message to widget format');
+    }
+
     // Map database sender types to widget types
     let senderType: SenderType;
     switch (supabaseMessage.sender_type) {
@@ -81,10 +85,10 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     return {
       id: parseInt(supabaseMessage.id) || Date.now(), // Convert to number as expected by Message interface
       conversationId: parseInt(supabaseMessage.conversation_id) || 0,
-      content: supabaseMessage.content,
+      content: supabaseMessage.content || '',
       senderType,
       senderName: supabaseMessage.sender_name || 'Unknown',
-      createdAt: supabaseMessage.created_at,
+      createdAt: supabaseMessage.created_at || new Date().toISOString(),
       status: (supabaseMessage.status as any) || 'sent',
     };
   }, []);
@@ -166,26 +170,42 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const { message: messageData } = await response.json();
+      const messageData = await response.json();
+
+      if (!messageData || !messageData.id) {
+        widgetDebugger.logMessage('error', 'Invalid response from message API', { messageData });
+        throw new Error('Invalid response from message API - missing message data');
+      }
+
       widgetDebugger.logNetworkResponse('/api/widget/messages', response.status, { messageId: messageData.id });
 
-      // Broadcast message to real-time channel
-      const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, activeConversationId);
-      widgetDebugger.logRealtime('info', 'Broadcasting message to channel', {
-        channelName,
-        messageId: messageData.id,
-        event: UNIFIED_EVENTS.MESSAGE_CREATED
-      });
+      // Broadcast message to real-time channel if channel is available
+      if (channelRef.current) {
+        const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, activeConversationId);
+        widgetDebugger.logRealtime('info', 'Broadcasting message to channel', {
+          channelName,
+          messageId: messageData.id,
+          event: UNIFIED_EVENTS.MESSAGE_CREATED
+        });
 
-      await channelRef.current?.send({
-        type: 'broadcast',
-        event: UNIFIED_EVENTS.MESSAGE_CREATED,
-        payload: {
-          message: messageData,
-          source: 'widget',
-          timestamp: new Date().toISOString(),
-        },
-      });
+        try {
+          await channelRef.current.send({
+            type: 'broadcast',
+            event: UNIFIED_EVENTS.MESSAGE_CREATED,
+            payload: {
+              message: messageData,
+              source: 'widget',
+              timestamp: new Date().toISOString(),
+            },
+          });
+          widgetDebugger.logRealtime('info', 'Message broadcast successful');
+        } catch (broadcastError) {
+          widgetDebugger.logRealtime('warn', 'Message broadcast failed', broadcastError);
+          // Don't throw here - message was still sent successfully via API
+        }
+      } else {
+        widgetDebugger.logRealtime('warn', 'No channel available for broadcast');
+      }
 
       widgetDebugger.updateMessageSent();
       logWidgetEvent('widget_message_sent_success', {
@@ -199,7 +219,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       logWidgetError('Failed to send widget message', { error, conversationId });
       throw error;
     }
-  }, [conversationId, config.organizationId, config.userId]);
+  }, [conversationId, config.organizationId, config.userId, config.getAuthHeaders]);
 
   // Send typing indicator
   const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
@@ -271,7 +291,12 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const { conversation: newConversation } = await response.json();
+        const responseData = await response.json();
+        const newConversation = responseData?.conversation;
+
+        if (!newConversation || !newConversation.id) {
+          throw new Error('Invalid response from conversation API - missing conversation data');
+        }
 
         setConversationId(newConversation.id);
         setIsInitializing(false);
@@ -296,18 +321,39 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     return initPromise;
   }, [conversationId, config.organizationId, config.userId]);
 
-  // Connect to real-time channel
-  const connect = useCallback(async () => {
+  // Connect to real-time channel with retry logic
+  const connect = useCallback(async (retryAttempt: number = 0) => {
+    const maxRetries = 3;
+    const baseDelay = 2000; // 2 seconds
+
     if (!supabaseRef.current) {
       logWidgetError('Cannot connect: Supabase client not initialized');
       return;
     }
 
     try {
+      widgetDebugger.logRealtime('info', `Starting real-time connection attempt ${retryAttempt + 1}/${maxRetries + 1}`);
+
       logWidgetEvent('widget_realtime_connect_start', {
         organizationId: config.organizationId,
         hasExistingConversation: !!conversationId,
+        retryAttempt,
       });
+
+      // Verify authentication before proceeding
+      const { data: { session: authSession }, error: sessionError } = await supabaseRef.current.auth.getSession();
+
+      widgetDebugger.logRealtime('info', 'Session check for real-time connection', {
+        hasSession: !!authSession,
+        hasAccessToken: !!authSession?.access_token,
+        sessionError: sessionError?.message,
+        userId: authSession?.user?.id,
+        retryAttempt
+      });
+
+      if (sessionError || !authSession?.access_token) {
+        throw new Error(`Authentication required for real-time connection: ${sessionError?.message || 'No session'}`);
+      }
 
       // Ensure we have a conversation
       const convId = await initializeConversation();
@@ -322,8 +368,158 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
       // Create new channel using unified naming convention
       const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, convId);
-      const channel = supabaseRef.current.channel(channelName);
 
+      // Verify authentication before subscribing with retry logic
+      let session: any = null;
+      let sessionAttempts = 0;
+      const maxSessionAttempts = 5; // Increased attempts
+
+      widgetDebugger.logRealtime('info', 'Starting session verification for real-time connection', {
+        organizationId: config.organizationId,
+        conversationId: convId
+      });
+
+      while (!session && sessionAttempts < maxSessionAttempts) {
+        const { data: { session: currentSession }, error: sessionError } = await supabaseRef.current.auth.getSession();
+
+        widgetDebugger.logRealtime('info', `Session check attempt ${sessionAttempts + 1}/${maxSessionAttempts}`, {
+          hasSession: !!currentSession,
+          hasAccessToken: !!currentSession?.access_token,
+          sessionError: sessionError?.message,
+          userId: currentSession?.user?.id,
+          userEmail: currentSession?.user?.email,
+          isWidgetSession: currentSession?.user?.user_metadata?.widget_session ||
+                          currentSession?.user?.app_metadata?.provider === 'widget'
+        });
+
+        if (sessionError) {
+          widgetDebugger.logRealtime('warn', `Session check attempt ${sessionAttempts + 1} failed`, { sessionError });
+          sessionAttempts++;
+          if (sessionAttempts < maxSessionAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay
+            continue;
+          } else {
+            widgetDebugger.logRealtime('error', 'Failed to get valid session after retries', { sessionError });
+            throw new Error(`Authentication failed after ${maxSessionAttempts} attempts: ${sessionError.message}`);
+          }
+        }
+
+        if (!currentSession) {
+          widgetDebugger.logRealtime('warn', `Session check attempt ${sessionAttempts + 1} returned null session`);
+          sessionAttempts++;
+          if (sessionAttempts < maxSessionAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay
+            continue;
+          } else {
+            widgetDebugger.logRealtime('error', 'No valid session found after retries');
+            throw new Error('Authentication required for real-time connection - no session found');
+          }
+        }
+
+        // Validate session has required properties
+        if (!currentSession.access_token) {
+          widgetDebugger.logRealtime('warn', `Session check attempt ${sessionAttempts + 1} missing access token`);
+          sessionAttempts++;
+          if (sessionAttempts < maxSessionAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            continue;
+          } else {
+            widgetDebugger.logRealtime('error', 'No valid access token found after retries');
+            throw new Error('Authentication required for real-time connection - no access token');
+          }
+        }
+
+        session = currentSession;
+        break;
+      }
+
+      widgetDebugger.logRealtime('info', 'Session verified for real-time', {
+        hasSession: !!session,
+        userId: session.user?.id,
+        sessionAttempts: sessionAttempts + 1,
+        isWidgetSession: session.user?.user_metadata?.widget_session || session.user?.app_metadata?.provider === 'widget',
+        tokenPreview: session.access_token?.substring(0, 20) + '...'
+      });
+
+      // CRITICAL: Set the access token before creating the channel
+      if (session?.access_token) {
+        // Debug JWT token structure
+        try {
+          const tokenParts = session.access_token.split('.');
+          if (tokenParts.length === 3) {
+            const payload = JSON.parse(atob(tokenParts[1]));
+            widgetDebugger.logRealtime('info', '🔑 JWT Token Structure for WebSocket', {
+              aud: payload.aud,
+              iss: payload.iss,
+              role: payload.role,
+              exp: payload.exp,
+              iat: payload.iat,
+              sub: payload.sub,
+              organization_id: payload.organization_id,
+              user_metadata: payload.user_metadata,
+              app_metadata: payload.app_metadata,
+              isExpired: payload.exp < Math.floor(Date.now() / 1000),
+              timeUntilExpiry: payload.exp - Math.floor(Date.now() / 1000),
+              isAnonymous: payload.user_metadata?.is_anonymous || payload.app_metadata?.provider === 'anonymous'
+            });
+
+            // Check for potential issues
+            if (payload.exp < Math.floor(Date.now() / 1000)) {
+              widgetDebugger.logRealtime('error', '❌ JWT token is expired!', {
+                expiredAt: new Date(payload.exp * 1000).toISOString(),
+                currentTime: new Date().toISOString()
+              });
+            }
+
+            if (payload.role !== 'anon' && payload.role !== 'authenticated') {
+              widgetDebugger.logRealtime('warn', '⚠️ Unexpected JWT role', {
+                role: payload.role,
+                expected: ['anon', 'authenticated']
+              });
+            }
+          }
+        } catch (e) {
+          widgetDebugger.logRealtime('warn', 'Failed to decode JWT for debugging', e);
+        }
+
+        // Update the client's auth token for WebSocket authentication
+        try {
+          await supabaseRef.current.auth.setSession({
+            access_token: session.access_token,
+            refresh_token: session.refresh_token || '',
+          });
+
+          widgetDebugger.logRealtime('info', '✅ Updated Supabase client session for WebSocket', {
+            hasAccessToken: !!session.access_token,
+            tokenPreview: session.access_token.substring(0, 20) + '...',
+            sessionUpdated: true
+          });
+        } catch (sessionError) {
+          widgetDebugger.logRealtime('error', '❌ Failed to update Supabase client session', {
+            error: sessionError,
+            hasAccessToken: !!session.access_token
+          });
+          throw new Error(`Failed to update session: ${sessionError}`);
+        }
+      } else {
+        widgetDebugger.logRealtime('warn', '⚠️ No access token available for WebSocket authentication', {
+          hasSession: !!session,
+          sessionKeys: session ? Object.keys(session) : []
+        });
+      }
+
+      // Create the channel with simplified configuration
+      // CRITICAL: Remove problematic postgres_changes filter that might cause CLOSED status
+      const channel = supabaseRef.current.channel(channelName, {
+        config: {
+          presence: { key: session?.user?.id || 'anonymous' },
+          broadcast: { self: true },
+          postgres_changes: { enabled: true }
+          // REMOVED: organization_id filter that might conflict with RLS policies
+        }
+      });
+
+      // Set up channel event listeners after channel creation
       // Listen for new messages from database
       channel.on(
         'postgres_changes',
@@ -334,14 +530,23 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           filter: `conversation_id=eq.${convId}`,
         },
         (payload: any) => {
-          const message = convertToWidgetMessage(payload.new);
-          // Only handle messages not sent by this widget instance
-          if (payload.new.metadata?.source !== 'widget' || payload.new.sender_type !== 'user') {
-            config.onMessage?.(message);
-            logWidgetEvent('widget_message_received', {
-              messageId: message.id,
-              senderType: message.senderType,
-            });
+          try {
+            if (!payload?.new) {
+              widgetDebugger.logRealtime('warn', 'Received invalid message payload', payload);
+              return;
+            }
+
+            const message = convertToWidgetMessage(payload.new);
+            // Only handle messages not sent by this widget instance
+            if (payload.new.metadata?.source !== 'widget' || payload.new.sender_type !== 'user') {
+              config.onMessage?.(message);
+              logWidgetEvent('widget_message_received', {
+                messageId: message.id,
+                senderType: message.senderType,
+              });
+            }
+          } catch (error) {
+            widgetDebugger.logRealtime('error', 'Error processing received message', error);
           }
         }
       );
@@ -356,80 +561,269 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           filter: `conversation_id=eq.${convId}`,
         },
         (payload: any) => {
-          if (payload.new.status !== payload.old.status) {
-            config.onMessageStatusUpdate?.(payload.new.id, payload.new.status);
-            logWidgetEvent('widget_message_status_updated', {
-              messageId: payload.new.id,
-              status: payload.new.status,
-            });
+          try {
+            if (!payload?.new || !payload?.old) {
+              widgetDebugger.logRealtime('warn', 'Received invalid status update payload', payload);
+              return;
+            }
+
+            if (payload.new.status !== payload.old.status) {
+              config.onMessageStatusUpdate?.(payload.new.id, payload.new.status);
+              logWidgetEvent('widget_message_status_updated', {
+                messageId: payload.new.id,
+                status: payload.new.status,
+              });
+            }
+          } catch (error) {
+            widgetDebugger.logRealtime('error', 'Error processing status update', error);
           }
         }
       );
 
       // Listen for broadcast events (typing, presence, etc.)
       channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
-        // Only show typing from agents, not from this widget
-        if (payload.payload.source !== 'widget') {
-          config.onTyping?.(true, payload.payload.userName);
+        try {
+          if (!payload?.payload) {
+            widgetDebugger.logRealtime('warn', 'Received invalid typing start payload', payload);
+            return;
+          }
+          // Only show typing from agents, not from this widget
+          if (payload.payload.source !== 'widget') {
+            config.onTyping?.(true, payload.payload.userName);
+          }
+        } catch (error) {
+          widgetDebugger.logRealtime('error', 'Error processing typing start', error);
         }
       });
 
       channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
-        if (payload.payload.source !== 'widget') {
-          config.onTyping?.(false, payload.payload.userName);
+        try {
+          if (!payload?.payload) {
+            widgetDebugger.logRealtime('warn', 'Received invalid typing stop payload', payload);
+            return;
+          }
+          if (payload.payload.source !== 'widget') {
+            config.onTyping?.(false, payload.payload.userName);
+          }
+        } catch (error) {
+          widgetDebugger.logRealtime('error', 'Error processing typing stop', error);
         }
       });
 
       // Listen for message broadcasts (for immediate updates)
       channel.on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
-        widgetDebugger.logRealtime('info', 'Received message broadcast', {
-          source: payload.payload.source,
-          hasMessage: !!payload.payload.message,
-          messageId: payload.payload.message?.id
-        });
+        try {
+          if (!payload?.payload) {
+            widgetDebugger.logRealtime('warn', 'Received invalid broadcast payload', payload);
+            return;
+          }
 
-        if (payload.payload.source !== 'widget' && payload.payload.message) {
-          const message = convertToWidgetMessage(payload.payload.message);
-          widgetDebugger.updateMessageReceived();
-          config.onMessage?.(message);
+          widgetDebugger.logRealtime('info', 'Received message broadcast', {
+            source: payload.payload.source,
+            hasMessage: !!payload.payload.message,
+            messageId: payload.payload.message?.id
+          });
+
+          if (payload.payload.source !== 'widget' && payload.payload.message) {
+            const message = convertToWidgetMessage(payload.payload.message);
+            widgetDebugger.updateMessageReceived();
+            config.onMessage?.(message);
+          }
+        } catch (error) {
+          widgetDebugger.logRealtime('error', 'Error processing message broadcast', error);
         }
       });
 
-      // Subscribe to channel
-      widgetDebugger.logRealtime('info', 'Subscribing to channel', { channelName });
+      // Subscribe to channel with improved error handling
+      widgetDebugger.logRealtime('info', 'Subscribing to channel', {
+        channelName,
+        organizationId: config.organizationId,
+        conversationId: convId,
+        sessionUserId: session.user?.id,
+        timestamp: new Date().toISOString()
+      });
       widgetDebugger.updateWebSocketStatus('connecting');
 
-      await channel.subscribe((status: string) => {
-        const connected = status === 'SUBSCRIBED';
-        widgetDebugger.logRealtime('info', `Channel subscription status: ${status}`, { connected });
+      const subscriptionPromise = new Promise<void>((resolve, reject) => {
+        let timeoutId: NodeJS.Timeout;
+        let isResolved = false;
 
-        if (connected) {
-          widgetDebugger.updateWebSocketStatus('connected');
-        } else if (status === 'CHANNEL_ERROR') {
-          widgetDebugger.updateWebSocketStatus('error');
+        const cleanup = () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+        };
+
+        const resolveOnce = () => {
+          if (!isResolved) {
+            isResolved = true;
+            cleanup();
+            resolve();
+          }
+        };
+
+        const rejectOnce = (error: Error) => {
+          if (!isResolved) {
+            isResolved = true;
+            cleanup();
+            reject(error);
+          }
+        };
+
+        // Increased timeout to 30 seconds for better reliability
+        timeoutId = setTimeout(() => {
+          widgetDebugger.logRealtime('error', 'Channel subscription timeout after 30 seconds', {
+            channelName,
+            sessionUserId: session?.user?.id,
+            organizationId: config.organizationId
+          });
+          rejectOnce(new Error('Channel subscription timeout after 30 seconds'));
+        }, 30000);
+
+        try {
+          // Add WebSocket connection monitoring
+          const realtimeClient = supabaseRef.current.realtime;
+
+          widgetDebugger.logRealtime('info', 'WebSocket connection status before subscription', {
+            isConnected: realtimeClient.isConnected(),
+            connectionState: realtimeClient.connectionState(),
+            channels: realtimeClient.channels.length,
+            endpointURL: realtimeClient.endpointURL
+          });
+
+          channel.subscribe((status: string) => {
+            const connected = status === 'SUBSCRIBED';
+
+            // Enhanced debugging for channel status changes
+            widgetDebugger.logRealtime('info', `🔄 Channel subscription status: ${status}`, {
+              connected,
+              channelName,
+              timestamp: new Date().toISOString(),
+              wsConnected: realtimeClient.isConnected(),
+              wsState: realtimeClient.connectionState(),
+              channelState: channel.state,
+              sessionUserId: session?.user?.id,
+              organizationId: config.organizationId
+            });
+
+            // Log all possible status values for debugging
+            if (status === 'JOINING') {
+              widgetDebugger.logRealtime('info', '🔄 Channel joining...', { channelName });
+            } else if (status === 'JOINED') {
+              widgetDebugger.logRealtime('info', '✅ Channel joined successfully', { channelName });
+            } else if (connected) {
+              widgetDebugger.updateWebSocketStatus('connected');
+              widgetDebugger.logRealtime('info', '🎉 Channel subscription successful', {
+                channelName,
+                wsConnected: realtimeClient.isConnected(),
+                finalState: channel.state
+              });
+              resolveOnce();
+            } else if (status === 'CHANNEL_ERROR') {
+              widgetDebugger.updateWebSocketStatus('error');
+              widgetDebugger.logRealtime('error', '❌ Channel subscription failed with CHANNEL_ERROR', {
+                channelName,
+                wsConnected: realtimeClient.isConnected(),
+                wsState: realtimeClient.connectionState(),
+                channelState: channel.state,
+                lastError: realtimeClient.lastError,
+                sessionInfo: {
+                  hasSession: !!session,
+                  hasAccessToken: !!session?.access_token,
+                  userId: session?.user?.id
+                }
+              });
+              rejectOnce(new Error(`Channel subscription failed: CHANNEL_ERROR`));
+            } else if (status === 'CLOSED') {
+              widgetDebugger.updateWebSocketStatus('error');
+              widgetDebugger.logRealtime('error', '❌ Channel subscription failed with CLOSED status', {
+                channelName,
+                wsConnected: realtimeClient.isConnected(),
+                wsState: realtimeClient.connectionState(),
+                channelState: channel.state,
+                lastError: realtimeClient.lastError,
+                possibleCauses: [
+                  'RLS policy blocking access',
+                  'Invalid JWT token',
+                  'WebSocket authentication failure',
+                  'Channel configuration issue',
+                  'Database permission denied'
+                ],
+                sessionInfo: {
+                  hasSession: !!session,
+                  hasAccessToken: !!session?.access_token,
+                  userId: session?.user?.id,
+                  role: session?.user?.role,
+                  isAnonymous: session?.user?.is_anonymous
+                }
+              });
+              rejectOnce(new Error(`Channel subscription failed: CLOSED - Check RLS policies and authentication`));
+            } else if (status === 'TIMED_OUT') {
+              widgetDebugger.updateWebSocketStatus('error');
+              widgetDebugger.logRealtime('error', '⏰ Channel subscription timed out', {
+                channelName,
+                timeout: '30 seconds'
+              });
+              rejectOnce(new Error('Channel subscription timed out'));
+            } else {
+              // Log any other status for debugging
+              widgetDebugger.logRealtime('info', `🔍 Unknown channel status: ${status}`, {
+                channelName,
+                status,
+                channelState: channel.state
+              });
+            }
+
+            setIsConnected(connected);
+            config.onConnectionChange?.(connected);
+
+            logWidgetEvent('widget_realtime_connection_change', {
+              status,
+              connected,
+              channelName,
+              timestamp: new Date().toISOString(),
+            });
+          });
+        } catch (subscribeError) {
+          widgetDebugger.logRealtime('error', 'Error during channel subscription', subscribeError);
+          rejectOnce(new Error(`Subscription error: ${subscribeError}`));
         }
-
-        setIsConnected(connected);
-        config.onConnectionChange?.(connected);
-
-        logWidgetEvent('widget_realtime_connection_change', {
-          status,
-          connected,
-          channelName,
-        });
       });
 
+      await subscriptionPromise;
+
       channelRef.current = channel;
-      
+
+      widgetDebugger.logRealtime('info', 'Real-time connection established successfully');
       logWidgetEvent('widget_realtime_connected', {
         conversationId: convId,
         channelName,
       });
 
     } catch (error) {
-      logWidgetError('Failed to connect to real-time', { error });
+      widgetDebugger.logRealtime('error', `Real-time connection attempt ${retryAttempt + 1} failed`, error);
+
+      // Retry logic with exponential backoff
+      if (retryAttempt < maxRetries) {
+        const delay = baseDelay * Math.pow(2, retryAttempt); // Exponential backoff
+        widgetDebugger.logRealtime('info', `Retrying connection in ${delay}ms (attempt ${retryAttempt + 2}/${maxRetries + 1})`);
+
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return connect(retryAttempt + 1);
+      }
+
+      // All retries exhausted
+      widgetDebugger.logRealtime('error', 'All connection attempts failed', {
+        totalAttempts: maxRetries + 1,
+        finalError: error
+      });
+      logWidgetError('Failed to connect to real-time after retries', {
+        error,
+        attempts: maxRetries + 1
+      });
       setIsConnected(false);
       config.onConnectionChange?.(false);
+      throw error;
     }
   }, [config.organizationId, conversationId, initializeConversation, convertToWidgetMessage]);
 

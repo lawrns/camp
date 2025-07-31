@@ -634,6 +634,15 @@ export function withUserAuth<T extends Record<string, string | string[]> = Recor
       const authResult = await extractAuthFromRequest(req);
 
       if (!authResult.success || !authResult.user) {
+        // Enhanced logging for debugging 401 errors
+        console.warn('[withUserAuth] Authentication failed:', {
+          success: authResult.success,
+          hasUser: !!authResult.user,
+          error: authResult.error,
+          url: req.url,
+          method: req.method,
+          userAgent: req.headers.get('user-agent')?.substring(0, 100),
+        });
         return createErrorResponse(authResult.error || "Authentication required", 401, "UNAUTHORIZED");
       }
 

@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS conversations (
     customer_id UUID,
     customer_email VARCHAR(255),
     customer_name VARCHAR(255),
-    assigned_agent_id UUID,
+    assigned_to_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     
     -- Metadata
     metadata JSONB DEFAULT '{}',
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS rag_handover_log (
 CREATE INDEX IF NOT EXISTS idx_conversations_workspace_id ON conversations(workspace_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_channel ON conversations(channel);
 CREATE INDEX IF NOT EXISTS idx_conversations_status ON conversations(status);
-CREATE INDEX IF NOT EXISTS idx_conversations_assigned_agent ON conversations(assigned_agent_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_assigned_to_user_id ON conversations(assigned_to_user_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_customer ON conversations(customer_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_created_at ON conversations(created_at);
 CREATE INDEX IF NOT EXISTS idx_conversations_last_message_at ON conversations(last_message_at);
@@ -501,4 +501,4 @@ BEGIN
     RAISE NOTICE 'Tables created: conversations, messages, typing_indicators, presence, conversation_participants, rag_handover_log';
     RAISE NOTICE 'Indexes, triggers, RLS policies, and utility functions have been set up';
     RAISE NOTICE 'Real-time publication "campfire_realtime" has been created';
-END $$; 
+END $$;

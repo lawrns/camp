@@ -115,12 +115,20 @@ function getWidgetClient() {
     realtime: {
       params: {
         eventsPerSecond: 10,
-        // Add apikey for WebSocket authentication
+        // CRITICAL: Add apikey for WebSocket authentication
         apikey: env.anonKey,
+        // Add log level for debugging
+        log_level: 'info',
+        // Add version parameter
+        vsn: '1.0.0'
       },
       heartbeatIntervalMs: 30000,
       reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
-      timeout: 20000,
+      // Increase timeout to match our subscription timeout
+      timeout: 35000,
+      // Use default WebSocket transport without custom encoding
+      transport: 'websocket'
+      // REMOVED: Custom encode function that might interfere with WebSocket protocol
     },
     global: {
       headers: {

@@ -128,7 +128,7 @@ export async function refreshWidgetJWT(token: string, organizationId: string): P
 
     // Generate new token with same session data
     const { generateWidgetToken } = await import('./widget-auth');
-    const newToken = await generateWidgetToken(
+    const authResult = await generateWidgetToken(
       organizationId,
       currentResult.user.visitorId!,
       {
@@ -137,6 +137,7 @@ export async function refreshWidgetJWT(token: string, organizationId: string): P
         mailboxId: currentResult.user.metadata?.mailboxId,
       }
     );
+    const newToken = authResult.token;
 
     // Validate the new token
     return await validateWidgetJWT(newToken);

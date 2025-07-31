@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create a new widget JWT with extended expiration
-    const newToken = await createWidgetAuthToken(
+    const authResult = await createWidgetAuthToken(
       currentOrgId,
       visitorId,
       metadata
@@ -75,9 +75,12 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      token: newToken,
+      token: authResult.token,
+      userId: authResult.userId,
+      visitorId: authResult.visitorId,
+      organizationId: authResult.organizationId,
       message: "Widget session refreshed successfully",
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
+      expiresAt: authResult.expiresAt.toISOString(),
     });
 
     return applySecurityHeaders(response);
