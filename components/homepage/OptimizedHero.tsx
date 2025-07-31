@@ -1,14 +1,13 @@
 "use client";
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Terminal } from 'lucide-react';
 import Link from 'next/link';
-import { useRef } from 'react';
 
-// Optimized animation variants - minimal re-renders
+// Simplified animation variants for better performance
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  visible: { opacity: 1, y: 0 }
 };
 
 const staggerContainer = {
@@ -22,25 +21,12 @@ const staggerContainer = {
 const scaleOnHover = { scale: 1.05, transition: { duration: 0.2 } };
 
 export const OptimizedHero = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  // Optimized transforms - only recalculate on scroll
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Optimized Parallax Background */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
-        style={{ y: backgroundY }}
-      />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      {/* Simplified Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" />
       
-      {/* Floating Elements - Performance Optimized */}
+      {/* Minimal Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-20 left-10 w-2 h-2 bg-blue-400 rounded-full opacity-60"
@@ -52,11 +38,6 @@ export const OptimizedHero = () => {
           animate={{ y: [0, 30, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         />
-        <motion.div
-          className="absolute bottom-40 left-1/4 w-2 h-2 bg-indigo-400 rounded-full opacity-50"
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        />
       </div>
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
@@ -65,7 +46,6 @@ export const OptimizedHero = () => {
           animate="visible"
           variants={staggerContainer}
           className="text-center max-w-6xl mx-auto"
-          style={{ y: textY }}
         >
           {/* Badge */}
           <motion.div

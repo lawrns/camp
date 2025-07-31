@@ -3,7 +3,6 @@
 import { Suspense } from 'react';
 import { SafeClientOnly } from '@/components/SafeClientOnly';
 import { EnhancedWidgetProvider } from '@/components/widget/enhanced';
-import { OptimizedNav } from '@/components/homepage/OptimizedNav';
 import { OptimizedHero } from '@/components/homepage/OptimizedHero';
 import { InteractiveChatDemo } from '@/components/homepage/InteractiveChatDemo';
 import { FeaturesShowcase } from '@/components/homepage/FeaturesShowcase';
@@ -23,9 +22,6 @@ const LoadingSpinner = () => (
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Optimized Navigation */}
-      <OptimizedNav />
-      
       <Suspense fallback={<LoadingSpinner />}>
         {/* Optimized Hero Section */}
         <OptimizedHero />
