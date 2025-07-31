@@ -588,8 +588,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
               id: selectedConversation.id,
               subject: selectedConversation.last_message_preview || "Conversation",
               customer: {
-                name: selectedConversation.customer_name,
-                email: selectedConversation.customer_email,
+                name: selectedConversation.customerName,
+                email: selectedConversation.customerEmail,
               },
               messages: [], // TODO: Add actual messages when available
               priority: selectedConversation.priority,

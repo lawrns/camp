@@ -35,7 +35,7 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
       // Query conversations with all needed fields
       const { data, error } = await client
         .from("conversations")
-        .select("id, subject, status, customer_name, customer_email, last_message_at, last_message_preview, unread_count, created_at, updated_at, assigned_to_user_id, assigned_to_ai, priority, tags, metadata")
+        .select("id, subject, status, customerName, customerEmail, lastMessageAt, status, priority, tags, metadata, assignedToUserId, customerId, customerVerified, customerOnline, customerBrowser, customerOs, customerDeviceType, ragEnabled, aiHandoverActive, aiPersona, aiConfidenceScore, assignmentMetadata, assignedAt, closedAt")
         .eq("organization_id", organizationId);
 
       if (error) {
@@ -49,10 +49,10 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
       // Map raw data to typed conversations
       const mappedConversations = (data || []).map(mapConversation);
 
-      // Sort conversations by last_message_at (most recent first), handling null values
+      // Sort conversations by lastMessageAt (most recent first), handling null values
       const sortedConversations = mappedConversations.sort((a, b) => {
-        const aTime = a.last_message_at ? new Date(a.last_message_at).getTime() : 0;
-        const bTime = b.last_message_at ? new Date(b.last_message_at).getTime() : 0;
+        const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+        const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
         return bTime - aTime; // Descending order (most recent first)
       });
 
@@ -114,7 +114,7 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
 
         // Handle conversation updated broadcasts from widget messages
         if (data?.conversationId) {
-          // Reload the specific conversation to get updated last_message_at
+          // Reload the specific conversation to get updated lastMessageAt
           const updateConversation = async () => {
             const { data: updated } = await client
               .from("conversations")
@@ -238,7 +238,7 @@ export const markConversationAsRead = async (conversationId: string, organizatio
   try {
     const { error } = await supabase
       .from("conversations")
-      .update({ unread_count: 0 })
+      .update({ unread: false })
       .eq("id", conversationId)
       .eq("organization_id", organizationId);
 

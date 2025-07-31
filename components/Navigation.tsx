@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Flame } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Navigation() {
@@ -48,7 +49,7 @@ export function Navigation() {
             whileHover={{ scale: 1.05 }}
           >
             <Link href="/" className="flex items-center space-x-2">
-              <Flame size={24} className="text-[var(--ds-color-primary-600)]" />
+              <Image src="/images/flamey.png" alt="Campfire logo" width={43} height={43} className="flex-shrink-0" />
               <span className="text-xl font-bold text-[var(--ds-color-primary-600)]">
                 Campfire
               </span>

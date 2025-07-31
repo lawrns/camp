@@ -73,7 +73,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   };
 
   // Check if customer is online
-  const isCustomerOnline = onlineUsers.includes(conversation.customer_email);
+  const isCustomerOnline = onlineUsers.includes(conversation.customerEmail);
 
   return (
     <div className="chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="chat-header">
@@ -83,8 +83,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Avatar with online indicator */}
           <div className="relative" data-testid="chat-header-avatar-container">
             <img
-              src={getAvatarPath(conversation.customer_email || conversation.customer_name, "customer")}
-              alt={conversation.customer_name}
+              src={getAvatarPath(conversation.customerEmail || conversation.customerName, "customer")}
+              alt={conversation.customerName}
               className="h-10 w-10 rounded-ds-full object-cover shadow-card-base"
               data-testid="chat-header-avatar"
             />
@@ -97,7 +97,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
             <div className="flex items-center gap-2" data-testid="chat-header-customer-title-row">
-              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customer_name}</h2>
+              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
 
               {/* Status badge using unified component */}
               <StatusBadge 
@@ -123,14 +123,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             </div>
 
             <div className="mt-1 flex items-center gap-3" data-testid="chat-header-customer-meta">
-              <p className="truncate text-sm text-[var(--fl-color-text-muted)]" data-testid="chat-header-customer-email">{conversation.customer_email}</p>
+              <p className="truncate text-sm text-[var(--fl-color-text-muted)]" data-testid="chat-header-customer-email">{conversation.customerEmail}</p>
 
               {/* Connection status removed - was showing inappropriate warnings */}
 
               {/* Last activity */}
               <div className="flex items-center gap-1 text-tiny text-[var(--fl-color-text-muted)]" data-testid="chat-header-last-activity">
                 <Clock className="h-3 w-3" data-testid="chat-header-activity-icon" />
-                <span data-testid="chat-header-activity-text">{formatLastActivity(conversation.last_message_at)}</span>
+                <span data-testid="chat-header-activity-text">{formatLastActivity(conversation.lastMessageAt)}</span>
               </div>
             </div>
 

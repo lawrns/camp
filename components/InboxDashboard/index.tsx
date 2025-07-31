@@ -104,8 +104,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   // Map raw conversations to expected Conversation type
   const conversations: Conversation[] = rawConversations.map((conv: any) => ({
     id: conv.id,
-    customer_name: conv.customer_name || "Unknown Customer",
-    customer_email: conv.customer_email || "",
+    customerName: conv.customerName || "Unknown Customer",
+    customerEmail: conv.customerEmail || "",
     status: conv.status || "open",
     last_message_at: conv.last_message_at || conv.created_at,
     unread_count: conv.unread_count || 0,
@@ -622,8 +622,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
             id: selectedConversation.id,
             subject: selectedConversation.last_message_preview || "Conversation",
             customer: {
-              name: selectedConversation.customer_name,
-              email: selectedConversation.customer_email,
+              name: selectedConversation.customerName,
+              email: selectedConversation.customerEmail,
             },
             messages: [], // TODO: Add actual messages when available
             priority: selectedConversation.priority,

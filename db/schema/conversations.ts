@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import {
-  bigint,
   boolean,
   index,
   integer,
@@ -10,67 +9,59 @@ import {
   timestamp,
   unique,
   uuid,
-  vector,
+  real,
 } from "drizzle-orm/pg-core";
 import { mailboxes } from "@/db/schema/mailboxes";
-import { nativeEncryptedField } from "../lib/encryptedField";
-import { randomSlugField } from "../lib/randomSlugField";
 import { withTimestamps } from "../lib/withTimestamps";
 import { conversationEvents } from "./conversationEvents";
 import { conversationMessages } from "./conversationMessages";
-import { platformCustomers } from "./platformCustomers";
-import { ragProfiles } from "./ragProfiles";
 
 export const conversations = pgTable(
-  "conversations", // Fixed: changed from "conversations_conversation" to "conversations"
+  "conversations",
   {
     ...withTimestamps,
-    id: bigint({ mode: "number" }).primaryKey().generatedByDefaultAsIdentity(),
-    // CRITICAL: Direct organization_id for multi-tenant security and performance
+    id: uuid("id").primaryKey().defaultRandom(),
     organizationId: uuid("organization_id").notNull(),
-    uid: randomSlugField("uid"),
-    mailboxId: bigint({ mode: "number" }).notNull(),
-    subject: text(),
-    status: text().default("open"),
-    assignedToId: bigint({ mode: "number" }),
-    assignedToUserId: text(),
-    assignedToType: text(),
-    vipStatus: boolean().default(false),
-    unread: boolean().default(true),
-    priority: integer().default(1),
-    tags: text().array(),
-    isSpam: boolean().default(false),
-    lastReplyAt: timestamp({ precision: 6, withTimezone: true }),
-    customerWaitingSince: timestamp({ precision: 6, withTimezone: true }),
-    lastRagResponseId: uuid("last_rag_response_id"),
-    platformCustomerInfo: jsonb(),
-    phoneNumber: text(),
-    whatsAppNumber: text(),
-    customerDisplayName: text(),
-    customerDisplayNameManual: text(),
-    conversationState: text().default("active"),
-    language: text(),
-    source: text(),
-    sourceInfo: jsonb(),
-    messageCount: integer().default(0),
-    customFields: jsonb(),
-    embedding: vector({ dimensions: 1536 }),
-    lastActiveAt: timestamp({ precision: 6, withTimezone: true }),
-    estimatedResponseTime: integer(),
-    satisfactionRating: integer(),
-    customerEmail: nativeEncryptedField("customer_email"),
-    // GitHub integration fields
-    githubIssueNumber: integer(),
-    githubIssueUrl: text(),
-    githubRepoOwner: text(),
-    githubRepoName: text(),
-    // Additional properties needed by the codebase
-    closedAt: timestamp({ precision: 6, withTimezone: true }),
-    lastUserEmailCreatedAt: timestamp({ precision: 6, withTimezone: true }),
-    isPrompt: boolean().default(false),
+    mailboxId: integer("mailbox_id"),
+    
+    // Conversation properties
+    subject: text("subject"),
+    status: text("status").default("open"),
+    priority: text("priority").default("medium"),
+    
+    // Assignment
+    assignedToUserId: uuid("assigned_to_user_id"),
+    assignmentMetadata: jsonb("assignment_metadata").default("{}"),
+    assignedAt: timestamp("assigned_at", { precision: 6, withTimezone: true }),
+    
+    // Customer information
+    customer: jsonb("customer").default("{}"),
+    customerId: uuid("customer_id"),
+    customerEmail: text("customer_email"),
+    customerName: text("customer_name"),
+    customerVerified: boolean("customer_verified").default(false),
+    customerOnline: boolean("customer_online").default(false),
+    customerIp: text("customer_ip"),
+    customerBrowser: text("customer_browser"),
+    customerOs: text("customer_os"),
+    customerDeviceType: text("customer_device_type").default("desktop"),
+    
+    // AI and RAG
+    ragEnabled: boolean("rag_enabled").default(false),
+    aiHandoverActive: boolean("ai_handover_active").default(false),
+    aiPersona: text("ai_persona").default("friendly"),
+    aiConfidenceScore: real("ai_confidence_score").default(0.0),
+    
+    // Metadata
+    metadata: jsonb("metadata").default("{}"),
+    tags: text("tags").array().default([]),
+    
+    // Timestamps
+    lastMessageAt: timestamp("last_message_at", { precision: 6, withTimezone: true }),
+    closedAt: timestamp("closed_at", { precision: 6, withTimezone: true }),
   },
   (conversations) => ({
-    // CRITICAL: Organization-first indexes for performance
+    // Indexes for performance
     organizationIdIdx: index("idx_conversations_organization_id").on(conversations.organizationId),
     orgStatusCreatedIdx: index("idx_conversations_org_status_created").on(
       conversations.organizationId,
@@ -82,17 +73,10 @@ export const conversations = pgTable(
       conversations.mailboxId,
       conversations.status
     ),
-
-    // Existing indexes preserved
-    mailboxIdIdx: index().on(conversations.mailboxId),
-    statusIdx: index().on(conversations.status),
-    assignedToIdIdx: index().on(conversations.assignedToId),
-    assignedToUserIdIdx: index().on(conversations.assignedToUserId),
-    createdAtIdx: index().on(conversations.createdAt),
-    isSpamIdx: index().on(conversations.isSpam),
-    lastActiveAtIdx: index().on(conversations.lastActiveAt),
-    customerEmailIdx: index().on(conversations.customerEmail),
-    uidUnique: unique().on(conversations.uid),
+    assignedToUserIdIdx: index("idx_conversations_assigned_to_user_id").on(conversations.assignedToUserId),
+    aiHandoverIdx: index("idx_conversations_ai_handover").on(conversations.aiHandoverActive),
+    lastMessageAtIdx: index("idx_conversations_last_message_at").on(conversations.lastMessageAt),
+    customerEmailIdx: index("idx_conversations_customer_email").on(conversations.customerEmail),
   })
 );
 
@@ -103,12 +87,4 @@ export const conversationsRelations = relations(conversations, ({ one, many }) =
   }),
   messages: many(conversationMessages),
   events: many(conversationEvents),
-  platformCustomer: one(platformCustomers, {
-    fields: [conversations.customerEmail],
-    references: [platformCustomers.email],
-  }),
-  ragProfile: one(ragProfiles, {
-    fields: [conversations.lastRagResponseId],
-    references: [ragProfiles.id],
-  }),
 }));

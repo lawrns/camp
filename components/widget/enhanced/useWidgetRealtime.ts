@@ -40,6 +40,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   const channelRef = useRef<any>(null);
   const supabaseRef = useRef<any>(null);
   const initializationPromiseRef = useRef<Promise<string> | null>(null);
+  const isConnectingRef = useRef<boolean>(false); // Prevent duplicate connection attempts
 
   // Initialize Supabase client for real-time only (not for database operations)
   useEffect(() => {
@@ -331,8 +332,19 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       return;
     }
 
+    // CRITICAL: Prevent duplicate connection attempts
+    if (isConnectingRef.current) {
+      widgetDebugger.logRealtime('warn', '🔄 Connection already in progress, skipping duplicate attempt', {
+        retryAttempt,
+        currentlyConnecting: isConnectingRef.current
+      });
+      return;
+    }
+
+    isConnectingRef.current = true;
+
     try {
-      widgetDebugger.logRealtime('info', `Starting real-time connection attempt ${retryAttempt + 1}/${maxRetries + 1}`);
+      widgetDebugger.logRealtime('info', `🔄 Starting real-time connection attempt ${retryAttempt + 1}/${maxRetries + 1}`);
 
       logWidgetEvent('widget_realtime_connect_start', {
         organizationId: config.organizationId,
@@ -361,13 +373,34 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
         throw new Error('Failed to get conversation ID');
       }
 
-      // Disconnect existing channel
-      if (channelRef.current) {
-        await channelRef.current.unsubscribe();
-      }
-
       // Create new channel using unified naming convention
       const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, convId);
+
+      // CRITICAL: Prevent duplicate subscriptions - check if we already have this exact channel
+      if (channelRef.current && channelRef.current.topic === channelName) {
+        widgetDebugger.logRealtime('info', '🔄 Channel already exists for this conversation, skipping duplicate subscription', {
+          channelName,
+          channelState: channelRef.current.state,
+          retryAttempt
+        });
+
+        // If the existing channel is already subscribed, we're done
+        if (channelRef.current.state === 'joined') {
+          setIsConnected(true);
+          config.onConnectionChange?.(true);
+          return;
+        }
+      }
+
+      // Disconnect existing channel only if it's for a different conversation
+      if (channelRef.current && channelRef.current.topic !== channelName) {
+        widgetDebugger.logRealtime('info', '🔄 Disconnecting existing channel for different conversation', {
+          oldTopic: channelRef.current.topic,
+          newTopic: channelName
+        });
+        await channelRef.current.unsubscribe();
+        channelRef.current = null;
+      }
 
       // Verify authentication before subscribing with retry logic
       let session: any = null;
@@ -800,6 +833,9 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
         channelName,
       });
 
+      // Reset connecting flag on success
+      isConnectingRef.current = false;
+
     } catch (error) {
       widgetDebugger.logRealtime('error', `Real-time connection attempt ${retryAttempt + 1} failed`, error);
 
@@ -823,6 +859,9 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       });
       setIsConnected(false);
       config.onConnectionChange?.(false);
+
+      // Reset connecting flag on failure
+      isConnectingRef.current = false;
       throw error;
     }
   }, [config.organizationId, conversationId, initializeConversation, convertToWidgetMessage]);
@@ -841,23 +880,34 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     });
   }, [conversationId]);
 
-  // Auto-connect on mount
+  // FIXED: Single useEffect to prevent duplicate subscriptions
   useEffect(() => {
-    connect();
+    // Update conversation ID when config changes
+    if (config.conversationId !== conversationId) {
+      setConversationId(config.conversationId);
+    }
+
+    // Connect when we have all required data
+    if (config.organizationId && (config.conversationId || conversationId)) {
+      widgetDebugger.logRealtime('info', '🔄 useEffect triggering connect', {
+        organizationId: config.organizationId,
+        configConversationId: config.conversationId,
+        stateConversationId: conversationId,
+        willConnect: true
+      });
+      connect();
+    } else {
+      widgetDebugger.logRealtime('info', '⏸️ useEffect skipping connect - missing required data', {
+        hasOrganizationId: !!config.organizationId,
+        hasConfigConversationId: !!config.conversationId,
+        hasStateConversationId: !!conversationId
+      });
+    }
+
     return () => {
       disconnect();
     };
-  }, []); // Remove dependencies to prevent infinite loop
-
-  // Update conversation ID when config changes
-  useEffect(() => {
-    if (config.conversationId !== conversationId) {
-      setConversationId(config.conversationId);
-      if (config.conversationId) {
-        connect();
-      }
-    }
-  }, [config.conversationId, conversationId]); // Remove connect dependency
+  }, [config.organizationId, config.conversationId, conversationId]); // Only depend on data, not functions
 
   return {
     isConnected,

@@ -12,12 +12,12 @@ export interface FileAttachment {
 
 export interface Conversation {
   id: string;
-  customer_name: string;
-  customer_email: string;
+  customerName: string;
+  customerEmail: string;
   status: "open" | "pending" | "resolved" | "escalated";
-  last_message_at: string;
-  unread_count: number;
-  last_message_preview: string;
+  lastMessageAt: string;
+  unreadCount: number;
+  lastMessagePreview: string;
   metadata?: Record<string, any>;
   assigned_to_ai?: boolean;
   ai_handover_session_id?: string;

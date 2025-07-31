@@ -77,7 +77,7 @@ export const getMessageItemSize = () => 80; // Fixed size for message items
  */
 export const mapConversation = (raw: any): any => {
   // Generate a friendly name if customer_name is missing or is just an email
-  let customerName = raw.customerName;
+  let customerName = raw.customer_name;
 
   // Check if we need to generate a friendly name
   const needsNameGeneration =
@@ -90,33 +90,33 @@ export const mapConversation = (raw: any): any => {
 
   if (needsNameGeneration) {
     // Generate a friendly visitor name using the conversation ID as primary seed for uniqueness
-    const seed = raw.id?.toString() || raw.customerEmail || "anonymous";
+    const seed = raw.id?.toString() || raw.customer_email || "anonymous";
     customerName = generateUniqueVisitorName(seed);
   }
 
   // Ensure we have a valid last_message_preview
-  let lastMessagePreview = raw.lastMessagePreview;
+  let lastMessagePreview = raw.last_message_preview;
   if (!lastMessagePreview || lastMessagePreview.trim() === "") {
     lastMessagePreview = "No messages yet";
   }
 
   // Ensure we have a valid timestamp
-  let lastMessageAt = raw.lastMessageAt;
+  let lastMessageAt = raw.last_message_at;
   if (!lastMessageAt || lastMessageAt === "1969-12-31T00:00:00.000Z" || lastMessageAt === "1970-01-01T00:00:00.000Z") {
     lastMessageAt = raw.updated_at || raw.created_at || new Date().toISOString();
   }
 
   return {
     id: raw.id,
-    customerName: customerName,
-    customerEmail: raw.customerEmail,
+    customer_name: customerName,
+    customer_email: raw.customer_email,
     status: raw.status || "open",
-    lastMessageAt: lastMessageAt,
-    unreadCount: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : (raw.unreadCount || 0),
-    lastMessagePreview: lastMessagePreview,
+    last_message_at: lastMessageAt,
+    unread_count: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : (raw.unread_count || 0),
+    last_message_preview: lastMessagePreview,
     metadata: raw.metadata,
-    aiHandoverActive: raw.aiHandoverActive,
-    aiHandoverSessionId: raw.aiHandoverSessionId,
+    assigned_to_ai: raw.assigned_to_ai,
+    ai_handover_session_id: raw.ai_handover_session_id,
     priority: raw.priority || "medium",
     tags: raw.tags || [],
   };

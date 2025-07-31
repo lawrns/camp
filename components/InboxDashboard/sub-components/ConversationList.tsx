@@ -61,8 +61,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       // Search filter
       const matchesSearch =
         !searchQuery ||
-        conv.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        conv.customer_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
         conv.last_message_preview.toLowerCase().includes(searchQuery.toLowerCase());
 
       // Status filter
@@ -75,7 +75,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       const matchesActiveFilter = (() => {
         switch (activeFilter) {
           case "unread":
-            return conv.unread_count > 0;
+            return conv.unreadCount > 0;
           case "unassigned":
             return !conv.assigned_to_ai;
           case "ai-managed":
@@ -95,7 +95,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   // Sort conversations by last message time
   const sortedConversations = useMemo(() => {
     return [...filteredConversations].sort(
-      (a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
+      (a, b) => new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
     );
   }, [filteredConversations]);
 

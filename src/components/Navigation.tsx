@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChatCircle, Fire, House, Gear as Settings, TestTube, User } from "@phosphor-icons/react";
+import { ChatCircle, House, Gear as Settings, TestTube, User } from "@phosphor-icons/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -40,7 +41,7 @@ export function Navigation() {
     <nav className="ds-bg-surface ds-border-r ds-border-border ds-w-64 ds-min-h-screen ds-p-4 ds-shadow-md">
       {/* Enhanced Logo with Design System */}
       <div className="ds-flex ds-items-center ds-gap-3 ds-mb-8 ds-px-2">
-        <Fire size={32} weight="fill" className="ds-text-primary-500" />
+        <Image src="/images/flamey.png" alt="Campfire logo" width={42} height={42} className="flex-shrink-0" />
         <div>
           <h1 className="ds-text-xl ds-font-bold ds-text-foreground">Campfire</h1>
           <p className="ds-text-xs ds-text-muted-foreground">Customer Support</p>
