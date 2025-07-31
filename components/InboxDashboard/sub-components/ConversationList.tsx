@@ -144,9 +144,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <div className="relative z-10 flex h-full min-h-0 flex-col border-r border-[var(--ds-color-border)] bg-[var(--ds-color-surface)]" style={{ width: 'var(--width-sidebar, 24rem)' }} data-testid="conversation-list-container" ref={containerRef}>
-      {/* Filter bar */}
-      <div className="border-b border-[var(--ds-color-border)] p-ds-4 filter-bar">
-        <div className="flex gap-2 overflow-x-auto">
+      {/* Filter bar with improved mobile responsiveness */}
+      <div className="border-b border-[var(--ds-color-border)] p-3 sm:p-ds-4 filter-bar">
+        <div className="flex gap-1 sm:gap-2 overflow-x-auto">
           {[
             { key: "all", label: "All" },
             { key: "unread", label: "Unread" },
@@ -157,10 +157,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             <button
               key={filter.key}
               onClick={() => setActiveFilter(filter.key as any)}
-              className={`px-3 py-1 rounded-ds-md text-sm font-medium transition-colors ${activeFilter === filter.key
+              className={`px-2 py-1.5 sm:px-3 sm:py-1 rounded-ds-md text-xs sm:text-sm font-medium transition-colors touch-target ${activeFilter === filter.key
                   ? "bg-[var(--ds-color-primary-500)] text-white"
                   : "bg-[var(--ds-color-surface)] text-[var(--ds-color-text)] hover:bg-[var(--ds-color-background-muted)]"
                 }`}
+              style={{ minWidth: "44px", minHeight: "44px" }}
             >
               {filter.label}
             </button>

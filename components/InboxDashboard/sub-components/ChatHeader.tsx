@@ -2,6 +2,7 @@
 
 import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator";
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
+import { AssignmentPopover } from "@/components/inbox/AssignmentPopover";
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
 import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
@@ -209,17 +210,15 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-2" data-testid="chat-header-actions">
-          {/* NEW: Assign Conversation Button */}
+          {/* NEW: Assign Conversation Button with Popover */}
           {onAssignConversation && (
-            <button
-              onClick={onAssignConversation}
-              className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
-              title="Assign conversation"
-              aria-label="Assign conversation"
-              data-testid="chat-header-assign-button"
-            >
-              <Users className="h-5 w-5" data-testid="chat-header-assign-icon" />
-            </button>
+            <AssignmentPopover
+              conversationId={conversation.id}
+              organizationId={user?.organizationId || ""}
+              onAssigned={onAssignConversation}
+              variant="header"
+              size="sm"
+            />
           )}
 
           {/* NEW: Convert to Ticket Button */}
