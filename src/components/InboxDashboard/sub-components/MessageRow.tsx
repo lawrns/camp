@@ -42,7 +42,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(
     const readReceipts = selectedConversation
       ? useReadReceipts({
           conversationId: selectedConversation.id,
-          organizationId: selectedConversation.organizationId || "",
+          organizationId: "", // Not available in this Conversation type
           autoMarkAsRead: isCustomer, // Only auto-mark customer messages as read
           enableRealtime: true,
         })
@@ -136,9 +136,9 @@ export const MessageRow: React.FC<MessageRowProps> = memo(
     // Get message bubble styling
     const getBubbleStyle = () => {
       if (isAgent || isAI) {
-        return "bg-blue-600 text-white ml-auto max-w-xs lg:max-w-md";
+        return "bg-blue-600 text-white ml-auto max-w-xs lg:max-w-md xl:max-w-lg";
       }
-      return "bg-gray-100 text-gray-900 mr-auto max-w-xs lg:max-w-md";
+      return "bg-gray-100 text-gray-900 mr-auto max-w-xs lg:max-w-md xl:max-w-lg";
     };
 
     // Render file attachment
@@ -220,7 +220,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(
       <div style={style} data-testid="message-row">
         <div
           ref={messageRef}
-          className={`flex space-x-3 spacing-4 transition-colors hover:bg-[var(--fl-color-background-subtle)] ${
+          className={`flex space-x-3 spacing-4 transition-colors hover:bg-[var(--fl-color-background-subtle)] p-2 ${
             isAgent || isAI ? "flex-row-reverse space-x-reverse" : ""
           }`}
           onMouseEnter={() => setHoveredMessage(message.id)}

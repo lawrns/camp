@@ -1,6 +1,7 @@
 // Hook for managing messages with real-time updates
 
 import { supabase } from "@/lib/supabase";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { useCallback, useEffect, useState } from "react";
 import type { FileAttachment, Message, UseMessagesReturn } from "../types";
 
@@ -113,9 +114,9 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
     // Initial load
     loadMessages();
 
-    // ENHANCED: Set up real-time subscription with STANDARDIZED channel naming
+    // ENHANCED: Set up real-time subscription with unified channel naming standards
     const client = supabase.browser();
-    const channelName = `org:${organizationId}:conv:${conversationId}`;
+    const channelName = UNIFIED_CHANNELS.conversation(organizationId, conversationId);
 
     // Supabase client does not have getChannel; channel() is idempotent by name.
     const channel = client.channel(channelName, {
@@ -146,13 +147,13 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
           });
         }
       )
-      // CRITICAL FIX: Also listen for broadcast events from widget
-      .on("broadcast", { event: "*" }, (payload) => {
+      // Listen for broadcast events from widget using unified events
+      .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload) => {
 
-        const { event, payload: data } = payload;
+        const { payload: data } = payload;
 
         // Handle new message broadcasts from widget
-        if ((event === "new_message" || event === "message_created") && data?.message) {
+        if (data?.message) {
           const newMessage = data.message as Message;
 
           // Only process messages for this conversation

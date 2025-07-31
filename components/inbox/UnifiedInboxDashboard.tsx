@@ -236,10 +236,36 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
         organization_id: effectiveUser.organizationId!,
       };
 
-      const { error } = await supabaseClient.from("messages").insert([messageData]);
+      const { data, error } = await supabaseClient.from("messages").insert([messageData]).select().single();
 
       if (error) {
         throw error;
+      }
+
+      // Broadcast real-time event using unified standards
+      try {
+        const channelName = UNIFIED_CHANNELS.conversation(effectiveUser.organizationId!, selectedConversation.id.toString());
+        const channel = supabaseClient.channel(channelName);
+
+        // Subscribe to channel first (required for broadcasts)
+        await channel.subscribe();
+
+        await channel.send({
+          type: "broadcast",
+          event: UNIFIED_EVENTS.MESSAGE_CREATED,
+          payload: {
+            message: data,
+            conversation_id: selectedConversation.id,
+            organization_id: effectiveUser.organizationId!,
+            sender_type: "agent",
+          },
+        });
+
+        // Clean up the channel after sending
+        await channel.unsubscribe();
+      } catch (broadcastError) {
+        console.warn("Failed to broadcast message:", broadcastError);
+        // Don't throw - message was saved successfully
       }
 
       setNewMessage("");

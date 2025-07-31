@@ -21,21 +21,25 @@ interface Agent {
   status: "available" | "busy" | "near-capacity";
 }
 
-interface AssignmentButtonProps {
+interface AssignmentPopoverProps {
   conversationId: string;
   currentAgentId?: string | null;
   organizationId: string;
   onAssigned?: (agentId: string) => void;
   className?: string;
+  variant?: "header" | "button";
+  size?: "sm" | "md";
 }
 
-export function AssignmentButton({
+export function AssignmentPopover({
   conversationId,
   currentAgentId,
   organizationId,
   onAssigned,
   className,
-}: AssignmentButtonProps) {
+  variant = "header",
+  size = "sm",
+}: AssignmentPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,9 +116,8 @@ export function AssignmentButton({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          assigneeId: "auto",
-          organizationId,
           autoAssign: true,
+          organizationId,
         }),
       });
 
@@ -123,8 +126,7 @@ export function AssignmentButton({
       }
 
       const data = await response.json();
-
-      toast.success("Auto-assigned based on workload");
+      toast.success("Auto-assigned to best available agent");
       setIsOpen(false);
       onAssigned?.(data.assigneeId);
     } catch (error) {
@@ -134,38 +136,137 @@ export function AssignmentButton({
     }
   };
 
-  // Get workload indicator color
   const getWorkloadColor = (status: string) => {
     switch (status) {
       case "available":
         return "bg-green-500";
-      case "near-capacity":
-        return "bg-yellow-500";
       case "busy":
+        return "bg-yellow-500";
+      case "near-capacity":
         return "bg-red-500";
       default:
         return "bg-gray-500";
     }
   };
 
+  // Header variant - just the icon button
+  if (variant === "header") {
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            size={size}
+            className={cn(
+              "touch-target text-neutral-600 transition-all hover:text-neutral-900",
+              "hover:bg-neutral-100",
+              className
+            )}
+            style={{ minWidth: 44, minHeight: 44 }}
+            aria-label="Assign conversation to agent"
+          >
+            <Icon icon={UserPlus} className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent 
+          className="w-80 p-0 md:w-96" 
+          align="end"
+          side="bottom"
+          sideOffset={8}
+        >
+          <div className="border-b spacing-3">
+            <h4 className="text-sm font-medium">Assign to Agent</h4>
+            <p className="mt-1 text-tiny text-[var(--fl-color-text-muted)]">
+              Select an agent or auto-assign based on workload
+            </p>
+          </div>
+
+          {isLoading ? (
+            <div className="p-spacing-lg text-center">
+              <Icon icon={Loader2} className="mx-auto h-6 w-6 animate-spin text-gray-400" />
+              <p className="mt-2 text-sm text-[var(--fl-color-text-muted)]">Loading agents...</p>
+            </div>
+          ) : (
+            <>
+              <div className="max-h-80 overflow-y-auto">
+                {agents.map((agent: any) => (
+                  <button
+                    key={agent.user_id}
+                    onClick={() => handleAssign(agent.user_id)}
+                    disabled={isAssigning || !agent.available}
+                    className={cn(
+                      "flex w-full items-center justify-between spacing-3 transition-colors hover:bg-neutral-50",
+                      "disabled:cursor-not-allowed disabled:opacity-50",
+                      "touch-target", // Mobile-friendly touch target
+                      currentAgentId === agent.user_id && "bg-[var(--fl-color-info-subtle)]"
+                    )}
+                    style={{ minHeight: 60 }} // Ensure touch-friendly height
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8">
+                        {agent.avatar_url && <AvatarImage src={agent.avatar_url} />}
+                        <AvatarFallback>{agent.full_name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      <div className="text-left">
+                        <p className="text-sm font-medium text-gray-900">{agent.full_name}</p>
+                        <p className="text-tiny text-[var(--fl-color-text-muted)]">
+                          {agent.workload}/{agent.capacity} conversations
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-ds-2">
+                      {currentAgentId === agent.user_id && <Icon icon={Check} className="h-4 w-4 text-blue-600" />}
+                      <div
+                        className={cn("h-2 w-2 rounded-ds-full", getWorkloadColor(agent.status))}
+                        aria-label={`Status: ${agent.status}`}
+                      />
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              <div className="border-t spacing-3">
+                <button
+                  onClick={handleAutoAssign}
+                  disabled={isAssigning}
+                  className={cn(
+                    "flex w-full items-center justify-center gap-2 spacing-3",
+                    "bg-blue-50 text-blue-700 hover:bg-blue-100",
+                    "disabled:cursor-not-allowed disabled:opacity-50",
+                    "touch-target"
+                  )}
+                  style={{ minHeight: 48 }}
+                >
+                  <Icon icon={Bot} className="h-4 w-4" />
+                  <span className="text-sm font-medium">Auto-assign to best agent</span>
+                </button>
+              </div>
+            </>
+          )}
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
+  // Button variant - full button with text
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
+          size={size}
           className={cn(
             "border-status-info-light text-status-info-dark hover:bg-status-info-light",
-            "flex items-center gap-2 whitespace-nowrap min-w-fit px-3",
+            "touch-target",
             className
           )}
           aria-label="Assign conversation to agent"
         >
-          <Icon icon={UserPlus} className="h-4 w-4 flex-shrink-0" />
-          <span>Assign Agent</span>
+          <Icon icon={UserPlus} className="mr-1 h-4 w-4" />
+          Assign
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0">
+      <PopoverContent className="w-80 p-0 md:w-96">
         <div className="border-b spacing-3">
           <h4 className="text-sm font-medium">Assign to Agent</h4>
           <p className="mt-1 text-tiny text-[var(--fl-color-text-muted)]">
@@ -189,8 +290,10 @@ export function AssignmentButton({
                   className={cn(
                     "flex w-full items-center justify-between spacing-3 transition-colors hover:bg-neutral-50",
                     "disabled:cursor-not-allowed disabled:opacity-50",
+                    "touch-target",
                     currentAgentId === agent.user_id && "bg-[var(--fl-color-info-subtle)]"
                   )}
+                  style={{ minHeight: 60 }}
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
@@ -219,10 +322,16 @@ export function AssignmentButton({
               <button
                 onClick={handleAutoAssign}
                 disabled={isAssigning}
-                className="flex w-full items-center justify-center gap-ds-2 rounded-ds-md p-spacing-sm text-sm text-blue-600 transition-colors hover:bg-[var(--fl-color-info-subtle)]"
+                className={cn(
+                  "flex w-full items-center justify-center gap-2 spacing-3",
+                  "bg-blue-50 text-blue-700 hover:bg-blue-100",
+                  "disabled:cursor-not-allowed disabled:opacity-50",
+                  "touch-target"
+                )}
+                style={{ minHeight: 48 }}
               >
                 <Icon icon={Bot} className="h-4 w-4" />
-                Auto-assign based on workload
+                <span className="text-sm font-medium">Auto-assign to best agent</span>
               </button>
             </div>
           </>
@@ -230,4 +339,4 @@ export function AssignmentButton({
       </PopoverContent>
     </Popover>
   );
-}
+} 

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/lib/supabase";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Message } from "@/types/entities/message";
 import { WidgetTypingIndicator } from "@/types/widget";
 
@@ -64,28 +65,20 @@ export class WidgetRealtimeClient {
             }
           }
         )
-        // ENHANCED: Listen for all broadcast events with better logging
-        .on("broadcast", { event: "*" }, (payload: any) => {
-
-          const { event, payload: data } = payload;
-
-          switch (event) {
-            case "typing":
-            case "typing_start":
-            case "typing_stop":
-              if (this.onTyping) {
-                this.onTyping(data);
-              }
-              break;
-            case "message_created":
-            case "new_message":
-              if (this.onMessage && data.message) {
-                this.onMessage(data.message);
-              }
-              break;
-            case "agent_joined":
-
-              break;
+        // Listen for unified broadcast events
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+          if (this.onTyping) {
+            this.onTyping(payload.payload);
+          }
+        })
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+          if (this.onTyping) {
+            this.onTyping(payload.payload);
+          }
+        })
+        .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+          if (this.onMessage && payload.payload.message) {
+            this.onMessage(payload.payload.message);
           }
         })
         .subscribe((status: string) => {

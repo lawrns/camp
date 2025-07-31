@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/Button-unified";
 import { Avatar } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import {
   Select,
@@ -100,29 +99,34 @@ export function AssignmentPanel({
       }
     };
 
-    if (organizationId) {
-      fetchAgents();
-    }
+    fetchAgents();
   }, [organizationId]);
 
   // Fetch assignment history
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch(`/api/conversations/${conversationId}/assignment`, {
+        const response = await fetch(`/api/conversations/${conversationId}/assignment-history`, {
+          method: "GET",
           headers: {
+            "Content-Type": "application/json",
             "X-Organization-ID": organizationId,
           },
         });
 
-        if (!response.ok) return;
-
-        const data = await response.json();
-        setAssignmentHistory(data.history || []);
-      } catch (error) { }
+        if (response.ok) {
+          const data = await response.json();
+          setAssignmentHistory(data.history || []);
+        }
+      } catch (error) {
+        // Silently fail - assignment history is not critical
+        console.warn("Failed to fetch assignment history:", error);
+      }
     };
 
-    fetchHistory();
+    if (conversationId) {
+      fetchHistory();
+    }
   }, [conversationId, organizationId]);
 
   const handleAssignToMe = async () => {
@@ -134,10 +138,7 @@ export function AssignmentPanel({
           "Content-Type": "application/json",
           "X-Organization-ID": organizationId,
         },
-        body: JSON.stringify({
-          assignee_type: "human",
-          agentId: "me", // Special value to assign to current user
-        }),
+        body: JSON.stringify({ assignee_type: "human", agentId: "me" }),
       });
 
       if (!response.ok) {
@@ -147,7 +148,7 @@ export function AssignmentPanel({
 
       toast({
         title: "Success",
-        description: "Conversation assigned to you successfully",
+        description: "Conversation assigned to you",
       });
 
       onAssignmentChange?.("me");
@@ -208,17 +209,17 @@ export function AssignmentPanel({
     const capacity = agent.maxCapacity || 10;
     const percentage = (workload / capacity) * 100;
 
-    if (percentage >= 90) return { color: "text-[var(--fl-color-danger)]", label: "High" };
-    if (percentage >= 60) return { color: "text-[var(--fl-color-warning)]", label: "Medium" };
-    return { color: "text-[var(--fl-color-success)]", label: "Low" };
+    if (percentage >= 90) return { color: "text-red-600", label: "High" };
+    if (percentage >= 60) return { color: "text-orange-600", label: "Medium" };
+    return { color: "text-green-600", label: "Low" };
   };
 
   const getStatusIcon = (status: Agent["status"]) => {
     switch (status) {
       case "available":
-        return <Icon icon={CheckCircle} className="text-semantic-success h-4 w-4" />;
+        return <Icon icon={CheckCircle} className="text-green-600 h-4 w-4" />;
       case "busy":
-        return <Icon icon={Clock} className="text-semantic-warning h-4 w-4" />;
+        return <Icon icon={Clock} className="text-orange-600 h-4 w-4" />;
       case "offline":
         return <Icon icon={AlertCircle} className="h-4 w-4 text-gray-400" />;
     }
@@ -226,31 +227,31 @@ export function AssignmentPanel({
 
   if (loading) {
     return (
-      <Card>
-        <CardHeader>
+      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80">
+        <div className="space-y-3">
           <Skeleton className="h-6 w-32" />
-        </CardHeader>
-        <CardContent className="space-y-3">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-20 w-full" />
-          <Skeleton className="h-20 w-full" />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Assign Agent</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80">
+      <div className="space-y-4">
+        {/* Header */}
+        <div className="border-b border-gray-200 pb-3">
+          <h3 className="text-lg font-semibold text-gray-900">Assign Agent</h3>
+          <p className="text-sm text-gray-500 mt-1">Choose who should handle this conversation</p>
+        </div>
+
         {/* Quick Assign to Me Button */}
-        <div className="space-y-spacing-sm">
+        <div className="space-y-3">
           <Button
             onClick={handleAssignToMe}
             disabled={assigning}
-            className="bg-primary w-full text-white hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             size="sm"
           >
             <Icon icon={UserPlus} className="mr-2 h-4 w-4" />
@@ -260,10 +261,10 @@ export function AssignmentPanel({
 
         {/* Agent Selection - Only show if agents loaded successfully */}
         {!agentsError && agents.length > 0 && (
-          <div className="space-y-spacing-sm">
-            <div className="text-foreground text-center text-sm">or</div>
+          <div className="space-y-3">
+            <div className="text-center text-sm text-gray-500">or</div>
             <Select value={selectedAgentId} onValueChange={(value) => setSelectedAgentId(value)}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select another agent" />
               </SelectTrigger>
               <SelectContent>
@@ -271,7 +272,7 @@ export function AssignmentPanel({
                   const workload = getWorkloadIndicator(agent);
                   return (
                     <SelectItem key={agent.id} value={agent.id}>
-                      <div className="flex items-center gap-ds-2">
+                      <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
                           {agent.avatar_url ? (
                             <img src={agent.avatar_url} alt={agent.name} />
@@ -279,7 +280,7 @@ export function AssignmentPanel({
                             <Icon icon={UserCircle} className="h-6 w-6" />
                           )}
                         </Avatar>
-                        <span>{agent.name}</span>
+                        <span className="flex-1">{agent.name}</span>
                         {getStatusIcon(agent.status)}
                         <Badge variant="outline" className={cn("ml-auto", workload.color)}>
                           {agent.activeConversations || 0}/{agent.maxCapacity || 10}
@@ -303,12 +304,12 @@ export function AssignmentPanel({
 
         {/* Show error message if agents failed to load */}
         {agentsError && (
-          <div className="border-status-info-light rounded-ds-lg border bg-[var(--fl-color-info-subtle)] spacing-3 text-center text-sm text-[var(--fl-color-text-muted)]">
-            <div className="mb-2 flex items-center justify-center gap-ds-2">
+          <div className="border border-blue-200 rounded-lg bg-blue-50 p-3 text-center text-sm">
+            <div className="mb-2 flex items-center justify-center gap-2">
               <Icon icon={UserCircle} className="h-4 w-4 text-blue-600" />
               <span className="font-medium text-blue-800">Single Agent Mode</span>
             </div>
-            <p className="text-status-info-dark">
+            <p className="text-blue-700">
               Team member data is not available. You can assign conversations to yourself using the button above.
             </p>
           </div>
@@ -316,10 +317,10 @@ export function AssignmentPanel({
 
         {/* Current Agent Info */}
         {currentAgentId && (
-          <div className="rounded-ds-lg border bg-muted/50 spacing-3">
-            <p className="mb-1 text-sm font-medium">Currently Assigned</p>
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+            <p className="mb-2 text-sm font-medium text-gray-900">Currently Assigned</p>
             {agents.find((a) => a.id === currentAgentId) ? (
-              <div className="flex items-center gap-ds-2">
+              <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   {agents.find((a) => a.id === currentAgentId)?.avatar_url ? (
                     <img
@@ -331,20 +332,20 @@ export function AssignmentPanel({
                   )}
                 </Avatar>
                 <div>
-                  <p className="font-medium">{agents.find((a) => a.id === currentAgentId)?.name}</p>
-                  <p className="text-tiny text-muted-foreground">
+                  <p className="font-medium text-gray-900">{agents.find((a) => a.id === currentAgentId)?.name}</p>
+                  <p className="text-xs text-gray-500">
                     {agents.find((a) => a.id === currentAgentId)?.email}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-ds-2">
+              <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <Icon icon={UserCircle} className="h-8 w-8" />
                 </Avatar>
                 <div>
-                  <p className="font-medium">Assigned Agent</p>
-                  <p className="text-tiny text-muted-foreground">ID: {currentAgentId}</p>
+                  <p className="font-medium text-gray-900">Assigned Agent</p>
+                  <p className="text-xs text-gray-500">ID: {currentAgentId}</p>
                 </div>
               </div>
             )}
@@ -353,24 +354,24 @@ export function AssignmentPanel({
 
         {/* Assignment History */}
         {assignmentHistory.length > 0 && (
-          <div className="space-y-spacing-sm">
-            <h4 className="text-sm font-medium">Assignment History</h4>
-            <ScrollArea className="h-32 rounded-ds-lg border">
-              <div className="space-y-spacing-sm p-spacing-sm">
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-gray-900">Assignment History</h4>
+            <ScrollArea className="h-32 rounded-lg border border-gray-200">
+              <div className="space-y-2 p-3">
                 {assignmentHistory.map((history: any) => (
-                  <div key={history.id} className="space-y-1 rounded p-spacing-sm text-tiny hover:bg-muted">
+                  <div key={history.id} className="space-y-1 rounded p-2 text-xs hover:bg-gray-100">
                     <div className="flex justify-between">
-                      <span className="font-medium">{history.agentName}</span>
-                      <span className="text-muted-foreground">{new Date(history.assignedAt).toLocaleDateString()}</span>
+                      <span className="font-medium text-gray-900">{history.agentName}</span>
+                      <span className="text-gray-500">{new Date(history.assignedAt).toLocaleDateString()}</span>
                     </div>
-                    {history.reason && <p className="text-muted-foreground">{history.reason}</p>}
+                    {history.reason && <p className="text-gray-500">{history.reason}</p>}
                   </div>
                 ))}
               </div>
             </ScrollArea>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

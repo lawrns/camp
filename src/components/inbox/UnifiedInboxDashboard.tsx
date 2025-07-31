@@ -11,6 +11,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabase";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Icon } from "@/lib/ui/Icon";
 import { getAvatarUrl, getOnlineStatus } from "@/lib/utils/avatar";
 import {
@@ -228,10 +229,36 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
         organization_id: user.organizationId!,
       };
 
-      const { error } = await supabaseClient.from("messages").insert([messageData]);
+      const { data, error } = await supabaseClient.from("messages").insert([messageData]).select().single();
 
       if (error) {
         throw error;
+      }
+
+      // Broadcast real-time event using unified standards
+      try {
+        const channelName = UNIFIED_CHANNELS.conversation(user.organizationId!, selectedConversation.id.toString());
+        const channel = supabaseClient.channel(channelName);
+
+        // Subscribe to channel first (required for broadcasts)
+        await channel.subscribe();
+
+        await channel.send({
+          type: "broadcast",
+          event: UNIFIED_EVENTS.MESSAGE_CREATED,
+          payload: {
+            message: data,
+            conversation_id: selectedConversation.id,
+            organization_id: user.organizationId!,
+            sender_type: "agent",
+          },
+        });
+
+        // Clean up the channel after sending
+        await channel.unsubscribe();
+      } catch (broadcastError) {
+        console.warn("Failed to broadcast message:", broadcastError);
+        // Don't throw - message was saved successfully
       }
 
       setNewMessage("");
@@ -356,10 +383,10 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
     const supabaseClient = supabase.browser();
 
     // Subscribe to new messages in the selected conversation
-    // FIX: Use conversation-specific channel to match widget broadcast pattern
+    // Use unified channel naming to match widget broadcast pattern
     const channelName = selectedConversation
-      ? `org:${user.organizationId}:conversation:${selectedConversation.id}`
-      : `org:${user.organizationId}:messages`;
+      ? UNIFIED_CHANNELS.conversation(user.organizationId, selectedConversation.id.toString())
+      : UNIFIED_CHANNELS.organization(user.organizationId);
 
     const messagesChannel = supabaseClient
       .channel(channelName)
@@ -399,8 +426,8 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
           loadConversations();
         }
       )
-      // FIX: Also listen for widget broadcast messages
-      .on("broadcast", { event: "message_created" }, (payload: any) => {
+      // Listen for widget broadcast messages using unified events
+      .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
         const messageData = payload.payload;
 
         // Only add message if it's for the currently selected conversation

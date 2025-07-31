@@ -535,11 +535,20 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
                   />
                 </>
               ) : (
-                <div className="flex flex-1 items-center justify-center bg-[var(--color-background-subtle)]">
-                  <div className="bg-background rounded-ds-lg spacing-6 text-center" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
-                    <div className="mx-auto mb-6 h-16 w-16 text-4xl text-[var(--color-primary-400)]">💬</div>
-                    <h3 className="section-header text-[var(--color-text)]">Select a conversation</h3>
-                    <p className="text-foreground max-w-sm">
+                <div className="flex flex-1 items-center justify-center bg-[var(--ds-color-background-subtle)]">
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <svg className="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="mb-2 text-lg font-medium text-neutral-300">Start the conversation</h3>
+                    <p className="text-sm text-neutral-300">
                       Choose a conversation from the list to start messaging with your customers.
                     </p>
                   </div>
@@ -549,13 +558,13 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
             {/* Smart Reply Panel - AI-powered suggestions (DASHBOARD-SIDE ONLY) */}
             {showSmartReplies && selectedConversation && messages?.length > 0 && (
-              <div className="flex w-80 flex-col border-l border-[var(--fl-color-border)] bg-white" style={{ boxShadow: 'var(--shadow-card-deep)' }}>
-                <div className="border-b border-[var(--fl-color-border)] bg-[var(--color-primary-50)]" style={{ padding: 'var(--spacing-3)' }}>
-                  <h3 className="flex items-center component-header text-[var(--color-text)]">
-                    <Robot className="mr-2 h-5 w-5 text-[var(--color-primary-600)]" />
+              <div className="flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
+                <div className="border-b border-gray-200 bg-blue-50 p-4">
+                  <h3 className="flex items-center text-lg font-semibold text-gray-900">
+                    <Robot className="mr-2 h-5 w-5 text-blue-600" />
                     Smart Replies
                   </h3>
-                  <p className="text-foreground mt-1 text-sm">AI-powered suggestions coming soon</p>
+                  <p className="mt-1 text-sm text-gray-600">AI-powered suggestions coming soon</p>
                 </div>
               </div>
             )}

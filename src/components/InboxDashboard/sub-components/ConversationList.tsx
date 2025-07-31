@@ -37,8 +37,12 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   useEffect(() => {
     const updateHeight = () => {
       if (containerRef.current) {
-        const height = containerRef.current.clientHeight;
-        setContainerHeight(height);
+        // Get the actual available height by subtracting the filter bar height
+        const container = containerRef.current;
+        const filterBar = container.querySelector('.filter-bar');
+        const filterBarHeight = filterBar ? filterBar.clientHeight : 60; // Default filter bar height
+        const availableHeight = container.clientHeight - filterBarHeight;
+        setContainerHeight(Math.max(availableHeight, 400)); // Minimum height of 400px
       }
     };
 
@@ -141,7 +145,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   return (
     <div className="relative z-10 flex h-full min-h-0 flex-col border-r border-[var(--color-border)] bg-[var(--color-surface)]" style={{ width: 'var(--width-sidebar, 24rem)' }} data-testid="conversation-list-container" ref={containerRef}>
       {/* Filter bar */}
-      <div className="border-b border-[var(--color-border)] spacing-4">
+      <div className="border-b border-[var(--ds-color-border)] p-ds-4 filter-bar">
         <div className="flex gap-2 overflow-x-auto">
           {[
             { key: "all", label: "All" },
@@ -154,8 +158,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               key={filter.key}
               onClick={() => setActiveFilter(filter.key as any)}
               className={`px-3 py-1 rounded-ds-md text-sm font-medium transition-colors ${activeFilter === filter.key
-                  ? "bg-[var(--color-primary)] text-white"
-                  : "bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-background-muted)]"
+                  ? "bg-[var(--ds-color-primary-500)] text-white"
+                  : "bg-[var(--ds-color-surface)] text-[var(--ds-color-text)] hover:bg-[var(--ds-color-background-muted)]"
                 }`}
             >
               {filter.label}
@@ -179,7 +183,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             <List
               height={containerHeight}
               itemCount={sortedConversations.length}
-              itemSize={80}
+              itemSize={180}
               width="100%"
               className="conversation-list-virtualized"
             >

@@ -4,7 +4,7 @@ import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator"
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
-import { Clock, DotsThreeVertical, Info, Phone, Tag, Ticket, Users, VideoCamera } from "@phosphor-icons/react";
+import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
 import * as React from "react";
 import type { Conversation } from "../types";
 
@@ -249,26 +249,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               />
             </div>
           )}
-
-          {/* Call button */}
-          <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
-            title="Start voice call"
-            aria-label="Start voice call"
-            data-testid="chat-header-call-button"
-          >
-            <Phone className="h-5 w-5" data-testid="chat-header-call-icon" />
-          </button>
-
-          {/* Video call button */}
-          <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
-            title="Start video call"
-            aria-label="Start video call"
-            data-testid="chat-header-video-button"
-          >
-            <VideoCamera className="h-5 w-5" data-testid="chat-header-video-icon" />
-          </button>
 
           {/* Customer details toggle */}
           <button

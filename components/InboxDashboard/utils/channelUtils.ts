@@ -86,8 +86,8 @@ export const mapConversation = (raw: any): any => {
     customerName === "visitor@widget.com";
 
   if (needsNameGeneration) {
-    // Generate a friendly visitor name using the customer email or conversation ID as seed
-    const seed = raw.customer_email || raw.id?.toString() || "anonymous";
+    // Generate a friendly visitor name using the conversation ID as primary seed for uniqueness
+    const seed = raw.id?.toString() || raw.customer_email || "anonymous";
     customerName = generateUniqueVisitorName(seed);
   }
 

@@ -1,35 +1,46 @@
-// Test script to verify name generation improvements
-// Since this is a TypeScript file, we'll test the compiled version or use a different approach
-
-console.log('Testing name generation improvements...\n');
-
-// Simple test to verify the unique-names-generator package is working
+// Test name generation functionality
 const { adjectives, colors, animals } = require('unique-names-generator');
 
-console.log('Unique-names-generator package test:');
-console.log(`  Adjectives available: ${adjectives.length}`);
-console.log(`  Colors available: ${colors.length}`);
-console.log(`  Animals available: ${animals.length}`);
-
-console.log('\nSample names:');
-console.log(`  Adjective: ${adjectives[0]}`);
-console.log(`  Color: ${colors[0]}`);
-console.log(`  Animal: ${animals[0]}`);
-
-console.log('\nTesting deterministic generation:');
-const testSeed = 'test-seed-123';
-let hash = 0;
-for (let i = 0; i < testSeed.length; i++) {
-  const char = testSeed.charCodeAt(i);
-  hash = (hash << 5) - hash + char;
-  hash = hash & hash;
+function generateUniqueVisitorName(seed) {
+  // Create a simple hash from the seed
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  
+  // Use the hash to select colors and animals
+  const color = colors[Math.abs(hash) % colors.length];
+  const animal = animals[Math.abs(hash >> 8) % animals.length];
+  
+  // Capitalize the first letter of each word
+  const capitalizedColor = color.charAt(0).toUpperCase() + color.slice(1);
+  const capitalizedAnimal = animal.charAt(0).toUpperCase() + animal.slice(1);
+  
+  return `${capitalizedColor} ${capitalizedAnimal}`;
 }
 
-const adjIndex = Math.abs(hash) % colors.length;
-const animalIndex = Math.abs(hash >> 8) % animals.length;
-const generatedName = `${colors[adjIndex]} ${animals[animalIndex]}`;
+// Test with different seeds
+const testSeeds = [
+  "visitor@widget.com",
+  "e08016a0-e759-408b-bdc1-8cec3630794d",
+  "c3ba1140-9c26-450d-961e-a7303f0136ee",
+  "0f5a5d29-a248-4a8e-bac1-608a7a4aea0a",
+  "Website Visitor",
+  "anonymous"
+];
 
-console.log(`  Seed: ${testSeed}`);
-console.log(`  Generated name: ${generatedName}`);
+console.log("Testing name generation with different seeds:");
+testSeeds.forEach(seed => {
+  const generatedName = generateUniqueVisitorName(seed);
+  console.log(`Seed: "${seed}" -> Name: "${generatedName}"`);
+});
 
-console.log('\nName generation test completed!'); 
+// Test consistency
+console.log("\nTesting consistency (same seed should produce same name):");
+const testSeed = "e08016a0-e759-408b-bdc1-8cec3630794d";
+for (let i = 0; i < 3; i++) {
+  const name = generateUniqueVisitorName(testSeed);
+  console.log(`Run ${i + 1}: "${name}"`);
+} 

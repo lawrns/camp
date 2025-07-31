@@ -1,6 +1,7 @@
 // Hook for managing conversations list with real-time updates
 
 import { supabase } from "@/lib/supabase";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { useCallback, useEffect, useState } from "react";
 import type { Conversation, UseConversationsReturn } from "../types";
 import { mapConversation } from "../utils/channelUtils";
@@ -80,20 +81,16 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
     // Initial load
     loadConversations();
 
-    // ENHANCED: Set up real-time subscription with improved error handling
+    // Set up real-time subscription using unified channel standards
     const client = supabase.browser();
-    const channelName = `conversations_${organizationId}_${Date.now()}`; // Unique channel name
+    const channelName = UNIFIED_CHANNELS.conversations(organizationId);
 
-    // CRITICAL FIX: Check if channel already exists to prevent conflicts
-    let channel = client.getChannel(channelName);
-    if (!channel) {
-      channel = client.channel(channelName, {
-        config: {
-          presence: { key: "dashboard" },
-          broadcast: { self: true },
-        },
-      });
-    }
+    const channel = client.channel(channelName, {
+      config: {
+        presence: { key: "dashboard" },
+        broadcast: { self: true },
+      },
+    });
 
     channel
       .on(
@@ -110,13 +107,13 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
           setConversations((prev) => [newConversation, ...prev]);
         }
       )
-      // CRITICAL FIX: Listen for broadcast events from widget
-      .on("broadcast", { event: "*" }, (payload) => {
+      // Listen for broadcast events from widget using unified events
+      .on("broadcast", { event: UNIFIED_EVENTS.CONVERSATION_UPDATED }, (payload) => {
 
-        const { event, payload: data } = payload;
+        const { payload: data } = payload;
 
         // Handle conversation updated broadcasts from widget messages
-        if (event === "conversation_updated" && data?.conversationId) {
+        if (data?.conversationId) {
           // Reload the specific conversation to get updated last_message_at
           const updateConversation = async () => {
             const { data: updated } = await client
@@ -138,8 +135,12 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
           updateConversation();
         }
 
-        // Handle new message broadcasts - update conversation list
-        if ((event === "new_message" || event === "message_created") && data?.message) {
+      })
+      // Also listen for message events to update conversation previews
+      .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload) => {
+        const { payload: data } = payload;
+
+        if (data?.message) {
           const message = data.message;
           // Update the conversation's last message preview
           setConversations((prev) =>

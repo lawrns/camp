@@ -7,6 +7,7 @@ import { useConversations } from "@/hooks/useConversations";
 import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Robot } from "@phosphor-icons/react";
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
@@ -28,6 +29,11 @@ import { handleFileDrop, handleFileInput } from "./utils/fileUtils";
 import { AssignmentPanel } from "@/components/conversations/AssignmentPanel";
 import { ConvertToTicketDialog } from "@/components/conversations/ConvertToTicketDialog";
 import { useMessages } from "./hooks/useMessages";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
 
 // Import AI components (DASHBOARD-SIDE ONLY)
 
@@ -97,12 +103,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
   // Fetch conversations using the useConversations hook
-  const { conversations: rawConversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
-
-  // Process conversations with our name generation and other fixes
-  const conversations = React.useMemo(() => {
-    return (rawConversations || []).map(mapConversation);
-  }, [rawConversations]);
+  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations(organizationId);
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
@@ -213,17 +214,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           )
         );
 
-        // Broadcast real-time event using standardized system
+        // Broadcast real-time event using unified standards
         try {
-          const channelName = `org:${organizationId}:conv:${convId}`;
+          const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
           const channel = supabase.browser().channel(channelName);
-          
+
           // Subscribe to channel first (required for broadcasts)
           await channel.subscribe();
 
           await channel.send({
             type: "broadcast",
-            event: "message_created",
+            event: UNIFIED_EVENTS.MESSAGE_CREATED,
             payload: {
               message: { ...data, attachments: [], read_status: "sent" as const },
               conversation_id: convId,
@@ -453,7 +454,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
       <div className="flex h-full w-full flex-col">
         {/* Header */}
         <Header
-          conversations={conversations as any}
+          conversations={conversations}
           searchQuery={searchQuery}
           setSearchQuery={debouncedSetSearchQuery}
           statusFilter={statusFilter}
@@ -470,7 +471,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         <div className="flex flex-1 overflow-hidden">
           {/* Conversation list */}
           <ConversationList
-            conversations={conversations as any}
+            conversations={conversations}
             selectedConversationId={selectedConversation?.id}
             onSelectConversation={handleSelectConversation}
             searchQuery={searchQuery}
@@ -535,10 +536,19 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
                 </>
               ) : (
                 <div className="flex flex-1 items-center justify-center bg-[var(--ds-color-background-subtle)]">
-                  <div className="bg-[var(--ds-color-background)] rounded-ds-lg p-ds-6 text-center" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
-                    <div className="mx-auto mb-6 h-16 w-16 text-4xl text-[var(--ds-color-primary-400)]">💬</div>
-                    <h3 className="section-header text-[var(--ds-color-text)]">Select a conversation</h3>
-                    <p className="text-foreground max-w-sm">
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <svg className="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="mb-2 text-lg font-medium text-neutral-300">Start the conversation</h3>
+                    <p className="text-sm text-neutral-300">
                       Choose a conversation from the list to start messaging with your customers.
                     </p>
                   </div>
@@ -548,14 +558,15 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
             {/* Smart Reply Panel - AI-powered suggestions (DASHBOARD-SIDE ONLY) */}
             {showSmartReplies && selectedConversation && messages?.length > 0 && (
-              <div className="flex w-80 flex-col border-l border-[var(--ds-color-border)] bg-white" style={{ boxShadow: 'var(--shadow-card-deep)' }}>
-                <div className="border-b border-[var(--ds-color-border)] bg-[var(--ds-color-primary-50)]" style={{ padding: 'var(--ds-spacing-3)' }}>
-                  <h3 className="flex items-center component-header text-[var(--ds-color-text)]">
-                    <Robot className="mr-2 h-5 w-5 text-[var(--ds-color-primary-600)]" />
+              <div className="flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
+                <div className="border-b border-gray-200 bg-blue-50 p-6">
+                  <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-2">
+                    <Robot className="mr-2 h-5 w-5 text-blue-600" />
                     Smart Replies
                   </h3>
-                  <p className="text-foreground mt-1 text-sm">AI-powered suggestions coming soon</p>
+                  <p className="text-sm text-gray-600">AI-powered suggestions coming soon</p>
                 </div>
+                <div className="p-6">{/* Smart replies content goes here */}</div>
               </div>
             )}
 
@@ -593,18 +604,29 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           />
         )}
 
-        {/* NEW: Assignment Panel */}
-        {showAssignmentPanel && selectedConversation && (
-          <AssignmentPanel
-            conversationId={selectedConversation.id}
-            currentAgentId={undefined}
-            organizationId={user?.organizationId || ""}
-            onAssignmentChange={(agentId) => {
-              console.log("Assigning conversation to agent:", agentId);
-              setShowAssignmentPanel(false);
-              // TODO: Implement actual assignment logic
-            }}
-          />
+        {/* NEW: Assignment Panel as Dropdown */}
+        {selectedConversation && (
+          <DropdownMenu open={showAssignmentPanel} onOpenChange={setShowAssignmentPanel}>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="fixed bottom-8 left-8 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+                onClick={() => setShowAssignmentPanel((v) => !v)}
+                aria-label="Assign agent"
+              >
+                Assign Agent
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80 p-0">
+              <AssignmentPanel
+                conversationId={selectedConversation.id}
+                currentAgentId={undefined}
+                organizationId={user?.organizationId || ""}
+                onAssignmentChange={(agentId) => {
+                  setShowAssignmentPanel(false);
+                }}
+              />
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
     </div>

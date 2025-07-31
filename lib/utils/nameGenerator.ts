@@ -128,7 +128,7 @@ export function generateDeterministicName(seed: string): string {
  * Generate a unique visitor name using unique-names-generator with better variety
  * 
  * @param {string} seed - Seed value for deterministic generation
- * @returns {string} A friendly visitor name
+ * @returns {string} A friendly visitor name with proper capitalization
  */
 export function generateUniqueVisitorName(seed: string): string {
   // Simple hash function to convert string to number
@@ -143,7 +143,15 @@ export function generateUniqueVisitorName(seed: string): string {
   const adjIndex = Math.abs(hash) % colors.length;
   const animalIndex = Math.abs(hash >> 8) % animals.length;
 
-  return `${colors[adjIndex]} ${animals[animalIndex]}`;
+  // Get the color and animal names
+  const color = colors[adjIndex];
+  const animal = animals[animalIndex];
+
+  // Properly capitalize each word
+  const capitalizedColor = color.charAt(0).toUpperCase() + color.slice(1);
+  const capitalizedAnimal = animal.charAt(0).toUpperCase() + animal.slice(1);
+
+  return `${capitalizedColor} ${capitalizedAnimal}`;
 }
 
 /**

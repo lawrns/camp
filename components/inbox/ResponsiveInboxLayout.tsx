@@ -62,26 +62,33 @@ export function ResponsiveInboxLayout({
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
-  // Determine layout based on window width
+  // Determine layout based on window width with improved mobile detection
   const layoutType = useMemo(() => {
     if (windowWidth <= 768) return "mobile";
     if (windowWidth <= 1024) return "tablet";
     return "desktop";
   }, [windowWidth]);
 
-  // Mobile layout
+  // Enhanced mobile detection for better touch support
+  const isMobile = layoutType === "mobile";
+  const isTablet = layoutType === "tablet";
+
+  // Mobile layout with enhanced touch support
   if (layoutType === "mobile") {
     return (
-      <MobileInboxLayout
-        conversationList={conversationList}
-        chatPanel={chatPanel}
-        detailsPanel={detailsPanel}
-        selectedConversationId={selectedConversationId || ""}
-        hasSelectedConversation={hasSelectedConversation}
-        onBackToList={onBackToList || (() => {})}
-        conversationTitle={conversationTitle || ""}
-        unreadCount={unreadCount || 0}
-      />
+      <div className="mobile-inbox-container h-full w-full overflow-hidden">
+        <MobileInboxLayout
+          conversationList={conversationList}
+          chatPanel={chatPanel}
+          detailsPanel={detailsPanel}
+          selectedConversationId={selectedConversationId || ""}
+          hasSelectedConversation={hasSelectedConversation}
+          onBackToList={onBackToList || (() => {})}
+          conversationTitle={conversationTitle || ""}
+          unreadCount={unreadCount || 0}
+          enableSwipeGestures={true}
+        />
+      </div>
     );
   }
 

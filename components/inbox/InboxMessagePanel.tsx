@@ -20,6 +20,7 @@ import type { Message } from "@/types/entities/message";
 import { DotsThreeVertical as MoreVertical, Sparkle as Sparkles, Note as StickyNote } from "@phosphor-icons/react";
 import { formatDistanceToNow } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AssignmentPopover } from "./AssignmentPopover";
 
 interface Conversation {
   id: string;
@@ -38,6 +39,7 @@ interface InboxMessagePanelProps {
   onMessageTextChange: (text: string) => void;
   onSendMessage: (content: string) => void;
   onStatusChange: (status: "open" | "resolved" | "pending") => void;
+  onAssignAgent?: (agentId: string) => void;
 }
 
 /**
@@ -58,6 +60,7 @@ export function InboxMessagePanel({
   onMessageTextChange,
   onSendMessage,
   onStatusChange,
+  onAssignAgent,
 }: InboxMessagePanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -313,6 +316,15 @@ export function InboxMessagePanel({
         </div>
 
         <div className="flex items-center gap-ds-2">
+          {/* Assignment Popover - Integrated into header */}
+          <AssignmentPopover
+            conversationId={conversation.id}
+            organizationId={conversation.organizationId || ""}
+            onAssigned={onAssignAgent}
+            variant="header"
+            size="sm"
+          />
+
           <Button
             variant="ghost"
             size="sm"
