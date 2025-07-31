@@ -29,6 +29,14 @@ export const mailboxes = pgTable(
     name: text().notNull(),
     slug: varchar({ length: 50 }).notNull(),
     organizationId: uuid("organization_id").notNull(),
+    
+    // Missing properties from Supabase types
+    description: text("description"),
+    settings: jsonb("settings"),
+    agentId: uuid("agent_id"),
+    autoAssignment: boolean("auto_assignment"),
+    maxQueueSize: integer("max_queue_size"),
+    
     gmailSupportEmailId: bigint({ mode: "number" }),
     slackAlertChannel: text("slack_escalation_channel"),
     slackBotToken: text(),

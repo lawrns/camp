@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { enhancedAIService } from '@/lib/ai/enhanced-ai-service';
 import { supabase } from '@/lib/supabase';
 import { slackService } from '@/lib/integrations/enhanced-slack-service';
@@ -34,10 +35,13 @@ export async function POST(request: NextRequest) {
       conversationHistory: conversationHistory || [],
     });
 
-    // If handover is needed, create a handover record
-    if (aiResponse.shouldHandover) {
+    // Create handover record if AI confidence is low
+    if (aiResponse.confidence < 0.7 || aiResponse.handoverReason) {
       try {
-        const supabaseClient = supabase.server();
+        const cookieStore = await cookies();
+        const supabaseClient = supabase.server(cookieStore);
+        // TODO: Uncomment when campfire_handoffs table is properly synced
+        /*
         await supabaseClient
           .from('campfire_handoffs')
           .insert({
@@ -52,6 +56,7 @@ export async function POST(request: NextRequest) {
             status: 'pending',
             created_at: new Date().toISOString(),
           });
+        */
 
         // Send Slack notification for handover
         try {
@@ -72,12 +77,13 @@ export async function POST(request: NextRequest) {
 
     // Store the AI response in the database
     try {
-      const supabaseClient = supabase.server();
+      const cookieStore = await cookies();
+      const supabaseClient = supabase.server(cookieStore);
       await supabaseClient
         .from('messages')
         .insert({
-          id: `ai_${Date.now()}`,
           conversation_id: conversationId,
+          organization_id: organizationId,
           content: aiResponse.content,
           sender_type: 'ai',
           metadata: {

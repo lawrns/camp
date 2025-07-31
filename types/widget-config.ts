@@ -1,3 +1,5 @@
+import type { WidgetSettings } from "./widget-settings";
+
 // Widget Configuration Types - Unified interface
 export interface WidgetSupabaseConfig {
   url: string;
@@ -12,8 +14,8 @@ export interface WidgetSupabaseConfig {
 }
 
 /**
- * Unified Widget Configuration
- * Merges WidgetConfig and WidgetSettings from types/widget.ts
+ * Widget Configuration
+ * Uses unified WidgetSettings from types/widget-settings.ts
  */
 export interface WidgetConfig {
   // Basic configuration
@@ -26,54 +28,8 @@ export interface WidgetConfig {
   supabase?: WidgetSupabaseConfig;
   enabled?: boolean;
 
-  // Features (unified from both interfaces)
-  features: {
-    fileUpload: boolean;
-    search: boolean;
-    businessHours: boolean;
-    aiResponses: boolean;
-    readReceipts: boolean;
-    allowFileUploads: boolean;
-    showTypingIndicator: boolean;
-    enableSoundNotifications: boolean;
-    enableEmailCapture: boolean;
-    allowScreenshots?: boolean;
-    enableRealtime?: boolean;
-  };
-
-  // Appearance (unified from both interfaces)
-  appearance: {
-    primaryColor: string;
-    backgroundColor?: string;
-    textColor?: string;
-    position: "bottom-right" | "bottom-left";
-    size: "small" | "medium" | "large";
-    theme?: "light" | "dark" | "auto";
-    zIndex?: number;
-    borderRadius?: number;
-    fontFamily?: string;
-    offsetX?: number;
-    offsetY?: number;
-    width?: number;
-    height?: number;
-    customCSS?: string;
-  };
-
-  // Behavior (unified from both interfaces)
-  behavior?: {
-    autoOpen?: boolean;
-    openDelay?: number;
-    autoOpenDelay?: number;
-    greeting?: string;
-    placeholderText?: string;
-    welcomeMessage?: string;
-    offlineMessage?: string;
-    aiWelcomeMessage?: string;
-    gdprNoticeText?: string;
-    showGDPRNotice?: boolean;
-    privacyPolicyUrl?: string;
-    maxFileSize?: number;
-  };
+  // Settings (using unified WidgetSettings)
+  settings: WidgetSettings;
 
   // Security
   security?: {
@@ -94,9 +50,7 @@ export interface WidgetInitResponse {
     realtimeEndpoint: string;
     publicKey: string;
     supabase: WidgetSupabaseConfig;
-    features: WidgetConfig["features"];
-    appearance: WidgetConfig["appearance"];
-    behavior?: WidgetConfig["behavior"];
+    settings: WidgetSettings;
   };
 }
 
@@ -104,7 +58,7 @@ export interface WidgetInitResponse {
 export interface WidgetSessionConfig {
   mailboxSlug: string;
   mailboxName: string;
-  theme?: WidgetConfig["appearance"];
+  settings: WidgetSettings;
   showWidget: boolean;
   isWhitelabel: boolean;
   config?: WidgetConfig;
@@ -119,21 +73,16 @@ export interface WidgetSessionConfig {
 }
 
 /**
- * Type alias for backward compatibility
- * Maps to the unified WidgetConfig
- */
-export type WidgetSettings = WidgetConfig;
-
-/**
  * Widget embed configuration for client-side usage
  */
 export interface WidgetEmbedConfig {
   mailboxSlug: string;
   apiHost?: string;
   config?: Partial<WidgetConfig>;
+  settings?: Partial<WidgetSettings>;
   // Legacy properties for backward compatibility
-  position?: WidgetConfig["appearance"]["position"];
-  theme?: WidgetConfig["appearance"]["theme"];
+  position?: WidgetSettings["position"];
+  theme?: "light" | "dark" | "auto";
   primaryColor?: string;
   backgroundColor?: string;
   textColor?: string;

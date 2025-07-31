@@ -231,6 +231,44 @@ export type Database = {
           },
         ]
       }
+      ai_reply_suggestions_cache: {
+        Row: {
+          context_hash: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          message_hash: string
+          organization_id: string
+          suggestions: Json
+        }
+        Insert: {
+          context_hash?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          message_hash: string
+          organization_id: string
+          suggestions?: Json
+        }
+        Update: {
+          context_hash?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          message_hash?: string
+          organization_id?: string
+          suggestions?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_reply_suggestions_cache_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_sessions: {
         Row: {
           agent_id: string | null
@@ -1150,6 +1188,47 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          metric_name: string
+          metric_type: string
+          organization_id: string | null
+          tags: Json | null
+          unit: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric_name: string
+          metric_type: string
+          organization_id?: string | null
+          tags?: Json | null
+          unit: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          organization_id?: string | null
+          tags?: Json | null
+          unit?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1208,6 +1287,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      read_receipts: {
+        Row: {
+          conversation_id: string
+          created_at: string | null
+          id: string
+          message_id: string
+          organization_id: string
+          read_at: string | null
+          user_id: string
+          user_type: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          message_id: string
+          organization_id: string
+          read_at?: string | null
+          user_id: string
+          user_type: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          message_id?: string
+          organization_id?: string
+          read_at?: string | null
+          user_id?: string
+          user_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "read_receipts_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -1371,33 +1491,36 @@ export type Database = {
       typing_indicators: {
         Row: {
           conversation_id: string
+          created_at: string | null
           id: string
           is_typing: boolean | null
+          last_activity: string | null
           organization_id: string
-          started_at: string | null
-          updated_at: string | null
-          user_id: string | null
-          visitor_id: string | null
+          user_id: string
+          user_name: string
+          user_type: string
         }
         Insert: {
           conversation_id: string
+          created_at?: string | null
           id?: string
           is_typing?: boolean | null
+          last_activity?: string | null
           organization_id: string
-          started_at?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          visitor_id?: string | null
+          user_id: string
+          user_name: string
+          user_type: string
         }
         Update: {
           conversation_id?: string
+          created_at?: string | null
           id?: string
           is_typing?: boolean | null
+          last_activity?: string | null
           organization_id?: string
-          started_at?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          visitor_id?: string | null
+          user_id?: string
+          user_name?: string
+          user_type?: string
         }
         Relationships: [
           {
@@ -1711,6 +1834,10 @@ export type Database = {
         }
         Returns: string
       }
+      debug_auth_context: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       generate_widget_api_key: {
         Args: { org_id: string }
         Returns: string
@@ -1777,6 +1904,22 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_user_available_organizations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          organization_id: string
+          organization_name: string
+          organization_slug: string
+          role: string
+          status: string
+          permissions: Json
+          is_current: boolean
+        }[]
+      }
+      get_widget_organization_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       gtrgm_compress: {
         Args: { "": unknown }
         Returns: unknown
@@ -1829,6 +1972,10 @@ export type Database = {
         Args: { "": unknown }
         Returns: unknown
       }
+      is_widget_session: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       ivfflat_bit_support: {
         Args: { "": unknown }
         Returns: unknown
@@ -1863,6 +2010,10 @@ export type Database = {
           similarity: number
         }[]
       }
+      set_active_organization: {
+        Args: { target_organization_id: string }
+        Returns: Json
+      }
       set_limit: {
         Args: { "": number }
         Returns: number
@@ -1890,6 +2041,14 @@ export type Database = {
       sparsevec_typmod_in: {
         Args: { "": unknown[] }
         Returns: number
+      }
+      test_widget_channel_access: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          test_name: string
+          success: boolean
+          details: string
+        }[]
       }
       validate_widget_api_key: {
         Args: { api_key: string }

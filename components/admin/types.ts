@@ -2,6 +2,8 @@
  * Type definitions for admin components
  */
 
+import type { WidgetSettings, BusinessHours } from "@/types/widget-settings";
+
 export interface WidgetConfig {
   appearance: {
     primaryColor: string;
@@ -19,17 +21,7 @@ export interface WidgetConfig {
     enableFileUploads: boolean;
     maxFileSize: number;
   };
-  businessHours: {
-    enabled: boolean;
-    timezone: string;
-    schedule: Array<{
-      dayOfWeek: number;
-      isOpen: boolean;
-      openTime: string;
-      closeTime: string;
-    }>;
-    outOfOfficeMessage: string;
-  };
+  businessHours: BusinessHours;
   security: {
     allowedDomains: string[];
     enableRateLimiting: boolean;
@@ -43,7 +35,7 @@ export type WidgetConfigSection = keyof WidgetConfig;
 export type UpdateConfigFunction<T extends WidgetConfigSection> = (section: T, key: string, value: any) => void;
 
 export interface BusinessHourUpdate {
-  (dayIndex: number, field: keyof WidgetConfig["businessHours"]["schedule"][0], value: string | number | boolean): void;
+  (dayIndex: number, field: keyof BusinessHours["schedule"][keyof BusinessHours["schedule"]], value: string | number | boolean): void;
 }
 
 export interface OrganizationSetting {

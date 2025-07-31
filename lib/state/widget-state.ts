@@ -5,6 +5,7 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import type { WidgetSettings, BusinessHours } from '@/types/widget-settings';
 
 // ============================================================================
 // TYPES
@@ -66,74 +67,74 @@ export interface WidgetState {
   reset: () => void;
 }
 
-export interface WidgetSettings {
-  theme: {
-    primaryColor: string;
-    backgroundColor: string;
-    fontFamily: string;
-  };
-  welcomeMessage: string;
-  businessHours: BusinessHours;
-  autoResponse: {
-    enabled: boolean;
-    message: string;
-    delay: number;
-  };
-  ai: {
-    enabled: boolean;
-    confidenceThreshold: number;
-    handoverMessage: string;
-    providers: ('openai' | 'anthropic' | 'deepseek')[];
-  };
-}
-
-export interface BusinessHours {
-  enabled: boolean;
-  timezone: string;
-  schedule: {
-    [key: string]: {
-      start: string;
-      end: string;
-      enabled: boolean;
-    };
-  };
-}
-
 // ============================================================================
 // DEFAULT VALUES
 // ============================================================================
 
 const defaultWidgetSettings: WidgetSettings = {
-  theme: {
-    primaryColor: '#6366F1',
-    backgroundColor: '#FFFFFF',
-    fontFamily: 'Inter, system-ui, sans-serif',
-  },
+  // Branding & Appearance
+  primaryColor: '#6366F1',
+  backgroundColor: '#FFFFFF',
+  textColor: '#1F2937',
+  borderRadius: 8,
+  fontFamily: 'Inter, system-ui, sans-serif',
+
+  // Widget Behavior
   welcomeMessage: 'Hello! How can we help you today?',
+  placeholderText: 'Type your message...',
+  autoOpenDelay: 0,
+  showTypingIndicator: true,
+  enableSoundNotifications: true,
+
+  // Positioning & Size
+  position: 'bottom-right',
+  offsetX: 20,
+  offsetY: 20,
+  width: 400,
+  height: 600,
+
+  // Business Hours & Availability
   businessHours: {
     enabled: false,
     timezone: 'America/New_York',
     schedule: {
-      monday: { start: '09:00', end: '17:00', enabled: true },
-      tuesday: { start: '09:00', end: '17:00', enabled: true },
-      wednesday: { start: '09:00', end: '17:00', enabled: true },
-      thursday: { start: '09:00', end: '17:00', enabled: true },
-      friday: { start: '09:00', end: '17:00', enabled: true },
-      saturday: { start: '10:00', end: '14:00', enabled: false },
-      sunday: { start: '10:00', end: '14:00', enabled: false },
+      monday: { enabled: true, start: '09:00', end: '17:00' },
+      tuesday: { enabled: true, start: '09:00', end: '17:00' },
+      wednesday: { enabled: true, start: '09:00', end: '17:00' },
+      thursday: { enabled: true, start: '09:00', end: '17:00' },
+      friday: { enabled: true, start: '09:00', end: '17:00' },
+      saturday: { enabled: false, start: '10:00', end: '14:00' },
+      sunday: { enabled: false, start: '10:00', end: '14:00' },
     },
   },
-  autoResponse: {
-    enabled: true,
-    message: 'Thanks for your message! We\'ll get back to you soon.',
-    delay: 1000,
+  offlineMessage: 'We\'re currently offline. Leave us a message and we\'ll get back to you soon!',
+
+  // Pre-chat Form
+  requireEmail: false,
+  requireName: false,
+  customFields: [],
+
+  // AI Settings
+  enableAI: true,
+  aiWelcomeMessage: 'I\'m an AI assistant. I can help you with common questions, or connect you with a human agent.',
+  aiHandoffTriggers: {
+    lowConfidenceThreshold: 0.3,
+    userRequestsHuman: true,
+    maxAIResponses: 5,
+    keywords: ['speak to human', 'human agent', 'representative'],
   },
-  ai: {
-    enabled: true,
-    confidenceThreshold: 0.7,
-    handoverMessage: 'I\'m connecting you to a human agent who can better assist you.',
-    providers: ['openai'],
-  },
+
+  // GDPR & Privacy
+  showGDPRNotice: false,
+  gdprNoticeText: 'We use cookies and collect data to improve your experience. By continuing, you agree to our privacy policy.',
+
+  // Advanced Configuration
+  allowFileUploads: true,
+  maxFileSize: 10,
+  allowedFileTypes: ['image/*', '.pdf', '.doc', '.docx', '.txt'],
+
+  // Metadata
+  isActive: true,
 };
 
 const defaultAIHandover: AIHandover = {
@@ -312,4 +313,4 @@ export const loadWidgetState = () => {
 // Auto-save on state changes
 useWidgetStore.subscribe((state) => {
   saveWidgetState();
-}); 
+});

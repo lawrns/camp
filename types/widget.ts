@@ -3,10 +3,11 @@
  * Central location for all widget-related types to ensure consistency
  */
 
-import { Message, MessageAttachment } from "./entities/message";
+import type { Message, MessageAttachment } from "./entities/message";
+import type { WidgetSettings } from "./widget-settings";
 
 /**
- * Widget session configuration from server
+ * Widget session data
  */
 export interface WidgetSession {
   mailboxSlug: string;
@@ -31,45 +32,6 @@ export interface WidgetAPIConfig {
   organizationId: string;
   visitorId: string;
   sessionId?: string;
-}
-
-/**
- * Widget settings from API
- */
-export interface WidgetSettings {
-  // Appearance
-  primaryColor: string;
-  backgroundColor: string;
-  textColor: string;
-  borderRadius: number;
-  fontFamily: string;
-  position: "bottom-right" | "bottom-left";
-  offsetX: number;
-  offsetY: number;
-  width: number;
-  height: number;
-  theme?: "light" | "dark" | "auto";
-  customCSS?: string;
-
-  // Content
-  welcomeMessage: string;
-  placeholderText: string;
-  offlineMessage: string;
-  aiWelcomeMessage?: string;
-  gdprNoticeText?: string;
-
-  // Features
-  showTypingIndicator: boolean;
-  enableSoundNotifications: boolean;
-  autoOpenDelay: number;
-  enableAI: boolean;
-  showGDPRNotice: boolean;
-  privacyPolicyUrl?: string;
-  allowFileUploads: boolean;
-  maxFileSize: number;
-  enableEmailCapture?: boolean;
-  allowScreenshots?: boolean;
-  enableRealtime?: boolean;
 }
 
 /**
@@ -179,7 +141,7 @@ export interface WidgetEmbedConfig {
 }
 
 /**
- * Widget API response types
+ * Widget API response wrapper
  */
 export interface WidgetAPIResponse<T = any> {
   success: boolean;
@@ -192,7 +154,7 @@ export interface WidgetAPIResponse<T = any> {
 }
 
 /**
- * Widget conversation creation response
+ * Widget conversation create response
  */
 export interface WidgetConversationCreateResponse extends WidgetAPIResponse {
   data?: {
