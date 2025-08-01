@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
 import { Clock, Download, Eye, Heart, DotsThree, ArrowBendUpLeft, Share, ThumbsUp } from "@phosphor-icons/react";
 import * as React from "react";
-import { useState } from "react";
+import { useState, memo } from "react";
 import type { Message } from "../types";
 
 interface MessageRowProps {
@@ -18,9 +18,9 @@ interface MessageRowProps {
 }
 
 /**
- * Individual message row component
+ * Individual message row component with memoization for performance
  */
-export const MessageRow: React.FC<MessageRowProps> = ({
+export const MessageRow: React.FC<MessageRowProps> = memo(({
   message,
   isOwnMessage,
   showAvatar,
@@ -126,7 +126,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
 
         {/* Message bubble */}
         <div
-          className={`message-bubble inline-block max-w-[80%] md:max-w-[70%] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-sm ${
+          className={`message-bubble mobile-message-bubble inline-block max-w-[85%] md:max-w-[70%] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-sm ${
             isOwnMessage
               ? "bg-blue-600 text-white border border-blue-700"
               : "bg-background border border-[var(--fl-color-border)]"
@@ -285,6 +285,8 @@ export const MessageRow: React.FC<MessageRowProps> = ({
       </div>
     </div>
   );
-};
+});
+
+MessageRow.displayName = "MessageRow";
 
 export default MessageRow;

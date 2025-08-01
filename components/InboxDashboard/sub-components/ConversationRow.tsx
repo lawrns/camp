@@ -41,7 +41,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
     <div style={style} className="relative">
       <div
         onClick={() => onSelect(conversation)}
-        className={`conversation-item ${isSelected ? 'selected' : ''} ${conversation.unread_count > 0 ? 'unread' : ''} flex cursor-pointer flex-col`}
+        className={`conversation-item mobile-conversation-item ${isSelected ? 'selected' : ''} ${conversation.unread_count > 0 ? 'unread' : ''} flex cursor-pointer flex-col touch-target`}
         style={{
           minHeight: '176px', // Increased from 128px for better content fit
         }}
@@ -58,13 +58,13 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
         data-testid="conversation"
         role="button"
         tabIndex={0}
+        aria-label={`Conversation with ${conversation.customer_name}${conversation.unread_count > 0 ? ` (${conversation.unread_count} unread)` : ''}`}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onSelect(conversation);
           }
         }}
-        aria-label={`Conversation with ${conversation.customer_name}`}
       >
         {/* Main content area */}
         <div className="flex flex-1 items-start justify-between gap-3">

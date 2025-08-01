@@ -1,151 +1,189 @@
+/**
+ * Error Boundary Component for Dashboard
+ * 
+ * Provides graceful error handling for dashboard components
+ * with retry functionality and user-friendly error messages
+ */
+
 "use client";
 
-import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Warning as AlertTriangle, House as Home, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import React from "react";
+import { AlertCircle, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
-// import { captureExceptionAndLogIfDevelopment } from '@/lib/sentry-client'; // Module not found
-import { handleComponentError } from "@/lib/client-errors";
-import { AppError, handleError } from "@/lib/errors/errorHandling";
-import { isFeatureEnabled } from "@/lib/feature-flags";
-import { Icon } from "@/lib/ui/Icon";
-import { ErrorContext, UnifiedErrorBoundary, UnifiedErrorBoundaryProps } from "./UnifiedErrorBoundary";
 
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  resetOnPropsChange?: boolean;
-  resetKeys?: Array<string | number>;
-}
-
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
-  errorId: string | null;
-  retryCount: number;
+  errorInfo: React.ErrorInfo | null;
+}
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
 /**
- * @deprecated Use UnifiedErrorBoundary instead. This is a wrapper for backward compatibility.
+ * Default error fallback component
  */
-export class ErrorBoundary extends Component<Props, State> {
-  private unifiedBoundaryRef = React.createRef<UnifiedErrorBoundary>();
-
-  override render() {
-    const { children, fallback, onError, resetKeys, resetOnPropsChange } = this.props;
-
-    // Map old props to new UnifiedErrorBoundary props
-    const unifiedProps: UnifiedErrorBoundaryProps = {
-      children,
-      domain: "default",
-      severity: "medium",
-      fallback,
-      onError: onError ? (error: any, errorInfo: any, context: any) => onError(error, errorInfo) : undefined,
-      resetKeys,
-      resetOnPropsChange,
-      maxRetries: 3,
-      enableLogging: true,
-      enableReporting: true,
-      showErrorDetails: process.env.NODE_ENV === "development",
-    };
-
-    return <UnifiedErrorBoundary ref={this.unifiedBoundaryRef} {...unifiedProps} />;
-  }
-}
-
-interface ErrorFallbackProps {
-  error: Error | null;
-  errorId: string | null;
-  retryCount: number;
-  onRetry: () => void;
-}
-
-function ErrorFallback({ error, errorId, retryCount, onRetry }: ErrorFallbackProps) {
-  const isAppError = error instanceof AppError;
-  const userMessage = isAppError ? error.message : "Something went wrong";
-  const showRetry = retryCount < 3;
-
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => {
   return (
-    <div className="border-status-error-light flex min-h-[200px] w-full flex-col items-center justify-center rounded-ds-lg border bg-[var(--fl-color-danger-subtle)] p-spacing-md text-center">
-      <Icon icon={AlertTriangle} className="text-brand-mahogany-500 mb-4 h-12 w-12" />
-
-      <h3 className="mb-2 text-base font-semibold text-red-900">Oops! Something went wrong</h3>
-
-      <p className="text-red-600-dark mb-4 max-w-md text-sm">{userMessage}</p>
-
-      {process.env.NODE_ENV === "development" && error && (
-        <details className="mb-4 max-w-lg">
-          <summary className="cursor-pointer text-tiny text-red-600 hover:text-red-800">
-            Technical Details (Development Only)
+    <div className="flex min-h-[400px] flex-col items-center justify-center p-6 text-center">
+      <div className="mb-6">
+        <AlertCircle className="mx-auto h-16 w-16 text-red-500" />
+      </div>
+      
+      <h2 className="mb-2 text-xl font-semibold text-gray-900">
+        Something went wrong
+      </h2>
+      
+      <p className="mb-6 max-w-md text-gray-600">
+        We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
+      </p>
+      
+      {process.env.NODE_ENV === "development" && (
+        <details className="mb-6 max-w-md text-left">
+          <summary className="cursor-pointer text-sm font-medium text-gray-700">
+            Error Details (Development)
           </summary>
-          <pre className="mt-2 max-h-32 overflow-auto rounded bg-[var(--fl-color-danger-subtle)] p-spacing-sm text-left text-tiny text-red-800">
-            {error.message}
-            {error.stack && `\n\n${error.stack}`}
+          <pre className="mt-2 whitespace-pre-wrap rounded bg-gray-100 p-3 text-xs text-gray-800">
+            {error.stack}
           </pre>
         </details>
       )}
-
-      <div className="flex gap-ds-2">
-        {showRetry && (
-          <Button
-            onClick={onRetry}
-            variant="outline"
-            size="sm"
-            className="text-red-600-dark border-[var(--fl-color-danger-muted)] hover:bg-[var(--fl-color-danger-subtle)]"
-          >
-            <Icon icon={RefreshCw} className="mr-2 h-4 w-4" />
-            Try Again
-          </Button>
-        )}
-
+      
+      <div className="flex gap-3">
         <Button
-          onClick={() => {
-            if (isFeatureEnabled("enableRealtimeSync")) {
-              // In realtime-only mode, just reset the error state
-              onRetry();
-            } else {
-              // Fallback to page reload for legacy mode
-              window.location.reload();
-            }
-          }}
+          onClick={retry}
           variant="outline"
-          size="sm"
-          className="text-red-600-dark border-[var(--fl-color-danger-muted)] hover:bg-[var(--fl-color-danger-subtle)]"
+          className="flex items-center gap-2"
         >
-          {isFeatureEnabled("enableRealtimeSync") ? "Reset" : "Reload Page"}
+          <RefreshCw className="h-4 w-4" />
+          Try Again
+        </Button>
+        
+        <Button
+          onClick={() => window.location.href = "/dashboard"}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <Home className="h-4 w-4" />
+          Go to Dashboard
         </Button>
       </div>
-
-      {errorId && <p className="text-brand-mahogany-500 mt-4 text-tiny">Error ID: {errorId}</p>}
     </div>
   );
+};
+
+/**
+ * Error Boundary for Dashboard Components
+ * 
+ * Catches JavaScript errors in child components and displays
+ * a fallback UI instead of crashing the entire application.
+ */
+export class DashboardErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Update state so the next render will show the fallback UI
+    return {
+      hasError: true,
+      error,
+      errorInfo: null,
+    };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Log error to console in development
+    if (process.env.NODE_ENV === "development") {
+      console.error("Dashboard Error Boundary caught an error:", error, errorInfo);
+    }
+
+    // Update state with error info
+    this.setState({
+      error,
+      errorInfo,
+    });
+
+    // Call optional error handler
+    this.props.onError?.(error, errorInfo);
+
+    // Log to error reporting service in production
+    if (process.env.NODE_ENV === "production") {
+      // TODO: Implement error reporting service integration
+      console.error("Dashboard Error:", error.message, errorInfo.componentStack);
+    }
+  }
+
+  handleRetry = () => {
+    this.setState({
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      const FallbackComponent = this.props.fallback || DefaultErrorFallback;
+      
+      return (
+        <FallbackComponent
+          error={this.state.error!}
+          retry={this.handleRetry}
+        />
+      );
+    }
+
+    return this.props.children;
+  }
 }
 
-// Convenience wrapper for common use cases
+/**
+ * Hook for functional components to handle errors
+ */
+export function useErrorHandler() {
+  const [error, setError] = React.useState<Error | null>(null);
+
+  const handleError = React.useCallback((error: Error) => {
+    console.error("Component Error:", error);
+    setError(error);
+  }, []);
+
+  const clearError = React.useCallback(() => {
+    setError(null);
+  }, []);
+
+  return {
+    error,
+    handleError,
+    clearError,
+  };
+}
+
+/**
+ * Higher-order component for error boundary
+ */
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, "children">
+  fallback?: React.ComponentType<{ error: Error; retry: () => void }>
 ) {
   const WrappedComponent = (props: P) => (
-    <ErrorBoundary {...errorBoundaryProps}>
+    <DashboardErrorBoundary fallback={fallback}>
       <Component {...props} />
-    </ErrorBoundary>
+    </DashboardErrorBoundary>
   );
 
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
+
   return WrappedComponent;
 }
 
-// Hook for manual error reporting
-export function useErrorHandler() {
-  return (error: Error, errorInfo?: { [key: string]: any }) => {
-    const appError = error instanceof AppError ? error : handleError(error);
-
-    // Simple error logging for development
-    if (process.env.NODE_ENV === "development") {
-    }
-
-    // You can add more error reporting logic here
-    // For example, sending to error tracking service
-  };
-}
+export default DashboardErrorBoundary;

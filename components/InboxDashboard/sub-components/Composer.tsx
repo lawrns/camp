@@ -2,7 +2,7 @@
 
 import { Paperclip as Attachment, PaperPlaneRight, Smiley, Sparkle, Note as Template } from "@phosphor-icons/react";
 import * as React from "react";
-import { useRef } from "react";
+import { useRef, memo } from "react";
 import type { ComposerProps } from "../types";
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
 import AISuggestionsPanel from "./AISuggestionsPanel";
@@ -11,9 +11,9 @@ import EmojiPicker from "./EmojiPicker";
 import TemplatePanel from "./TemplatePanel";
 
 /**
- * Message composer component with AI, attachments, and templates
+ * Message composer component with AI, attachments, and templates - memoized for performance
  */
-export const Composer: React.FC<ComposerProps> = ({
+export const Composer: React.FC<ComposerProps> = memo(({
   newMessage,
   setNewMessage,
   attachments,
@@ -279,6 +279,8 @@ export const Composer: React.FC<ComposerProps> = ({
       </div>
     </div>
   );
-};
+});
+
+Composer.displayName = "Composer";
 
 export default Composer;

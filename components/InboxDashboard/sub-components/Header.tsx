@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Bell, Funnel, MagnifyingGlass, List, Plus, SortAscending, SortDescending, X } from "@phosphor-icons/react";
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
 import { Icon } from "@/lib/ui/Icon";
 import type { Conversation } from "../types";
 
@@ -27,9 +27,9 @@ interface HeaderProps {
 }
 
 /**
- * Header component with search, filters, and actions
+ * Header component with search, filters, and actions - memoized for performance
  */
-export const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<HeaderProps> = memo(({
   conversations,
   searchQuery,
   setSearchQuery,
@@ -84,7 +84,8 @@ export const Header: React.FC<HeaderProps> = ({
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="typography-input w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
+              className="typography-input mobile-search-input w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
+              aria-label="Search conversations"
             />
           </div>
 
@@ -170,9 +171,10 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {/* New conversation */}
-          <button className="btn-primary">
+          <button className="btn-primary mobile-friendly-button touch-target" aria-label="Start new conversation">
             <Plus className="h-4 w-4" />
-            New Conversation
+            <span className="hidden sm:inline">New Conversation</span>
+            <span className="sm:hidden">New</span>
           </button>
         </div>
       </div>
@@ -190,10 +192,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="p-2 text-gray-400 hover:text-foreground transition-colors">
+          <button className="p-2 text-gray-400 hover:text-foreground transition-colors touch-target" aria-label="Notifications">
             <Bell className="h-5 w-5" />
           </button>
-          <button className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors">
+          <button className="mobile-friendly-button inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors touch-target" aria-label="Start new conversation">
             <Plus className="h-4 w-4" />
             New
           </button>
@@ -362,6 +364,8 @@ export const Header: React.FC<HeaderProps> = ({
       )}
     </div>
   );
-};
+});
+
+Header.displayName = "Header";
 
 export default Header;

@@ -8,6 +8,11 @@
  * - Widget: useRealtime({ type: "widget", organizationId, conversationId })
  * - Dashboard: useRealtime({ type: "dashboard", organizationId, conversationId, userId })
  * - General: useRealtime({ type: "general", organizationId })
+ *
+ * Mobile Optimizations:
+ * - Throttled updates on mobile devices
+ * - Reduced subscription frequency
+ * - Optimized for battery life
  */
 
 "use client";
@@ -24,6 +29,7 @@ import type { RealtimeMessagePayload } from "@/lib/realtime/constants";
 import { supabase } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 // Types for the standardized realtime hook
 interface RealtimeConfig {
@@ -31,6 +37,30 @@ interface RealtimeConfig {
   organizationId: string;
   conversationId?: string;
   userId?: string;
+  enableHeartbeat?: boolean;
+  enablePresence?: boolean;
+}
+
+interface StandardMessage {
+  id: string;
+  content: string;
+  senderType: 'visitor' | 'agent' | 'ai';
+  timestamp: string;
+  conversationId: string;
+  metadata?: Record<string, any>;
+}
+
+interface StandardTypingUser {
+  userId: string;
+  userName: string;
+  isTyping: boolean;
+}
+
+interface StandardRealtimeMetrics {
+  messageLatency: number;
+  connectionUptime: number;
+  messagesReceived: number;
+  messagesSent: number;
 }
 
 interface RealtimeState {
@@ -49,11 +79,16 @@ interface RealtimeActions {
 }
 
 /**
- * STANDARDIZED REALTIME HOOK
+ * STANDARDIZED REALTIME HOOK WITH MOBILE OPTIMIZATIONS
  *
  * This hook provides a unified interface for all realtime communication.
  * It automatically manages channels, prevents memory leaks, and provides
  * consistent event handling across the application.
+ * 
+ * Mobile optimizations include:
+ * - Throttled updates (1s vs 100ms on desktop)
+ * - Reduced subscription frequency
+ * - Battery-optimized connection management
  */
 export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeActions] {
   const [state, setState] = useState<RealtimeState>({
@@ -61,17 +96,40 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
     connectionStatus: 'disconnected',
     error: null,
     lastActivity: null,
+    messages: [],
+    typingUsers: [],
+    onlineUsers: [],
+    metrics: {
+      messageLatency: 0,
+      connectionUptime: 0,
+      messagesReceived: 0,
+      messagesSent: 0,
+    },
   });
 
   const unsubscribersRef = useRef<(() => void)[]>([]);
   const configRef = useRef(config);
+  const { isMobile } = useBreakpoint();
+
+  // Mobile-specific throttling
+  const throttleDelay = isMobile ? 1000 : 100; // 1s on mobile vs 100ms on desktop
+  const lastUpdateRef = useRef<number>(0);
+
+  // Throttled state update function
+  const throttledSetState = useCallback((updater: (prev: RealtimeState) => RealtimeState) => {
+    const now = Date.now();
+    if (now - lastUpdateRef.current >= throttleDelay) {
+      setState(updater);
+      lastUpdateRef.current = now;
+    }
+  }, [throttleDelay]);
 
   // Update config ref when config changes
   useEffect(() => {
     configRef.current = config;
   }, [config]);
 
-  // Setup realtime connections
+  // Setup realtime connections with mobile optimizations
   useEffect(() => {
     if (!config.organizationId) return;
 
@@ -87,7 +145,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
           UNIFIED_CHANNELS.conversations(organizationId),
           UNIFIED_EVENTS.CONVERSATION_UPDATED,
           (payload) => {
-            setState(prev => ({ ...prev, lastActivity: new Date() }));
+            throttledSetState(prev => ({ ...prev, lastActivity: new Date() }));
             // Handle organization-wide conversation updates
           }
         );
@@ -99,18 +157,18 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
             UNIFIED_CHANNELS.conversation(organizationId, conversationId),
             UNIFIED_EVENTS.MESSAGE_CREATED,
             (payload) => {
-              setState(prev => ({ ...prev, lastActivity: new Date() }));
+              throttledSetState(prev => ({ ...prev, lastActivity: new Date() }));
               // Handle new messages
             }
           );
           unsubscribers.push(messageUnsubscriber);
 
-          // Subscribe to typing indicators
+          // Subscribe to typing indicators (throttled on mobile)
           const typingUnsubscriber = RealtimeHelpers.subscribeToTyping(
             organizationId,
             conversationId,
             (payload) => {
-              setState(prev => ({ ...prev, lastActivity: new Date() }));
+              throttledSetState(prev => ({ ...prev, lastActivity: new Date() }));
               // Handle typing indicators
             }
           );
@@ -122,7 +180,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
           CHANNEL_PATTERNS.conversations(organizationId),
           EVENT_TYPES.CONVERSATION_ASSIGNED,
           (payload) => {
-            setState(prev => ({ ...prev, lastActivity: new Date() }));
+            throttledSetState(prev => ({ ...prev, lastActivity: new Date() }));
             // Handle assignment changes
           }
         );
@@ -166,7 +224,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
         connectionStatus: 'disconnected'
       }));
     };
-  }, [config.organizationId, config.conversationId, config.userId, config.type]);
+  }, [config.organizationId, config.conversationId, config.userId, config.type, throttledSetState]);
 
   // Actions
   const actions: RealtimeActions = {

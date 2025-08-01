@@ -15,12 +15,20 @@ export const CHANNEL_PATTERNS = UNIFIED_CHANNELS;
 // Re-export unified events for backward compatibility
 export const EVENT_TYPES = UNIFIED_EVENTS;
 
-// Channel manager to prevent memory leaks
+// Enhanced Channel manager with heartbeat and reconnection
 class ChannelManager {
-  private channels = new Map<string, { channel: RealtimeChannel; lastUsed: number; subscribers: number }>();
+  private channels = new Map<string, {
+    channel: RealtimeChannel;
+    lastUsed: number;
+    subscribers: number;
+    heartbeatInterval?: NodeJS.Timeout;
+    reconnectAttempts: number;
+  }>();
   private cleanupInterval: NodeJS.Timeout | null = null;
   private readonly CLEANUP_INTERVAL = 30000; // 30 seconds
   private readonly IDLE_TIMEOUT = 300000; // 5 minutes
+  private readonly HEARTBEAT_INTERVAL = 25000; // 25 seconds
+  private readonly MAX_RECONNECT_ATTEMPTS = 5;
 
   constructor() {
     this.startCleanup();
@@ -48,6 +56,11 @@ class ChannelManager {
       const info = this.channels.get(name);
       if (info) {
         try {
+          // Clear heartbeat interval
+          if (info.heartbeatInterval) {
+            clearInterval(info.heartbeatInterval);
+          }
+
           const client = supabase.browser();
           client.removeChannel(info.channel);
           this.channels.delete(name);
@@ -99,6 +112,7 @@ class ChannelManager {
         channel,
         lastUsed: Date.now(),
         subscribers: 0,
+        reconnectAttempts: 0,
       });
 
       console.log(`[Realtime] Created new channel: ${name}`);
@@ -113,6 +127,8 @@ class ChannelManager {
     const info = this.channels.get(name);
     if (info) {
       info.subscribers++;
+      // Setup heartbeat for active channels
+      this.setupHeartbeat(name);
     }
   }
 
@@ -120,7 +136,58 @@ class ChannelManager {
     const info = this.channels.get(name);
     if (info) {
       info.subscribers = Math.max(0, info.subscribers - 1);
+      // Clear heartbeat if no subscribers
+      if (info.subscribers === 0 && info.heartbeatInterval) {
+        clearInterval(info.heartbeatInterval);
+        info.heartbeatInterval = undefined;
+      }
     }
+  }
+
+  private setupHeartbeat(name: string) {
+    const info = this.channels.get(name);
+    if (!info || info.heartbeatInterval) return;
+
+    info.heartbeatInterval = setInterval(async () => {
+      try {
+        // Send a heartbeat to keep the connection alive
+        await info.channel.send({
+          type: 'broadcast',
+          event: 'heartbeat',
+          payload: { timestamp: new Date().toISOString() }
+        });
+        console.log(`[Realtime] Heartbeat sent for channel: ${name}`);
+      } catch (error) {
+        console.warn(`[Realtime] Heartbeat failed for channel ${name}:`, error);
+        // Attempt reconnection if heartbeat fails
+        this.attemptReconnection(name);
+      }
+    }, this.HEARTBEAT_INTERVAL);
+  }
+
+  private async attemptReconnection(name: string) {
+    const info = this.channels.get(name);
+    if (!info) return;
+
+    if (info.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
+      console.error(`[Realtime] Max reconnection attempts reached for channel: ${name}`);
+      return;
+    }
+
+    info.reconnectAttempts++;
+    const delay = Math.min(1000 * Math.pow(2, info.reconnectAttempts), 10000);
+
+    console.log(`[Realtime] Attempting reconnection ${info.reconnectAttempts}/${this.MAX_RECONNECT_ATTEMPTS} for channel: ${name} (delay: ${delay}ms)`);
+
+    setTimeout(async () => {
+      try {
+        await info.channel.subscribe();
+        info.reconnectAttempts = 0; // Reset on successful reconnection
+        console.log(`[Realtime] Successfully reconnected channel: ${name}`);
+      } catch (error) {
+        console.error(`[Realtime] Reconnection failed for channel ${name}:`, error);
+      }
+    }, delay);
   }
 
   removeChannel(name: string) {

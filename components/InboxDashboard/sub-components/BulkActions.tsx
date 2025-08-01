@@ -2,7 +2,7 @@
 // Provides bulk operations for multiple conversations
 
 import { useState } from 'react';
-import { Check, X, Tag, Flag, Clock, Archive, Trash2, Users, Download } from '@phosphor-icons/react';
+import { Check, X, Tag, Flag, Clock, Archive, Trash, Users, Download } from '@phosphor-icons/react';
 import type { Conversation } from '../types';
 
 interface BulkActionsProps {
@@ -101,7 +101,8 @@ export const BulkActions: React.FC<BulkActionsProps> = ({
               <button
                 onClick={() => setShowPriorityMenu(!showPriorityMenu)}
                 disabled={isLoading}
-                className="btn-secondary text-xs"
+                className="btn-secondary mobile-friendly-button text-xs touch-target"
+                aria-label="Set priority for selected conversations"
               >
                 <Flag className="h-4 w-4" />
                 Priority
@@ -172,7 +173,7 @@ export const BulkActions: React.FC<BulkActionsProps> = ({
               disabled={isLoading}
               className="btn-secondary text-xs text-red-600 hover:bg-red-50"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash className="h-4 w-4" />
               Delete
             </button>
           </div>

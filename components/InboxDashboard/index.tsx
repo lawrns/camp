@@ -11,7 +11,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel
 import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
 import { Robot, X } from "@phosphor-icons/react";
 import * as React from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, memo, useMemo } from "react";
 // Import utilities
 import { fallbackAISuggestions } from "./constants/messageTemplates";
 // Import all the extracted components
@@ -47,8 +47,9 @@ interface InboxDashboardProps {
 
 /**
  * Main InboxDashboard component - now much smaller and focused on orchestration
+ * Performance optimized with memoization and optimized state management
  */
-export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }) => {
+export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className = "" }) => {
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
@@ -132,11 +133,11 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const reconnect = () => { }; // TODO: Implement
 
   // Performance metrics using real stats
-  const performanceMetrics = {
-    averageLatency: stats?.averageResponseTime || 0,
-    messageCount: stats?.messagesToday || 0,
-    reconnectionCount: 0
-  };
+  const performanceMetrics = useMemo(() => ({
+    responseTime: stats?.averageResponseTime || 0,
+    memoryUsage: 0, // TODO: Implement memory usage tracking
+    cpuUsage: 0, // TODO: Implement CPU usage tracking
+  }), [stats?.averageResponseTime]);
 
   // Early return if auth is loading or missing required data
   if (authLoading) {
@@ -538,7 +539,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   return (
     <div className={`flex h-screen overflow-hidden bg-[var(--ds-color-background-muted)] ${className}`} data-testid="inbox-dashboard">
       {/* Add wrapper with padding */}
-      <div className="flex h-full w-full flex-col">
+      <div className="flex h-full w-full flex-col mobile-stack">
         {/* Header */}
         <Header
           conversations={conversations}
@@ -566,7 +567,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         />
 
         {/* Main content with proper layout */}
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden mobile-stack">
           {/* Conversation list */}
           <ConversationList
             conversations={conversations}
@@ -703,10 +704,10 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
             onOpenChange={setShowConvertDialog}
             conversation={{
               id: selectedConversation.id,
-              subject: selectedConversation.last_message_preview || "Conversation",
+              subject: selectedConversation.lastMessagePreview || "Conversation",
               customer: {
-                name: selectedConversation.customer_name,
-                email: selectedConversation.customer_email,
+                name: selectedConversation.customerName,
+                email: selectedConversation.customerEmail,
               },
               messages: [], // TODO: Add actual messages when available
               priority: selectedConversation.priority,
@@ -732,6 +733,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
       </div>
     </div>
   );
-};
+});
+
+InboxDashboard.displayName = "InboxDashboard";
 
 export default InboxDashboard;

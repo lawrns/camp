@@ -140,8 +140,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className={`advanced-filters fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${className}`}>
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div className={`advanced-filters fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 mobile-padding ${className}`}>
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto mobile-full-width">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="typography-section-title flex items-center gap-2">
@@ -282,11 +282,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             >
               Clear All
             </button>
-            <div className="flex items-center gap-3">
-              <button onClick={onClose} className="btn-secondary">
+            <div className="flex items-center gap-3 mobile-stack">
+              <button onClick={onClose} className="btn-secondary mobile-friendly-button touch-target mobile-full-width" aria-label="Cancel filter changes">
                 Cancel
               </button>
-              <button onClick={handleApply} className="btn-primary">
+              <button onClick={handleApply} className="btn-primary mobile-friendly-button touch-target mobile-full-width" aria-label="Apply selected filters">
                 Apply Filters
               </button>
             </div>
