@@ -679,6 +679,63 @@ p, span, div {
     margin-bottom: var(--spacing-3);
 }
 
+/* ===== PROFESSIONAL TYPOGRAPHY UTILITIES ===== */
+.typography-dashboard-title {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-2xl);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-text);
+    letter-spacing: -0.025em;
+}
+
+.typography-section-title {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-lg);
+    font-weight: var(--ds-font-weight-medium);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-text);
+}
+
+.typography-conversation-title {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-base);
+    font-weight: var(--ds-font-weight-medium);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-text);
+}
+
+.typography-message-content {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: var(--ds-line-height-relaxed);
+    color: var(--ds-color-text);
+}
+
+.typography-metadata {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-xs);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: var(--ds-line-height-normal);
+    color: var(--ds-color-text-muted);
+}
+
+.typography-button {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-medium);
+    line-height: var(--ds-line-height-normal);
+    letter-spacing: 0.025em;
+}
+
+.typography-input {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: var(--ds-line-height-normal);
+}
+
 /* Component Padding */
 .component-padding {
     padding: var(--spacing-4) var(--spacing-6);
@@ -1063,6 +1120,88 @@ button:hover,
     font-size: var(--ds-font-size-sm);
     font-weight: var(--ds-font-weight-medium);
     color: var(--ds-color-text);
+}
+
+/* ===== CONVERSATION LIST ENHANCEMENTS ===== */
+.conversation-item {
+    padding: var(--ds-spacing-3) var(--ds-spacing-4);
+    border-bottom: 1px solid var(--ds-color-border-subtle);
+    transition: all var(--ds-transition-fast);
+    cursor: pointer;
+    position: relative;
+}
+
+.conversation-item:hover {
+    background-color: var(--ds-color-surface-subtle);
+    border-left: 3px solid var(--ds-color-primary-500);
+    padding-left: calc(var(--ds-spacing-4) - 3px);
+}
+
+.conversation-item.selected {
+    background-color: var(--ds-color-primary-50);
+    border-left: 3px solid var(--ds-color-primary-500);
+    padding-left: calc(var(--ds-spacing-4) - 3px);
+}
+
+.conversation-item.unread {
+    background-color: var(--ds-color-surface);
+    font-weight: var(--ds-font-weight-medium);
+}
+
+.conversation-item.unread::before {
+    content: '';
+    position: absolute;
+    left: var(--ds-spacing-2);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: var(--ds-color-primary-500);
+    border-radius: 50%;
+}
+
+.conversation-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--ds-color-border-subtle);
+    transition: border-color var(--ds-transition-fast);
+}
+
+.conversation-item:hover .conversation-avatar {
+    border-color: var(--ds-color-primary-300);
+}
+
+.conversation-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-spacing-2);
+    margin-top: var(--ds-spacing-1);
+}
+
+.conversation-status-badge {
+    padding: 2px 6px;
+    border-radius: var(--ds-radius-sm);
+    font-size: var(--ds-font-size-xs);
+    font-weight: var(--ds-font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.conversation-status-badge.open {
+    background-color: var(--ds-color-success-100);
+    color: var(--ds-color-success-700);
+}
+
+.conversation-status-badge.in-progress {
+    background-color: var(--ds-color-warning-100);
+    color: var(--ds-color-warning-700);
+}
+
+.conversation-status-badge.resolved {
+    background-color: var(--ds-color-neutral-100);
+    color: var(--ds-color-neutral-700);
 }
 
 /* Chat Header Utilities */

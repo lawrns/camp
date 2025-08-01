@@ -41,13 +41,9 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
     <div style={style} className="relative">
       <div
         onClick={() => onSelect(conversation)}
-        className={`conversation-item conversation-card relative z-10 flex cursor-pointer flex-col transition-all ${isSelected ? "border-l-4 border-l-[var(--color-primary-600)] bg-[var(--color-primary-50)]" : ""
-          }`}
+        className={`conversation-item ${isSelected ? 'selected' : ''} ${conversation.unread_count > 0 ? 'unread' : ''} flex cursor-pointer flex-col`}
         style={{
           minHeight: '176px', // Increased from 128px for better content fit
-          borderBottom: '1px solid var(--color-border)',
-          backgroundColor: isSelected ? undefined : 'var(--color-surface)',
-          padding: 'var(--spacing-4)'
         }}
         onMouseEnter={(e) => {
           if (!isSelected) {
@@ -84,11 +80,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                   return getAvatarPath(uniqueId, "customer");
                 })()}
                 alt={conversation.customer_name}
-                className="rounded-ds-full transition-all"
-                style={{
-                  height: 'var(--spacing-10)', // 40px
-                  width: 'var(--spacing-10)'
-                }}
+                className="conversation-avatar"
                 data-testid="conversation-avatar"
               />
             </div>
@@ -99,7 +91,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
               <div className="min-w-0 flex-1 space-y-spacing-sm">
                 {/* Customer name and AI indicator */}
                 <div className="flex min-w-0 items-center gap-ds-2">
-                  <h3 className="truncate font-medium text-[var(--color-text)]" style={{ fontSize: 'var(--font-size-sm)' }} data-testid="conversation-customer-name">{conversation.customer_name}</h3>
+                  <h3 className="typography-conversation-title truncate" data-testid="conversation-customer-name">{conversation.customer_name}</h3>
                   <div className="flex-shrink-0">
                     {isAIAssigned ? (
                       <StatusBadge 
@@ -120,10 +112,10 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                 </div>
 
                 {/* Email */}
-                <p className="truncate text-tiny text-foreground-muted" data-testid="conversation-customer-email">{conversation.customer_email}</p>
+                <p className="typography-metadata truncate" data-testid="conversation-customer-email">{conversation.customer_email}</p>
 
                 {/* Last message preview */}
-                <p className="line-clamp-2 text-sm text-foreground leading-relaxed" data-testid="conversation-message-preview">
+                <p className="typography-message-content line-clamp-2" data-testid="conversation-message-preview">
                   {conversation.last_message_preview || "No messages yet"}
                 </p>
               </div>
@@ -165,9 +157,9 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
           {/* Right side: Timestamp and unread count */}
           <div className="flex flex-col items-end justify-between h-full flex-shrink-0">
             {/* Timestamp */}
-            <div className="flex items-center text-xs text-gray-500">
-              <Clock className="mr-1 h-3 w-3" />
-              {formatTime(conversation.last_message_at)}
+            <div className="conversation-meta">
+              <Clock className="h-3 w-3" />
+              <span className="typography-metadata">{formatTime(conversation.last_message_at)}</span>
             </div>
 
             {/* Unread count */}
