@@ -735,6 +735,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
           window.location.search.includes('widget=true') ||
           (window as any).CampfireWidgetConfig;
 
+        console.log('[AuthProvider] Widget context detection:', {
+          pathname: window.location.pathname,
+          search: window.location.search,
+          hasWidgetConfig: !!(window as any).CampfireWidgetConfig,
+          widgetConfig: (window as any).CampfireWidgetConfig,
+          isWidgetContext
+        });
+
         const widgetToken = isWidgetContext ? localStorage.getItem("campfire_widget_token") : null;
 
         // Prepare headers for session request

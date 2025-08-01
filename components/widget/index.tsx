@@ -9,6 +9,16 @@ import { DefinitiveWidget } from "./DefinitiveWidget";
 import { useAuth } from "./hooks/useAuth";
 import { WidgetErrorBoundary } from "./WidgetErrorBoundary";
 
+// Extend window interface for widget configuration
+declare global {
+  interface Window {
+    CampfireWidgetConfig?: {
+      organizationId: string;
+      debug?: boolean;
+    };
+  }
+}
+
 interface WidgetContextType {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
@@ -46,6 +56,17 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [widgetError, setWidgetError] = useState<string | null>(null);
   
+  // Set widget configuration on window for auth provider detection
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.CampfireWidgetConfig = {
+        organizationId,
+        debug,
+      };
+      console.log('[WidgetProvider] Set CampfireWidgetConfig on window:', window.CampfireWidgetConfig);
+    }
+  }, [organizationId, debug]);
+
   // Add logging for widget state changes
   useEffect(() => {
     console.log('[WidgetProvider] Widget state changed:', { isOpen, organizationId });

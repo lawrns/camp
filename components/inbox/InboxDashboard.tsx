@@ -28,6 +28,8 @@ import { DashboardChatView } from '@/components/chat/DashboardChatView';
 import { ConversationCard } from '@/components/inbox/ConversationCard';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
+import { subscribeToChannel } from '@/lib/realtime/standardized-realtime';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { AssignmentPanel } from '@/components/conversations/AssignmentPanel';
 import { PriorityManagement } from '@/components/conversations/PriorityManagement';
 import { ConversationStatusDropdown } from '@/components/inbox/ConversationStatusDropdown';
@@ -86,59 +88,57 @@ export function InboxDashboard({
 
   // Set up real-time subscriptions
   useEffect(() => {
-    console.log('[InboxDashboard] Setting up real-time subscriptions...');
+    if (!currentUserId) return;
 
-    // Subscribe to conversation updates for the organization
-    const conversationChannel = supabase
-      .channel('inbox-conversations')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'conversations'
-        },
-        (payload) => {
-          console.log('[InboxDashboard] Conversation update:', payload);
-          // Reload conversations when any conversation changes
-          loadConversations();
+    console.log('[InboxDashboard] Setting up standardized real-time subscriptions...');
+
+    const unsubscribers: (() => void)[] = [];
+
+    // Subscribe to organization-wide conversation updates
+    const conversationUnsubscriber = subscribeToChannel(
+      UNIFIED_CHANNELS.organization(currentUserId),
+      UNIFIED_EVENTS.CONVERSATION_UPDATED,
+      (payload) => {
+        console.log('[InboxDashboard] Conversation update via standardized channel:', payload);
+        loadConversations();
+      }
+    );
+    unsubscribers.push(conversationUnsubscriber);
+
+    // Subscribe to organization-wide message updates
+    const messageUnsubscriber = subscribeToChannel(
+      UNIFIED_CHANNELS.organization(currentUserId),
+      UNIFIED_EVENTS.MESSAGE_CREATED,
+      (payload) => {
+        console.log('[InboxDashboard] Message update via standardized channel:', payload);
+        loadConversations(); // Refresh to update last message previews
+
+        // If we have a selected conversation and the message is for it, refresh the chat view
+        if (selectedConversation && payload.message && payload.message.conversationId === selectedConversation.id) {
+          console.log('[InboxDashboard] Message for selected conversation, refreshing chat view');
         }
-      )
-      .subscribe();
+      }
+    );
+    unsubscribers.push(messageUnsubscriber);
 
-    // Subscribe to message updates for all conversations
-    const messageChannel = supabase
-      .channel('inbox-messages')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'messages'
-        },
-        (payload) => {
-          console.log('[InboxDashboard] Message update:', payload);
-          // Reload conversations when messages change to update last message
-          loadConversations();
+    // Subscribe to conversation creation events
+    const conversationCreatedUnsubscriber = subscribeToChannel(
+      UNIFIED_CHANNELS.organization(currentUserId),
+      UNIFIED_EVENTS.CONVERSATION_CREATED,
+      (payload) => {
+        console.log('[InboxDashboard] New conversation created:', payload);
+        loadConversations();
+      }
+    );
+    unsubscribers.push(conversationCreatedUnsubscriber);
 
-          // If we have a selected conversation and the message is for it, refresh the chat view
-          if (selectedConversation && payload.new && payload.new.conversation_id === selectedConversation.id) {
-            console.log('[InboxDashboard] Message for selected conversation, refreshing chat view');
-            // The ChatView component should handle its own real-time updates
-          }
-        }
-      )
-      .subscribe();
+    console.log('[InboxDashboard] Standardized real-time subscriptions established');
 
-    console.log('[InboxDashboard] Real-time subscriptions established');
-
-    // Cleanup subscriptions
     return () => {
-      console.log('[InboxDashboard] Cleaning up real-time subscriptions');
-      conversationChannel.unsubscribe();
-      messageChannel.unsubscribe();
+      console.log('[InboxDashboard] Cleaning up standardized real-time subscriptions...');
+      unsubscribers.forEach(unsubscribe => unsubscribe());
     };
-  }, [selectedConversation]); // Re-subscribe when selected conversation changes
+  }, [selectedConversation, currentUserId]); // Re-subscribe when selected conversation changes
 
   const loadConversations = async () => {
     try {
@@ -381,7 +381,7 @@ export function InboxDashboard({
         {/* Header */}
         <div className="p-4 border-b">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Inbox</h2>
+            <h2 className="text-lg font-sans font-semibold">Inbox</h2>
             <Button size="sm" onClick={loadConversations}>
               Refresh
             </Button>
@@ -465,13 +465,13 @@ export function InboxDashboard({
       </div>
 
       {/* Main Content - Chat View with Management */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col md:gap-4 lg:gap-6">
         {selectedConversation ? (
           <div className="flex-1 flex flex-col">
             {/* Conversation Management Header */}
             <div className="border-b p-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 md:space-x-6">
                   <h3 className="text-lg font-semibold">{selectedConversation.customerName}</h3>
                   <Badge variant={getPriorityColor(selectedConversation.priority)}>
                     {selectedConversation.priority}

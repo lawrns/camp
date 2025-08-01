@@ -276,7 +276,7 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Chat Header with Smart Replies */}
-      <div className="border-b p-3 flex items-center justify-between bg-gray-50">
+      <div className="border-b p-4 flex items-center justify-center bg-gray-50 text-center">
         <div className="flex items-center space-x-2">
           <h4 className="font-medium">Conversation</h4>
           <Badge variant="outline">{conversationId.slice(0, 8)}</Badge>
@@ -298,7 +298,7 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message) => (
-            <div key={message.id} className="flex gap-3">
+            <div key={message.id} className="flex gap-4 p-3 rounded-lg bg-gray-50 hover:bg-gray-100">
               <Avatar className="h-8 w-8 flex-shrink-0">
                 <AvatarFallback className="text-xs">
                   {getSenderIcon(message.sender_type)}

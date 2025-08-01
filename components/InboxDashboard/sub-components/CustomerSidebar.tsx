@@ -132,7 +132,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
             </svg>
           </div>
         </button>
-        {isExpanded && <div className="px-4 pb-4 pt-2" data-testid={`customer-sidebar-section-${id}-content`}>{children}</div>}
+        {isExpanded && <div className="px-6 pb-6 pt-4" data-testid={`customer-sidebar-section-${id}-content`}>{children}</div>}
       </div>
     );
   };
@@ -157,7 +157,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
       {/* Content */}
       <div className="flex-1 overflow-y-auto" data-testid="customer-sidebar-content">
         {isLoading ? (
-          <div className="space-y-3 p-4" data-testid="customer-sidebar-loading">
+          <div className="space-y-4 p-4" data-testid="customer-sidebar-loading">
             <div className="animate-pulse" data-testid="customer-sidebar-loading-skeleton">
               <div className="mx-auto mb-3 h-20 w-20 rounded-ds-full bg-gray-200" data-testid="customer-sidebar-loading-avatar"></div>
               <div className="mx-auto mb-2 h-4 w-3/4 rounded bg-gray-200" data-testid="customer-sidebar-loading-name"></div>
@@ -193,7 +193,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 </svg>
               }
             >
-              <div className="space-y-4" data-testid="customer-details-content">
+              <div className="space-y-6" data-testid="customer-details-content">
                 {/* Customer Avatar and Basic Info */}
                 <div className="text-center" data-testid="customer-basic-info">
                   <img
