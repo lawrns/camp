@@ -1,8 +1,8 @@
 export const testUsers = {
   admin: {
-    email: 'admin@campfire.test',
-    password: 'testpassword123',
-    name: 'Admin User'
+    email: 'jam@jam.com',
+    password: 'password123',
+    name: 'Jam User'
   },
   customer: {
     email: 'customer@campfire.test',

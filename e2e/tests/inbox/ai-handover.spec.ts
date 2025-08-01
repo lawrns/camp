@@ -10,7 +10,7 @@ test.describe('Inbox AI Handover Features', () => {
     await page.click('button[type="submit"]');
     
     // Wait for login to complete and navigate to inbox
-    await page.waitForURL('/dashboard');
+    await page.waitForURL(/\/dashboard/);
     await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });

@@ -21,7 +21,7 @@ test.describe('Comprehensive Authenticated Testing', () => {
     // 2. Test Dashboard
     console.log('📊 Testing Dashboard...');
     await expect(page).toHaveURL(/\/dashboard/);
-    await expect(page.locator('h1')).toContainText('Dashboard');
+    await expect(page.locator('h1:has-text("Welcome back, jam!")')).toBeVisible();
     console.log('✅ Dashboard accessible');
 
     // 3. Test Inbox

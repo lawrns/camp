@@ -91,7 +91,7 @@ test.describe('Basic Authentication Tests', () => {
     if (currentUrl.includes('/dashboard')) {
       // Success case
       await expect(page).toHaveURL(/\/dashboard/);
-      await expect(page.locator('h1')).toContainText(/dashboard/i);
+      await expect(page.locator('h1:has-text("Welcome back, jam!")')).toBeVisible();
     } else if (currentUrl.includes('/onboarding')) {
       // Onboarding redirect case
       console.log('User redirected to onboarding, completing flow...');
@@ -122,7 +122,7 @@ test.describe('Basic Authentication Tests', () => {
     // Wait for authentication and verify we can access dashboard
     await page.waitForTimeout(3000);
     await page.goto('/dashboard');
-    await page.waitForSelector('h1:has-text("Dashboard")', { timeout: 10000 });
+    await page.waitForSelector('h1:has-text("Welcome back, jam!")', { timeout: 10000 });
 
     // Test accessing inbox (should work without QueryClient for now)
     await page.goto('/inbox');

@@ -22,10 +22,11 @@ export function getServiceClient() {
 }
 
 /**
- * Create client (alias for service client)
+ * Create client with user context for server-side operations
  */
 export function createClient() {
-  return supabase.admin();
+  const cookieStore = cookies();
+  return supabase.server(cookieStore);
 }
 
 // Legacy exports

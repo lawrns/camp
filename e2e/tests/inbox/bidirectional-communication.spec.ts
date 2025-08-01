@@ -9,7 +9,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     await page.click('button[type="submit"]');
     
     // Wait for login to complete and navigate to inbox
-    await page.waitForURL('/dashboard');
+    await page.waitForURL(/\/dashboard/);
     await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });
@@ -18,8 +18,8 @@ test.describe('Inbox Bidirectional Communication', () => {
     // Wait for inbox to load
     await page.waitForSelector('h1');
     
-    // Verify inbox page is displayed
-    await expect(page.locator('h1')).toContainText('Inbox');
+    // Verify inbox page is displayed - use more specific selector
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     
     // Take screenshot for debugging
     await page.screenshot({ path: 'inbox-page.png' });
@@ -32,7 +32,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     await page.waitForSelector('h1');
     
     // Verify basic inbox elements are present
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     await expect(page.locator('body')).toBeVisible();
     
     console.log('✅ Inbox interface elements are present');
@@ -49,7 +49,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     // Navigate back to inbox
     await page.goto('/dashboard/inbox');
     await expect(page).toHaveURL(/\/dashboard\/inbox/);
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     
     console.log('✅ Inbox navigation works correctly');
   });
@@ -60,7 +60,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     
     // Verify we're still logged in (not redirected to login)
     await expect(page).not.toHaveURL(/\/login/);
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     
     console.log('✅ Session maintained in inbox');
   });
@@ -74,7 +74,7 @@ test.describe('Inbox Bidirectional Communication', () => {
     await page.waitForLoadState('networkidle');
     
     // Verify inbox still loads after refresh
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     await expect(page).not.toHaveURL(/\/login/);
     
     console.log('✅ Inbox page refresh works correctly');

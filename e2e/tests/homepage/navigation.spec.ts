@@ -20,7 +20,7 @@ test.describe('Homepage Navigation', () => {
     await page.click('nav a:has-text("Sign In")');
     
     // Should redirect to login page
-    await expect(page).toHaveURL('http://localhost:3000/app/login');
+    await expect(page).toHaveURL('http://localhost:3000/login');
     
     // Check if login form is visible
     await expect(page.locator('form')).toBeVisible();

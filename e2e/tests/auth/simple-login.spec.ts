@@ -40,7 +40,7 @@ test.describe('Simple Login Test', () => {
     
     // Verify we can access inbox
     await expect(page).toHaveURL(/\/inbox/);
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Inbox")')).toBeVisible();
     
     // Take a screenshot
     await page.screenshot({ path: 'inbox-access.png' });
