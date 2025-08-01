@@ -1,315 +1,170 @@
-// MessageRow component for individual messages
+// 🔧 FIXED MESSAGE ROW - CAMPFIRE V2
+// Updated to use unified types and camelCase properties
 
-import { Check, Checks, Clock, Download, File, Image, Robot, Smiley, User, Warning } from "@phosphor-icons/react";
-import * as React from "react";
-import { memo, useEffect, useRef, useState } from "react";
-import { quickReactionEmojis } from "../constants/messageTemplates";
-import type { FileAttachment, MessageRowProps } from "../types";
+import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import type { Conversation, Message } from '@/types/unified';
 
-/**
- * Individual message row component with memoization
- */
-export const MessageRow: React.FC<MessageRowProps> = memo(
-  ({ message, selectedConversation, hoveredMessage, setHoveredMessage, style }) => {
-    const [showReactions, setShowReactions] = useState(false);
-    const messageRef = useRef<HTMLDivElement>(null);
-    const isAgent = message.sender_type === "agent";
-    const isAI = message.sender_type === "ai";
-    const isCustomer = message.sender_type === "customer" || message.sender_type === "visitor";
+interface MessageRowProps {
+  message: Message;
+  selectedConversation?: Conversation;
+  hoveredMessage?: string | null;
+  setHoveredMessage: (id: string | null) => void;
+  style?: React.CSSProperties;
+}
 
-    // Initialize read receipts hook
-    const readReceiptsHook = selectedConversation
-      ? {
-          getReadReceiptStatus: (messageId: string) => ({
-            messageId,
-            status: message.read_status || "sent",
-            readBy: [],
-          }),
-          observeMessage: (element: HTMLElement, messageId: string) => () => {},
-          isReadByUser: (messageId: string) => false,
-        }
-      : null;
+export const MessageRow: React.FC<MessageRowProps> = ({
+  message,
+  selectedConversation,
+  hoveredMessage,
+  setHoveredMessage,
+  style,
+}) => {
+  const isHovered = hoveredMessage === message.id;
+  const isFromCustomer = message.senderType === 'customer' || message.senderType === 'visitor';
+  const isFromAgent = message.senderType === 'agent' || message.senderType === 'user';
+  const isFromAI = message.senderType === 'ai' || message.senderType === 'rag';
 
-    // Use read receipts hook if available (import dynamically to avoid issues)
-    const { useReadReceipts } = React.useMemo(() => {
-      try {
-        return require("@/hooks/useReadReceipts");
-      } catch {
-        return { useReadReceipts: () => readReceiptsHook };
-      }
-    }, [readReceiptsHook]);
+  // Get sender name - using camelCase properties
+  const customerName = selectedConversation?.customerName || message.senderName || 'Customer';
+  const customerEmail = selectedConversation?.customerEmail || message.senderEmail || 'customer@example.com';
+  
+  const senderName = isFromCustomer 
+    ? customerName 
+    : message.senderName || (isFromAI ? 'AI Assistant' : 'Agent');
 
-    const readReceipts = selectedConversation
-      ? useReadReceipts({
-          conversationId: selectedConversation.id,
-          organizationId: "", // Not available in this Conversation type
-          autoMarkAsRead: isCustomer, // Only auto-mark customer messages as read
-          enableRealtime: true,
-        })
-      : readReceiptsHook;
+  const senderEmail = isFromCustomer 
+    ? customerEmail 
+    : message.senderEmail || '';
 
-    // Format timestamp with error handling
-    const formatTime = (timestamp: string) => {
-      try {
-        const date = new Date(timestamp);
-        if (isNaN(date.getTime())) {
-          return "Invalid time";
-        }
-        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      } catch (error) {
-        return "Invalid time";
-      }
-    };
+  // Format timestamp
+  const formattedTime = formatDistanceToNow(new Date(message.createdAt), { addSuffix: true });
 
-    // Enhanced read receipt indicator with real-time updates
-    const getReadReceiptIndicator = () => {
-      if (!isAgent && !isAI) return null; // Only show for agent/AI messages
+  // Get avatar initials
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
-      // Get real-time read receipt status
-      const receiptStatus = readReceipts?.getReadReceiptStatus?.(message.id.toString()) || {
-        status: message.read_status || "sent",
-        readBy: [],
-      };
+  // Get avatar color based on sender type
+  const getAvatarColor = () => {
+    if (isFromCustomer) return 'bg-blue-500';
+    if (isFromAI) return 'bg-purple-500';
+    return 'bg-green-500';
+  };
 
-      const status = receiptStatus.status;
-      const readByCount = receiptStatus.readBy?.length || 0;
+  // Get message status badge
+  const getStatusBadge = () => {
+    if (message.readStatus === 'read') {
+      return <Badge variant="secondary" className="text-xs">Read</Badge>;
+    }
+    if (message.readStatus === 'delivered') {
+      return <Badge variant="outline" className="text-xs">Delivered</Badge>;
+    }
+    return <Badge variant="outline" className="text-xs">Sent</Badge>;
+  };
 
-      switch (status) {
-        case "read":
-          return (
-            <div
-              className="text-ds-brand flex items-center"
-              title={`Read${readByCount > 0 ? ` by ${readByCount} user${readByCount > 1 ? "s" : ""}` : ""}`}
-            >
-              <Checks className="h-3 w-3" />
-              {readByCount > 1 && <span className="ml-1 text-tiny font-medium">{readByCount}</span>}
-            </div>
-          );
-        case "delivered":
-          return (
-            <div className="flex items-center text-gray-400" title="Delivered">
-              <Check className="h-3 w-3" />
-            </div>
-          );
-        default:
-          return (
-            <div className="flex items-center text-gray-300" title="Sent">
-              <Clock className="h-3 w-3" />
-            </div>
-          );
-      }
-    };
+  return (
+    <div
+      className={cn(
+        'flex items-start space-x-3 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer',
+        isHovered && 'bg-blue-50',
+        isFromCustomer ? 'justify-start' : 'justify-end'
+      )}
+      onMouseEnter={() => setHoveredMessage(message.id)}
+      onMouseLeave={() => setHoveredMessage(null)}
+      style={style}
+      data-testid={`message-row-${message.id}`}
+    >
+      {/* Avatar */}
+      <div className={cn('flex-shrink-0', isFromCustomer ? 'order-1' : 'order-2')}>
+        <Avatar className="h-8 w-8">
+          <AvatarImage src="" alt={senderName} />
+          <AvatarFallback className={getAvatarColor()}>
+            {getInitials(senderName)}
+          </AvatarFallback>
+        </Avatar>
+      </div>
 
-    // Get sender avatar
-    const getSenderAvatar = () => {
-      if (isAI) {
-        return (
-          <div className="flex h-8 w-8 items-center justify-center rounded-ds-full bg-purple-100">
-            <Robot className="h-5 w-5 text-purple-600" />
+      {/* Message Content */}
+      <div className={cn('flex-1 min-w-0', isFromCustomer ? 'order-2' : 'order-1')}>
+        <div className="flex items-center space-x-2 mb-1">
+          <span className="text-sm font-medium text-gray-900" data-testid="message-sender-name">
+            {senderName}
+          </span>
+          {senderEmail && (
+            <span className="text-xs text-gray-500" data-testid="message-sender-email">
+              {senderEmail}
+            </span>
+          )}
+          <span className="text-xs text-gray-400" data-testid="message-timestamp">
+            {formattedTime}
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          {/* Message Text */}
+          <div className="text-sm text-gray-900 whitespace-pre-wrap" data-testid="message-content">
+            {message.content}
           </div>
-        );
-      }
 
-      if (isAgent) {
-        return (
-          <div className="flex h-8 w-8 items-center justify-center rounded-ds-full bg-blue-100">
-            <User className="h-5 w-5 text-blue-600" />
-          </div>
-        );
-      }
-
-      // Customer avatar
-      const customerName = selectedConversation?.customer_name || message.sender_name;
-      const customerEmail = selectedConversation?.customer_email || message.sender_name;
-      return (
-        <img
-          src={(() => {
-            const { getAvatarPath } = require("@/lib/utils/avatar");
-            return getAvatarPath(customerEmail || customerName, "customer");
-          })()}
-          alt={customerName}
-          className="h-8 w-8 rounded-ds-full"
-        />
-      );
-    };
-
-    // Get message bubble styling
-    const getBubbleStyle = () => {
-      if (isAgent || isAI) {
-        return "bg-blue-600 text-white ml-auto max-w-xs lg:max-w-md xl:max-w-lg";
-      }
-      return "bg-gray-100 text-gray-900 mr-auto max-w-xs lg:max-w-md xl:max-w-lg";
-    };
-
-    // Render file attachment
-    const renderAttachment = (attachment: FileAttachment) => {
-      const isImage = attachment.type.startsWith("image/");
-      const isUploading = attachment.uploadStatus === "uploading";
-      const hasError = attachment.uploadStatus === "error";
-
-      return (
-        <div key={attachment.id} className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-spacing-sm" data-testid="message-attachment">
-          <div className="flex items-center space-x-spacing-sm" data-testid="attachment-header">
-            {isImage ? (
-              <Image
-                className={`h-5 w-5 ${hasError ? "text-[var(--fl-color-danger)]" : "text-[var(--fl-color-text-muted)]"}`}
-                data-testid="attachment-image-icon"
-              />
-            ) : (
-              <File
-                className={`h-5 w-5 ${hasError ? "text-[var(--fl-color-danger)]" : "text-[var(--fl-color-text-muted)]"}`}
-                data-testid="attachment-file-icon"
-              />
+          {/* Message Metadata */}
+          <div className="flex items-center space-x-2">
+            {getStatusBadge()}
+            
+            {message.aiConfidence && (
+              <Badge variant="outline" className="text-xs">
+                AI: {Math.round(message.aiConfidence * 100)}%
+              </Badge>
             )}
-            <div className="min-w-0 flex-1" data-testid="attachment-info">
-              <p className="truncate text-sm font-medium text-gray-900" data-testid="attachment-name">{attachment.name}</p>
-              <p className="text-tiny text-[var(--fl-color-text-muted)]" data-testid="attachment-size">{(attachment.size / 1024).toFixed(1)} KB</p>
-            </div>
 
-            {isUploading && <div className="h-4 w-4 animate-spin rounded-ds-full border-b-2 border-blue-600" data-testid="attachment-uploading"></div>}
+            {message.messageType !== 'text' && (
+              <Badge variant="outline" className="text-xs">
+                {message.messageType}
+              </Badge>
+            )}
 
-            {hasError && (
-              <div title="Upload failed" data-testid="attachment-error">
-                <Warning className="h-4 w-4 text-[var(--fl-color-danger)]" />
+            {message.isDeleted && (
+              <Badge variant="destructive" className="text-xs">
+                Deleted
+              </Badge>
+            )}
+          </div>
+
+          {/* AI Sources */}
+          {message.aiSources && message.aiSources.length > 0 && (
+            <div className="mt-2 p-2 bg-gray-50 rounded-md">
+              <div className="text-xs font-medium text-gray-700 mb-1">AI Sources:</div>
+              <div className="space-y-1">
+                {message.aiSources.map((source: any, index: number) => (
+                  <div key={index} className="text-xs text-gray-600">
+                    • {source.title || source.url || 'Unknown source'}
+                  </div>
+                ))}
               </div>
-            )}
-
-            {attachment.url && !isUploading && !hasError && (
-              <button
-                onClick={() => window.open(attachment.url, "_blank")}
-                className="hover:text-foreground spacing-1 text-gray-400"
-                aria-label="Download file"
-                data-testid="attachment-download"
-              >
-                <Download className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Image preview */}
-          {isImage && attachment.preview && (
-            <div className="mt-2" data-testid="attachment-preview">
-              <img
-                src={attachment.preview}
-                alt={attachment.name}
-                className="h-auto max-h-48 max-w-full rounded-ds-lg object-cover"
-                data-testid="attachment-image"
-              />
             </div>
           )}
-        </div>
-      );
-    };
 
-    // Handle reaction click
-    const handleReaction = (emoji: string) => {
-      // In a real app, this would save the reaction to the database
-
-      setShowReactions(false);
-    };
-
-    // Setup intersection observer for auto-marking as read
-    useEffect(() => {
-      if (messageRef.current && readReceipts?.observeMessage && isCustomer) {
-        const cleanup = readReceipts.observeMessage(messageRef.current, message.id.toString());
-        return cleanup;
-      }
-    }, [readReceipts, message.id, isCustomer]);
-
-    return (
-      <div style={style} data-testid="message-row">
-        <div
-          ref={messageRef}
-          className={`flex space-x-3 spacing-4 transition-colors hover:bg-[var(--fl-color-background-subtle)] p-2 ${
-            isAgent || isAI ? "flex-row-reverse space-x-reverse" : ""
-          }`}
-          onMouseEnter={() => setHoveredMessage(message.id)}
-          onMouseLeave={() => setHoveredMessage(null)}
-          data-testid="message-content"
-        >
-          {/* Avatar */}
-          <div className="flex-shrink-0" data-testid="message-avatar">{getSenderAvatar()}</div>
-
-          {/* Message content */}
-          <div className="min-w-0 flex-1" data-testid="message-body">
-            {/* Sender name and timestamp */}
-            <div className={`mb-1 flex items-center space-x-2 ${isAgent || isAI ? "justify-end" : ""}`} data-testid="message-header">
-              <span className="text-sm font-medium text-gray-900" data-testid="message-sender">
-                {isAI ? "AI Assistant" : message.sender_name}
-              </span>
-              <span className="flex items-center gap-1 text-tiny text-[var(--fl-color-text-muted)]" data-testid="message-timestamp">
-                {formatTime(message.created_at)}
-                {getReadReceiptIndicator()}
-              </span>
-            </div>
-
-            {/* Message bubble */}
-            <div className={`rounded-ds-lg px-4 py-2 ${getBubbleStyle()}`} data-testid="message-bubble">
-              <p className="whitespace-pre-wrap break-words text-sm" data-testid="message-text">{message.content}</p>
-
-              {/* Attachments */}
-              {message.attachments && message.attachments.length > 0 && (
-                <div className="space-y-spacing-sm" data-testid="message-attachments">{message.attachments.map(renderAttachment)}</div>
-              )}
-            </div>
-
-            {/* Message actions (show on hover) */}
-            {hoveredMessage === message.id && (
-              <div className={`mt-2 flex items-center space-x-2 ${isAgent || isAI ? "justify-end" : ""}`} data-testid="message-actions">
-                {/* Quick reactions */}
-                <div className="flex items-center space-x-1" data-testid="message-quick-reactions">
-                  {quickReactionEmojis.map((emoji) => (
-                    <button
-                      key={emoji}
-                      onClick={() => handleReaction(emoji)}
-                      className="rounded spacing-1 text-sm transition-colors hover:bg-gray-200"
-                      title={`React with ${emoji}`}
-                      data-testid={`message-reaction-${emoji}`}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-
-                  {/* More reactions button */}
-                  <button
-                    onClick={() => setShowReactions(!showReactions)}
-                    className="hover:text-foreground rounded spacing-1 text-gray-400 transition-colors hover:bg-gray-200"
-                    aria-label="More reactions"
-                    data-testid="message-more-reactions"
-                  >
-                    <Smiley className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Extended reactions panel */}
-            {showReactions && (
-              <div className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-spacing-sm shadow-card-base" data-testid="message-reactions-panel">
-                <div className="grid grid-cols-8 gap-1" data-testid="message-reactions-grid">
-                  {["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰"].map(
-                    (emoji) => (
-                      <button
-                        key={emoji}
-                        onClick={() => handleReaction(emoji)}
-                        className="hover:bg-background rounded p-spacing-sm text-base transition-colors"
-                        title={`React with ${emoji}`}
-                        data-testid={`message-extended-reaction-${emoji}`}
-                      >
-                        {emoji}
-                      </button>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Message Metadata */}
+          {message.metadata && Object.keys(message.metadata).length > 0 && (
+            <details className="mt-2">
+              <summary className="text-xs text-gray-500 cursor-pointer">
+                Metadata
+              </summary>
+              <pre className="text-xs text-gray-600 mt-1 p-2 bg-gray-50 rounded overflow-auto">
+                {JSON.stringify(message.metadata, null, 2)}
+              </pre>
+            </details>
+          )}
         </div>
       </div>
-    );
-  }
-);
-
-MessageRow.displayName = "MessageRow";
-
-export default MessageRow;
+    </div>
+  );
+};

@@ -1,9 +1,52 @@
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+/**
+ * Widget API Integration Tests
+ * Tests widget-specific endpoints for conversation creation, messaging, and authentication
+ */
 
-// Mock fetch for API testing
-global.fetch = jest.fn();
+import { createMocks } from 'node-mocks-http';
+import { NextRequest } from 'next/server';
 
-const mockFetch = fetch as jest.MockedFunction<typeof fetch>;
+// Mock widget authentication
+jest.mock('@/lib/auth/widget-supabase-auth', () => ({
+  optionalWidgetAuth: (handler: any) => handler,
+  getOrganizationId: jest.fn().mockReturnValue('test-org-id')
+}));
+
+// Mock Supabase service role client
+jest.mock('@/lib/supabase/service-role-server', () => ({
+  createServiceRoleClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      insert: jest.fn().mockReturnThis(),
+      update: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockReturnThis(),
+      single: jest.fn().mockResolvedValue({
+        data: {
+          id: 'test-conversation-id',
+          organization_id: 'test-org-id',
+          customer_email: 'test@example.com',
+          status: 'open'
+        },
+        error: null
+      }),
+      order: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockResolvedValue({
+        data: [
+          {
+            id: 'test-message-id',
+            content: 'Test message',
+            sender_type: 'customer',
+            created_at: new Date().toISOString()
+          }
+        ],
+        error: null
+      })
+    })),
+    channel: jest.fn(() => ({
+      send: jest.fn().mockResolvedValue({ error: null })
+    }))
+  }))
+}));
 
 describe('Widget API Integration Tests', () => {
   const TEST_ORG_ID = 'b5e80170-004c-4e82-a88c-3e2166b169dd';

@@ -1,116 +1,152 @@
+// 🔧 FIXED WIDGET TYPING INDICATORS API - CAMPFIRE V2
+// Updated to use unified types and proper error handling
+
 import { NextRequest, NextResponse } from 'next/server';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
+import { createClient } from '@/lib/supabase/server';
 
-// Widget typing indicator API - handles real-time typing state
+interface TypingIndicatorRequest {
+  conversationId: string;
+  isTyping: boolean;
+  userId?: string;
+  userName?: string;
+}
 
-export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { conversationId, isTyping, userId, userName } = body;
-    const organizationId = getOrganizationId(request, auth);
+    const organizationId = request.headers.get('x-organization-id');
 
-    if (!conversationId || !organizationId) {
+    if (!organizationId) {
       return NextResponse.json(
-        { error: 'Missing required parameters', code: 'VALIDATION_ERROR' },
+        { error: 'Organization ID header is required' },
         { status: 400 }
       );
     }
 
-    // Broadcast typing indicator to real-time channels
-    try {
-      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    const body: TypingIndicatorRequest = await request.json();
 
-      const typingPayload = {
-        conversationId,
-        organizationId,
-        userId: userId || 'visitor',
-        userName: userName || 'You',
-        isTyping,
-        timestamp: new Date().toISOString(),
-        source: 'widget'
-      };
-
-      // Broadcast to conversation-specific channel
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
-        isTyping ? UNIFIED_EVENTS.TYPING_STARTED : UNIFIED_EVENTS.TYPING_STOPPED,
-        typingPayload
+    // Validate required fields
+    if (!body.conversationId || typeof body.isTyping !== 'boolean') {
+      return NextResponse.json(
+        { error: 'Conversation ID and typing status are required' },
+        { status: 400 }
       );
+    }
 
-      console.log('[Widget Typing API] Typing indicator broadcast sent:', isTyping);
-    } catch (broadcastError) {
-      console.error('[Widget Typing API] Real-time broadcast failed:', broadcastError);
-      // Don't fail the request if broadcast fails
+    // Create Supabase client
+    const supabase = createClient();
+
+    // Generate a unique ID for the typing indicator
+    const typingId = crypto.randomUUID();
+
+    if (body.isTyping) {
+      // Create or update typing indicator
+      const { error } = await supabase
+        .from('typing_indicators')
+        .upsert({
+          id: typingId,
+          conversation_id: body.conversationId,
+          organization_id: organizationId,
+          user_id: body.userId || 'anonymous',
+          user_name: body.userName || 'Anonymous',
+          is_typing: true,
+          last_activity: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) {
+        console.error('Database error:', error);
+        return NextResponse.json(
+          { error: 'Failed to update typing indicator' },
+          { status: 500 }
+        );
+      }
+    } else {
+      // Remove typing indicator
+      const { error } = await supabase
+        .from('typing_indicators')
+        .delete()
+        .eq('conversation_id', body.conversationId)
+        .eq('organization_id', organizationId)
+        .eq('user_id', body.userId || 'anonymous');
+
+      if (error) {
+        console.error('Database error:', error);
+        return NextResponse.json(
+          { error: 'Failed to remove typing indicator' },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({
       success: true,
-      isTyping,
-      timestamp: new Date().toISOString()
+      isTyping: body.isTyping,
     });
 
   } catch (error) {
-    console.error('[Widget Typing API] Unexpected error:', error);
+    console.error('Widget typing indicator error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
-});
+}
 
-export const DELETE = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
-    const userId = searchParams.get('userId');
-    const organizationId = getOrganizationId(request, auth);
+    const organizationId = searchParams.get('organizationId');
 
     if (!conversationId || !organizationId) {
       return NextResponse.json(
-        { error: 'Missing required parameters', code: 'VALIDATION_ERROR' },
+        { error: 'Conversation ID and Organization ID are required' },
         { status: 400 }
       );
     }
 
-    // Broadcast typing stopped to real-time channels
-    try {
-      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    // Create Supabase client
+    const supabase = createClient();
 
-      const typingPayload = {
-        conversationId,
-        organizationId,
-        userId: userId || 'visitor',
-        userName: 'You',
-        isTyping: false,
-        timestamp: new Date().toISOString(),
-        source: 'widget'
-      };
+    // Get typing indicators for the conversation
+    const { data: typingIndicators, error } = await supabase
+      .from('typing_indicators')
+      .select('*')
+      .eq('conversation_id', conversationId)
+      .eq('organization_id', organizationId)
+      .eq('is_typing', true);
 
-      // Broadcast to conversation-specific channel
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
-        UNIFIED_EVENTS.TYPING_STOPPED,
-        typingPayload
+    if (error) {
+      console.error('Database error:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch typing indicators' },
+        { status: 500 }
       );
-
-      console.log('[Widget Typing API] Typing stopped broadcast sent');
-    } catch (broadcastError) {
-      console.error('[Widget Typing API] Real-time broadcast failed:', broadcastError);
-      // Don't fail the request if broadcast fails
     }
 
+    // Map to API format
+    const mappedIndicators = (typingIndicators || []).map(indicator => ({
+      id: indicator.id,
+      conversationId: indicator.conversation_id,
+      userId: indicator.user_id,
+      userName: indicator.user_name,
+      isTyping: indicator.is_typing,
+      lastActivity: indicator.last_activity,
+      createdAt: indicator.created_at,
+      updatedAt: indicator.updated_at,
+    }));
+
     return NextResponse.json({
-      success: true,
-      isTyping: false,
-      timestamp: new Date().toISOString()
+      typingIndicators: mappedIndicators,
+      count: mappedIndicators.length,
     });
 
   } catch (error) {
-    console.error('[Widget Typing API] Unexpected error:', error);
+    console.error('Widget typing indicators fetch error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
-});
+}

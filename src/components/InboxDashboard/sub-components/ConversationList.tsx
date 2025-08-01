@@ -1,12 +1,11 @@
-// ConversationList component with virtualization
+// 🔧 FIXED CONVERSATION LIST - CAMPFIRE V2
+// Updated to use unified types and camelCase properties
 
-import { ChatCircle, MagnifyingGlass } from "@phosphor-icons/react";
-import * as React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { FixedSizeList as List } from "react-window";
-// Styles now handled by design-system.css
-import type { Conversation } from "../types";
-import { ConversationRow } from "./ConversationRow";
+import React, { useMemo, useRef, useState } from 'react';
+import { FixedSizeList as List } from 'react-window';
+import { ChatCircle, MagnifyingGlass } from 'lucide-react';
+import { ConversationRow } from './ConversationRow';
+import type { Conversation } from '@/types/unified';
 
 interface ConversationListProps {
   conversations: Conversation[];
@@ -18,9 +17,6 @@ interface ConversationListProps {
   isLoading: boolean;
 }
 
-/**
- * Virtualized conversation list component
- */
 export const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
   selectedConversationId,
@@ -30,40 +26,22 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   priorityFilter,
   isLoading,
 }) => {
+  const [activeFilter, setActiveFilter] = useState<'all' | 'unread' | 'unassigned' | 'ai-managed' | 'human-managed'>('all');
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState(600);
 
-  // Measure container height for virtualization
-  useEffect(() => {
-    const updateHeight = () => {
-      if (containerRef.current) {
-        // Get the actual available height by subtracting the filter bar height
-        const container = containerRef.current;
-        const filterBar = container.querySelector('.filter-bar');
-        const filterBarHeight = filterBar ? filterBar.clientHeight : 60; // Default filter bar height
-        const availableHeight = container.clientHeight - filterBarHeight;
-        setContainerHeight(Math.max(availableHeight, 400)); // Minimum height of 400px
-      }
-    };
+  // Virtualization setup
+  const itemHeight = 80;
+  const containerHeight = 600; // Adjust based on your layout
 
-    updateHeight();
-    window.addEventListener("resize", updateHeight);
-    return () => window.removeEventListener("resize", updateHeight);
-  }, []);
-
-  // Local filter state for the new filter bar
-  const [activeFilter, setActiveFilter] = useState<"all" | "unread" | "unassigned" | "ai-managed" | "human-managed">(
-    "all"
-  );
-  // Filter and search conversations
+  // Filter conversations based on search and filters
   const filteredConversations = useMemo(() => {
     return conversations.filter((conv) => {
-      // Search filter
+      // Search filter - using camelCase properties
       const matchesSearch =
         !searchQuery ||
-        conv.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        conv.customer_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        conv.last_message_preview.toLowerCase().includes(searchQuery.toLowerCase());
+        conv.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (conv.lastMessagePreview?.toLowerCase().includes(searchQuery.toLowerCase()) || false);
 
       // Status filter
       const matchesStatus = !statusFilter || conv.status === statusFilter;
@@ -75,13 +53,13 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       const matchesActiveFilter = (() => {
         switch (activeFilter) {
           case "unread":
-            return conv.unread_count > 0;
+            return conv.unreadCount > 0;
           case "unassigned":
-            return !conv.assigned_to_ai;
+            return !conv.assignedToAi;
           case "ai-managed":
-            return conv.assigned_to_ai === true;
+            return conv.assignedToAi === true;
           case "human-managed":
-            return conv.assigned_to_ai === false;
+            return conv.assignedToAi === false;
           case "all":
           default:
             return true;
@@ -92,10 +70,14 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     });
   }, [conversations, searchQuery, statusFilter, priorityFilter, activeFilter]);
 
-  // Sort conversations by last message time
+  // Sort conversations by last message time - using camelCase properties
   const sortedConversations = useMemo(() => {
     return [...filteredConversations].sort(
-      (a, b) => new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
+      (a, b) => {
+        const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+        const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+        return bTime - aTime;
+      }
     );
   }, [filteredConversations]);
 
@@ -157,10 +139,12 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             <button
               key={filter.key}
               onClick={() => setActiveFilter(filter.key as any)}
-              className={`px-3 py-1 rounded-ds-md text-sm font-medium transition-colors ${activeFilter === filter.key
-                  ? "bg-[var(--ds-color-primary-500)] text-white"
-                  : "bg-[var(--ds-color-surface)] text-[var(--ds-color-text)] hover:bg-[var(--ds-color-background-muted)]"
-                }`}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                activeFilter === filter.key
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              }`}
+              data-testid={`filter-${filter.key}`}
             >
               {filter.label}
             </button>
@@ -171,7 +155,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       {/* Conversation list */}
       <div className="flex-1 overflow-hidden">
         {isLoading ? (
-          <div className="space-y-2 spacing-4">
+          <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
               <LoadingSkeleton key={i} />
             ))}
@@ -179,21 +163,18 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         ) : sortedConversations.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="h-full">
-            <List
-              height={containerHeight}
-              itemCount={sortedConversations.length}
-              itemSize={180}
-              width="100%"
-              className="conversation-list-virtualized"
-            >
-              {Row}
-            </List>
-          </div>
+          <List
+            height={containerHeight}
+            itemCount={sortedConversations.length}
+            itemSize={itemHeight}
+            width="100%"
+            className="conversation-list"
+            data-testid="conversation-list"
+          >
+            {Row}
+          </List>
         )}
       </div>
     </div>
   );
 };
-
-export default ConversationList;

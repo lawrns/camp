@@ -1,9 +1,11 @@
+// 🔧 FIXED AI HANDOVER HOOK - CAMPFIRE V2
+// Updated to handle missing organizationId and provide better error handling
+
 "use client";
 
 import { supabase } from "@/lib/supabase/consolidated-exports";
 import { useCallback, useEffect, useState } from "react";
-
-import { useAuthStore } from "../store/domains/auth/auth-store"; // Adjust path as needed
+import { useAuthStore } from "../store/domains/auth/auth-store";
 
 interface AIHandoverState {
   isAIActive: boolean;
@@ -33,7 +35,7 @@ export type AIHandoverHook = AIHandoverState & AIHandoverActions;
  * Complete AI Handover Hook
  * Provides full AI handover functionality using existing API infrastructure
  */
-export function useAIHandover(conversationId: string, organizationId: string, userId?: string): AIHandoverHook {
+export function useAIHandover(conversationId: string, organizationId?: string, userId?: string): AIHandoverHook {
   const [state, setState] = useState<AIHandoverState>({
     isAIActive: false,
     confidence: 0.85,
@@ -53,23 +55,28 @@ export function useAIHandover(conversationId: string, organizationId: string, us
   const getAuthHeaders = async () => {
     try {
       const accessToken = useAuthStore.getState().session?.access_token;
+      const currentOrgId = organizationId || useAuthStore.getState().organizationId;
+
+      if (!currentOrgId) {
+        throw new Error("Organization ID is required");
+      }
 
       return {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
-        "X-Organization-ID": organizationId,
+        "X-Organization-ID": currentOrgId,
       };
     } catch (error) {
-      return {
-        "Content-Type": "application/json",
-        "X-Organization-ID": organizationId,
-      };
+      console.error("Failed to get auth headers:", error);
+      throw new Error("Organization ID is required");
     }
   };
 
   // Check current AI status on mount
   useEffect(() => {
-    void checkAIStatus();
+    if (conversationId && organizationId) {
+      void checkAIStatus();
+    }
   }, [conversationId, organizationId]);
 
   const checkAIStatus = async () => {
@@ -89,17 +96,30 @@ export function useAIHandover(conversationId: string, organizationId: string, us
         if (conversation) {
           setState((prev) => ({
             ...prev,
-            isAIActive: conversation.assignedtoai || conversation.assigned_to === "ai" || false,
-            confidence: conversation.ai_confidence_score || 0.85,
-            sessionId: conversation.ai_handover_session_id || null,
+            isAIActive: conversation.assignedToAi || conversation.assigned_to === "ai" || false,
+            confidence: conversation.aiConfidence || 0.85,
+            sessionId: conversation.aiHandoverSessionId || null,
           }));
         }
       }
-    } catch (error) { }
+    } catch (error) {
+      console.error("Failed to check AI status:", error);
+    }
   };
 
   const startHandover = useCallback(
     async (persona: string = "friendly") => {
+      if (!organizationId) {
+        const error = "Organization ID is required";
+        setState((prev) => ({
+          ...prev,
+          error,
+          isProcessing: false,
+          processingProgress: 0,
+        }));
+        throw new Error(error);
+      }
+
       setState((prev) => ({ ...prev, isProcessing: true, error: null, processingProgress: 10 }));
 
       try {
@@ -183,13 +203,22 @@ export function useAIHandover(conversationId: string, organizationId: string, us
   );
 
   const stopHandover = useCallback(async () => {
-    setState((prev) => ({ ...prev, isProcessing: true, error: null, processingProgress: 10 }));
+    if (!organizationId) {
+      const error = "Organization ID is required";
+      setState((prev) => ({
+        ...prev,
+        error,
+        isProcessing: false,
+        processingProgress: 0,
+      }));
+      throw new Error(error);
+    }
+
+    setState((prev) => ({ ...prev, isProcessing: true, error: null }));
 
     try {
       const headers = await getAuthHeaders();
-      setState((prev) => ({ ...prev, processingProgress: 50 }));
 
-      // Use the AI stop endpoint
       const response = await fetch("/api/ai?action=handover", {
         method: "POST",
         headers,
@@ -198,12 +227,9 @@ export function useAIHandover(conversationId: string, organizationId: string, us
           conversationId,
           organizationId,
           action: "stop",
-          reason: "agent_takeover",
-          targetOperatorId: userId,
+          reason: "agent_stopped_ai_handover",
         }),
       });
-
-      setState((prev) => ({ ...prev, processingProgress: 80 }));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
@@ -215,16 +241,9 @@ export function useAIHandover(conversationId: string, organizationId: string, us
         ...prev,
         isAIActive: false,
         sessionId: null,
-        confidence: 0,
         isProcessing: false,
-        processingProgress: 100,
-        currentSource: null,
+        processingProgress: 0,
       }));
-
-      // Clear progress after a delay
-      setTimeout(() => {
-        setState((prev) => ({ ...prev, processingProgress: 0 }));
-      }, 1000);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Stop handover failed";
       setState((prev) => ({
@@ -235,7 +254,7 @@ export function useAIHandover(conversationId: string, organizationId: string, us
       }));
       throw error;
     }
-  }, [conversationId, organizationId, userId]);
+  }, [conversationId, organizationId]);
 
   const toggleAI = useCallback(async () => {
     if (state.isAIActive) {
@@ -245,48 +264,54 @@ export function useAIHandover(conversationId: string, organizationId: string, us
     }
   }, [state.isAIActive, startHandover, stopHandover]);
 
-  const updatePersona = useCallback(async (persona: string) => {
-    try {
-      // For now, just update the confidence based on persona
-      const confidenceMap: Record<string, number> = {
-        friendly: 0.85,
-        professional: 0.9,
-        supportive: 0.88,
-        technical: 0.92,
-      };
-
-      setState((prev) => ({
-        ...prev,
-        confidence: confidenceMap[persona] || 0.85,
-      }));
-    } catch (error) { }
-  }, []);
-
   const updateConfidence = useCallback((confidence: number) => {
-    setState((prev) => ({
-      ...prev,
-      confidence: Math.max(0, Math.min(1, confidence)),
-    }));
+    setState((prev) => ({ ...prev, confidence }));
   }, []);
 
   const setKnowledgeSource = useCallback((source: string) => {
-    setState((prev) => ({
-      ...prev,
-      currentSource: source,
-    }));
+    setState((prev) => ({ ...prev, currentSource: source }));
   }, []);
 
-  // REMOVED: Simulated metrics updates polling
-  // This eliminates the 30-second polling interval that was causing unnecessary updates
-  // Real-time metrics will be handled by actual event-driven updates
+  const updatePersona = useCallback(async (persona: string) => {
+    if (!state.isAIActive) {
+      throw new Error("AI must be active to update persona");
+    }
+
+    try {
+      const headers = await getAuthHeaders();
+
+      const response = await fetch("/api/ai?action=handover", {
+        method: "POST",
+        headers,
+        credentials: "include",
+        body: JSON.stringify({
+          conversationId,
+          organizationId,
+          action: "update_persona",
+          persona,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update persona");
+      }
+
+      // Update local state if needed
+      setState((prev) => ({ ...prev }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to update persona";
+      setState((prev) => ({ ...prev, error: errorMessage }));
+      throw error;
+    }
+  }, [conversationId, organizationId, state.isAIActive]);
 
   return {
     ...state,
+    startHandover,
+    stopHandover,
     toggleAI,
     updateConfidence,
     setKnowledgeSource,
-    startHandover,
-    stopHandover,
     updatePersona,
   };
 }

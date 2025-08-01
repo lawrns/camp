@@ -1,176 +1,137 @@
+// 🔧 FIXED WIDGET MESSAGES API - CAMPFIRE V2
+// Updated to use unified types and proper error handling
+
 import { NextRequest, NextResponse } from 'next/server';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { supabase } from '@/lib/supabase';
-import { mapDbMessageToApi, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
-import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
+import { createClient } from '@/lib/supabase/server';
+import { mapApiMessageToDbInsert, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
+import type { MessageCreateRequest } from '@/types/unified';
 
-// Widget authentication using unified Supabase sessions
-
-export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
-    const organizationId = getOrganizationId(request, auth);
+    const organizationId = searchParams.get('organizationId');
 
     if (!conversationId || !organizationId) {
       return NextResponse.json(
-        { error: 'Missing required parameters', code: 'VALIDATION_ERROR' },
+        { error: 'Conversation ID and Organization ID are required' },
         { status: 400 }
       );
     }
 
-    // Initialize Supabase service role client to bypass RLS for widget operations
-    const supabaseClient = supabase.admin();
+    // Create Supabase client
+    const supabase = createClient();
 
-    // Get messages with proper organization context and correct field names
-    const { data: messages, error } = await supabaseClient
+    // Get messages for the conversation
+    const { data: messages, error } = await supabase
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
       .eq('organization_id', organizationId)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true })
+      .limit(100);
 
     if (error) {
-      console.error('[Widget Messages API] Fetch error:', error);
+      console.error('Database error:', error);
       return NextResponse.json(
-        { error: 'Failed to fetch messages', code: 'DATABASE_ERROR' },
+        { error: 'Failed to fetch messages' },
         { status: 500 }
       );
     }
 
-    // Convert snake_case database response to camelCase API response
-    const apiMessages = mapDbMessagesToApi(messages || []);
-    return NextResponse.json(apiMessages);
+    // Map database records to API format
+    const mappedMessages = mapDbMessagesToApi(messages || []);
+
+    return NextResponse.json({
+      messages: mappedMessages,
+      count: mappedMessages.length,
+    });
 
   } catch (error) {
-    console.error('[Widget Messages API] Unexpected error:', error);
+    console.error('Widget messages API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
-});
+}
 
-export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { conversationId, content, senderEmail, senderName, senderType = 'customer' } = body;
-    const organizationId = getOrganizationId(request, auth);
+    const organizationId = request.headers.get('x-organization-id');
 
-    // Validate required fields
-    if (!conversationId || !content || !organizationId) {
+    if (!organizationId) {
       return NextResponse.json(
-        { 
-          error: 'Missing required fields', 
-          code: 'VALIDATION_ERROR',
-          details: {
-            required: ['conversationId', 'content', 'organizationId'],
-            provided: Object.keys(body)
-          }
-        },
+        { error: 'Organization ID header is required' },
         { status: 400 }
       );
     }
 
-    // Initialize Supabase service role client to bypass RLS for widget operations
-    const supabaseClient = supabase.admin();
+    const body: MessageCreateRequest = await request.json();
 
-    // Verify conversation exists and belongs to organization
-    const { data: conversation, error: conversationError } = await supabaseClient
-      .from('conversations')
-      .select('id')
-      .eq('id', conversationId)
-      .eq('organization_id', organizationId)
-      .single();
-
-    if (conversationError || !conversation) {
+    // Validate required fields
+    if (!body.content || !body.conversationId) {
       return NextResponse.json(
-        { error: 'Conversation not found', code: 'NOT_FOUND' },
-        { status: 404 }
+        { error: 'Content and conversation ID are required' },
+        { status: 400 }
       );
     }
 
-    // Create message with proper organization context and correct column names
-    const { data: message, error } = await supabaseClient
+    // Create Supabase client
+    const supabase = createClient();
+
+    // Prepare message data
+    const messageData = mapApiMessageToDbInsert({
+      conversation_id: body.conversationId,
+      content: body.content,
+      sender_type: body.senderType || 'visitor',
+      sender_id: body.senderId,
+      message_type: body.messageType || 'text',
+      metadata: body.metadata || {},
+    }, organizationId);
+
+    // Insert message
+    const { data: message, error } = await supabase
       .from('messages')
-      .insert({
-        conversation_id: conversationId,
-        organization_id: organizationId,
-        content,
-        sender_email: senderEmail,
-        sender_name: senderName,
-        sender_type: senderType === 'customer' ? 'visitor' : senderType, // Map customer to visitor
-        metadata: {
-          source: 'widget',
-          timestamp: new Date().toISOString(),
-        },
-      })
+      .insert(messageData)
       .select()
       .single();
 
     if (error) {
-      console.error('[Widget Messages API] Creation error:', error);
+      console.error('Database error:', error);
       return NextResponse.json(
-        { error: 'Failed to create message', code: 'DATABASE_ERROR' },
+        { error: 'Failed to create message' },
         { status: 500 }
       );
     }
 
-    // CRITICAL: Broadcast message to real-time channels for agent dashboard
-    try {
-      // Use the standardized broadcast function for consistent real-time communication
-      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    // Update conversation's last message timestamp
+    const { error: updateError } = await supabase
+      .from('conversations')
+      .update({
+        last_message_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', body.conversationId);
 
-      const messagePayload = {
-        message,
-        conversationId,
-        organizationId,
-        timestamp: new Date().toISOString(),
-        source: 'widget'
-      };
-
-      // Broadcast to conversation-specific channel (for agents viewing this conversation)
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
-        UNIFIED_EVENTS.MESSAGE_CREATED,
-        messagePayload
-      );
-
-      // Broadcast to organization channel (for conversation list updates)
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.organization(organizationId),
-        UNIFIED_EVENTS.CONVERSATION_UPDATED,
-        {
-          conversationId,
-          organizationId,
-          lastMessage: message,
-          timestamp: new Date().toISOString(),
-          source: 'widget'
-        }
-      );
-
-      // Also broadcast to conversations channel for dashboard conversation list updates
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.conversations(organizationId),
-        UNIFIED_EVENTS.MESSAGE_CREATED,
-        messagePayload
-      );
-
-      console.log('[Widget Messages API] Real-time broadcast sent successfully');
-    } catch (broadcastError) {
-      console.error('[Widget Messages API] Real-time broadcast failed:', broadcastError);
-      // Don't fail the request if broadcast fails, but log it
+    if (updateError) {
+      console.error('Failed to update conversation timestamp:', updateError);
+      // Don't fail the request, just log the error
     }
 
-    // Convert snake_case database response to camelCase API response
-    const apiMessage = mapDbMessageToApi(message);
-    return NextResponse.json(apiMessage, { status: 201 });
+    // Map to API format
+    const mappedMessage = mapDbMessagesToApi([message])[0];
+
+    return NextResponse.json({
+      message: mappedMessage,
+      success: true,
+    });
 
   } catch (error) {
-    console.error('[Widget Messages API] Unexpected error:', error);
+    console.error('Widget message creation error:', error);
     return NextResponse.json(
-      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
-});
+}

@@ -1,197 +1,224 @@
-// ConversationRow component for conversation list
+// 🔧 FIXED CONVERSATION ROW - CAMPFIRE V2
+// Updated to use unified types and camelCase properties
 
-import { Clock, Robot, Tag } from "@phosphor-icons/react";
-import * as React from "react";
-import { memo } from "react";
-import { formatDistanceToNow } from "date-fns";
-import type { ConversationRowProps } from "../types";
+import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import type { Conversation } from '@/types/unified';
 
-/**
- * Individual conversation row component with memoization for performance
- */
-export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversation, selectedId, onSelect, style }) => {
-  const isSelected = conversation.id === selectedId;
-  const isAIAssigned = conversation.assigned_to_ai;
+interface ConversationRowProps {
+  conversation: Conversation;
+  selectedId?: string;
+  onSelect: (conversation: Conversation) => void;
+  style?: React.CSSProperties;
+}
 
-  // Format timestamp with improved error handling and relative time
-  const formatTime = (timestamp: string) => {
+export const ConversationRow: React.FC<ConversationRowProps> = ({
+  conversation,
+  selectedId,
+  onSelect,
+  style,
+}) => {
+  const isSelected = selectedId === conversation.id;
+  const hasUnread = conversation.unreadCount > 0;
+
+  // Format timestamp - using camelCase properties
+  const formatTime = () => {
+    if (!conversation.lastMessageAt) return '';
     try {
-      const date = new Date(timestamp);
-      if (isNaN(date.getTime())) {
-        return "Unknown time";
-      }
-
-      // Check for invalid dates (Unix epoch, etc.)
-      const now = new Date();
-      const diffInMs = now.getTime() - date.getTime();
-      
-      if (diffInMs < 0 || diffInMs > 100 * 365 * 24 * 60 * 60 * 1000) { // More than 100 years
-        return "Unknown time";
-      }
-
-      // Use date-fns for better relative time formatting
-      return formatDistanceToNow(date, { addSuffix: true });
-    } catch (error) {
-      return "Unknown time";
+      return formatDistanceToNow(new Date(conversation.lastMessageAt), { addSuffix: true });
+    } catch {
+      return '';
     }
   };
 
-  // Get priority color using design system tokens
-  const getPriorityColor = (priority?: string) => {
-    switch (priority) {
-      case "urgent":
-        return "text-red-600 bg-red-100";
-      case "high":
-        return "text-orange-600 bg-orange-100";
-      case "medium":
-        return "text-yellow-600 bg-yellow-100";
-      case "low":
-        return "text-green-600 bg-green-100";
-      default:
-        return "text-gray-600 bg-gray-100";
-    }
+  // Get avatar initials
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
-  // Get status color using design system tokens
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "open":
-        return "text-blue-600 bg-blue-100";
-      case "pending":
-        return "text-orange-600 bg-orange-100";
-      case "resolved":
-        return "text-green-600 bg-green-100";
-      case "escalated":
-        return "text-red-600 bg-red-100";
-      default:
-        return "text-gray-600 bg-gray-100";
+  // Get status badge
+  const getStatusBadge = () => {
+    const statusColors = {
+      open: 'bg-green-100 text-green-800',
+      pending: 'bg-yellow-100 text-yellow-800',
+      resolved: 'bg-blue-100 text-blue-800',
+      escalated: 'bg-red-100 text-red-800',
+      closed: 'bg-gray-100 text-gray-800',
+    };
+
+    return (
+      <Badge 
+        variant="secondary" 
+        className={cn('text-xs', statusColors[conversation.status])}
+        data-testid="conversation-status-badge"
+      >
+        {conversation.status}
+      </Badge>
+    );
+  };
+
+  // Get priority badge
+  const getPriorityBadge = () => {
+    const priorityColors = {
+      low: 'bg-gray-100 text-gray-800',
+      medium: 'bg-blue-100 text-blue-800',
+      high: 'bg-orange-100 text-orange-800',
+      urgent: 'bg-red-100 text-red-800',
+    };
+
+    return (
+      <Badge 
+        variant="outline" 
+        className={cn('text-xs', priorityColors[conversation.priority])}
+        data-testid="conversation-priority-badge"
+      >
+        {conversation.priority}
+      </Badge>
+    );
+  };
+
+  // Get assignment badge
+  const getAssignmentBadge = () => {
+    if (conversation.assignedToAi) {
+      return (
+        <Badge variant="outline" className="text-xs bg-purple-100 text-purple-800">
+          AI
+        </Badge>
+      );
     }
+    if (conversation.assignedOperatorId) {
+      return (
+        <Badge variant="outline" className="text-xs bg-blue-100 text-blue-800">
+          Assigned
+        </Badge>
+      );
+    }
+    return (
+      <Badge variant="outline" className="text-xs bg-gray-100 text-gray-800">
+        Unassigned
+      </Badge>
+    );
   };
 
   return (
-    <div style={style} className="relative">
-      <div
-        onClick={() => onSelect(conversation)}
-        className={`conversation-item conversation-card relative z-10 flex cursor-pointer transition-all ${
-          isSelected 
-            ? "border-l-4 border-l-blue-600 bg-blue-50" 
-            : "border-l-4 border-l-transparent hover:bg-gray-50"
-        }`}
-        style={{
-          minHeight: '140px',
-          borderBottom: '1px solid #e5e7eb',
-          backgroundColor: isSelected ? undefined : '#ffffff',
-          padding: '16px'
-        }}
-        onMouseEnter={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.backgroundColor = '#f9fafb';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.backgroundColor = '#ffffff';
-          }
-        }}
-        data-testid="conversation"
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onSelect(conversation);
-          }
-        }}
-        aria-label={`Conversation with ${conversation.customer_name}`}
-      >
-        {/* Main content area with proper flex layout */}
-        <div className="flex items-start gap-3 h-full">
-          {/* Avatar */}
-          <div className="flex-shrink-0">
-            <img
-              src={(() => {
-                const { getAvatarPath } = require("@/lib/utils/avatar");
-                const uniqueId = conversation.id?.toString() || conversation.customer_email || conversation.customer_name;
-                return getAvatarPath(uniqueId, "customer");
-              })()}
-              alt={conversation.customer_name}
-              className="rounded-full cursor-pointer transition-all hover:ring-2 hover:ring-blue-300"
-              style={{
-                height: '40px',
-                width: '40px'
-              }}
-              data-testid="conversation-avatar"
-            />
-          </div>
+    <div
+      className={cn(
+        'flex items-center space-x-3 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer',
+        isSelected && 'bg-blue-50 border-blue-200',
+        hasUnread && 'bg-blue-50'
+      )}
+      onClick={() => onSelect(conversation)}
+      style={style}
+      data-testid={`conversation-row-${conversation.id}`}
+    >
+      {/* Avatar */}
+      <div className="flex-shrink-0">
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={conversation.customerAvatar || ''} alt={conversation.customerName} />
+          <AvatarFallback className="bg-blue-500 text-white">
+            {getInitials(conversation.customerName)}
+          </AvatarFallback>
+        </Avatar>
+      </div>
 
-          {/* Content area with proper flex distribution */}
-          <div className="flex-1 min-w-0 flex flex-col h-full">
-            {/* Top row: Name, badges, and timestamp */}
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <h3 className="truncate font-medium text-gray-900 text-sm" data-testid="conversation-customer-name">
-                  {conversation.customer_name}
-                </h3>
-                <div className="flex-shrink-0">
-                  {isAIAssigned ? (
-                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800" data-testid="conversation-ai-badge">
-                      <Robot className="mr-1 h-3 w-3" data-testid="conversation-ai-icon" />
-                      AI
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800" data-testid="conversation-human-badge">
-                      <Tag className="mr-1 h-3 w-3" data-testid="conversation-human-icon" />
-                      Human
-                    </span>
-                  )}
-                </div>
-              </div>
-              
-              {/* Timestamp */}
-              <div className="flex items-center text-xs text-gray-500 flex-shrink-0">
-                <Clock className="mr-1 h-3 w-3" />
-                {formatTime(conversation.last_message_at)}
-              </div>
-            </div>
-
-            {/* Email */}
-            <p className="truncate text-xs text-gray-500 mb-2" data-testid="conversation-customer-email">
-              {conversation.customer_email}
-            </p>
-
-            {/* Message preview */}
-            <p className="line-clamp-2 text-sm text-gray-700 leading-relaxed mb-3 flex-1" data-testid="conversation-message-preview">
-              {conversation.last_message_preview || "No messages yet"}
-            </p>
-
-            {/* Bottom row: Status badges and unread count */}
-            <div className="flex items-center justify-between gap-2 mt-auto">
-              {/* Status and Priority badges */}
-              <div className="flex items-center gap-1 flex-wrap">
-                <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(conversation.status)}`}>
-                  {conversation.status}
-                </span>
-                {conversation.priority && (
-                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(conversation.priority)}`}>
-                    {conversation.priority}
-                  </span>
-                )}
-              </div>
-
-              {/* Unread count */}
-              {conversation.unread_count > 0 && (
-                <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-full bg-blue-600 px-2 py-1 text-xs font-bold text-white">
-                  {conversation.unread_count > 99 ? "99+" : conversation.unread_count}
-                </span>
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center space-x-2">
+            <span 
+              className={cn(
+                'text-sm font-medium truncate',
+                hasUnread ? 'text-gray-900 font-semibold' : 'text-gray-700'
               )}
-            </div>
+              data-testid="conversation-customer-name"
+            >
+              {conversation.customerName}
+            </span>
+            {hasUnread && (
+              <Badge variant="destructive" className="text-xs">
+                {conversation.unreadCount}
+              </Badge>
+            )}
           </div>
+          <span className="text-xs text-gray-400" data-testid="conversation-timestamp">
+            {formatTime()}
+          </span>
         </div>
+
+        <div className="flex items-center space-x-2 mb-1">
+          <span 
+            className={cn(
+              'text-sm truncate',
+              hasUnread ? 'text-gray-900' : 'text-gray-600'
+            )}
+            data-testid="conversation-customer-email"
+          >
+            {conversation.customerEmail}
+          </span>
+        </div>
+
+        {/* Last message preview */}
+        {conversation.lastMessagePreview && (
+          <div className="flex items-center space-x-2 mb-2">
+            <span 
+              className={cn(
+                'text-sm truncate',
+                hasUnread ? 'text-gray-900 font-medium' : 'text-gray-500'
+              )}
+              data-testid="conversation-last-message"
+            >
+              {conversation.lastMessagePreview}
+            </span>
+          </div>
+        )}
+
+        {/* Badges */}
+        <div className="flex items-center space-x-2">
+          {getStatusBadge()}
+          {getPriorityBadge()}
+          {getAssignmentBadge()}
+          
+          {conversation.hasAttachments && (
+            <Badge variant="outline" className="text-xs">
+              📎
+            </Badge>
+          )}
+          
+          {conversation.messageCount > 0 && (
+            <Badge variant="outline" className="text-xs">
+              {conversation.messageCount} messages
+            </Badge>
+          )}
+        </div>
+
+        {/* Subject */}
+        {conversation.subject && (
+          <div className="mt-1">
+            <span className="text-xs text-gray-500" data-testid="conversation-subject">
+              {conversation.subject}
+            </span>
+          </div>
+        )}
+
+        {/* Tags */}
+        {conversation.tags && conversation.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {conversation.tags.map((tag, index) => (
+              <Badge key={index} variant="outline" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-});
-
-ConversationRow.displayName = "ConversationRow";
-
-export default ConversationRow;
+};

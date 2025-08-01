@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     // Check database connectivity (basic connection test)
     let dbStatus = 'ok';
     try {
-      const supabaseClient = supabase.server();
+      const supabaseClient = createClient();
       const { error: dbError } = await supabaseClient
         .from('organizations')
         .select('id')

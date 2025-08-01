@@ -87,7 +87,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   };
 
   // Check if customer is online
-  const isCustomerOnline = onlineUsers.includes(conversation.customer_email);
+  const isCustomerOnline = onlineUsers.includes(conversation.customerEmail);
 
   return (
     <div className="chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="chat-header">
@@ -99,9 +99,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <img
               src={(() => {
                 const { getAvatarPath } = require("@/lib/utils/avatar");
-                return getAvatarPath(conversation.customer_email || conversation.customer_name, "customer");
+                return getAvatarPath(conversation.customerEmail || conversation.customerName, "customer");
               })()}
-              alt={conversation.customer_name}
+              alt={conversation.customerName}
               className="h-10 w-10 rounded-ds-full object-cover shadow-card-base"
               data-testid="chat-header-avatar"
             />
@@ -114,7 +114,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
             <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-customer-title-row">
-              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customer_name}</h2>
+              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
 
               {/* Status badge */}
               <span
@@ -156,14 +156,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             </div>
 
             <div className="mt-1 flex items-center space-x-3" data-testid="chat-header-customer-meta">
-              <p className="truncate text-sm text-[var(--fl-color-text-muted)]" data-testid="chat-header-customer-email">{conversation.customer_email}</p>
+              <p className="truncate text-sm text-[var(--fl-color-text-muted)]" data-testid="chat-header-customer-email">{conversation.customerEmail}</p>
 
               {/* Connection status removed - was showing inappropriate warnings */}
 
               {/* Last activity */}
               <div className="flex items-center space-x-1 text-tiny text-[var(--fl-color-text-muted)]" data-testid="chat-header-last-activity">
                 <Clock className="h-3 w-3" data-testid="chat-header-activity-icon" />
-                <span data-testid="chat-header-activity-text">{formatLastActivity(conversation.last_message_at)}</span>
+                <span data-testid="chat-header-activity-text">{formatLastActivity(conversation.lastMessageAt)}</span>
               </div>
             </div>
 
@@ -216,18 +216,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
         {/* Right side - Actions */}
         <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-actions">
-<<<<<<< Updated upstream
-          import { AssignmentPopover } from "@/components/inbox/AssignmentPopover";
-
-          {/* Assignment Popover */}
-          <AssignmentPopover
-            conversationId={conversation.id}
-            organizationId={user?.organizationId || ""}
-            currentAgentId={conversation.assigned_to_ai}
-            variant="header"
-            size="sm"
-          />
-=======
           {/* Assignment Button - Opens Dialog */}
           <button
             onClick={() => setShowAssignmentDialog(true)}
@@ -238,7 +226,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           >
             <Users className="h-4 w-4" />
           </button>
->>>>>>> Stashed changes
 
           {/* NEW: Convert to Ticket Button */}
           {onConvertToTicket && (
