@@ -124,25 +124,23 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           </div>
         )}
 
-        {/* Message bubble with improved mobile spacing */}
+        {/* Message bubble */}
         <div
-          className={`inline-block max-w-xs lg:max-w-md xl:max-w-lg rounded-ds-lg px-3 py-2.5 sm:px-4 sm:py-3 text-sm ${
+          className={`inline-block max-w-xs lg:max-w-md xl:max-w-lg rounded-ds-lg px-4 py-2 text-sm ${
             isOwnMessage
               ? "bg-blue-600 text-white"
               : "bg-gray-100 text-gray-900"
           }`}
-          style={{ minHeight: "44px" }}
           data-testid="message-bubble"
         >
           <p className="whitespace-pre-wrap break-words" data-testid="message-text">{message.content}</p>
         </div>
 
-        {/* Message actions with improved mobile touch targets */}
+        {/* Message actions */}
         <div className={`flex items-center gap-1 mt-1 ${isOwnMessage ? "justify-end" : "justify-start"}`} data-testid="message-actions">
           <button
             onClick={() => onReply?.(message)}
-            className="hover:text-foreground rounded p-1.5 text-gray-400 transition-colors touch-target"
-            style={{ minWidth: "44px", minHeight: "44px" }}
+            className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Reply"
             data-testid="message-reply"
           >
@@ -150,8 +148,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           </button>
           <button
             onClick={() => onReact?.(message.id, "like")}
-            className="hover:text-foreground rounded p-1.5 text-gray-400 transition-colors touch-target"
-            style={{ minWidth: "44px", minHeight: "44px" }}
+            className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Like"
             data-testid="message-like"
           >
@@ -159,8 +156,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           </button>
           <button
             onClick={() => onReact?.(message.id, "heart")}
-            className="hover:text-foreground rounded p-1.5 text-gray-400 transition-colors touch-target"
-            style={{ minWidth: "44px", minHeight: "44px" }}
+            className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Heart"
             data-testid="message-heart"
           >
@@ -168,8 +164,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           </button>
           <button
             onClick={() => onShare?.(message)}
-            className="hover:text-foreground rounded p-1.5 text-gray-400 transition-colors touch-target"
-            style={{ minWidth: "44px", minHeight: "44px" }}
+            className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Share"
             data-testid="message-share"
           >
@@ -177,8 +172,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           </button>
           <button
             onClick={() => setShowMessageMenu(!showMessageMenu)}
-            className="hover:text-foreground rounded p-1.5 text-gray-400 transition-colors touch-target"
-            style={{ minWidth: "44px", minHeight: "44px" }}
+            className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="More options"
             data-testid="message-more"
           >

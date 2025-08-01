@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ChatCircle,
-  Question,
-  Phone,
-  X,
+import { 
+  ChatCircle, 
+  Question, 
+  Phone, 
+  X, 
   Minus,
   ArrowsOut,
   ArrowsIn,
@@ -15,12 +15,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { WidgetConfig } from './EnhancedWidgetProvider';
-import { useWidgetSupabaseAuth } from '@/hooks/useWidgetSupabaseAuth';
-import { useWidgetRealtime } from './useWidgetRealtime';
-import { useReadReceipts } from '../../../src/components/widget/hooks/useReadReceipts';
-import { WidgetMessage } from '@/types/entities/message';
-import { WidgetDebugPanel } from '../debug/WidgetDebugPanel';
-import { widgetDebugger } from '@/lib/utils/widget-debug';
 
 interface EnhancedWidgetProps {
   organizationId: string;
@@ -34,7 +28,6 @@ interface WidgetState {
   isExpanded: boolean;
   activeTab: 'chat' | 'faq' | 'help';
   conversationId?: string;
-  connectionStatus: 'disconnected' | 'connecting' | 'connected';
 }
 
 interface Message {
@@ -54,119 +47,104 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     isOpen: false,
     isMinimized: false,
     isExpanded: false,
-    activeTab: 'chat',
-    connectionStatus: 'disconnected'
+    activeTab: 'chat'
   });
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [typingUser, setTypingUser] = useState<string | undefined>();
-  const [isDebugOpen, setIsDebugOpen] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize widget authentication
-  const auth = useWidgetSupabaseAuth(organizationId);
-
-  // Auto sign-in as visitor when widget opens
+  // Initialize conversation
   useEffect(() => {
-    if (state.isOpen && !auth.isAuthenticated && !auth.isLoading) {
-      const metadata = {
-        conversationId: state.conversationId || `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        visitorId: `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        source: 'enhanced-widget',
-      };
+    if (state.isOpen && !state.conversationId) {
+      initializeConversation();
+    }
+  }, [state.isOpen]);
 
-      auth.signInAsVisitor(organizationId, metadata);
+  const initializeConversation = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/widget/conversations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          organizationId,
+          visitorId: `visitor-${Date.now()}`,
+          customerName: 'Website Visitor',
+          customerEmail: 'visitor@widget.com',
+        }),
+      });
 
-      if (!state.conversationId) {
-        setState(prev => ({
-          ...prev,
-          conversationId: metadata.conversationId,
-          connectionStatus: 'connecting'
-        }));
+      if (response.ok) {
+        const data = await response.json();
+        const conversationId = data.conversation?.id || data.conversationId || data.id;
+        setState(prev => ({ ...prev, conversationId }));
+        
+        // Add welcome message
+        if (config.showWelcomeMessage && config.welcomeMessage) {
+          setMessages([{
+            id: 'welcome',
+            content: config.welcomeMessage,
+            sender: 'system',
+            timestamp: new Date()
+          }]);
+        }
       }
+    } catch (error) {
+      console.error('Failed to initialize conversation:', error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [state.isOpen, auth.isAuthenticated, auth.isLoading, organizationId, state.conversationId]);
-
-  // Initialize realtime with auth headers
-  const realtime = useWidgetRealtime({
-    organizationId,
-    conversationId: state.conversationId || '',
-    onMessage: (message) => {
-      console.log('[Enhanced Widget] Received message:', message);
-      const newMessage: Message = {
-        id: message.id.toString(),
-        content: message.content,
-        sender: message.senderType === 'visitor' ? 'user' : 'agent',
-        timestamp: new Date(message.createdAt)
-      };
-      setMessages(prev => [...prev, newMessage]);
-    },
-    onTyping: (typing, userName) => {
-      setIsTyping(typing);
-      setTypingUser(userName);
-    },
-    onConnectionChange: (connected) => {
-      setState(prev => ({
-        ...prev,
-        connectionStatus: connected ? 'connected' : 'disconnected'
-      }));
-    },
-    getAuthHeaders: auth.getAuthHeaders,
-  });
-
-  // Initialize read receipts with auth headers
-  const readReceipts = useReadReceipts(
-    state.conversationId,
-    organizationId,
-    auth.user?.visitorId || 'unknown',
-    auth.getAuthHeaders
-  );
-
-  // Add welcome message when conversation is initialized
-  useEffect(() => {
-    if (state.conversationId && config.showWelcomeMessage && config.welcomeMessage && messages.length === 0) {
-      setMessages([{
-        id: 'welcome',
-        content: config.welcomeMessage,
-        sender: 'system',
-        timestamp: new Date()
-      }]);
-    }
-  }, [state.conversationId, config.showWelcomeMessage, config.welcomeMessage, messages.length]);
-
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Mark messages as read when they appear
-  useEffect(() => {
-    if (messages.length > 0 && readReceipts) {
-      const unreadMessageIds = messages
-        .filter(msg => msg.sender !== 'user')
-        .map(msg => msg.id);
-
-      if (unreadMessageIds.length > 0) {
-        readReceipts.markAsRead(unreadMessageIds, auth.user?.visitorId || 'unknown');
-      }
-    }
-  }, [messages, readReceipts]);
+  };
 
   const sendMessage = async () => {
-    if (!inputValue.trim() || !state.conversationId || !auth.isAuthenticated) return;
+    if (!inputValue.trim() || !state.conversationId) return;
 
-    const messageContent = inputValue.trim();
+    const userMessage: Message = {
+      id: `msg-${Date.now()}`,
+      content: inputValue,
+      sender: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
     setInputValue('');
+    setIsTyping(true);
 
     try {
-      await realtime.sendMessage(messageContent);
-      console.log('[Enhanced Widget] Message sent successfully');
+      const response = await fetch('/api/widget/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          conversationId: state.conversationId,
+          content: inputValue,
+          senderType: 'visitor'
+        }),
+      });
+
+      if (response.ok) {
+        // Simulate agent response
+        setTimeout(() => {
+          const agentMessage: Message = {
+            id: `agent-${Date.now()}`,
+            content: "Thanks for your message! An agent will respond shortly.",
+            sender: 'agent',
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, agentMessage]);
+          setIsTyping(false);
+        }, 2000);
+      }
     } catch (error) {
-      console.error('[Enhanced Widget] Failed to send message:', error);
-      // Re-add message to input on failure
-      setInputValue(messageContent);
+      console.error('Failed to send message:', error);
+      setIsTyping(false);
     }
   };
 
@@ -212,7 +190,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   const renderChatTab = () => (
     <div className="flex flex-col h-full">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 pb-2">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -236,21 +214,14 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         {isTyping && (
           <div className="flex justify-start">
             <div className="bg-gray-100 rounded-lg px-3 py-2 text-sm">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-                <span className="text-xs text-gray-500">
-                  {typingUser || 'Someone'} is typing...
-                </span>
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
@@ -267,19 +238,12 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
           />
           <Button
             onClick={sendMessage}
-            disabled={!inputValue.trim() || !auth.isAuthenticated || state.connectionStatus !== 'connected'}
+            disabled={!inputValue.trim() || isLoading}
             size="sm"
             data-testid="widget-send-button"
           >
             <PaperPlaneTilt size={16} />
           </Button>
-        </div>
-
-        {/* Status info */}
-        <div className="mt-2 text-xs text-gray-500">
-          {!auth.isAuthenticated && 'Please wait for authentication...'}
-          {auth.isAuthenticated && state.connectionStatus !== 'connected' && 'Connecting to realtime...'}
-          {auth.isAuthenticated && state.connectionStatus === 'connected' && 'Ready to send messages'}
         </div>
       </div>
     </div>
@@ -371,20 +335,10 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
             <div className="bg-gray-50 border-b px-4 py-3 flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div
-                  className={cn(
-                    "w-3 h-3 rounded-full",
-                    state.connectionStatus === 'connected' ? 'bg-green-500' :
-                    state.connectionStatus === 'connecting' ? 'bg-yellow-500' : 'bg-red-500'
-                  )}
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: config.primaryColor }}
                 />
-                <div className="flex flex-col">
-                  <span className="font-medium text-sm">{config.organizationName}</span>
-                  <span className="text-xs text-gray-500">
-                    {!auth.isAuthenticated ? 'Authenticating...' :
-                     state.connectionStatus === 'connected' ? 'Online' :
-                     state.connectionStatus === 'connecting' ? 'Connecting...' : 'Offline'}
-                  </span>
-                </div>
+                <span className="font-medium text-sm">{config.organizationName}</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Button variant="ghost" size="sm" onClick={minimizeWidget}>
@@ -458,15 +412,6 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Debug Panel */}
-      {debug && (
-        <WidgetDebugPanel
-          isOpen={isDebugOpen}
-          onToggle={() => setIsDebugOpen(!isDebugOpen)}
-          className="z-[60]"
-        />
-      )}
     </div>
   );
 };

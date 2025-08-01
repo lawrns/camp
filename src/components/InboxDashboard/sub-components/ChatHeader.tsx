@@ -2,11 +2,9 @@
 
 import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator";
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
-import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
 import { useAuth } from "@/hooks/useAuth";
 import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
 import * as React from "react";
-import { useState } from "react";
 import type { Conversation } from "../types";
 
 interface ChatHeaderProps {
@@ -39,9 +37,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   // Get auth context to determine if user is an agent (not widget user)
   const { user } = useAuth();
   const isAgent = user && (user.organizationRole === "agent" || user.organizationRole === "admin");
-
-  // State for assignment dialog
-  const [showAssignmentDialog, setShowAssignmentDialog] = useState(false);
   // Format last activity with error handling
   const formatLastActivity = (timestamp: string) => {
     try {
@@ -216,16 +211,16 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
         {/* Right side - Actions */}
         <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-actions">
-          {/* Assignment Button - Opens Dialog */}
-          <button
-            onClick={() => setShowAssignmentDialog(true)}
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
-            title="Assign conversation"
-            aria-label="Assign conversation"
-            data-testid="chat-header-assign-button"
-          >
-            <Users className="h-4 w-4" />
-          </button>
+          import { AssignmentPopover } from "@/components/inbox/AssignmentPopover";
+
+          {/* Assignment Popover */}
+          <AssignmentPopover
+            conversationId={conversation.id}
+            organizationId={user?.organizationId || ""}
+            currentAgentId={conversation.assigned_to_ai}
+            variant="header"
+            size="sm"
+          />
 
           {/* NEW: Convert to Ticket Button */}
           {onConvertToTicket && (
@@ -278,19 +273,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           </button>
         </div>
       </div>
-
-      {/* Assignment Dialog */}
-      <AssignmentDialog
-        open={showAssignmentDialog}
-        onOpenChange={setShowAssignmentDialog}
-        conversationId={conversation.id}
-        currentAgentId={null}
-        organizationId={user?.organizationId || ""}
-        onAssigned={(agentId) => {
-          onAssignConversation?.();
-          setShowAssignmentDialog(false);
-        }}
-      />
     </div>
   );
 };

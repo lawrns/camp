@@ -70,10 +70,14 @@ export function getBrowserClient() {
           eventsPerSecond: 10,
           // Add apikey for WebSocket authentication
           apikey: env.anonKey,
+          // ENHANCED: Enable debug logging for better troubleshooting
+          log_level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
         },
-        heartbeatIntervalMs: 30000,
+        // ENHANCED: Reduced heartbeat interval to prevent 30s idle timeouts
+        heartbeatIntervalMs: 25000,
         reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
-        timeout: 20000,
+        // ENHANCED: Reduced timeout for faster failure detection
+        timeout: 15000,
       },
       global: {
         headers: {
@@ -117,15 +121,16 @@ function getWidgetClient() {
         eventsPerSecond: 10,
         // CRITICAL: Add apikey for WebSocket authentication
         apikey: env.anonKey,
-        // Add log level for debugging
-        log_level: 'info',
+        // ENHANCED: Enable debug logging for widget troubleshooting
+        log_level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
         // Add version parameter
         vsn: '1.0.0'
       },
-      heartbeatIntervalMs: 30000,
+      // ENHANCED: Reduced heartbeat interval to prevent 30s idle timeouts
+      heartbeatIntervalMs: 25000,
       reconnectAfterMs: (tries: number) => Math.min(tries * 1000, 30000),
-      // Increase timeout to match our subscription timeout
-      timeout: 35000,
+      // ENHANCED: Reduced timeout for faster failure detection
+      timeout: 15000,
       // Use default WebSocket transport without custom encoding
       transport: 'websocket'
       // REMOVED: Custom encode function that might interfere with WebSocket protocol

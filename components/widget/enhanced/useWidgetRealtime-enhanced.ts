@@ -18,6 +18,7 @@ const PRE_CONNECTION_TIMEOUT = 5000; // WebSocket pre-check timeout
 
 // Global channel memoization to prevent duplicates
 const activeChannels = new Map<string, RealtimeChannel>();
+const connectionAttempts = new Map<string, number>();
 
 interface WidgetRealtimeConfig {
   organizationId: string;
@@ -198,64 +199,6 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     };
   }, []);
 
-  // Initialize conversation if needed
-  const initializeConversation = useCallback(async (): Promise<string> => {
-    if (conversationId) {
-      return conversationId;
-    }
-
-    if (initializationPromiseRef.current) {
-      return initializationPromiseRef.current;
-    }
-
-    setIsInitializing(true);
-    setInitializationError(null);
-
-    const promise = (async () => {
-      try {
-        const headers = await config.getAuthHeaders?.() || {};
-        const response = await fetch('/api/widget/conversations', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-organization-id': config.organizationId,
-            ...headers,
-          },
-          body: JSON.stringify({
-            organizationId: config.organizationId,
-            visitorId: config.userId,
-            customerName: 'Website Visitor',
-            customerEmail: config.userId || 'anonymous@widget.com',
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to initialize conversation: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const newConversationId = data.conversation?.id || data.conversationId || data.id;
-
-        if (!newConversationId) {
-          throw new Error('No conversation ID returned from API');
-        }
-
-        setConversationId(newConversationId);
-        return newConversationId;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setInitializationError(errorMessage);
-        throw error;
-      } finally {
-        setIsInitializing(false);
-        initializationPromiseRef.current = null;
-      }
-    })();
-
-    initializationPromiseRef.current = promise;
-    return promise;
-  }, [conversationId, config.organizationId, config.userId, config.getAuthHeaders]);
-
   // ENHANCED CONNECTION MANAGEMENT FUNCTIONS
 
   /**
@@ -333,16 +276,8 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           widgetDebugger.logRealtime('info', '♻️ Reusing existing channel', { channelName });
           return;
         } else {
-          // ROBUST CLEANUP: Use removeChannel for stale channels
-          try {
-            if (supabaseRef.current) {
-              supabaseRef.current.removeChannel(existingChannel);
-            } else {
-              existingChannel.unsubscribe();
-            }
-          } catch (cleanupError) {
-            widgetDebugger.logRealtime('warn', '⚠️ Stale channel cleanup error (ignoring)', cleanupError);
-          }
+          // Clean up stale channel
+          existingChannel.unsubscribe();
           activeChannels.delete(channelName);
         }
       }
@@ -386,69 +321,37 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           config.onTyping?.(false, payload.payload?.userName);
         });
 
-      // Subscribe with robust timeout and enhanced error handling
+      // Subscribe with timeout and enhanced error handling
       return new Promise<void>((resolve, reject) => {
-        let isResolved = false;
-
-        const cleanup = () => {
-          if (timeoutId) {
-            clearTimeout(timeoutId);
-          }
-        };
-
-        const resolveOnce = () => {
-          if (!isResolved) {
-            isResolved = true;
-            cleanup();
-            resolve();
-          }
-        };
-
-        const rejectOnce = (error: Error) => {
-          if (!isResolved) {
-            isResolved = true;
-            cleanup();
-            // ROBUST CLEANUP: Remove channel on error to prevent leaks
-            try {
-              if (supabaseRef.current && channel) {
-                supabaseRef.current.removeChannel(channel);
-              }
-              activeChannels.delete(channelName);
-            } catch (cleanupError) {
-              widgetDebugger.logRealtime('warn', '⚠️ Error cleanup failed (ignoring)', cleanupError);
-            }
-            reject(error);
-          }
-        };
-
         const timeoutId = setTimeout(() => {
-          rejectOnce(new Error(`Connection timeout after ${CONNECTION_TIMEOUT}ms`));
+          reject(new Error(`Connection timeout after ${CONNECTION_TIMEOUT}ms`));
         }, CONNECTION_TIMEOUT);
 
-        try {
-          channel.subscribe((status: string) => {
-            widgetDebugger.logRealtime('info', `🔄 Channel status: ${status}`, {
-              channelName,
-              retryCount,
-              connectionTime: Date.now() - startTime
-            });
+        channel.subscribe((status: string) => {
+          clearTimeout(timeoutId);
 
-            if (status === 'SUBSCRIBED') {
-              setIsConnected(true);
-              setConnectionStatus('connected');
-              setConnectionError(null);
-              startHeartbeat(channel);
-              connectionMetricsRef.current.successfulConnections++;
-              connectionMetricsRef.current.lastConnectionTime = Date.now() - startTime;
-              connectionMetricsRef.current.retryCount = 0;
+          widgetDebugger.logRealtime('info', `🔄 Channel status: ${status}`, {
+            channelName,
+            retryCount,
+            connectionTime: Date.now() - startTime
+          });
 
-              // ENHANCED MONITORING: Track successful connection and state transition
-              realtimeConnectionMonitor.trackConnectionSuccess();
-              realtimeConnectionMonitor.trackStateTransition('connecting', 'connected');
+          if (status === 'SUBSCRIBED') {
+            setIsConnected(true);
+            setConnectionStatus('connected');
+            setConnectionError(null);
+            startHeartbeat(channel);
+            connectionMetricsRef.current.successfulConnections++;
+            connectionMetricsRef.current.lastConnectionTime = Date.now() - startTime;
+            connectionMetricsRef.current.retryCount = 0;
 
-              config.onConnectionChange?.(true);
-              resolveOnce();
-            } else if (status === 'CLOSED' || status === 'TIMED_OUT') {
+            // ENHANCED MONITORING: Track successful connection and state transition
+            realtimeConnectionMonitor.trackConnectionSuccess();
+            realtimeConnectionMonitor.trackStateTransition('connecting', 'connected');
+
+            config.onConnectionChange?.(true);
+            resolve();
+          } else if (status === 'CLOSED' || status === 'TIMED_OUT') {
             connectionMetricsRef.current.failedConnections++;
 
             // ENHANCED MONITORING: Track state transition and failure
@@ -481,13 +384,10 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
               realtimeConnectionMonitor.trackStateTransition(status.toLowerCase(), 'fallback');
 
               config.onConnectionChange?.(false);
-              rejectOnce(new Error(`Connection failed after ${MAX_RETRIES} retries`));
+              reject(new Error(`Connection failed after ${MAX_RETRIES} retries`));
             }
-            }
-          });
-        } catch (subscribeError) {
-          rejectOnce(new Error(`Subscription setup failed: ${subscribeError}`));
-        }
+          }
+        });
       });
 
     } catch (error) {
@@ -516,241 +416,6 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     }
   }, [config, convertToWidgetMessage, startHeartbeat]);
 
-  // Send message to conversation
-  const sendMessage = useCallback(async (content: string, senderType: SenderType = 'visitor') => {
-    try {
-      const activeConversationId = await initializeConversation();
-
-      const headers = await config.getAuthHeaders?.() || {};
-      const response = await fetch('/api/widget/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-organization-id': config.organizationId,
-          ...headers,
-        },
-        body: JSON.stringify({
-          conversationId: activeConversationId,
-          content,
-          senderType,
-          senderName: config.userId || 'Anonymous',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to send message: ${response.status}`);
-      }
-
-      const messageData = await response.json();
-
-      // CRITICAL FIX: Message sending should work even without real-time connection
-      // Broadcast message to real-time channel if channel is available
-      if (channelRef.current && isConnected) {
-        const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, activeConversationId);
-        widgetDebugger.logRealtime('info', 'Broadcasting message to channel', {
-          channelName,
-          messageId: messageData.id,
-          event: UNIFIED_EVENTS.MESSAGE_CREATED
-        });
-
-        try {
-          await channelRef.current.send({
-            type: 'broadcast',
-            event: UNIFIED_EVENTS.MESSAGE_CREATED,
-            payload: {
-              message: messageData,
-              source: 'widget',
-              timestamp: new Date().toISOString(),
-              organizationId: config.organizationId,
-              conversationId: activeConversationId,
-            },
-          });
-        } catch (broadcastError) {
-          widgetDebugger.logRealtime('warn', 'Failed to broadcast message', broadcastError);
-        }
-      } else {
-        widgetDebugger.logRealtime('warn', 'Real-time broadcast skipped', {
-          hasChannel: !!channelRef.current,
-          isConnected,
-          reason: !channelRef.current ? 'No channel' : 'Not connected'
-        });
-        // Message was still sent successfully via API - real-time is optional
-      }
-
-      return messageData;
-    } catch (error) {
-      logWidgetError('Failed to send message', { error, organizationId: config.organizationId });
-      throw error;
-    }
-  }, [config, initializeConversation, isConnected]);
-
-  // Send typing indicator
-  const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
-    if (!channelRef.current || !isConnected) {
-      return;
-    }
-
-    try {
-      const activeConversationId = await initializeConversation();
-      const event = isTyping ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP;
-
-      await channelRef.current.send({
-        type: 'broadcast',
-        event,
-        payload: {
-          userId: config.userId || 'anonymous',
-          userName: config.userId || 'Anonymous',
-          source: 'widget',
-          organizationId: config.organizationId,
-          conversationId: activeConversationId,
-        },
-      });
-    } catch (error) {
-      widgetDebugger.logRealtime('warn', 'Failed to send typing indicator', error);
-    }
-  }, [config, initializeConversation, isConnected]);
-
-  // Enhanced connect function using new connection management
-  const connect = useCallback(async () => {
-    if (!supabaseRef.current) {
-      logWidgetError('Cannot connect: Supabase client not initialized');
-      return;
-    }
-
-    // CRITICAL: Prevent duplicate connection attempts
-    if (isConnectingRef.current) {
-      widgetDebugger.logRealtime('warn', '🔄 Connection already in progress, skipping duplicate attempt');
-      return;
-    }
-
-    isConnectingRef.current = true;
-    setConnectionStatus('connecting');
-
-    try {
-      // Ensure we have a conversation
-      const convId = await initializeConversation();
-      if (!convId) {
-        throw new Error('Failed to get conversation ID');
-      }
-
-      // Create channel name using unified naming convention
-      const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, convId);
-
-      widgetDebugger.logRealtime('info', '🚀 Starting enhanced real-time connection', {
-        channelName,
-        organizationId: config.organizationId,
-        conversationId: convId
-      });
-
-      // Simple connection for now - enhanced version will be added later
-      const channel = supabaseRef.current.channel(channelName);
-      channelRef.current = channel;
-
-      // Set up basic event handlers
-      channel
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: any) => {
-          if (payload.eventType === 'INSERT' && payload.new) {
-            const message = convertToWidgetMessage(payload.new as SupabaseMessage);
-            config.onMessage?.(message);
-          }
-        })
-        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
-          if (payload.payload?.message) {
-            const message = convertToWidgetMessage(payload.payload.message);
-            config.onMessage?.(message);
-          }
-        });
-
-      // Subscribe to channel
-      channel.subscribe((status: string) => {
-        if (status === 'SUBSCRIBED') {
-          setIsConnected(true);
-          setConnectionStatus('connected');
-          setConnectionError(null);
-          config.onConnectionChange?.(true);
-        } else if (status === 'CLOSED' || status === 'TIMED_OUT') {
-          setIsConnected(false);
-          setConnectionStatus('error');
-          setConnectionError(`Connection failed: ${status}`);
-          config.onConnectionChange?.(false);
-        }
-      });
-
-      logWidgetEvent('widget_realtime_connect_success', {
-        organizationId: config.organizationId,
-        conversationId: convId
-      });
-
-    } catch (error) {
-      widgetDebugger.logRealtime('error', '❌ Connection failed', { error });
-      setConnectionStatus('error');
-      setConnectionError(error instanceof Error ? error.message : 'Connection failed');
-      config.onConnectionChange?.(false);
-
-      logWidgetError('Widget realtime connection failed', {
-        error,
-        organizationId: config.organizationId
-      });
-    } finally {
-      isConnectingRef.current = false;
-    }
-  }, [config, initializeConversation, convertToWidgetMessage]);
-
-  // Disconnect from real-time with robust cleanup
-  const disconnect = useCallback(async () => {
-    if (channelRef.current) {
-      try {
-        widgetDebugger.logRealtime('info', '🔄 Disconnecting channel', {
-          state: channelRef.current.state,
-          topic: channelRef.current.topic
-        });
-
-        isIntentionalDisconnectRef.current = true; // Mark as intentional
-
-        // ROBUST FIX: Use supabase.removeChannel() instead of channel.unsubscribe()
-        // This prevents recursive unsubscribe loops as documented in Supabase best practices
-        if (supabaseRef.current) {
-          await supabaseRef.current.removeChannel(channelRef.current);
-          widgetDebugger.logRealtime('info', '✅ Channel removed successfully using removeChannel()');
-        } else {
-          // Fallback to direct unsubscribe if supabase client not available
-          widgetDebugger.logRealtime('warn', '⚠️ Using fallback unsubscribe method');
-          await channelRef.current.unsubscribe();
-        }
-
-        isIntentionalDisconnectRef.current = false; // Reset flag
-      } catch (disconnectError) {
-        isIntentionalDisconnectRef.current = false; // Reset flag on error
-        widgetDebugger.logRealtime('warn', '⚠️ Error during channel disconnect (ignoring)', {
-          error: disconnectError,
-          channelState: channelRef.current?.state,
-          errorType: disconnectError instanceof Error ? disconnectError.name : 'Unknown'
-        });
-
-        // Force cleanup even if disconnect failed
-        try {
-          if (supabaseRef.current && channelRef.current) {
-            supabaseRef.current.removeChannel(channelRef.current);
-          }
-        } catch (forceCleanupError) {
-          widgetDebugger.logRealtime('warn', '⚠️ Force cleanup also failed (ignoring)', forceCleanupError);
-        }
-      }
-      channelRef.current = null;
-    }
-    setIsConnected(false);
-    config.onConnectionChange?.(false);
-    stopHeartbeat();
-  }, [config, stopHeartbeat]);
-
-  // Auto-connect when component mounts
-  useEffect(() => {
-    connect();
-    return () => {
-      disconnect();
-    };
-  }, [connect, disconnect]);
-
   return {
     isConnected,
     connectionStatus,
@@ -758,9 +423,10 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     conversationId,
     isInitializing,
     initializationError,
-    sendMessage,
-    sendTypingIndicator,
-    connect,
-    disconnect,
+    connectWithRetry,
+    sendMessage: async () => {}, // Placeholder
+    sendTypingIndicator: async () => {}, // Placeholder
+    connect: async () => {}, // Placeholder
+    disconnect: async () => {}, // Placeholder
   };
 }
