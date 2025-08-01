@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
+import { validateOrganizationId, sanitizeErrorMessage, checkRateLimit } from '@/lib/utils/validation';
+import { createWidgetClient } from '@/lib/supabase/secure-client-factory';
 
 // Widget API route handler for various actions
 export async function POST(request: NextRequest) {
@@ -9,18 +11,48 @@ export async function POST(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action');
     const body = await request.json();
-    const organizationId = request.headers.get('x-organization-id') || body.organizationId;
-
-    if (!organizationId) {
+    
+    // SECURITY FIX: Validate organization ID format and prevent injection
+    let organizationId: string;
+    try {
+      organizationId = validateOrganizationId(
+        request.headers.get('x-organization-id'),
+        body.organizationId
+      );
+    } catch (validationError) {
       return NextResponse.json(
         { 
           success: false,
           error: { 
             code: 'VALIDATION_ERROR',
-            message: 'Organization ID is required' 
+            message: sanitizeErrorMessage(validationError)
           }
         },
         { status: 400 }
+      );
+    }
+
+    // SECURITY FIX: Basic rate limiting
+    const clientIP = request.headers.get('x-forwarded-for') || 'unknown';
+    const rateLimit = checkRateLimit(`widget-${clientIP}`, 60, 60000); // 60 requests per minute
+    
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: { 
+            code: 'RATE_LIMIT_EXCEEDED',
+            message: 'Too many requests. Please try again later.'
+          }
+        },
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '60',
+            'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+            'X-RateLimit-Reset': new Date(rateLimit.resetTime).toISOString()
+          }
+        }
       );
     }
 

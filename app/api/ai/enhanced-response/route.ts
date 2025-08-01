@@ -38,23 +38,47 @@ export async function POST(request: NextRequest) {
     if (aiResponse.confidence < 0.7 || aiResponse.handoverReason) {
       try {
         const supabaseClient = createServiceRoleClient();
-        // TODO: Uncomment when campfire_handoffs table is properly synced
-        /*
+        
+        // FIXED: AI handover functionality restored (Critical Issue C016)
         await supabaseClient
           .from('campfire_handoffs')
           .insert({
             conversation_id: conversationId,
             organization_id: organizationId,
-            reason: aiResponse.handoverReason,
-            urgency: aiResponse.metadata.urgency,
-            context_summary: `Customer message: "${messageContent}". AI confidence: ${aiResponse.confidence}`,
-            ai_confidence: aiResponse.confidence,
-            customer_sentiment: aiResponse.sentiment,
-            issue_complexity: aiResponse.metadata.complexity,
-            status: 'pending',
-            created_at: new Date().toISOString(),
+            reason: aiResponse.handoverReason || `Low AI confidence: ${aiResponse.confidence}`,
+            priority: aiResponse.metadata?.urgency || 'medium',
+            transfer_type: 'ai-to-human',
+            conversation_state: {
+              messageHistory: [{
+                id: crypto.randomUUID(),
+                sender: 'customer',
+                content: messageContent,
+                timestamp: new Date().toISOString()
+              }],
+              aiContext: {
+                lastModel: 'gpt-4',
+                confidence: aiResponse.confidence,
+                knowledgeUsed: aiResponse.sources || []
+              },
+              customerInfo: {
+                tier: 'standard'
+              },
+              sessionVariables: {},
+              tags: []
+            },
+            customer_sentiment: aiResponse.sentiment || 'neutral',
+            topic_complexity: aiResponse.metadata?.complexity || 'medium',
+            urgency_score: 1.0 - aiResponse.confidence, // Higher urgency for lower confidence
+            escalation_triggers: [aiResponse.handoverReason || 'low_confidence'],
+            automated_triggers: {
+              sentimentThreshold: false,
+              responseTimeExceeded: false,
+              keywordDetected: false,
+              customerRequest: false,
+              aiConfidenceLow: aiResponse.confidence < 0.7
+            },
+            status: 'pending'
           });
-        */
 
         // Send Slack notification for handover
         try {

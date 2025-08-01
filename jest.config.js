@@ -14,13 +14,17 @@ const customJestConfig = {
     '<rootDir>/node_modules/',
     '<rootDir>/cypress/'
   ],
-  moduleNameMapping: {
+  moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
     '^@/(.*)$': '<rootDir>/$1',
     '^@/components/(.*)$': '<rootDir>/components/$1',
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
     '^@/app/(.*)$': '<rootDir>/app/$1',
-    '^@/db/(.*)$': '<rootDir>/db/$1'
+    '^@/db/(.*)$': '<rootDir>/db/$1',
+    // Mock static file imports
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js'
   },
   collectCoverageFrom: [
     'components/**/*.{js,jsx,ts,tsx}',
@@ -58,12 +62,7 @@ const customJestConfig = {
       tsconfig: 'tsconfig.json'
     }
   },
-  // Mock static file imports
-  moduleNameMapping: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/__mocks__/fileMock.js'
-  }
+  
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

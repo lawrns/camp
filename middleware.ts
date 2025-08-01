@@ -67,19 +67,43 @@ export async function middleware(request: NextRequest) {
 
   // IMPORTANT: This refreshes the session automatically
   console.log('[Middleware] Refreshing session for path:', pathname)
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser()
+  
+  let user = null;
+  let authError = null;
+  
+  try {
+    const {
+      data: { user: authUser },
+      error
+    } = await supabase.auth.getUser()
+    
+    user = authUser;
+    authError = error;
+    
+    console.log('[Middleware] Session refresh result:', {
+      hasUser: !!user,
+      userId: user?.id,
+      error: error?.message
+    })
+  } catch (err) {
+    console.error('[Middleware] Session refresh failed:', err)
+    authError = err;
+  }
 
-  console.log('[Middleware] Session refresh result:', {
-    hasUser: !!user,
-    userId: user?.id,
-    error: error?.message
-  })
-
+  // Prevent redirect loops - don't redirect if already on auth pages
+  const isAuthPage = pathname.startsWith('/auth/') || pathname.startsWith('/login');
+  
   // Redirect unauthenticated users to login for protected routes
-  if (!user && pathname.startsWith('/dashboard')) {
+  if (!user && pathname.startsWith('/dashboard') && !isAuthPage) {
+    console.log('[Middleware] Redirecting unauthenticated user to login')
+    const url = request.nextUrl.clone()
+    url.pathname = '/auth/login'
+    return NextResponse.redirect(url)
+  }
+  
+  // If there's an auth error and we're on a protected route, redirect to login
+  if (authError && pathname.startsWith('/dashboard') && !isAuthPage) {
+    console.log('[Middleware] Auth error, redirecting to login:', authError.message)
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)

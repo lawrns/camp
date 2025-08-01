@@ -3,79 +3,66 @@
 import { useEffect } from 'react';
 
 /**
- * ConsoleManager - Client-side component that handles console error suppression
- * This component runs on the client and suppresses noisy console errors
+ * ConsoleManager - Client-side component that handles proper error logging
+ * This component runs on the client and provides structured error reporting
+ * FIXED: Removed error suppression anti-pattern (Critical Issue C004)
  */
 export function ConsoleManager() {
   useEffect(() => {
-    // Suppress JWT enrichment console errors
+    // Set up proper error handling instead of suppression
     const originalError = console.error;
     const originalWarn = console.warn;
 
     console.error = (...args) => {
       const message = args.join(' ');
       
-      // Patterns to suppress from console output
-      const noisyErrorPatterns = [
-        // JWT enrichment errors (often caused by extensions or network issues)
-        "Failed to enrich JWT: {}",
-        "Error enriching JWT",
-        "JWT enrichment failed",
-        "🚨 Failed to enrich JWT: {}",
-        "🚨 Error enriching JWT",
-        
-        // Extension-related errors
-        "chrome-extension",
-        "moz-extension",
-        "1password",
-        "lastpass",
-        "bitwarden",
-        
-        // Common React hydration warnings
-        "Warning: Text content did not match",
-        "Warning: Expected server HTML",
-        
-        // Network errors that are often temporary
-        "Failed to fetch",
-        "NetworkError",
-        "ERR_NETWORK",
-      ];
+      // Categorize errors for better debugging
+      const errorCategories = {
+        jwt: ["Failed to enrich JWT", "Error enriching JWT", "JWT enrichment failed"],
+        extensions: ["chrome-extension", "moz-extension", "1password", "lastpass", "bitwarden"],
+        hydration: ["Warning: Text content did not match", "Warning: Expected server HTML"],
+        network: ["Failed to fetch", "NetworkError", "ERR_NETWORK"]
+      };
       
-      // Check if this is a noisy error we should suppress
-      const shouldSuppress = noisyErrorPatterns.some(pattern => 
-        message.includes(pattern)
-      );
-      
-      if (shouldSuppress) {
-        return; // Suppress the error
+      // Categorize the error
+      let category = 'unknown';
+      for (const [cat, patterns] of Object.entries(errorCategories)) {
+        if (patterns.some(pattern => message.includes(pattern))) {
+          category = cat;
+          break;
+        }
       }
       
-      // Log the original error
-      originalError.apply(console, args);
+      // Log with category for better debugging (instead of suppressing)
+      originalError(`[${category.toUpperCase()}]`, ...args);
+      
+      // Send to error tracking service in production
+      if (process.env.NODE_ENV === 'production' && category !== 'extensions') {
+        // TODO: Implement proper error tracking (e.g., Sentry, LogRocket)
+        console.info('Error would be sent to tracking service:', { category, message });
+      }
     };
 
     console.warn = (...args) => {
       const message = args.join(' ');
       
-      // Check if this is a noisy warning we should suppress
-      const noisyWarningPatterns = [
-        "Failed to enrich JWT: {}",
-        "Error enriching JWT",
-        "JWT enrichment failed",
-        "🚨 Failed to enrich JWT: {}",
-        "🚨 Error enriching JWT",
-      ];
+      // Apply same categorization to warnings
+      const warningCategories = {
+        jwt: ["Failed to enrich JWT", "Error enriching JWT", "JWT enrichment failed"],
+        extensions: ["chrome-extension", "moz-extension"],
+        hydration: ["Warning: Text content did not match", "Warning: Expected server HTML"]
+      };
       
-      const shouldSuppress = noisyWarningPatterns.some(pattern => 
-        message.includes(pattern)
-      );
-      
-      if (shouldSuppress) {
-        return; // Suppress the warning
+      let category = 'unknown';
+      for (const [cat, patterns] of Object.entries(warningCategories)) {
+        if (patterns.some(pattern => message.includes(pattern))) {
+          category = cat;
+          break;
+        }
       }
       
-      // Log the original warning
-      originalWarn.apply(console, args);
+      // Log with category (instead of suppressing)
+      originalWarn(`[${category.toUpperCase()}]`, ...args);
     };
 
     // Cleanup function to restore original console methods
