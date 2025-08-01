@@ -19,6 +19,8 @@ import ChatHeader from "./sub-components/ChatHeader";
 import Composer from "./sub-components/Composer";
 import ConversationList from "./sub-components/ConversationList";
 import { ConversationManagement } from "./sub-components/ConversationManagement";
+import { BulkActions } from "./sub-components/BulkActions";
+import { AdvancedFilters } from "./sub-components/AdvancedFilters";
 import CustomerSidebar from "./sub-components/CustomerSidebar";
 import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
@@ -84,6 +86,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState<AISuggestion[]>([]);
   const [showConversationManagement, setShowConversationManagement] = useState(false);
+  const [selectedConversations, setSelectedConversations] = useState<string[]>([]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<any>({});
 
   // Drag and drop
   const [isDragOver, setIsDragOver] = useState(false);
@@ -317,6 +322,72 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     setShowConvertDialog(true);
   }, []);
 
+  // Bulk action handlers
+  const handleBulkUpdate = async (conversationIds: string[], updates: Partial<any>) => {
+    try {
+      const response = await fetch('/api/conversations/bulk', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationIds, updates })
+      });
+
+      if (response.ok) {
+        console.log('Bulk update successful');
+      }
+    } catch (error) {
+      console.error('Bulk update failed:', error);
+    }
+  };
+
+  const handleBulkDelete = async (conversationIds: string[]) => {
+    try {
+      const response = await fetch('/api/conversations/bulk', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationIds })
+      });
+
+      if (response.ok) {
+        console.log('Bulk delete successful');
+      }
+    } catch (error) {
+      console.error('Bulk delete failed:', error);
+    }
+  };
+
+  const handleBulkExport = async (conversationIds: string[]) => {
+    try {
+      const response = await fetch('/api/conversations/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationIds })
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `conversations-export-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Bulk export failed:', error);
+    }
+  };
+
+  const handleApplyFilters = (filters: any) => {
+    setActiveFilters(filters);
+    console.log('Applying filters:', filters);
+  };
+
+  const handleClearFilters = () => {
+    setActiveFilters({});
+  };
+
   // Generate AI suggestions
   const generateAISuggestions = useCallback(async () => {
     if (!selectedConversation) return;
@@ -478,9 +549,20 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           priorityFilter={priorityFilter}
           setPriorityFilter={setPriorityFilter}
           setShowShortcuts={setShowShortcuts}
+          setShowAdvancedFilters={setShowAdvancedFilters}
           searchInputRef={searchInputRef}
           performanceMetrics={performanceMetrics}
           connectionStatus={connectionStatus as "error" | "connecting" | "connected" | "disconnected"}
+        />
+
+        {/* Bulk Actions */}
+        <BulkActions
+          selectedConversations={selectedConversations}
+          conversations={conversations as any[]}
+          onClearSelection={() => setSelectedConversations([])}
+          onBulkUpdate={handleBulkUpdate}
+          onBulkDelete={handleBulkDelete}
+          onBulkExport={handleBulkExport}
         />
 
         {/* Main content with proper layout */}
@@ -637,6 +719,15 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
             }}
           />
         )}
+
+        {/* Advanced Filters */}
+        <AdvancedFilters
+          isOpen={showAdvancedFilters}
+          onClose={() => setShowAdvancedFilters(false)}
+          onApplyFilters={handleApplyFilters}
+          onClearFilters={handleClearFilters}
+          currentFilters={activeFilters}
+        />
 
       </div>
     </div>

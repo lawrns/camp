@@ -16,6 +16,7 @@ interface HeaderProps {
   priorityFilter: string;
   setPriorityFilter: (filter: string) => void;
   setShowShortcuts: (show: boolean) => void;
+  setShowAdvancedFilters?: (show: boolean) => void;
   searchInputRef: React.RefObject<HTMLInputElement>;
   performanceMetrics?: {
     responseTime: number;
@@ -37,6 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   priorityFilter,
   setPriorityFilter,
   setShowShortcuts,
+  setShowAdvancedFilters,
   searchInputRef,
   performanceMetrics,
   connectionStatus,
@@ -146,6 +148,17 @@ export const Header: React.FC<HeaderProps> = ({
             <Bell className="h-5 w-5" />
             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
           </button>
+
+          {/* Advanced Filters */}
+          {setShowAdvancedFilters && (
+            <button
+              onClick={() => setShowAdvancedFilters(true)}
+              className="p-2 text-gray-400 hover:text-foreground transition-colors"
+              title="Advanced filters"
+            >
+              <Funnel className="h-5 w-5" />
+            </button>
+          )}
 
           {/* Shortcuts */}
           <button
