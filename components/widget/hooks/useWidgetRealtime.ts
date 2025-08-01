@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { logWidgetEvent } from '@/lib/monitoring/widget-logger';
-import { WidgetMessage, MessageStatus } from '@/types/entities/message';
+import { createClient } from '../../../lib/supabase/client';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '../../../lib/realtime/unified-channel-standards';
+import { logWidgetEvent } from '../../../lib/monitoring/widget-logger';
+import { WidgetMessage, MessageStatus } from '../../../types/entities/message';
 
 interface WidgetRealtimeConfig {
   organizationId: string;
@@ -46,7 +46,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   // Initialize Supabase client
   useEffect(() => {
     if (!supabaseRef.current) {
-      supabaseRef.current = supabase.widget();
+      supabaseRef.current = createClient();
       logWidgetEvent('widget_supabase_client_initialized', {
         organizationId: config.organizationId,
         note: 'Widget client with unified auth - database ops via API',
@@ -56,15 +56,19 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
   // Convert Supabase message to Widget message format
   const convertMessage = useCallback((supabaseMessage: SupabaseMessage): WidgetMessage => {
+    // Database IDs are UUIDs (strings) - no conversion needed
     return {
-      id: parseInt(supabaseMessage.id, 10),
+      id: supabaseMessage.id, // Keep as string (UUID)
       content: supabaseMessage.content,
-      senderType: supabaseMessage.sender_type === 'visitor' ? 'visitor' : 'agent',
+      senderType: supabaseMessage.sender_type, // Fixed: use the actual sender_type value
       senderName: supabaseMessage.sender_name || 'Unknown',
       createdAt: supabaseMessage.created_at,
       status: (supabaseMessage.status as MessageStatus) || 'delivered',
       metadata: supabaseMessage.metadata || {},
-      conversationId: parseInt(supabaseMessage.conversation_id, 10)
+      conversationId: supabaseMessage.conversation_id, // Keep as string (UUID)
+      // Add required WidgetMessage fields
+      organizationId: '', // Will be set from context
+      updatedAt: supabaseMessage.updated_at || supabaseMessage.created_at
     };
   }, []);
 
@@ -117,7 +121,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
               config.onTyping(true, payload.payload.userName);
             }
           })
-          .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload) => {
+          .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (_payload) => {
             if (config.onTyping) {
               config.onTyping(false);
             }
@@ -138,8 +142,8 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       // Subscribe to all channels
       await orgChannelClient.subscribe();
       await conversationsChannelClient.subscribe();
-      
-      if (conversationChannelClient) {
+
+      if (conversationChannelClient && conversationChannelClient !== conversationsChannelClient) {
         await conversationChannelClient.subscribe();
       }
 

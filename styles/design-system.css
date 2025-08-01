@@ -32,6 +32,36 @@
     --ds-inbox-height-mobile: calc(100vh - 3rem);
     --ds-sidebar-width: 320px;
 
+    /* ===== INBOX-SPECIFIC TOKENS ===== */
+    /* Chat Header */
+    --ds-inbox-header-height: 4rem;
+    --ds-inbox-header-padding: var(--ds-spacing-4);
+    --ds-inbox-header-gap: var(--ds-spacing-3);
+    --ds-inbox-avatar-size: 2.5rem;
+    --ds-inbox-status-size: 0.75rem;
+    
+    /* Message List */
+    --ds-inbox-message-padding: var(--ds-spacing-4);
+    --ds-inbox-message-gap: var(--ds-spacing-2);
+    --ds-inbox-message-bubble-radius: var(--ds-radius-lg);
+    --ds-inbox-message-max-width: 70%;
+    
+    /* Message Composer */
+    --ds-inbox-composer-padding: var(--ds-spacing-4);
+    --ds-inbox-composer-gap: var(--ds-spacing-3);
+    --ds-inbox-textarea-min-height: 2.5rem;
+    --ds-inbox-textarea-max-height: 8rem;
+    --ds-inbox-textarea-padding: var(--ds-spacing-3);
+    
+    /* Button Consistency */
+    --ds-inbox-button-height: 2.5rem;
+    --ds-inbox-button-padding: var(--ds-spacing-3) var(--ds-spacing-4);
+    --ds-inbox-button-gap: var(--ds-spacing-2);
+    
+    /* Responsive Breakpoints */
+    --ds-inbox-mobile-padding: var(--ds-spacing-3);
+    --ds-inbox-mobile-gap: var(--ds-spacing-2);
+
     /* ===== DASHBOARD-SPECIFIC TOKENS ===== */
     --ds-padding-dashboard: var(--ds-spacing-6);
     --ds-gap-dashboard: var(--ds-spacing-6);
@@ -921,6 +951,139 @@ button:hover,
     padding: var(--ds-spacing-4);
     background: var(--ds-color-surface);
     border-top: 1px solid var(--ds-color-border);
+}
+
+/* ===== INBOX COMPONENT UTILITY CLASSES ===== */
+
+/* Chat Header Utilities */
+.ds-inbox-header {
+    height: var(--ds-inbox-header-height);
+    padding: var(--ds-inbox-header-padding);
+    gap: var(--ds-inbox-header-gap);
+    display: flex;
+    align-items: center;
+    background: var(--ds-color-surface);
+    border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-inbox-avatar {
+    width: var(--ds-inbox-avatar-size);
+    height: var(--ds-inbox-avatar-size);
+    border-radius: var(--ds-radius-full);
+    flex-shrink: 0;
+}
+
+.ds-inbox-status {
+    width: var(--ds-inbox-status-size);
+    height: var(--ds-inbox-status-size);
+    border-radius: var(--ds-radius-full);
+    border: 2px solid var(--ds-color-surface);
+}
+
+/* Message List Utilities */
+.ds-inbox-message-list {
+    padding: var(--ds-inbox-message-padding);
+    gap: var(--ds-inbox-message-gap);
+    display: flex;
+    flex-direction: column;
+}
+
+.ds-inbox-message {
+    max-width: var(--ds-inbox-message-max-width);
+    border-radius: var(--ds-inbox-message-bubble-radius);
+    padding: var(--ds-spacing-3);
+    margin-bottom: var(--ds-inbox-message-gap);
+    word-wrap: break-word;
+}
+
+/* Message Composer Utilities */
+.ds-inbox-composer {
+    padding: var(--ds-inbox-composer-padding);
+    gap: var(--ds-inbox-composer-gap);
+    display: flex;
+    align-items: flex-end;
+    background: var(--ds-color-surface);
+    border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-inbox-textarea {
+    min-height: var(--ds-inbox-textarea-min-height);
+    max-height: var(--ds-inbox-textarea-max-height);
+    padding: var(--ds-inbox-textarea-padding);
+    border-radius: var(--ds-radius-md);
+    border: 1px solid var(--ds-color-border);
+    resize: none;
+    flex: 1;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    transition: border-color var(--ds-transition-fast);
+}
+
+.ds-inbox-textarea:focus {
+    outline: none;
+    border-color: var(--ds-color-border-interactive);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button Utilities */
+.ds-inbox-button {
+    height: var(--ds-inbox-button-height);
+    padding: var(--ds-inbox-button-padding);
+    gap: var(--ds-inbox-button-gap);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--ds-radius-md);
+    font-weight: 500;
+    transition: all var(--ds-transition-fast);
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ds-inbox-button-primary {
+    background: var(--ds-color-primary-500);
+    color: var(--ds-color-primary-50);
+    border-color: var(--ds-color-primary-500);
+}
+
+.ds-inbox-button-primary:hover {
+    background: var(--ds-color-primary-600);
+    border-color: var(--ds-color-primary-600);
+}
+
+.ds-inbox-button-secondary {
+    background: var(--ds-color-surface);
+    color: var(--ds-color-text);
+    border-color: var(--ds-color-border);
+}
+
+.ds-inbox-button-secondary:hover {
+    background: var(--ds-color-background-muted);
+    border-color: var(--ds-color-border-interactive);
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+    .ds-inbox-header {
+        padding: var(--ds-inbox-mobile-padding);
+        gap: var(--ds-inbox-mobile-gap);
+    }
+    
+    .ds-inbox-message-list {
+        padding: var(--ds-inbox-mobile-padding);
+        gap: var(--ds-inbox-mobile-gap);
+    }
+    
+    .ds-inbox-composer {
+        padding: var(--ds-inbox-mobile-padding);
+        gap: var(--ds-inbox-mobile-gap);
+    }
+    
+    .ds-inbox-message {
+        max-width: 85%;
+    }
 }
 
 /* ===== LIGHT MODE EXPLICIT OVERRIDES ===== */

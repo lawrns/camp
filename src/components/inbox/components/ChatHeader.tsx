@@ -3,17 +3,17 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
-  Robot as Bot,
-  Buildings as Building,
-  CheckCircle as CheckCircle2,
+  Bot,
+  Building,
+  CheckCircle2,
   Clock,
-  FileArrowDown as FileDown,
+  FileDown,
   MapPin,
-  DotsThree as MoreHorizontal,
+  MoreHorizontal,
   Ticket,
   UserCircle,
   Users,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Button } from "@/components/ui/Button-unified";
 import {

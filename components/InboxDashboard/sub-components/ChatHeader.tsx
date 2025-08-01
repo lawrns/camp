@@ -6,7 +6,7 @@ import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
 import { StatusBadge } from "@/components/inbox/StatusBadge";
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
-import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
+import { Clock, MoreVertical, Info, Tag, Ticket, Users } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import type { Conversation } from "../types";
@@ -244,7 +244,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             aria-label="More actions"
             data-testid="chat-header-more-actions"
           >
-            <DotsThreeVertical className="h-5 w-5" data-testid="chat-header-more-actions-icon" />
+            <MoreVertical className="h-5 w-5" data-testid="chat-header-more-actions-icon" />
           </button>
         </div>
       </div>

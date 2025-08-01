@@ -1,0 +1,147 @@
+# Page snapshot
+
+```yaml
+- alert
+- navigation "Main navigation":
+  - img "Campfire logo"
+  - navigation:
+    - text: Primary
+    - link "Dashboard":
+      - /url: /dashboard
+      - img
+      - text: Dashboard
+    - link "Inbox":
+      - /url: /dashboard/inbox
+      - img
+      - text: Inbox
+    - link "Tickets":
+      - /url: /dashboard/tickets
+      - img
+      - text: Tickets
+    - link "Knowledge":
+      - /url: /dashboard/knowledge
+      - img
+      - text: Knowledge
+    - link "Analytics":
+      - /url: /dashboard/analytics
+      - img
+      - text: Analytics
+    - link "AI Insights":
+      - /url: /dashboard/ai-insights
+      - img
+      - text: AI Insights
+    - text: Tools
+    - link "Settings":
+      - /url: /dashboard/settings
+      - img
+      - text: Settings
+    - link "Team":
+      - /url: /dashboard/team
+      - img
+      - text: Team
+    - link "Integrations":
+      - /url: /dashboard/integrations
+      - img
+      - text: Integrations
+  - link "Notifications":
+    - /url: /dashboard/notifications
+    - img
+    - text: Notifications
+  - link "Help":
+    - /url: /dashboard/help
+    - img
+    - text: Help
+  - link "Profile":
+    - /url: /dashboard/profile
+    - img
+    - text: Profile
+- main:
+  - heading "Good morning, jam" [level=1]
+  - paragraph: Manage customer conversations and support requests
+  - img
+  - text: Inbox
+  - img
+  - textbox "Search conversations..."
+  - button "Filters":
+    - img
+    - text: Filters
+  - button "Sort":
+    - img
+    - text: Sort
+  - text: ms connected
+  - button:
+    - img
+  - button "Keyboard shortcuts":
+    - img
+  - button "New Conversation":
+    - img
+    - text: New Conversation
+  - button "All"
+  - button "Unread"
+  - button "Unassigned"
+  - button "AI Managed"
+  - button "Human Managed"
+  - button "Conversation with Test User":
+    - img "Test User"
+    - heading "Test User" [level=3]
+    - img
+    - text: Human
+    - paragraph: test@example.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Website Visitor":
+    - img "Website Visitor"
+    - heading "Website Visitor" [level=3]
+    - img
+    - text: Human
+    - paragraph: visitor@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Test User":
+    - img "Test User"
+    - heading "Test User" [level=3]
+    - img
+    - text: Human
+    - paragraph: test@realtime-test.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Website Visitor":
+    - img "Website Visitor"
+    - heading "Website Visitor" [level=3]
+    - img
+    - text: Human
+    - paragraph: visitor@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Website Visitor":
+    - img "Website Visitor"
+    - heading "Website Visitor" [level=3]
+    - img
+    - text: Human
+    - paragraph: visitor@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - img
+  - heading "Start the conversation" [level=3]
+  - paragraph: Choose a conversation from the list to start messaging with your customers.
+```

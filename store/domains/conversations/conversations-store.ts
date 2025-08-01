@@ -501,7 +501,7 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
               const conversation = draft.conversations.get(conversationId);
               if (conversation) {
                 conversation.status = status;
-                conversation.updated_at = new Date().toISOString();
+                conversation.updatedAt = new Date().toISOString(); // Fixed: use camelCase
                 conversation.version = (conversation.version || 0) + 1;
                 if (process.env.NODE_ENV === "development") {
                   console.log("[ConversationsStore] Optimistically updated conversation status:", {
@@ -576,8 +576,8 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
                 const conversation = draft.conversations.get(conversationId);
                 if (conversation) {
                   conversation.status = originalStatus;
-                  if (currentConversation.updated_at) {
-                    conversation.updated_at = currentConversation.updated_at;
+                  if (currentConversation.updatedAt) { // Fixed: use camelCase
+                    conversation.updatedAt = currentConversation.updatedAt; // Fixed: use camelCase
                   }
                   if (currentConversation.version !== undefined) {
                     conversation.version = currentConversation.version;
@@ -610,11 +610,11 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
               const conv = draft.conversations.get(conversationId);
               if (conv) {
                 if (userId) {
-                  conv.assigned_to = userId;
+                  conv.assignedOperatorId = userId; // Fixed: use camelCase
                 } else {
-                  delete conv.assigned_to;
+                  delete conv.assignedOperatorId; // Fixed: use camelCase
                 }
-                conv.updated_at = new Date().toISOString();
+                conv.updatedAt = new Date().toISOString(); // Fixed: use camelCase
                 conv.version = (conv.version || 0) + 1;
               }
             });
@@ -671,12 +671,12 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
                 const conv = draft.conversations.get(conversationId);
                 if (conv) {
                   if (originalAssignee) {
-                    conv.assigned_to = originalAssignee;
+                    conv.assignedOperatorId = originalAssignee; // Fixed: use camelCase
                   } else {
-                    delete conv.assigned_to;
+                    delete conv.assignedOperatorId; // Fixed: use camelCase
                   }
-                  if (conversation.updated_at) {
-                    conv.updated_at = conversation.updated_at;
+                  if (conversation.updatedAt) { // Fixed: use camelCase
+                    conv.updatedAt = conversation.updatedAt; // Fixed: use camelCase
                   }
                   if (conversation.version !== undefined) {
                     conv.version = conversation.version;
@@ -709,10 +709,10 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
               if (conversation) {
                 conversation.lastMessagePreview = preview;
                 if (timestamp) {
-                  conversation.last_message_at = timestamp;
+                  conversation.lastMessageAt = timestamp; // Fixed: use camelCase
                 }
                 if (timestamp) {
-                  conversation.updated_at = timestamp;
+                  conversation.updatedAt = timestamp; // Fixed: use camelCase
                 }
                 conversation.version = (conversation.version || 0) + 1;
               }
@@ -742,8 +742,8 @@ export const conversationSelectors = {
   // Get all conversations as array (sorted by last message)
   getAllConversations: (state: ConversationsState): ConversationWithVersion[] => {
     return Array.from(state.conversations.values()).sort((a, b) => {
-      const aTime = a.last_message_at ? new Date(a.last_message_at || "").getTime() : 0;
-      const bTime = b.last_message_at ? new Date(b.last_message_at || "").getTime() : 0;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt || "").getTime() : 0; // Fixed: use camelCase
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt || "").getTime() : 0; // Fixed: use camelCase
       return bTime - aTime;
     });
   },
@@ -787,8 +787,8 @@ export const conversationSelectors = {
 
     // Sort by last message time
     return filtered.sort((a, b) => {
-      const aTime = a.last_message_at ? new Date(a.last_message_at || "").getTime() : 0;
-      const bTime = b.last_message_at ? new Date(b.last_message_at || "").getTime() : 0;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt || "").getTime() : 0; // Fixed: use camelCase
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt || "").getTime() : 0; // Fixed: use camelCase
       return bTime - aTime;
     });
   },

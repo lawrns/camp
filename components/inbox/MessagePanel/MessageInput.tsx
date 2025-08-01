@@ -97,8 +97,8 @@ export function MessageInput({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="p-spacing-md">
-        <div className="flex gap-3">
+      <form onSubmit={handleSubmit} className="ds-inbox-composer">
+        <div className="flex" style={{ gap: 'var(--ds-inbox-composer-gap)' }}>
           <div className="relative flex-1">
             <Textarea
               value={value}
@@ -107,14 +107,15 @@ export function MessageInput({
               onFocus={onFocus}
               onBlur={onBlur}
               placeholder={placeholder}
-              className="border-ds-border-strong max-h-32 min-h-[48px] resize-none rounded-ds-xl pr-12 focus:border-[var(--fl-color-border-interactive)] focus:ring-blue-400"
+              className="ds-inbox-textarea"
               data-testid="message-input"
             />
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="button-press smooth-transition absolute right-2 top-2 text-gray-400 hover:text-blue-600"
+              className="ds-inbox-button ds-inbox-button-secondary absolute"
+              style={{ right: 'var(--ds-spacing-2)', top: 'var(--ds-spacing-2)' }}
               disabled={isFileUploading}
             >
               {isFileUploading ? (
@@ -127,7 +128,7 @@ export function MessageInput({
           <Button
             type="submit"
             disabled={!value.trim() || isSending}
-            className="button-press button-hover smooth-transition self-end bg-[#246BFF] px-4 py-2 text-white shadow-card-base hover:bg-[#246BFF]/90"
+            className="ds-inbox-button ds-inbox-button-primary self-end"
           >
             {isSending ? (
               <div className="h-4 w-4 animate-spin rounded-ds-full border-b-2 border-white" />

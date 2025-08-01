@@ -6,7 +6,7 @@ import { ArrowDown, ChatCircle } from "@phosphor-icons/react";
 import { VariableSizeList as List } from "react-window";
 import type { Conversation, Message } from "../types";
 import { getMessageItemSize } from "../utils/channelUtils";
-import MessageRow from "./MessageRow";
+import { MessageRow } from "./MessageRow";
 
 interface MessageListProps {
   messages: Message[];
@@ -74,13 +74,13 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   // Loading skeleton
   const LoadingSkeleton = () => (
-    <div className="flex space-x-3 spacing-3">
+    <div className="flex" style={{ gap: 'var(--ds-inbox-message-gap)' }}>
       <div className="animate-pulse">
-        <div className="h-8 w-8 rounded-ds-full bg-gray-300"></div>
+        <div className="ds-inbox-avatar bg-gray-300"></div>
       </div>
-      <div className="flex-1 animate-pulse space-y-2">
+      <div className="flex-1 animate-pulse" style={{ gap: 'var(--ds-spacing-2)', display: 'flex', flexDirection: 'column' }}>
         <div className="h-4 w-1/4 rounded bg-gray-300"></div>
-        <div className="h-16 w-3/4 rounded-ds-lg bg-gray-300"></div>
+        <div className="h-16 w-3/4 bg-gray-300" style={{ borderRadius: 'var(--ds-inbox-message-bubble-radius)' }}></div>
       </div>
     </div>
   );
@@ -101,7 +101,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         </div>
         <h3 className="mb-2 text-lg font-medium text-neutral-300">Start the conversation</h3>
         <p className="text-sm text-neutral-300">
-          Send a message to {selectedConversation?.customer_name} to begin the conversation.
+          Send a message to {selectedConversation?.customerName} to begin the conversation.
         </p>
       </div>
     </div>
@@ -116,7 +116,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         <div className="flex-shrink-0">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              selectedConversation?.customer_name || "User"
+              selectedConversation?.customerName || "User"
             )}&size=32&background=e5e7eb&color=374151`}
             alt="Customer"
             className="h-8 w-8 rounded-ds-full"
@@ -157,13 +157,13 @@ export const MessageList: React.FC<MessageListProps> = ({
   const shouldVirtualize = messages.length > 100;
 
   return (
-    <div className="message-container messages relative flex min-h-0 flex-1 flex-col bg-[var(--fl-color-background-subtle)]" data-testid="messages">
+    <div className="ds-inbox-message-list relative flex min-h-0 flex-1 flex-col" style={{ background: 'var(--ds-color-background-muted)' }} data-testid="messages">
       {/* Connection status removed - was showing inappropriate warnings */}
 
       {/* Messages container */}
       <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto" onScroll={handleScroll}>
         {isLoading ? (
-          <div className="space-y-3 spacing-3">
+          <div style={{ gap: 'var(--ds-inbox-message-gap)', display: 'flex', flexDirection: 'column' }}>
             {Array.from({ length: 3 }).map((_, i) => (
               <LoadingSkeleton key={i} />
             ))}
@@ -211,7 +211,8 @@ export const MessageList: React.FC<MessageListProps> = ({
       {showScrollToBottom && (
         <button
           onClick={() => scrollToBottom()}
-          className="bg-primary absolute bottom-4 right-4 z-10 rounded-ds-full spacing-3 text-white shadow-card-deep transition-colors hover:bg-blue-700"
+          className="ds-inbox-button ds-inbox-button-primary absolute bottom-4 right-4 z-10 rounded-full"
+          style={{ padding: 'var(--ds-spacing-3)' }}
           aria-label="Scroll to bottom"
         >
           <ArrowDown className="h-5 w-5" />

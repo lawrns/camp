@@ -4,7 +4,7 @@ import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator"
 import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
 import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
 import { useAuth } from "@/hooks/useAuth";
-import { Clock, DotsThreeVertical, Info, Tag, Ticket, Users } from "@phosphor-icons/react";
+import { Clock, MoreVertical, Info, Tag, Ticket, Users } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import type { Conversation } from "../types";
@@ -28,7 +28,7 @@ interface ChatHeaderProps {
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
   conversation,
   isAIActive,
-  toggleAIHandover,
+  toggleAIHandover: _toggleAIHandover,
   showCustomerDetails,
   setShowCustomerDetails,
   typingUsers,
@@ -90,10 +90,10 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   const isCustomerOnline = onlineUsers.includes(conversation.customerEmail);
 
   return (
-    <div className="chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="chat-header">
-      <div className="flex items-center justify-between" data-testid="chat-header-content">
+    <div className="ds-inbox-header" data-testid="chat-header">
+      <div className="flex items-center justify-between w-full" data-testid="chat-header-content">
         {/* Left side - Customer info */}
-        <div className="flex items-center space-x-3" data-testid="chat-header-customer-info">
+        <div className="flex items-center" style={{ gap: 'var(--ds-inbox-header-gap)' }} data-testid="chat-header-customer-info">
           {/* Avatar with online indicator */}
           <div className="relative" data-testid="chat-header-avatar-container">
             <img
@@ -102,26 +102,27 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
                 return getAvatarPath(conversation.customerEmail || conversation.customerName, "customer");
               })()}
               alt={conversation.customerName}
-              className="h-10 w-10 rounded-ds-full object-cover shadow-card-base"
+              className="ds-inbox-avatar object-cover"
               data-testid="chat-header-avatar"
             />
             {/* Online indicator */}
             {isCustomerOnline && (
-              <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-ds-full border-2 border-white bg-green-400 shadow-card-base" data-testid="chat-header-online-indicator"></div>
+              <div className="ds-inbox-status absolute -bottom-1 -right-1 bg-green-400" data-testid="chat-header-online-indicator"></div>
             )}
           </div>
 
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
-            <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-customer-title-row">
-              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
+            <div className="flex items-center" style={{ gap: 'var(--ds-spacing-2)' }} data-testid="chat-header-customer-title-row">
+              <h2 className="truncate text-base font-semibold" style={{ color: 'var(--ds-color-text)' }} data-testid="chat-header-customer-name">{conversation.customerName}</h2>
 
               {/* Status badge */}
               <span
-                className={`inline-flex items-center rounded-ds-full px-2 py-1 text-xs font-medium text-white ${getStatusColor(conversation.status)}`}
+                className={`inline-flex items-center rounded-full text-xs font-medium text-white ${getStatusColor(conversation.status)}`}
+                style={{ padding: 'var(--ds-spacing-1) var(--ds-spacing-2)' }}
                 data-testid="chat-header-status-badge"
               >
-                <div className={`mr-1 h-2 w-2 rounded-ds-full ${getStatusColor(conversation.status)}`} data-testid="chat-header-status-indicator"></div>
+                <div className={`h-2 w-2 rounded-full ${getStatusColor(conversation.status)}`} style={{ marginRight: 'var(--ds-spacing-1)' }} data-testid="chat-header-status-indicator"></div>
                 {conversation.status}
               </span>
 
@@ -215,11 +216,11 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center space-x-spacing-sm" data-testid="chat-header-actions">
+        <div className="flex items-center" style={{ gap: 'var(--ds-inbox-button-gap)' }} data-testid="chat-header-actions">
           {/* Assignment Button - Opens Dialog */}
           <button
             onClick={() => setShowAssignmentDialog(true)}
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+            className="ds-inbox-button ds-inbox-button-secondary"
             title="Assign conversation"
             aria-label="Assign conversation"
             data-testid="chat-header-assign-button"
@@ -231,7 +232,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {onConvertToTicket && (
             <button
               onClick={onConvertToTicket}
-              className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+              className="ds-inbox-button ds-inbox-button-secondary"
               title="Convert to ticket"
               aria-label="Convert to ticket"
               data-testid="chat-header-convert-ticket-button"
@@ -258,8 +259,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details toggle */}
           <button
             onClick={() => setShowCustomerDetails(!showCustomerDetails)}
-            className={`rounded-ds-lg spacing-2 transition-colors ${showCustomerDetails ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              }`}
+            className={`ds-inbox-button ${showCustomerDetails ? "ds-inbox-button-primary" : "ds-inbox-button-secondary"}`}
             title="Toggle customer details"
             aria-label="Toggle customer details"
             data-testid="chat-header-details-toggle"
@@ -269,12 +269,12 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* More actions menu */}
           <button
-            className="hover:bg-background hover:text-foreground rounded-ds-lg p-spacing-sm text-gray-400 transition-colors"
+            className="ds-inbox-button ds-inbox-button-secondary"
             title="More actions"
             aria-label="More actions"
             data-testid="chat-header-more-actions"
           >
-            <DotsThreeVertical className="h-5 w-5" data-testid="chat-header-more-actions-icon" />
+            <MoreVertical className="h-5 w-5" data-testid="chat-header-more-actions-icon" />
           </button>
         </div>
       </div>
@@ -286,7 +286,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         conversationId={conversation.id}
         currentAgentId={null}
         organizationId={user?.organizationId || ""}
-        onAssigned={(agentId) => {
+        onAssigned={(_agentId) => {
           onAssignConversation?.();
           setShowAssignmentDialog(false);
         }}

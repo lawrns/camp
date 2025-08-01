@@ -41,8 +41,8 @@ export interface MessageAttachment {
  * Used across the entire application
  */
 export interface Message {
-  id: number; // Changed from string to number to match database schema
-  conversationId: number; // Changed from string to number to match database schema
+  id: string; // Fixed: Database uses UUID strings, not numbers
+  conversationId: string; // Fixed: Database uses UUID strings, not numbers
   content: string;
   senderType: SenderType;
   senderId?: string | null;
@@ -66,8 +66,8 @@ export interface Message {
   // Database compatibility fields
   organizationId?: string;
   organization_id?: string;
-  inReplyToId?: number | null; // Changed from string to number
-  responseToId?: number | null; // Changed from string to number
+  inReplyToId?: string | null; // Fixed: Database uses UUID strings
+  responseToId?: string | null; // Fixed: Database uses UUID strings
   validatedMailboxId?: string;
   gmailThreadId?: string;
   gmailMessageId?: string;
@@ -90,7 +90,7 @@ export interface Message {
   sender_name?: string;
   sender_email?: string;
   sender_avatar_url?: string;
-  conversation_id?: number; // Changed from string to number
+  conversation_id?: string; // Fixed: Database uses UUID strings
   read_at?: string | Date | null;
   delivery_status?: DeliveryStatus;
   read_status?: string;
@@ -219,17 +219,17 @@ export interface CustomerData {
  * Database Message type (snake_case from database schema)
  */
 export interface DatabaseMessage {
-  id: number; // Changed from string to number to match database schema
+  id: string; // Fixed: Database uses UUID strings
   organization_id: string;
-  conversation_id: number; // Changed from string to number to match database schema
+  conversation_id: string; // Fixed: Database uses UUID strings
   content: string;
   sender_name?: string | null;
   sender_email?: string | null;
   sender_type: SenderType;
   role?: MessageRole;
   source?: "email" | "chat" | "api" | "helpscout" | "slack";
-  in_reply_to_id?: number | null; // Changed from string to number
-  response_to_id?: number | null; // Changed from string to number
+  in_reply_to_id?: string | null; // Fixed: Database uses UUID strings
+  response_to_id?: string | null; // Fixed: Database uses UUID strings
   is_deleted?: boolean;
   deleted_at?: string | Date | null;
   validated_mailbox_id?: string;
@@ -413,7 +413,7 @@ export function transformToDatabase(message: Partial<Message>): Partial<Database
  * Database insert type
  */
 export interface MessageInsert {
-  conversation_id: number; // Changed from string to number to match database schema
+  conversation_id: string; // Fixed: Database uses UUID strings
   content: string;
   sender_type: SenderType;
   sender_id?: string | null;
