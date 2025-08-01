@@ -97,7 +97,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
             <div className="flex items-center gap-2" data-testid="chat-header-customer-title-row">
-              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
+              <h2 className="typography-conversation-title truncate" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
 
               {/* Status badge using unified component */}
               <StatusBadge 
