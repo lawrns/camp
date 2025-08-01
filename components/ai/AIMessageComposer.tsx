@@ -127,12 +127,12 @@ export function AIMessageComposer({
     adjustTextareaHeight();
   }, [message, adjustTextareaHeight]);
 
-  // Show suggestions when AI generates them
+  // Show suggestions when AI generates them or is generating
   useEffect(() => {
-    if (suggestions.length > 0) {
+    if (suggestions.length > 0 || isGeneratingSuggestions) {
       setShowSuggestions(true);
     }
-  }, [suggestions]);
+  }, [suggestions, isGeneratingSuggestions]);
 
   // Smart formatting preview
   useEffect(() => {

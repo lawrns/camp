@@ -184,12 +184,12 @@ export function useWidgetState(
       }));
       logDebug('Set initial conversation ID on widget open', { conversationId: initialConversationId });
     }
-  }, [state.conversationId, initialConversationId, initializeConversation, logDebug]);
+  }, [state.conversationId, initialConversationId, initializeConversation]);
 
   const closeWidget = useCallback(() => {
     // Widget open/close is now managed by WidgetProvider
     logDebug('Widget closed', {});
-  }, [logDebug]);
+  }, []);
 
   // Enhanced send message with debugging
   const sendMessage = useCallback(async (content: string) => {
@@ -226,9 +226,8 @@ export function useWidgetState(
   useEffect(() => {
     if (messagesError) {
       setState(prev => ({ ...prev, error: messagesError }));
-      logDebug('Messages error', { error: messagesError });
     }
-  }, [messagesError]); // Removed logDebug to prevent infinite re-renders
+  }, [messagesError]);
 
   // Debug mode setter
   const setDebugMode = useCallback((enabled: boolean) => {
@@ -244,14 +243,13 @@ export function useWidgetState(
         isInitialized: true,
         error: null
       }));
-      logDebug('Initialized with provided conversation ID', { conversationId: initialConversationId });
     }
-  }, [initialConversationId]); // Removed logDebug to prevent infinite re-renders
+  }, [initialConversationId]);
 
-  // Log state changes
-  useEffect(() => {
-    logDebug('State updated', state);
-  }, [state]); // Removed logDebug to prevent infinite re-renders
+  // Log state changes - disabled to prevent infinite re-renders
+  // useEffect(() => {
+  //   logDebug('State updated', state);
+  // }, [state]);
 
   return {
     state,

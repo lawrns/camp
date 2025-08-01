@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
+// TODO: Replace with standardized useRealtime hook
+import { useOrganizationRealtime as useNativeOrganizationRealtime } from "@/lib/realtime";
 
 interface RealtimeCallbacks {
   onNewMessage?: (message: any) => void;

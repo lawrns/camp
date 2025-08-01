@@ -1,7 +1,14 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MessageComposer } from "../MessageComposer";
-import type { UltimateMessageComposerProps } from "../types";
+import { MessageComposer } from "../phoenix-ui/MessageComposer";
+// Mock types since the actual types file doesn't exist
+interface UltimateMessageComposerProps {
+  conversationId: string;
+  features: any;
+  onMessageSent?: (message: any) => void;
+  maxLength?: number;
+  disabled?: boolean;
+}
 
 const defaultProps: UltimateMessageComposerProps = {
   conversationId: "test-conversation",

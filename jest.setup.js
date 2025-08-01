@@ -9,6 +9,34 @@ if (typeof global.TextEncoder === 'undefined') {
   global.TextEncoder = require('util').TextEncoder;
 }
 
+// Mock standardized realtime layer to prevent live WebSocket traffic during tests
+jest.mock('@/lib/realtime/standardized-realtime', () => ({
+  __esModule: true,
+  CHANNEL_PATTERNS: {
+    conversation: jest.fn((o, c) => `${o}:conversation:${c}`),
+    conversations: jest.fn((o) => `${o}:conversations`),
+    conversationTyping: jest.fn((o, c) => `${o}:typing:${c}`),
+  },
+  EVENT_TYPES: {
+    MESSAGE_CREATED: 'MESSAGE_CREATED',
+    TYPING_START: 'TYPING_START',
+    TYPING_STOP: 'TYPING_STOP',
+    CONVERSATION_ASSIGNED: 'CONVERSATION_ASSIGNED',
+    CONVERSATION_UPDATED: 'CONVERSATION_UPDATED',
+  },
+  channelManager: {
+    getStats: jest.fn(() => ({ channels: [] })),
+  },
+  broadcastToChannel: jest.fn().mockResolvedValue(true),
+  subscribeToChannel: jest.fn(() => jest.fn()), // returns unsubscribe fn
+  RealtimeHelpers: {
+    broadcastMessage: jest.fn().mockResolvedValue(true),
+    broadcastTyping: jest.fn().mockResolvedValue(true),
+    broadcastAssignment: jest.fn().mockResolvedValue(true),
+    subscribeToTyping: jest.fn(() => jest.fn()),
+  },
+}));
+
 // Mock Next.js router
 jest.mock('next/router', () => ({
   useRouter() {

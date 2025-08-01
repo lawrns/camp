@@ -1,0 +1,83 @@
+# Page snapshot
+
+```yaml
+- alert
+- button:
+  - img
+- main:
+  - heading "Welcome back, jam!" [level=1]
+  - heading "Active Conversations" [level=3]
+  - text: "5305"
+  - heading "Response Time" [level=3]
+  - text: "1"
+  - heading "AI Resolution Rate" [level=3]
+  - text: "91"
+  - heading "Customer Satisfaction" [level=3]
+  - text: "4.9"
+  - button:
+    - img
+  - heading "Inbox" [level=1]
+  - button:
+    - img
+  - button "New":
+    - img
+    - text: New
+  - button "All"
+  - button "Unread"
+  - button "Unassigned"
+  - button "AI Managed"
+  - button "Human Managed"
+  - button "Conversation with Test User":
+    - img "Test User"
+    - heading "Test User" [level=3]
+    - img
+    - text: Human
+    - paragraph: test@realtime-test.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Website Visitor":
+    - img "Website Visitor"
+    - heading "Website Visitor" [level=3]
+    - img
+    - text: Human
+    - paragraph: visitor@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Website Visitor":
+    - img "Website Visitor"
+    - heading "Website Visitor" [level=3]
+    - img
+    - text: Human
+    - paragraph: visitor@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: over 55 years ago
+  - img
+  - heading "Start the conversation" [level=3]
+  - paragraph: Choose a conversation from the list to start messaging with your customers.
+```

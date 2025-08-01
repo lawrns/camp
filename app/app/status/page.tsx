@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useOrganizationRealtime } from "@/lib/realtime";
 
 export default function StatusPage() {
   const [status, setStatus] = useState({
@@ -31,7 +31,7 @@ export default function StatusPage() {
   );
 
   // Test the consolidated realtime system
-  const realtimeStatus = useNativeOrganizationRealtime(testOrgId, realtimeOptions);
+  const realtimeStatus = useOrganizationRealtime(testOrgId, realtimeOptions);
 
   useEffect(() => {
     // Update realtime status based on native hook

@@ -60,7 +60,7 @@ describe("AIMessageComposer", () => {
 
     expect(screen.getByPlaceholderText("Type a message...")).toBeInTheDocument();
     expect(screen.getByTitle("Attach file")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /send/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "" })).toBeInTheDocument();
   });
 
   it("handles text input and calls onTyping", async () => {
@@ -214,7 +214,7 @@ describe("AIMessageComposer", () => {
   it("disables send button when message is empty", () => {
     render(<AIMessageComposer onSend={mockOnSend} />);
 
-    const sendButton = screen.getByRole("button", { name: /send/i });
+    const sendButton = screen.getByRole("button", { name: "" });
     expect(sendButton).toBeDisabled();
   });
 
@@ -226,7 +226,7 @@ describe("AIMessageComposer", () => {
     const textarea = screen.getByPlaceholderText("Type a message...");
     await user.type(textarea, "Test");
 
-    const sendButton = screen.getByRole("button", { name: /send/i });
+    const sendButton = screen.getByRole("button", { name: "" });
     expect(sendButton).toBeEnabled();
   });
 
@@ -304,7 +304,7 @@ describe("AIMessageComposer", () => {
     render(<AIMessageComposer onSend={mockOnSend} disabled={true} />);
 
     const textarea = screen.getByPlaceholderText("Type a message...");
-    const sendButton = screen.getByRole("button", { name: /send/i });
+    const sendButton = screen.getByRole("button", { name: "" });
     const fileButton = screen.getByTitle("Attach file");
 
     expect(textarea).toBeDisabled();

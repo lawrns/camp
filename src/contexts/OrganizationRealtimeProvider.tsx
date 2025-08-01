@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
+// TODO: migrate to full useRealtime hook; using unified alias for now
+import { useOrganizationRealtime as useNativeOrganizationRealtime } from "@/lib/realtime";
 
 interface RealtimeCallbacks {
   onNewMessage?: (message: any) => void;

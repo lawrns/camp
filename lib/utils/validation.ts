@@ -4,6 +4,7 @@
  */
 
 import { z } from 'zod';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // UUID validation schema
 const uuidSchema = z.string().uuid('Invalid UUID format');
@@ -54,6 +55,45 @@ export function validateConversationId(conversationId: string | null | undefined
  */
 export function validateUserId(userId: string | null | undefined): string {
   return validateUUID(userId, 'User ID');
+}
+
+/**
+ * Validates that the current user has access to the specified organization
+ * Checks organization membership and active status
+ */
+export async function validateOrganizationAccess(
+  supabase: SupabaseClient,
+  organizationId: string
+): Promise<boolean> {
+  try {
+    // Validate organization ID format first
+    validateUUID(organizationId, 'Organization ID');
+
+    // Get current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return false;
+    }
+
+    // Check if user is a member of the organization
+    const { data: membership, error: membershipError } = await supabase
+      .from('organization_members')
+      .select('id, status')
+      .eq('user_id', user.id)
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .single();
+
+    if (membershipError || !membership) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Organization access validation error:', error);
+    return false;
+  }
 }
 
 /**

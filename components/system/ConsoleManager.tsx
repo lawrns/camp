@@ -37,7 +37,11 @@ export function ConsoleManager() {
       originalError(`[${category.toUpperCase()}]`, ...args);
       
       // Send to error tracking service in production
-      if (process.env.NODE_ENV === 'production' && category !== 'extensions') {
+      // Use window.location to detect production environment safely
+      const isProduction = typeof window !== 'undefined' && 
+        (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1'));
+      
+      if (isProduction && category !== 'extensions') {
         // TODO: Implement proper error tracking (e.g., Sentry, LogRocket)
         console.info('Error would be sent to tracking service:', { category, message });
       }

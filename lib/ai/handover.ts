@@ -108,23 +108,30 @@ export class AIHandoverService {
     const { conversationId, organizationId } = context;
 
     try {
-      // 1. Create handover record
+      // 1. Create handover record (using correct schema)
       const { data: handover, error: handoverError } = await this.supabase
         .from("campfire_handoffs")
         .insert({
           conversation_id: conversationId,
           organization_id: organizationId,
-          from_ai_personality: context.aiPersonality.id,
-          to_agent_id: assignedAgentId,
+          persona_id: context.aiPersonality.id,
+          target_agent_id: assignedAgentId,
+          assigned_agent_id: assignedAgentId,
           reason: handoverResult.reason,
-          urgency: handoverResult.urgency,
-          context_summary: handoverResult.contextSummary,
-          ai_confidence: context.aiAnalysis.confidence,
+          priority: handoverResult.urgency,
+          transfer_type: "ai_to_human",
           customer_sentiment: context.aiAnalysis.sentiment,
-          issue_complexity: context.aiAnalysis.complexity,
-          escalation_reasons: context.aiAnalysis.escalationReasons,
+          topic_complexity: context.aiAnalysis.complexity,
+          urgency_score: context.aiAnalysis.confidence,
+          escalation_triggers: context.aiAnalysis.escalationReasons,
+          conversation_state: {
+            summary: handoverResult.contextSummary,
+            messageCount: context.messageHistory.length,
+            lastActivity: new Date().toISOString()
+          },
           status: "pending",
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         })
         .select()
         .single();

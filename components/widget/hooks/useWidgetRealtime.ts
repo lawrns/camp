@@ -5,7 +5,7 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { logWidgetEvent } from '@/lib/monitoring/widget-logger';
-import { WidgetMessage } from '@/types/entities/message';
+import { WidgetMessage, MessageStatus } from '@/types/entities/message';
 
 interface WidgetRealtimeConfig {
   organizationId: string;
@@ -57,13 +57,14 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   // Convert Supabase message to Widget message format
   const convertMessage = useCallback((supabaseMessage: SupabaseMessage): WidgetMessage => {
     return {
-      id: supabaseMessage.id,
+      id: parseInt(supabaseMessage.id, 10),
       content: supabaseMessage.content,
-      senderType: supabaseMessage.sender_type === 'visitor' ? 'user' : 'agent',
+      senderType: supabaseMessage.sender_type === 'visitor' ? 'visitor' : 'agent',
       senderName: supabaseMessage.sender_name || 'Unknown',
-      timestamp: new Date(supabaseMessage.created_at),
-      status: supabaseMessage.status || 'delivered',
-      metadata: supabaseMessage.metadata || {}
+      createdAt: supabaseMessage.created_at,
+      status: (supabaseMessage.status as MessageStatus) || 'delivered',
+      metadata: supabaseMessage.metadata || {},
+      conversationId: parseInt(supabaseMessage.conversation_id, 10)
     };
   }, []);
 
@@ -261,7 +262,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     return () => {
       disconnect();
     };
-  }, [config.organizationId, config.conversationId, connect, disconnect]);
+  }, [config.organizationId, config.conversationId]);
 
   // Update conversationId when it changes
   useEffect(() => {
@@ -272,7 +273,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
         disconnect().then(() => connect());
       }
     }
-  }, [config.conversationId, conversationId, isConnected, connect, disconnect]);
+  }, [config.conversationId, conversationId, isConnected]);
 
   return {
     isConnected,
@@ -282,4 +283,4 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     disconnect,
     connect
   };
-} 
+}
