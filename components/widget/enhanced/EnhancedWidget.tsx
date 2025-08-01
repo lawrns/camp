@@ -9,12 +9,17 @@ import {
   X, 
   Minus,
   ArrowsOut,
-  ArrowsIn,
-  PaperPlaneTilt
+  ArrowsIn
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { WidgetConfig } from './EnhancedWidgetProvider';
+
+// Import enterprise-grade enhanced-messaging components
+import { EnhancedComposer } from '@/components/enhanced-messaging/EnhancedComposer';
+import { EnhancedMessageList } from '@/components/enhanced-messaging/EnhancedMessageList';
+import { EnhancedMessageBubble, MessageData } from '@/components/enhanced-messaging/EnhancedMessageBubble';
+import { EnhancedTypingIndicator, TypingUser } from '@/components/enhanced-messaging/EnhancedTypingIndicator';
 
 interface EnhancedWidgetProps {
   organizationId: string;
@@ -30,14 +35,6 @@ interface WidgetState {
   conversationId?: string;
 }
 
-interface Message {
-  id: string;
-  content: string;
-  sender: 'user' | 'agent' | 'system';
-  timestamp: Date;
-  isTyping?: boolean;
-}
-
 export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   organizationId,
   config,
@@ -50,9 +47,9 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     activeTab: 'chat'
   });
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  // Use enhanced-messaging data structures
+  const [messages, setMessages] = useState<MessageData[]>([]);
+  const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Initialize conversation
@@ -84,14 +81,17 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         const conversationId = data.conversation?.id || data.conversationId || data.id;
         setState(prev => ({ ...prev, conversationId }));
         
-        // Add welcome message
+        // Add welcome message using enhanced-messaging format
         if (config.showWelcomeMessage && config.welcomeMessage) {
-          setMessages([{
+          const welcomeMessage: MessageData = {
             id: 'welcome',
             content: config.welcomeMessage,
-            sender: 'system',
-            timestamp: new Date()
-          }]);
+            senderType: 'system',
+            senderName: 'System',
+            timestamp: new Date().toISOString(),
+            status: 'delivered'
+          };
+          setMessages([welcomeMessage]);
         }
       }
     } catch (error) {
@@ -101,19 +101,27 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     }
   };
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || !state.conversationId) return;
+  // Enhanced message sending with enterprise-grade composer
+  const handleSendMessage = async (content: string, attachments?: File[], metadata?: any) => {
+    if (!content.trim() || !state.conversationId) return;
 
-    const userMessage: Message = {
+    const userMessage: MessageData = {
       id: `msg-${Date.now()}`,
-      content: inputValue,
-      sender: 'user',
-      timestamp: new Date()
+      content,
+      senderType: 'user',
+      senderName: 'You',
+      timestamp: new Date().toISOString(),
+      status: 'sending',
+      attachments: attachments?.map((file, index) => ({
+        id: `att-${Date.now()}-${index}`,
+        name: file.name,
+        url: URL.createObjectURL(file),
+        size: file.size,
+        type: file.type
+      }))
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsTyping(true);
 
     try {
       const response = await fetch('/api/widget/messages', {
@@ -124,28 +132,74 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         },
         body: JSON.stringify({
           conversationId: state.conversationId,
-          content: inputValue,
-          senderType: 'visitor'
+          content,
+          senderType: 'visitor',
+          attachments: metadata?.attachments
         }),
       });
 
       if (response.ok) {
-        // Simulate agent response
+        // Update message status to sent
+        setMessages(prev => prev.map(msg => 
+          msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg
+        ));
+
+        // Simulate agent response with enhanced-messaging format
         setTimeout(() => {
-          const agentMessage: Message = {
+          const agentMessage: MessageData = {
             id: `agent-${Date.now()}`,
             content: "Thanks for your message! An agent will respond shortly.",
-            sender: 'agent',
-            timestamp: new Date()
+            senderType: 'agent',
+            senderName: 'Support Agent',
+            timestamp: new Date().toISOString(),
+            status: 'delivered'
           };
           setMessages(prev => [...prev, agentMessage]);
-          setIsTyping(false);
         }, 2000);
       }
     } catch (error) {
       console.error('Failed to send message:', error);
-      setIsTyping(false);
+      // Update message status to failed
+      setMessages(prev => prev.map(msg => 
+        msg.id === userMessage.id ? { ...msg, status: 'failed' } : msg
+      ));
     }
+  };
+
+  // Enhanced typing indicator handling
+  const handleTyping = () => {
+    const typingUser: TypingUser = {
+      id: 'visitor',
+      name: 'You',
+      isTyping: true
+    };
+    setTypingUsers([typingUser]);
+  };
+
+  const handleStopTyping = () => {
+    setTypingUsers([]);
+  };
+
+  // Message action handlers for enhanced-messaging
+  const handleMessageAction = (action: string, messageId: string, data?: any) => {
+    console.log('Message action:', action, messageId, data);
+    // Handle reactions, replies, editing, etc.
+  };
+
+  const handleReact = (messageId: string, emoji: string) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId 
+        ? { 
+            ...msg, 
+            reactions: [...(msg.reactions || []), { emoji, userId: 'visitor', timestamp: new Date().toISOString() }]
+          }
+        : msg
+    ));
+  };
+
+  const handleCopy = (content: string) => {
+    navigator.clipboard.writeText(content);
+    // Could add toast notification here
   };
 
   const toggleWidget = useCallback(() => {
@@ -187,64 +241,40 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     }
   };
 
+  // Enhanced chat tab using enterprise-grade components
   const renderChatTab = () => (
     <div className="flex flex-col h-full">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={cn(
-              "flex",
-              message.sender === 'user' ? "justify-end" : "justify-start"
-            )}
-          >
-            <div
-              className={cn(
-                "max-w-[80%] rounded-lg px-3 py-2 text-sm",
-                message.sender === 'user'
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-100 text-gray-900"
-              )}
-            >
-              {message.content}
-            </div>
-          </div>
-        ))}
-        {isTyping && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-3 py-2 text-sm">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Enhanced Message List */}
+      <div className="flex-1 overflow-hidden">
+        <EnhancedMessageList
+          messages={messages}
+          typingUsers={typingUsers}
+          isLoading={isLoading}
+          enableVirtualization={messages.length > 50}
+          enableAutoScroll={true}
+          enableGrouping={true}
+          enableLoadMore={false}
+          onReact={handleReact}
+          onCopy={handleCopy}
+          onMessageAction={handleMessageAction}
+          className="h-full"
+        />
       </div>
 
-      {/* Input */}
-      <div className="border-t p-4">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder="Type your message..."
-            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            data-testid="widget-message-input"
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            size="sm"
-            data-testid="widget-send-button"
-          >
-            <PaperPlaneTilt size={16} />
-          </Button>
-        </div>
+      {/* Enhanced Composer */}
+      <div className="border-t bg-white p-4">
+        <EnhancedComposer
+          onSend={handleSendMessage}
+          placeholder="Type your message..."
+          enableEmoji={true}
+          enableAttachments={true}
+          enableDrafts={true}
+          maxLength={2000}
+          variant="widget"
+          onTyping={handleTyping}
+          onStopTyping={handleStopTyping}
+          className="w-full"
+        />
       </div>
     </div>
   );
