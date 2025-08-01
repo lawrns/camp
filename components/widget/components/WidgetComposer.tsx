@@ -85,13 +85,20 @@ export function WidgetComposer({
 
     try {
       setIsSending(true);
+
+      // Clear typing timeout immediately when sending
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
+
       await onSend(currentValue.trim(), attachments);
-      
+
       // Clear form
       setCurrentValue('');
       setAttachments([]);
       onStopTyping?.();
-      
+
       // Reset textarea height
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
@@ -166,7 +173,7 @@ export function WidgetComposer({
 
   return (
     <TooltipProvider>
-      <div className={cn("border-t bg-white", className)}>
+      <div className={cn("sticky bottom-0 border-t bg-white z-10", className)}>
         {/* Attachments Preview */}
         <AnimatePresence>
           {attachments.length > 0 && (

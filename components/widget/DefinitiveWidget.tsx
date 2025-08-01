@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { WidgetDebugger } from './debug/WidgetDebugger';
 import { useWidgetState } from './hooks/useWidgetState';
 import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
@@ -25,6 +25,10 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
   const [widgetError, setWidgetError] = useState<string | null>(null);
   const [demoAgentIsTyping, setDemoAgentIsTyping] = useState(false);
+
+  // Refs for auto-scroll functionality
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   console.log('[DefinitiveWidget] About to call useWidget()');
 
@@ -89,12 +93,17 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     console.log("[DefinitiveWidget] Messages updated:", messages.length, messages);
   }, [messages]);
 
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
-    const messagesContainer = document.getElementById('widget-messages');
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  // Auto-scroll to bottom when new messages arrive or after sending
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
   }, [messages]);
 
   // Typing indicator functions with real API integration
@@ -178,6 +187,11 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       const result = await sendMessage(content.trim());
       console.log('[DefinitiveWidget] sendMessage result:', result);
       stopTyping(); // Stop typing indicator when message is sent
+
+      // Scroll to bottom after sending message
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100); // Small delay to ensure message is rendered
     } catch (error) {
       console.error('[DefinitiveWidget] Failed to send message:', error);
     }
@@ -294,6 +308,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
 
       {/* Messages */}
       <div
+        ref={messagesContainerRef}
         id="widget-messages"
         className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"
         data-testid="widget-messages"
@@ -395,6 +410,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
             </div>
           </div>
         )}
+
+        {/* Messages end marker for auto-scroll */}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Agent Typing Indicator */}
