@@ -97,7 +97,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
 
   return (
     <div
-      className={`flex gap-4 p-4 rounded-lg bg-background shadow-sm hover:shadow-md transition-all duration-200 ${
+      className={`flex gap-4 p-4 transition-colors hover:bg-[var(--fl-color-background-subtle)] ${
         isOwnMessage ? "flex-row-reverse" : "flex-row"
       }`}
       data-testid="message-row"

@@ -204,7 +204,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         ) : (
           // Regular rendering for smaller lists
           <div className="overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
-            <div className="space-y-0">
+            <div className="space-y-2">
               {messages.map((message) => (
                 <MessageRow
                   key={message.id}
