@@ -463,9 +463,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   ]);
 
   return (
-    <div className={`responsive-container flex h-screen overflow-hidden bg-[var(--ds-color-background-muted)] gap-0 md:gap-1 ${className}`} data-testid="inbox-dashboard">
+    <div className={`flex h-screen overflow-hidden bg-[var(--ds-color-background-muted)] ${className}`} data-testid="inbox-dashboard">
       {/* Add wrapper with padding */}
-      <div className="flex h-full w-full flex-col gap-6 md:gap-8">
+      <div className="flex h-full w-full flex-col">
         {/* Header */}
         <Header
           conversations={conversations}
@@ -482,7 +482,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         />
 
         {/* Main content with proper layout */}
-        <div className="flex flex-1 overflow-hidden gap-0 md:gap-1">
+        <div className="flex flex-1 overflow-hidden">
           {/* Conversation list */}
           <ConversationList
             conversations={conversations}
@@ -495,8 +495,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           />
 
           {/* Chat area */}
-          <div className="bg-[var(--ds-color-background)] relative flex flex-1 shadow-sm" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
-            <div className="bg-[var(--ds-color-background)] flex flex-1 flex-col gap-0">
+          <div className="bg-[var(--ds-color-background)] relative flex flex-1" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
+            <div className="bg-[var(--ds-color-background)] flex flex-1 flex-col">
               {selectedConversation ? (
                 <>
                   <ChatHeader

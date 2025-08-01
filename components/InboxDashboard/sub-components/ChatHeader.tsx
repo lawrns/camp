@@ -76,7 +76,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   const isCustomerOnline = onlineUsers.includes(conversation.customerEmail);
 
   return (
-    <div className="ds-inbox-header chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4 shadow-sm" data-testid="chat-header">
+    <div className="chat-header bg-background flex-shrink-0 border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="chat-header">
       <div className="flex items-center justify-between" data-testid="chat-header-content">
         {/* Left side - Customer info */}
         <div className="flex items-center gap-3" data-testid="chat-header-customer-info">
@@ -97,7 +97,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Customer details */}
           <div className="min-w-0 flex-1" data-testid="chat-header-customer-details">
             <div className="flex items-center gap-2" data-testid="chat-header-customer-title-row">
-              <h2 className="font-sans truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
+              <h2 className="truncate text-base font-semibold text-gray-900" data-testid="chat-header-customer-name">{conversation.customerName}</h2>
 
               {/* Status badge using unified component */}
               <StatusBadge 
