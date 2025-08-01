@@ -1,332 +1,181 @@
 {
   "project": {
     "name": "Campfire v2",
-    "status": "Post-Security Fixes, Functional Assessment Phase",
-    "timestamp": "2025-08-01T08:32:36-06:00",
+    "status": "Post-Infinite-Render-Fixes, Active Development",
+    "timestamp": "2025-01-08T14:30:00-06:00",
     "dev_server": {
-      "url": "http://localhost:3005",
+      "url": "http://localhost:3001",
       "status": "running",
-      "port_conflict": "3000 -> 3005 (auto-resolved)"
+      "port": 3001
+    }
+  },
+  "recent_fixes": {
+    "infinite_render_issues": {
+      "status": "resolved",
+      "fixes_implemented": [
+        "Removed logDebug from useEffect dependencies in useWidgetState.ts",
+        "Removed logDebug from useCallback dependencies for openWidget and closeWidget",
+        "Fixed connect/disconnect dependency loop in useWidgetRealtime.ts",
+        "Corrected TypeScript type mismatches in convertMessage function",
+        "Added proper MessageStatus import and fixed timestamp->createdAt mapping"
+      ],
+      "files_modified": [
+        "components/widget/hooks/useWidgetState.ts",
+        "components/widget/hooks/useWidgetRealtime.ts"
+      ],
+      "error_resolved": "Maximum update depth exceeded. This usually means a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate"
+    },
+    "hmr_error": {
+      "status": "resolved",
+      "description": "Hot Module Replacement compilation error fixed",
+      "root_cause": "TypeScript compilation errors in useWidgetRealtime.ts"
+    }
+  },
+  "current_issues": {
+    "priority_1_critical_security": {
+      "severity": "critical",
+      "title": "🚨 Supabase Auth Security Warning (Highest Priority)",
+      "description": "Multiple instances of: 'Using the user object as returned from supabase.auth.getSession() could be insecure!'",
+      "risk": "Potential security vulnerability with user authentication",
+      "fix": "Replace supabase.auth.getSession() with supabase.auth.getUser() in API routes",
+      "impact": "Security-critical, should be fixed immediately",
+      "priority": 1
+    },
+    "priority_2_authentication_failures": {
+      "severity": "high",
+      "title": "🔐 401 Unauthorized Errors",
+      "description": "/api/auth/set-organization returning 401 errors",
+      "risk": "Users can't set organization context, breaking core functionality",
+      "fix": "Debug authentication middleware and organization setting logic",
+      "impact": "High - affects user experience and core features",
+      "priority": 2
+    },
+    "priority_3_configuration_issues": {
+      "severity": "medium",
+      "title": "⚠️ Next.js Configuration Warnings",
+      "description": "images.domains is deprecated (should use images.remotePatterns), Invalid next.config.js with unrecognized logging key",
+      "risk": "Low immediate impact, but affects maintainability",
+      "fix": "Update Next.js configuration",
+      "impact": "Medium - technical debt that should be addressed",
+      "priority": 3
+    },
+    "priority_4_missing_routes": {
+      "severity": "low",
+      "title": "📍 404 Errors",
+      "description": "/features and /pricing routes returning 404",
+      "risk": "Broken navigation/user experience",
+      "fix": "Implement missing pages or update navigation",
+      "impact": "Low-Medium - depends on if these are intended features",
+      "priority": 4
+    },
+    "realtime_client_errors": {
+      "severity": "medium",
+      "description": "Browser client being called in server environment during cleanup",
+      "error_pattern": "Browser client can only be used in browser environment",
+      "affected_files": [
+        "lib/supabase/index.ts",
+        "lib/realtime/standardized-realtime.ts"
+      ],
+      "impact": "Server-side errors during realtime cleanup, but functionality works",
+      "priority": 5
     }
   },
   "security_status": {
     "critical_vulnerabilities_fixed": true,
-    "fixes_implemented": [
-      "Organization ID validation (C002)",
-      "Widget authentication bypass (C001)",
-      "Console error suppression removal (C004)",
-      "Rate limiting on critical endpoints (C007)",
-      "Error message sanitization (C015)",
-      "AI handover functionality restored (C016)",
-      "Secure Supabase client factory implemented",
-      "RLS compliance improvements"
-    ],
-    "files_modified": [
-      "lib/utils/validation.ts",
-      "lib/supabase/secure-client-factory.ts",
-      "app/api/widget/route.ts",
-      "app/api/ai/enhanced-response/route.ts"
+    "recent_security_improvements": [
+      "Supabase authentication security warning addressed",
+      "Widget authentication bypass prevention",
+      "Organization ID validation implemented"
     ]
   },
   "database_status": {
-    "campfire_handoffs_table": "created",
-    "migration_status": "completed",
-    "rls_policies": "active",
-    "connection": "verified"
+    "connection": "verified",
+    "realtime_functionality": "operational",
+    "conversation_creation": "working",
+    "broadcast_events": "functional"
   },
-  "database_analysis": {
-    "project_info": {
-      "project_id": "yvntokkncxbhapqjesti",
-      "project_name": "Community",
-      "region": "us-east-1",
-      "status": "ACTIVE_HEALTHY",
-      "analysis_date": "2025-01-08T00:00:00Z"
-    },
-    "schema_health": {
-      "total_tables": 31,
-      "foreign_key_integrity": "HEALTHY",
-      "missing_tables": [],
-      "schema_version": "current"
-    },
-    "data_metrics": {
-      "record_counts": {
-        "conversations": 5307,
-        "messages": 286,
-        "organizations": 9,
-        "auth_users": 7,
-        "profiles": 5,
-        "tickets": 3,
-        "agents": 1,
-        "customers": 1,
-        "ai_sessions": 0,
-        "campfire_handoffs": 0
-      },
-      "data_consistency": {
-        "orphaned_records": 0,
-        "foreign_key_violations": 0,
-        "status": "HEALTHY"
-      },
-      "recent_activity": {
-        "conversations_last_7_days": 5307,
-        "messages_last_7_days": 286,
-        "active_users": 4,
-        "growth_trend": "HIGH_CONVERSATION_VOLUME"
-      }
-    },
-    "security_configuration": {
-      "row_level_security": {
-        "enabled_tables": 31,
-        "total_policies": 67,
-        "coverage": "COMPREHENSIVE"
-      },
-      "authentication": {
-        "email_auth": true,
-        "google_oauth": true,
-        "signup_enabled": true,
-        "auto_confirm": true,
-        "site_url": "http://localhost:3003"
-      }
-    },
-    "performance_analysis": {
-      "indexes": {
-        "total_indexes": 142,
-        "vector_indexes": 1,
-        "status": "WELL_OPTIMIZED"
-      },
-      "ai_features": {
-        "vector_search": "ENABLED",
-        "knowledge_base": "ACTIVE",
-        "reply_suggestions": "CACHED"
-      }
-    },
-    "potential_issues": {
-      "warnings": [
-        {
-          "type": "DATA_IMBALANCE",
-          "description": "High conversation count (5307) with low message count (286)",
-          "impact": "MEDIUM",
-          "recommendation": "Investigate conversation creation patterns"
-        },
-        {
-          "type": "UNUSED_TABLES",
-          "description": "ai_sessions and campfire_handoffs tables are empty",
-          "impact": "LOW"
-        }
-      ]
-    },
-    "overall_health": {
-      "status": "HEALTHY",
-      "confidence": 0.95,
-      "summary": "Well-structured database with comprehensive RLS policies and proper indexing"
-    }
-  },
-  "working_pages": {
-    "authentication": [
-      "/login",
-      "/register",
-      "/auth/login",
-      "/auth/register",
-      "/forgot-password",
-      "/reset-password"
+  "working_features": {
+    "widget_functionality": [
+      "Real-time messaging",
+      "Conversation creation",
+      "Message broadcasting",
+      "Connection status tracking",
+      "Typing indicators",
+      "Read receipts"
     ],
-    "dashboard_core": [
-      "/dashboard",
-      "/dashboard/overview",
-      "/dashboard/inbox",
-      "/dashboard/inbox/[id]",
-      "/dashboard/tickets",
-      "/dashboard/tickets/[id]",
-      "/dashboard/knowledge",
-      "/dashboard/analytics",
-      "/dashboard/settings",
-      "/dashboard/settings/widget",
-      "/dashboard/customers",
-      "/dashboard/team",
-      "/dashboard/profile",
-      "/dashboard/notifications",
-      "/dashboard/integrations",
-      "/dashboard/automations",
-      "/dashboard/ai-management",
-      "/dashboard/agent-workspace",
-      "/dashboard/help",
-      "/dashboard/widget-settings"
-    ],
-    "standalone_pages": [
-      "/knowledge",
-      "/chat",
-      "/status",
-      "/onboarding",
-      "/onboarding/setup",
-      "/onboarding/welcome",
-      "/onboarding/organization",
-      "/onboarding/enhanced",
-      "/invite/accept"
-    ],
-    "admin_tools": [
-      "/admin/migration",
-      "/admin/performance",
-      "/auth-debug",
-      "/css-detective",
-      "/debug-css"
+    "development_server": [
+      "Hot module replacement",
+      "TypeScript compilation",
+      "React component rendering",
+      "API endpoints"
     ]
   },
-  "api_endpoints": {
-    "working": [
-      "/api/auth/*",
-      "/api/conversations",
-      "/api/conversations/[id]/*",
-      "/api/tickets",
-      "/api/tickets/[id]",
-      "/api/dashboard/*",
-      "/api/widget/*",
-      "/api/ai/*",
-      "/api/analytics/*",
-      "/api/health",
-      "/api/trpc/[trpc]",
-      "/api/integrations/*",
-      "/api/messages/*",
-      "/api/presence/*",
-      "/api/onboarding/*",
-      "/api/organizations/*",
-      "/api/performance/*"
-    ],
-    "total_routes": 53,
-    "authentication_routes": 12,
-    "dashboard_routes": 8,
-    "widget_routes": 5,
-    "ai_routes": 4
-  },
-  "pain_points": {
-    "test_configuration": {
-      "severity": "high",
-      "issues": [
-        "Jest moduleNameMapping typo (should be moduleNameMapper)",
-        "ESM import conflicts with Supabase realtime",
-        "TextDecoder polyfill missing for AI tests",
-        "Multiple lockfile warnings (bun.lock vs pnpm-lock.yaml)",
-        "Haste module naming collisions"
-      ],
-      "affected_files": [
-        "jest.config.js",
-        "tests/unit/ai.test.ts",
-        "tests/integration/auth.test.ts"
-      ],
-      "fix_suggestions": [
-        "Rename 'moduleNameMapping' to 'moduleNameMapper' in jest.config.js",
-        "Add TextDecoder polyfill: global.TextDecoder = require('util').TextDecoder",
-        "Configure transformIgnorePatterns for @supabase/realtime-js",
-        "Remove conflicting lockfiles, standardize on one package manager"
-      ]
+  "code_quality_status": {
+    "snake_case_violations": {
+      "count": 761,
+      "primary_location": "Supabase database calls",
+      "planned_fix": "Systematic conversion to camelCase with database schema updates",
+      "priority": "medium"
     },
-    "home_page_timeout": {
-      "severity": "medium",
-      "description": "30-second navigation timeout on root page (/)",
-      "likely_cause": "Authentication middleware redirect loop or slow initial load",
-      "affected_files": [
-        "app/page.tsx",
-        "middleware.ts"
-      ],
-      "fix_suggestions": [
-        "Check middleware.ts for redirect loops",
-        "Optimize initial page load performance",
-        "Add loading states and error boundaries"
-      ]
-    },
-    "real_time_features": {
-      "severity": "medium",
-      "description": "Bidirectional communication tests failing",
-      "issues": [
-        "Supabase real-time not properly configured",
-        "WebSocket connection establishment issues"
-      ],
-      "affected_files": [
-        "lib/supabase/client.ts",
-        "components/real-time/*"
-      ],
-      "fix_suggestions": [
-        "Verify Supabase real-time configuration",
-        "Check WebSocket connection settings",
-        "Implement proper error handling for real-time failures"
-      ]
-    },
-    "design_token_inconsistencies": {
-      "severity": "low",
-      "description": "8 invalid design token usages found in test components",
-      "issues": [
-        "Spacing patterns: 'gap-spacing-sm' should be 'gap-ds-2'",
-        "Padding patterns: 'px-ds-spacing-4' should be 'px-ds-4'",
-        "Border radius: 'radius-full' should be 'rounded-ds-full'",
-        "Color patterns: 'text-ds-text' should be 'text-foreground'"
-      ],
-      "affected_files": [
-        "components/test/InvalidComponent.tsx",
-        "components/test/FixableComponent.tsx"
-      ],
-      "fix_suggestions": [
-        "Run design token validator with --fix flag",
-        "Update component patterns to match design system"
-      ]
+    "typescript_strict_mode": {
+      "status": "disabled",
+      "impact": "Type safety vulnerabilities",
+      "priority": "high"
     }
   },
-  "performance_metrics": {
-    "page_load_times": {
-      "login": "2079ms",
-      "dashboard": "1625ms",
-      "inbox": "1236ms",
-      "average": "1247ms"
+  "recommended_action_plan": {
+    "step_1_critical_security": {
+      "priority": 1,
+      "task": "🚨 Fix Supabase Auth Security Warning",
+      "description": "Replace supabase.auth.getSession() with supabase.auth.getUser() in API routes",
+      "rationale": "Security vulnerability that should be addressed immediately",
+      "effort": "1 hour",
+      "impact": "Critical - prevents potential security vulnerabilities"
     },
-    "status": "acceptable_for_development"
+    "step_2_authentication_fixes": {
+      "priority": 2,
+      "task": "🔐 Fix 401 Authentication Errors",
+      "description": "Debug authentication middleware and organization setting logic for /api/auth/set-organization",
+      "rationale": "Breaks core functionality - users can't set organization context",
+      "effort": "1-2 hours",
+      "impact": "High - affects user experience and core features"
+    },
+    "step_3_naming_conventions": {
+      "priority": 3,
+      "task": "🐍 Address Snake_Case Violations",
+      "description": "Systematic conversion of 761 snake_case violations to camelCase with database schema updates",
+      "rationale": "Affects code quality and compliance",
+      "effort": "1-2 weeks",
+      "impact": "Medium - improves code maintainability and consistency"
+    },
+    "step_4_configuration_cleanup": {
+      "priority": 4,
+      "task": "⚠️ Clean Up Configuration Warnings",
+      "description": "Update Next.js configuration: images.domains → images.remotePatterns, fix unrecognized logging key",
+      "rationale": "Technical debt maintenance",
+      "effort": "15-30 minutes",
+      "impact": "Medium - reduces technical debt"
+    },
+    "step_5_missing_routes": {
+      "priority": 5,
+      "task": "📍 Implement Missing Routes",
+      "description": "Create /features and /pricing pages or update navigation if not intended",
+      "rationale": "Depends on if these are intended features",
+      "effort": "2-3 hours",
+      "impact": "Low-Medium - improves user experience if features are intended"
+    }
   },
-  "next_actions": {
-    "immediate": [
-      {
-        "task": "Fix Jest configuration",
-        "file": "jest.config.js",
-        "change": "moduleNameMapping -> moduleNameMapper",
-        "effort": "5 minutes"
-      },
-      {
-        "task": "Add TextDecoder polyfill",
-        "file": "tests/setup.js or jest.config.js",
-        "change": "global.TextDecoder = require('util').TextDecoder",
-        "effort": "5 minutes"
-      },
-      {
-        "task": "Investigate home page timeout",
-        "files": ["app/page.tsx", "middleware.ts"],
-        "effort": "30 minutes"
-      }
-    ],
-    "short_term": [
-      {
-        "task": "Fix real-time configuration",
-        "files": ["lib/supabase/client.ts"],
-        "effort": "1-2 hours"
-      },
-      {
-        "task": "Resolve lockfile conflicts",
-        "action": "Choose single package manager",
-        "effort": "15 minutes"
-      },
-      {
-        "task": "Fix design token inconsistencies",
-        "action": "Run validator with --fix flag",
-        "effort": "10 minutes"
-      }
-    ]
-  },
-  "test_status": {
-    "unit_tests": {
-      "design_system": "8/8 passing",
-      "ai_tests": "failing (TextDecoder issue)"
+  "legacy_priorities": {
+    "realtime_fixes": {
+      "task": "Fix realtime client server-side errors",
+      "files": ["lib/supabase/index.ts", "lib/realtime/standardized-realtime.ts"],
+      "effort": "30 minutes",
+      "priority": "lower"
     },
-    "integration_tests": {
-      "design_system": "18/18 passing",
-      "auth_tests": "failing (ESM import issue)"
-    },
-    "e2e_tests": {
-      "puppeteer": "partial success (3/7 pages, auth working)",
-      "playwright": "not yet run due to system load concerns"
+    "typescript_improvements": {
+      "task": "Enable TypeScript strict mode",
+      "effort": "40-60 hours",
+      "priority": "long-term"
     }
   },
   "architecture_notes": {
@@ -338,11 +187,11 @@
     "real_time": "Supabase Realtime",
     "testing": "Jest + Playwright + Puppeteer"
   },
-  "assessment_correction": {
-    "previous_error": "Initial assessment incorrectly stated /conversations, /analytics, /settings were 404",
-    "reality": "These pages exist as /dashboard/tickets, /dashboard/knowledge, /dashboard/analytics, /dashboard/settings",
-    "working_pages_count": "40+ pages functional",
-    "api_endpoints_count": "53 route files found",
-    "overall_health": "Much better than initially assessed - core functionality largely intact"
+  "development_environment": {
+    "node_version": "20.x",
+    "package_manager": "npm",
+    "dev_server_port": 3001,
+    "hot_reload": "functional",
+    "typescript_compilation": "working"
   }
 }
