@@ -112,4 +112,8 @@ export default function TestConversationManagement() {
             assignedAgent: assignedAgent || 'None'
           }, null, 2)}
         </pre>
+      </div>
+    </div>
+  );
+}
  

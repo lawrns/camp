@@ -173,6 +173,11 @@ export const env = createEnv({
       .string()
       .transform((s) => s === "true")
       .default("false"),
+
+    // Homepage variant feature flag
+    NEXT_PUBLIC_HOMEPAGE_VARIANT: z
+      .enum(["legacy", "commie"])
+      .default("legacy"),
   },
 
   /**
@@ -248,6 +253,7 @@ export const env = createEnv({
     NEXT_PUBLIC_RECOVERY_2025_P2_CONVERSATIONS: process.env.NEXT_PUBLIC_RECOVERY_2025_P2_CONVERSATIONS,
     NEXT_PUBLIC_RECOVERY_2025_P2_MESSAGING: process.env.NEXT_PUBLIC_RECOVERY_2025_P2_MESSAGING,
     NEXT_PUBLIC_RECOVERY_2025_P2_PROFILE: process.env.NEXT_PUBLIC_RECOVERY_2025_P2_PROFILE,
+    NEXT_PUBLIC_HOMEPAGE_VARIANT: process.env.NEXT_PUBLIC_HOMEPAGE_VARIANT,
   },
 
   /**
@@ -322,3 +328,8 @@ export const RECOVERY_FLAGS = {
   P2_MESSAGING: env.NEXT_PUBLIC_RECOVERY_2025_P2_MESSAGING,
   P2_PROFILE: env.NEXT_PUBLIC_RECOVERY_2025_P2_PROFILE,
 };
+
+/**
+ * Homepage variant feature flag
+ */
+export const HOMEPAGE_VARIANT = env.NEXT_PUBLIC_HOMEPAGE_VARIANT;

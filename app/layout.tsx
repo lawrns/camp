@@ -12,7 +12,12 @@ if (typeof window !== 'undefined') {
   initializeMonitoring();
 }
 
-export const metadata: Metadata = { title: 'Campfire - Customer Support Platform' };
+export const metadata: Metadata = { 
+  title: 'Campfire - Customer Support Platform',
+  alternates: {
+    canonical: '/',
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
