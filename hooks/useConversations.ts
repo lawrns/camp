@@ -1,7 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "./useAuth";
+import { safeMapConversations, mapDatabaseConversation } from "@/lib/data/conversationMapper";
 
 export function useConversations() {
   const queryClient = useQueryClient();
@@ -23,33 +24,52 @@ export function useConversations() {
         try {
           const tokenParts = session.access_token.split('.');
           if (tokenParts.length === 3) {
-            const claims = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString());
-
+            // JWT token is valid - we can proceed with the query
           }
         } catch (e) {
-
+          // Ignore JWT decode errors
         }
       }
 
-      const { data, error } = await supabase
-        .browser()
-        .from("conversations")
-        .select("*")
-        .eq("organization_id", organizationId)
-        .order("updated_at", { ascending: false });
+      try {
+        // Query conversations directly - customer data is stored in the conversations table
+        console.log("[useConversations] Fetching conversations with direct customer fields...");
+        const { data, error } = await supabase
+          .browser()
+          .from("conversations")
+          .select("*")
+          .eq("organization_id", organizationId)
+          .order("updated_at", { ascending: false });
 
-      if (error) {
-        console.error("[useConversations] Supabase error:", error);
+        if (error) {
+          console.error("[useConversations] Failed to fetch conversations:", error);
+          throw error;
+        }
+
+        console.log("[useConversations] Successfully fetched conversations:", data?.length || 0, "conversations");
+        console.log("[useConversations] Organization ID used:", organizationId);
+        
+        // Log the actual data structure for debugging
+        if (data && data.length > 0) {
+          console.log("[useConversations] Sample conversation data:", data[0]);
+          console.log("[useConversations] Sample conversation keys:", Object.keys(data[0]));
+        }
+        
+        // Transform database data to TypeScript types
+        const transformedData = safeMapConversations(data || []);
+        console.log("[useConversations] Transformed conversations:", transformedData.length, "valid conversations");
+        
+        return transformedData;
+      } catch (error) {
+        console.error("[useConversations] All query strategies failed:", error);
         throw error;
       }
-
-      console.log("[useConversations] Successfully fetched conversations:", data?.length || 0, "conversations");
-      console.log("[useConversations] Organization ID used:", organizationId);
-      return data;
     },
     enabled: !!organizationId, // Only run query if organizationId is available
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+
 
   // Set up real-time subscription
   useEffect(() => {
@@ -66,13 +86,35 @@ export function useConversations() {
           table: "conversations",
           filter: `organization_id=eq.${organizationId}`,
         },
-        (payload) => {
+        async (payload) => {
+          try {
+            // Fetch the full conversation data (customer data is already in the conversations table)
+            const { data: fullConversation } = await supabase
+              .browser()
+              .from("conversations")
+              .select("*")
+              .eq("id", payload.new.id)
+              .single();
 
-          queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
-            if (!old) return payload.new ? [payload.new] : [];
-            if (!payload.new) return old;
-            return [payload.new, ...old];
-          });
+            if (fullConversation) {
+              const newConversation = mapDatabaseConversation(fullConversation);
+
+              queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+                if (!old) return [newConversation];
+                return [newConversation, ...old];
+              });
+            } else {
+              // Fallback: Use the payload data directly
+              const fallbackConversation = mapDatabaseConversation(payload.new as any);
+
+              queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+                if (!old) return [fallbackConversation];
+                return [fallbackConversation, ...old];
+              });
+            }
+          } catch (error) {
+            console.warn("[useConversations] Realtime insert handling failed:", error);
+          }
         }
       )
       .on(
@@ -83,13 +125,35 @@ export function useConversations() {
           table: "conversations",
           filter: `organization_id=eq.${organizationId}`,
         },
-        (payload) => {
+        async (payload) => {
+          try {
+            // Fetch the full conversation data (customer data is already in the conversations table)
+            const { data: fullConversation } = await supabase
+              .browser()
+              .from("conversations")
+              .select("*")
+              .eq("id", payload.new.id)
+              .single();
 
-          queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
-            if (!old) return payload.new ? [payload.new] : [];
-            if (!payload.new) return old;
-            return old.map((conv) => (conv.id === payload.new.id ? payload.new : conv));
-          });
+            if (fullConversation) {
+              const updatedConversation = mapDatabaseConversation(fullConversation);
+
+              queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+                if (!old) return [updatedConversation];
+                return old.map((conv) => (conv.id === updatedConversation.id ? updatedConversation : conv));
+              });
+            } else {
+              // Fallback: Use the payload data directly
+              const fallbackConversation = mapDatabaseConversation(payload.new as any);
+
+              queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+                if (!old) return [fallbackConversation];
+                return old.map((conv) => (conv.id === fallbackConversation.id ? fallbackConversation : conv));
+              });
+            }
+          } catch (error) {
+            console.warn("[useConversations] Realtime update handling failed:", error);
+          }
         }
       )
       .on(
@@ -101,7 +165,6 @@ export function useConversations() {
           filter: `organization_id=eq.${organizationId}`,
         },
         (payload) => {
-
           queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
             if (!old) return [];
             return old.filter((conv) => conv.id !== payload.old.id);
@@ -111,7 +174,6 @@ export function useConversations() {
       .subscribe();
 
     return () => {
-
       supabase.browser().removeChannel(channel);
     };
   }, [queryClient, organizationId]);
@@ -121,11 +183,20 @@ export function useConversations() {
       .browser()
       .from("conversations")
       .insert(data)
-      .select()
+      .select(`
+        *,
+        customers:customer_id (
+          id,
+          name,
+          email
+        )
+      `)
       .single();
 
     if (error) throw error;
-    return newConversation;
+    
+    // Transform the created conversation
+    return mapDatabaseConversation(newConversation);
   }, []);
 
   const updateConversation = useCallback(async (id: any, updates: any) => {
@@ -134,15 +205,29 @@ export function useConversations() {
       .from("conversations")
       .update(updates)
       .eq("id", id)
-      .select()
+      .select(`
+        *,
+        customers:customer_id (
+          id,
+          name,
+          email
+        )
+      `)
       .single();
 
     if (error) throw error;
-    return updatedConversation;
+    
+    // Transform the updated conversation
+    return mapDatabaseConversation(updatedConversation);
   }, []);
 
+  // Memoize the conversations to prevent unnecessary re-renders
+  const conversations = useMemo(() => {
+    return (query.data || []).filter(Boolean); // Filter out any null/undefined values
+  }, [query.data]);
+
   return {
-    conversations: (query.data || []).filter(Boolean), // Filter out any null/undefined values
+    conversations,
     isLoading: query.isLoading,
     error: query.error,
     refetch: query.refetch,

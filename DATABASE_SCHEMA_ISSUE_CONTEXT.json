@@ -1,0 +1,259 @@
+{
+  "issue": {
+    "title": "Database Schema Mismatch - Foreign Key Relationship Not Found",
+    "severity": "CRITICAL",
+    "status": "INVESTIGATION_REQUIRED",
+    "timestamp": "2025-01-27T10:30:00Z",
+    "error_code": "PGRST200",
+    "error_message": "Could not find a relationship between 'conversations' and 'customer_id' in the schema cache"
+  },
+  
+  "error_details": {
+    "supabase_error": {
+      "code": "PGRST200",
+      "message": "Could not find a relationship between 'conversations' and 'customer_id' in the schema cache",
+      "details": "Searched for a foreign key relationship between 'conversations' and 'customer_id' in the schema 'public', but no matches were found.",
+      "hint": null
+    },
+    "failed_query": "GET /rest/v1/conversations?select=*,customers:customer_id(id,name,email)&organization_id=eq.b5e80170-004c-4e82-a88c-3e2166b169dd&order=updated_at.desc",
+    "organization_id": "b5e80170-004c-4e82-a88c-3e2166b169dd"
+  },
+
+  "investigation_required": {
+    "database_ai_dev_tasks": [
+      {
+        "task": "INVESTIGATE_ACTUAL_SCHEMA",
+        "description": "Query the actual database schema to understand the real table structure",
+        "priority": "CRITICAL",
+        "sql_queries": [
+          "SELECT table_name, column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'conversations' ORDER BY ordinal_position;",
+          "SELECT table_name, column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'customers' ORDER BY ordinal_position;",
+          "SELECT tc.table_name, kcu.column_name, ccu.table_name AS foreign_table_name, ccu.column_name AS foreign_column_name FROM information_schema.table_constraints AS tc JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = 'conversations';",
+          "SELECT * FROM conversations LIMIT 1;",
+          "SELECT * FROM customers LIMIT 1;"
+        ]
+      },
+      {
+        "task": "ANALYZE_MIGRATION_HISTORY",
+        "description": "Check which migrations have been applied and what the actual schema looks like",
+        "priority": "HIGH",
+        "files_to_check": [
+          "db/migrations/*.sql",
+          "supabase/migrations/*.sql",
+          "db/consolidated-schema.sql"
+        ]
+      },
+      {
+        "task": "VERIFY_FOREIGN_KEY_CONSTRAINTS",
+        "description": "Check if foreign key constraints exist and are properly named",
+        "priority": "HIGH",
+        "sql_queries": [
+          "SELECT conname, conrelid::regclass, confrelid::regclass FROM pg_constraint WHERE contype = 'f';",
+          "SELECT tc.constraint_name, tc.table_name, kcu.column_name, ccu.table_name AS foreign_table_name, ccu.column_name AS foreign_column_name FROM information_schema.table_constraints AS tc JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name WHERE tc.constraint_type = 'FOREIGN KEY';"
+        ]
+      },
+      {
+        "task": "CHECK_SUPABASE_RLS_POLICIES",
+        "description": "Verify Row Level Security policies and table permissions",
+        "priority": "MEDIUM",
+        "sql_queries": [
+          "SELECT schemaname, tablename, rowsecurity FROM pg_tables WHERE tablename IN ('conversations', 'customers');",
+          "SELECT * FROM pg_policies WHERE tablename IN ('conversations', 'customers');"
+        ]
+      }
+    ],
+
+    "frontend_ai_dev_tasks": [
+      {
+        "task": "UPDATE_QUERY_STRUCTURE",
+        "description": "Modify the useConversations hook to handle the actual database schema",
+        "priority": "CRITICAL",
+        "files_to_modify": [
+          "hooks/useConversations.ts",
+          "lib/data/conversationMapper.ts"
+        ],
+        "fallback_strategies": [
+          "Use separate queries for conversations and customers",
+          "Implement client-side data joining",
+          "Create a database view for joined data"
+        ]
+      },
+      {
+        "task": "IMPLEMENT_ERROR_HANDLING",
+        "description": "Add proper error handling for schema mismatches",
+        "priority": "HIGH",
+        "files_to_modify": [
+          "hooks/useConversations.ts",
+          "components/error/ErrorBoundary.tsx"
+        ]
+      },
+      {
+        "task": "CREATE_SCHEMA_VALIDATION",
+        "description": "Add runtime schema validation to catch issues early",
+        "priority": "MEDIUM",
+        "files_to_create": [
+          "lib/validation/schemaValidator.ts"
+        ]
+      }
+    ]
+  },
+
+  "current_assumptions": {
+    "database_schema": {
+      "conversations_table": {
+        "assumed_structure": {
+          "id": "UUID PRIMARY KEY",
+          "organization_id": "UUID",
+          "customer_id": "UUID REFERENCES customers(id)",
+          "status": "TEXT",
+          "priority": "TEXT",
+          "created_at": "TIMESTAMPTZ",
+          "updated_at": "TIMESTAMPTZ"
+        },
+        "actual_structure": "UNKNOWN - NEEDS INVESTIGATION"
+      },
+      "customers_table": {
+        "assumed_structure": {
+          "id": "UUID PRIMARY KEY",
+          "organization_id": "UUID",
+          "name": "TEXT",
+          "email": "TEXT",
+          "created_at": "TIMESTAMPTZ",
+          "updated_at": "TIMESTAMPTZ"
+        },
+        "actual_structure": "UNKNOWN - NEEDS INVESTIGATION"
+      }
+    }
+  },
+
+  "possible_solutions": {
+    "solution_1": {
+      "name": "Fix Foreign Key Relationship",
+      "description": "If the foreign key constraint is missing, add it to the database",
+      "sql": [
+        "ALTER TABLE conversations ADD CONSTRAINT fk_conversations_customer_id FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL;"
+      ],
+      "risk": "MEDIUM",
+      "effort": "LOW"
+    },
+    "solution_2": {
+      "name": "Use Separate Queries",
+      "description": "Query conversations and customers separately, then join in JavaScript",
+      "implementation": {
+        "conversations_query": "SELECT * FROM conversations WHERE organization_id = ? ORDER BY updated_at DESC",
+        "customers_query": "SELECT * FROM customers WHERE id IN (SELECT DISTINCT customer_id FROM conversations WHERE organization_id = ?)",
+        "client_side_join": "Join data in useConversations hook"
+      },
+      "risk": "LOW",
+      "effort": "MEDIUM"
+    },
+    "solution_3": {
+      "name": "Create Database View",
+      "description": "Create a view that joins conversations and customers",
+      "sql": [
+        "CREATE VIEW conversations_with_customers AS SELECT c.*, cu.name as customer_name, cu.email as customer_email FROM conversations c LEFT JOIN customers cu ON c.customer_id = cu.id;"
+      ],
+      "risk": "LOW",
+      "effort": "MEDIUM"
+    },
+    "solution_4": {
+      "name": "Direct Field Mapping",
+      "description": "If customer data is stored directly in conversations table",
+      "implementation": "Update conversationMapper to use direct fields instead of joins",
+      "risk": "LOW",
+      "effort": "LOW"
+    }
+  },
+
+  "immediate_actions": {
+    "database_ai_dev": [
+      {
+        "action": "EXECUTE_SCHEMA_QUERIES",
+        "description": "Run the investigation queries to understand the actual schema",
+        "commands": [
+          "psql -d your_database -c \"SELECT table_name, column_name, data_type FROM information_schema.columns WHERE table_name IN ('conversations', 'customers') ORDER BY table_name, ordinal_position;\"",
+          "psql -d your_database -c \"SELECT * FROM conversations LIMIT 1;\"",
+          "psql -d your_database -c \"SELECT * FROM customers LIMIT 1;\""
+        ]
+      },
+      {
+        "action": "CHECK_MIGRATIONS",
+        "description": "Verify which migrations have been applied",
+        "commands": [
+          "psql -d your_database -c \"SELECT * FROM schema_migrations ORDER BY version;\""
+        ]
+      }
+    ],
+    "frontend_ai_dev": [
+      {
+        "action": "IMPLEMENT_FALLBACK_QUERY",
+        "description": "Update useConversations to use separate queries as fallback",
+        "file": "hooks/useConversations.ts",
+        "changes": [
+          "Add error handling for PGRST200 error",
+          "Implement separate queries for conversations and customers",
+          "Add client-side data joining logic"
+        ]
+      },
+      {
+        "action": "ADD_SCHEMA_VALIDATION",
+        "description": "Create schema validation utility",
+        "file": "lib/validation/schemaValidator.ts",
+        "features": [
+          "Validate table structure",
+          "Check foreign key relationships",
+          "Provide helpful error messages"
+        ]
+      }
+    ]
+  },
+
+  "files_to_modify": {
+    "hooks/useConversations.ts": {
+      "current_issue": "Trying to join with customers table that doesn't exist or has different structure",
+      "required_changes": [
+        "Add error handling for PGRST200 error",
+        "Implement fallback query strategy",
+        "Add schema validation"
+      ]
+    },
+    "lib/data/conversationMapper.ts": {
+      "current_issue": "Assumes joined data structure that may not exist",
+      "required_changes": [
+        "Make data mapping more flexible",
+        "Handle missing customer data gracefully",
+        "Add fallback data sources"
+      ]
+    }
+  },
+
+  "testing_strategy": {
+    "database_tests": [
+      "Verify table structure matches expectations",
+      "Test foreign key relationships",
+      "Check RLS policies",
+      "Validate data integrity"
+    ],
+    "frontend_tests": [
+      "Test with actual database schema",
+      "Verify error handling",
+      "Test fallback strategies",
+      "Validate data transformation"
+    ]
+  },
+
+  "success_criteria": {
+    "database": [
+      "Schema investigation completed",
+      "Foreign key relationships verified",
+      "Migration status confirmed",
+      "Data integrity validated"
+    ],
+    "frontend": [
+      "Queries work with actual schema",
+      "Error handling implemented",
+      "Fallback strategies working",
+      "Data transformation successful"
+    ]
+  }
+} 

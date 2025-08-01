@@ -41,7 +41,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
     <div style={style} className="relative">
       <div
         onClick={() => onSelect(conversation)}
-        className={`conversation-item mobile-conversation-item ${isSelected ? 'selected' : ''} ${conversation.unread_count > 0 ? 'unread' : ''} flex cursor-pointer flex-col touch-target`}
+        className={`conversation-item mobile-conversation-item ${isSelected ? 'selected' : ''} ${conversation.unreadCount > 0 ? 'unread' : ''} flex cursor-pointer flex-col touch-target`}
         style={{
           minHeight: '176px', // Increased from 128px for better content fit
         }}
@@ -58,7 +58,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
         data-testid="conversation"
         role="button"
         tabIndex={0}
-        aria-label={`Conversation with ${conversation.customer_name}${conversation.unread_count > 0 ? ` (${conversation.unread_count} unread)` : ''}`}
+        aria-label={`Conversation with ${conversation.customerName}${conversation.unreadCount > 0 ? ` (${conversation.unreadCount} unread)` : ''}`}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -76,10 +76,10 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                 src={(() => {
                   const { getAvatarPath } = require("@/lib/utils/avatar");
                   // Use conversation ID as unique identifier to ensure different avatars
-                  const uniqueId = conversation.id?.toString() || conversation.customer_email || conversation.customer_name;
+                  const uniqueId = conversation.id?.toString() || conversation.customerEmail || conversation.customerName;
                   return getAvatarPath(uniqueId, "customer");
                 })()}
-                alt={conversation.customer_name}
+                alt={conversation.customerName}
                 className="conversation-avatar"
                 data-testid="conversation-avatar"
               />
@@ -91,7 +91,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
               <div className="min-w-0 flex-1 space-y-spacing-sm">
                 {/* Customer name and AI indicator */}
                 <div className="flex min-w-0 items-center gap-ds-2">
-                  <h3 className="typography-conversation-title truncate" data-testid="conversation-customer-name">{conversation.customer_name}</h3>
+                  <h3 className="typography-conversation-title truncate" data-testid="conversation-customer-name">{conversation.customerName}</h3>
                   <div className="flex-shrink-0">
                     {isAIAssigned ? (
                       <StatusBadge 
@@ -112,11 +112,11 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
                 </div>
 
                 {/* Email */}
-                <p className="typography-metadata truncate" data-testid="conversation-customer-email">{conversation.customer_email}</p>
+                <p className="typography-metadata truncate" data-testid="conversation-customer-email">{conversation.customerEmail}</p>
 
                 {/* Last message preview */}
                 <p className="typography-message-content line-clamp-2" data-testid="conversation-message-preview">
-                  {conversation.last_message_preview || "No messages yet"}
+                  {conversation.lastMessagePreview || "No messages yet"}
                 </p>
               </div>
 
@@ -159,13 +159,13 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
             {/* Timestamp */}
             <div className="conversation-meta">
               <Clock className="h-3 w-3" />
-              <span className="typography-metadata">{formatTime(conversation.last_message_at)}</span>
+              <span className="typography-metadata">{formatTime(conversation.lastMessageAt)}</span>
             </div>
 
             {/* Unread count */}
-            {conversation.unread_count > 0 && (
+            {conversation.unreadCount > 0 && (
               <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-blue-600 px-2 py-1 text-xs font-bold text-white transition-colors">
-                {conversation.unread_count > 99 ? "99+" : conversation.unread_count}
+                {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
               </span>
             )}
           </div>
