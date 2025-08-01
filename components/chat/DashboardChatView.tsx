@@ -276,21 +276,23 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Chat Header with Smart Replies */}
-      <div className="border-b p-4 flex items-center justify-center bg-gray-50 text-center">
-        <div className="flex items-center space-x-2">
-          <h4 className="font-medium">Conversation</h4>
-          <Badge variant="outline">{conversationId.slice(0, 8)}</Badge>
-        </div>
-        <div className="flex items-center space-x-2">
-          <SmartRepliesHeaderIcon
-            conversationId={conversationId}
-            organizationId="default" // TODO: Get from context
-            lastMessage={lastCustomerMessage}
-            onReplySelect={handleSmartReplySelect}
-          />
-          <Button variant="ghost" size="sm">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
+      <div className="ds-inbox-header border-b bg-background">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center space-x-3">
+            <h4 className="font-sans font-medium text-base">Conversation</h4>
+            <Badge variant="outline" className="font-sans text-xs">{conversationId.slice(0, 8)}</Badge>
+          </div>
+          <div className="flex items-center space-x-2">
+            <SmartRepliesHeaderIcon
+              conversationId={conversationId}
+              organizationId="default" // TODO: Get from context
+              lastMessage={lastCustomerMessage}
+              onReplySelect={handleSmartReplySelect}
+            />
+            <Button variant="ghost" size="sm" className="font-sans">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -298,31 +300,31 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message) => (
-            <div key={message.id} className="flex gap-4 p-3 rounded-lg bg-gray-50 hover:bg-gray-100">
+            <div key={message.id} className="flex gap-4 p-4 rounded-lg bg-background shadow-sm hover:shadow-md transition-shadow duration-200">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarFallback className="text-xs">
+                <AvatarFallback className="text-xs font-sans">
                   {getSenderIcon(message.sender_type)}
                 </AvatarFallback>
               </Avatar>
-              
-              <div className="flex-1 space-y-1">
+
+              <div className="flex-1 space-y-2 max-w-[80%]">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm">
+                  <span className="font-sans font-medium text-sm">
                     {message.sender_name || 'Unknown'}
                   </span>
-                  <Badge 
-                    variant="secondary" 
-                    className={`text-xs ${getSenderBadgeColor(message.sender_type)}`}
+                  <Badge
+                    variant="secondary"
+                    className={`text-xs font-sans ${getSenderBadgeColor(message.sender_type)}`}
                   >
                     {message.sender_type.replace('_', ' ')}
                   </Badge>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs font-sans text-gray-500">
                     {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}
                   </span>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+
+                <div className="message-bubble bg-background border border-border rounded-lg p-4 shadow-sm">
+                  <p className="text-sm font-sans whitespace-pre-wrap leading-relaxed">{message.content}</p>
                 </div>
               </div>
             </div>

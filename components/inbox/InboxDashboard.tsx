@@ -375,36 +375,36 @@ export function InboxDashboard({
   }
 
   return (
-    <div className={`flex h-full ${className}`}>
+    <div className={`flex h-full gap-0 md:gap-1 ${className}`}>
       {/* Sidebar - Conversation List */}
-      <div className="w-1/3 border-r flex flex-col">
+      <div className="w-1/3 border-r flex flex-col bg-background">
         {/* Header */}
-        <div className="p-4 border-b">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-sans font-semibold">Inbox</h2>
-            <Button size="sm" onClick={loadConversations}>
+        <div className="p-4 border-b bg-background space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-sans font-semibold">Inbox</h2>
+            <Button size="sm" className="font-sans text-xs" onClick={loadConversations}>
               Refresh
             </Button>
           </div>
 
           {/* Search */}
-          <div className="relative mb-4">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 font-sans text-sm"
             />
           </div>
 
           {/* Filters */}
           <Tabs value={statusFilter} onValueChange={setStatusFilter}>
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="handoff">Handoff</TabsTrigger>
-              <TabsTrigger value="closed">Closed</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-4 font-sans">
+              <TabsTrigger value="all" className="text-xs font-medium">All</TabsTrigger>
+              <TabsTrigger value="active" className="text-xs font-medium">Active</TabsTrigger>
+              <TabsTrigger value="handoff" className="text-xs font-medium">Handoff</TabsTrigger>
+              <TabsTrigger value="closed" className="text-xs font-medium">Closed</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -465,15 +465,15 @@ export function InboxDashboard({
       </div>
 
       {/* Main Content - Chat View with Management */}
-      <div className="flex-1 flex flex-col md:gap-4 lg:gap-6">
+      <div className="flex-1 flex flex-col gap-6 md:gap-8">
         {selectedConversation ? (
           <div className="flex-1 flex flex-col">
             {/* Conversation Management Header */}
             <div className="border-b p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4 md:space-x-6">
-                  <h3 className="text-lg font-semibold">{selectedConversation.customerName}</h3>
-                  <Badge variant={getPriorityColor(selectedConversation.priority)}>
+                  <h3 className="text-base font-sans font-semibold">{selectedConversation.customerName}</h3>
+                  <Badge variant={getPriorityColor(selectedConversation.priority)} className="font-sans text-xs">
                     {selectedConversation.priority}
                   </Badge>
                   <div className={`w-2 h-2 rounded-full ${getStatusColor(selectedConversation.status)}`} />

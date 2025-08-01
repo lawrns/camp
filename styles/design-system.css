@@ -610,12 +610,38 @@ a:focus-visible {
 
 /* ===== COMPONENT STYLES ===== */
 
+/* Global Font Standardization */
+body, html {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    line-height: var(--ds-line-height-normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--ds-font-family-sans);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
+}
+
+h1 { font-size: var(--ds-font-size-2xl); }
+h2 { font-size: var(--ds-font-size-xl); }
+h3 { font-size: var(--ds-font-size-lg); }
+h4 { font-size: var(--ds-font-size-base); }
+h5 { font-size: var(--ds-font-size-sm); }
+h6 { font-size: var(--ds-font-size-xs); }
+
+p, span, div {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+}
+
 /* Typography Classes */
 .page-header-h1 {
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-tight);
-    margin-bottom: var(--spacing-6);
+    font-size: var(--ds-font-size-4xl);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+    margin-bottom: var(--ds-spacing-6);
+    font-family: var(--ds-font-family-sans);
 }
 
 .page-header-h2 {
@@ -806,18 +832,50 @@ button:hover,
 
 /* ===== RESPONSIVE DESIGN ===== */
 
+/* Enhanced Layout Spacing */
+.responsive-container {
+    padding: var(--ds-spacing-4);
+    gap: var(--ds-spacing-4);
+}
+
+@media (min-width: 768px) {
+    .responsive-container {
+        padding: var(--ds-spacing-6);
+        gap: var(--ds-spacing-6);
+    }
+
+    .ds-inbox-message {
+        max-width: 70%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .responsive-container {
+        padding: var(--ds-spacing-8);
+        gap: var(--ds-spacing-8);
+    }
+}
+
 /* Mobile Optimizations */
 @media (max-width: 768px) {
     .component-padding {
-        padding: var(--spacing-3) var(--spacing-4);
+        padding: var(--ds-spacing-3) var(--ds-spacing-4);
     }
 
     .page-header-h1 {
-        font-size: var(--font-size-3xl);
+        font-size: var(--ds-font-size-3xl);
     }
 
     .page-header-h2 {
-        font-size: var(--font-size-2xl);
+        font-size: var(--ds-font-size-2xl);
+    }
+
+    .flex-col-mobile {
+        flex-direction: column !important;
+    }
+
+    .gap-mobile-reduced {
+        gap: var(--ds-spacing-2) !important;
     }
 }
 
@@ -912,23 +970,46 @@ button:hover,
 /* Enhanced Message Bubbles */
 .message-bubble {
     border-radius: var(--ds-radius-lg);
-    padding: var(--ds-spacing-3);
+    padding: var(--ds-spacing-4);
     margin-bottom: var(--ds-spacing-2);
-    max-width: 70%;
+    max-width: 80%;
     word-wrap: break-word;
     transition: all var(--ds-duration-fast) var(--ds-ease-out);
+    font-family: var(--ds-font-family-sans);
+    line-height: var(--ds-line-height-relaxed);
+    box-shadow: var(--ds-shadow-sm);
+}
+
+.message-bubble:hover {
+    box-shadow: var(--ds-shadow-md);
+    transform: translateY(-1px);
 }
 
 .message-bubble.user {
     background: var(--ds-color-primary-500);
     color: var(--ds-color-primary-50);
     margin-left: auto;
+    border: 1px solid var(--ds-color-primary-600);
 }
 
 .message-bubble.agent {
     background: var(--ds-color-surface);
     color: var(--ds-color-text);
     border: 1px solid var(--ds-color-border);
+}
+
+/* Responsive message bubble allocation */
+@media (min-width: 768px) {
+    .message-bubble {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 767px) {
+    .message-bubble {
+        max-width: 85%;
+        padding: var(--ds-spacing-3);
+    }
 }
 
 /* Chat Layout Classes */
@@ -955,6 +1036,35 @@ button:hover,
 
 /* ===== INBOX COMPONENT UTILITY CLASSES ===== */
 
+/* Sidebar and Accordion Utilities */
+.ds-sidebar-section {
+    padding: var(--ds-spacing-4);
+    background: var(--ds-color-surface);
+    border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-sidebar-header {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-medium);
+    color: var(--ds-color-text);
+    margin-bottom: var(--ds-spacing-3);
+}
+
+.ds-accordion-content {
+    padding: var(--ds-spacing-4);
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    line-height: var(--ds-line-height-normal);
+}
+
+.ds-accordion-title {
+    font-family: var(--ds-font-family-sans);
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-medium);
+    color: var(--ds-color-text);
+}
+
 /* Chat Header Utilities */
 .ds-inbox-header {
     height: var(--ds-inbox-header-height);
@@ -962,8 +1072,11 @@ button:hover,
     gap: var(--ds-inbox-header-gap);
     display: flex;
     align-items: center;
+    justify-content: center;
     background: var(--ds-color-surface);
     border-bottom: 1px solid var(--ds-color-border);
+    font-family: var(--ds-font-family-sans);
+    box-shadow: var(--ds-shadow-xs);
 }
 
 .ds-inbox-avatar {
