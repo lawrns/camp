@@ -9,7 +9,7 @@ import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
-import { Robot } from "@phosphor-icons/react";
+import { Robot, X } from "@phosphor-icons/react";
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
 // Import utilities
@@ -18,6 +18,7 @@ import { fallbackAISuggestions } from "./constants/messageTemplates";
 import ChatHeader from "./sub-components/ChatHeader";
 import Composer from "./sub-components/Composer";
 import ConversationList from "./sub-components/ConversationList";
+import { ConversationManagement } from "./sub-components/ConversationManagement";
 import CustomerSidebar from "./sub-components/CustomerSidebar";
 import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
@@ -82,6 +83,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const [showTemplates, setShowTemplates] = useState(false);
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState<AISuggestion[]>([]);
+  const [showConversationManagement, setShowConversationManagement] = useState(false);
 
   // Drag and drop
   const [isDragOver, setIsDragOver] = useState(false);
@@ -509,6 +511,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
                     onlineUsers={onlineUsers}
                     onAssignConversation={handleAssignConversation}
                     onConvertToTicket={handleConvertToTicket}
+                    onToggleConversationManagement={() => setShowConversationManagement(!showConversationManagement)}
                   />
                   <MessageList
                     messages={messages || []}
@@ -571,6 +574,35 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
             </div>
 
 
+
+            {/* Conversation Management Panel */}
+            {selectedConversation && showConversationManagement && (
+              <div className="w-80 border-l border-[var(--ds-color-border)] bg-[var(--ds-color-surface)] overflow-y-auto">
+                <div className="p-4 border-b border-[var(--ds-color-border)]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="typography-section-title">Conversation Management</h3>
+                    <button
+                      onClick={() => setShowConversationManagement(false)}
+                      className="btn-ghost p-1"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <ConversationManagement
+                    conversation={selectedConversation}
+                    onUpdate={(updates) => {
+                      // Update the conversation in the local state
+                      if (selectedConversation) {
+                        const updatedConversation = { ...selectedConversation, ...updates };
+                        console.log('Conversation updated:', updatedConversation);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Customer sidebar */}
             {showCustomerDetails && selectedConversation && (

@@ -136,6 +136,35 @@ export const MessageRow: React.FC<MessageRowProps> = ({
           <p className="font-sans whitespace-pre-wrap break-words leading-relaxed" data-testid="message-text">{message.content}</p>
         </div>
 
+        {/* Message status indicator */}
+        {isOwnMessage && (
+          <div className="flex items-center justify-end mt-1">
+            <span className="typography-metadata flex items-center gap-1">
+              {(message as any).status === 'sending' && <Clock className="h-3 w-3 animate-spin" />}
+              {(message as any).status === 'delivered' && <span className="text-gray-500">✓</span>}
+              {(message as any).status === 'read' && <span className="text-blue-500">✓✓</span>}
+              {(message as any).status === 'failed' && <span className="text-red-500">✗</span>}
+              {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
+        )}
+
+        {/* Message reactions display */}
+        {(message as any).reactions && (message as any).reactions.length > 0 && (
+          <div className={`flex items-center gap-1 mt-1 ${isOwnMessage ? "justify-end" : "justify-start"}`}>
+            {(message as any).reactions.map((reaction: any, index: number) => (
+              <button
+                key={index}
+                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-xs transition-colors"
+                onClick={() => onReact?.(message.id, reaction.type)}
+              >
+                <span>{reaction.emoji}</span>
+                <span className="typography-metadata">{reaction.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Message actions */}
         <div className={`flex items-center gap-1 mt-1 ${isOwnMessage ? "justify-end" : "justify-start"}`} data-testid="message-actions">
           <button

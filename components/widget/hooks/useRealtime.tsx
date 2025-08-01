@@ -66,11 +66,24 @@ export function useRealtime(
   useEffect(() => {
     const initializeWidget = async () => {
       try {
-        // Authenticate widget and get conversation ID
+        // Authenticate widget and get shared conversation ID
         const response = await fetch("/api/widget/auth", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ organizationId }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Organization-ID": organizationId
+          },
+          body: JSON.stringify({
+            organizationId,
+            customerEmail: null, // Will be set later if user provides it
+            customerName: null,  // Will be set later if user provides it
+            source: 'widget',
+            metadata: {
+              userAgent: navigator.userAgent,
+              referrer: document.referrer,
+              currentUrl: window.location.href
+            }
+          }),
         });
 
         if (!response.ok) {
@@ -83,11 +96,23 @@ export function useRealtime(
         // Log shared conversation details for debugging
         console.log('[Widget Realtime] Using shared conversation:', {
           id: newConversationId,
+          organizationId,
           status: conversation?.status,
-          priority: conversation?.priority
+          priority: conversation?.priority,
+          isShared: conversation?.metadata?.sharedConversation,
+          channel: `org:${organizationId}:conv:${newConversationId}`
         });
+
+        // Ensure conversation is marked as shared for bidirectional sync
+        if (conversation && !conversation.metadata?.sharedConversation) {
+          console.warn('[Widget Realtime] Conversation not marked as shared, this may cause sync issues');
+        }
       } catch (error) {
         realtimeLogger.error("Widget auth failed:", error);
+        // Set a fallback conversation ID to prevent complete failure
+        const fallbackId = `fallback-${Date.now()}`;
+        setConversationId(fallbackId);
+        console.warn('[Widget Realtime] Using fallback conversation ID:', fallbackId);
       }
     };
 
@@ -132,6 +157,11 @@ export function useRealtime(
           conversationId,
           content,
           senderType: "visitor",
+          metadata: {
+            source: 'widget',
+            sharedConversation: true,
+            channel: `org:${organizationId}:conv:${conversationId}`
+          }
         }),
       });
 
@@ -142,12 +172,18 @@ export function useRealtime(
       const result = await response.json();
       console.log("[Widget] Message sent to API:", result);
 
-      // Then broadcast via realtime
+      // Then broadcast via realtime using shared conversation channel
       const success = await actions.sendMessage({
         content,
         conversationId,
+        organizationId,
         senderType: "visitor",
         timestamp: new Date().toISOString(),
+        metadata: {
+          source: 'widget',
+          sharedConversation: true,
+          messageId: result.message?.id
+        }
       });
 
       if (success) {
@@ -158,9 +194,19 @@ export function useRealtime(
           conversationId,
           senderType: "visitor",
           timestamp: new Date().toISOString(),
-          metadata: {},
+          metadata: {
+            source: 'widget',
+            sharedConversation: true
+          },
         };
         setMessages(prev => [...prev, newMessage]);
+
+        console.log('[Widget] Message broadcasted to shared channel:', {
+          conversationId,
+          organizationId,
+          channel: `org:${organizationId}:conv:${conversationId}`,
+          messageId: result.message?.id
+        });
       }
     } catch (error) {
       console.error("[Widget] Failed to send message:", error);

@@ -22,6 +22,7 @@ interface ChatHeaderProps {
   // NEW: Add callback functions for actions
   onAssignConversation?: () => void;
   onConvertToTicket?: () => void;
+  onToggleConversationManagement?: () => void;
 }
 
 /**
@@ -37,6 +38,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onlineUsers,
   onAssignConversation,
   onConvertToTicket,
+  onToggleConversationManagement,
 }) => {
   // Get auth context to determine if user is an agent (not widget user)
   const { user } = useAuth();
@@ -222,6 +224,19 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
                 className="agent-only"
               />
             </div>
+          )}
+
+          {/* Conversation Management toggle */}
+          {onToggleConversationManagement && (
+            <button
+              onClick={onToggleConversationManagement}
+              className="rounded-ds-lg p-2 transition-colors w-10 h-10 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              title="Manage conversation"
+              aria-label="Manage conversation"
+              data-testid="chat-header-management-toggle"
+            >
+              <Tag className="h-5 w-5" data-testid="chat-header-management-icon" />
+            </button>
           )}
 
           {/* Customer details toggle */}
