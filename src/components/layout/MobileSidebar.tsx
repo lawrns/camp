@@ -3,20 +3,24 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Robot as Bot,
-  CreditCard,
-  Question as HelpCircle,
-  Tray as Inbox,
-  List as Menu,
-  Gear as Settings,
+  House,
+  Tray,
+  Ticket,
+  BookOpen,
+  ChartBar,
+  Lightbulb,
+  Gear,
   Users,
+  Plug,
+  Bell,
+  Question,
+  User,
+  Fire,
+  List as Menu,
   X,
 } from "@phosphor-icons/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Button } from "@/components/ui/Button-unified";
-import { Separator } from "@/components/unified-ui/components/Separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/unified-ui/components/sheet";
-import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -26,23 +30,25 @@ interface MobileSidebarProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-const navigation = [
-  { name: "Inbox", href: "/dashboard", icon: Inbox },
-  { name: "AI Assistant", href: "/dashboard/ai", icon: Bot },
-  { name: "Teams", href: "/teams", icon: Users },
-  { name: "Help", href: "/help", icon: HelpCircle },
-];
-
-const bottomNavigation = [
-  { name: "Settings", href: "/settings", icon: Settings },
-  { name: "Billing", href: "/settings/billing", icon: CreditCard },
+const navigationItems = [
+  { name: "Dashboard", href: "/dashboard", icon: House },
+  { name: "Inbox", href: "/inbox", icon: Tray },
+  { name: "Tickets", href: "/tickets", icon: Ticket },
+  { name: "Knowledge", href: "/knowledge", icon: BookOpen },
+  { name: "Analytics", href: "/analytics", icon: ChartBar },
+  { name: "AI Insights", href: "/ai-insights", icon: Lightbulb },
+  { name: "Settings", href: "/settings", icon: Gear },
+  { name: "Team", href: "/team", icon: Users },
+  { name: "Integrations", href: "/integrations", icon: Plug },
+  { name: "Notifications", href: "/notifications", icon: Bell },
+  { name: "Help", href: "/help", icon: Question },
+  { name: "Profile", href: "/profile", icon: User },
 ];
 
 export function MobileSidebar({ className, isOpen = false, onOpenChange }: MobileSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [sheetOpen, setSheetOpen] = useState(isOpen);
-  const { user } = useAuth();
 
   useEffect(() => {
     setSheetOpen(isOpen);
@@ -76,75 +82,32 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
 
       {/* Mobile Sidebar Sheet */}
       <Sheet open={sheetOpen} onOpenChange={handleOpenChange}>
-        <SheetContent className="w-[280px] p-0">
-          <SheetHeader className="p-spacing-md pb-4">
+        <SheetContent className="w-[280px] p-0 !left-0 !right-auto">
+          <SheetHeader className="p-6 pb-4">
             <SheetTitle className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-ds-lg bg-gradient-to-br from-orange-500 to-pink-500" />
+              <Icon icon={Fire} className="h-8 w-8 text-orange-500" />
               <span className="text-lg font-bold">Campfire</span>
             </SheetTitle>
           </SheetHeader>
 
-          <div className="px-3">
-            {/* User Profile Section */}
-            <div className="mb-6 px-3">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  {user?.user_metadata?.avatar_url && <AvatarImage src={user.user_metadata.avatar_url} />}
-                  <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">
-                    {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User"}
-                  </p>
-                  <p className="truncate text-tiny text-muted-foreground">{user?.email || "No email"}</p>
-                </div>
-              </div>
-            </div>
-
-            <Separator className="mb-6" />
-
-            {/* Main Navigation */}
+          <div className="px-3 pb-6">
+            {/* Navigation */}
             <nav className="space-y-1">
-              {navigation.map((item: any) => (
+              {navigationItems.map((item) => (
                 <Button
                   key={item.name}
                   variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn("h-12 w-full justify-start gap-3", isActive(item.href) && "bg-secondary font-medium")}
+                  className={cn(
+                    "h-12 w-full flex items-center gap-3 justify-start",
+                    isActive(item.href) && "bg-secondary font-medium"
+                  )}
                   onClick={() => handleNavigate(item.href)}
                 >
-                  <item.icon className="h-5 w-5" />
+                  <Icon icon={item.icon} className="h-5 w-5" />
                   {item.name}
                 </Button>
               ))}
             </nav>
-
-            <Separator className="my-6" />
-
-            {/* Bottom Navigation */}
-            <nav className="space-y-1">
-              {bottomNavigation.map((item: any) => (
-                <Button
-                  key={item.name}
-                  variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn("h-12 w-full justify-start gap-3", isActive(item.href) && "bg-secondary font-medium")}
-                  onClick={() => handleNavigate(item.href)}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
-                </Button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="absolute bottom-0 left-0 right-0 p-spacing-md">
-            <div className="rounded-ds-lg bg-muted spacing-3">
-              <p className="mb-1 text-sm font-medium">Need help?</p>
-              <p className="mb-3 text-tiny text-muted-foreground">Chat with our support team</p>
-              <Button size="sm" className="w-full">
-                Start Chat
-              </Button>
-            </div>
           </div>
         </SheetContent>
       </Sheet>

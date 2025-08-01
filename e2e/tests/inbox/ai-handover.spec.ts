@@ -5,13 +5,13 @@ test.describe('Inbox AI Handover Features', () => {
   test.beforeEach(async ({ page }) => {
     // Login as admin user
     await page.goto('/login');
-    await page.fill('[data-testid="email-input"]', testUsers.admin.email);
-    await page.fill('[data-testid="password-input"]', testUsers.admin.password);
-    await page.click('[data-testid="login-button"]');
+    await page.fill('#email', testUsers.admin.email);
+    await page.fill('#password', testUsers.admin.password);
+    await page.click('button[type="submit"]');
     
     // Wait for login to complete and navigate to inbox
     await page.waitForURL('/dashboard');
-    await page.goto('/inbox');
+    await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });
 

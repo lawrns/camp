@@ -520,6 +520,85 @@ export type Database = {
           },
         ]
       }
+      conversation_history: {
+        Row: {
+          action: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          new_value: Json | null
+          old_value: Json | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          new_value?: Json | null
+          old_value?: Json | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          new_value?: Json | null
+          old_value?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_history_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_notes: {
+        Row: {
+          author_id: string
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          is_private: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          author_id: string
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          is_private?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_notes_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_summaries: {
         Row: {
           conversation_id: string
@@ -574,6 +653,42 @@ export type Database = {
           },
         ]
       }
+      conversation_tags: {
+        Row: {
+          conversation_id: string
+          created_at: string | null
+          id: string
+          tag_id: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          tag_id: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_tags_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversations: {
         Row: {
           agent_id: string | null
@@ -601,9 +716,9 @@ export type Database = {
           mailbox_id: number | null
           metadata: Json | null
           organization_id: string
-          priority: string | null
+          priority: Database["public"]["Enums"]["conversation_priority"] | null
           rag_enabled: boolean | null
-          status: string | null
+          status: Database["public"]["Enums"]["conversation_status"] | null
           subject: string | null
           tags: string[] | null
           updated_at: string | null
@@ -634,9 +749,9 @@ export type Database = {
           mailbox_id?: number | null
           metadata?: Json | null
           organization_id: string
-          priority?: string | null
+          priority?: Database["public"]["Enums"]["conversation_priority"] | null
           rag_enabled?: boolean | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["conversation_status"] | null
           subject?: string | null
           tags?: string[] | null
           updated_at?: string | null
@@ -667,9 +782,9 @@ export type Database = {
           mailbox_id?: number | null
           metadata?: Json | null
           organization_id?: string
-          priority?: string | null
+          priority?: Database["public"]["Enums"]["conversation_priority"] | null
           rag_enabled?: boolean | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["conversation_status"] | null
           subject?: string | null
           tags?: string[] | null
           updated_at?: string | null
@@ -1536,6 +1651,41 @@ export type Database = {
           },
         ]
       }
+      tags: {
+        Row: {
+          color: string
+          created_at: string | null
+          id: string
+          name: string
+          organization_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          color?: string
+          created_at?: string | null
+          id?: string
+          name: string
+          organization_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          color?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          organization_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tags_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets: {
         Row: {
           assignee_id: string | null
@@ -2194,7 +2344,14 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      conversation_priority: "low" | "medium" | "high" | "urgent" | "critical"
+      conversation_status:
+        | "open"
+        | "in_progress"
+        | "waiting"
+        | "resolved"
+        | "closed"
+        | "snoozed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2321,6 +2478,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      conversation_priority: ["low", "medium", "high", "urgent", "critical"],
+      conversation_status: [
+        "open",
+        "in_progress",
+        "waiting",
+        "resolved",
+        "closed",
+        "snoozed",
+      ],
+    },
   },
 } as const

@@ -99,7 +99,7 @@ const TeamMemberRow = React.memo(
       switch (status) {
         case "online":
           return (
-            <Badge variant="primary" className="bg-emerald-600">
+            <Badge variant="success" className="bg-emerald-600">
               Online
             </Badge>
           );
@@ -406,7 +406,7 @@ const TeamManagementPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-4 text-sm text-[var(--fl-color-text-muted)]">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-[var(--fl-color-text-muted)]">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-ds-full bg-emerald-500"></div>
               <span>Live data • Last updated {currentTime}</span>
@@ -415,7 +415,7 @@ const TeamManagementPage = () => {
               onClick={() => handleNavigation("/dashboard")}
               variant="outline"
               size="sm"
-              className="border-status-info-light flex items-center gap-2 text-blue-600 hover:bg-[var(--fl-color-info-subtle)]"
+              className="border-status-info-light flex items-center gap-2 text-blue-600 hover:bg-[var(--fl-color-info-subtle)] mobile-full-width sm:w-auto"
             >
               <Icon icon={Zap} className="h-4 w-4" />
               Back to Dashboard

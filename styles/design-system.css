@@ -1064,8 +1064,16 @@ button:hover,
     border-color: var(--ds-color-border-interactive);
 }
 
-/* Responsive Utilities */
+/* ===== MOBILE RESPONSIVE UTILITIES ===== */
+
 @media (max-width: 768px) {
+    /* Ensure main content doesn't overlap mobile menu button */
+    main {
+        padding-top: 5rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
     .ds-inbox-header {
         padding: var(--ds-inbox-mobile-padding);
         gap: var(--ds-inbox-mobile-gap);
@@ -1084,6 +1092,68 @@ button:hover,
     .ds-inbox-message {
         max-width: 85%;
     }
+    
+    /* Mobile button fixes */
+    .ds-inbox-button {
+        min-height: 44px; /* Touch-friendly size */
+        padding: var(--ds-spacing-3) var(--ds-spacing-4);
+    }
+    
+    /* Grid layouts stack on mobile */
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4,
+    .md\:grid-cols-2,
+    .md\:grid-cols-3,
+    .md\:grid-cols-4,
+    .lg\:grid-cols-2,
+    .lg\:grid-cols-3,
+    .lg\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Full width buttons on mobile */
+    .mobile-full-width {
+        width: 100% !important;
+    }
+    
+    /* Reduce padding on mobile */
+    .container {
+        padding-left: var(--ds-spacing-4) !important;
+        padding-right: var(--ds-spacing-4) !important;
+    }
+    
+    /* Better mobile typography */
+    h1 {
+        font-size: 1.75rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+        line-height: 1.3 !important;
+    }
+    
+    /* Touch-friendly interactive elements */
+    button, .button, [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .container {
+        padding-left: var(--ds-spacing-3) !important;
+        padding-right: var(--ds-spacing-3) !important;
+    }
+    
+    .ds-inbox-button {
+        font-size: 14px;
+        padding: var(--ds-spacing-2) var(--ds-spacing-3);
+    }
+    
+    /* Extra small screen adjustments */
 }
 
 /* ===== LIGHT MODE EXPLICIT OVERRIDES ===== */

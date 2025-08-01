@@ -13,6 +13,14 @@ import { Database } from './supabase-generated';
 export type DatabaseConversation = Database['public']['Tables']['conversations']['Row'];
 export type DatabaseMessage = Database['public']['Tables']['messages']['Row'];
 export type DatabaseOrganization = Database['public']['Tables']['organizations']['Row'];
+export type DatabaseTag = Database['public']['Tables']['tags']['Row'];
+export type DatabaseConversationTag = Database['public']['Tables']['conversation_tags']['Row'];
+export type DatabaseConversationNote = Database['public']['Tables']['conversation_notes']['Row'];
+export type DatabaseConversationHistory = Database['public']['Tables']['conversation_history']['Row'];
+
+// Extract enum types
+export type ConversationPriority = Database['public']['Enums']['conversation_priority'];
+export type ConversationStatus = Database['public']['Enums']['conversation_status'];
 
 // Conversation types with proper camelCase mapping
 export interface Conversation {
@@ -23,8 +31,8 @@ export interface Conversation {
   customerName?: string | null;
   customerEmail?: string | null;
   subject?: string | null;
-  status: string;
-  priority?: string | null;
+  status: ConversationStatus;
+  priority?: ConversationPriority | null;
   channel?: string | null;
   
   // Assignment fields
@@ -128,10 +136,75 @@ export interface Organization {
   settings?: Record<string, any> | null;
   createdAt: string;
   updatedAt?: string | null;
-  
+
   // Legacy fields
   created_at?: string;
   updated_at?: string | null;
+}
+
+// Tag type
+export interface Tag {
+  id: string;
+  name: string;
+  color: string;
+  organizationId: string;
+  createdAt: string;
+  updatedAt?: string | null;
+
+  // Legacy fields
+  organization_id?: string;
+  created_at?: string;
+  updated_at?: string | null;
+}
+
+// Conversation Tag junction type
+export interface ConversationTag {
+  id: string;
+  conversationId: string;
+  tagId: string;
+  createdAt: string;
+
+  // Legacy fields
+  conversation_id?: string;
+  tag_id?: string;
+  created_at?: string;
+}
+
+// Conversation Note type
+export interface ConversationNote {
+  id: string;
+  conversationId: string;
+  authorId: string;
+  content: string;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt?: string | null;
+
+  // Legacy fields
+  conversation_id?: string;
+  author_id?: string;
+  is_private?: boolean;
+  created_at?: string;
+  updated_at?: string | null;
+}
+
+// Conversation History type for audit trail
+export interface ConversationHistory {
+  id: string;
+  conversationId: string;
+  userId: string;
+  action: string;
+  oldValue?: Record<string, any> | null;
+  newValue?: Record<string, any> | null;
+  metadata?: Record<string, any> | null;
+  createdAt: string;
+
+  // Legacy fields
+  conversation_id?: string;
+  user_id?: string;
+  old_value?: Record<string, any> | null;
+  new_value?: Record<string, any> | null;
+  created_at?: string;
 }
 
 // Type conversion utilities
@@ -253,6 +326,75 @@ export function isDatabaseMessage(obj: any): obj is DatabaseMessage {
 
 // Export database types for direct use
 export type { DatabaseConversation, DatabaseMessage, DatabaseOrganization };
+
+// Conversion utilities for new types
+export function convertDatabaseTagToApi(dbTag: DatabaseTag): Tag {
+  return {
+    id: dbTag.id,
+    name: dbTag.name,
+    color: dbTag.color,
+    organizationId: dbTag.organization_id,
+    createdAt: dbTag.created_at || new Date().toISOString(),
+    updatedAt: dbTag.updated_at,
+
+    // Legacy fields
+    organization_id: dbTag.organization_id,
+    created_at: dbTag.created_at,
+    updated_at: dbTag.updated_at,
+  };
+}
+
+export function convertDatabaseConversationNoteToApi(dbNote: DatabaseConversationNote): ConversationNote {
+  return {
+    id: dbNote.id,
+    conversationId: dbNote.conversation_id,
+    authorId: dbNote.author_id,
+    content: dbNote.content,
+    isPrivate: dbNote.is_private || false,
+    createdAt: dbNote.created_at || new Date().toISOString(),
+    updatedAt: dbNote.updated_at,
+
+    // Legacy fields
+    conversation_id: dbNote.conversation_id,
+    author_id: dbNote.author_id,
+    is_private: dbNote.is_private,
+    created_at: dbNote.created_at,
+    updated_at: dbNote.updated_at,
+  };
+}
+
+export function convertDatabaseConversationHistoryToApi(dbHistory: DatabaseConversationHistory): ConversationHistory {
+  return {
+    id: dbHistory.id,
+    conversationId: dbHistory.conversation_id,
+    userId: dbHistory.user_id,
+    action: dbHistory.action,
+    oldValue: dbHistory.old_value as Record<string, any> | null,
+    newValue: dbHistory.new_value as Record<string, any> | null,
+    metadata: dbHistory.metadata as Record<string, any> | null,
+    createdAt: dbHistory.created_at || new Date().toISOString(),
+
+    // Legacy fields
+    conversation_id: dbHistory.conversation_id,
+    user_id: dbHistory.user_id,
+    old_value: dbHistory.old_value,
+    new_value: dbHistory.new_value,
+    created_at: dbHistory.created_at,
+  };
+}
+
+// Batch conversion utilities for new types
+export function convertDatabaseTagsToApi(dbTags: DatabaseTag[]): Tag[] {
+  return dbTags.map(convertDatabaseTagToApi);
+}
+
+export function convertDatabaseConversationNotesToApi(dbNotes: DatabaseConversationNote[]): ConversationNote[] {
+  return dbNotes.map(convertDatabaseConversationNoteToApi);
+}
+
+export function convertDatabaseConversationHistoryToApi(dbHistory: DatabaseConversationHistory[]): ConversationHistory[] {
+  return dbHistory.map(convertDatabaseConversationHistoryToApi);
+}
 
 // Re-export the generated database type
 export type { Database } from './supabase-generated';
