@@ -2,8 +2,10 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { Bell, Funnel, MagnifyingGlass, List, Plus, SortAscending, SortDescending, X } from "@phosphor-icons/react";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 import * as React from "react";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "@/lib/ui/Icon";
 import type { Conversation } from "../types";
 
@@ -41,10 +43,12 @@ export const Header: React.FC<HeaderProps> = ({
   performanceMetrics,
   connectionStatus,
 }) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const router = useRouter();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [showFilters, setShowFilters] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Get unique statuses and priorities for filters
   const statuses = [...new Set(conversations.map(c => c.status))];
@@ -64,6 +68,29 @@ export const Header: React.FC<HeaderProps> = ({
 
   // Get filter count
   const activeFilters = [searchQuery, statusFilter, priorityFilter].filter(Boolean).length;
+
+  // Handle logout with cleanup
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+
+    try {
+      setIsLoggingOut(true);
+
+      // Perform logout
+      await signOut();
+
+      // Clear any local storage or session data
+      localStorage.removeItem("campfire_org_context");
+
+      // Redirect to login page
+      router.push("/auth/login");
+
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Reset loading state on error
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <div className="bg-background border-b border-[var(--fl-color-border-strong)] flex-shrink-0" data-testid="inbox-header">
@@ -156,6 +183,21 @@ export const Header: React.FC<HeaderProps> = ({
             <Icon icon={List} className="h-5 w-5" />
           </button>
 
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={isLoggingOut ? "Signing out..." : "Sign out"}
+            aria-label={isLoggingOut ? "Signing out..." : "Sign out"}
+          >
+            {isLoggingOut ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-red-600" />
+            ) : (
+              <ArrowRightOnRectangleIcon className="h-5 w-5" />
+            )}
+          </button>
+
           {/* New conversation */}
           <button className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors">
             <Plus className="h-4 w-4" />
@@ -180,6 +222,22 @@ export const Header: React.FC<HeaderProps> = ({
           <button className="p-2 text-gray-400 hover:text-foreground transition-colors">
             <Bell className="h-5 w-5" />
           </button>
+
+          {/* Mobile Logout */}
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={isLoggingOut ? "Signing out..." : "Sign out"}
+            aria-label={isLoggingOut ? "Signing out..." : "Sign out"}
+          >
+            {isLoggingOut ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-red-600" />
+            ) : (
+              <ArrowRightOnRectangleIcon className="h-5 w-5" />
+            )}
+          </button>
+
           <button className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-ds-lg hover:bg-blue-700 transition-colors">
             <Plus className="h-4 w-4" />
             New
@@ -269,6 +327,23 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Account Actions */}
+              <div className="space-y-2 border-t border-gray-200 pt-4" data-testid="mobile-account-section">
+                <h3 className="text-sm font-medium text-gray-900">Account</h3>
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-ds-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoggingOut ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-300 border-t-red-600" />
+                  ) : (
+                    <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                  )}
+                  {isLoggingOut ? "Signing out..." : "Sign out"}
+                </button>
               </div>
 
               {/* Clear Filters */}

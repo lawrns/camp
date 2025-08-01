@@ -10,7 +10,8 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const supabase = createClient();
-    const conversationId = params.id;
+    const { id } = await params;
+    const conversationId = id;
     
     // Get the current user session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();

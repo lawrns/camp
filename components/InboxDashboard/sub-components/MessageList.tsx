@@ -12,6 +12,7 @@ interface MessageListProps {
   messages: Message[];
   selectedConversation?: Conversation;
   isLoading: boolean;
+  error?: string | null;
   typingUsers: string[];
   onlineUsers: string[];
 }
@@ -23,6 +24,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   messages,
   selectedConversation,
   isLoading,
+  error,
   typingUsers,
   onlineUsers,
 }) => {
@@ -162,7 +164,23 @@ export const MessageList: React.FC<MessageListProps> = ({
 
       {/* Messages container */}
       <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto" onScroll={handleScroll}>
-        {isLoading ? (
+        {error ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center p-6">
+              <div className="text-red-500 mb-2">
+                <ChatCircle size={48} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Messages</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        ) : isLoading ? (
           <div className="space-y-3 spacing-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <LoadingSkeleton key={i} />

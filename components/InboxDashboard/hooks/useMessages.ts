@@ -22,15 +22,18 @@ interface RawAttachment {
 export const useMessages = (conversationId?: string, organizationId?: string): UseMessagesReturn => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Load messages from database
   const loadMessages = useCallback(async () => {
     if (!conversationId || !organizationId) {
       setMessages([]);
+      setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
+    setError(null);
     try {
       const client = supabase.browser();
       const { data, error } = await client
@@ -40,7 +43,9 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
         .order("created_at", { ascending: true });
 
       if (error) {
-
+        console.error("[useMessages] Error loading messages:", error);
+        setError(error.message || "Failed to load messages");
+        setIsLoading(false);
         return;
       }
 
@@ -96,7 +101,8 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
 
       setMessages(messagesWithReadReceipts);
     } catch (error) {
-
+      console.error("[useMessages] Error processing messages:", error);
+      setError(error instanceof Error ? error.message : "Failed to process messages");
     } finally {
       setIsLoading(false);
     }
@@ -213,8 +219,8 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
   return {
     messages,
     isLoading,
+    error,
     reload,
-    setMessages,
   };
 };
 
