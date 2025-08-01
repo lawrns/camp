@@ -155,10 +155,1107 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.54.1",
-    "workers": 7,
+    "workers": 1,
     "webServer": null
   },
   "suites": [
+    {
+      "title": "tests/auth/comprehensive-authenticated-test.spec.ts",
+      "file": "tests/auth/comprehensive-authenticated-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Comprehensive Authenticated Testing",
+          "file": "tests/auth/comprehensive-authenticated-test.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should test real-time features in inbox",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4952,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔄 Testing real-time features...\n"
+                        },
+                        {
+                          "text": "✅ Conversations loaded\n"
+                        },
+                        {
+                          "text": "✅ Conversation selection working\n"
+                        },
+                        {
+                          "text": "✅ Real-time features tested\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-01T21:57:58.728Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0ff93200467b92a1b7fd-b857b1261d729cd14594",
+              "file": "tests/auth/comprehensive-authenticated-test.spec.ts",
+              "line": 69,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/auth/simple-login.spec.ts",
+      "file": "tests/auth/simple-login.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Simple Login Test",
+          "file": "tests/auth/simple-login.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should access inbox after login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1355,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Inbox access successful!\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-01T21:58:03.772Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d3f61956f6cfdff42b5b-e66540175067c0358fde",
+              "file": "tests/auth/simple-login.spec.ts",
+              "line": 30,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/comprehensive-feature-test.spec.ts",
+      "file": "tests/comprehensive-feature-test.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Comprehensive Feature Testing",
+          "file": "tests/comprehensive-feature-test.spec.ts",
+          "line": 15,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should test inbox functionality and conversation management",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "interrupted",
+                      "duration": 2032,
+                      "error": {
+                        "message": "Error: page.waitForLoadState: Test ended.",
+                        "stack": "Error: page.waitForLoadState: Test ended.\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive-feature-test.spec.ts:57:16",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive-feature-test.spec.ts",
+                          "column": 16,
+                          "line": 57
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 55 |\u001b[39m     \u001b[90m// Navigate to inbox\u001b[39m\n \u001b[90m 56 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m`${TEST_CONFIG.BASE_URL}/dashboard/inbox`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 |\u001b[39m     \n \u001b[90m 59 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ Inbox page accessible'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive-feature-test.spec.ts",
+                            "column": 16,
+                            "line": 57
+                          },
+                          "message": "Error: page.waitForLoadState: Test ended.\n\n\u001b[0m \u001b[90m 55 |\u001b[39m     \u001b[90m// Navigate to inbox\u001b[39m\n \u001b[90m 56 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m`${TEST_CONFIG.BASE_URL}/dashboard/inbox`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 57 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 58 |\u001b[39m     \n \u001b[90m 59 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ Inbox page accessible'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 60 |\u001b[39m     \u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive-feature-test.spec.ts:57:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "📥 Testing inbox functionality...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-01T21:58:05.131Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-comprehensive-featur-866ec-and-conversation-management-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-comprehensive-featur-866ec-and-conversation-management-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive-feature-test.spec.ts",
+                        "column": 16,
+                        "line": 57
+                      }
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "7e038e1946349377dae5-c3715ffa8380881772b9",
+              "file": "tests/comprehensive-feature-test.spec.ts",
+              "line": 45,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/inbox/ai-handover.spec.ts",
+      "file": "tests/inbox/ai-handover.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Inbox AI Handover Features",
+          "file": "tests/inbox/ai-handover.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should initiate AI handover from agent to AI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-1eefba9872e520bc45a2",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 22,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover from AI to agent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-865b2e83888501268ecc",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 46,
+              "column": 7
+            },
+            {
+              "title": "should show AI handover history and context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-2f35fc6d8b69bc4d53df",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 70,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-de87ed4c8f742132aa54",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 94,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with file attachments",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-ce543824419889c59d08",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 118,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation tags",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-5f5aef9c1109d15a2112",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 142,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with customer information",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-bd038d8081feca214908",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 166,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation history",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-a343d8646311f1d04329",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 190,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation priority",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-0b881f4340f91d5a5cdc",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 214,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-5931bd22715bc3a8cf56",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 238,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation assignment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-fc053267ea6e9b42d0e9",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 262,
+              "column": 7
+            },
+            {
+              "title": "should handle AI handover with conversation metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "dbf410e87221d6f48ca6-10aff7e9ebcd6a6100ae",
+              "file": "tests/inbox/ai-handover.spec.ts",
+              "line": 286,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/inbox/bidirectional-communication.spec.ts",
+      "file": "tests/inbox/bidirectional-communication.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Inbox Bidirectional Communication",
+          "file": "tests/inbox/bidirectional-communication.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display inbox page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5e102876a58237aa5462-1b38b036a90071663e52",
+              "file": "tests/inbox/bidirectional-communication.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "should show inbox interface elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5e102876a58237aa5462-6c4a083f78c49cc4a62c",
+              "file": "tests/inbox/bidirectional-communication.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "should handle inbox navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5e102876a58237aa5462-714f7840ffe243bc3a39",
+              "file": "tests/inbox/bidirectional-communication.spec.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "should maintain session in inbox",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5e102876a58237aa5462-492e2c74dedef9f97e27",
+              "file": "tests/inbox/bidirectional-communication.spec.ts",
+              "line": 61,
+              "column": 7
+            },
+            {
+              "title": "should handle inbox page refresh",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5e102876a58237aa5462-a7c5698ab469951557e4",
+              "file": "tests/inbox/bidirectional-communication.spec.ts",
+              "line": 72,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/inbox/inbox-features.spec.ts",
+      "file": "tests/inbox/inbox-features.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Inbox Features and Functionalities",
+          "file": "tests/inbox/inbox-features.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display conversation list with proper information",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-685e770400be68ca1efe",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 22,
+              "column": 7
+            },
+            {
+              "title": "should filter conversations by status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-562a4de167a51b2f720b",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 62,
+              "column": 7
+            },
+            {
+              "title": "should search conversations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-92879ba7b12bfb424067",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 104,
+              "column": 7
+            },
+            {
+              "title": "should sort conversations by different criteria",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-f7f2b344271e0a7394ce",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 135,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation selection and navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-f90f232728fbcf4af638",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 154,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation assignment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-054876858c49683cd3b9",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 180,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation priority changes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-9c2be5f951ed1299f093",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 206,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation status changes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-c686d95b595f7c1b963b",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 230,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation tags and labels",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-500dd0ab0e6bb40f3714",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 254,
+              "column": 7
+            },
+            {
+              "title": "should handle customer information display",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-def9f29dd92aa2482829",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 278,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation history and context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-0838839f91848415a604",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 302,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation metrics and analytics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-23279a4ed077a5bc18b4",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 326,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation notes and internal comments",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-193161ae85a440b41ed0",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 350,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation templates and canned responses",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-22836670b1208f805306",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 374,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation export and sharing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-98ba9a05bd7f3f59fe27",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 398,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation bulk actions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-682874cf98d3fa28150f",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 422,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation keyboard shortcuts",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-3383e878442a3581ebc0",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 446,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation accessibility features",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-374e39377b268f9bd5c9",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 470,
+              "column": 7
+            },
+            {
+              "title": "should handle conversation performance and loading states",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3b0dfebc2b35cb3d2d26-87425be8523c43f82f3e",
+              "file": "tests/inbox/inbox-features.spec.ts",
+              "line": 494,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tests/inbox/realtime-features.spec.ts",
+      "file": "tests/inbox/realtime-features.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Inbox Real-time Features",
+          "file": "tests/inbox/realtime-features.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load inbox page with real-time capabilities",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5458cfd7deffc5778cb7-0219fae72a5c8adc6cd5",
+              "file": "tests/inbox/realtime-features.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "should maintain real-time connection state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5458cfd7deffc5778cb7-512e3975745a624fa219",
+              "file": "tests/inbox/realtime-features.spec.ts",
+              "line": 31,
+              "column": 7
+            },
+            {
+              "title": "should handle page navigation with real-time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5458cfd7deffc5778cb7-7eac94c451ea505a0e21",
+              "file": "tests/inbox/realtime-features.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should handle page refresh with real-time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5458cfd7deffc5778cb7-29f0400cdd6f587b2595",
+              "file": "tests/inbox/realtime-features.spec.ts",
+              "line": 58,
+              "column": 7
+            },
+            {
+              "title": "should maintain session across real-time operations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5458cfd7deffc5778cb7-3aa533e861a2beddb1df",
+              "file": "tests/inbox/realtime-features.spec.ts",
+              "line": 73,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
     {
       "title": "tests/widget-dashboard-sync.spec.ts",
       "file": "tests/widget-dashboard-sync.spec.ts",
@@ -183,131 +1280,8 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 21764,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "🔄 Testing widget-dashboard message synchronization...\n"
-                        },
-                        {
-                          "text": "📊 Setting up dashboard...\n"
-                        },
-                        {
-                          "text": "✅ Dashboard login successful\n"
-                        },
-                        {
-                          "text": "✅ Dashboard inbox loaded\n"
-                        },
-                        {
-                          "text": "🔧 Setting up widget...\n"
-                        },
-                        {
-                          "text": "✅ Homepage loaded\n"
-                        },
-                        {
-                          "text": "💬 Sending message from widget...\n"
-                        },
-                        {
-                          "text": "✅ Widget opened\n"
-                        },
-                        {
-                          "text": "✅ Message sent from widget: \"Widget to dashboard sync test - 1754085257838\"\n"
-                        },
-                        {
-                          "text": "👀 Checking if message appears in dashboard...\n"
-                        },
-                        {
-                          "text": "❌ Message did not appear in dashboard\n"
-                        },
-                        {
-                          "text": "Dashboard content preview: (self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"5:\\\"$Sreact.fragment\\\"\\n\"])self.__next_f.push([1,\"25:I[\\\"[project]/components/system/ConsoleManager.tsx [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/_405fdd81._.js\\\",\\\"/_next/static/chunks/_3e98c08d._.js\\\",\\\"/_next/static/chunks/node_modules_next_b09d993e._.js\\\",\\\"/_next/static/chunks/node_modules_motion-dom_dist_es_2453d03e._.js\\\",\\\"/_next/static/chunks/node_modules_framer-motion_dist_es_ebc484db._.js\\\",\\\"/_next/static/chu...\n"
-                        },
-                        {
-                          "text": "Found 31 conversation elements in dashboard\n"
-                        },
-                        {
-                          "text": "Found 6 message elements in dashboard\n"
-                        },
-                        {
-                          "text": "📡 Testing API-level message synchronization...\n"
-                        },
-                        {
-                          "text": "API send status: 200\n"
-                        },
-                        {
-                          "text": "✅ API message sent successfully\n"
-                        },
-                        {
-                          "text": "❌ API message did not appear in dashboard\n"
-                        },
-                        {
-                          "text": "📋 Testing dashboard message retrieval...\n"
-                        },
-                        {
-                          "text": "Dashboard messages API status: 200\n"
-                        },
-                        {
-                          "text": "Dashboard API response: {\n  \"messages\": [\n    {\n      \"id\": \"4d7f7d52-7dfd-4a18-a572-20e2b9806185\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API sync test - 1754085263400\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-08-01T21:54:23.601839+00:00\",\n      \"updatedAt\": \"2025-08-01T21:54:23.601839+00:00\",\n      \"metadata\": {},\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-08-01T21:54:23.601839+00:00\"\n    },\n    {\n      \"id\": \"4526539f-be86-470a-9d82-cc063431a47a\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Test message from API fix\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-08-01T21:53:34.271207+00:00\",\n      \"updatedAt\": \"2025-08-01T21:53:34.271207+00:00\",\n      \"metadata\": {},\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-08-01T21:53:34.271207+00:00\"\n    },\n    {\n      \"id\": \"472ec930-ec45-4e94-abb8-faa447e5e6ab\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"I ain't sayin she a gold digga\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-31T19:49:35.208934+00:00\",\n      \"updatedAt\": \"2025-07-31T19:49:35.208934+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-31T19:49:34.984Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-31T19:49:35.208934+00:00\"\n    },\n    {\n      \"id\": \"4a86d9a2-6eae-4628-bc6e-547ce34c6530\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"asdfasdf\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-31T19:49:18.812661+00:00\",\n      \"updatedAt\": \"2025-07-31T19:49:18.812661+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-31T19:49:18.593Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-31T19:49:18.812661+00:00\"\n    },\n    {\n      \"id\": \"ca1147d0-2b77-4e0c-8a8b-e2332a53deba\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API direct test - 1753918294453\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T23:31:34.773651+00:00\",\n      \"updatedAt\": \"2025-07-30T23:31:34.773651+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:31:34.651Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:31:34.773651+00:00\"\n    },\n    {\n      \"id\": \"e631837d-6f39-4baa-86dc-d2a5c58bc5ee\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Final integration test - 1753918285202\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"visitor-1753918285476@example.com\",\n      \"senderName\": \"Visitor\",\n      \"senderEmail\": \"visitor-1753918285476@example.com\",\n      \"createdAt\": \"2025-07-30T23:31:25.734829+00:00\",\n      \"updatedAt\": \"2025-07-30T23:31:25.734829+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:31:25.639Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:31:25.734829+00:00\"\n    },\n    {\n      \"id\": \"9f2b7c4a-96a1-4b88-9185-c84dbaf407b1\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API direct test - 1753917830476\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T23:23:50.79318+00:00\",\n      \"updatedAt\": \"2025-07-30T23:23:50.79318+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:23:50.670Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:23:50.79318+00:00\"\n    },\n    {\n      \"id\": \"4acadd24-3fa3-49a4-b992-3bbb05a2fa86\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Final integration test - 1753917821660\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"visitor-1753917821841@example.com\",\n      \"senderName\": \"Visitor\",\n      \"senderEmail\": \"visitor-1753917821841@example.com\",\n      \"createdAt\": \"2025-07-30T23:23:42.108268+00:00\",\n      \"updatedAt\": \"2025-07-30T23:23:42.108268+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:23:42.002Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:23:42.108268+00:00\"\n    },\n    {\n      \"id\": \"414d71c5-96ab-4c3e-8e38-fbabc04f81d0\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API direct test - 1753917363324\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T23:16:03.813378+00:00\",\n      \"updatedAt\": \"2025-07-30T23:16:03.813378+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:16:03.637Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:16:03.813378+00:00\"\n    },\n    {\n      \"id\": \"28481672-de01-4cc6-b7f7-e492e56b4601\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Final integration test - 1753917354562\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"visitor-1753917354740@example.com\",\n      \"senderName\": \"Visitor\",\n      \"senderEmail\": \"visitor-1753917354740@example.com\",\n      \"createdAt\": \"2025-07-30T23:15:55.081158+00:00\",\n      \"updatedAt\": \"2025-07-30T23:15:55.081158+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:15:54.917Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:15:55.081158+00:00\"\n    },\n    {\n      \"id\": \"bc30be58-ae88-4832-8de5-1fbdc8fce4fd\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Widget debug test - 1753917307537\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"visitor-1753917307831@example.com\",\n      \"senderName\": \"Visitor\",\n      \"senderEmail\": \"visitor-1753917307831@example.com\",\n      \"createdAt\": \"2025-07-30T23:15:08.135363+00:00\",\n      \"updatedAt\": \"2025-07-30T23:15:08.135363+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:15:07.995Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:15:08.135363+00:00\"\n    },\n    {\n      \"id\": \"0a6aceab-88f0-4015-90bc-b7512c906d58\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API direct test - 1753916717757\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T23:05:18.127716+00:00\",\n      \"updatedAt\": \"2025-07-30T23:05:18.127716+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T23:05:17.971Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T23:05:18.127716+00:00\"\n    },\n    {\n      \"id\": \"2968c83c-7410-476c-b538-9891c7f751a0\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API direct test - 1753915024483\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:37:04.812068+00:00\",\n      \"updatedAt\": \"2025-07-30T22:37:04.812068+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:37:04.689Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:37:04.812068+00:00\"\n    },\n    {\n      \"id\": \"459f61f6-8976-48e2-830a-ad7cc2656b59\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913825090\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:17:05.386137+00:00\",\n      \"updatedAt\": \"2025-07-30T22:17:05.386137+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:17:05.254Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:17:05.386137+00:00\"\n    },\n    {\n      \"id\": \"8ef657ce-bef7-4771-b6f8-86627207137e\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Alignment test message - 1753913701479\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:15:01.746649+00:00\",\n      \"updatedAt\": \"2025-07-30T22:15:01.746649+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:15:01.642Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:15:01.746649+00:00\"\n    },\n    {\n      \"id\": \"8b3eeefc-593e-4ca6-babd-c6b6952b3242\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913334398\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:08:54.730252+00:00\",\n      \"updatedAt\": \"2025-07-30T22:08:54.730252+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:08:54.600Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:08:54.730252+00:00\"\n    },\n    {\n      \"id\": \"67d82caf-fb44-4794-9380-bddb4ced6360\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913192495\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:06:32.79141+00:00\",\n      \"updatedAt\": \"2025-07-30T22:06:32.79141+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:06:32.679Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:06:32.79141+00:00\"\n    },\n    {\n      \"id\": \"588d3f07-34d1-489b-9c2a-51051530abf0\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913141791\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:05:42.121728+00:00\",\n      \"updatedAt\": \"2025-07-30T22:05:42.121728+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:05:41.981Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:05:42.121728+00:00\"\n    },\n    {\n      \"id\": \"04e697da-62d6-46ca-9b6b-27f1c5432726\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913095237\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:04:55.679342+00:00\",\n      \"updatedAt\": \"2025-07-30T22:04:55.679342+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:04:55.546Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:04:55.679342+00:00\"\n    },\n    {\n      \"id\": \"99b11357-5b31-4a9c-b349-1fc8a2dc007c\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753913018335\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:03:38.645919+00:00\",\n      \"updatedAt\": \"2025-07-30T22:03:38.645919+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:03:38.514Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:03:38.645919+00:00\"\n    },\n    {\n      \"id\": \"433696df-740d-426c-9d4f-23202b6a6fdb\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753912900338\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T22:01:40.644731+00:00\",\n      \"updatedAt\": \"2025-07-30T22:01:40.644731+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T22:01:40.510Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T22:01:40.644731+00:00\"\n    },\n    {\n      \"id\": \"511afc50-b691-4c11-adc5-46ac204803b2\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753912201593\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T21:50:01.896379+00:00\",\n      \"updatedAt\": \"2025-07-30T21:50:01.896379+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T21:50:01.809Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T21:50:01.896379+00:00\"\n    },\n    {\n      \"id\": \"1f14f11e-9467-4a6e-ad41-13b1245b7be6\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753912061778\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T21:47:44.068038+00:00\",\n      \"updatedAt\": \"2025-07-30T21:47:44.068038+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T21:47:43.977Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T21:47:44.068038+00:00\"\n    },\n    {\n      \"id\": \"654081f0-e66d-4316-ab34-e256f9cfbf7d\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"API test message - 1753911983585\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"\",\n      \"senderName\": null,\n      \"senderEmail\": null,\n      \"createdAt\": \"2025-07-30T21:46:23.975975+00:00\",\n      \"updatedAt\": \"2025-07-30T21:46:23.975975+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-30T21:46:23.861Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-30T21:46:23.975975+00:00\"\n    },\n    {\n      \"id\": \"8e371e92-0f83-4c1a-b592-a6ef726b16b9\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Comprehensive test message to verify TypeError fix\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"test-fix@example.com\",\n      \"senderName\": \"Fix Test\",\n      \"senderEmail\": \"test-fix@example.com\",\n      \"createdAt\": \"2025-07-29T21:23:04.183677+00:00\",\n      \"updatedAt\": \"2025-07-29T21:23:04.183677+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-29T21:23:03.936Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-29T21:23:04.183677+00:00\"\n    },\n    {\n      \"id\": \"1480be8a-95a6-4baf-9db7-64f694b4ce0b\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Comprehensive test message to verify TypeError fix\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"test-fix@example.com\",\n      \"senderName\": \"Fix Test\",\n      \"senderEmail\": \"test-fix@example.com\",\n      \"createdAt\": \"2025-07-29T21:23:03.494432+00:00\",\n      \"updatedAt\": \"2025-07-29T21:23:03.494432+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-29T21:23:03.229Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-29T21:23:03.494432+00:00\"\n    },\n    {\n      \"id\": \"b5fe178f-acda-46e3-bdb9-46d20fe10021\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Test\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"test@example.com\",\n      \"senderName\": \"Test\",\n      \"senderEmail\": \"test@example.com\",\n      \"createdAt\": \"2025-07-29T21:22:12.838987+00:00\",\n      \"updatedAt\": \"2025-07-29T21:22:12.838987+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-29T21:22:12.570Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-29T21:22:12.838987+00:00\"\n    },\n    {\n      \"id\": \"ee2cdd05-b00c-409e-b878-c9908cdbffab\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Test consistency\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"test@example.com\",\n      \"senderName\": \"Test\",\n      \"senderEmail\": \"test@example.com\",\n      \"createdAt\": \"2025-07-29T21:21:49.42362+00:00\",\n      \"updatedAt\": \"2025-07-29T21:21:49.42362+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-29T21:21:49.164Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-29T21:21:49.42362+00:00\"\n    },\n    {\n      \"id\": \"ffc35217-dddd-445f-95ce-52b9b28df089\",\n      \"conversationId\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"content\": \"Test message from API test script\",\n      \"senderType\": \"visitor\",\n      \"senderId\": \"test@example.com\",\n      \"senderName\": \"Test User\",\n      \"senderEmail\": \"test@example.com\",\n      \"createdAt\": \"2025-07-29T21:20:01.729788+00:00\",\n      \"updatedAt\": \"2025-07-29T21:20:01.729788+00:00\",\n      \"metadata\": {\n        \"source\": \"widget\",\n        \"timestamp\": \"2025-07-29T21:20:01.470Z\"\n      },\n      \"attachments\": [],\n      \"status\": \"sent\",\n      \"inReplyToId\": null,\n      \"isDeleted\": false,\n      \"conversation_id\": \"48eedfba-2568-4231-bb38-2ce20420900d\",\n      \"sender_type\": \"visitor\",\n      \"created_at\": \"2025-07-29T21:20:01.729788+00:00\"\n    }\n  ],\n  \"pagination\": {\n    \"limit\": 50,\n    \"offset\": 0,\n    \"total\": 29,\n    \"hasMore\": false\n  }\n}\n"
-                        },
-                        {
-                          "text": "✅ Dashboard API working - found 29 messages\n"
-                        },
-                        {
-                          "text": "Dashboard API contains widget message: ❌\n"
-                        },
-                        {
-                          "text": "Dashboard API contains API message: ✅\n"
-                        },
-                        {
-                          "text": "📻 Testing real-time channel verification...\n"
-                        },
-                        {
-                          "text": "Expected real-time channel: org:b5e80170-004c-4e82-a88c-3e2166b169dd:conv:48eedfba-2568-4231-bb38-2ce20420900d\n"
-                        },
-                        {
-                          "text": "Widget real-time info: { hasSupabase: \u001b[33mfalse\u001b[39m, hasRealtime: \u001b[33mfalse\u001b[39m, channels: [] }\n"
-                        },
-                        {
-                          "text": "Dashboard real-time info: { hasSupabase: \u001b[33mfalse\u001b[39m, hasRealtime: \u001b[33mfalse\u001b[39m, channels: [] }\n"
-                        },
-                        {
-                          "text": "📋 Widget-Dashboard Sync Test Summary:\n"
-                        },
-                        {
-                          "text": "Widget message sent: ✅\n"
-                        },
-                        {
-                          "text": "Widget message visible in widget: ✅\n"
-                        },
-                        {
-                          "text": "Widget message visible in dashboard: ❌\n"
-                        },
-                        {
-                          "text": "API message sent: ✅\n"
-                        },
-                        {
-                          "text": "Dashboard messages API working: ✅\n"
-                        },
-                        {
-                          "text": "Expected channel: org:b5e80170-004c-4e82-a88c-3e2166b169dd:conv:48eedfba-2568-4231-bb38-2ce20420900d\n"
-                        },
-                        {
-                          "text": "🎉 Widget-Dashboard sync test completed!\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-01T21:54:04.817Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "9481ef0044e517df7fb8-90717f74fea284725f29",
@@ -322,10 +1296,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-01T21:54:04.521Z",
-    "duration": 22865.101000000002,
-    "expected": 1,
-    "skipped": 0,
+    "startTime": "2025-08-01T21:57:58.351Z",
+    "duration": 8843.958,
+    "expected": 2,
+    "skipped": 43,
     "unexpected": 0,
     "flaky": 0
   }

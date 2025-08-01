@@ -5,7 +5,7 @@ import { AuthProviders } from './app/client-providers';
 import { ExtensionIsolationProvider } from '@/components/system/ExtensionIsolationProvider';
 import { initializeMonitoring } from '@/lib/monitoring/init';
 import type { Metadata } from 'next';
-import { ConsoleManager } from '@/components/system/ConsoleManager';
+import { ClientConsoleManager } from '@/components/system/ClientConsoleManager';
 
 // Initialize monitoring for production
 if (typeof window !== 'undefined') {
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preload" href="/fonts/Sundry-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
-        <ConsoleManager />
+        <ClientConsoleManager />
         <ExtensionIsolationProvider>
           <ThemeProvider>
             <AuthProviders>

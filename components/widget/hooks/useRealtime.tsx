@@ -77,8 +77,15 @@ export function useRealtime(
           throw new Error(`Auth failed: ${response.status}`);
         }
 
-        const { conversationId: newConversationId } = await response.json();
+        const { conversationId: newConversationId, conversation } = await response.json();
         setConversationId(newConversationId);
+
+        // Log shared conversation details for debugging
+        console.log('[Widget Realtime] Using shared conversation:', {
+          id: newConversationId,
+          status: conversation?.status,
+          priority: conversation?.priority
+        });
       } catch (error) {
         realtimeLogger.error("Widget auth failed:", error);
       }

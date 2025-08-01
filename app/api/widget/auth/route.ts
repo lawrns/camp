@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { mapDbConversationToApi } from '@/lib/utils/db-type-mappers';
+import { createOrGetSharedConversation } from '@/lib/services/shared-conversation-service';
 
 // Simplified optional auth wrapper for widget endpoints
 async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promise<NextResponse>) {
@@ -82,61 +83,29 @@ export async function POST(request: NextRequest) {
 
     // Generate or use existing visitor ID
     const generatedVisitorId = visitorId || `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
-    // For widget auth, we always need a conversation
-    let conversationId: string | null = null;
-    
-    if (customerEmail) {
-      // Check for existing conversation for this customer
-      const { data: existingConversation, error: convError } = await supabaseClient
-        .from('conversations')
-        .select('id, status, updated_at')
-        .eq('organization_id', organizationId)
-        .eq('customer_email', customerEmail)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
 
-      if (convError && convError.code !== 'PGRST116') {
-        console.error('[Widget Auth API] Conversation fetch error:', convError);
-        return NextResponse.json(
-          { error: 'Failed to check existing conversation', code: 'DATABASE_ERROR' },
-          { status: 500 }
-        );
-      }
-      
-      if (existingConversation) {
-        conversationId = existingConversation.id;
-      }
-    }
-
-    // If no conversation exists, create one
-    if (!conversationId) {
-      const { data: newConversation, error: createError } = await supabaseClient
-        .from('conversations')
-        .insert({
-          organization_id: organizationId,
-          customer_email: customerEmail || null,
-          customer_name: customerName || 'Anonymous User',
-          status: 'open',
-          source: 'widget',
-          metadata: {
-            visitor_id: generatedVisitorId,
-            widget_session: true
-          }
-        })
-        .select('id')
-        .single();
-
-      if (createError) {
-        console.error('[Widget Auth API] Conversation creation error:', createError);
-        return NextResponse.json(
-          { error: 'Failed to create conversation', code: 'DATABASE_ERROR' },
-          { status: 500 }
-        );
-      }
-
-      conversationId = newConversation.id;
+    // Use shared conversation service to create or get existing conversation
+    let conversation;
+    try {
+      conversation = await createOrGetSharedConversation({
+        organizationId,
+        customerEmail,
+        customerName,
+        visitorId: generatedVisitorId,
+        source: 'widget',
+        metadata: {
+          widget_session: true,
+          user_agent: body.userAgent,
+          referrer: body.referrer,
+          current_url: body.currentUrl,
+        }
+      });
+    } catch (error) {
+      console.error('[Widget Auth API] Shared conversation creation error:', error);
+      return NextResponse.json(
+        { error: 'Failed to create conversation', code: 'DATABASE_ERROR' },
+        { status: 500 }
+      );
     }
 
     // Generate a widget authentication token
@@ -148,7 +117,7 @@ export async function POST(request: NextRequest) {
       token: sessionToken,
       userId: userId,
       visitorId: generatedVisitorId,
-      conversationId: conversationId,
+      conversationId: conversation.id,
       organizationId: organizationId,
       user: {
         id: userId,
@@ -159,6 +128,11 @@ export async function POST(request: NextRequest) {
       organization: {
         id: organization.id,
         widgetEnabled: widgetEnabled
+      },
+      conversation: {
+        id: conversation.id,
+        status: conversation.status,
+        priority: conversation.priority
       }
     }, { status: 200 });
 
