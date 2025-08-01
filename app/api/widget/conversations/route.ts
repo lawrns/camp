@@ -1,111 +1,159 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { supabase } from '@/lib/supabase';
+import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
 
-export async function POST(request: NextRequest) {
+// Widget conversations API - handles conversation lifecycle management
+
+export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const body = await request.json();
-    const { organizationId, visitorId, customerName, customerEmail } = body;
+    const { visitorId, initialMessage, customerEmail, customerName, userAgent, referrer, currentUrl } = body;
+    const organizationId = getOrganizationId(request, auth);
 
-    // Validate required fields
     if (!organizationId) {
       return NextResponse.json(
-        { error: 'Organization ID is required' },
+        { error: 'Missing organization ID', code: 'VALIDATION_ERROR' },
         { status: 400 }
       );
     }
 
-    // Create conversation using server-side Supabase client with service role
-    const { data: conversation, error } = await supabase
-      .admin()
+    // Initialize Supabase service role client
+    const supabaseClient = supabase.admin();
+
+    // Generate UUID for conversation ID
+    const conversationId = crypto.randomUUID();
+
+    // Create conversation in database
+    const { data: conversation, error } = await supabaseClient
       .from('conversations')
       .insert({
+        id: conversationId,
         organization_id: organizationId,
+        customer_email: customerEmail || null,
+        customer_name: customerName || 'Anonymous User',
         status: 'open',
-        subject: 'Widget Conversation',
-        customer_name: customerName || 'Website Visitor',
-        customer_email: customerEmail || 'visitor@widget.com',
+        priority: 'medium',
+        channel: 'widget',
+        created_at: new Date().toISOString(),
         metadata: {
           source: 'widget',
-          visitor_id: visitorId || 'anonymous',
-          created_via: 'widget_api',
-          timestamp: new Date().toISOString(),
-        },
+          visitorId: visitorId || `visitor_${Date.now()}`,
+          userAgent,
+          referrer,
+          currentUrl
+        }
       })
-      .select('id, organization_id, status, subject, customer_name, customer_email, created_at, metadata')
+      .select()
       .single();
 
     if (error) {
-      console.error('[Widget API] Failed to create conversation:', error);
+      console.error('[Widget Conversations API] Database conversation creation error:', error);
       return NextResponse.json(
-        { error: 'Failed to create conversation', details: error.message },
+        { error: 'Failed to create conversation', code: 'DATABASE_ERROR' },
         { status: 500 }
       );
     }
 
-    // Return only minimal fields needed by widget
+    // If there's an initial message, create it
+    if (initialMessage) {
+      const { error: messageError } = await supabaseClient
+        .from('messages')
+        .insert({
+          conversation_id: conversationId,
+          organization_id: organizationId,
+          content: initialMessage,
+          sender_type: 'visitor',
+          sender_name: customerName || 'Anonymous User',
+          sender_email: customerEmail,
+          metadata: {
+            source: 'widget',
+            timestamp: new Date().toISOString(),
+          },
+        });
+
+      if (messageError) {
+        console.error('[Widget Conversations API] Initial message creation error:', messageError);
+        // Don't fail the conversation creation if message fails
+      }
+    }
+
+    // Broadcast conversation creation to real-time channels
+    try {
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversations(organizationId),
+        UNIFIED_EVENTS.CONVERSATION_CREATED,
+        {
+          conversation,
+          organizationId,
+          timestamp: new Date().toISOString(),
+          source: 'widget'
+        }
+      );
+
+      console.log('[Widget Conversations API] Real-time broadcast sent successfully');
+    } catch (broadcastError) {
+      console.error('[Widget Conversations API] Real-time broadcast failed:', broadcastError);
+      // Don't fail the request if broadcast fails
+    }
+
+    console.log('[Widget Conversations API] Created conversation:', conversationId);
+
     return NextResponse.json({
-      success: true,
-      conversation: {
-        id: conversation.id,
-        organizationId: conversation.organization_id,
-        status: conversation.status,
-        createdAt: conversation.created_at,
-      },
-    });
+      conversationId,
+      conversation,
+      success: true
+    }, { status: 201 });
 
   } catch (error) {
-    console.error('[Widget API] Unexpected error:', error);
+    console.error('[Widget Conversations API] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
       { status: 500 }
     );
   }
-}
+});
 
-export async function GET(request: NextRequest) {
+export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
   try {
     const { searchParams } = new URL(request.url);
-    const organizationId = searchParams.get('organizationId');
     const conversationId = searchParams.get('conversationId');
+    const organizationId = getOrganizationId(request, auth);
 
-    if (!organizationId) {
+    if (!conversationId || !organizationId) {
       return NextResponse.json(
-        { error: 'Organization ID is required' },
+        { error: 'Missing required parameters', code: 'VALIDATION_ERROR' },
         { status: 400 }
       );
     }
 
-    let query = supabase
-      .admin()
+    // Initialize Supabase service role client
+    const supabaseClient = supabase.admin();
+
+    // Get conversation with organization context
+    const { data: conversation, error } = await supabaseClient
       .from('conversations')
       .select('*')
+      .eq('id', conversationId)
       .eq('organization_id', organizationId)
-      .eq('metadata->>source', 'widget');
+      .single();
 
-    if (conversationId) {
-      query = query.eq('id', conversationId);
-    }
-
-    const { data: conversations, error } = await query;
-
-    if (error) {
-      console.error('[Widget API] Failed to fetch conversations:', error);
+    if (error || !conversation) {
       return NextResponse.json(
-        { error: 'Failed to fetch conversations', details: error.message },
-        { status: 500 }
+        { error: 'Conversation not found', code: 'NOT_FOUND' },
+        { status: 404 }
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      conversations,
-    });
+    return NextResponse.json(conversation);
 
   } catch (error) {
-    console.error('[Widget API] Unexpected error:', error);
+    console.error('[Widget Conversations API] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
       { status: 500 }
     );
   }
-}
+});
