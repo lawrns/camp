@@ -1,45 +1,6 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="12.307909">
-<testsuite name="tests/widget-dashboard-sync.spec.ts" timestamp="2025-08-01T21:42:11.214Z" hostname="chromium" tests="1" failures="1" skipped="0" time="11.679" errors="0">
-<testcase name="Widget-Dashboard Message Synchronization › should sync messages from widget to dashboard inbox" classname="tests/widget-dashboard-sync.spec.ts" time="11.679">
-<failure message="widget-dashboard-sync.spec.ts:17:7 should sync messages from widget to dashboard inbox" type="FAILURE">
-<![CDATA[  [chromium] › tests/widget-dashboard-sync.spec.ts:17:7 › Widget-Dashboard Message Synchronization › should sync messages from widget to dashboard inbox 
-
-    Error: expect.toBeVisible: Error: strict mode violation: locator('[data-testid="widget-panel"] div:has-text("Widget to dashboard sync test - 1754084542603"):not(textarea)') resolved to 18 elements:
-        1) <div class="flex-1 overflow-hidden">…</div> aka locator('.bg-white.rounded-lg > div:nth-child(3)')
-        2) <div class="flex flex-col h-full">…</div> aka locator('.flex.flex-col.h-full').first()
-        3) <div class="flex-1 overflow-hidden">…</div> aka locator('.flex.flex-col > div').first()
-        4) <div class="relative flex-1 flex flex-col h-full">…</div> aka locator('.relative.flex-1').first()
-        5) <div class="flex-1 relative">…</div> aka locator('.relative > .flex-1.relative')
-        6) <div dir="ltr" class="relative overflow-hidden h-full">…</div> aka locator('.relative.overflow-hidden.h-full')
-        7) <div data-radix-scroll-area-viewport="" class="h-full w-full rounded-[inherit]">…</div> aka locator('.h-full.w-full')
-        8) <div>…</div> aka locator('.h-full.w-full > div')
-        9) <div class="space-y-1">…</div> aka getByText('Hi! How can we help you today?Just nowWidget to dashboard sync test -')
-        10) <div class="px-4 py-2">…</div> aka locator('.h-full > div > .space-y-1 > div:nth-child(2)')
-        ...
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('[data-testid="widget-panel"] div:has-text("Widget to dashboard sync test - 1754084542603"):not(textarea)')
-
-
-       99 |       // Verify message appears in widget - EnhancedMessageList uses different structure
-      100 |       const sentMessage = widgetPage.locator(`[data-testid="widget-panel"] div:has-text("${testMessage}"):not(textarea)`);
-    > 101 |       await expect(sentMessage).toBeVisible({ timeout: 5000 });
-          |                                 ^
-      102 |       console.log(`✅ Message sent from widget: "${testMessage}"`);
-      103 |       
-      104 |       // Step 4: Check if message appears in dashboard
-        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts:101:33
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="22.865101000000003">
+<testsuite name="tests/widget-dashboard-sync.spec.ts" timestamp="2025-08-01T21:54:04.536Z" hostname="chromium" tests="1" failures="0" skipped="0" time="21.764" errors="0">
+<testcase name="Widget-Dashboard Message Synchronization › should sync messages from widget to dashboard inbox" classname="tests/widget-dashboard-sync.spec.ts" time="21.764">
 <system-out>
 <![CDATA[🔄 Testing widget-dashboard message synchronization...
 📊 Setting up dashboard...
@@ -49,10 +10,675 @@
 ✅ Homepage loaded
 💬 Sending message from widget...
 ✅ Widget opened
-
-[[ATTACHMENT|tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-2.png]]
+✅ Message sent from widget: "Widget to dashboard sync test - 1754085257838"
+👀 Checking if message appears in dashboard...
+❌ Message did not appear in dashboard
+Dashboard content preview: (self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,"5:\"$Sreact.fragment\"\n"])self.__next_f.push([1,"25:I[\"[project]/components/system/ConsoleManager.tsx [app-client] (ecmascript)\",[\"/_next/static/chunks/_405fdd81._.js\",\"/_next/static/chunks/_3e98c08d._.js\",\"/_next/static/chunks/node_modules_next_b09d993e._.js\",\"/_next/static/chunks/node_modules_motion-dom_dist_es_2453d03e._.js\",\"/_next/static/chunks/node_modules_framer-motion_dist_es_ebc484db._.js\",\"/_next/static/chu...
+Found 31 conversation elements in dashboard
+Found 6 message elements in dashboard
+📡 Testing API-level message synchronization...
+API send status: 200
+✅ API message sent successfully
+❌ API message did not appear in dashboard
+📋 Testing dashboard message retrieval...
+Dashboard messages API status: 200
+Dashboard API response: {
+  "messages": [
+    {
+      "id": "4d7f7d52-7dfd-4a18-a572-20e2b9806185",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API sync test - 1754085263400",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-08-01T21:54:23.601839+00:00",
+      "updatedAt": "2025-08-01T21:54:23.601839+00:00",
+      "metadata": {},
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-08-01T21:54:23.601839+00:00"
+    },
+    {
+      "id": "4526539f-be86-470a-9d82-cc063431a47a",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Test message from API fix",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-08-01T21:53:34.271207+00:00",
+      "updatedAt": "2025-08-01T21:53:34.271207+00:00",
+      "metadata": {},
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-08-01T21:53:34.271207+00:00"
+    },
+    {
+      "id": "472ec930-ec45-4e94-abb8-faa447e5e6ab",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "I ain't sayin she a gold digga",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-31T19:49:35.208934+00:00",
+      "updatedAt": "2025-07-31T19:49:35.208934+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-31T19:49:34.984Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-31T19:49:35.208934+00:00"
+    },
+    {
+      "id": "4a86d9a2-6eae-4628-bc6e-547ce34c6530",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "asdfasdf",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-31T19:49:18.812661+00:00",
+      "updatedAt": "2025-07-31T19:49:18.812661+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-31T19:49:18.593Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-31T19:49:18.812661+00:00"
+    },
+    {
+      "id": "ca1147d0-2b77-4e0c-8a8b-e2332a53deba",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API direct test - 1753918294453",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T23:31:34.773651+00:00",
+      "updatedAt": "2025-07-30T23:31:34.773651+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:31:34.651Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:31:34.773651+00:00"
+    },
+    {
+      "id": "e631837d-6f39-4baa-86dc-d2a5c58bc5ee",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Final integration test - 1753918285202",
+      "senderType": "visitor",
+      "senderId": "visitor-1753918285476@example.com",
+      "senderName": "Visitor",
+      "senderEmail": "visitor-1753918285476@example.com",
+      "createdAt": "2025-07-30T23:31:25.734829+00:00",
+      "updatedAt": "2025-07-30T23:31:25.734829+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:31:25.639Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:31:25.734829+00:00"
+    },
+    {
+      "id": "9f2b7c4a-96a1-4b88-9185-c84dbaf407b1",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API direct test - 1753917830476",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T23:23:50.79318+00:00",
+      "updatedAt": "2025-07-30T23:23:50.79318+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:23:50.670Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:23:50.79318+00:00"
+    },
+    {
+      "id": "4acadd24-3fa3-49a4-b992-3bbb05a2fa86",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Final integration test - 1753917821660",
+      "senderType": "visitor",
+      "senderId": "visitor-1753917821841@example.com",
+      "senderName": "Visitor",
+      "senderEmail": "visitor-1753917821841@example.com",
+      "createdAt": "2025-07-30T23:23:42.108268+00:00",
+      "updatedAt": "2025-07-30T23:23:42.108268+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:23:42.002Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:23:42.108268+00:00"
+    },
+    {
+      "id": "414d71c5-96ab-4c3e-8e38-fbabc04f81d0",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API direct test - 1753917363324",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T23:16:03.813378+00:00",
+      "updatedAt": "2025-07-30T23:16:03.813378+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:16:03.637Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:16:03.813378+00:00"
+    },
+    {
+      "id": "28481672-de01-4cc6-b7f7-e492e56b4601",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Final integration test - 1753917354562",
+      "senderType": "visitor",
+      "senderId": "visitor-1753917354740@example.com",
+      "senderName": "Visitor",
+      "senderEmail": "visitor-1753917354740@example.com",
+      "createdAt": "2025-07-30T23:15:55.081158+00:00",
+      "updatedAt": "2025-07-30T23:15:55.081158+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:15:54.917Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:15:55.081158+00:00"
+    },
+    {
+      "id": "bc30be58-ae88-4832-8de5-1fbdc8fce4fd",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Widget debug test - 1753917307537",
+      "senderType": "visitor",
+      "senderId": "visitor-1753917307831@example.com",
+      "senderName": "Visitor",
+      "senderEmail": "visitor-1753917307831@example.com",
+      "createdAt": "2025-07-30T23:15:08.135363+00:00",
+      "updatedAt": "2025-07-30T23:15:08.135363+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:15:07.995Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:15:08.135363+00:00"
+    },
+    {
+      "id": "0a6aceab-88f0-4015-90bc-b7512c906d58",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API direct test - 1753916717757",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T23:05:18.127716+00:00",
+      "updatedAt": "2025-07-30T23:05:18.127716+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T23:05:17.971Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T23:05:18.127716+00:00"
+    },
+    {
+      "id": "2968c83c-7410-476c-b538-9891c7f751a0",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API direct test - 1753915024483",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:37:04.812068+00:00",
+      "updatedAt": "2025-07-30T22:37:04.812068+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:37:04.689Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:37:04.812068+00:00"
+    },
+    {
+      "id": "459f61f6-8976-48e2-830a-ad7cc2656b59",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913825090",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:17:05.386137+00:00",
+      "updatedAt": "2025-07-30T22:17:05.386137+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:17:05.254Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:17:05.386137+00:00"
+    },
+    {
+      "id": "8ef657ce-bef7-4771-b6f8-86627207137e",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Alignment test message - 1753913701479",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:15:01.746649+00:00",
+      "updatedAt": "2025-07-30T22:15:01.746649+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:15:01.642Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:15:01.746649+00:00"
+    },
+    {
+      "id": "8b3eeefc-593e-4ca6-babd-c6b6952b3242",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913334398",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:08:54.730252+00:00",
+      "updatedAt": "2025-07-30T22:08:54.730252+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:08:54.600Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:08:54.730252+00:00"
+    },
+    {
+      "id": "67d82caf-fb44-4794-9380-bddb4ced6360",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913192495",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:06:32.79141+00:00",
+      "updatedAt": "2025-07-30T22:06:32.79141+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:06:32.679Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:06:32.79141+00:00"
+    },
+    {
+      "id": "588d3f07-34d1-489b-9c2a-51051530abf0",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913141791",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:05:42.121728+00:00",
+      "updatedAt": "2025-07-30T22:05:42.121728+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:05:41.981Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:05:42.121728+00:00"
+    },
+    {
+      "id": "04e697da-62d6-46ca-9b6b-27f1c5432726",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913095237",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:04:55.679342+00:00",
+      "updatedAt": "2025-07-30T22:04:55.679342+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:04:55.546Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:04:55.679342+00:00"
+    },
+    {
+      "id": "99b11357-5b31-4a9c-b349-1fc8a2dc007c",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753913018335",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:03:38.645919+00:00",
+      "updatedAt": "2025-07-30T22:03:38.645919+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:03:38.514Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:03:38.645919+00:00"
+    },
+    {
+      "id": "433696df-740d-426c-9d4f-23202b6a6fdb",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753912900338",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T22:01:40.644731+00:00",
+      "updatedAt": "2025-07-30T22:01:40.644731+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T22:01:40.510Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T22:01:40.644731+00:00"
+    },
+    {
+      "id": "511afc50-b691-4c11-adc5-46ac204803b2",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753912201593",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T21:50:01.896379+00:00",
+      "updatedAt": "2025-07-30T21:50:01.896379+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T21:50:01.809Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T21:50:01.896379+00:00"
+    },
+    {
+      "id": "1f14f11e-9467-4a6e-ad41-13b1245b7be6",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753912061778",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T21:47:44.068038+00:00",
+      "updatedAt": "2025-07-30T21:47:44.068038+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T21:47:43.977Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T21:47:44.068038+00:00"
+    },
+    {
+      "id": "654081f0-e66d-4316-ab34-e256f9cfbf7d",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "API test message - 1753911983585",
+      "senderType": "visitor",
+      "senderId": "",
+      "senderName": null,
+      "senderEmail": null,
+      "createdAt": "2025-07-30T21:46:23.975975+00:00",
+      "updatedAt": "2025-07-30T21:46:23.975975+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-30T21:46:23.861Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-30T21:46:23.975975+00:00"
+    },
+    {
+      "id": "8e371e92-0f83-4c1a-b592-a6ef726b16b9",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Comprehensive test message to verify TypeError fix",
+      "senderType": "visitor",
+      "senderId": "test-fix@example.com",
+      "senderName": "Fix Test",
+      "senderEmail": "test-fix@example.com",
+      "createdAt": "2025-07-29T21:23:04.183677+00:00",
+      "updatedAt": "2025-07-29T21:23:04.183677+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-29T21:23:03.936Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-29T21:23:04.183677+00:00"
+    },
+    {
+      "id": "1480be8a-95a6-4baf-9db7-64f694b4ce0b",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Comprehensive test message to verify TypeError fix",
+      "senderType": "visitor",
+      "senderId": "test-fix@example.com",
+      "senderName": "Fix Test",
+      "senderEmail": "test-fix@example.com",
+      "createdAt": "2025-07-29T21:23:03.494432+00:00",
+      "updatedAt": "2025-07-29T21:23:03.494432+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-29T21:23:03.229Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-29T21:23:03.494432+00:00"
+    },
+    {
+      "id": "b5fe178f-acda-46e3-bdb9-46d20fe10021",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Test",
+      "senderType": "visitor",
+      "senderId": "test@example.com",
+      "senderName": "Test",
+      "senderEmail": "test@example.com",
+      "createdAt": "2025-07-29T21:22:12.838987+00:00",
+      "updatedAt": "2025-07-29T21:22:12.838987+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-29T21:22:12.570Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-29T21:22:12.838987+00:00"
+    },
+    {
+      "id": "ee2cdd05-b00c-409e-b878-c9908cdbffab",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Test consistency",
+      "senderType": "visitor",
+      "senderId": "test@example.com",
+      "senderName": "Test",
+      "senderEmail": "test@example.com",
+      "createdAt": "2025-07-29T21:21:49.42362+00:00",
+      "updatedAt": "2025-07-29T21:21:49.42362+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-29T21:21:49.164Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-29T21:21:49.42362+00:00"
+    },
+    {
+      "id": "ffc35217-dddd-445f-95ce-52b9b28df089",
+      "conversationId": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "content": "Test message from API test script",
+      "senderType": "visitor",
+      "senderId": "test@example.com",
+      "senderName": "Test User",
+      "senderEmail": "test@example.com",
+      "createdAt": "2025-07-29T21:20:01.729788+00:00",
+      "updatedAt": "2025-07-29T21:20:01.729788+00:00",
+      "metadata": {
+        "source": "widget",
+        "timestamp": "2025-07-29T21:20:01.470Z"
+      },
+      "attachments": [],
+      "status": "sent",
+      "inReplyToId": null,
+      "isDeleted": false,
+      "conversation_id": "48eedfba-2568-4231-bb38-2ce20420900d",
+      "sender_type": "visitor",
+      "created_at": "2025-07-29T21:20:01.729788+00:00"
+    }
+  ],
+  "pagination": {
+    "limit": 50,
+    "offset": 0,
+    "total": 29,
+    "hasMore": false
+  }
+}
+✅ Dashboard API working - found 29 messages
+Dashboard API contains widget message: ❌
+Dashboard API contains API message: ✅
+📻 Testing real-time channel verification...
+Expected real-time channel: org:b5e80170-004c-4e82-a88c-3e2166b169dd:conv:48eedfba-2568-4231-bb38-2ce20420900d
+Widget real-time info: { hasSupabase: [33mfalse[39m, hasRealtime: [33mfalse[39m, channels: [] }
+Dashboard real-time info: { hasSupabase: [33mfalse[39m, hasRealtime: [33mfalse[39m, channels: [] }
+📋 Widget-Dashboard Sync Test Summary:
+Widget message sent: ✅
+Widget message visible in widget: ✅
+Widget message visible in dashboard: ❌
+API message sent: ✅
+Dashboard messages API working: ✅
+Expected channel: org:b5e80170-004c-4e82-a88c-3e2166b169dd:conv:48eedfba-2568-4231-bb38-2ce20420900d
+🎉 Widget-Dashboard sync test completed!
 ]]>
 </system-out>
 </testcase>

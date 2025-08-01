@@ -3,6 +3,7 @@
 import { getBrowserClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface DashboardMetrics {
   conversations: number;
@@ -41,6 +42,9 @@ const getColorForAction = (action: string): RealtimeActivity['color'] => {
 };
 
 export function useRealtimeDashboard() {
+  const { user } = useAuth();
+  const organizationId = user?.organizationId;
+  
   const [metrics, setMetrics] = useState<DashboardMetrics>({
     conversations: 0,
     activeAgents: 0,
@@ -61,6 +65,15 @@ export function useRealtimeDashboard() {
   });
 
   useEffect(() => {
+    if (!organizationId) {
+      setMetrics(prev => ({
+        ...prev,
+        loading: false,
+        error: 'No organization context available'
+      }));
+      return;
+    }
+
     const supabase = getBrowserClient();
     let mounted = true;
 
@@ -251,7 +264,7 @@ export function useRealtimeDashboard() {
       conversationSubscription.unsubscribe();
       activitySubscription.unsubscribe();
     };
-  }, []);
+  }, [organizationId]);
 
   // Test Supabase connection
   const testConnection = async () => {

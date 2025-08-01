@@ -355,7 +355,7 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
 
     // Convert snake_case database response to camelCase API response
     const apiMessage = mapDbMessageToApi(message);
-    return NextResponse.json(apiMessage, { status: 201 });
+    return NextResponse.json({ message: apiMessage }, { status: 201 });
 
   } catch (error) {
     console.error('[Dashboard Messages API] Unexpected error:', error);

@@ -86,9 +86,12 @@ export async function POST(request: NextRequest) {
       content: body.content,
       sender_type: body.senderType || 'visitor',
       sender_id: body.senderId,
+      sender_name: body.senderName || null,
       message_type: body.messageType || 'text',
       metadata: body.metadata || {},
     }, organizationId);
+
+    console.log('[Widget Messages API] Inserting message data:', JSON.stringify(messageData, null, 2));
 
     // Insert message
     const { data: message, error } = await supabase
@@ -98,9 +101,10 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database error:', error);
+      console.error('[Widget Messages API] Database error:', error);
+      console.error('[Widget Messages API] Message data that failed:', JSON.stringify(messageData, null, 2));
       return NextResponse.json(
-        { error: 'Failed to create message' },
+        { error: 'Failed to create message', details: error.message },
         { status: 500 }
       );
     }

@@ -2,26 +2,21 @@
 
 import { Button } from "@/components/ui/Button-unified";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
-import { Bell, ChatCircle, Clock, Fire, MagnifyingGlass as Search, Gear as Settings, Users } from "@phosphor-icons/react";
+import { useRealtimeDashboard } from '../hooks/useRealtimeDashboard';
+import { Bell, ChatCircle, Clock, Fire, MagnifyingGlass as Search, Gear as Settings, Users, Ticket, CheckCircle, ArrowRight } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 export default function EnhancedDashboard() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
-
-  // Mock metrics for now to avoid hook issues
-  const metrics = {
-    conversations: 1234,
-    activeAgents: 12,
-    responseTime: "2.3m",
-    satisfaction: "94%",
-    pendingTickets: 23,
-    resolvedToday: 45,
-    loading: false,
-    error: null
-  };
+  
+  // Use real dashboard data
+  const { metrics, activities, systemStatus, refreshMetrics } = useRealtimeDashboard();
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -83,7 +78,7 @@ export default function EnhancedDashboard() {
 
       {/* Main Content */}
       <main className="p-6">
-        {/* Enhanced Metrics Grid with Design System */}
+        {/* Enhanced Metrics Grid with Real Data */}
         <div className="ds-grid ds-grid-cols-1 ds-gap-6 sm:ds-grid-cols-2 lg:ds-grid-cols-3 xl:ds-grid-cols-6 ds-mb-8">
           <div className="ds-dashboard-card ds-bg-primary-500 ds-text-primary-50 ds-border-0">
             <div className="ds-p-4">
@@ -124,7 +119,7 @@ export default function EnhancedDashboard() {
                 <Fire className="ds-h-6 ds-w-6 ds-text-warning-100" weight="duotone" />
                 <Badge className="ds-border-0 ds-bg-white/20 ds-text-xs ds-text-white">Score</Badge>
               </div>
-              <div className="ds-text-2xl ds-font-bold ds-text-warning-50">{metrics.satisfaction}</div>
+              <div className="ds-text-2xl ds-font-bold ds-text-warning-50">{metrics.satisfaction}%</div>
               <div className="ds-text-xs ds-text-warning-100">Satisfaction</div>
             </div>
           </div>
@@ -132,7 +127,7 @@ export default function EnhancedDashboard() {
           <div className="ds-dashboard-card ds-bg-error-500 ds-text-error-50 ds-border-0">
             <div className="ds-p-4">
               <div className="ds-flex ds-items-center ds-justify-between ds-mb-2">
-                <Bell className="ds-h-6 ds-w-6 ds-text-error-100" weight="duotone" />
+                <Ticket className="ds-h-6 ds-w-6 ds-text-error-100" weight="duotone" />
                 <Badge className="ds-border-0 ds-bg-white/20 ds-text-xs ds-text-white">Pending</Badge>
               </div>
               <div className="ds-text-2xl ds-font-bold ds-text-error-50">{metrics.pendingTickets}</div>
@@ -143,7 +138,7 @@ export default function EnhancedDashboard() {
           <div className="ds-dashboard-card ds-bg-accent-500 ds-text-accent-50 ds-border-0">
             <div className="ds-p-4">
               <div className="ds-flex ds-items-center ds-justify-between ds-mb-2">
-                <ChatCircle className="ds-h-6 ds-w-6 ds-text-accent-100" weight="duotone" />
+                <CheckCircle className="ds-h-6 ds-w-6 ds-text-accent-100" weight="duotone" />
                 <Badge className="ds-border-0 ds-bg-white/20 ds-text-xs ds-text-white">Today</Badge>
               </div>
               <div className="ds-text-2xl ds-font-bold ds-text-accent-50">{metrics.resolvedToday}</div>

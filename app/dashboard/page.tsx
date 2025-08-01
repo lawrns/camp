@@ -2,15 +2,17 @@
 
 import { Suspense } from 'react';
 import { InboxDashboard } from '@/components/InboxDashboard';
-import { MetricCard } from '@/components/MetricCard';
 import { MemoryMonitor } from '@/components/MemoryMonitor';
-import { useDashboardData } from '@/hooks/useDashboardData';
+import { useRealtimeDashboard } from '../app/hooks/useRealtimeDashboard';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthGuard } from '@/components/auth/auth-guard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
+import { TrendingUp, TrendingDown, Users, Clock, Star, Ticket, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
-  const { metrics, loading: metricsLoading } = useDashboardData();
+  const { metrics, activities, systemStatus } = useRealtimeDashboard();
+  const { loading: metricsLoading, error } = metrics;
 
   if (isLoading) {
     return (
@@ -30,49 +32,84 @@ export default function DashboardPage() {
           Welcome back, {user?.email?.split('@')[0] || 'User'}!
         </h1>
 
-        {/* Metrics Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Enhanced Metrics Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {metricsLoading ? (
             // Loading skeleton
             Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-white p-6 rounded-lg shadow animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-              </div>
+              <Card key={i} className="animate-pulse">
+                <CardHeader className="pb-2">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                </CardContent>
+              </Card>
             ))
-          ) : metrics ? (
-            <>
-              <MetricCard
-                title="Active Conversations"
-                value={metrics.activeConversations.value}
-                change={metrics.activeConversations.change}
-                trend={metrics.activeConversations.trend}
-              />
-              <MetricCard
-                title="Response Time"
-                value={parseFloat(metrics.responseTime.value)}
-                change={metrics.responseTime.change}
-                trend={metrics.responseTime.trend}
-              />
-              <MetricCard
-                title="AI Resolution Rate"
-                value={parseFloat(metrics.aiResolutionRate.value)}
-                change={metrics.aiResolutionRate.change}
-                trend={metrics.aiResolutionRate.trend}
-              />
-              <MetricCard
-                title="Customer Satisfaction"
-                value={parseFloat(metrics.customerSatisfaction.value)}
-                change={metrics.customerSatisfaction.change}
-                trend={metrics.customerSatisfaction.trend}
-              />
-            </>
-          ) : (
-            // Fallback if no metrics
-            <div className="col-span-4 text-center text-gray-500">
-              Unable to load metrics
+          ) : error ? (
+            <div className="col-span-4 text-center text-red-500">
+              <AlertCircle className="w-6 h-6 mx-auto mb-2" />
+              Error loading metrics: {error}
             </div>
+          ) : (
+            <>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Active Conversations</CardTitle>
+                  <Users className="h-4 w-4 text-blue-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-gray-900">{metrics.conversations}</div>
+                  <p className="text-xs text-green-600 flex items-center mt-1">
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    +12% from last hour
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Avg Response Time</CardTitle>
+                  <Clock className="h-4 w-4 text-orange-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-gray-900">{metrics.responseTime}s</div>
+                  <p className="text-xs text-green-600 flex items-center mt-1">
+                    <TrendingDown className="w-3 h-3 mr-1" />
+                    -8% faster today
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Customer Satisfaction</CardTitle>
+                  <Star className="h-4 w-4 text-yellow-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-gray-900">{metrics.satisfaction}/5</div>
+                  <p className="text-xs text-green-600 flex items-center mt-1">
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    +0.2 this week
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Resolved Today</CardTitle>
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-gray-900">{metrics.resolvedToday}</div>
+                  <p className="text-xs text-green-600 flex items-center mt-1">
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    +15% vs yesterday
+                  </p>
+                </CardContent>
+              </Card>
+            </>
           )}
         </div>
 

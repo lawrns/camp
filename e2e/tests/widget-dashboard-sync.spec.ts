@@ -97,7 +97,7 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
       }
       
       // Verify message appears in widget - EnhancedMessageList uses different structure
-      const sentMessage = widgetPage.locator(`[data-testid="widget-panel"] div.space-y-1 div:has-text("${testMessage}")`);
+      const sentMessage = widgetPage.locator(`[data-testid="widget-panel"] div.space-y-1 div:has-text("${testMessage}")`).nth(4);
       await expect(sentMessage).toBeVisible({ timeout: 5000 });
       console.log(`✅ Message sent from widget: "${testMessage}"`);
       
@@ -177,15 +177,19 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
       console.log(`Dashboard messages API status: ${dashboardMessagesResponse.status()}`);
       
       if (dashboardMessagesResponse.ok()) {
-        const dashboardMessages = await dashboardMessagesResponse.json();
+        const dashboardData = await dashboardMessagesResponse.json();
+        console.log('Dashboard API response:', JSON.stringify(dashboardData, null, 2));
+
+        // Handle both array and object responses
+        const dashboardMessages = Array.isArray(dashboardData) ? dashboardData : (dashboardData.messages || []);
         console.log(`✅ Dashboard API working - found ${dashboardMessages.length || 0} messages`);
-        
+
         // Look for our test messages
-        const hasWidgetMessage = dashboardMessages.some((msg: any) => 
+        const hasWidgetMessage = dashboardMessages.some((msg: any) =>
           msg.content && msg.content.includes('Widget to dashboard sync test'));
-        const hasApiMessage = dashboardMessages.some((msg: any) => 
+        const hasApiMessage = dashboardMessages.some((msg: any) =>
           msg.content && msg.content.includes('API sync test'));
-        
+
         console.log(`Dashboard API contains widget message: ${hasWidgetMessage ? '✅' : '❌'}`);
         console.log(`Dashboard API contains API message: ${hasApiMessage ? '✅' : '❌'}`);
       } else {
