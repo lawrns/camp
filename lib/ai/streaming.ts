@@ -7,7 +7,7 @@
 
 // Add React import for the hook
 import React from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createServiceRoleClient } from "@/lib/supabase";
 import { AI_PERSONALITIES, calculateTypingTiming, type AIPersonality } from "./personalities";
 
 export interface StreamingOptions {
@@ -32,7 +32,7 @@ export interface TypingIndicatorOptions {
  * Stream AI response with human-like timing and typing indicators
  */
 export class AIStreamingService {
-  private supabase = createClient();
+  private supabase = createServiceRoleClient();
   private activeStreams = new Map<string, AbortController>();
 
   /**

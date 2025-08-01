@@ -182,3 +182,8 @@ export function TechnicalSetupStep({ organizationId, onComplete, onSkip, onBack,
     </div>
   );
 }
+
+// Export the new onboarding step components
+export { TeamInviteStep } from './TeamInviteStep';
+export { WidgetSetupStep } from './WidgetSetupStep';
+export { CompletionStep } from './CompletionStep';

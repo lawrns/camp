@@ -188,7 +188,7 @@ async function enrichJWTWithOrganization(organizationId: string | undefined, ret
         errorDetails = { error: `HTTP ${response.status}: ${statusText}` };
       }
 
-      // Enhanced error logging with more context
+      // Enhanced error logging with more context - prevent empty object errors
       if (errorDetails && Object.keys(errorDetails).length > 0 && errorDetails.error !== "Unknown error") {
         console.error("🚨 Failed to enrich JWT:", {
           status: response.status,

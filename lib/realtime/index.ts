@@ -32,6 +32,10 @@ export {
   useNativeOrganizationRealtime,
 };
 
+// Legacy compatibility exports
+export const useOrganizationRealtime = useNativeOrganizationRealtime;
+export const useConversationRealtime = useNativeConversationRealtime;
+
 // Server-side implementations
 export { broadcastToConversation, broadcastToOrganization, publishToRealtime } from "./lean-server";
 

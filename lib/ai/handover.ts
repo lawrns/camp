@@ -5,7 +5,7 @@
  * Includes confidence scoring, escalation rules, and context preservation
  */
 
-import { createClient } from "@/lib/supabase/client";
+import { createServiceRoleClient } from "@/lib/supabase";
 import { AI_PERSONALITIES, type AIPersonality } from "./personalities";
 
 export interface HandoverContext {
@@ -54,7 +54,7 @@ export interface HandoverResult {
  * Enhanced AI Handover Service
  */
 export class AIHandoverService {
-  private supabase = createClient();
+  private supabase = createServiceRoleClient();
 
   /**
    * Evaluate if a conversation should be handed over to a human agent

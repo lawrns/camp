@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { enhancedAIService } from '@/lib/ai/enhanced-ai-service';
-import { supabase } from '@/lib/supabase';
+import { createServiceRoleClient } from '@/lib/supabase';
 import { slackService } from '@/lib/integrations/enhanced-slack-service';
 
 export async function POST(request: NextRequest) {
@@ -38,8 +37,7 @@ export async function POST(request: NextRequest) {
     // Create handover record if AI confidence is low
     if (aiResponse.confidence < 0.7 || aiResponse.handoverReason) {
       try {
-        const cookieStore = await cookies();
-        const supabaseClient = supabase.server(cookieStore);
+        const supabaseClient = createServiceRoleClient();
         // TODO: Uncomment when campfire_handoffs table is properly synced
         /*
         await supabaseClient
@@ -77,8 +75,7 @@ export async function POST(request: NextRequest) {
 
     // Store the AI response in the database
     try {
-      const cookieStore = await cookies();
-      const supabaseClient = supabase.server(cookieStore);
+      const supabaseClient = createServiceRoleClient();
       await supabaseClient
         .from('messages')
         .insert({

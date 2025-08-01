@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCampfireClient } from '@/lib/supabase';
+import { createServiceRoleClient } from '@/lib/supabase';
 import { aiHandoverService } from '@/lib/ai/handover';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 

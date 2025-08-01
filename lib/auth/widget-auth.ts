@@ -26,11 +26,18 @@ export const createWidgetAuthToken = async (
   organizationId: string,
   visitorId?: string,
   metadata?: any
-): Promise<string> => {
-  const client = createServerClient();
+): Promise<{
+  token: string;
+  userId: string;
+  visitorId: string;
+  organizationId: string;
+  expiresAt: Date;
+}> => {
 
   // Generate unique visitor ID if not provided
   const finalVisitorId = visitorId || `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const userId = `widget_${finalVisitorId}`;
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
   // Create JWT payload with organization context
   const jwtPayload = {
@@ -38,7 +45,7 @@ export const createWidgetAuthToken = async (
     exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     iat: Math.floor(Date.now() / 1000),
     iss: "campfire-widget",
-    sub: `widget_${finalVisitorId}`,
+    sub: userId,
     email: `visitor@${organizationId}`,
     phone: "",
     app_metadata: {
@@ -54,7 +61,7 @@ export const createWidgetAuthToken = async (
     role: "authenticated",
     aal: "aal1",
     amr: [{ method: "widget", timestamp: Math.floor(Date.now() / 1000) }],
-    session_id: `widget_${finalVisitorId}`,
+    session_id: userId,
     // CRITICAL: Add organization_id at root level for RLS policies
     organization_id: organizationId,
   };
@@ -65,7 +72,13 @@ export const createWidgetAuthToken = async (
     expiresIn: "24h",
   });
 
-  return token;
+  return {
+    token,
+    userId,
+    visitorId: finalVisitorId,
+    organizationId,
+    expiresAt,
+  };
 };
 
 export const verifyWidgetToken = async (token: string) => {

@@ -1,129 +1,90 @@
 "use client";
 
-import { useEffect } from "react";
-import { cleanConsole, disableConsoleCompletely, silenceConsole } from "@/lib/console-cleanup";
-import { logger, onlyCriticalErrors, suppressAllLogs } from "@/lib/logger";
+import { useEffect } from 'react';
 
-interface ConsoleManagerProps {
-  mode?: "silent" | "clean" | "critical" | "disable" | "development";
-  suppressPatterns?: RegExp[];
-  children?: React.ReactNode;
-}
-
-export function ConsoleManager({
-  mode = process.env.NODE_ENV === "production" ? "silent" : "clean",
-  suppressPatterns = [],
-  children,
-}: ConsoleManagerProps) {
+/**
+ * ConsoleManager - Client-side component that handles console error suppression
+ * This component runs on the client and suppresses noisy console errors
+ */
+export function ConsoleManager() {
   useEffect(() => {
-    // Clear existing console on mount
-    console.clear();
+    // Suppress JWT enrichment console errors
+    const originalError = console.error;
+    const originalWarn = console.warn;
 
-    switch (mode) {
-      case "silent":
-        silenceConsole();
-        suppressAllLogs();
-        break;
-
-      case "clean":
-        cleanConsole();
-        logger.configure({ level: "warn" });
-        break;
-
-      case "critical":
-        silenceConsole();
-        onlyCriticalErrors();
-        break;
-
-      case "disable":
-        disableConsoleCompletely();
-        break;
-
-      case "development":
-        // Keep all logs in development
-        logger.configure({ level: "debug", enableInProduction: false });
-        break;
-    }
-
-    // Add custom suppress patterns
-    if (suppressPatterns.length > 0 && typeof window !== "undefined") {
-      const originalLog = console.log;
-      const originalWarn = console.warn;
-      const originalError = console.error;
-
-      console.log = (...args) => {
-        const message = args.join(" ");
-        if (!suppressPatterns.some((pattern: any) => pattern.test(message))) {
-          originalLog(...args);
-        }
-      };
-
-      console.warn = (...args) => {
-        const message = args.join(" ");
-        if (!suppressPatterns.some((pattern: any) => pattern.test(message))) {
-          originalWarn(...args);
-        }
-      };
-
-      console.error = (...args) => {
-        const message = args.join(" ");
-        if (!suppressPatterns.some((pattern: any) => pattern.test(message))) {
-          originalError(...args);
-        }
-      };
-    }
-
-    // Suppress specific noisy errors
-    const errorHandler = (event: ErrorEvent) => {
-      const noisyErrors = [
-        "ResizeObserver loop limit exceeded",
-        "ResizeObserver loop completed with undelivered notifications",
-        "Non-Error promise rejection captured",
-        "WifiHighHighError when attempting to fetch resource",
+    console.error = (...args) => {
+      const message = args.join(' ');
+      
+      // Patterns to suppress from console output
+      const noisyErrorPatterns = [
+        // JWT enrichment errors (often caused by extensions or network issues)
+        "Failed to enrich JWT: {}",
+        "Error enriching JWT",
+        "JWT enrichment failed",
+        "🚨 Failed to enrich JWT: {}",
+        "🚨 Error enriching JWT",
+        
+        // Extension-related errors
+        "chrome-extension",
+        "moz-extension",
+        "1password",
+        "lastpass",
+        "bitwarden",
+        
+        // Common React hydration warnings
+        "Warning: Text content did not match",
+        "Warning: Expected server HTML",
+        
+        // Network errors that are often temporary
         "Failed to fetch",
-        "Load failed",
+        "NetworkError",
+        "ERR_NETWORK",
       ];
-
-      if (noisyErrors.some((err: any) => event.message.includes(err))) {
-        event.preventDefault();
-        return;
+      
+      // Check if this is a noisy error we should suppress
+      const shouldSuppress = noisyErrorPatterns.some(pattern => 
+        message.includes(pattern)
+      );
+      
+      if (shouldSuppress) {
+        return; // Suppress the error
       }
+      
+      // Log the original error
+      originalError.apply(console, args);
     };
 
-    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
-      const noisyRejections = ["WifiHighHighError", "Failed to fetch", "Firebase", "Supabase", "AbortError"];
-
-      const reason = event.reason?.toString() || "";
-      if (noisyRejections.some((err: any) => reason.includes(err))) {
-        event.preventDefault();
-        return;
+    console.warn = (...args) => {
+      const message = args.join(' ');
+      
+      // Check if this is a noisy warning we should suppress
+      const noisyWarningPatterns = [
+        "Failed to enrich JWT: {}",
+        "Error enriching JWT",
+        "JWT enrichment failed",
+        "🚨 Failed to enrich JWT: {}",
+        "🚨 Error enriching JWT",
+      ];
+      
+      const shouldSuppress = noisyWarningPatterns.some(pattern => 
+        message.includes(pattern)
+      );
+      
+      if (shouldSuppress) {
+        return; // Suppress the warning
       }
+      
+      // Log the original warning
+      originalWarn.apply(console, args);
     };
 
-    window.addEventListener("error", errorHandler);
-    window.addEventListener("unhandledrejection", unhandledRejectionHandler);
-
-    // Cleanup
+    // Cleanup function to restore original console methods
     return () => {
-      window.removeEventListener("error", errorHandler);
-      window.removeEventListener("unhandledrejection", unhandledRejectionHandler);
+      console.error = originalError;
+      console.warn = originalWarn;
     };
-  }, [mode, suppressPatterns]);
+  }, []);
 
-  return <>{children}</>;
-}
-
-// Hook for runtime console control
-export function useConsoleControl() {
-  return {
-    silence: () => silenceConsole(),
-    clean: () => cleanConsole(),
-    disable: () => disableConsoleCompletely(),
-    clear: () => console.clear(),
-    restore: () => window.location.reload(), // Only way to fully restore
-    showOnly: (patterns: RegExp[]) => {
-      cleanConsole();
-      // Additional filtering logic
-    },
-  };
+  // This component doesn't render anything
+  return null;
 }

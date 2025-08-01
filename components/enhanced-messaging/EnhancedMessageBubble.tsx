@@ -2,15 +2,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Check, 
-  Checks, 
-  Clock, 
-  Copy, 
-  DotsThree, 
-  PencilSimple, 
-  Reply, 
-  Trash, 
+import {
+  Check,
+  Checks,
+  Clock,
+  Copy,
+  DotsThree,
+  PencilSimple,
+  ArrowBendLeftUp,
+  Trash,
   Warning,
   Heart,
   ThumbsUp,
@@ -376,7 +376,7 @@ export function EnhancedMessageBubble({
                   <DropdownMenuContent align={isOwn ? 'end' : 'start'}>
                     {enableReplies && (
                       <DropdownMenuItem onClick={() => onReply?.(message.id)}>
-                        <Reply className="h-4 w-4 mr-2" />
+                        <ArrowBendLeftUp className="h-4 w-4 mr-2" />
                         Reply
                       </DropdownMenuItem>
                     )}
