@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Comprehensive UI/UX Testing', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3005');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
   });
 
@@ -10,7 +10,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('🔍 Testing Login Page UI Components...');
 
     // Navigate to login page
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
     
     // Check page title
@@ -40,7 +40,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('🔍 Testing Authenticated Pages UI Components...');
     
     // Login first
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
 
     await page.fill('#email', 'jam@jam.com');
@@ -72,7 +72,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
 
     // Test Inbox page
     console.log('📥 Testing Inbox UI...');
-    await page.goto('http://localhost:3005/inbox');
+    await page.goto('http://localhost:3001/inbox');
     await page.waitForLoadState('networkidle');
     
     const inboxElements = [
@@ -93,7 +93,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     
     // Test Widget page
     console.log('🎛️ Testing Widget UI...');
-    await page.goto('http://localhost:3005/widget');
+    await page.goto('http://localhost:3001/widget');
     await page.waitForLoadState('networkidle');
     
     const widgetElements = [
@@ -116,7 +116,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('🧭 Testing Navigation and Layout Components...');
     
     // Login first
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
 
     await page.fill('#email', 'jam@jam.com');
@@ -172,7 +172,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('📝 Testing Form Components and Interactions...');
     
     // Login first
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
 
     await page.fill('#email', 'jam@jam.com');
@@ -182,7 +182,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     await page.waitForURL('**/dashboard', { timeout: 10000 });
 
     // Test form interactions in inbox
-    await page.goto('http://localhost:3005/inbox');
+    await page.goto('http://localhost:3001/inbox');
     await page.waitForLoadState('networkidle');
     
     // Look for message input forms
@@ -218,7 +218,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('♿ Testing Accessibility Features...');
     
     // Login first
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
 
     await page.fill('#email', 'jam@jam.com');
@@ -265,7 +265,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('⚠️ Testing Error Handling and Loading States...');
     
     // Test 404 page
-    await page.goto('http://localhost:3005/nonexistent-page');
+    await page.goto('http://localhost:3001/nonexistent-page');
     await page.waitForLoadState('networkidle');
 
     const errorElements = page.locator('h1, [role="alert"], .error, .not-found');
@@ -276,7 +276,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     }
 
     // Test loading states
-    await page.goto('http://localhost:3005/login');
+    await page.goto('http://localhost:3001/login');
     await page.waitForLoadState('networkidle');
     
     const loadingElements = page.locator('[aria-busy="true"], .loading, .spinner');
@@ -318,7 +318,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
       console.log(`\n🔍 Testing ${pageInfo.name} page...`);
       
       try {
-        await page.goto(`http://localhost:3005${pageInfo.url}`);
+        await page.goto(`http://localhost:3001${pageInfo.url}`);
         await page.waitForLoadState('networkidle', { timeout: 10000 });
         
         // Check if page loads
@@ -359,7 +359,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     // Test login functionality
     console.log('\n🔐 Testing Login Functionality...');
     try {
-      await page.goto('http://localhost:3005/login');
+      await page.goto('http://localhost:3001/login');
       await page.waitForLoadState('networkidle');
       
       await page.fill('#email', 'jam@jam.com');

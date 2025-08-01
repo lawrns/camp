@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Homepage Navigation', () => {
   test('should load homepage successfully', async ({ page }) => {
-    await page.goto('http://localhost:3000/');
-    
+    await page.goto('http://localhost:3001/');
+
     // Check if homepage loads
-    await expect(page).toHaveURL('http://localhost:3000/');
+    await expect(page).toHaveURL('http://localhost:3001/');
     
     // Check for main navigation elements
     await expect(page.locator('nav')).toBeVisible();

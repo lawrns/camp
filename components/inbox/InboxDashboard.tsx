@@ -23,6 +23,12 @@ import {
 import { DashboardChatView } from '@/components/chat/DashboardChatView';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
+import { AssignmentPanel } from '@/components/conversations/AssignmentPanel';
+import { PriorityManagement } from '@/components/conversations/PriorityManagement';
+import { ConversationStatusDropdown } from '@/components/inbox/ConversationStatusDropdown';
+import { ConversationMetadata } from '@/components/conversations/ConversationMetadata';
+import { ConvertToTicketDialog } from '@/components/conversations/ConvertToTicketDialog';
+import { HistoryTab } from '@/components/conversations/customer-details/tabs/HistoryTab';
 
 interface Conversation {
   id: string;
@@ -406,13 +412,145 @@ export function InboxDashboard({
         </ScrollArea>
       </div>
 
-      {/* Main Content - Chat View */}
-      <div className="flex-1">
+      {/* Main Content - Chat View with Management */}
+      <div className="flex-1 flex flex-col">
         {selectedConversation ? (
-          <DashboardChatView
-            conversationId={selectedConversation.id}
-            className="h-full"
-          />
+          <div className="flex-1 flex flex-col">
+            {/* Conversation Management Header */}
+            <div className="border-b p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <h3 className="text-lg font-semibold">{selectedConversation.customerName}</h3>
+                  <Badge variant={getPriorityColor(selectedConversation.priority)}>
+                    {selectedConversation.priority}
+                  </Badge>
+                  <div className={`w-2 h-2 rounded-full ${getStatusColor(selectedConversation.status)}`} />
+                </div>
+                <div className="flex items-center space-x-2">
+                  {/* Import existing conversation management components */}
+                  <AssignmentPanel 
+                    conversationId={selectedConversation.id}
+                    currentAgentId={selectedConversation.assignedAgent}
+                    organizationId={currentUserId} // Use currentUserId as organizationId for now
+                    onAssignmentChange={(agentId) => {
+                      // Update assignment
+                      setConversations(prev => 
+                        prev.map(conv => 
+                          conv.id === selectedConversation.id 
+                            ? { ...conv, assignedAgent: agentId }
+                            : conv
+                        )
+                      );
+                    }}
+                  />
+                  <PriorityManagement
+                    conversationId={selectedConversation.id}
+                    currentPriority={selectedConversation.priority}
+                    onPriorityChange={(priority) => {
+                      // Update priority
+                      setConversations(prev => 
+                        prev.map(conv => 
+                          conv.id === selectedConversation.id 
+                            ? { ...conv, priority }
+                            : conv
+                        )
+                      );
+                    }}
+                  />
+                  <ConversationStatusDropdown
+                    currentStatus={selectedConversation.status}
+                    onStatusChange={(status) => {
+                      // Update status
+                      setConversations(prev => 
+                        prev.map(conv => 
+                          conv.id === selectedConversation.id 
+                            ? { ...conv, status }
+                            : conv
+                        )
+                      );
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Chat and Management Tabs */}
+            <Tabs defaultValue="chat" className="flex-1 flex flex-col">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="chat">Chat</TabsTrigger>
+                <TabsTrigger value="management">Management</TabsTrigger>
+                <TabsTrigger value="history">History</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="chat" className="flex-1">
+                <DashboardChatView
+                  conversationId={selectedConversation.id}
+                  className="h-full"
+                />
+              </TabsContent>
+              
+              <TabsContent value="management" className="flex-1 p-4">
+                <div className="space-y-4">
+                  {/* Tags and Notes */}
+                  <ConversationMetadata
+                    conversationId={selectedConversation.id}
+                    metadata={{
+                      tags: selectedConversation.tags,
+                      notes: '',
+                      customerInfo: {
+                        name: selectedConversation.customerName,
+                        email: selectedConversation.customerEmail
+                      }
+                    }}
+                    onMetadataUpdate={(metadata) => {
+                      // Update metadata
+                      setConversations(prev => 
+                        prev.map(conv => 
+                          conv.id === selectedConversation.id 
+                            ? { ...conv, tags: metadata.tags || [] }
+                            : conv
+                        )
+                      );
+                    }}
+                  />
+                  
+                  {/* Convert to Ticket */}
+                  <ConvertToTicketDialog
+                    open={false}
+                    onOpenChange={() => {}}
+                    conversation={{
+                      id: selectedConversation.id,
+                      subject: selectedConversation.subject,
+                      customer: {
+                        name: selectedConversation.customerName,
+                        email: selectedConversation.customerEmail
+                      },
+                      messages: [],
+                      priority: selectedConversation.priority,
+                      category: ''
+                    }}
+                    onConvert={async (ticketData) => {
+                      console.log('Conversation converted to ticket:', ticketData);
+                    }}
+                  />
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="history" className="flex-1 p-4">
+                <HistoryTab
+                  customer={{
+                    id: selectedConversation.customerId,
+                    name: selectedConversation.customerName,
+                    email: selectedConversation.customerEmail,
+                    conversationCount: 0
+                  }}
+                  conversationHistory={[]}
+                  isLoadingHistory={false}
+                  error={null}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">

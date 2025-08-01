@@ -92,7 +92,7 @@ class ComprehensiveTestRunner {
     }
 
     // Check if server is running
-    const ports = [3003, 3005, 3000];
+    const ports = [3001, 3000, 3005]; // Prioritize 3001
     let serverFound = false;
 
     for (const port of ports) {

@@ -47,6 +47,57 @@ const getTicketsSchema = z.object({
 });
 
 export const ticketsRouter = createTRPCRouter({
+  // List tickets with filtering (alias for getTickets)
+  list: protectedProcedure.input(getTicketsSchema).query(async ({ ctx, input }) => {
+    const { user } = ctx;
+
+    try {
+      // Get organization's mailbox
+      const mailbox = await db.query.mailboxes.findFirst({
+        where: eq(mailboxes.organizationId, user.organizationId),
+      });
+
+      if (!mailbox) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Organization mailbox not found",
+        });
+      }
+
+      // Build where conditions
+      const conditions = [eq(tickets.mailboxId, mailbox.id)];
+
+      if (input.status) {
+        conditions.push(eq(tickets.status, input.status));
+      }
+      if (input.assigneeId) {
+        conditions.push(eq(tickets.assigneeId, input.assigneeId));
+      }
+      if (input.priority) {
+        conditions.push(eq(tickets.priority, input.priority));
+      }
+
+      const ticketsList = await db.query.tickets.findMany({
+        where: conditions.length > 1 ? and(...conditions) : conditions[0],
+        limit: input.limit,
+        offset: input.offset,
+        orderBy: desc(tickets.createdAt),
+      });
+
+      return {
+        tickets: ticketsList,
+        total: ticketsList.length,
+        hasMore: ticketsList.length === input.limit,
+      };
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to fetch tickets",
+      });
+    }
+  }),
+
   // Get all tickets with filtering
   getTickets: protectedProcedure.input(getTicketsSchema).query(async ({ ctx, input }) => {
     const { user } = ctx;

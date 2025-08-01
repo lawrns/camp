@@ -744,4 +744,75 @@ export const widgetRouter = createTRPCRouter({
 
       return settings[0] || null;
     }),
+
+  // Widget read receipts endpoint
+  readReceipts: publicProcedure
+    .input(
+      z.object({
+        conversationId: z.string().uuid(),
+        messageId: z.string().uuid(),
+        userId: z.string(),
+        organizationId: z.string().uuid(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        // Store read receipt in database
+        const readReceipt = await db
+          .insert({
+            conversationId: input.conversationId,
+            messageId: input.messageId,
+            userId: input.userId,
+            organizationId: input.organizationId,
+            readAt: new Date(),
+          })
+          .returning();
+
+        return { success: true, readReceipt: readReceipt[0] };
+      } catch (error) {
+        console.error('[Widget] Read receipt error:', error);
+        return { success: false, error: 'Failed to record read receipt' };
+      }
+    }),
+
+  // Widget typing indicators endpoint
+  typingIndicators: publicProcedure
+    .input(
+      z.object({
+        conversationId: z.string().uuid(),
+        userId: z.string(),
+        organizationId: z.string().uuid(),
+        isTyping: z.boolean(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        if (input.isTyping) {
+          // Start typing indicator
+          await db
+            .insert({
+              conversationId: input.conversationId,
+              userId: input.userId,
+              organizationId: input.organizationId,
+              startedAt: new Date(),
+            })
+            .onConflictDoNothing();
+        } else {
+          // Stop typing indicator
+          await db
+            .delete()
+            .where(
+              and(
+                eq('conversationId', input.conversationId),
+                eq('userId', input.userId)
+              )
+            );
+        }
+
+        return { success: true };
+      } catch (error) {
+        console.error('[Widget] Typing indicator error:', error);
+        return { success: false, error: 'Failed to update typing indicator' };
+      }
+    }),
 });

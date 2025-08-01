@@ -9,7 +9,7 @@ const TEST_CONFIG = {
   AGENT_EMAIL: 'jam@jam.com',
   AGENT_PASSWORD: 'password123',
   TEST_ORG_ID: 'b5e80170-004c-4e82-a88c-3e2166b169dd',
-  BASE_URL: 'http://localhost:3003'
+  BASE_URL: 'http://localhost:3001'
 };
 
 test.describe('Authentication Debug', () => {

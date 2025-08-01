@@ -248,7 +248,7 @@ test.describe('Complete E2E Flow', () => {
     for (const endpoint of endpoints) {
       console.log(`📍 Testing endpoint: ${endpoint}`);
       
-      const response = await page.request.get(`http://localhost:3005${endpoint}?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22organizationId%22%3A%22b5e80170-004c-4e82-a88c-3e2166b169dd%22%7D%7D%7D`);
+      const response = await page.request.get(`http://localhost:3001${endpoint}?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22organizationId%22%3A%22b5e80170-004c-4e82-a88c-3e2166b169dd%22%7D%7D%7D`);
       
       // Should return either 200 (success) or 401 (auth required) - both indicate the endpoint exists
       expect([200, 401]).toContain(response.status());

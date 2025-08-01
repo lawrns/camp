@@ -9,7 +9,7 @@ import { test, expect } from '@playwright/test';
 const TEST_CONFIG = {
   AGENT_EMAIL: 'jam@jam.com',
   AGENT_PASSWORD: 'password123',
-  BASE_URL: 'http://localhost:3005'
+  BASE_URL: 'http://localhost:3001'
 };
 
 test.describe('Comprehensive Feature Testing', () => {

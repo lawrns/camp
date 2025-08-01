@@ -208,7 +208,7 @@ async function verifySetup() {
 
   // Server connectivity check
   console.log('\n🌐 Checking server connectivity...');
-  const ports = [3003, 3005, 3000]; // Check multiple common ports
+  const ports = [3001, 3000, 3005]; // Check multiple common ports, prioritize 3001
   let serverFound = false;
   let serverPort = null;
 
@@ -228,7 +228,7 @@ async function verifySetup() {
 
   if (!serverFound) {
     console.log('⚠️  Cannot connect to development server on any common port');
-    warnings.push('Development server is not running on ports 3000, 3003, or 3005');
+    warnings.push('Development server is not running on ports 3001, 3000, or 3005');
   }
 
   // Widget demo page check

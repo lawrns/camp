@@ -48,6 +48,49 @@ const createMessageSchema = z.object({
 
 export const conversationsRouter = createTRPCRouter({
   /**
+   * List conversations with pagination and filtering
+   * Alias for getConversations for compatibility
+   */
+  list: publicProcedure
+    .input(getConversationsSchema)
+    .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent"] }))
+    .use(createAuditMiddleware("conversations.list"))
+    .query(async ({ ctx, input }) => {
+      const { supabase } = ctx;
+
+      try {
+        // Direct database query since getConversations method doesn't exist
+        const conditions = [eq(conversationsTable.mailboxId, input.mailboxId)];
+        if (input.status) {
+          conditions.push(eq(conversationsTable.status, input.status));
+        }
+
+        const conversations = await db.query.conversations.findMany({
+          where: conditions.length > 1 ? and(...conditions) : conditions[0],
+          limit: input.limit,
+          offset: input.offset,
+          orderBy: (conversations, { desc }) => desc(conversations.createdAt),
+        });
+
+        return {
+          conversations: conversations.map((conv) => ({
+            ...conv,
+            id: Number(conv.id), // Convert bigint to number
+            mailboxId: Number(conv.mailboxId),
+          })),
+          total: conversations.length,
+          hasMore: conversations.length === input.limit,
+        };
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch conversations",
+        });
+      }
+    }),
+
+  /**
    * Get conversations for a specific mailbox with tenant validation
    * Requires agent-level access to the mailbox
    */

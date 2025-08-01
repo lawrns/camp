@@ -19,6 +19,41 @@ const analyticsFilterSchema = z.object({
 });
 
 export const analyticsRouter = createTRPCRouter({
+  getDashboardMetrics: protectedProcedure.input(analyticsFilterSchema).query(async ({ input, ctx }) => {
+    const filter: AnalyticsFilter = {
+      timeRange: input.timeRange,
+      dateRange: input.dateRange,
+      mailboxSlug: input.mailboxSlug,
+      agentId: input.agentId,
+      channelType: input.channelType,
+      category: input.category,
+    };
+
+    // Get comprehensive dashboard metrics
+    const [
+      conversationMetrics,
+      volumeTimeSeries,
+      responseTimeSeries,
+      agentPerformance,
+      channelDistribution
+    ] = await Promise.all([
+      dataAggregator.getConversationMetrics(filter),
+      dataAggregator.getConversationVolumeTimeSeries(filter),
+      dataAggregator.getResponseTimeTimeSeries(filter),
+      dataAggregator.getAgentPerformanceMetrics(filter),
+      dataAggregator.getChannelDistribution(filter)
+    ]);
+
+    return {
+      conversationMetrics,
+      volumeTimeSeries,
+      responseTimeSeries,
+      agentPerformance,
+      channelDistribution,
+      lastUpdated: new Date().toISOString(),
+    };
+  }),
+
   getConversationMetrics: protectedProcedure.input(analyticsFilterSchema).query(async ({ input, ctx }) => {
     const filter: AnalyticsFilter = {
       timeRange: input.timeRange,

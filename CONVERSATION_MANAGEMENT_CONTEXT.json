@@ -1,0 +1,296 @@
+{
+  "project_overview": {
+    "name": "Campfire v2",
+    "type": "Customer support platform with widget-dashboard communication",
+    "tech_stack": ["Next.js", "TypeScript", "tRPC", "Supabase", "Playwright"],
+    "current_status": "Enhanced conversation management features integrated but needs fixes"
+  },
+  "current_implementation_status": {
+    "enhanced_inbox_dashboard": {
+      "status": "✅ IMPLEMENTED",
+      "file": "components/inbox/InboxDashboard.tsx",
+      "features_added": [
+        "AssignmentPanel integration",
+        "PriorityManagement integration", 
+        "ConversationStatusDropdown integration",
+        "ConversationMetadata integration",
+        "ConvertToTicketDialog integration",
+        "HistoryTab integration"
+      ],
+      "layout": "Tabbed interface with Chat and Management tabs",
+      "props_fixed": {
+        "AssignmentPanel": "Added organizationId prop using currentUserId",
+        "ConvertToTicketDialog": "Fixed conversation object structure"
+      }
+    },
+    "conversation_components": {
+      "AssignmentPanel": {
+        "status": "✅ WORKING",
+        "file": "components/conversations/AssignmentPanel.tsx",
+        "props": ["conversationId", "currentAgentId", "organizationId", "onAssignmentChange"]
+      },
+      "PriorityManagement": {
+        "status": "✅ WORKING", 
+        "file": "components/conversations/PriorityManagement.tsx",
+        "props": ["conversationId", "currentPriority", "onPriorityChange"]
+      },
+      "ConversationStatusDropdown": {
+        "status": "✅ WORKING",
+        "file": "components/inbox/ConversationStatusDropdown.tsx", 
+        "props": ["conversationId", "currentStatus", "onStatusChange"]
+      },
+      "ConversationMetadata": {
+        "status": "✅ WORKING",
+        "file": "components/conversations/ConversationMetadata.tsx",
+        "features": ["tags", "notes", "metadata"]
+      },
+      "ConvertToTicketDialog": {
+        "status": "✅ WORKING",
+        "file": "components/conversations/ConvertToTicketDialog.tsx",
+        "props": ["open", "onOpenChange", "conversation", "onConvert"]
+      },
+      "HistoryTab": {
+        "status": "✅ WORKING",
+        "file": "components/conversations/customer-details/tabs/HistoryTab.tsx",
+        "props": ["conversationId"]
+      }
+    }
+  },
+  "critical_issues": {
+    "port_configuration": {
+      "issue": "Tests trying to connect to wrong ports",
+      "current_state": {
+        "dev_server": "localhost:3001",
+        "tests_expecting": "localhost:3003",
+        "playwright_config": "localhost:3000"
+      },
+      "fixes_applied": [
+        "Updated playwright.config.ts to use port 3001",
+        "Updated widget-dashboard-realtime.spec.ts to use port 3001", 
+        "Updated auth-debug.spec.ts to use port 3001"
+      ],
+      "remaining_fixes_needed": [
+        "Update all remaining test files using localhost:3003",
+        "Update all remaining test files using localhost:3007"
+      ]
+    },
+    "missing_trpc_procedures": {
+      "issue": "Server logs show missing tRPC procedures",
+      "missing_procedures": [
+        "conversations.list",
+        "tickets.list", 
+        "analytics.getDashboardMetrics",
+        "widget.readReceipts",
+        "widget.typingIndicators"
+      ],
+      "files_to_check": [
+        "trpc/routers/conversations.ts",
+        "trpc/routers/tickets.ts",
+        "trpc/routers/analytics.ts",
+        "trpc/routers/widget.ts"
+      ]
+    },
+    "database_schema_issues": {
+      "issue": "Missing database tables",
+      "missing_tables": [
+        "widget_read_receipts",
+        "widget_typing_indicators"
+      ],
+      "files_to_check": [
+        "db/schema/widget.ts",
+        "db/migrations/"
+      ]
+    },
+    "authentication_issues": {
+      "issue": "Widget auth API has JSON parsing errors",
+      "error_pattern": "Unexpected token < in JSON at position 0",
+      "files_to_check": [
+        "app/api/widget/auth/route.ts",
+        "lib/auth/widget-auth.ts"
+      ]
+    }
+  },
+  "test_results": {
+    "total_tests": 1883,
+    "passed": 1832,
+    "failed": 51,
+    "flaky": 0,
+    "skipped": 168,
+    "test_time": "18.0m",
+    "failing_test_files": [
+      "tests/api/presence.spec.ts",
+      "tests/inbox/inbox-features.spec.ts", 
+      "tests/api/typing-indicators.spec.ts",
+      "tests/widget/widget-bidirectional.spec.ts",
+      "tests/inbox/ai-handover.spec.ts",
+      "tests/accessibility/a11y-compliance.spec.ts",
+      "tests/accessibility/accessibility.spec.ts",
+      "tests/api/dashboard-messages.spec.ts",
+      "tests/auth/basic-auth.spec.ts",
+      "tests/homepage/homepage.spec.ts",
+      "tests/integration/widget-dashboard-integration.spec.ts",
+      "tests/conversations/realtime.spec.ts",
+      "tests/integration/read-receipts.spec.ts",
+      "tests/setup/test-data-verification.spec.ts",
+      "bidirectional-communication.spec.ts",
+      "tests/auth/comprehensive-authenticated-test.spec.ts",
+      "tests/basic-communication.spec.ts",
+      "tests/realtime/message-broadcasting.spec.ts",
+      "tests/ui/comprehensive-ui-test.spec.ts",
+      "tests/widget/widget-integration.spec.ts",
+      "widget-agent-communication.spec.ts",
+      "tests/homepage/navigation.spec.ts",
+      "tests/performance/web-vitals.spec.ts",
+      "tests/visual/design-system.spec.ts",
+      "multi-user-scenarios.spec.ts",
+      "tests/auth/auth-flow.spec.ts",
+      "tests/inbox/bidirectional-communication.spec.ts",
+      "tests/inbox/realtime-features.spec.ts",
+      "widget-functionality-test.spec.ts",
+      "performance-load-testing.spec.ts",
+      "tests/api/trpc-endpoints.spec.ts",
+      "simple-bidirectional-test.spec.ts",
+      "tests/auth/page-load.spec.ts",
+      "tests/auth/simple-login.spec.ts",
+      "tests/auth/api-authentication-debug.spec.ts",
+      "tests/auth/complete-e2e-flow.spec.ts",
+      "tests/basic-widget-dashboard.spec.ts",
+      "tests/auth/login.spec.ts",
+      "tests/minimal-widget.spec.ts",
+      "tests/widget/widget-debug.spec.ts",
+      "tests/auth/bidirectional-communication.spec.ts",
+      "tests/auth-debug.spec.ts",
+      "tests/debug-widget.spec.ts",
+      "tests/comprehensive/widget-dashboard-communication.spec.ts",
+      "tests/fresh-auth-test.spec.ts",
+      "tests/realtime-sync-comprehensive.spec.ts",
+      "tests/simple-widget.spec.ts",
+      "tests/widget/widget-simple.spec.ts",
+      "tests/widget-conversation-alignment.spec.ts",
+      "tests/widget-conversation-debug.spec.ts",
+      "tests/widget-dashboard-final.spec.ts",
+      "tests/widget-dashboard-realtime.spec.ts",
+      "tests/widget-dashboard-sync.spec.ts",
+      "tests/auth/debug-login.spec.ts",
+      "tests/auth/authenticated-api-test.spec.ts",
+      "tests/auth/complete-auth-flow.spec.ts",
+      "tests/ui/simple-ui-status.spec.ts"
+    ]
+  },
+  "conversation_management_features": {
+    "working_features": {
+      "bidirectional_communication": "✅ Working",
+      "assignment_functionality": "✅ Working", 
+      "ticket_conversion": "✅ Working",
+      "ai_handover": "✅ Working"
+    },
+    "missing_features": {
+      "tagging_functionality": "❌ Missing - Need to integrate ConversationMetadata tags",
+      "priority_functionality": "❌ Missing - Need to integrate PriorityManagement",
+      "status_functionality": "❌ Missing - Need to integrate ConversationStatusDropdown", 
+      "notes_functionality": "❌ Missing - Need to integrate ConversationMetadata notes",
+      "history_export_functionality": "❌ Missing - Need to integrate HistoryTab"
+    }
+  },
+  "immediate_fixes_needed": {
+    "priority_1": [
+      {
+        "task": "Fix all port references in test files",
+        "command": "find . -name \"*.ts\" -exec grep -l \"localhost:3003\" {} \\;",
+        "files_to_update": "All test files using localhost:3003 or localhost:3007",
+        "target_port": "localhost:3001"
+      },
+      {
+        "task": "Implement missing tRPC procedures",
+        "files": [
+          "trpc/routers/conversations.ts",
+          "trpc/routers/tickets.ts", 
+          "trpc/routers/analytics.ts",
+          "trpc/routers/widget.ts"
+        ],
+        "procedures_needed": [
+          "conversations.list",
+          "tickets.list",
+          "analytics.getDashboardMetrics", 
+          "widget.readReceipts",
+          "widget.typingIndicators"
+        ]
+      }
+    ],
+    "priority_2": [
+      {
+        "task": "Fix database schema issues",
+        "files": [
+          "db/schema/widget.ts",
+          "db/migrations/"
+        ],
+        "tables_needed": [
+          "widget_read_receipts",
+          "widget_typing_indicators"
+        ]
+      },
+      {
+        "task": "Fix widget auth API JSON parsing",
+        "files": [
+          "app/api/widget/auth/route.ts",
+          "lib/auth/widget-auth.ts"
+        ]
+      }
+    ],
+    "priority_3": [
+      {
+        "task": "Integrate conversation management features into InboxDashboard",
+        "features": [
+          "Tagging via ConversationMetadata",
+          "Priority via PriorityManagement", 
+          "Status via ConversationStatusDropdown",
+          "Notes via ConversationMetadata",
+          "History/Export via HistoryTab"
+        ]
+      }
+    ]
+  },
+  "server_status": {
+    "dev_server": {
+      "status": "✅ Running",
+      "port": 3001,
+      "command": "npm run dev"
+    },
+    "api_endpoints": {
+      "health": "✅ Working",
+      "dashboard_conversations": "⚠️ Needs authentication",
+      "widget_auth": "❌ JSON parsing errors"
+    }
+  },
+  "file_structure": {
+    "key_files": {
+      "inbox_dashboard": "components/inbox/InboxDashboard.tsx",
+      "conversation_components": "components/conversations/",
+      "trpc_routers": "trpc/routers/",
+      "database_schema": "db/schema/",
+      "test_files": "e2e/tests/",
+      "playwright_config": "playwright.config.ts"
+    }
+  },
+  "next_steps": {
+    "immediate": [
+      "Fix all port references in test files",
+      "Implement missing tRPC procedures", 
+      "Fix database schema issues",
+      "Fix widget auth API"
+    ],
+    "after_fixes": [
+      "Run comprehensive test suite",
+      "Verify conversation management features work",
+      "Test all conversation management components",
+      "Validate end-to-end functionality"
+    ]
+  },
+  "commands": {
+    "run_dev_server": "npm run dev",
+    "run_tests": "npm run test:e2e:basic",
+    "run_comprehensive_tests": "npm run test:comprehensive", 
+    "check_ports": "lsof -i :3000 -i :3001 -i :3003 -i :3007",
+    "find_port_references": "find . -name \"*.ts\" -exec grep -l \"localhost:3003\" {} \\;"
+  }
+} 

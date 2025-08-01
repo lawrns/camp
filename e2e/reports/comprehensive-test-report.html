@@ -1,0 +1,1238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Communication Test Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .metric { display: inline-block; margin: 10px; padding: 15px; background: #f8f9fa; border-radius: 5px; text-align: center; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #007bff; }
+        .metric-label { font-size: 12px; color: #6c757d; }
+        .section { margin: 20px 0; }
+        .section h3 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 5px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Comprehensive Communication Test Report</h1>
+            <p>Generated on 8/1/2025, 12:18:18 PM</p>
+        </div>
+
+        <div class="status error">
+            <strong>❌ Test Failed</strong>
+            <p>Duration: 0.00 seconds</p>
+        </div>
+
+        <div class="section">
+            <h3>📊 Test Metrics</h3>
+            <div class="metric">
+                <div class="metric-value">N/A</div>
+                <div class="metric-label">Test Duration (ms)</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">0</div>
+                <div class="metric-label">Errors</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">0</div>
+                <div class="metric-label">Successful Messages</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">2</div>
+                <div class="metric-label">Warnings</div>
+            </div>
+        </div>
+
+        
+        <div class="section">
+            <h3>❌ Errors</h3>
+            <ul>
+                <li>Test process exited with code 1</li><li>STDERR: ❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294025[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294025[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294036[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294039[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294928[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294929[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294938[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294937[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072294960[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072295037[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072295474[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072295518[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072295525[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072295584[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296322[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296340[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296343[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: Could not connect to the server.
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296358[39m,
+    error: {
+      message: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: Could not connect to the server.\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296626[39m,
+    error: {
+      message: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296659[39m,
+    error: {
+      message: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296838[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/login\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072296926[39m,
+    error: {
+      message: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3007/widget-demo\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Dashboard setup failed: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "http://localhost:3007/login", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupDashboard [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@8'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m131[39m,
+      column: [33m32[39m,
+      function: [32m'CommunicationTestRunner.setupDashboard'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/login"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/login'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@8'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072298470[39m,
+    error: {
+      message: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/login", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupDashboard (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:131:32)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:845:47'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+❌ Widget setup failed: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"[22m
+
+    at CommunicationTestRunner.setupWidget [90m(/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29[90m)[39m
+    at [90m/Users/lukatenbosch/Downloads/campfire-v2/[39me2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44 {
+  name: [32m'Error'[39m,
+  [[32mSymbol(step)[39m]: {
+    stepId: [32m'pw:api@9'[39m,
+    location: {
+      file: [32m'/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts'[39m,
+      line: [33m166[39m,
+      column: [33m29[39m,
+      function: [32m'CommunicationTestRunner.setupWidget'[39m
+    },
+    category: [32m'pw:api'[39m,
+    title: [32m'Navigate to "/widget-demo"'[39m,
+    apiName: [32m'page.goto'[39m,
+    params: {
+      url: [32m'http://localhost:3007/widget-demo'[39m,
+      waitUntil: [32m'load'[39m,
+      timeout: [33m30000[39m
+    },
+    boxedStack: [90mundefined[39m,
+    steps: [],
+    attachmentIndices: [],
+    info: TestStepInfoImpl {
+      annotations: [],
+      _testInfo: [36m[TestInfoImpl][39m,
+      _stepId: [32m'pw:api@9'[39m,
+      skip: [36m[Function (anonymous)][39m
+    },
+    complete: [36m[Function: complete][39m,
+    endWallTime: [33m1754072298489[39m,
+    error: {
+      message: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m,
+      stack: [32m'Error: page.goto: NS_ERROR_CONNECTION_REFUSED\n'[39m +
+        [32m'Call log:\n'[39m +
+        [32m'\x1B[2m  - navigating to "http://localhost:3007/widget-demo", waiting until "load"\x1B[22m\n'[39m +
+        [32m'\n'[39m +
+        [32m'    at CommunicationTestRunner.setupWidget (/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:166:29)\n'[39m +
+        [32m'    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/comprehensive/widget-dashboard-communication.spec.ts:846:44'[39m,
+      cause: [90mundefined[39m
+    }
+  }
+}
+</li>
+            </ul>
+        </div>
+        
+
+        
+        <div class="section">
+            <h3>⚠️ Warnings</h3>
+            <ul>
+                <li>Missing environment variable: NEXT_PUBLIC_SUPABASE_URL</li><li>Missing environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY</li>
+            </ul>
+        </div>
+        
+
+        <div class="section">
+            <h3>🔧 Environment</h3>
+            <ul>
+                <li><strong>Node Version:</strong> v20.19.4</li>
+                <li><strong>Platform:</strong> darwin</li>
+                <li><strong>Test File:</strong> e2e/tests/comprehensive/widget-dashboard-communication.spec.ts</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+    

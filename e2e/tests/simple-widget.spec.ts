@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
  */
 
 const TEST_CONFIG = {
-  BASE_URL: 'http://localhost:3003'
+  BASE_URL: 'http://localhost:3001'
 };
 
 test.describe('Simple Widget Test', () => {
