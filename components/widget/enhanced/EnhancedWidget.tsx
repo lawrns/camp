@@ -21,6 +21,9 @@ import { EnhancedMessageList } from '@/components/enhanced-messaging/EnhancedMes
 import { EnhancedMessageBubble, MessageData } from '@/components/enhanced-messaging/EnhancedMessageBubble';
 import { EnhancedTypingIndicator, TypingUser } from '@/components/enhanced-messaging/EnhancedTypingIndicator';
 
+// Import simplified real-time hook
+import { useWidgetRealtime } from '../hooks/useWidgetRealtime';
+
 interface EnhancedWidgetProps {
   organizationId: string;
   config: WidgetConfig;
@@ -51,6 +54,39 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Initialize real-time connection
+  const realtime = useWidgetRealtime({
+    organizationId,
+    conversationId: state.conversationId,
+    onMessage: (message) => {
+      const messageData: MessageData = {
+        id: message.id.toString(),
+        content: message.content,
+        senderType: message.senderType === 'visitor' ? 'user' : 'agent',
+        senderName: message.senderName || 'Unknown',
+        timestamp: new Date(message.createdAt).toISOString(),
+        status: message.status === 'pending' ? 'sending' : (message.status || 'delivered'),
+        metadata: message.metadata || {}
+      };
+      setMessages(prev => [...prev, messageData]);
+    },
+    onTyping: (isTyping, userName) => {
+      if (isTyping && userName) {
+        setTypingUsers([{ id: 'agent', name: userName }]);
+      } else {
+        setTypingUsers([]);
+      }
+    },
+    onConnectionChange: (connected) => {
+      console.log('[Widget] Connection status:', connected);
+    },
+    onMessageStatusUpdate: (messageId, status) => {
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId ? { ...msg, status: status as any } : msg
+      ));
+    }
+  });
 
   // Initialize conversation
   useEffect(() => {
@@ -117,7 +153,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         name: file.name,
         url: URL.createObjectURL(file),
         size: file.size,
-        type: file.type
+        type: file.type as 'file' | 'image' | 'video' | 'audio'
       }))
     };
 
@@ -168,16 +204,11 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
   // Enhanced typing indicator handling
   const handleTyping = () => {
-    const typingUser: TypingUser = {
-      id: 'visitor',
-      name: 'You',
-      isTyping: true
-    };
-    setTypingUsers([typingUser]);
+    realtime.sendTypingIndicator(true);
   };
 
   const handleStopTyping = () => {
-    setTypingUsers([]);
+    realtime.sendTypingIndicator(false);
   };
 
   // Message action handlers for enhanced-messaging
@@ -191,7 +222,13 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
       msg.id === messageId 
         ? { 
             ...msg, 
-            reactions: [...(msg.reactions || []), { emoji, userId: 'visitor', timestamp: new Date().toISOString() }]
+            reactions: [...(msg.reactions || []), { 
+              emoji, 
+              count: 1, 
+              users: ['visitor'], 
+              hasReacted: true,
+              timestamp: new Date().toISOString()
+            }]
           }
         : msg
     ));
