@@ -130,7 +130,7 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
     console.log('[DashboardChatView] Setting up real-time subscriptions for conversation:', conversationId);
 
     // Subscribe to message changes for this specific conversation
-    const messageChannel = supabase
+    const messageChannel = supabase.browser()
       .channel(`dashboard-chat-${conversationId}`)
       .on(
         'postgres_changes',
