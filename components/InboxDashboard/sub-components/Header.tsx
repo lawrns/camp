@@ -82,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
+              className="font-sans text-sm w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
             />
           </div>
 
@@ -173,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <List className="h-6 w-6" />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">Inbox</h1>
+          <h1 className="font-sans text-base font-semibold text-gray-900">Inbox</h1>
         </div>
 
         <div className="flex items-center gap-2">

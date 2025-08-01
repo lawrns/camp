@@ -97,7 +97,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
 
   return (
     <div
-      className={`flex gap-3 transition-colors hover:bg-[var(--fl-color-background-subtle)] ${
+      className={`flex gap-4 p-4 rounded-lg bg-background shadow-sm hover:shadow-md transition-all duration-200 ${
         isOwnMessage ? "flex-row-reverse" : "flex-row"
       }`}
       data-testid="message-row"
@@ -117,23 +117,23 @@ export const MessageRow: React.FC<MessageRowProps> = ({
       <div className={`flex-1 min-w-0 ${isOwnMessage ? "text-right" : "text-left"}`} data-testid="message-content">
         {/* Message header */}
         {showTimestamp && (
-          <div className={`flex items-center gap-1 text-xs text-gray-500 mb-1 ${isOwnMessage ? "justify-end" : "justify-start"}`} data-testid="message-header">
-            <span className="font-medium" data-testid="message-sender">{message.sender_name}</span>
+          <div className={`flex items-center gap-2 text-xs text-gray-500 mb-2 ${isOwnMessage ? "justify-end" : "justify-start"}`} data-testid="message-header">
+            <span className="font-sans font-medium" data-testid="message-sender">{message.sender_name}</span>
             <Clock className="h-3 w-3" data-testid="message-time-icon" />
-            <span data-testid="message-timestamp">{formatTimestamp(message.created_at)}</span>
+            <span className="font-sans" data-testid="message-timestamp">{formatTimestamp(message.created_at)}</span>
           </div>
         )}
 
         {/* Message bubble */}
         <div
-          className={`inline-block max-w-xs lg:max-w-md xl:max-w-lg rounded-ds-lg px-4 py-2 text-sm ${
+          className={`message-bubble inline-block max-w-[80%] md:max-w-[70%] rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-sm ${
             isOwnMessage
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-900"
+              ? "bg-blue-600 text-white border border-blue-700"
+              : "bg-background border border-[var(--fl-color-border)]"
           }`}
           data-testid="message-bubble"
         >
-          <p className="whitespace-pre-wrap break-words" data-testid="message-text">{message.content}</p>
+          <p className="font-sans whitespace-pre-wrap break-words leading-relaxed" data-testid="message-text">{message.content}</p>
         </div>
 
         {/* Message actions */}
