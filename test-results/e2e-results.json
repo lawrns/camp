@@ -174,7 +174,7 @@
           "specs": [
             {
               "title": "should display conversation list with proper information",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -187,32 +187,32 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "interrupted",
-                      "duration": 4651,
+                      "status": "failed",
+                      "duration": 33660,
                       "error": {
-                        "message": "Error: page.fill: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('#email')\u001b[22m\n",
-                        "stack": "Error: page.fill: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('#email')\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts:8:16",
+                        "message": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2:has-text(\"Inbox\")') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2:has-text(\"Inbox\")') to be visible\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts:24:16",
                         "location": {
                           "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts",
                           "column": 16,
-                          "line": 8
+                          "line": 24
                         },
-                        "snippet": "\u001b[0m \u001b[90m  6 |\u001b[39m     \u001b[90m// Login as admin user\u001b[39m\n \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#email'\u001b[39m\u001b[33m,\u001b[39m testUsers\u001b[33m.\u001b[39madmin\u001b[33m.\u001b[39memail)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#password'\u001b[39m\u001b[33m,\u001b[39m testUsers\u001b[33m.\u001b[39madmin\u001b[33m.\u001b[39mpassword)\u001b[33m;\u001b[39m\n \u001b[90m 10 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 22 |\u001b[39m   test(\u001b[32m'should display conversation list with proper information'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 23 |\u001b[39m     \u001b[90m// Wait for the inbox page to load\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 24 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'h2:has-text(\"Inbox\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 25 |\u001b[39m     \n \u001b[90m 26 |\u001b[39m     \u001b[90m// Verify inbox header is visible\u001b[39m\n \u001b[90m 27 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h2:has-text(\"Inbox\")'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts",
                             "column": 16,
-                            "line": 8
+                            "line": 24
                           },
-                          "message": "Error: page.fill: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('#email')\u001b[22m\n\n\n\u001b[0m \u001b[90m  6 |\u001b[39m     \u001b[90m// Login as admin user\u001b[39m\n \u001b[90m  7 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  8 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#email'\u001b[39m\u001b[33m,\u001b[39m testUsers\u001b[33m.\u001b[39madmin\u001b[33m.\u001b[39memail)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  9 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#password'\u001b[39m\u001b[33m,\u001b[39m testUsers\u001b[33m.\u001b[39madmin\u001b[33m.\u001b[39mpassword)\u001b[33m;\u001b[39m\n \u001b[90m 10 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 11 |\u001b[39m     \u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts:8:16\u001b[22m"
+                          "message": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h2:has-text(\"Inbox\")') to be visible\u001b[22m\n\n\n\u001b[0m \u001b[90m 22 |\u001b[39m   test(\u001b[32m'should display conversation list with proper information'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m 23 |\u001b[39m     \u001b[90m// Wait for the inbox page to load\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 24 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'h2:has-text(\"Inbox\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 25 |\u001b[39m     \n \u001b[90m 26 |\u001b[39m     \u001b[90m// Verify inbox header is visible\u001b[39m\n \u001b[90m 27 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'h2:has-text(\"Inbox\")'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts:24:16\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-01T18:55:13.818Z",
+                      "startTime": "2025-08-01T19:00:13.114Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -224,21 +224,26 @@
                           "name": "video",
                           "contentType": "video/webm",
                           "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-inbox-inbox-features-41830-ist-with-proper-information-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-inbox-inbox-features-41830-ist-with-proper-information-chromium/error-context.md"
                         }
                       ],
                       "errorLocation": {
                         "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/inbox/inbox-features.spec.ts",
                         "column": 16,
-                        "line": 8
+                        "line": 24
                       }
                     }
                   ],
-                  "status": "skipped"
+                  "status": "unexpected"
                 }
               ],
               "id": "3b0dfebc2b35cb3d2d26-685e770400be68ca1efe",
               "file": "tests/inbox/inbox-features.spec.ts",
-              "line": 18,
+              "line": 22,
               "column": 7
             }
           ]
@@ -248,11 +253,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-01T18:55:13.336Z",
-    "duration": 5349.255,
+    "startTime": "2025-08-01T19:00:12.703Z",
+    "duration": 34310.725999999995,
     "expected": 0,
-    "skipped": 1,
-    "unexpected": 0,
+    "skipped": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

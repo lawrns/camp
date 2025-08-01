@@ -13,7 +13,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { InboxDashboard } from "@/components/InboxDashboard";
+import { InboxDashboard } from "@/components/InboxDashboard/index";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";

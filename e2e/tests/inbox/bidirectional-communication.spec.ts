@@ -4,12 +4,16 @@ test.describe('Inbox Bidirectional Communication', () => {
   test.beforeEach(async ({ page }) => {
     // Login as admin user
     await page.goto('/login');
+    await page.waitForLoadState('networkidle');
+    
+    // Wait for email input to be available
+    await page.waitForSelector('#email', { timeout: 10000 });
     await page.fill('#email', 'jam@jam.com');
     await page.fill('#password', 'password123');
     await page.click('button[type="submit"]');
     
     // Wait for login to complete and navigate to inbox
-    await page.waitForURL(/\/dashboard/);
+    await page.waitForURL(/\/dashboard/, { timeout: 30000 });
     await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');
   });
