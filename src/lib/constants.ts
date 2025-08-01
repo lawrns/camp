@@ -5,7 +5,7 @@
 
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api",
   TIMEOUT: 30000, // 30 seconds
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000, // 1 second
@@ -155,8 +155,8 @@ export const ENVIRONMENT = {
   IS_PRODUCTION: process.env.NODE_ENV === "production",
   IS_DEVELOPMENT: process.env.NODE_ENV === "development",
   IS_TEST: process.env.NODE_ENV === "test",
-  APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3012",
-  API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api",
+  APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001",
+  API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api",
 } as const;
 
 // HTTP Status Codes

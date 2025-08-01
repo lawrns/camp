@@ -119,10 +119,20 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
         reason: "Development bypass attempted in production environment",
         nodeEnv: process.env.NODE_ENV,
         vercelEnv: process.env.VERCEL_ENV,
+        timestamp: new Date().toISOString(),
+        severity: 'CRITICAL'
       });
 
       // In production, this is a security violation - do not proceed
-      throw new Error("Security violation: Development bypass attempted in production");
+      // Enhanced error with more context
+      const error = new Error("CRITICAL SECURITY VIOLATION: Development authentication bypass attempted in production environment");
+      console.error('SECURITY ALERT:', error.message, {
+        headers: { testOrgId, testUserId },
+        userAgent,
+        url: req.url,
+        timestamp: new Date().toISOString()
+      });
+      throw error;
     }
 
     // Additional validation for legitimate test requests

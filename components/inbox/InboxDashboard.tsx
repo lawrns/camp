@@ -10,17 +10,22 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import {
-  SearchIcon,
-  FilterIcon,
-  MessageSquareIcon,
-  ClockIcon,
-  UserIcon,
-  BotIcon,
-  AlertCircleIcon,
-  CheckCircleIcon,
-  XCircleIcon
-} from 'lucide-react';
+  MagnifyingGlass as Search,
+  Funnel as Filter,
+  ChatCircle as MessageSquare,
+  Clock,
+  User,
+  Robot as Bot,
+  Warning as AlertCircle,
+  CheckCircle,
+  XCircle as X,
+  Archive,
+  Star,
+  Flag,
+  DotsThree as MoreHorizontal
+} from '@phosphor-icons/react';
 import { DashboardChatView } from '@/components/chat/DashboardChatView';
+import { ConversationCard } from '@/components/inbox/ConversationCard';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
 import { AssignmentPanel } from '@/components/conversations/AssignmentPanel';
@@ -69,6 +74,10 @@ export function InboxDashboard({
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Bulk selection state
+  const [isBulkSelectMode, setIsBulkSelectMode] = useState(false);
+  const [selectedConversationIds, setSelectedConversationIds] = useState<Set<string>>(new Set());
 
   // Load conversations
   useEffect(() => {
@@ -201,15 +210,15 @@ export function InboxDashboard({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-        return <MessageSquareIcon className="h-4 w-4" />;
+        return <MessageSquare className="h-4 w-4" />;
       case 'handoff':
-        return <ClockIcon className="h-4 w-4" />;
+        return <Clock className="h-4 w-4" />;
       case 'closed':
-        return <CheckCircleIcon className="h-4 w-4" />;
+        return <CheckCircle className="h-4 w-4" />;
       case 'pending':
-        return <AlertCircleIcon className="h-4 w-4" />;
+        return <AlertCircle className="h-4 w-4" />;
       default:
-        return <MessageSquareIcon className="h-4 w-4" />;
+        return <MessageSquare className="h-4 w-4" />;
     }
   };
 
@@ -279,9 +288,9 @@ export function InboxDashboard({
         .update({ unread_count: 0 })
         .eq('id', conversation.id)
         .then(() => {
-          setConversations(prev => 
-            prev.map(conv => 
-              conv.id === conversation.id 
+          setConversations(prev =>
+            prev.map(conv =>
+              conv.id === conversation.id
                 ? { ...conv, unreadCount: 0 }
                 : conv
             )
@@ -290,13 +299,73 @@ export function InboxDashboard({
     }
   };
 
+  // Bulk selection handlers
+  const handleBulkSelect = (conversationId: string, selected: boolean) => {
+    setSelectedConversationIds(prev => {
+      const newSet = new Set(prev);
+      if (selected) {
+        newSet.add(conversationId);
+      } else {
+        newSet.delete(conversationId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleBulkAction = async (action: string, data?: any) => {
+    const selectedIds = Array.from(selectedConversationIds);
+    if (selectedIds.length === 0) return;
+
+    try {
+      // Implement bulk actions: assign, archive, close, etc.
+      console.log(`Bulk action: ${action}`, { selectedIds, data });
+
+      // Reset selection after action
+      setSelectedConversationIds(new Set());
+      setIsBulkSelectMode(false);
+
+      // Reload conversations to reflect changes
+      await loadConversations();
+    } catch (error) {
+      console.error('Bulk action failed:', error);
+    }
+  };
+
+  // Helper functions for ConversationCard data transformation
+  const mapStatusToCardStatus = (status: string): "open" | "assigned" | "escalated" | "waiting" | "closed" => {
+    switch (status) {
+      case 'active': return 'open';
+      case 'handoff': return 'assigned';
+      case 'pending': return 'waiting';
+      case 'closed': return 'closed';
+      default: return 'open';
+    }
+  };
+
+  const mapPriorityToUrgency = (priority: string): "critical" | "high" | "normal" | "low" => {
+    switch (priority) {
+      case 'urgent': return 'critical';
+      case 'high': return 'high';
+      case 'medium': return 'normal';
+      case 'low': return 'low';
+      default: return 'normal';
+    }
+  };
+
+  const calculateEscalationRisk = (conversation: Conversation): "high" | "medium" | "low" => {
+    // Simple escalation risk calculation based on priority and wait time
+    if (conversation.priority === 'urgent' && conversation.unreadCount > 0) return 'high';
+    if (conversation.priority === 'high' && conversation.estimatedWaitTime && conversation.estimatedWaitTime > 60) return 'medium';
+    return 'low';
+  };
+
 
 
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <XCircleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <p className="text-lg font-medium">Error loading conversations</p>
           <p className="text-sm text-muted-foreground mb-4">{error}</p>
           <Button onClick={loadConversations}>Try Again</Button>
@@ -320,7 +389,7 @@ export function InboxDashboard({
 
           {/* Search */}
           <div className="relative mb-4">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search conversations..."
               value={searchQuery}
@@ -352,61 +421,44 @@ export function InboxDashboard({
             </div>
           ) : (
             <div className="space-y-1 p-2">
-              {filteredConversations.map((conversation) => (
-                <Card
-                  key={conversation.id}
-                  className={`cursor-pointer transition-colors hover:bg-muted/50 ${
-                    selectedConversation?.id === conversation.id ? 'bg-muted' : ''
-                  }`}
-                  onClick={() => handleConversationSelect(conversation)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={conversation.customerAvatar} />
-                        <AvatarFallback>
-                          {conversation.customerName.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium truncate">
-                            {conversation.customerName}
-                          </h4>
-                          <div className="flex items-center space-x-1">
-                            {conversation.unreadCount > 0 && (
-                              <Badge variant="destructive" className="text-xs">
-                                {conversation.unreadCount}
-                              </Badge>
-                            )}
-                            <div className={`w-2 h-2 rounded-full ${getStatusColor(conversation.status)}`} />
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {conversation.subject}
-                        </p>
-                        <p className="text-xs text-muted-foreground truncate mt-1">
-                          {conversation.lastMessage}
-                        </p>
-                        <div className="flex items-center justify-between mt-2">
-                          <div className="flex items-center space-x-2">
-                            {getChannelIcon(conversation.channel)}
-                            <Badge variant={getPriorityColor(conversation.priority)} className="text-xs">
-                              {conversation.priority}
-                            </Badge>
-                            <span className={`text-xs ${getSentimentColor(conversation.sentiment)}`}>
-                              {conversation.sentiment}
-                            </span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDistanceToNow(conversation.lastMessageAt, { addSuffix: true })}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {filteredConversations.map((conversation) => {
+                // Transform conversation data to match ConversationCard format
+                const transformedConversation = {
+                  id: conversation.id,
+                  email_from: conversation.customerEmail,
+                  subject: conversation.subject,
+                  preview: conversation.lastMessage,
+                  status: mapStatusToCardStatus(conversation.status),
+                  lastMessageAt: conversation.lastMessageAt.toISOString(),
+                  unread: conversation.unreadCount > 0,
+                  priority: conversation.priority,
+                  tags: conversation.tags,
+                  avatar: conversation.customerAvatar,
+                  isOnline: false, // Could be enhanced with real-time presence
+                  isVerified: false, // Could be enhanced with customer verification
+                  assignedTo: conversation.assignedAgent,
+                  aiEnabled: false, // Could be enhanced with AI status
+                  customer: {
+                    location: undefined,
+                    localTime: undefined,
+                  },
+                  urgency: mapPriorityToUrgency(conversation.priority),
+                  sentiment: conversation.sentiment,
+                  responseTime: conversation.estimatedWaitTime,
+                  escalationRisk: calculateEscalationRisk(conversation)
+                };
+
+                return (
+                  <ConversationCard
+                    key={conversation.id}
+                    conversation={transformedConversation}
+                    isSelected={selectedConversation?.id === conversation.id}
+                    onSelect={() => handleConversationSelect(conversation)}
+                    onBulkSelect={handleBulkSelect}
+                    isBulkSelectMode={isBulkSelectMode}
+                  />
+                );
+              })}
             </div>
           )}
         </ScrollArea>

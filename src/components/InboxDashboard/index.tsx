@@ -62,13 +62,16 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     );
   }
 
-  // Allow fallback organizationId for testing
-  if (!organizationId) {
+  // Check for valid organizationId - reject empty strings and undefined
+  if (!organizationId || organizationId.trim() === "") {
     return (
       <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
         <div className="text-center">
           <p className="mb-4 text-red-600">No organization context</p>
-          <p className="text-foreground">Unable to determine organization ID</p>
+          <p className="text-foreground">Unable to determine organization ID. Please contact your administrator.</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Debug: organizationId = "{organizationId || 'undefined'}"
+          </p>
         </div>
       </div>
     );

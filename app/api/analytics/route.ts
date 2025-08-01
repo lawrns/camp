@@ -4,7 +4,7 @@ import { validateOrganizationAccess, checkRateLimit } from '@/lib/utils/validati
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const organizationId = searchParams.get('organizationId');
 

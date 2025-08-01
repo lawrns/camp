@@ -221,6 +221,7 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
     isLoading,
     error,
     reload,
+    setMessages,
   };
 };
 

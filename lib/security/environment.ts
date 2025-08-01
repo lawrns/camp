@@ -28,10 +28,18 @@ export function isProductionEnvironment(): boolean {
 /**
  * Determines if development bypasses should be allowed
  * Requires explicit opt-in and multiple safety checks
+ * ENHANCED: Additional security layers and logging
  */
 export function isDevelopmentBypassAllowed(): boolean {
   // Never allow bypasses in production
   if (isProductionEnvironment()) {
+    // Log security violation attempt
+    console.error('SECURITY VIOLATION: Development bypass attempted in production environment', {
+      NODE_ENV: process.env.NODE_ENV,
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      PRODUCTION: process.env.PRODUCTION,
+      timestamp: new Date().toISOString()
+    });
     return false;
   }
 
@@ -43,6 +51,12 @@ export function isDevelopmentBypassAllowed(): boolean {
   // Must be in development environment
   if (process.env.NODE_ENV !== "development") {
     return false;
+  }
+
+  // Additional security check: validate localhost usage
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+  if (appUrl && !appUrl.includes('localhost') && !appUrl.includes('127.0.0.1')) {
+    console.warn('WARNING: Development bypass enabled with non-localhost URL:', appUrl);
   }
 
   return true;

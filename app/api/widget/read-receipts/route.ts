@@ -25,15 +25,8 @@ export const POST = optionalWidgetAuth(async (request: NextRequest, context: any
     const receiptData = {
       message_id: messageId,
       conversation_id: conversationId,
-      organization_id: organizationId,
       user_id: 'visitor', // Widget users are always visitors
-      user_name: 'You',
-      status, // 'read', 'delivered', 'sent'
       read_at: status === 'read' ? new Date().toISOString() : null,
-      metadata: {
-        source: 'widget',
-        timestamp: new Date().toISOString(),
-      }
     };
 
     const { data: receipt, error } = await supabaseClient

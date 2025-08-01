@@ -29,7 +29,7 @@ export interface AuthenticatedUser {
   id: string;
   email: string;
   name?: string | undefined;
-  organizationId: string;
+  organizationId?: string | undefined; // Made optional to handle cases where user doesn't have org access
   organizationRole: string;
   firstName?: string | undefined;
   lastName?: string | undefined;

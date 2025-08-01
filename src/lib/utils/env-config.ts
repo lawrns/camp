@@ -260,7 +260,7 @@ try {
   // Fallback to process.env with safe defaults
   env = {
     ...process.env,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3012",
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001",
     NODE_ENV: process.env.NODE_ENV || "development",
   } as any;
 }

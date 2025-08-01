@@ -37,7 +37,8 @@ export function useConversations() {
         }
       }
 
-      const { data, error } = await supabase
+      // First, fetch conversations
+      const { data: conversationsData, error } = await supabase
         .browser()
         .from("conversations")
         .select("*")
@@ -45,12 +46,30 @@ export function useConversations() {
         .order("updated_at", { ascending: false });
 
       if (error) {
-
-
         throw error;
       }
 
-      return data;
+      // Then, fetch last message for each conversation
+      const conversationsWithMessages = await Promise.all(
+        (conversationsData || []).map(async (conversation) => {
+          const { data: lastMessage } = await supabase
+            .browser()
+            .from("messages")
+            .select("content, created_at, sender_type")
+            .eq("conversation_id", conversation.id)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .single();
+
+          return {
+            ...conversation,
+            lastMessagePreview: lastMessage?.content?.substring(0, 100) || null,
+            lastMessageAt: lastMessage?.created_at || conversation.updated_at,
+          };
+        })
+      );
+
+      return conversationsWithMessages;
     },
     enabled: !shouldSkipQuery, // Skip on homepage and when no organizationId
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -119,7 +138,7 @@ export function useConversations() {
 
       supabase.browser().removeChannel(channel);
     };
-  }, [queryClient, shouldSkipQuery]);
+  }, [organizationId, queryClient, shouldSkipQuery]);
 
   const createConversation = useCallback(async (data: any) => {
     const { data: newConversation, error } = await supabase

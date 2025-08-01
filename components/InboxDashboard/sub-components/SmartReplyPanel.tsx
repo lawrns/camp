@@ -14,8 +14,9 @@
  */
 
 import { SmartReplyService } from "@/lib/ai/SmartReplyService";
-import { AlertTriangle, Clock, MessageSquare, Sparkles, TrendingUp, Zap } from "lucide-react";
+import { Warning as AlertTriangle, Clock, ChatCircle as MessageSquare, Sparkle as Sparkles, TrendUp as TrendingUp, Lightning as Zap } from "@phosphor-icons/react";
 import React, { useCallback, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface SmartReplyPanelProps {
   conversationId: string;
@@ -28,6 +29,8 @@ interface SmartReplyPanelProps {
   }>;
   onReplySelect: (reply: string) => void;
   isVisible: boolean;
+  isCompact?: boolean; // NEW: for popover mode
+  maxHeight?: string; // NEW: height constraint
 }
 
 interface SmartReply {
@@ -47,6 +50,8 @@ export const SmartReplyPanel: React.FC<SmartReplyPanelProps> = ({
   conversationHistory,
   onReplySelect,
   isVisible,
+  isCompact = false,
+  maxHeight = "400px"
 }) => {
   const [smartReplies, setSmartReplies] = useState<SmartReply[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -141,57 +146,83 @@ export const SmartReplyPanel: React.FC<SmartReplyPanelProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="bg-background flex w-80 flex-col border-l border-[var(--fl-color-border)]">
+    <div
+      className={cn(
+        "bg-background flex flex-col",
+        isCompact ? "max-h-96" : "w-80 h-full border-l border-[var(--fl-color-border)]"
+      )}
+      style={{ maxHeight: isCompact ? maxHeight : undefined }}
+    >
       {/* Panel header with proper spacing */}
-      <div className="border-b border-ds-border bg-background px-6 py-4">
+      <div className={cn(
+        "border-b border-ds-border bg-background",
+        isCompact ? "px-4 py-3" : "px-6 py-4"
+      )}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-blue-600" />
-            <h3 className="font-semibold text-gray-900">Smart Replies</h3>
+            <Sparkles className={cn(
+              "text-blue-600",
+              isCompact ? "h-4 w-4" : "h-5 w-5"
+            )} />
+            <h3 className={cn(
+              "font-semibold text-gray-900",
+              isCompact ? "text-sm" : "text-base"
+            )}>Smart Replies</h3>
           </div>
-          <div className="flex items-center gap-ds-4">
-            {processingTime > 0 && (
-              <div className="flex items-center gap-1 text-sm text-foreground-muted">
-                <Clock className="h-3 w-3" />
-                <span>{processingTime.toFixed(0)}ms</span>
+          {!isCompact && (
+            <div className="flex items-center gap-ds-4">
+              {processingTime > 0 && (
+                <div className="flex items-center gap-1 text-sm text-foreground-muted">
+                  <Clock className="h-3 w-3" />
+                  <span>{processingTime.toFixed(0)}ms</span>
+                </div>
+              )}
+              <span className="text-sm text-foreground-muted">AI-powered suggestions</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Content area - scrollable in compact mode */}
+      <div className={cn(
+        "flex-1",
+        isCompact ? "overflow-y-auto" : ""
+      )}>
+        {/* Conversation Analysis - hide in compact mode */}
+        {!isCompact && (
+          <div className="mt-3 space-y-spacing-sm px-6">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-foreground">Sentiment:</span>
+              <span className={`font-medium capitalize ${getSentimentColor(sentiment)}`}>{sentiment}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-foreground">Urgency:</span>
+              <span
+                className={`font-medium capitalize ${urgencyLevel === "critical"
+                  ? "text-red-600"
+                  : urgencyLevel === "high"
+                    ? "text-orange-600"
+                    : urgencyLevel === "medium"
+                      ? "text-yellow-600"
+                      : "text-green-600"
+                  }`}
+              >
+                {urgencyLevel}
+              </span>
+            </div>
+            {suggestedHandover && (
+              <div className="flex items-center space-x-spacing-sm rounded-ds-lg bg-orange-50 p-spacing-sm">
+                <AlertTriangle className="h-4 w-4 text-orange-600" />
+                <span className="text-sm text-orange-800">Consider human handover</span>
               </div>
             )}
-            <span className="text-sm text-foreground-muted">AI-powered suggestions</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Conversation Analysis */}
-      <div className="mt-3 space-y-spacing-sm">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-foreground">Sentiment:</span>
-          <span className={`font-medium capitalize ${getSentimentColor(sentiment)}`}>{sentiment}</span>
-        </div>
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-foreground">Urgency:</span>
-          <span
-            className={`font-medium capitalize ${urgencyLevel === "critical"
-              ? "text-red-600"
-              : urgencyLevel === "high"
-                ? "text-orange-600"
-                : urgencyLevel === "medium"
-                  ? "text-yellow-600"
-                  : "text-green-600"
-              }`}
-          >
-            {urgencyLevel}
-          </span>
-        </div>
-        {suggestedHandover && (
-          <div className="flex items-center space-x-spacing-sm rounded-ds-lg bg-orange-50 p-spacing-sm">
-            <AlertTriangle className="h-4 w-4 text-orange-600" />
-            <span className="text-sm text-orange-800">Consider human handover</span>
           </div>
         )}
-      </div>
 
-      {/* AI Suggestions section */}
-      <div className="p-spacing-lg">
+        {/* AI Suggestions section */}
+        <div className={cn(
+          isCompact ? "p-4" : "p-spacing-lg"
+        )}>
         <h4 className="mb-4 font-medium text-gray-900">AI Suggestions</h4>
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
@@ -288,6 +319,7 @@ export const SmartReplyPanel: React.FC<SmartReplyPanelProps> = ({
           </div>
         </div>
       </div>
+      </div> {/* Close content area div */}
     </div>
   );
 };

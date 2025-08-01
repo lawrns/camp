@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     // Generate or use existing visitor ID
     const generatedVisitorId = visitorId || `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    // For widget auth, we don't need to check existing conversations if no email is provided
+    // For widget auth, we always need a conversation
     let conversationId: string | null = null;
     
     if (customerEmail) {
@@ -108,6 +108,35 @@ export async function POST(request: NextRequest) {
       if (existingConversation) {
         conversationId = existingConversation.id;
       }
+    }
+
+    // If no conversation exists, create one
+    if (!conversationId) {
+      const { data: newConversation, error: createError } = await supabaseClient
+        .from('conversations')
+        .insert({
+          organization_id: organizationId,
+          customer_email: customerEmail || null,
+          customer_name: customerName || 'Anonymous User',
+          status: 'open',
+          source: 'widget',
+          metadata: {
+            visitor_id: generatedVisitorId,
+            widget_session: true
+          }
+        })
+        .select('id')
+        .single();
+
+      if (createError) {
+        console.error('[Widget Auth API] Conversation creation error:', createError);
+        return NextResponse.json(
+          { error: 'Failed to create conversation', code: 'DATABASE_ERROR' },
+          { status: 500 }
+        );
+      }
+
+      conversationId = newConversation.id;
     }
 
     // Generate a widget authentication token

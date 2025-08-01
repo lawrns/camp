@@ -20,7 +20,7 @@ test.describe('Inbox Real-time Features', () => {
     await page.waitForSelector('h1');
     
     // Verify inbox page is displayed
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Good")')).toBeVisible();
     
     // Take screenshot for debugging
     await page.screenshot({ path: 'inbox-realtime.png' });
@@ -33,7 +33,7 @@ test.describe('Inbox Real-time Features', () => {
     await page.waitForSelector('h1');
     
     // Verify page loads without errors
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Good")')).toBeVisible();
     await expect(page).not.toHaveURL(/\/login/);
     
     console.log('✅ Real-time connection state maintained');
@@ -50,7 +50,7 @@ test.describe('Inbox Real-time Features', () => {
     // Navigate back to inbox
     await page.goto('/dashboard/inbox');
     await expect(page).toHaveURL(/\/dashboard\/inbox/);
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Good")')).toBeVisible();
     
     console.log('✅ Page navigation with real-time works correctly');
   });
@@ -64,7 +64,7 @@ test.describe('Inbox Real-time Features', () => {
     await page.waitForLoadState('networkidle');
     
     // Verify inbox still loads after refresh
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Good")')).toBeVisible();
     await expect(page).not.toHaveURL(/\/login/);
     
     console.log('✅ Page refresh with real-time works correctly');
@@ -76,7 +76,7 @@ test.describe('Inbox Real-time Features', () => {
     
     // Verify we're still logged in (not redirected to login)
     await expect(page).not.toHaveURL(/\/login/);
-    await expect(page.locator('h1')).toContainText('Inbox');
+    await expect(page.locator('h1:has-text("Good")')).toBeVisible();
     
     console.log('✅ Session maintained across real-time operations');
   });

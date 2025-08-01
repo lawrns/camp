@@ -6,6 +6,10 @@ import { useWidgetState } from './hooks/useWidgetState';
 import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
 import { ReadReceiptIndicator } from '@/components/ui/ReadReceiptIndicator';
 import { useWidget } from './index';
+import { WidgetComposer } from './components/WidgetComposer';
+import { X, Minus } from '@phosphor-icons/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface DefinitiveWidgetProps {
   organizationId: string;
@@ -161,22 +165,18 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     }
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('[DefinitiveWidget] handleSendMessage called with:', messageText);
-    console.log('[DefinitiveWidget] isLoading:', isLoading);
-    console.log('[DefinitiveWidget] messageText.trim():', messageText.trim());
-
-    if (!messageText.trim() || isLoading) {
-      console.log('[DefinitiveWidget] Exiting early - no text or loading');
+  const handleSendMessage = async (content: string, attachments?: File[]) => {
+    console.log('[DefinitiveWidget] handleSendMessage called with content:', content, 'isLoading:', isLoading);
+    
+    if (!content.trim() || isLoading) {
+      console.log('[DefinitiveWidget] Message empty or loading, returning early');
       return;
     }
 
     try {
-      console.log('[DefinitiveWidget] Calling sendMessage...');
-      const result = await sendMessage(messageText.trim());
+      console.log('[DefinitiveWidget] Calling sendMessage with:', content);
+      const result = await sendMessage(content.trim());
       console.log('[DefinitiveWidget] sendMessage result:', result);
-      setMessageText('');
       stopTyping(); // Stop typing indicator when message is sent
     } catch (error) {
       console.error('[DefinitiveWidget] Failed to send message:', error);
@@ -191,86 +191,88 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-4 right-4 z-[9999]">
-        <button
-          onClick={() => setIsMinimized(false)}
-          className="bg-primary text-white spacing-3 rounded-ds-full shadow-card-deep hover:bg-blue-700 transition-colors"
-          data-testid="widget-minimize-button"
-          data-campfire-widget-minimize
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" fill="none" />
-          </svg>
-          {messages.length > 0 && (
-            <div className="absolute -top-2 -right-2 bg-red-500 text-white text-tiny rounded-ds-full w-6 h-6 flex items-center justify-center">
-              {messages.length}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="fixed bottom-4 right-4 w-80 bg-white border border-gray-200 rounded-2xl shadow-lg flex items-center justify-between p-4 z-[9999] cursor-pointer hover:shadow-xl transition-shadow"
+        onClick={() => setIsMinimized(false)}
+        data-testid="widget-minimized"
+        data-campfire-widget-minimized
+      >
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center">
+            <span className="text-white text-sm font-bold">🔥</span>
+          </div>
+          <div>
+            <div className="font-semibold text-sm text-gray-900">Campfire Support</div>
+            <div className="text-xs text-gray-500 flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              Click to expand
             </div>
-          )}
+          </div>
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+          data-testid="widget-close-button-minimized"
+          data-campfire-close-button-minimized
+        >
+          <X className="h-4 w-4 text-gray-500" />
         </button>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div
-      className="fixed bottom-4 right-4 w-96 h-[600px] bg-background border rounded-ds-lg shadow-2xl flex flex-col z-[9998] overflow-hidden"
-      data-testid="widget-panel"
-      data-campfire-widget-panel
-    >
-      {/* Header */}
-      <div
-        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-spacing-md flex items-center justify-between"
-        data-testid="widget-header"
-        data-campfire-widget-header
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className={cn(
+          "fixed bottom-4 right-4 bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col z-[9999] overflow-hidden",
+          "w-96 h-[600px] max-h-[80vh]",
+          "sm:w-80 sm:h-[500px]"
+        )}
+        data-testid="widget-panel"
+        data-campfire-widget-panel
       >
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="flex items-center space-x-3">
-          <div className={`w-3 h-3 rounded-ds-full ${widgetState.conversationId ? 'bg-green-400' : 'bg-yellow-400'}`} />
+          <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+            <span className="text-white text-sm font-bold">🔥</span>
+          </div>
           <div>
-            <h3 className="font-semibold text-base">Customer Support</h3>
-            <div className="text-tiny opacity-75">
+            <div className="font-semibold text-sm">Campfire Support</div>
+            <div className="text-xs text-blue-100 flex items-center gap-1">
+              <div className={`w-2 h-2 rounded-full ${widgetState.conversationId ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
               {widgetState.conversationId ? 'Connected' : 'Connecting...'}
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-spacing-sm">
-          <button
-            onClick={() => {
-              // Demo: Toggle agent typing indicator
-              setDemoAgentIsTyping(!demoAgentIsTyping);
-              if (!demoAgentIsTyping) {
-                // Auto-stop after 5 seconds
-                setTimeout(() => setDemoAgentIsTyping(false), 5000);
-              }
-            }}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
-            title="Demo: Toggle agent typing"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M2 2h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4.5L2 13V3a1 1 0 0 1 1-1z" />
-              <circle cx="5" cy="6.5" r="0.5" />
-              <circle cx="8" cy="6.5" r="0.5" />
-              <circle cx="11" cy="6.5" r="0.5" />
-            </svg>
-          </button>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setIsMinimized(true)}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
+            className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
             title="Minimize"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M4 8h8v1H4z" />
-            </svg>
+            <Minus className="h-4 w-4" />
           </button>
           <button
             onClick={handleClose}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
-            title="Close"
+            className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
             data-testid="widget-close-button"
             data-campfire-widget-close
+            title="Close"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-            </svg>
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -293,18 +295,17 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       {/* Messages */}
       <div
         id="widget-messages"
-        className="flex-1 p-spacing-md overflow-y-auto space-y-3 bg-background"
+        className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"
         data-testid="widget-messages"
         data-campfire-widget-messages
       >
         {messages.length === 0 ? (
-          <div className="text-center text-foreground-muted mt-16">
-            <div className="text-4xl mb-4">👋</div>
-            <div className="font-semibold text-base mb-2">Welcome to Support!</div>
-            <div className="text-sm">How can we help you today?</div>
-            <div className="text-tiny mt-2 opacity-75">
-              Conversation ID: {widgetState.conversationId ? '✅ Ready' : '⏳ Creating...'}
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">👋</span>
             </div>
+            <div className="font-semibold text-gray-900 mb-2">Hi! How can we help you today?</div>
+            <div className="text-sm text-gray-500">Just now</div>
           </div>
         ) : (
           messages.map((message, index) => (
@@ -318,9 +319,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
               data-message-id={message.id}
             >
               <div
-                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-ds-lg shadow-sm ${message.senderType === 'visitor'
-                  ? 'bg-blue-600 text-white rounded-br-sm'
-                  : 'bg-white border rounded-bl-sm'
+                className={`max-w-[85%] px-4 py-3 rounded-2xl shadow-sm ${message.senderType === 'visitor'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-900'
                   }`}
               >
                 <div className="text-tiny opacity-75 mb-1 font-medium flex items-center space-x-1">
@@ -334,7 +335,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
                     </span>
                   )}
                 </div>
-                <div className="text-sm leading-relaxed">
+                <div className="text-sm leading-relaxed whitespace-pre-wrap">
                   {message.isTyping ? (
                     <div className="flex items-center space-x-spacing-sm">
                       <div className="flex space-x-1">
@@ -348,8 +349,13 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
                     message.content
                   )}
                 </div>
-                <div className="text-tiny opacity-50 mt-2 flex items-center justify-between">
-                  <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
+                <div className={`text-xs mt-2 flex items-center justify-between ${
+                  message.senderType === 'visitor' ? 'text-blue-100' : 'text-gray-500'
+                }`}>
+                  <span>{new Date(message.timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</span>
                   {message.id && (
                     <ReadReceiptIndicator
                       receipt={{
@@ -377,11 +383,14 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
             data-testid="widget-typing-indicator"
             data-campfire-typing-indicator
           >
-            <div className="bg-background border rounded-ds-lg px-4 py-3 shadow-card-base">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-ds-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-ds-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-ds-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+                <span className="text-sm text-gray-500">AI is typing...</span>
               </div>
             </div>
           </div>
@@ -407,57 +416,13 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       )}
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="p-spacing-md border-t bg-background">
-        <div className="flex space-x-3">
-          <input
-            type="text"
-            value={messageText}
-            onChange={(e) => {
-              setMessageText(e.target.value);
-              // Start typing indicator when user types
-              if (e.target.value.length > 0) {
-                startTyping();
-              } else {
-                stopTyping();
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                console.log('[DefinitiveWidget] Enter key pressed, submitting form');
-                e.preventDefault();
-                handleSendMessage(e);
-              }
-            }}
-            onBlur={() => {
-              // Stop typing when input loses focus
-              stopTyping();
-            }}
-            placeholder="Type your message..."
-            className="flex-1 px-4 py-3 border rounded-ds-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            disabled={isLoading}
-            data-testid="widget-message-input"
-            data-campfire-message-input
-          />
-          <button
-            type="button"
-            disabled={!messageText.trim() || isLoading}
-            className="px-6 py-3 bg-primary text-white rounded-ds-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
-            data-testid="widget-send-button"
-            data-campfire-send-button
-            onClick={(e) => {
-              console.log('[DefinitiveWidget] Send button clicked, messageText:', messageText, 'isLoading:', isLoading);
-              e.preventDefault();
-              handleSendMessage(e);
-            }}
-          >
-            {isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-ds-full animate-spin" />
-            ) : (
-              'Send'
-            )}
-          </button>
-        </div>
-      </form>
+      <WidgetComposer
+         onSend={handleSendMessage}
+         onTyping={startTyping}
+         onStopTyping={stopTyping}
+         placeholder="Type your message..."
+         disabled={isLoading}
+       />
 
       {/* Debug Panel - Development Only */}
       {process.env.NODE_ENV === 'development' && (
@@ -469,6 +434,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           error={widgetState.error}
         />
       )}
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

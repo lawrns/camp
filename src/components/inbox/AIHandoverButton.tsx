@@ -38,12 +38,26 @@ export function AIHandoverButton({
   const urgency = isLowConfidence ? "required" : currentConfidence < 0.8 ? "recommended" : "optional";
 
   const handleHandoverClick = async () => {
-    if (handover.isAIActive) {
-      await handover.stopHandover();
-    } else {
-      await handover.startHandover();
+    // Validate organizationId before attempting handover
+    if (!organizationId || organizationId.trim() === "") {
+      console.error("[AIHandoverButton] Cannot start handover: organizationId is missing or empty", {
+        organizationId,
+        conversationId
+      });
+      return;
     }
-    setShowConfirmation(false);
+
+    try {
+      if (handover.isAIActive) {
+        await handover.stopHandover();
+      } else {
+        await handover.startHandover();
+      }
+    } catch (error) {
+      console.error("[AIHandoverButton] Handover failed:", error);
+    } finally {
+      setShowConfirmation(false);
+    }
   };
 
   const getButtonText = () => {

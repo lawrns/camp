@@ -11,7 +11,7 @@ import { type AppRouter } from "./root";
 function getBaseUrl() {
   if (typeof window !== "undefined") return ""; // browser should use relative url
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3012}`; // dev SSR should use localhost
+  return `http://localhost:${process.env.PORT ?? 3001}`; // dev SSR should use localhost
 }
 
 export const api = createTRPCNext<AppRouter>({

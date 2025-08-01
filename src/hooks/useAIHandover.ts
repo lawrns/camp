@@ -100,6 +100,19 @@ export function useAIHandover(conversationId: string, organizationId: string, us
 
   const startHandover = useCallback(
     async (persona: string = "friendly") => {
+      // Validate required parameters
+      if (!organizationId || organizationId.trim() === "") {
+        const errorMessage = "Organization ID is required for AI handover";
+        setState((prev) => ({ ...prev, error: errorMessage, isProcessing: false }));
+        throw new Error(errorMessage);
+      }
+
+      if (!conversationId || conversationId.trim() === "") {
+        const errorMessage = "Conversation ID is required for AI handover";
+        setState((prev) => ({ ...prev, error: errorMessage, isProcessing: false }));
+        throw new Error(errorMessage);
+      }
+
       setState((prev) => ({ ...prev, isProcessing: true, error: null, processingProgress: 10 }));
 
       try {

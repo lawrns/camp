@@ -10,13 +10,15 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatDistanceToNow } from 'date-fns';
 import {
-  Send,
-  Bot,
+  PaperPlaneTilt as Send,
+  Robot as Bot,
   User,
   Clock,
   CheckCircle,
-  AlertCircle
-} from 'lucide-react';
+  Warning as AlertCircle,
+  DotsThree as MoreHorizontal
+} from '@phosphor-icons/react';
+import { SmartRepliesHeaderIcon } from './SmartRepliesHeaderIcon';
 
 interface Message {
   id: string;
@@ -261,8 +263,37 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
     );
   }
 
+  // Handle smart reply selection
+  const handleSmartReplySelect = (reply: string) => {
+    setNewMessage(reply);
+  };
+
+  // Get last customer message for smart replies context
+  const lastCustomerMessage = messages
+    .filter(msg => msg.sender_type === 'visitor')
+    .slice(-1)[0]?.content || '';
+
   return (
     <div className={`flex flex-col h-full ${className}`}>
+      {/* Chat Header with Smart Replies */}
+      <div className="border-b p-3 flex items-center justify-between bg-gray-50">
+        <div className="flex items-center space-x-2">
+          <h4 className="font-medium">Conversation</h4>
+          <Badge variant="outline">{conversationId.slice(0, 8)}</Badge>
+        </div>
+        <div className="flex items-center space-x-2">
+          <SmartRepliesHeaderIcon
+            conversationId={conversationId}
+            organizationId="default" // TODO: Get from context
+            lastMessage={lastCustomerMessage}
+            onReplySelect={handleSmartReplySelect}
+          />
+          <Button variant="ghost" size="sm">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       {/* Messages Area */}
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">

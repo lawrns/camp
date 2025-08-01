@@ -258,12 +258,27 @@ async function enrichJWTWithOrganization(organizationId: string | undefined, ret
     const isExtensionError = /extension|chrome-extension|moz-extension|1password|lastpass|bitwarden/i.test(errorMessage);
 
     if (!isExtensionError) {
-      console.error("🚨 Error enriching JWT with organization:", error);
+      // Enhanced error logging with more context to prevent empty object errors
+      const errorDetails = {
+        message: errorMessage,
+        organizationId,
+        retryCount,
+        errorType: error instanceof Error ? error.constructor.name : typeof error,
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      };
+
+      console.error("🚨 Failed to enrich JWT:", errorDetails);
+
+      // Also log the raw error for debugging
+      if (error && typeof error === 'object' && Object.keys(error).length === 0) {
+        console.error("🚨 Empty error object detected - this indicates an async/await issue was likely fixed");
+      }
     } else {
       console.debug("🔇 Extension interference detected during JWT enrichment, suppressing error");
     }
 
-    return { success: false, reason: "network_error", error };
+    return { success: false, reason: "network_error", error: errorMessage };
   }
 }
 
@@ -812,12 +827,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
               }
             }
             
-            // Set user state
+            // Set user state - only set organizationId if it's a valid non-empty string
             setUser({
               id: apiUser.id,
               email: apiUser.email,
               name: apiUser.displayName ?? apiUser.email,
-              organizationId: apiUser.organizationId ?? "",
+              organizationId: apiUser.organizationId && apiUser.organizationId.trim() !== "" ? apiUser.organizationId : undefined,
               organizationRole: apiUser.organizationRole ?? "viewer",
               user_metadata: apiUser.user_metadata ?? {},
               firstName: apiUser.first_name ?? apiUser.firstName,

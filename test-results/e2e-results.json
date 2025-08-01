@@ -1,0 +1,283 @@
+{
+  "config": {
+    "configFile": "/Users/lukatenbosch/Downloads/campfire-v2/playwright.config.ts",
+    "rootDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/e2e-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/e2e-results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "/Users/lukatenbosch/Downloads/campfire-v2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tests/widget-dashboard-sync.spec.ts",
+      "file": "tests/widget-dashboard-sync.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Widget-Dashboard Message Synchronization",
+          "file": "tests/widget-dashboard-sync.spec.ts",
+          "line": 16,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should sync messages from widget to dashboard inbox",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11679,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)') resolved to 18 elements:\n    1) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.bg-white.rounded-lg > div:nth-child(3)')\n    2) <div class=\"flex flex-col h-full\">…</div> aka locator('.flex.flex-col.h-full').first()\n    3) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.flex.flex-col > div').first()\n    4) <div class=\"relative flex-1 flex flex-col h-full\">…</div> aka locator('.relative.flex-1').first()\n    5) <div class=\"flex-1 relative\">…</div> aka locator('.relative > .flex-1.relative')\n    6) <div dir=\"ltr\" class=\"relative overflow-hidden h-full\">…</div> aka locator('.relative.overflow-hidden.h-full')\n    7) <div data-radix-scroll-area-viewport=\"\" class=\"h-full w-full rounded-[inherit]\">…</div> aka locator('.h-full.w-full')\n    8) <div>…</div> aka locator('.h-full.w-full > div')\n    9) <div class=\"space-y-1\">…</div> aka getByText('Hi! How can we help you today?Just nowWidget to dashboard sync test -')\n    10) <div class=\"px-4 py-2\">…</div> aka locator('.h-full > div > .space-y-1 > div:nth-child(2)')\n    ...\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)') resolved to 18 elements:\n    1) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.bg-white.rounded-lg > div:nth-child(3)')\n    2) <div class=\"flex flex-col h-full\">…</div> aka locator('.flex.flex-col.h-full').first()\n    3) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.flex.flex-col > div').first()\n    4) <div class=\"relative flex-1 flex flex-col h-full\">…</div> aka locator('.relative.flex-1').first()\n    5) <div class=\"flex-1 relative\">…</div> aka locator('.relative > .flex-1.relative')\n    6) <div dir=\"ltr\" class=\"relative overflow-hidden h-full\">…</div> aka locator('.relative.overflow-hidden.h-full')\n    7) <div data-radix-scroll-area-viewport=\"\" class=\"h-full w-full rounded-[inherit]\">…</div> aka locator('.h-full.w-full')\n    8) <div>…</div> aka locator('.h-full.w-full > div')\n    9) <div class=\"space-y-1\">…</div> aka getByText('Hi! How can we help you today?Just nowWidget to dashboard sync test -')\n    10) <div class=\"px-4 py-2\">…</div> aka locator('.h-full > div > .space-y-1 > div:nth-child(2)')\n    ...\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)')\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts:101:33",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts",
+                          "column": 33,
+                          "line": 101
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  99 |\u001b[39m       \u001b[90m// Verify message appears in widget - EnhancedMessageList uses different structure\u001b[39m\n \u001b[90m 100 |\u001b[39m       \u001b[36mconst\u001b[39m sentMessage \u001b[33m=\u001b[39m widgetPage\u001b[33m.\u001b[39mlocator(\u001b[32m`[data-testid=\"widget-panel\"] div:has-text(\"${testMessage}\"):not(textarea)`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 101 |\u001b[39m       \u001b[36mawait\u001b[39m expect(sentMessage)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 102 |\u001b[39m       console\u001b[33m.\u001b[39mlog(\u001b[32m`✅ Message sent from widget: \"${testMessage}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 103 |\u001b[39m       \n \u001b[90m 104 |\u001b[39m       \u001b[90m// Step 4: Check if message appears in dashboard\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts",
+                            "column": 33,
+                            "line": 101
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)') resolved to 18 elements:\n    1) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.bg-white.rounded-lg > div:nth-child(3)')\n    2) <div class=\"flex flex-col h-full\">…</div> aka locator('.flex.flex-col.h-full').first()\n    3) <div class=\"flex-1 overflow-hidden\">…</div> aka locator('.flex.flex-col > div').first()\n    4) <div class=\"relative flex-1 flex flex-col h-full\">…</div> aka locator('.relative.flex-1').first()\n    5) <div class=\"flex-1 relative\">…</div> aka locator('.relative > .flex-1.relative')\n    6) <div dir=\"ltr\" class=\"relative overflow-hidden h-full\">…</div> aka locator('.relative.overflow-hidden.h-full')\n    7) <div data-radix-scroll-area-viewport=\"\" class=\"h-full w-full rounded-[inherit]\">…</div> aka locator('.h-full.w-full')\n    8) <div>…</div> aka locator('.h-full.w-full > div')\n    9) <div class=\"space-y-1\">…</div> aka getByText('Hi! How can we help you today?Just nowWidget to dashboard sync test -')\n    10) <div class=\"px-4 py-2\">…</div> aka locator('.h-full > div > .space-y-1 > div:nth-child(2)')\n    ...\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"widget-panel\"] div:has-text(\"Widget to dashboard sync test - 1754084542603\"):not(textarea)')\u001b[22m\n\n\n\u001b[0m \u001b[90m  99 |\u001b[39m       \u001b[90m// Verify message appears in widget - EnhancedMessageList uses different structure\u001b[39m\n \u001b[90m 100 |\u001b[39m       \u001b[36mconst\u001b[39m sentMessage \u001b[33m=\u001b[39m widgetPage\u001b[33m.\u001b[39mlocator(\u001b[32m`[data-testid=\"widget-panel\"] div:has-text(\"${testMessage}\"):not(textarea)`\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 101 |\u001b[39m       \u001b[36mawait\u001b[39m expect(sentMessage)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 102 |\u001b[39m       console\u001b[33m.\u001b[39mlog(\u001b[32m`✅ Message sent from widget: \"${testMessage}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 103 |\u001b[39m       \n \u001b[90m 104 |\u001b[39m       \u001b[90m// Step 4: Check if message appears in dashboard\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts:101:33\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🔄 Testing widget-dashboard message synchronization...\n"
+                        },
+                        {
+                          "text": "📊 Setting up dashboard...\n"
+                        },
+                        {
+                          "text": "✅ Dashboard login successful\n"
+                        },
+                        {
+                          "text": "✅ Dashboard inbox loaded\n"
+                        },
+                        {
+                          "text": "🔧 Setting up widget...\n"
+                        },
+                        {
+                          "text": "✅ Homepage loaded\n"
+                        },
+                        {
+                          "text": "💬 Sending message from widget...\n"
+                        },
+                        {
+                          "text": "✅ Widget opened\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-01T21:42:11.466Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-widget-dashboard-syn-59aae-m-widget-to-dashboard-inbox-chromium/test-failed-2.png"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/widget-dashboard-sync.spec.ts",
+                        "column": 33,
+                        "line": 101
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9481ef0044e517df7fb8-90717f74fea284725f29",
+              "file": "tests/widget-dashboard-sync.spec.ts",
+              "line": 17,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-01T21:42:11.033Z",
+    "duration": 12307.909,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

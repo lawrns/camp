@@ -77,8 +77,9 @@ export const getMessageItemSize = () => 80; // Fixed size for message items
  * @returns Typed Conversation object
  */
 export const mapConversation = (raw: any): any => {
-  // Generate a friendly name if customer_name is missing or is just an email
-  let customerName = raw.customerName;
+  // Handle both camelCase and snake_case field names from database
+  let customerName = raw.customerName || raw.customer_name;
+  const customerEmail = raw.customerEmail || raw.customer_email;
 
   // Check if we need to generate a friendly name
   const needsNameGeneration =
@@ -91,18 +92,24 @@ export const mapConversation = (raw: any): any => {
 
   if (needsNameGeneration) {
     // Generate a friendly visitor name using the conversation ID as primary seed for uniqueness
-    const seed = raw.id?.toString() || raw.customerEmail || "anonymous";
+    const seed = raw.id?.toString() || customerEmail || "anonymous";
     customerName = generateUniqueVisitorName(seed);
+    console.log(`[mapConversation] Generated visitor name: "${customerName}" for conversation ${raw.id}`);
   }
 
-  // Ensure we have a valid last_message_preview
-  let lastMessagePreview = raw.lastMessagePreview;
+  // Handle both camelCase and snake_case for message preview
+  let lastMessagePreview = raw.lastMessagePreview || raw.last_message_preview;
   if (!lastMessagePreview || lastMessagePreview.trim() === "") {
     lastMessagePreview = "No messages yet";
+  } else {
+    // Truncate long messages for preview
+    lastMessagePreview = lastMessagePreview.length > 100
+      ? lastMessagePreview.substring(0, 100) + "..."
+      : lastMessagePreview;
   }
 
-  // Ensure we have a valid timestamp
-  let lastMessageAt = raw.lastMessageAt;
+  // Handle both camelCase and snake_case for timestamps
+  let lastMessageAt = raw.lastMessageAt || raw.last_message_at;
   if (!lastMessageAt || lastMessageAt === "1969-12-31T00:00:00.000Z" || lastMessageAt === "1970-01-01T00:00:00.000Z") {
     lastMessageAt = raw.updated_at || raw.created_at || new Date().toISOString();
   }
@@ -110,14 +117,14 @@ export const mapConversation = (raw: any): any => {
   return {
     id: raw.id,
     customerName: customerName,
-    customerEmail: raw.customerEmail,
+    customerEmail: customerEmail,
     status: raw.status || "open",
     lastMessageAt: lastMessageAt,
-    unreadCount: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : (raw.unreadCount || 0),
+    unreadCount: typeof raw.unread === "boolean" ? (raw.unread ? 1 : 0) : (raw.unreadCount || raw.unread_count || 0),
     lastMessagePreview: lastMessagePreview,
     metadata: raw.metadata,
-    aiHandoverActive: raw.aiHandoverActive,
-    aiHandoverSessionId: raw.aiHandoverSessionId,
+    aiHandoverActive: raw.aiHandoverActive || raw.ai_handover_active,
+    aiHandoverSessionId: raw.aiHandoverSessionId || raw.ai_handover_session_id,
     priority: raw.priority || "medium",
     tags: raw.tags || [],
   };

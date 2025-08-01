@@ -162,6 +162,8 @@ const nextConfig = {
     logging: {
       level: process.env.NODE_ENV === 'development' ? 'verbose' : 'error',
     },
+    // Enable font optimization
+    optimizeFonts: true,
   },
 
   // Compiler optimizations

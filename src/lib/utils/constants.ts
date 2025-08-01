@@ -20,7 +20,7 @@ export function getBaseUrl(): string {
   }
 
   // Fallback for development
-  return "http://localhost:3010";
+  return "http://localhost:3001";
 }
 
 // Email configuration

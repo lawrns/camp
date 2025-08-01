@@ -26,18 +26,28 @@ export function useConversationStats() {
 
     return useQuery({
         queryKey: ["conversation-stats", organizationId],
-        enabled: !!organizationId && !isWidgetContext, // Disable in widget context
+        enabled: !!organizationId && !!user && !isWidgetContext, // Ensure user is loaded
         queryFn: async (): Promise<ConversationStats> => {
             if (!organizationId) {
                 throw new Error("Organization ID is required to fetch conversation stats");
             }
 
-            console.log("[ConversationStats] Fetching stats for organization:", organizationId);
+            if (!user) {
+                throw new Error("User must be authenticated to fetch conversation stats");
+            }
+
+            console.log("[ConversationStats] Fetching stats for organization:", organizationId, "user:", user.id);
 
             try {
+                // Get Supabase client and ensure it's properly initialized
+                const supabaseClient = supabase.browser();
+
+                if (!supabaseClient) {
+                    throw new Error("Supabase client not initialized");
+                }
+
                 // Fetch basic conversation counts
-                const { data: conversations, error: convError } = await supabase
-                    .browser()
+                const { data: conversations, error: convError } = await supabaseClient
                     .from("conversations")
                     .select("id, status, assigned_to_user_id, created_at, updated_at")
                     .eq("organization_id", organizationId);
@@ -51,12 +61,13 @@ export function useConversationStats() {
 
                 if (convError) {
                     console.error("Error fetching conversations for stats:", {
-                        error: convError,
-                        code: convError.code,
-                        message: convError.message,
-                        details: convError.details,
-                        hint: convError.hint,
-                        organizationId
+                        errorCode: convError.code,
+                        errorMessage: convError.message,
+                        errorDetails: convError.details,
+                        errorHint: convError.hint,
+                        organizationId,
+                        // Serialize the full error object properly
+                        fullError: JSON.stringify(convError, null, 2)
                     });
 
                     // Return default stats instead of throwing error for empty results or permission issues
@@ -82,8 +93,7 @@ export function useConversationStats() {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                const { data: todayMessages, error: msgError } = await supabase
-                    .browser()
+                const { data: todayMessages, error: msgError } = await supabaseClient
                     .from("messages")
                     .select("id")
                     .eq("organization_id", organizationId)
@@ -161,7 +171,6 @@ export function useConversationStats() {
                 };
             }
         },
-        enabled: !!organizationId,
         staleTime: 1000 * 60 * 2, // 2 minutes
         retry: 2,
     });

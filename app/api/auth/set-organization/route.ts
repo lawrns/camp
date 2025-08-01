@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const body = await request.json();
     const { organizationId } = body;
 
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Set organization cookie for client-side access
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.set('current-organization', organizationId, {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();

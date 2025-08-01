@@ -24,8 +24,8 @@ export function getServiceClient() {
 /**
  * Create client with user context for server-side operations
  */
-export function createClient() {
-  const cookieStore = cookies();
+export async function createClient() {
+  const cookieStore = await cookies();
   return supabase.server(cookieStore);
 }
 

@@ -11,19 +11,19 @@ import { cn } from "@/lib/utils";
 import { getCustomerDisplayFromConversation } from "@/lib/utils/unified-customer-display";
 import {
   Archive,
-  CheckCircle as CheckCircle2,
-  CaretRight as ChevronRight,
+  CheckCircle,
+  ChevronRight,
   Clock,
   Flag,
-  SmileyXEyes as Frown,
-  SmileyMeh as Meh,
-  DotsThree as MoreHorizontal,
-  Smiley as Smile,
+  Frown,
+  Meh,
+  MoreHorizontal,
+  Smile,
   Star,
-  TrendUp as TrendingUp,
+  TrendingUp,
   User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import React, { memo, useCallback, useState } from "react";
 

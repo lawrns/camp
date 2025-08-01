@@ -74,6 +74,7 @@ export interface UseMessagesReturn {
   isLoading: boolean;
   error: string | null;
   reload: () => void;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
 export interface UseConversationChannelReturn {

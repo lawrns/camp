@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create Supabase client
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get conversations for the organization
     const { data: conversations, error } = await supabase
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Supabase client
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Prepare conversation data
     const conversationData = mapApiConversationToDbInsert({

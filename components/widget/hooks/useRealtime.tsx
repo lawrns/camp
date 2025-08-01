@@ -107,30 +107,57 @@ export function useRealtime(
     messagesSent: 0,
   });
 
-  // Mock sendMessage function
+  // Send message function that persists to database
   const sendMessage = async (content: string) => {
     if (!conversationId) {
       throw new Error("No conversation ID available");
     }
 
-    const success = await actions.sendMessage({
-      content,
-      conversationId,
-      senderType: "visitor",
-      timestamp: new Date().toISOString(),
-    });
+    try {
+      // First, send message to API to persist in database
+      const response = await fetch("/api/widget/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Organization-ID": organizationId,
+        },
+        body: JSON.stringify({
+          conversationId,
+          content,
+          senderType: "visitor",
+        }),
+      });
 
-    if (success) {
-      // Add message to local state
-      const newMessage: StandardMessage = {
-        id: `temp-${Date.now()}`,
+      if (!response.ok) {
+        throw new Error(`Failed to send message: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("[Widget] Message sent to API:", result);
+
+      // Then broadcast via realtime
+      const success = await actions.sendMessage({
         content,
         conversationId,
         senderType: "visitor",
         timestamp: new Date().toISOString(),
-        metadata: {},
-      };
-      setMessages(prev => [...prev, newMessage]);
+      });
+
+      if (success) {
+        // Add message to local state
+        const newMessage: StandardMessage = {
+          id: result.message?.id || `temp-${Date.now()}`,
+          content,
+          conversationId,
+          senderType: "visitor",
+          timestamp: new Date().toISOString(),
+          metadata: {},
+        };
+        setMessages(prev => [...prev, newMessage]);
+      }
+    } catch (error) {
+      console.error("[Widget] Failed to send message:", error);
+      throw error;
     }
   };
 

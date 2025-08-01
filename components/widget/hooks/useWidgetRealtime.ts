@@ -200,30 +200,23 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     });
   }, [config.organizationId, config.onConnectionChange]);
 
-  // Send typing indicator
+  // Send typing indicator using tRPC
   const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
     if (!isConnected || !config.conversationId) {
       return;
     }
 
     try {
-      const response = await fetch('/api/widget/typing', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Organization-ID': config.organizationId,
-        },
-        body: JSON.stringify({
-          conversationId: config.conversationId,
-          isTyping,
-          userId: config.userId || 'visitor',
-          userName: 'You'
-        }),
+      // For now, use a simple console log until tRPC is properly configured
+      console.log('[Widget Realtime] Typing indicator:', {
+        conversationId: config.conversationId,
+        userId: config.userId || 'visitor',
+        organizationId: config.organizationId,
+        isTyping
       });
 
-      if (!response.ok) {
-        console.error('[Widget Realtime] Failed to send typing indicator');
-      }
+      // TODO: Implement proper tRPC call when client is configured
+      // const result = await api.widget.typingIndicators.mutate({...});
     } catch (error) {
       console.error('[Widget Realtime] Typing indicator error:', error);
     }

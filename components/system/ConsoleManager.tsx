@@ -1,19 +1,29 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * ConsoleManager - Client-side component that handles proper error logging
  * This component runs on the client and provides structured error reporting
  * FIXED: Removed error suppression anti-pattern (Critical Issue C004)
+ * FIXED: Added hydration safety to prevent SSR errors
  */
 export function ConsoleManager() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent hydration mismatch by only running on client
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     // Set up proper error handling instead of suppression
     const originalError = console.error;
     const originalWarn = console.warn;
 
-    console.error = (...args) => {
+    console.error = (...args: any[]) => {
       const message = args.join(' ');
       
       // Categorize errors for better debugging
@@ -47,7 +57,7 @@ export function ConsoleManager() {
       }
     };
 
-    console.warn = (...args) => {
+    console.warn = (...args: any[]) => {
       const message = args.join(' ');
       
       // Apply same categorization to warnings
@@ -71,10 +81,12 @@ export function ConsoleManager() {
 
     // Cleanup function to restore original console methods
     return () => {
-      console.error = originalError;
-      console.warn = originalWarn;
+      if (isMounted) {
+        console.error = originalError;
+        console.warn = originalWarn;
+      }
     };
-  }, []);
+  }, [isMounted]);
 
   // This component doesn't render anything
   return null;

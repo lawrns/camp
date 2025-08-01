@@ -19,7 +19,7 @@ export async function GET(
     }
 
     // Create Supabase client
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get the current user session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();

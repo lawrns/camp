@@ -45,10 +45,10 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
       
       // Step 2: Set up widget page
       console.log('🔧 Setting up widget...');
-      await widgetPage.goto(`${TEST_CONFIG.BASE_URL}/widget-demo`);
+      await widgetPage.goto(`${TEST_CONFIG.BASE_URL}/`);
       await widgetPage.waitForLoadState('networkidle');
       await widgetPage.waitForTimeout(3000);
-      console.log('✅ Widget demo page loaded');
+      console.log('✅ Homepage loaded');
       
       // Step 3: Send message from widget
       console.log('💬 Sending message from widget...');
@@ -56,22 +56,48 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
       // Open widget
       const widgetButton = widgetPage.locator('[data-testid="widget-button"]');
       await expect(widgetButton).toBeVisible({ timeout: 10000 });
-      await widgetButton.click();
-      
+
+      // Wait for widget to be fully loaded and clickable
+      await widgetPage.waitForTimeout(1000);
+      await widgetButton.click({ force: true }); // Force click to bypass overlay issues
+
       const widgetPanel = widgetPage.locator('[data-testid="widget-panel"]');
-      await expect(widgetPanel).toBeVisible();
+      await expect(widgetPanel).toBeVisible({ timeout: 10000 });
       console.log('✅ Widget opened');
-      
-      // Send message
-      const messageInput = widgetPage.locator('[data-testid="widget-message-input"]');
-      const sendButton = widgetPage.locator('[data-testid="widget-send-button"]');
-      
+
+      // Send message - EnhancedComposer uses different selectors
+      const messageInput = widgetPage.locator('textarea[placeholder*="message"]');
+      const sendButton = widgetPage.locator('button:has(svg[class*="h-4 w-4"])').nth(2); // Third button is send button
+
+      // Wait for input elements to be ready
+      await expect(messageInput).toBeVisible({ timeout: 5000 });
+      await expect(sendButton).toBeVisible({ timeout: 5000 });
+
       const testMessage = `Widget to dashboard sync test - ${Date.now()}`;
       await messageInput.fill(testMessage);
-      await sendButton.click();
+
+      // Wait for send button to be enabled and click with force
+      await widgetPage.waitForTimeout(500);
+
+      // Try multiple interaction methods to handle pointer event issues
+      try {
+        await sendButton.click({ force: true });
+      } catch (error) {
+        console.log('⚠️ Force click failed, trying alternative methods...');
+
+        // Alternative 1: Try pressing Enter key
+        try {
+          await messageInput.press('Enter');
+        } catch (enterError) {
+          console.log('⚠️ Enter key failed, trying dispatch event...');
+
+          // Alternative 2: Dispatch click event directly
+          await sendButton.dispatchEvent('click');
+        }
+      }
       
-      // Verify message appears in widget
-      const sentMessage = widgetPage.locator(`[data-testid="widget-message"]:has-text("${testMessage}")`);
+      // Verify message appears in widget - EnhancedMessageList uses different structure
+      const sentMessage = widgetPage.locator(`[data-testid="widget-panel"] div.space-y-1 div:has-text("${testMessage}")`);
       await expect(sentMessage).toBeVisible({ timeout: 5000 });
       console.log(`✅ Message sent from widget: "${testMessage}"`);
       

@@ -27,6 +27,7 @@ export async function middleware(request: NextRequest) {
 
   // Skip middleware for API routes (they have their own auth)
   if (pathname.startsWith('/api/')) {
+    console.log('[Middleware] Skipping API route:', pathname);
     return NextResponse.next();
   }
 
@@ -113,6 +114,21 @@ export async function middleware(request: NextRequest) {
   supabaseResponse.headers.set('X-Frame-Options', 'DENY');
   supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff');
   supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // Add CSP header to allow Supabase connections
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://yvntokkncxbhapqjesti.supabase.co wss://yvntokkncxbhapqjesti.supabase.co https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.anthropic.com",
+    "frame-src 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'"
+  ].join('; ');
+  supabaseResponse.headers.set('Content-Security-Policy', csp);
 
   return supabaseResponse;
 }

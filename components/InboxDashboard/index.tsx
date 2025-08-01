@@ -61,7 +61,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [showSmartReplies, setShowSmartReplies] = useState(true); // AI-powered smart replies
 
   // NEW: Add state for dialogs
   const [showConvertDialog, setShowConvertDialog] = useState(false);
@@ -571,19 +570,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
               )}
             </div>
 
-            {/* Smart Reply Panel - AI-powered suggestions (DASHBOARD-SIDE ONLY) */}
-            {showSmartReplies && selectedConversation && messages?.length > 0 && (
-              <div className="flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
-                <div className="border-b border-gray-200 bg-blue-50 p-6">
-                  <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-2">
-                    <Robot className="mr-2 h-5 w-5 text-blue-600" />
-                    Smart Replies
-                  </h3>
-                  <p className="text-sm text-gray-600">AI-powered suggestions coming soon</p>
-                </div>
-                <div className="p-6">{/* Smart replies content goes here */}</div>
-              </div>
-            )}
+
 
             {/* Customer sidebar */}
             {showCustomerDetails && selectedConversation && (
