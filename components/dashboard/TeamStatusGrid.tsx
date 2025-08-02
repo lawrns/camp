@@ -71,9 +71,9 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
   // Transform members data to include status and metrics
   const teamMembers: TeamMemberStatus[] = members.map((member, index) => ({
     id: member.id,
-    name: member.full_name || member.email,
-    email: member.email,
-    avatar: member.avatar_url,
+    name: member.profile.full_name || member.profile.email,
+    email: member.profile.email,
+    avatar: member.profile.avatar_url,
     status: index === 0 ? 'online' : index === 1 ? 'busy' : 'offline' as const,
     lastSeen: new Date(Date.now() - (index * 30 * 60 * 1000)), // Mock last seen times
     activeConversations: Math.floor(Math.random() * 5) + 1,
