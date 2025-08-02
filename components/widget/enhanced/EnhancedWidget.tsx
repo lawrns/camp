@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChatCircle,
@@ -57,6 +57,35 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Auto-scroll functionality
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+
+  // Auto-scroll utility functions
+  const scrollToBottom = useCallback((smooth = true) => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    }
+  }, []);
+
+  const checkIfUserScrolledUp = useCallback(() => {
+    if (messagesContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100; // 100px threshold
+      setIsUserScrolledUp(!isNearBottom);
+      setShouldAutoScroll(isNearBottom);
+    }
+  }, []);
+
+  // Handle scroll events to detect if user scrolled up
+  const handleScroll = useCallback(() => {
+    checkIfUserScrolledUp();
+  }, [checkIfUserScrolledUp]);
+
   // Initialize real-time connection
   const realtime = useWidgetRealtime({
     organizationId,
@@ -89,6 +118,28 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
       ));
     }
   });
+
+  // Auto-scroll effects
+  useEffect(() => {
+    // Auto-scroll when new messages arrive (only if user is near bottom)
+    if (shouldAutoScroll && messages.length > 0) {
+      scrollToBottom(true);
+    }
+  }, [messages, shouldAutoScroll, scrollToBottom]);
+
+  useEffect(() => {
+    // Auto-scroll when switching to messages tab
+    if (state.activeTab === 'messages' && messages.length > 0) {
+      setTimeout(() => scrollToBottom(false), 100); // Small delay to ensure DOM is ready
+    }
+  }, [state.activeTab, scrollToBottom, messages.length]);
+
+  useEffect(() => {
+    // Auto-scroll when widget opens and has messages
+    if (state.isOpen && messages.length > 0) {
+      setTimeout(() => scrollToBottom(false), 200); // Delay for animation
+    }
+  }, [state.isOpen, scrollToBottom, messages.length]);
 
   // Initialize conversation
   useEffect(() => {
@@ -160,6 +211,9 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     };
 
     setMessages(prev => [...prev, userMessage]);
+
+    // Force auto-scroll when user sends a message
+    setShouldAutoScroll(true);
 
     try {
       const response = await fetch('/api/widget/messages', {
@@ -293,35 +347,59 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
   // Home/Welcome tab with organization-specific content
   const renderHomeTab = () => (
-    <WelcomeScreen
-      organizationId={organizationId}
-      onStartChat={() => switchTab('messages')}
-      onViewFAQ={() => switchTab('help')}
-    />
+    <div className="h-full pb-16 overflow-y-auto">
+      <WelcomeScreen
+        organizationId={organizationId}
+        onStartChat={() => switchTab('messages')}
+        onViewFAQ={() => switchTab('help')}
+      />
+    </div>
   );
 
   // Enhanced chat tab using enterprise-grade components
   const renderChatTab = () => (
-    <div className="flex flex-col h-full">
-      {/* Enhanced Message List */}
-      <div className="flex-1 overflow-hidden">
+    <div className="flex flex-col h-full pb-16">
+      {/* Enhanced Message List with Auto-scroll */}
+      <div
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto"
+        onScroll={handleScroll}
+      >
         <EnhancedMessageList
           messages={messages}
           typingUsers={typingUsers}
           isLoading={isLoading}
           enableVirtualization={messages.length > 50}
-          enableAutoScroll={true}
+          enableAutoScroll={false} // We handle auto-scroll manually
           enableGrouping={true}
           enableLoadMore={false}
           onReact={handleReact}
           onCopy={handleCopy}
           onMessageAction={handleMessageAction}
-          className="h-full"
+          className="min-h-full"
         />
       </div>
 
+      {/* Scroll to bottom button (when user scrolled up) */}
+      <AnimatePresence>
+        {isUserScrolledUp && (
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            onClick={() => scrollToBottom(true)}
+            className="absolute bottom-20 right-4 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition-colors z-10"
+            title="Scroll to bottom"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Enhanced Composer - Using existing WidgetComposer */}
-      <div className="border-t bg-white p-4">
+      <div className="absolute bottom-16 left-0 right-0 border-t bg-white p-4">
         <WidgetComposer
           onSend={handleSendMessage}
           placeholder="Type your message..."
@@ -336,7 +414,9 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
 
   const renderHelpTab = () => (
-    <HelpTab organizationId={organizationId} />
+    <div className="h-full pb-16">
+      <HelpTab organizationId={organizationId} />
+    </div>
   );
 
   return (
@@ -424,20 +504,18 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
             {!state.isMinimized && (
               <>
-
-
                 {/* Content */}
-                <div className="flex-1 overflow-hidden pb-16">
+                <div className="flex-1 overflow-hidden relative">
                   {state.activeTab === 'home' && renderHomeTab()}
                   {state.activeTab === 'messages' && renderChatTab()}
                   {state.activeTab === 'help' && renderHelpTab()}
-                </div>
 
-                {/* Bottom Tab Navigation */}
-                <WidgetBottomTabs
-                  activeTab={state.activeTab}
-                  onTabChange={switchTab}
-                />
+                  {/* Bottom Tab Navigation - positioned within widget */}
+                  <WidgetBottomTabs
+                    activeTab={state.activeTab}
+                    onTabChange={switchTab}
+                  />
+                </div>
               </>
             )}
           </motion.div>

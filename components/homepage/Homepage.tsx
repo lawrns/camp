@@ -1,367 +1,723 @@
 "use client";
 
-import { BrandLogo } from "@/components/unified-ui/components/BrandLogo";
-import { FlameGradient } from "@/components/unified-ui/components/flame-gradient";
-// WidgetProvider is now provided at the page level in app/page.tsx
-import { Icon } from "@/lib/ui/Icon";
-import { ArrowRight, CheckCircle as Check } from "@phosphor-icons/react";
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+
+// Force dynamic rendering to avoid localStorage issues during build
+// Use default dynamic/static behavior for homepage
+import { ArrowRight, Bot, CheckCircle, Flame, MessageCircle, Shield, Sparkles, Star, Terminal, User } from 'lucide-react';
 import Link from "next/link";
-import { lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
-// Lazy load heavy components
-const HandoverChatBubble = lazy(() => import("@/components/homepage/HandoverChatBubble"));
-const FeatureTabs = lazy(() => import("@/components/homepage/FeatureTabs"));
+// Animation variants for reuse
+const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+};
 
-// Memoized metric data to prevent recreation on each render
-const METRICS_DATA = [
-  { value: "99.9%", label: "Uptime SLA" },
-  { value: "< 3s", label: "Avg Response Time" },
-  { value: "95%", label: "Customer Satisfaction" },
-  { value: "24/7", label: "Support Available" },
-  { value: "50+", label: "Languages Supported" },
-  { value: "10M+", label: "Messages Handled" },
-];
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+        },
+    },
+};
 
-// Campfire Homepage with Stripe-inspired design
-function Homepage() {
-  const [activeTab, setActiveTab] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
+// Interactive Handover Animation Component with Memory Management
+const HandoverChatBubble = ({ onAnimationStateChange }: { onAnimationStateChange?: (state: string) => void }) => {
+    const [animationState, setAnimationState] = useState('human-typing'); // human-typing, cursor-moving, handover, ai-response, complete
+    const [typedText, setTypedText] = useState('');
+    const [showHandoverButton, setShowHandoverButton] = useState(false);
+    const [showCursor, setShowCursor] = useState(false);
+    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    const [handoverProgress, setHandoverProgress] = useState(0);
 
-  // Memoized scroll handler to prevent unnecessary re-renders
-  const handleScroll = useCallback(() => {
-    setScrollY(window.scrollY);
-  }, []);
+    // Refs to track timers for cleanup
+    const timersRef = useRef<Set<NodeJS.Timeout>>(new Set());
 
-  // Memoized observer options
-  const observerOptions = useMemo(
-    () => ({
-      threshold: 0.1,
-      rootMargin: "0px 0px -10% 0px",
-    }),
-    []
-  );
+    // Notify parent of animation state changes
+    useEffect(() => {
+        onAnimationStateChange?.(animationState);
+    }, [animationState, onAnimationStateChange]);
 
-  // Memoized observer callback
-  const observerCallback = useCallback((entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("revealed");
-        observer?.unobserve(entry.target);
-      }
-    });
-  }, []);
+    const humanMessage = "Thanks for your patience. I'm reviewing your billing discrepancy case now and will have this resolved for you shortly...";
+    const aiMessage = "Alright, I've looked into the discrepancy. Here's what happened: there was a duplicate charge on March 15th. I'm processing the refund now and you'll see it within 2-3 business days. I've also added account protection to prevent this in the future...";
 
-  // Memoized observer instance
-  const observer = useMemo(() => {
-    if (typeof window === "undefined") return null;
-    return new IntersectionObserver(observerCallback, observerOptions);
-  }, [observerCallback, observerOptions]);
-
-  useEffect(() => {
-    setIsVisible(true);
-
-    // Throttled scroll handler for better performance
-    let ticking = false;
-    const throttledHandleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
+    // Helper function to add timer to tracking set
+    const addTimer = (timer: NodeJS.Timeout) => {
+        timersRef.current.add(timer);
+        return timer;
     };
 
-    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
-
-    // Observe all elements with reveal-on-scroll class
-    if (observer) {
-      const elements = document.querySelectorAll(".reveal-on-scroll");
-      elements.forEach((el) => observer.observe(el));
-    }
-
-    return () => {
-      window.removeEventListener("scroll", throttledHandleScroll);
-      observer?.disconnect();
+    // Helper function to clear and remove timer
+    const clearTimer = (timer: NodeJS.Timeout) => {
+        clearTimeout(timer);
+        timersRef.current.delete(timer);
     };
-  }, [handleScroll, observer]);
 
-  return (
-    <div className="bg-background text-foreground">
-      {/* Include the blue flame gradient definition at the root */}
-      <FlameGradient />
+    // Cleanup all timers
+    const clearAllTimers = () => {
+        timersRef.current.forEach(timer => clearTimeout(timer));
+        timersRef.current.clear();
+    };
 
-      {/* Top Navigation Bar - backdrop-blur removed to fix position:fixed bug */}
-      <nav className="fixed left-0 right-0 top-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex h-20 items-center justify-between">
-            {/* Logo on the left */}
-            <Link href="/" className="flex items-center gap-3">
-              <BrandLogo size={48} className="h-12 w-12" />
-              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-3xl font-bold text-blue-700">
-                Campfire
-              </span>
-            </Link>
+    // Reset animation cycle with cleanup
+    const resetAnimation = () => {
+        clearAllTimers();
+        setAnimationState('human-typing');
+        setTypedText('');
+        setShowHandoverButton(false);
+        setShowCursor(false);
+        setCursorPosition({ x: 0, y: 0 });
+        setHandoverProgress(0);
+    };
 
-            {/* Navigation links on the right */}
-            <div className="flex items-center gap-3">
-              <Link href="/login" className="text-foreground font-medium transition-colors hover:text-primary-600">
-                Sign In
-              </Link>
-              <Link
-                href="/signup"
-                className="rounded-md bg-primary px-4 py-2 font-medium text-white transition-colors hover:bg-primary-600"
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            clearAllTimers();
+        };
+    }, []);
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-50 via-background to-primary-100 pb-16 pt-32">
-        <div className="container mx-auto px-6">
-          <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
-            {/* Left side - Content */}
-            <div className="hero-center lg:text-left">
-              <h1 className="heading-center lg:text-left text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
-                Transform Customer Service Into Your{" "}
-                <span className="bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-primary-700">
-                  Competitive Advantage
-                </span>
-              </h1>
-              <p className="paragraph-center lg:text-left leading-relaxed text-foreground mb-8 max-w-xl text-lg mx-auto lg:mx-0">
-                AI-powered customer support that combines human expertise with AI intelligence. 
-                Deliver exceptional experiences at scale with seamless AI-to-human handover.
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href="/signup"
-                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:from-primary-700 hover:to-primary-800 hover:shadow-xl sm:justify-start"
-                >
-                  Get Started Free
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="#features"
-                  className="rounded-xl border-2 border-border px-8 py-4 text-center font-semibold text-primary-600 transition-all duration-300 hover:border-border hover:bg-primary-50"
-                >
-                  View Features
-                </Link>
-              </div>
-            </div>
+    // Human typing animation with memory leak prevention
+    useEffect(() => {
+        if (animationState === 'human-typing') {
+            const timer = addTimer(setTimeout(() => {
+                if (typedText.length < humanMessage.length) {
+                    setTypedText(humanMessage.slice(0, typedText.length + 1));
+                } else {
+                    setShowHandoverButton(true);
+                    // Start cursor animation after a brief pause
+                    const cursorTimer = addTimer(setTimeout(() => {
+                        setShowCursor(true);
+                        setAnimationState('cursor-moving');
+                    }, 1000));
+                }
+            }, 13 + Math.random() * 14)); // Increased typing speed by 50% more (was 20-40ms, now 13-27ms)
 
-            {/* Right side - Visual Demo */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-md">
-                <Suspense
-                  fallback={
-                    <div className="flex h-64 items-center justify-center rounded-2xl border border-border bg-background p-6 shadow-2xl">
-                      <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-                    </div>
-                  }
-                >
-                  <HandoverChatBubble />
-                </Suspense>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            return () => clearTimer(timer);
+        }
+    }, [typedText, animationState, humanMessage]);
 
-      {/* Features Section */}
-      <section id="features" className="bg-background py-20">
-        <div className="container mx-auto px-6">
-          <div className="reveal-on-scroll mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold text-foreground">
-              Everything you need for world-class support
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-foreground">
-              Campfire combines AI intelligence with human expertise to deliver exceptional customer experiences
-            </p>
-          </div>
-          <div className="reveal-on-scroll mx-auto max-w-5xl">
-            <Suspense
-              fallback={
-                <div className="flex h-96 items-center justify-center">
-                  <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
+    // Cursor movement animation
+    useEffect(() => {
+        if (animationState === 'cursor-moving') {
+            // Animate cursor moving to the handover button
+            const timer = addTimer(setTimeout(() => {
+                setCursorPosition({ x: 280, y: -10 }); // Position near the handover button
+                // After cursor reaches button, trigger click
+                const clickTimer = addTimer(setTimeout(() => {
+                    setAnimationState('handover');
+                    setShowHandoverButton(false);
+                    setShowCursor(false);
+                }, 1500));
+            }, 100));
+            return () => clearTimer(timer);
+        }
+    }, [animationState]);
+
+    // Handover progress animation
+    useEffect(() => {
+        if (animationState === 'handover') {
+            const timer = addTimer(setTimeout(() => {
+                if (handoverProgress < 100) {
+                    setHandoverProgress(prev => Math.min(prev + 2, 100));
+                } else {
+                    setAnimationState('ai-response');
+                    setTypedText('');
+                }
+            }, 50));
+            return () => clearTimer(timer);
+        }
+    }, [handoverProgress, animationState]);
+
+    // AI typing animation
+    useEffect(() => {
+        if (animationState === 'ai-response') {
+            const timer = addTimer(setTimeout(() => {
+                if (typedText.length < aiMessage.length) {
+                    setTypedText(aiMessage.slice(0, typedText.length + 1));
+                } else {
+                    const completeTimer = addTimer(setTimeout(() => {
+                        setAnimationState('complete');
+                        const resetTimer = addTimer(setTimeout(resetAnimation, 3000)); // Reset after 3 seconds
+                    }, 2000));
+                }
+            }, 11 + Math.random() * 16)); // Increased typing speed by 50% more (was 16-40ms, now 11-27ms)
+            return () => clearTimer(timer);
+        }
+    }, [typedText, animationState, aiMessage]);
+
+    const handleHandoverClick = () => {
+        setAnimationState('handover');
+        setShowHandoverButton(false);
+        setShowCursor(false);
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-xl p-4 border border-gray-100 max-w-xs z-10 mx-auto"
+        >
+            {/* Animated Cursor */}
+            <AnimatePresence>
+                {showCursor && (
+                    <motion.div
+                        initial={{ x: 150, y: 80, opacity: 0 }}
+                        animate={{
+                            x: cursorPosition.x,
+                            y: cursorPosition.y,
+                            opacity: 1
+                        }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 1.2,
+                            ease: "easeInOut",
+                            x: { type: "spring", stiffness: 100, damping: 20 },
+                            y: { type: "spring", stiffness: 100, damping: 20 }
+                        }}
+                        className="absolute pointer-events-none z-50"
+                        style={{
+                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+                        }}
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="text-gray-800"
+                        >
+                            <path
+                                d="M5.5 3L19 16.5L13 15L11.5 21L5.5 3Z"
+                                fill="currentColor"
+                                stroke="white"
+                                strokeWidth="1"
+                            />
+                        </svg>
+                        {/* Click animation effect */}
+                        {animationState === 'cursor-moving' && cursorPosition.x > 200 && (
+                            <motion.div
+                                initial={{ scale: 0, opacity: 1 }}
+                                animate={{ scale: 2, opacity: 0 }}
+                                transition={{ duration: 0.3, delay: 1.2 }}
+                                className="absolute -top-1 -left-1 w-4 h-4 border-2 border-blue-500 rounded-full"
+                            />
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            {/* Header with avatar and status */}
+            <div className="flex items-center space-x-3 mb-3">
+                <div className="relative">
+                    <motion.div
+                        animate={{
+                            scale: animationState === 'handover' ? [1, 1.1, 1] : 1,
+                        }}
+                        transition={{ duration: 0.5, repeat: animationState === 'handover' ? Infinity : 0 }}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center ${animationState === 'human-typing' || animationState === 'complete'
+                            ? 'bg-blue-100'
+                            : animationState === 'handover'
+                                ? 'bg-gradient-to-r from-blue-100 to-purple-100'
+                                : 'bg-purple-100'
+                            }`}
+                    >
+                        <AnimatePresence mode="wait">
+                            {(animationState === 'human-typing' || animationState === 'complete') && (
+                                <motion.div
+                                    key="human"
+                                    initial={{ opacity: 0, scale: 0.5 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.5 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <User size={16} className="text-blue-600" />
+                                </motion.div>
+                            )}
+                            {animationState === 'handover' && (
+                                <motion.div
+                                    key="transition"
+                                    initial={{ opacity: 0, rotate: 0 }}
+                                    animate={{ opacity: 1, rotate: 360 }}
+                                    exit={{ opacity: 0, scale: 0.5 }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                >
+                                    <Sparkles size={16} className="text-purple-600" />
+                                </motion.div>
+                            )}
+                            {animationState === 'ai-response' && (
+                                <motion.div
+                                    key="ai"
+                                    initial={{ opacity: 0, scale: 0.5 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.5 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Bot size={16} className="text-purple-600" />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
                 </div>
-              }
-            >
-              <FeatureTabs />
-            </Suspense>
-          </div>
-        </div>
-      </section>
 
-      {/* Trust Metrics Section */}
-      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 py-20 text-white">
-        <div className="container mx-auto px-6">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold">
-              Trusted by thousands of companies worldwide
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-primary-100">
-              Our AI handles millions of conversations daily
-            </p>
-          </div>
-          <div className="overflow-hidden py-8">
-            <div className="animate-scroll scrollbar-hide flex overflow-x-auto md:justify-center">
-              {[0, 1].map((setIndex) => (
-                <div key={setIndex} className="flex flex-shrink-0 gap-8 px-4 md:gap-16 md:px-8">
-                  {METRICS_DATA.map((metric, index) => (
-                    <div key={`${setIndex}-${index}`} className="flex-shrink-0 whitespace-nowrap px-8 text-center">
-                      <div className="mb-2 text-3xl font-bold">{metric.value}</div>
-                      <div className="text-sm text-primary-200 md:text-base">{metric.label}</div>
+                <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                        <span className="text-xs font-medium text-gray-700">
+                            Jimmy Bob - Support Agent
+                        </span>
+                        {/* Internal System Status - Only visible in internal view */}
+                        {(animationState === 'handover' || animationState === 'ai-response') && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                            >
+                                <motion.div
+                                    animate={{ scale: [1, 1.3, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="w-full h-full bg-gradient-to-r from-purple-400 to-blue-400 rounded-full opacity-60"
+                                />
+                            </motion.div>
+                        )}
+                        {(animationState === 'human-typing' || animationState === 'ai-response') && (
+                            <div className="flex space-x-1">
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                                    className="w-1.5 h-1.5 bg-blue-500 rounded-full"
+                                />
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                                    className="w-1.5 h-1.5 bg-blue-500 rounded-full"
+                                />
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                                    className="w-1.5 h-1.5 bg-blue-500 rounded-full"
+                                />
+                            </div>
+                        )}
                     </div>
-                  ))}
                 </div>
-              ))}
+
+                {/* Internal Enhancement Button */}
+                <AnimatePresence>
+                    {showHandoverButton && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.5 }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleHandoverClick}
+                            className="w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                            title="Activate Comrad Enhancement"
+                        >
+                            <Sparkles size={12} className="text-white" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
-          </div>
+
+            {/* Internal System Activation Overlay */}
+            {animationState === 'handover' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-3 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-3"
+                >
+                    <div className="flex items-center space-x-2 mb-2">
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        >
+                            <Sparkles size={12} className="text-purple-600" />
+                        </motion.div>
+                        <span className="text-xs text-purple-600 font-medium">
+                            Comrad Operator Activated
+                        </span>
+                        <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                            className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full"
+                        >
+                            AUTO
+                        </motion.div>
+                    </div>
+
+                    {/* Command Line Style Progress */}
+                    <div className="font-mono text-xs text-gray-600 space-y-1">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: handoverProgress > 20 ? 1 : 0 }}
+                            className="flex items-center space-x-2"
+                        >
+                            <span className="text-green-500">&gt;</span>
+                            <span>context: billing_discrepancy</span>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: handoverProgress > 50 ? 1 : 0 }}
+                            className="flex items-center space-x-2"
+                        >
+                            <span className="text-green-500">&gt;</span>
+                            <span>session_id: {Math.random().toString(36).substr(2, 8)}</span>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: handoverProgress > 80 ? 1 : 0 }}
+                            className="flex items-center space-x-2"
+                        >
+                            <span className="text-green-500">&gt;</span>
+                            <span>escalation: autonomous_mode</span>
+                        </motion.div>
+                    </div>
+
+
+                </motion.div>
+            )}
+
+            {/* Message Content */}
+            <div className="min-h-[80px]">
+                <div className="text-sm text-gray-700 font-medium leading-relaxed">
+                    {animationState === 'handover' ? (
+                        <span className="text-gray-500 italic">
+                            {/* Show last part of human message during internal handover */}
+                            {humanMessage.slice(-50)}...
+                        </span>
+                    ) : (
+                        <>
+                            {typedText}
+                            {(animationState === 'human-typing' || animationState === 'ai-response') && (
+                                <motion.div
+                                    animate={{ opacity: [1, 0] }}
+                                    transition={{ duration: 0.8, repeat: Infinity }}
+                                    className="inline-block w-0.5 h-4 bg-blue-500 ml-0.5"
+                                />
+                            )}
+                        </>
+                    )}
+                </div>
+            </div>
+
+            {/* Chat bubble tail pointing upward to operator */}
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-[-1]"></div>
+        </motion.div>
+    );
+};
+
+const scaleOnHover = {
+    scale: 1.02,
+    transition: { duration: 0.2, ease: "easeOut" },
+};
+
+// Parallax Background Component
+const ParallaxBackground = () => {
+    const ref = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll();
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+
+    return (
+        <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+                style={{ y: y1 }}
+                className="absolute w-96 h-96 bg-gradient-to-r from-blue-600/10 to-blue-800/10 rounded-full blur-3xl -top-20 -left-20"
+            />
+            <motion.div
+                style={{ y: y2 }}
+                className="absolute w-64 h-64 bg-gradient-to-l from-blue-500/10 to-transparent rounded-full blur-2xl top-1/3 -right-20"
+            />
+            <motion.div
+                style={{ y: y1 }}
+                className="absolute w-80 h-80 bg-gradient-to-r from-blue-400/8 to-transparent rounded-full blur-3xl bottom-1/4 left-1/3"
+            />
         </div>
-      </section>
+    );
+};
 
-      {/* Pricing Section */}
-      <section id="pricing" className="bg-background py-20">
-        <div className="container mx-auto px-6">
-          <div className="reveal-on-scroll mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold text-foreground">Simple, transparent pricing</h2>
-            <p className="text-lg text-foreground">Start free and scale as you grow</p>
-          </div>
-          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
-            {/* Starter Plan */}
-            <div className="reveal-on-scroll rounded-2xl border border-border bg-background p-6 shadow-lg">
-              <h3 className="mb-2 text-2xl font-bold">Starter</h3>
-              <p className="mb-6 text-foreground">Perfect for small teams</p>
-              <div className="mb-6 text-4xl font-bold">
-                $0<span className="text-xl font-normal text-foreground">/month</span>
-              </div>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Up to 100 conversations/month</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Basic AI capabilities</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Email support</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">1 team member</span>
-                </li>
-              </ul>
-              <Link
-                className="block w-full rounded-lg bg-muted px-6 py-3 text-center font-semibold text-foreground transition-colors hover:bg-muted/80"
-                href="/signup"
-              >
-                Get Started
-              </Link>
-            </div>
+// Animated Navigation
+const AnimatedNav = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
 
-            {/* Pro Plan */}
-            <div className="reveal-on-scroll scale-105 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 p-6 text-white shadow-xl">
-              <h3 className="mb-4 text-2xl font-bold">The Campfire Difference</h3>
-              <p className="mb-6 text-primary-100">For growing businesses</p>
-              <div className="mb-6 text-4xl font-bold">
-                $99<span className="text-xl font-normal text-primary-100">/month</span>
-              </div>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-primary-300" />
-                  <span>Unlimited conversations</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-primary-300" />
-                  <span>Advanced AI with learning</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-primary-300" />
-                  <span>Priority support</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-primary-300" />
-                  <span>Up to 10 team members</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-primary-300" />
-                  <span>Custom integrations</span>
-                </li>
-              </ul>
-              <Link
-                className="block w-full rounded-lg bg-background px-6 py-3 text-center font-semibold text-primary-600 transition-colors hover:bg-primary-50"
-                href="/signup"
-              >
-                Start Free Trial
-              </Link>
-            </div>
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
 
-            {/* Enterprise Plan */}
-            <div className="reveal-on-scroll rounded-2xl border border-border bg-background p-6 shadow-lg">
-              <h3 className="mb-2 text-2xl font-bold">Enterprise</h3>
-              <p className="mb-6 text-foreground">For large organizations</p>
-              <div className="mb-6 text-4xl font-bold">Custom</div>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Everything in Pro</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Dedicated infrastructure</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">SLA guarantees</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">Unlimited team members</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="h-5 w-5 flex-shrink-0 text-success" />
-                  <span className="text-foreground">White-label options</span>
-                </li>
-              </ul>
-              <button className="block w-full rounded-lg bg-neutral-900 px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-neutral-800">
-                Contact Sales
-              </button>
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    return (
+        <motion.nav
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className={`border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white/90"
+                }`}
+        >
+            <div className="container mx-auto px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                    <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-2">
+                        <Flame size={24} className="text-blue-600" />
+                        <span className="text-xl font-bold text-gray-900">Campfire</span>
+                    </motion.div>
+
+                    <div className="hidden md:flex items-center space-x-8">
+                        {["Features", "Pricing", "Enterprise"].map((item, index) => (
+                            <motion.a
+                                key={item}
+                                href={`/${item.toLowerCase()}`}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 * index }}
+                                whileHover={{ y: -2 }}
+                                className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                            >
+                                {item}
+                            </motion.a>
+                        ))}
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Link href="/login" className="text-gray-600 hover:text-blue-600 transition-colors">
+                                Sign In
+                            </Link>
+                        </motion.div>
+                        <motion.div whileHover={scaleOnHover} whileTap={{ scale: 0.95 }}>
+                            <Link
+                                href="/register"
+                                className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
+                            >
+                                <span>Get Started</span>
+                                <ArrowRight size={16} />
+                            </Link>
+                        </motion.div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </motion.nav>
+    );
+};
+
+// Animated Hero Section
+const HeroSection = () => {
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [chatAnimationState, setChatAnimationState] = useState('human-typing');
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    const handleChatAnimationStateChange = (state: string) => {
+        setChatAnimationState(state);
+    };
+
+    return (
+        <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-16">
+            <ParallaxBackground />
+
+            {/* Interactive cursor follower */}
+            <motion.div
+                className="absolute w-4 h-4 bg-blue-600/20 rounded-full pointer-events-none z-10"
+                animate={{
+                    x: mousePosition.x - 8,
+                    y: mousePosition.y - 8,
+                }}
+                transition={{
+                    type: "spring",
+                    damping: 30,
+                    stiffness: 200,
+                    mass: 0.5,
+                }}
+            />
+
+            <div className="container mx-auto px-6 lg:px-8 relative z-20">
+                <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+                    {/* Left Column - Text Content */}
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={staggerContainer}
+                        className="text-left"
+                    >
+                        {/* Badge */}
+                        <motion.div
+                            variants={fadeInUp}
+                            className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600/10 to-blue-800/10 px-4 py-2 rounded-full mb-8"
+                        >
+                            <Sparkles size={16} className="text-blue-600" />
+                            <span className="text-sm font-medium text-blue-600">AI-Powered Customer Service Platform</span>
+                        </motion.div>
+
+                        {/* Animated Headline */}
+                        <motion.h1 variants={fadeInUp} className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-none">
+                            Transform Customer Service Into Your{" "}
+                            <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                                Competitive Advantage
+                            </span>
+                        </motion.h1>
+
+                        {/* Subtitle */}
+                        <motion.p variants={fadeInUp} className="text-xl text-gray-600 mb-8 leading-relaxed">
+                            AI support so advanced, your customers can't tell it's not human. Deliver instant, intelligent responses that feel completely natural while reducing costs and increasing satisfaction.
+                        </motion.p>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            variants={fadeInUp}
+                            className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-12"
+                        >
+                            <motion.div whileHover={scaleOnHover} whileTap={{ scale: 0.95 }}>
+                                <Link
+                                    href="/demo"
+                                    className="bg-blue-600 text-white px-8 py-4 rounded-lg flex items-center space-x-2 text-lg font-medium hover:bg-blue-700 transition-colors shadow-lg"
+                                >
+                                    <Terminal size={20} />
+                                    <span>Start Free Trial</span>
+                                    <motion.div
+                                        animate={{ x: [0, 4, 0] }}
+                                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                    >
+                                        <ArrowRight size={16} />
+                                    </motion.div>
+                                </Link>
+                            </motion.div>
+
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Link
+                                    href="/comrad"
+                                    className="bg-white border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg flex items-center space-x-2 text-lg font-medium hover:border-blue-600 hover:bg-gray-50 transition-colors shadow-sm"
+                                >
+                                    <MessageCircle size={20} />
+                                    <span>Meet Comrad</span>
+                                </Link>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Trust Indicators */}
+                        <motion.div variants={fadeInUp} className="flex items-center space-x-8 text-sm text-gray-500">
+                            <div className="flex items-center space-x-2">
+                                <Shield size={16} />
+                                <span>SOC 2 Compliant</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <CheckCircle size={16} className="text-emerald-500" />
+                                <span>98.9% Uptime</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Star size={16} className="text-orange-500" />
+                                <span>Fortune 500 Trusted</span>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Right Column - Operator Image with Chat Bubble */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="relative flex flex-col items-center lg:items-end"
+                    >
+                        {/* Main Operator Image with Transition */}
+                        <div className="relative">
+                            <AnimatePresence mode="wait">
+                                {(chatAnimationState === 'human-typing' || chatAnimationState === 'cursor-moving' || chatAnimationState === 'complete') ? (
+                                    <motion.img
+                                        key="human-operator"
+                                        src="/images/operator.png"
+                                        alt="Human Customer Service Operator"
+                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100"
+                                        transition={{
+                                            opacity: { duration: 0.5 }
+                                        }}
+                                        initial={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    />
+                                ) : (
+                                    <motion.img
+                                        key="ai-operator"
+                                        src="/images/rag.png"
+                                        alt="AI Customer Service Specialist"
+                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{
+                                            opacity: { duration: 1.5, ease: "easeInOut" }
+                                        }}
+                                    />
+                                )}
+                            </AnimatePresence>
+
+                            {/* Floating Metrics - repositioned for better layout */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1.5, duration: 0.5 }}
+                                className="absolute bottom-8 -right-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg"
+                            >
+                                <div className="text-2xl font-bold">12s</div>
+                                <div className="text-sm opacity-90">Response time</div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 2, duration: 0.5 }}
+                                className="absolute top-1/3 -right-16 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg"
+                            >
+                                <div className="text-2xl font-bold">96%</div>
+                                <div className="text-sm opacity-90">CSAT Score</div>
+                            </motion.div>
+                        </div>
+
+                        {/* Interactive Handover Chat Bubble - Overlay on Images */}
+                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+                            <HandoverChatBubble onAnimationStateChange={handleChatAnimationStateChange} />
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// Main Homepage Component (client-only)
+export default function Homepage() {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        console.log("🔥 HomePage useEffect started");
+
+        // Set client flag to prevent hydration mismatch
+        setIsClient(true);
+
+        // Widget is loaded in the layout - no need to load it here
+    }, []);
+
+    // Widget is already loaded in the layout - no need to load it again
+    useEffect(() => {
+        console.log("🔥 Homepage mounted - widget should already be loaded from layout");
+    }, []);
+
+    return (
+        <div className="min-h-screen bg-white">
+            <AnimatedNav />
+            <HeroSection />
+            {/* Other sections would continue here but keeping this minimal for now */}
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-700 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="mb-4 text-4xl font-bold text-white">
-            Ready to revolutionize your customer support?
-          </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-primary-100">
-            Join thousands of companies already using Campfire to deliver magical support experiences
-          </p>
-          <div className="flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              className="rounded-xl bg-background px-8 py-4 font-semibold text-primary-600 shadow-lg transition-all duration-300 hover:bg-primary-50 hover:shadow-xl"
-              href="/signup"
-            >
-              Start Free Trial
-            </Link>
-            <button className="rounded-xl border-2 border-white bg-white/10 px-8 py-4 font-semibold text-white transition-all duration-300 hover:bg-white/20">
-              Schedule Demo
-            </button>
-          </div>
-          <p className="mt-6 text-primary-100">No credit card required • 14-day free trial • Cancel anytime</p>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-export default memo(Homepage);
+    );
+} 

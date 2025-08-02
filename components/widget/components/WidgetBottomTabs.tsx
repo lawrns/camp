@@ -45,9 +45,9 @@ export const WidgetBottomTabs: React.FC<WidgetBottomTabsProps> = ({
 
   return (
     <div className={cn(
-      "fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2",
+      "absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2",
       "flex justify-around items-center",
-      "shadow-lg",
+      "shadow-lg z-10",
       className
     )}>
       {tabs.map((tab) => {

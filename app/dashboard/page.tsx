@@ -8,11 +8,45 @@ import { useAuth } from '@/hooks/useAuth';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
 import { TrendingUp, TrendingDown, Users, Clock, Star, Ticket, CheckCircle, AlertCircle } from 'lucide-react';
+import { EnhancedHeroSection } from '@/components/dashboard/EnhancedHeroSection';
+import { EnhancedMetricCard } from '@/components/dashboard/EnhancedMetricCard';
+import { TeamActivityFeed } from '@/components/dashboard/TeamActivityFeed';
+import { TeamStatusGrid } from '@/components/dashboard/TeamStatusGrid';
+import { QuickActionButton } from '@/components/dashboard/QuickActionButton';
+import { AIInsightsPanel } from '@/components/dashboard/AIInsightsPanel';
+import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
+import { motion } from 'framer-motion';
+import { 
+  ChatCircle, 
+  Brain, 
+  TrendUp, 
+  Users as UsersIcon, 
+  Gear, 
+  ChartLine 
+} from '@phosphor-icons/react';
+
+interface DisplayMetrics {
+  conversations: number;
+  responseTime: string;
+  satisfaction: string;
+  resolvedToday: number;
+  pendingConversations?: number;
+}
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const { metrics, activities, systemStatus } = useRealtimeDashboard();
   const { loading: metricsLoading, error } = metrics;
+
+  // Use enhanced dashboard metrics
+  const {
+    metrics: enhancedMetrics,
+    loading: enhancedMetricsLoading,
+    error: enhancedMetricsError,
+  } = useDashboardMetrics({
+    range: "today",
+    refreshInterval: 30000, // Refresh every 30 seconds
+  });
 
   if (isLoading) {
     return (
@@ -25,98 +59,233 @@ export default function DashboardPage() {
     );
   }
 
+  // Use enhanced metrics if available, fallback to realtime metrics
+  const displayMetrics: DisplayMetrics = enhancedMetrics ? {
+    conversations: enhancedMetrics.totalConversations || 0,
+    responseTime: enhancedMetrics.responseTime || "0s",
+    satisfaction: enhancedMetrics.satisfactionRate?.toString() || "0%",
+    resolvedToday: enhancedMetrics.resolvedToday || 0,
+    pendingConversations: enhancedMetrics.openConversations || 0,
+  } : {
+    conversations: metrics.conversations || 0,
+    responseTime: metrics.responseTime || "0s",
+    satisfaction: metrics.satisfaction || "0%",
+    resolvedToday: metrics.resolvedToday || 0,
+    pendingConversations: 0,
+  };
+
+  const metricCards = [
+    {
+      title: "Active Conversations",
+      value: displayMetrics.conversations,
+      change: "+12%",
+      trend: "up" as const,
+      icon: Users,
+      color: "blue" as const,
+      description: "From last hour",
+    },
+    {
+      title: "Avg Response Time",
+      value: `${displayMetrics.responseTime}`,
+      change: "-8%",
+      trend: "down" as const,
+      icon: Clock,
+      color: "orange" as const,
+      description: "Faster today",
+    },
+    {
+      title: "Customer Satisfaction",
+      value: `${displayMetrics.satisfaction}`,
+      change: "+0.2",
+      trend: "up" as const,
+      icon: Star,
+      color: "yellow" as const,
+      description: "This week",
+    },
+    {
+      title: "Resolved Today",
+      value: displayMetrics.resolvedToday,
+      change: "+15%",
+      trend: "up" as const,
+      icon: CheckCircle,
+      color: "green" as const,
+      description: "vs yesterday",
+    },
+  ];
+
+  const quickActions = [
+    {
+      title: "Start Chat",
+      description: "Begin new conversation",
+      icon: ChatCircle,
+      href: "/dashboard/inbox",
+      color: "blue" as const,
+      badge: displayMetrics.pendingConversations ? `${displayMetrics.pendingConversations} pending` : undefined,
+    },
+    {
+      title: "Knowledge Base",
+      description: "Search articles & docs",
+      icon: Brain,
+      href: "/knowledge",
+      color: "purple" as const,
+    },
+    {
+      title: "Analytics",
+      description: "Performance insights",
+      icon: TrendUp,
+      href: "/dashboard/analytics",
+      color: "green" as const,
+    },
+    {
+      title: "Team Chat",
+      description: "Collaborate with team",
+      icon: UsersIcon,
+      href: "/dashboard/team",
+      color: "orange" as const,
+    },
+    {
+      title: "Settings",
+      description: "Configure preferences",
+      icon: Gear,
+      href: "/dashboard/settings",
+      color: "yellow" as const,
+    },
+    {
+      title: "Reports",
+      description: "View detailed reports",
+      icon: ChartLine,
+      href: "/dashboard/analytics",
+      color: "blue" as const,
+    },
+  ];
+
   return (
     <AuthGuard>
-      <div className="p-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Welcome back, {user?.email?.split('@')[0] || 'User'}!
-        </h1>
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+        {/* Enhanced Hero Section */}
+        <EnhancedHeroSection 
+          metrics={displayMetrics}
+          userName={user?.firstName}
+        />
 
         {/* Enhanced Metrics Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {metricsLoading ? (
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {enhancedMetricsLoading ? (
             // Loading skeleton
             Array.from({ length: 4 }).map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader className="pb-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-                </CardContent>
-              </Card>
+              <EnhancedMetricCard
+                key={i}
+                title="Loading..."
+                value="0"
+                icon={Users}
+                color="blue"
+                loading={true}
+              />
             ))
-          ) : error ? (
-            <div className="col-span-4 text-center text-red-500">
+          ) : enhancedMetricsError ? (
+            <div className="col-span-full text-center text-red-500">
               <AlertCircle className="w-6 h-6 mx-auto mb-2" />
-              Error loading metrics: {error}
+              Error loading metrics: {enhancedMetricsError.toString()}
             </div>
           ) : (
-            <>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Active Conversations</CardTitle>
-                  <Users className="h-4 w-4 text-blue-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.conversations}</div>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    +12% from last hour
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Avg Response Time</CardTitle>
-                  <Clock className="h-4 w-4 text-orange-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.responseTime}s</div>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
-                    <TrendingDown className="w-3 h-3 mr-1" />
-                    -8% faster today
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Customer Satisfaction</CardTitle>
-                  <Star className="h-4 w-4 text-yellow-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.satisfaction}/5</div>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    +0.2 this week
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Resolved Today</CardTitle>
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.resolvedToday}</div>
-                  <p className="text-xs text-green-600 flex items-center mt-1">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    +15% vs yesterday
-                  </p>
-                </CardContent>
-              </Card>
-            </>
+            metricCards.map((metric, index) => (
+              <motion.div
+                key={metric.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+              >
+                <EnhancedMetricCard
+                  title={metric.title}
+                  value={metric.value}
+                  change={metric.change}
+                  trend={metric.trend}
+                  icon={metric.icon}
+                  color={metric.color}
+                  description={metric.description}
+                />
+              </motion.div>
+            ))
           )}
-        </div>
+        </motion.div>
+
+        {/* Team Collaboration Section */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="lg:col-span-2">
+            <TeamActivityFeed organizationId={user?.organizationId || ''} />
+          </div>
+          <div>
+            <TeamStatusGrid organizationId={user?.organizationId || ''} />
+          </div>
+        </motion.div>
+
+        {/* Quick Actions and AI Insights Section */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendUp className="w-5 h-5" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {quickActions.map((action, index) => (
+                  <motion.div
+                    key={action.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 * index }}
+                  >
+                    <QuickActionButton
+                      title={action.title}
+                      description={action.description}
+                      icon={action.icon}
+                      href={action.href}
+                      color={action.color}
+                      badge={action.badge}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          
+          <AIInsightsPanel 
+            metrics={displayMetrics}
+            organizationId={user?.organizationId}
+          />
+        </motion.div>
 
         {/* Main Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           <div className="lg:col-span-2">
-            <Suspense fallback={<div>Loading inbox...</div>}>
+            <Suspense fallback={
+              <Card>
+                <CardContent className="p-6">
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            }>
               <InboxDashboard />
             </Suspense>
           </div>

@@ -1,71 +1,57 @@
 "use client";
 
-import { Suspense } from 'react';
-import { HeroSection } from '@/components/HeroSection';
-import { FeatureCard } from '@/components/FeatureCard';
-import { SafeClientOnly } from '@/components/SafeClientOnly';
-import { EnhancedWidgetProvider } from '@/components/widget/enhanced';
-import { Robot, Users, ChatCircle } from '@phosphor-icons/react';
+import dynamic from "next/dynamic";
+import Script from "next/script";
+import { Suspense } from "react";
+
+// Beautiful Homepage with animations - imported from components
+const BeautifulHomepage = dynamic(() => import("../components/homepage/Homepage"), {
+    loading: () => (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <div className="text-xl font-semibold text-gray-700">Loading Campfire...</div>
+            </div>
+        </div>
+    ),
+    ssr: false
+});
 
 /**
  * Legacy Homepage Component
  * 
- * This component contains the original homepage content that was previously
- * in app/page.tsx. It's preserved here to allow for easy rollback and
- * A/B testing between homepage variants.
+ * This component now contains the enhanced commie homepage content.
+ * The name is kept for backward compatibility but the content has been replaced.
  */
 export default function LegacyHome() {
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Suspense fallback={<div>Loading...</div>}>
-        <HeroSection />
-        <section className="py-16 px-4">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard
-              title="AI-Powered Support"
-              description="Instant responses with human-like conversation quality"
-              icon={<Robot size={24} />}
+    return (
+        <div className="min-h-screen home-page">
+            {/* Beautiful Homepage with operator.png and rag.png */}
+            <Suspense fallback={
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+                    <div className="text-center">
+                        <div className="animate-pulse bg-blue-200 h-8 w-48 rounded mx-auto mb-4"></div>
+                        <div className="animate-pulse bg-gray-200 h-4 w-64 rounded mx-auto"></div>
+                    </div>
+                </div>
+            }>
+                <BeautifulHomepage />
+            </Suspense>
+
+            {/* Campfire Intercom-Style Widget - True Intercom-Level Design */}
+            <Script
+                src={`/widget-intercom.js?v=production-clean-v5&t=${Date.now()}`}
+                strategy="afterInteractive"
+                data-organization-id="b5e80170-004c-4e82-a88c-3e2166b169dd"
+                data-primary-color="#6366F1"
+                data-position="bottom-right"
+                data-company-name="Campfire"
+                data-greeting="Hi there! 👋 Welcome to Campfire. How can we help you today?"
+                onLoad={() => {
+                    console.log('🔥 Campfire Intercom Widget loaded with true Intercom-level design');
+                    // Widget will auto-initialize via script with proper backend integration
+                }}
             />
-            <FeatureCard
-              title="Seamless Handoffs"
-              description="Context-preserving transitions between AI and human agents"
-              icon={<Users size={24} />}
-            />
-            <FeatureCard
-              title="Real-time Collaboration"
-              description="Live chat with typing indicators and instant delivery"
-              icon={<ChatCircle size={24} />}
-            />
-          </div>
-        </section>
-        <SafeClientOnly>
-          <EnhancedWidgetProvider
-            organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
-            debug={true}
-            config={{
-              organizationName: "Campfire Support",
-              primaryColor: "#3b82f6",
-              position: "bottom-right",
-              welcomeMessage: "Hi! How can we help you today?",
-              showWelcomeMessage: true,
-              enableFAQ: true,
-              enableHelp: true,
-              contactInfo: {
-                email: "support@campfire.com",
-                businessHours: {
-                  monday: "9:00 AM - 6:00 PM",
-                  tuesday: "9:00 AM - 6:00 PM",
-                  wednesday: "9:00 AM - 6:00 PM",
-                  thursday: "9:00 AM - 6:00 PM",
-                  friday: "9:00 AM - 6:00 PM",
-                  saturday: "Closed",
-                  sunday: "Closed"
-                }
-              }
-            }}
-          />
-        </SafeClientOnly>
-      </Suspense>
-    </main>
-  );
+        </div>
+    );
 } 

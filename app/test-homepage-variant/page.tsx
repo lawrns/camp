@@ -1,32 +1,31 @@
 "use client";
 
-import { useHomepageVariant } from '@/hooks/useHomepageVariant';
-
 export default function TestHomepageVariant() {
-  const variant = useHomepageVariant();
-
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Homepage Variant Test</h1>
+      <h1 className="text-2xl font-bold mb-4">Homepage Status</h1>
       <div className="space-y-4">
-        <div className="p-4 bg-blue-50 rounded-lg">
-          <h2 className="font-semibold">Current Variant:</h2>
-          <p className="text-lg">{variant}</p>
+        <div className="p-4 bg-green-50 rounded-lg">
+          <h2 className="font-semibold">Current Status:</h2>
+          <p className="text-lg">✅ Commie homepage is now the default</p>
         </div>
         
-        <div className="p-4 bg-green-50 rounded-lg">
-          <h2 className="font-semibold">Environment Variable:</h2>
-          <p className="text-sm font-mono">
-            NEXT_PUBLIC_HOMEPAGE_VARIANT={process.env.NEXT_PUBLIC_HOMEPAGE_VARIANT || 'not set'}
-          </p>
+        <div className="p-4 bg-blue-50 rounded-lg">
+          <h2 className="font-semibold">What Changed:</h2>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Homepage variant system has been removed</li>
+            <li>Commie homepage content is now directly integrated</li>
+            <li>Feature flag system is no longer needed</li>
+            <li>Visit / to see the enhanced homepage</li>
+          </ul>
         </div>
 
         <div className="p-4 bg-yellow-50 rounded-lg">
-          <h2 className="font-semibold">Instructions:</h2>
+          <h2 className="font-semibold">Files Removed:</h2>
           <ul className="list-disc list-inside space-y-1">
-            <li>Set NEXT_PUBLIC_HOMEPAGE_VARIANT=legacy for original homepage</li>
-            <li>Set NEXT_PUBLIC_HOMEPAGE_VARIANT=commie for new homepage</li>
-            <li>Visit / to see the homepage variant in action</li>
+            <li>app/CommieHome.tsx</li>
+            <li>hooks/useHomepageVariant.ts</li>
+            <li>Feature flag system</li>
           </ul>
         </div>
       </div>
