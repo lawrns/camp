@@ -101,9 +101,16 @@ export function useWidgetState(
     logDebug('Initializing new conversation', { organizationId });
 
     try {
-      // For testing purposes, create a mock conversation ID if API fails
-      const mockConversationId = `test-conversation-${Date.now()}`;
-      
+      // For testing purposes, create a proper UUID if API fails
+      const generateUUID = () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+      const mockConversationId = generateUUID();
+
       // Try to create conversation via API, but fallback to mock if it fails
       try {
         const response = await fetch('/api/widget', {

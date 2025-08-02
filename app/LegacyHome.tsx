@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { WidgetProvider } from "@/components/widget";
+import { EnhancedWidgetProvider } from "@/components/widget/enhanced";
 
 // Beautiful Homepage with animations - imported from components
 const BeautifulHomepage = dynamic(() => import("../components/homepage/Homepage"), {
@@ -38,10 +38,33 @@ export default function LegacyHome() {
                 <BeautifulHomepage />
             </Suspense>
 
-            {/* Enhanced Campfire Widget - Intercom-Quality Design */}
-            <WidgetProvider
+            {/* Enhanced Campfire Widget - Intercom-Quality Design with Tabs */}
+            <EnhancedWidgetProvider
                 organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
                 debug={false}
+                config={{
+                    organizationName: "Campfire",
+                    primaryColor: "#6366F1",
+                    position: "bottom-right",
+                    welcomeMessage: "Hi there! 👋 Welcome to Campfire. How can we help you today?",
+                    showWelcomeMessage: true,
+                    enableFAQ: true,
+                    enableHelp: true,
+                    contactInfo: {
+                        email: "support@campfire.com",
+                        phone: "+1 (555) 123-4567",
+                        website: "https://campfire.com",
+                        businessHours: {
+                            monday: "9:00 AM - 6:00 PM",
+                            tuesday: "9:00 AM - 6:00 PM",
+                            wednesday: "9:00 AM - 6:00 PM",
+                            thursday: "9:00 AM - 6:00 PM",
+                            friday: "9:00 AM - 6:00 PM",
+                            saturday: "10:00 AM - 4:00 PM",
+                            sunday: "Closed"
+                        }
+                    }
+                }}
             />
         </div>
     );

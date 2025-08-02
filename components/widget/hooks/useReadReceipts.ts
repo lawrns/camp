@@ -47,7 +47,10 @@ export function useReadReceipts(
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch read receipts: ${response.statusText}`);
+        // Don't throw error for read receipts - just log and continue
+        console.warn(`[useReadReceipts] API returned ${response.status}: ${response.statusText}`);
+        setReadReceipts({}); // Set empty receipts
+        return;
       }
 
       const data = await response.json();
@@ -66,8 +69,9 @@ export function useReadReceipts(
 
       setReadReceipts(receiptsMap);
     } catch (err) {
-      console.error('[useReadReceipts] Fetch error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch read receipts');
+      console.warn('[useReadReceipts] Fetch error (non-critical):', err);
+      // Don't set error state for read receipts - just continue without them
+      setReadReceipts({});
     } finally {
       setIsLoading(false);
     }

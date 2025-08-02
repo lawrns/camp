@@ -3,7 +3,7 @@ import { ArrowClockwise, ChatCircle, Clock, TrendUp, Users, Warning } from "@pho
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
 import {
   selectDashboardError,
   selectDashboardLoading,

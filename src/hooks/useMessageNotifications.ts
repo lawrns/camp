@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 // CONSOLIDATED: Use modern real-time hooks instead of deprecated manager
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
 import { ChannelFactory } from "@/lib/realtime/channels";
 import { getBrowserClient } from "@/lib/supabase";
 import { useAudioNotifications } from "./useAudioNotifications";

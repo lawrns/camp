@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
 
 export default function StatusPage() {
   const [status, setStatus] = useState({

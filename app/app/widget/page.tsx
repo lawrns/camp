@@ -93,11 +93,26 @@ export default function WidgetInterface() {
         setConversationId(data.conversation?.id || data.conversationId);
         // Conversation initialized with visitor identity
       } else {
-        // Use fallback conversation ID for testing
-        setConversationId("test-conversation-" + Date.now());
+        // Use fallback conversation ID for testing - proper UUID format
+        const generateUUID = () => {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
+        };
+        setConversationId(generateUUID());
       }
     } catch (error) {
-      setConversationId("test-conversation-" + Date.now());
+      // Use fallback conversation ID for testing - proper UUID format
+      const generateUUID = () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+      setConversationId(generateUUID());
     }
   };
 

@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
 import { getBrowserClient } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";
 import { formatRelativeTimeShort } from "@/lib/utils/date";

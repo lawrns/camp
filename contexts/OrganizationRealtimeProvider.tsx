@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 // TODO: Replace with standardized useRealtime hook
-import { useOrganizationRealtime as useNativeOrganizationRealtime } from "@/lib/realtime";
+import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
 
 interface RealtimeCallbacks {
   onNewMessage?: (message: any) => void;
