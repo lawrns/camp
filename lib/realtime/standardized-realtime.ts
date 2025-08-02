@@ -243,7 +243,46 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Standardized broadcast function
+// Helper function to ensure channel subscription before operations
+async function ensureChannelSubscription(channelName: string, config?: any): Promise<RealtimeChannel> {
+  const channel = channelManager.getChannel(channelName, config);
+
+  // Check if channel is already subscribed
+  if (channel.state === 'joined') {
+    return channel;
+  }
+
+  console.log(`[Realtime] Ensuring subscription for channel: ${channelName}`);
+
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      reject(new Error(`Channel subscription timeout for ${channelName} after 5 seconds`));
+    }, 5000);
+
+    // Subscribe and wait for confirmation
+    channel.subscribe((status) => {
+      clearTimeout(timeout);
+
+      switch (status) {
+        case 'SUBSCRIBED':
+          console.log(`[Realtime] ✅ Channel ${channelName} successfully subscribed`);
+          resolve(channel);
+          break;
+        case 'CHANNEL_ERROR':
+        case 'TIMED_OUT':
+        case 'CLOSED':
+          console.error(`[Realtime] ❌ Channel ${channelName} subscription failed: ${status}`);
+          reject(new Error(`Channel subscription failed: ${status}`));
+          break;
+        default:
+          console.log(`[Realtime] Channel ${channelName} status: ${status}`);
+          // Continue waiting for SUBSCRIBED status
+      }
+    });
+  });
+}
+
+// Standardized broadcast function with proper subscription handling
 export async function broadcastToChannel(
   channelName: string,
   eventType: string,
@@ -251,31 +290,8 @@ export async function broadcastToChannel(
   config?: any
 ): Promise<boolean> {
   try {
-    const channel = channelManager.getChannel(channelName, config);
-
-    // CRITICAL FIX: Ensure channel is subscribed before broadcasting
-    // Supabase requires channels to be subscribed to send broadcasts
-    const channelStatus = channel.state;
-    if (channelStatus !== 'joined') {
-      console.log(`[Realtime] Channel ${channelName} not subscribed (${channelStatus}), subscribing...`);
-
-      // Subscribe to the channel and wait for it to be ready
-      await new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error(`Channel subscription timeout for ${channelName}`));
-        }, 5000);
-
-        channel.subscribe((status) => {
-          clearTimeout(timeout);
-          if (status === 'SUBSCRIBED') {
-            console.log(`[Realtime] Channel ${channelName} successfully subscribed`);
-            resolve();
-          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-            reject(new Error(`Channel subscription failed: ${status}`));
-          }
-        });
-      });
-    }
+    // PHASE 1 FIX: Ensure channel is properly subscribed before broadcasting
+    const channel = await ensureChannelSubscription(channelName, config);
 
     const result = await channel.send({
       type: 'broadcast',
@@ -284,14 +300,14 @@ export async function broadcastToChannel(
     });
 
     if (result === 'ok') {
-      console.log(`[Realtime] Broadcast successful: ${channelName} -> ${eventType}`);
+      console.log(`[Realtime] ✅ Broadcast successful: ${channelName} -> ${eventType}`);
       return true;
     } else {
-      console.warn(`[Realtime] Broadcast failed: ${channelName} -> ${eventType}`, result);
+      console.warn(`[Realtime] ❌ Broadcast failed: ${channelName} -> ${eventType}`, result);
       return false;
     }
   } catch (error) {
-    console.error(`[Realtime] Broadcast error: ${channelName} -> ${eventType}`, error);
+    console.error(`[Realtime] 💥 Broadcast error: ${channelName} -> ${eventType}`, error);
     return false;
   }
 }

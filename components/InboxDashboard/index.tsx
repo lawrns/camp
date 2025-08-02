@@ -163,12 +163,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     );
   }
 
-  // Send message function with real-time broadcasting
+  // PHASE 2: Improved error handling with proper cleanup
   const sendMessageHP = useCallback(
     async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<any> => {
       if (!organizationId || !content.trim()) return null;
 
-      // Create optimistic message for immediate UI update
+      // 1. Create optimistic message for immediate UI update
       const tempId = `temp_${Date.now()}_${Math.random()}`;
       const optimisticMessage: Message = {
         id: tempId,
@@ -183,10 +183,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
       // Add optimistic message to UI immediately
       setMessages(prev => [...prev, optimisticMessage]);
+      console.log(`[SendMessage] 🚀 Added optimistic message: ${tempId}`);
 
       try {
 
-        // Send to database
+        // 2. Database operation - save message to database
+        console.log(`[SendMessage] 💾 Saving message to database...`);
         const { data, error } = await supabase
           .browser()
           .from("messages")
@@ -205,10 +207,13 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           .single();
 
         if (error) {
-          // Remove optimistic message on error
+          console.error(`[SendMessage] ❌ Database error:`, error);
+          // 5. Failure - cleanup optimistic update
           setMessages(prev => prev.filter(msg => msg.id !== tempId));
-          throw error;
+          throw new Error(`Failed to save message: ${error.message}`);
         }
+
+        console.log(`[SendMessage] ✅ Message saved to database:`, data.id);
 
         // Replace optimistic message with real one
         const realMessage: Message = {
@@ -222,17 +227,19 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           read_status: "sent",
         };
 
+        // 4. Success - replace optimistic with real message
         setMessages(prev =>
           prev.map(msg =>
             msg.id === tempId ? realMessage : msg
           )
         );
+        console.log(`[SendMessage] 🔄 Replaced optimistic message with real message: ${data.id}`);
 
-        // Broadcast real-time event using persistent channels for bidirectional communication
+        // 3. Real-time broadcast - attempt to notify other clients
+        console.log(`[SendMessage] 📡 Attempting real-time broadcast...`);
         try {
           const startTime = performance.now();
 
-          // Use existing persistent channel from real-time system instead of creating temporary ones
           const messagePayload: RealtimeMessagePayload = {
             id: data.id,
             conversation_id: convId,
@@ -245,32 +252,32 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           };
 
           const success = await realtimeActions.sendMessage(messagePayload);
-
           const latency = performance.now() - startTime;
           const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
 
           if (success) {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
-            console.log(`📡 [Realtime] ✅ Message broadcast successful on ${channelName} (${latency.toFixed(1)}ms)`);
+            console.log(`[SendMessage] ✅ Real-time broadcast successful: ${channelName} (${latency.toFixed(1)}ms)`);
           } else {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, false, "Broadcast failed");
-            console.warn(`📡 [Realtime] ❌ Message broadcast failed on ${channelName}`);
-            console.warn("⚠️  Real-time broadcast failed, but message was saved to database successfully");
-            // Continue execution - message was saved successfully even if broadcast failed
+            console.warn(`[SendMessage] ⚠️  Real-time broadcast failed: ${channelName}`);
+            console.warn(`[SendMessage] ℹ️  Message was saved successfully, but real-time sync may be delayed`);
+            // Don't throw - message was saved successfully, broadcast failure is not critical
           }
         } catch (broadcastError) {
           RealtimeLogger.error("message broadcast", broadcastError);
-          console.warn("Failed to broadcast message:", broadcastError);
-          console.warn("⚠️  Real-time broadcast error, but message was saved to database successfully");
-          // Don't throw - message was saved successfully even if broadcast failed
+          console.warn(`[SendMessage] ⚠️  Real-time broadcast error:`, broadcastError);
+          console.warn(`[SendMessage] ℹ️  Message was saved successfully, but real-time sync may be delayed`);
+          // Don't throw - message was saved successfully, broadcast failure is not critical
         }
 
         return data;
       } catch (error) {
-        console.error("Failed to send message:", error);
+        console.error(`[SendMessage] ❌ Critical error during message send:`, error);
 
-        // Clean up optimistic message on database error
+        // 5. Failure - cleanup optimistic update (if not already cleaned up)
         setMessages(prev => prev.filter(msg => msg.id !== tempId));
+        console.log(`[SendMessage] 🧹 Cleaned up optimistic message: ${tempId}`);
 
         throw error;
       }
@@ -435,14 +442,16 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   }, []);
 
   // Send message handler
+  // PHASE 3: Enhanced user feedback and error handling
   const handleSendMessage = useCallback(async () => {
     if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) return;
 
     setIsSending(true);
     const messageContent = newMessage.trim();
+    console.log(`[HandleSendMessage] 🚀 Starting message send process...`);
 
     try {
-      // Use high-performance real-time sending for <30ms delivery
+      // Use improved real-time sending with proper error handling
       await sendMessageHP(selectedConversation.id, messageContent, "agent");
 
       // Clear form only on success
@@ -450,17 +459,22 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
       setAttachments([]);
       handleStopTyping();
 
-      console.log("✅ Message sent successfully");
+      console.log(`[HandleSendMessage] ✅ Message sent successfully and form cleared`);
+      // TODO: Add success toast notification
     } catch (error) {
-      console.error("❌ Failed to send message:", error);
+      console.error(`[HandleSendMessage] ❌ Failed to send message:`, error);
 
-      // Show user-friendly error message
-      // TODO: Add toast notification or error state
-      alert("Failed to send message. Please try again.");
+      // PHASE 3: Better user feedback
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+
+      // TODO: Replace alert with proper toast notification system
+      alert(`Failed to send message: ${errorMessage}\n\nPlease try again.`);
 
       // Don't clear the message content so user can retry
+      console.log(`[HandleSendMessage] 🔄 Message content preserved for retry`);
     } finally {
       setIsSending(false);
+      console.log(`[HandleSendMessage] 🏁 Send process completed, loading state cleared`);
     }
   }, [newMessage, selectedConversation, isSending, organizationId, sendMessageHP, setNewMessage, setAttachments, handleStopTyping]);
 
