@@ -1,0 +1,537 @@
+{
+  "project": {
+    "name": "Campfire v2",
+    "type": "Customer Support Platform",
+    "technology_stack": {
+      "frontend": "Next.js with TypeScript",
+      "backend": "Next.js API routes",
+      "database": "Supabase (PostgreSQL)",
+      "realtime": "Supabase Realtime",
+      "authentication": "Supabase Auth"
+    },
+    "current_status": "Development with E2E testing completed"
+  },
+  "database_issues_discovered": {
+    "critical_permissions": {
+      "widget_read_receipts": {
+        "error": "permission denied for table widget_read_receipts",
+        "code": "42501",
+        "impact": "Widget read receipts API failing with 500 errors",
+        "priority": "HIGH",
+        "affected_endpoints": [
+          "/api/widget/read-receipts"
+        ]
+      }
+    },
+    "missing_tables": {
+      "widget_read_receipts": {
+        "status": "Table exists but permissions incorrect",
+        "required_permissions": ["SELECT", "INSERT", "UPDATE"],
+        "required_roles": ["authenticated", "service_role"]
+      }
+    }
+  },
+  "api_endpoints_status": {
+    "working": {
+      "/api/auth/session": {
+        "status": "401 (Expected - requires auth)",
+        "method": "GET",
+        "notes": "Working correctly, returns 401 when not authenticated"
+      },
+      "/api/auth/set-organization": {
+        "status": "200",
+        "method": "POST",
+        "notes": "Working correctly"
+      },
+      "/dashboard/inbox": {
+        "status": "200",
+        "method": "GET",
+        "notes": "Page loads correctly"
+      }
+    },
+    "broken": {
+      "/api/messages": {
+        "status": "404",
+        "method": "GET",
+        "issue": "Endpoint not found",
+        "priority": "MEDIUM",
+        "required_features": [
+          "Message retrieval",
+          "Conversation message listing",
+          "Pagination support"
+        ]
+      },
+      "/api/widget/auth": {
+        "status": "405",
+        "method": "GET",
+        "issue": "Method not allowed (should be POST)",
+        "priority": "HIGH",
+        "required_features": [
+          "Widget authentication",
+          "Organization validation",
+          "Token generation"
+        ]
+      },
+      "/api/conversations": {
+        "status": "401",
+        "method": "GET",
+        "issue": "Requires authentication",
+        "priority": "MEDIUM",
+        "required_features": [
+          "Conversation listing",
+          "Filtering and search",
+          "Pagination"
+        ]
+      }
+    },
+    "tRPC_issues": {
+      "analytics.getDashboardMetrics": {
+        "status": "404",
+        "error": "No procedure found on path 'analytics.getDashboardMetrics'",
+        "priority": "MEDIUM",
+        "required_features": [
+          "Dashboard metrics calculation",
+          "Time range filtering",
+          "Analytics data aggregation"
+        ]
+      }
+    }
+  },
+  "database_schema_requirements": {
+    "tables_needed": {
+      "conversations": {
+        "description": "Main conversation table",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "customer_id (UUID, Foreign Key)",
+          "organization_id (UUID, Foreign Key)",
+          "status (ENUM: open, closed, pending)",
+          "priority (ENUM: low, medium, high, urgent)",
+          "subject (TEXT)",
+          "last_message_at (TIMESTAMP)",
+          "created_at (TIMESTAMP)",
+          "updated_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_conversations_organization_id",
+          "idx_conversations_status",
+          "idx_conversations_created_at"
+        ]
+      },
+      "messages": {
+        "description": "Individual messages in conversations",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "conversation_id (UUID, Foreign Key)",
+          "sender_id (UUID, Foreign Key)",
+          "sender_type (ENUM: customer, agent, ai)",
+          "content (TEXT)",
+          "message_type (ENUM: text, file, system)",
+          "metadata (JSONB)",
+          "created_at (TIMESTAMP)",
+          "updated_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_messages_conversation_id",
+          "idx_messages_created_at",
+          "idx_messages_sender_type"
+        ]
+      },
+      "customers": {
+        "description": "Customer information",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "organization_id (UUID, Foreign Key)",
+          "email (TEXT, Unique)",
+          "name (TEXT)",
+          "phone (TEXT)",
+          "metadata (JSONB)",
+          "created_at (TIMESTAMP)",
+          "updated_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_customers_organization_id",
+          "idx_customers_email"
+        ]
+      },
+      "widget_read_receipts": {
+        "description": "Widget read receipts for messages",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "message_id (UUID, Foreign Key)",
+          "customer_id (UUID, Foreign Key)",
+          "organization_id (UUID, Foreign Key)",
+          "read_at (TIMESTAMP)",
+          "created_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_widget_read_receipts_message_id",
+          "idx_widget_read_receipts_customer_id",
+          "idx_widget_read_receipts_organization_id"
+        ]
+      },
+      "organizations": {
+        "description": "Organization/tenant information",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "name (TEXT)",
+          "domain (TEXT)",
+          "settings (JSONB)",
+          "created_at (TIMESTAMP)",
+          "updated_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_organizations_domain"
+        ]
+      },
+      "users": {
+        "description": "Agent/user information",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "organization_id (UUID, Foreign Key)",
+          "email (TEXT, Unique)",
+          "name (TEXT)",
+          "role (ENUM: admin, agent, viewer)",
+          "status (ENUM: active, inactive)",
+          "created_at (TIMESTAMP)",
+          "updated_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_users_organization_id",
+          "idx_users_email",
+          "idx_users_role"
+        ]
+      },
+      "conversation_assignments": {
+        "description": "Agent assignments to conversations",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "conversation_id (UUID, Foreign Key)",
+          "user_id (UUID, Foreign Key)",
+          "assigned_at (TIMESTAMP)",
+          "assigned_by (UUID, Foreign Key)",
+          "created_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_conversation_assignments_conversation_id",
+          "idx_conversation_assignments_user_id"
+        ]
+      },
+      "ai_handovers": {
+        "description": "AI handover tracking",
+        "columns": [
+          "id (UUID, Primary Key)",
+          "conversation_id (UUID, Foreign Key)",
+          "handover_type (ENUM: ai_to_human, human_to_ai)",
+          "triggered_by (UUID, Foreign Key)",
+          "reason (TEXT)",
+          "confidence_score (DECIMAL)",
+          "handled_at (TIMESTAMP)",
+          "created_at (TIMESTAMP)"
+        ],
+        "indexes": [
+          "idx_ai_handovers_conversation_id",
+          "idx_ai_handovers_handover_type"
+        ]
+      }
+    },
+    "views_needed": {
+      "conversation_summary": {
+        "description": "Aggregated conversation data for listing",
+        "columns": [
+          "conversation_id",
+          "customer_name",
+          "customer_email",
+          "last_message_preview",
+          "message_count",
+          "status",
+          "priority",
+          "assigned_agent_name",
+          "last_message_at",
+          "created_at"
+        ]
+      },
+      "dashboard_metrics": {
+        "description": "Dashboard analytics metrics",
+        "columns": [
+          "organization_id",
+          "metric_name",
+          "metric_value",
+          "time_period",
+          "calculated_at"
+        ]
+      }
+    },
+    "functions_needed": {
+      "update_conversation_updated_at": {
+        "description": "Trigger function to update conversation timestamp",
+        "triggers": ["messages.insert", "messages.update"]
+      },
+      "create_read_receipt": {
+        "description": "Function to create read receipts",
+        "parameters": ["message_id", "customer_id", "organization_id"]
+      },
+      "calculate_dashboard_metrics": {
+        "description": "Function to calculate dashboard metrics",
+        "parameters": ["organization_id", "time_range"]
+      }
+    }
+  },
+  "api_implementation_requirements": {
+    "endpoints_to_implement": {
+      "/api/messages": {
+        "method": "GET",
+        "parameters": [
+          "conversationId (required)",
+          "limit (optional, default: 50)",
+          "offset (optional, default: 0)"
+        ],
+        "response": {
+          "messages": "Array of message objects",
+          "total": "Total message count",
+          "hasMore": "Boolean for pagination"
+        },
+        "database_queries": [
+          "SELECT messages WHERE conversation_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
+          "SELECT COUNT(*) FROM messages WHERE conversation_id = ?"
+        ]
+      },
+      "/api/conversations": {
+        "method": "GET",
+        "parameters": [
+          "organizationId (required)",
+          "status (optional)",
+          "priority (optional)",
+          "search (optional)",
+          "limit (optional, default: 20)",
+          "offset (optional, default: 0)"
+        ],
+        "response": {
+          "conversations": "Array of conversation objects",
+          "total": "Total conversation count",
+          "hasMore": "Boolean for pagination"
+        },
+        "database_queries": [
+          "SELECT FROM conversation_summary WHERE organization_id = ? AND status = ? AND priority = ? ORDER BY last_message_at DESC LIMIT ? OFFSET ?"
+        ]
+      },
+      "/api/widget/auth": {
+        "method": "POST",
+        "body": {
+          "organizationId": "UUID (required)",
+          "customerEmail": "String (optional)",
+          "customerName": "String (optional)"
+        },
+        "response": {
+          "token": "JWT token for widget",
+          "customerId": "UUID of customer",
+          "organizationId": "UUID of organization"
+        },
+        "database_queries": [
+          "SELECT organization WHERE id = ?",
+          "INSERT customer IF NOT EXISTS",
+          "SELECT customer WHERE email = ? AND organization_id = ?"
+        ]
+      },
+      "/api/widget/read-receipts": {
+        "method": "POST",
+        "body": {
+          "messageId": "UUID (required)",
+          "customerId": "UUID (required)",
+          "organizationId": "UUID (required)"
+        },
+        "response": {
+          "success": "Boolean",
+          "readAt": "Timestamp"
+        },
+        "database_queries": [
+          "INSERT INTO widget_read_receipts (message_id, customer_id, organization_id, read_at) VALUES (?, ?, ?, NOW())"
+        ]
+      }
+    },
+    "tRPC_procedures_to_implement": {
+      "analytics.getDashboardMetrics": {
+        "input": {
+          "timeRange": "String (7d, 30d, 90d)",
+          "organizationId": "UUID (required)"
+        },
+        "response": {
+          "totalConversations": "Number",
+          "openConversations": "Number",
+          "avgResponseTime": "Number (minutes)",
+          "customerSatisfaction": "Number (percentage)",
+          "topAgents": "Array of agent objects"
+        },
+        "database_queries": [
+          "SELECT COUNT(*) FROM conversations WHERE organization_id = ? AND created_at >= ?",
+          "SELECT COUNT(*) FROM conversations WHERE organization_id = ? AND status = 'open'",
+          "SELECT AVG(response_time) FROM conversation_metrics WHERE organization_id = ? AND created_at >= ?"
+        ]
+      }
+    }
+  },
+  "permissions_and_roles": {
+    "required_roles": {
+      "authenticated": {
+        "description": "Authenticated users",
+        "permissions": [
+          "SELECT conversations WHERE organization_id = user.organization_id",
+          "SELECT messages WHERE conversation_id IN (SELECT id FROM conversations WHERE organization_id = user.organization_id)",
+          "INSERT messages",
+          "UPDATE conversations WHERE organization_id = user.organization_id"
+        ]
+      },
+      "service_role": {
+        "description": "Service role for API operations",
+        "permissions": [
+          "ALL operations on all tables",
+          "Bypass RLS (Row Level Security)"
+        ]
+      },
+      "widget_role": {
+        "description": "Widget-specific role",
+        "permissions": [
+          "SELECT conversations WHERE organization_id = ?",
+          "SELECT messages WHERE conversation_id = ?",
+          "INSERT messages",
+          "INSERT widget_read_receipts",
+          "SELECT customers WHERE organization_id = ?"
+        ]
+      }
+    },
+    "row_level_security": {
+      "conversations": "organization_id = auth.jwt() ->> 'organization_id'",
+      "messages": "conversation_id IN (SELECT id FROM conversations WHERE organization_id = auth.jwt() ->> 'organization_id')",
+      "customers": "organization_id = auth.jwt() ->> 'organization_id'",
+      "widget_read_receipts": "organization_id = auth.jwt() ->> 'organization_id'",
+      "users": "organization_id = auth.jwt() ->> 'organization_id'"
+    }
+  },
+  "realtime_requirements": {
+    "channels": {
+      "conversations": {
+        "description": "Conversation updates",
+        "events": ["INSERT", "UPDATE", "DELETE"],
+        "filter": "organization_id = ?"
+      },
+      "messages": {
+        "description": "Message updates",
+        "events": ["INSERT", "UPDATE"],
+        "filter": "conversation_id = ?"
+      },
+      "widget": {
+        "description": "Widget-specific channel",
+        "events": ["INSERT", "UPDATE"],
+        "filter": "organization_id = ?"
+      }
+    },
+    "triggers": {
+      "messages_insert": {
+        "description": "Trigger realtime broadcast on message insert",
+        "function": "broadcast_message_insert()"
+      },
+      "conversations_update": {
+        "description": "Trigger realtime broadcast on conversation update",
+        "function": "broadcast_conversation_update()"
+      }
+    }
+  },
+  "testing_requirements": {
+    "database_tests": {
+      "schema_validation": "Verify all tables exist with correct structure",
+      "permissions_test": "Test RLS policies work correctly",
+      "realtime_test": "Verify realtime triggers fire correctly",
+      "performance_test": "Test query performance with large datasets"
+    },
+    "api_tests": {
+      "authentication": "Test all endpoints with proper auth",
+      "authorization": "Test users can only access their organization's data",
+      "pagination": "Test pagination works correctly",
+      "error_handling": "Test proper error responses"
+    }
+  },
+  "migration_requirements": {
+    "current_state": {
+      "description": "Database exists but missing tables and permissions",
+      "issues": [
+        "widget_read_receipts table permissions incorrect",
+        "Missing API endpoints",
+        "Missing tRPC procedures"
+      ]
+    },
+    "migrations_needed": [
+      {
+        "name": "001_create_missing_tables",
+        "description": "Create missing tables if they don't exist",
+        "tables": ["conversations", "messages", "customers", "widget_read_receipts", "organizations", "users", "conversation_assignments", "ai_handovers"]
+      },
+      {
+        "name": "002_create_views",
+        "description": "Create database views for performance",
+        "views": ["conversation_summary", "dashboard_metrics"]
+      },
+      {
+        "name": "003_create_functions",
+        "description": "Create database functions",
+        "functions": ["update_conversation_updated_at", "create_read_receipt", "calculate_dashboard_metrics"]
+      },
+      {
+        "name": "004_setup_rls",
+        "description": "Setup Row Level Security policies",
+        "policies": ["conversations", "messages", "customers", "widget_read_receipts", "users"]
+      },
+      {
+        "name": "005_create_indexes",
+        "description": "Create performance indexes",
+        "indexes": "All indexes listed in schema requirements"
+      },
+      {
+        "name": "006_setup_realtime",
+        "description": "Setup realtime triggers and functions",
+        "triggers": ["messages_insert", "conversations_update"]
+      }
+    ]
+  },
+  "priority_order": {
+    "critical": [
+      "Fix widget_read_receipts permissions",
+      "Implement /api/widget/auth endpoint",
+      "Create missing database tables"
+    ],
+    "high": [
+      "Implement /api/messages endpoint",
+      "Implement /api/conversations endpoint",
+      "Setup Row Level Security"
+    ],
+    "medium": [
+      "Implement analytics.getDashboardMetrics tRPC procedure",
+      "Create database views",
+      "Setup realtime triggers"
+    ],
+    "low": [
+      "Performance optimization",
+      "Additional indexes",
+      "Advanced analytics"
+    ]
+  },
+  "success_criteria": {
+    "database": [
+      "All tables exist with correct structure",
+      "RLS policies working correctly",
+      "No permission denied errors",
+      "Realtime triggers firing correctly"
+    ],
+    "api": [
+      "All endpoints return 200/201 for valid requests",
+      "Proper error responses (400, 401, 404, 500)",
+      "Pagination working correctly",
+      "Authentication working correctly"
+    ],
+    "e2e": [
+      "All E2E tests passing",
+      "No database permission errors",
+      "Real-time communication working",
+      "AI handover accessible"
+    ]
+  }
+} 

@@ -7,19 +7,30 @@ import { validateOrganizationAccess } from '@/lib/utils/validation';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      conversationId, 
-      organizationId, 
+    const {
+      conversationId,
+      organizationId,
       action = 'start',
-      reason, 
+      reason,
       context,
       targetOperatorId,
-      metadata 
+      metadata,
+      handoverType = 'agent_to_ai', // New: handover type
+      confidenceThreshold = 0.8, // New: confidence threshold
+      rollbackEnabled = true // New: rollback capability
     } = body;
     
     if (!conversationId || !organizationId) {
       return NextResponse.json(
         { error: 'Conversation ID and Organization ID are required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate confidence threshold for AI handovers
+    if (handoverType.includes('ai') && (confidenceThreshold < 0 || confidenceThreshold > 1)) {
+      return NextResponse.json(
+        { error: 'Confidence threshold must be between 0 and 1' },
         { status: 400 }
       );
     }
@@ -243,6 +254,102 @@ export async function GET(request: NextRequest) {
     
   } catch (error) {
     console.error('[AI Handover Status] Error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT method for handover rollback
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { handoverId, organizationId, rollbackReason } = body;
+
+    if (!handoverId || !organizationId) {
+      return NextResponse.json(
+        { error: 'Handover ID and Organization ID are required' },
+        { status: 400 }
+      );
+    }
+
+    const supabase = createServiceRoleClient();
+
+    // Get handover details
+    const { data: handover, error: handoverError } = await supabase
+      .from('campfire_handoffs')
+      .select('*')
+      .eq('id', handoverId)
+      .eq('organization_id', organizationId)
+      .single();
+
+    if (handoverError || !handover) {
+      return NextResponse.json(
+        { error: 'Handover not found' },
+        { status: 404 }
+      );
+    }
+
+    // Check if rollback is available
+    if (!handover.rollback_available) {
+      return NextResponse.json(
+        { error: 'Rollback not available for this handover' },
+        { status: 400 }
+      );
+    }
+
+    // Perform rollback
+    const { data: rolledBackHandover, error: rollbackError } = await supabase
+      .from('campfire_handoffs')
+      .update({
+        status: 'rolled_back',
+        updated_at: new Date().toISOString(),
+        notes: `${handover.notes || ''}\n\nRollback performed: ${rollbackReason}`,
+        metrics: {
+          ...handover.metrics,
+          rollback_at: new Date().toISOString(),
+          rollback_reason: rollbackReason
+        }
+      })
+      .eq('id', handoverId)
+      .select()
+      .single();
+
+    if (rollbackError) {
+      console.error('Rollback error:', rollbackError);
+      return NextResponse.json(
+        { error: 'Failed to perform rollback' },
+        { status: 500 }
+      );
+    }
+
+    // Restore conversation to previous state if checkpoint exists
+    if (handover.last_checkpoint_id) {
+      const checkpoints = handover.checkpoints as any;
+      const lastCheckpoint = checkpoints?.[handover.last_checkpoint_id];
+
+      if (lastCheckpoint) {
+        await supabase
+          .from('conversations')
+          .update({
+            status: lastCheckpoint.conversation_status,
+            assigned_agent_id: lastCheckpoint.assigned_agent_id,
+            ai_session_id: lastCheckpoint.ai_session_id,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', handover.conversation_id);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      handover: rolledBackHandover,
+      message: 'Handover successfully rolled back'
+    });
+
+  } catch (error) {
+    console.error('Handover rollback error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -276,9 +276,27 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// PHASE 1 FIX: Enhanced channel subscription with comprehensive debugging
+// CRITICAL FIX: Enhanced channel subscription with auth validation
 async function ensureChannelSubscription(channelName: string, config?: any): Promise<RealtimeChannel> {
-  console.log(`[Realtime] 🔍 ensureChannelSubscription called for: ${channelName}`);
+  console.log(`[Realtime] 🔍 SABOTEUR-FIX-V2: ensureChannelSubscription called for: ${channelName}`);
+
+  // CRITICAL FIX: Validate auth before any channel operations
+  if (typeof window !== 'undefined') {
+    try {
+      const client = supabase.browser();
+      const { data: session, error } = await client.auth.getSession();
+
+      if (error || !session?.session?.access_token) {
+        console.error(`[Realtime] 🔐 CRITICAL: No valid auth session for channel ${channelName}`);
+        throw new Error(`Auth validation failed: ${error?.message || 'No access token'}`);
+      }
+
+      console.log(`[Realtime] 🔐 ✅ Auth validated for channel: ${channelName}`);
+    } catch (authError) {
+      console.error(`[Realtime] 🔐 ❌ Auth validation error:`, authError);
+      throw authError;
+    }
+  }
 
   const channel = channelManager.getChannel(channelName, config);
   console.log(`[Realtime] 📊 Channel state before subscription: ${channel.state}`);
@@ -323,32 +341,50 @@ async function ensureChannelSubscription(channelName: string, config?: any): Pro
   });
 }
 
-// PHASE 1 FIX: Enhanced broadcast function with mandatory subscription
+// CRITICAL FIX: Enhanced broadcast function with mandatory subscription
 export async function broadcastToChannel(
   channelName: string,
   eventType: string,
   payload: any,
   config?: any
 ): Promise<boolean> {
-  console.log(`[Realtime] 🚀 Starting broadcast to ${channelName} -> ${eventType}`);
+  const timestamp = new Date().toISOString();
+  console.log(`[Realtime] 🚀 SABOTEUR-FIX-V3-${timestamp}: Starting broadcast to ${channelName} -> ${eventType}`);
+
+  // CACHE BUSTER: Expose function globally for testing
+  if (typeof window !== 'undefined') {
+    (window as any).broadcastToChannel = broadcastToChannel;
+    (window as any).REALTIME_VERSION = 'SABOTEUR-FIX-V3';
+  }
 
   try {
     // CRITICAL FIX: Force subscription before any broadcast attempt
-    console.log(`[Realtime] 📡 Ensuring subscription for channel: ${channelName}`);
+    console.log(`[Realtime] 📡 SABOTEUR-FIX-V2: Ensuring subscription for channel: ${channelName}`);
     const channel = await ensureChannelSubscription(channelName, config);
 
     console.log(`[Realtime] ✅ Channel subscribed, attempting broadcast...`);
+    console.log(`[Realtime] 📤 Broadcast payload:`, { type: 'broadcast', event: eventType, payload });
+
     const result = await channel.send({
       type: 'broadcast',
       event: eventType,
       payload,
     });
 
+    console.log(`[Realtime] 📨 Broadcast result:`, result);
+
     if (result === 'ok') {
       console.log(`[Realtime] ✅ Broadcast successful: ${channelName} -> ${eventType}`);
       return true;
     } else {
-      console.error(`[Realtime] ❌ Broadcast failed: ${channelName} -> ${eventType}`, result);
+      console.error(`[Realtime] ❌ Broadcast failed: ${channelName} -> ${eventType}`);
+      console.error(`[Realtime] 🔍 Failure details:`, {
+        result,
+        channelState: channel.state,
+        channelName,
+        eventType,
+        payloadSize: JSON.stringify(payload).length
+      });
       return false;
     }
   } catch (error) {
@@ -356,7 +392,9 @@ export async function broadcastToChannel(
     console.error(`[Realtime] 🔍 Error details:`, {
       name: error.name,
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
+      channelName,
+      eventType
     });
     return false;
   }

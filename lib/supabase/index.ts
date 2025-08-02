@@ -89,8 +89,11 @@ export function getBrowserClient() {
 
   // Prevent multiple instances by checking global state
   if (browserClientInitialized && browserClient) {
-    // PHASE 1 FIX: Validate auth token before returning existing client
-    validateAuthToken(browserClient);
+    // CRITICAL FIX: Start async auth validation but don't block client return
+    // The validation will happen in background and log results
+    validateAuthToken(browserClient).catch(error =>
+      console.error('🔐 [Auth] Background validation failed:', error)
+    );
     return browserClient;
   }
 
@@ -98,8 +101,10 @@ export function getBrowserClient() {
   if (typeof window !== 'undefined' && (window as any).__SUPABASE_CLIENT__) {
     browserClient = (window as any).__SUPABASE_CLIENT__;
     browserClientInitialized = true;
-    // PHASE 1 FIX: Validate auth token for existing global client
-    validateAuthToken(browserClient);
+    // CRITICAL FIX: Start async auth validation but don't block client return
+    validateAuthToken(browserClient).catch(error =>
+      console.error('🔐 [Auth] Background validation failed:', error)
+    );
     return browserClient;
   }
 

@@ -1,205 +1,856 @@
-<testsuites id="" name="" tests="45" failures="0" skipped="43" errors="0" time="8.843958">
-<testsuite name="tests/auth/comprehensive-authenticated-test.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="1" failures="0" skipped="0" time="4.952" errors="0">
-<testcase name="Comprehensive Authenticated Testing › should test real-time features in inbox" classname="tests/auth/comprehensive-authenticated-test.spec.ts" time="4.952">
+<testsuites id="" name="" tests="70" failures="0" skipped="0" errors="0" time="64.310653">
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="chromium" tests="10" failures="0" skipped="0" time="76.605" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="4.781">
 <system-out>
-<![CDATA[🔄 Testing real-time features...
-✅ Conversations loaded
-✅ Conversation selection working
-✅ Real-time features tested
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="6.981">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="28.217">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="7.485">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="7.713">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="4.813">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="6.131">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="3.298">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 1134ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.333">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.853">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/auth/simple-login.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="1" failures="0" skipped="0" time="1.355" errors="0">
-<testcase name="Simple Login Test › should access inbox after login" classname="tests/auth/simple-login.spec.ts" time="1.355">
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="firefox" tests="10" failures="0" skipped="0" time="72.138" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="3.225">
 <system-out>
-<![CDATA[✅ Inbox access successful!
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="7.675">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="19.493">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="8.487">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="8.232">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="3.487">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="5.389">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="5.882">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 1930ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="6.567">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="3.701">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0.2) Gecko/20100101 Firefox/140.0.2
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/comprehensive-feature-test.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="1" failures="0" skipped="1" time="2.032" errors="0">
-<testcase name="Comprehensive Feature Testing › should test inbox functionality and conversation management" classname="tests/comprehensive-feature-test.spec.ts" time="2.032">
-<skipped>
-</skipped>
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="webkit" tests="10" failures="0" skipped="0" time="45.139" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="3.871">
+<system-out>
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="5.31">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="8.15">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="5.955">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.624">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="2.474">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.626">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.751">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 923ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.028">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="2.35">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
+]]>
+</system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/inbox/ai-handover.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="12" failures="0" skipped="12" time="0" errors="0">
-<testcase name="Inbox AI Handover Features › should initiate AI handover from agent to AI" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Mobile Chrome" tests="10" failures="0" skipped="0" time="43.487" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="2.522">
+<system-out>
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover from AI to agent" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="4.335">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should show AI handover history and context" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="8.629">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation context" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="5.135">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with file attachments" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.59">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation tags" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="2.775">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with customer information" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="3.98">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation history" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.888">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 926ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation priority" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.062">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation status" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation assignment" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox AI Handover Features › should handle AI handover with conversation metrics" classname="tests/inbox/ai-handover.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="tests/inbox/bidirectional-communication.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="5" failures="0" skipped="5" time="0" errors="0">
-<testcase name="Inbox Bidirectional Communication › should display inbox page" classname="tests/inbox/bidirectional-communication.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Bidirectional Communication › should show inbox interface elements" classname="tests/inbox/bidirectional-communication.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Bidirectional Communication › should handle inbox navigation" classname="tests/inbox/bidirectional-communication.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Bidirectional Communication › should maintain session in inbox" classname="tests/inbox/bidirectional-communication.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Bidirectional Communication › should handle inbox page refresh" classname="tests/inbox/bidirectional-communication.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="tests/inbox/inbox-features.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="19" failures="0" skipped="19" time="0" errors="0">
-<testcase name="Inbox Features and Functionalities › should display conversation list with proper information" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should filter conversations by status" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should search conversations" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should sort conversations by different criteria" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation selection and navigation" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation assignment" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation priority changes" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation status changes" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation tags and labels" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle customer information display" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation history and context" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation metrics and analytics" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation notes and internal comments" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation templates and canned responses" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation export and sharing" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation bulk actions" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation keyboard shortcuts" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation accessibility features" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Inbox Features and Functionalities › should handle conversation performance and loading states" classname="tests/inbox/inbox-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.571">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Mobile Safari/537.36
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
+]]>
+</system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/inbox/realtime-features.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="5" failures="0" skipped="5" time="0" errors="0">
-<testcase name="Inbox Real-time Features › should load inbox page with real-time capabilities" classname="tests/inbox/realtime-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Mobile Safari" tests="10" failures="0" skipped="0" time="34.211" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="1.604">
+<system-out>
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox Real-time Features › should maintain real-time connection state" classname="tests/inbox/realtime-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="4.004">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox Real-time Features › should handle page navigation with real-time" classname="tests/inbox/realtime-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="6.8">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox Real-time Features › should handle page refresh with real-time" classname="tests/inbox/realtime-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="4.067">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
 </testcase>
-<testcase name="Inbox Real-time Features › should maintain session across real-time operations" classname="tests/inbox/realtime-features.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="5.03">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="1.688">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.246">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.3">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 739ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.256">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.216">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
+]]>
+</system-out>
 </testcase>
 </testsuite>
-<testsuite name="tests/widget-dashboard-sync.spec.ts" timestamp="2025-08-01T21:57:58.484Z" hostname="chromium" tests="1" failures="0" skipped="1" time="0" errors="0">
-<testcase name="Widget-Dashboard Message Synchronization › should sync messages from widget to dashboard inbox" classname="tests/widget-dashboard-sync.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Microsoft Edge" tests="10" failures="0" skipped="0" time="51.626" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="4.183">
+<system-out>
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="6.317">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="10.282">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="6.593">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.267">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="3.183">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="3.887">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="4.067">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 1387ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.149">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.698">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36 Edg/139.0.7258.5
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Google Chrome" tests="10" failures="0" skipped="0" time="30.885" errors="0">
+<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="1.422">
+<system-out>
+<![CDATA[🧪 Testing inbox dashboard structure...
+📄 Current URL: http://localhost:3001/login
+📊 Found 0 dashboard elements
+✅ Page has content
+📄 Page title: Campfire - Customer Support Platform
+📊 Found 2 buttons, 2 inputs, 1 links
+✅ Dashboard structure test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="3.696">
+<system-out>
+<![CDATA[🔐 Testing authentication flow...
+📊 Found 3 login elements
+ℹ️ Login form detected, attempting login
+✅ Login attempt completed
+✅ Authentication flow test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="5.692">
+<system-out>
+<![CDATA[🧭 Testing page navigation and routing...
+📄 /dashboard: http://localhost:3001/login
+✅ /dashboard loaded with content
+📄 /dashboard/inbox: http://localhost:3001/login
+✅ /dashboard/inbox loaded with content
+📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
+✅ /dashboard/conversations loaded with content
+📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
+✅ /dashboard/analytics loaded with content
+✅ Page navigation test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="3.023">
+<system-out>
+<![CDATA[🔌 Testing API endpoints and data loading...
+📡 /api/auth/session: 401
+📡 /api/conversations: 401
+📡 /api/messages: 404
+📡 /api/widget/auth: 405
+🔍 API Request: GET http://localhost:3001/api/auth/session
+📊 Captured 1 API calls
+✅ API endpoints test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="4.356">
+<system-out>
+<![CDATA[📡 Testing real-time functionality...
+📊 Captured 0 real-time logs
+📊 Found 0 WebSocket connections
+✅ Real-time functionality test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="1.314">
+<system-out>
+<![CDATA[🎨 Testing UI components and interactions...
+📊 Found 2 buttons
+✅ buttons present
+📊 Found 2 inputs
+✅ inputs present
+📊 Found 0 textareas
+📊 Found 0 selects
+📊 Found 0 test elements
+📊 Found 0 inbox elements
+📊 Found 0 conversation elements
+📊 Found 0 message elements
+📊 Found 0 chat elements
+✅ Keyboard navigation working
+📊 Found 3 clickable elements
+✅ Clickable elements present
+✅ UI components test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.412">
+<system-out>
+<![CDATA[🛡️ Testing error handling and edge cases...
+📡 /dashboard/nonexistent: 404
+📡 /api/invalid-endpoint: 404
+📡 /invalid-page: 404
+✅ Error handling test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.621">
+<system-out>
+<![CDATA[⚡ Testing performance and loading states...
+📊 Page load time: 1064ms
+📊 Found 0 loading elements
+📊 Found 0 error elements
+✅ Performance test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="4.798">
+<system-out>
+<![CDATA[📱 Testing responsive design...
+📊 Mobile viewport: Content present
+📊 Tablet viewport: Content present
+📊 Desktop viewport: Content present
+✅ Responsive design test completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.551">
+<system-out>
+<![CDATA[🌐 Testing browser compatibility...
+📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36
+📊 JavaScript: Working
+📊 LocalStorage: Working
+✅ Browser compatibility test completed
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

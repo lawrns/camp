@@ -193,15 +193,94 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Standardized broadcast function
+// Helper function to ensure channel subscription before operations
+async function ensureChannelSubscription(channelName: string, config?: any): Promise<RealtimeChannel> {
+  console.log(`[Realtime] 🔍 SABOTEUR-FIX-V2: ensureChannelSubscription called for: ${channelName}`);
+
+  // CRITICAL FIX: Validate auth before any channel operations
+  if (typeof window !== 'undefined') {
+    try {
+      const client = supabase.browser();
+      const { data: session, error } = await client.auth.getSession();
+
+      if (error || !session?.session?.access_token) {
+        console.error(`[Realtime] 🔐 CRITICAL: No valid auth session for channel ${channelName}`);
+        throw new Error(`Auth validation failed: ${error?.message || 'No access token'}`);
+      }
+
+      console.log(`[Realtime] 🔐 ✅ Auth validated for channel: ${channelName}`);
+    } catch (authError) {
+      console.error(`[Realtime] 🔐 ❌ Auth validation error:`, authError);
+      throw authError;
+    }
+  }
+
+  const channel = channelManager.getChannel(channelName, config);
+  console.log(`[Realtime] 📊 Channel state before subscription: ${channel.state}`);
+
+  // Check if channel is already subscribed
+  if (channel.state === 'joined') {
+    console.log(`[Realtime] ✅ Channel ${channelName} already subscribed`);
+    return channel;
+  }
+
+  console.log(`[Realtime] 🔄 Starting subscription process for: ${channelName}`);
+
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 5 seconds`);
+      reject(new Error(`Channel subscription timeout for ${channelName} after 5 seconds`));
+    }, 5000);
+
+    // Subscribe and wait for confirmation
+    console.log(`[Realtime] 📡 Calling channel.subscribe() for: ${channelName}`);
+    channel.subscribe((status) => {
+      console.log(`[Realtime] 📢 Subscription status update for ${channelName}: ${status}`);
+
+      switch (status) {
+        case 'SUBSCRIBED':
+          clearTimeout(timeout);
+          console.log(`[Realtime] ✅ Channel ${channelName} successfully subscribed`);
+          resolve(channel);
+          break;
+        case 'CHANNEL_ERROR':
+        case 'TIMED_OUT':
+        case 'CLOSED':
+          clearTimeout(timeout);
+          console.error(`[Realtime] ❌ Channel ${channelName} subscription failed: ${status}`);
+          reject(new Error(`Channel subscription failed: ${status}`));
+          break;
+        default:
+          console.log(`[Realtime] 🔄 Channel ${channelName} intermediate status: ${status}`);
+          // Continue waiting for SUBSCRIBED status
+      }
+    });
+  });
+}
+
+// CRITICAL FIX: Enhanced broadcast function with mandatory subscription
 export async function broadcastToChannel(
   channelName: string,
   eventType: string,
   payload: any,
   config?: any
 ): Promise<boolean> {
+  const timestamp = new Date().toISOString();
+  console.log(`[Realtime] 🚀 SABOTEUR-FIX-V3-${timestamp}: Starting broadcast to ${channelName} -> ${eventType}`);
+
+  // CACHE BUSTER: Expose function globally for testing
+  if (typeof window !== 'undefined') {
+    (window as any).broadcastToChannel = broadcastToChannel;
+    (window as any).REALTIME_VERSION = 'SABOTEUR-FIX-V3';
+  }
+
   try {
-    const channel = channelManager.getChannel(channelName, config);
+    // CRITICAL FIX: Force subscription before any broadcast attempt
+    console.log(`[Realtime] 📡 SABOTEUR-FIX-V2: Ensuring subscription for channel: ${channelName}`);
+    const channel = await ensureChannelSubscription(channelName, config);
+
+    console.log(`[Realtime] ✅ Channel subscribed, attempting broadcast...`);
+    console.log(`[Realtime] 📤 Broadcast payload:`, { type: 'broadcast', event: eventType, payload });
 
     const result = await channel.send({
       type: 'broadcast',
@@ -209,15 +288,31 @@ export async function broadcastToChannel(
       payload,
     });
 
+    console.log(`[Realtime] 📨 Broadcast result:`, result);
+
     if (result === 'ok') {
-      console.log(`[Realtime] Broadcast successful: ${channelName} -> ${eventType}`);
+      console.log(`[Realtime] ✅ Broadcast successful: ${channelName} -> ${eventType}`);
       return true;
     } else {
-      console.warn(`[Realtime] Broadcast failed: ${channelName} -> ${eventType}`, result);
+      console.error(`[Realtime] ❌ Broadcast failed: ${channelName} -> ${eventType}`);
+      console.error(`[Realtime] 🔍 Failure details:`, {
+        result,
+        channelState: channel.state,
+        channelName,
+        eventType,
+        payloadSize: JSON.stringify(payload).length
+      });
       return false;
     }
   } catch (error) {
-    console.error(`[Realtime] Broadcast error: ${channelName} -> ${eventType}`, error);
+    console.error(`[Realtime] 💥 Broadcast error: ${channelName} -> ${eventType}`, error);
+    console.error(`[Realtime] 🔍 Error details:`, {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      channelName,
+      eventType
+    });
     return false;
   }
 }

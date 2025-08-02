@@ -35,6 +35,93 @@ async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promi
   };
 }
 
+// GET method for session validation
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const token = searchParams.get('token');
+    const organizationId = searchParams.get('organizationId');
+
+    if (!token || !organizationId) {
+      return NextResponse.json(
+        { error: 'Missing token or organizationId', code: 'VALIDATION_ERROR' },
+        { status: 400 }
+      );
+    }
+
+    // Validate session token (simple validation for now)
+    if (!token.startsWith('widget_')) {
+      return NextResponse.json(
+        { error: 'Invalid token format', code: 'INVALID_TOKEN' },
+        { status: 401 }
+      );
+    }
+
+    // Verify organization exists
+    const supabaseClient = supabase.admin();
+    const { data: organization, error: orgError } = await supabaseClient
+      .from('organizations')
+      .select('id, settings')
+      .eq('id', organizationId)
+      .single();
+
+    if (orgError || !organization) {
+      return NextResponse.json(
+        { error: 'Organization not found', code: 'NOT_FOUND' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      valid: true,
+      organizationId,
+      organization: {
+        id: organization.id,
+        widgetEnabled: (organization.settings as any)?.widget_enabled ?? true
+      }
+    });
+
+  } catch (error) {
+    console.error('[Widget Auth GET] Error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT method for session refresh
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { token, organizationId } = body;
+
+    if (!token || !organizationId) {
+      return NextResponse.json(
+        { error: 'Missing token or organizationId', code: 'VALIDATION_ERROR' },
+        { status: 400 }
+      );
+    }
+
+    // Generate new session token
+    const newToken = `widget_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+
+    return NextResponse.json({
+      success: true,
+      token: newToken,
+      organizationId,
+      refreshedAt: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('[Widget Auth PUT] Error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error', code: 'INTERNAL_ERROR' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
