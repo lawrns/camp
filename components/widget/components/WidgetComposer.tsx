@@ -199,11 +199,12 @@ export function WidgetComposer({
                         <button
                           onClick={() => removeAttachment(index)}
                           className="text-gray-400 hover:text-red-500 transition-colors"
+                          aria-label="Remove attachment"
                         >
                           <X className="h-3 w-3" />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent side="top" align="center">
                         <p>Remove attachment</p>
                       </TooltipContent>
                     </Tooltip>
@@ -235,33 +236,40 @@ export function WidgetComposer({
                     onClick={() => fileInputRef.current?.click()}
                     disabled={disabled}
                     className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                    aria-label="Attach file"
                   >
                     <Paperclip className="h-5 w-5" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="top" align="center">
                   <p>Attach file</p>
                 </TooltipContent>
               </Tooltip>
-              
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                     disabled={disabled}
                     className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                    aria-label="Add emoji"
                   >
                     <Smiley className="h-5 w-5" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="top" align="center">
                   <p>Add emoji</p>
                 </TooltipContent>
               </Tooltip>
             </div>
 
             {/* Text Input */}
-            <div className="flex-1 relative">
+            <div className={cn(
+              "flex-1 relative rounded-lg border transition-all duration-200 px-3 py-2",
+              isFocused
+                ? "border-blue-500 bg-white shadow-sm"
+                : "border-gray-200 bg-gray-50 hover:bg-white hover:border-gray-300"
+            )}>
               <textarea
                 ref={textareaRef}
                 value={currentValue}
@@ -276,8 +284,9 @@ export function WidgetComposer({
                 disabled={disabled}
                 rows={1}
                 className={cn(
-                  "w-full resize-none border-0 bg-transparent p-0 text-sm placeholder-gray-500 focus:outline-none focus:ring-0",
-                  "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+                  "w-full resize-none border-0 bg-transparent p-0 text-sm placeholder-gray-400 focus:outline-none focus:ring-0",
+                  "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent",
+                  disabled && "opacity-50 cursor-not-allowed"
                 )}
                 style={{ minHeight: '24px', maxHeight: '120px' }}
               />
@@ -295,6 +304,7 @@ export function WidgetComposer({
                       ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
                       : "bg-gray-100 text-gray-400 cursor-not-allowed"
                   )}
+                  aria-label={canSend ? "Send message" : "Enter message to send"}
                 >
                   {isSending ? (
                     <motion.div
@@ -307,8 +317,8 @@ export function WidgetComposer({
                   )}
                 </button>
               </TooltipTrigger>
-              <TooltipContent>
-                <p>Send message</p>
+              <TooltipContent side="top" align="center">
+                <p>{canSend ? "Send message" : "Enter message to send"}</p>
               </TooltipContent>
             </Tooltip>
           </div>

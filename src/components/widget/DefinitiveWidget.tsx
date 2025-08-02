@@ -6,6 +6,8 @@ import { useWidgetState } from './hooks/useWidgetState';
 import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
 import { ReadReceiptIndicator } from '../ui/ReadReceiptIndicator';
 import { useWidget } from './index';
+import { useWidgetAccessibility } from './hooks/useWidgetAccessibility';
+import './widget-mobile.css';
 
 interface DefinitiveWidgetProps {
   organizationId: string;
@@ -213,26 +215,26 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
 
   return (
     <div
-      className="fixed bottom-4 right-4 w-96 h-[600px] bg-background border rounded-ds-lg shadow-2xl flex flex-col z-[9998] overflow-hidden"
+      className="fixed bottom-4 right-4 w-96 max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-2rem)] bg-white border border-gray-200 rounded-lg shadow-2xl flex flex-col z-[9998] overflow-hidden transition-all duration-300 ease-in-out sm:w-96 sm:h-[600px] md:w-[28rem] md:h-[640px]"
       data-testid="widget-panel"
       data-campfire-widget-panel
     >
       {/* Header */}
       <div
-        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-spacing-md flex items-center justify-between"
+        className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 flex items-center justify-between"
         data-testid="widget-header"
         data-campfire-widget-header
       >
         <div className="flex items-center space-x-3">
-          <div className={`w-3 h-3 rounded-ds-full ${widgetState.conversationId ? 'bg-green-400' : 'bg-yellow-400'}`} />
+          <div className={`w-3 h-3 rounded-full transition-colors duration-200 ${widgetState.conversationId ? 'bg-green-400' : 'bg-yellow-400'}`} />
           <div>
-            <h3 className="font-semibold text-base">Customer Support</h3>
-            <div className="text-tiny opacity-75">
+            <h3 className="font-semibold text-sm">Customer Support</h3>
+            <div className="text-xs opacity-75">
               {widgetState.conversationId ? 'Connected' : 'Connecting...'}
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-spacing-sm">
+        <div className="flex items-center space-x-1">
           <button
             onClick={() => {
               // Demo: Toggle agent typing indicator
@@ -242,8 +244,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
                 setTimeout(() => setDemoAgentIsTyping(false), 5000);
               }
             }}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
+            className="text-white hover:bg-white hover:bg-opacity-20 p-1 rounded transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             title="Demo: Toggle agent typing"
+            aria-label="Toggle agent typing indicator"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M2 2h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4.5L2 13V3a1 1 0 0 1 1-1z" />
@@ -254,8 +257,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           </button>
           <button
             onClick={() => setIsMinimized(true)}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
+            className="text-white hover:bg-white hover:bg-opacity-20 p-1 rounded transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             title="Minimize"
+            aria-label="Minimize widget"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M4 8h8v1H4z" />
@@ -263,8 +267,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           </button>
           <button
             onClick={handleClose}
-            className="text-white hover:bg-background hover:bg-opacity-20 spacing-1 rounded transition-colors"
+            className="text-white hover:bg-white hover:bg-opacity-20 p-1 rounded transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
             title="Close"
+            aria-label="Close widget"
             data-testid="widget-close-button"
             data-campfire-widget-close
           >
@@ -276,7 +281,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       </div>
 
       {/* Status Bar */}
-      <div className="bg-background px-4 py-2 text-tiny text-foreground border-b">
+      <div className="bg-gray-50 px-4 py-2 text-xs text-gray-600 border-b border-gray-200">
         <div className="flex justify-between items-center">
           <div>
             Messages: {messages.length} |
@@ -293,7 +298,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       {/* Messages */}
       <div
         id="widget-messages"
-        className="flex-1 p-spacing-md overflow-y-auto space-y-3 bg-background"
+        className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50"
         data-testid="widget-messages"
         data-campfire-widget-messages
       >
@@ -318,9 +323,9 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
               data-message-id={message.id}
             >
               <div
-                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-ds-lg shadow-sm ${message.senderType === 'visitor'
+                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg shadow-sm transition-all duration-200 ${message.senderType === 'visitor'
                   ? 'bg-blue-600 text-white rounded-br-sm'
-                  : 'bg-white border rounded-bl-sm'
+                  : 'bg-white border border-gray-200 rounded-bl-sm'
                   }`}
               >
                 <div className="text-tiny opacity-75 mb-1 font-medium flex items-center space-x-1">
@@ -407,7 +412,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
       )}
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="p-spacing-md border-t bg-background">
+      <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 bg-white">
         <div className="flex space-x-3">
           <input
             type="text"
@@ -433,7 +438,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
               stopTyping();
             }}
             placeholder="Type your message..."
-            className="flex-1 px-4 py-3 border rounded-ds-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             disabled={isLoading}
             data-testid="widget-message-input"
             data-campfire-message-input
@@ -441,7 +446,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           <button
             type="button"
             disabled={!messageText.trim() || isLoading}
-            className="px-6 py-3 bg-primary text-white rounded-ds-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-blue-300"
             data-testid="widget-send-button"
             data-campfire-send-button
             onClick={(e) => {
@@ -451,7 +456,7 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
             }}
           >
             {isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-ds-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               'Send'
             )}

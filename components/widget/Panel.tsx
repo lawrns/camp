@@ -8,22 +8,29 @@ interface PanelProps {
   className?: string;
   variant?: 'default' | 'bordered' | 'elevated';
   size?: 'sm' | 'md' | 'lg';
+  layout?: 'default' | 'flex' | 'sticky';
 }
 
 const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
-  ({ children, className, variant = 'default', size = 'md', ...props }, ref) => {
-    const baseClasses = 'rounded-ds-md bg-background';
-    
+  ({ children, className, variant = 'default', size = 'md', layout = 'default', ...props }, ref) => {
+    const baseClasses = 'rounded-lg bg-white';
+
     const variantClasses = {
-      default: 'border border-border',
-      bordered: 'border-2 border-border',
-      elevated: 'shadow-lg border border-border'
+      default: 'border border-gray-200',
+      bordered: 'border-2 border-gray-300',
+      elevated: 'shadow-lg border border-gray-200'
     };
-    
+
     const sizeClasses = {
-      sm: 'spacing-3',
-      md: 'spacing-4',
-      lg: 'spacing-6'
+      sm: 'p-3',
+      md: 'p-4',
+      lg: 'p-6'
+    };
+
+    const layoutClasses = {
+      default: '',
+      flex: 'flex flex-col',
+      sticky: 'flex flex-col h-full overflow-hidden'
     };
 
     return (
@@ -33,6 +40,7 @@ const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           baseClasses,
           variantClasses[variant],
           sizeClasses[size],
+          layoutClasses[layout],
           className
         )}
         {...props}

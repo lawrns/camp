@@ -95,16 +95,16 @@ export const WidgetPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-background border-ds-border mt-2 flex h-96 w-80 flex-col overflow-hidden rounded-ds-lg border shadow-xl">
+    <div className="bg-white border border-gray-200 mt-2 flex h-96 w-80 flex-col overflow-hidden rounded-lg shadow-xl transition-all duration-200 ease-in-out">
       {/* Header */}
-      <div className="bg-primary flex items-center justify-between spacing-3 text-white">
+      <div className="bg-blue-600 flex items-center justify-between px-4 py-3 text-white">
         <div>
-          <h3 className="font-semibold">Chat Support</h3>
-          <p className="text-tiny opacity-90">We're here to help</p>
+          <h3 className="font-semibold text-sm">Chat Support</h3>
+          <p className="text-xs opacity-90">We're here to help</p>
         </div>
         <button
           onClick={closeWidget}
-          className="rounded spacing-1 text-white transition-colors hover:bg-blue-700"
+          className="rounded p-1 text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           aria-label="Close chat"
           data-testid="close-button"
         >
@@ -116,21 +116,24 @@ export const WidgetPanel: React.FC = () => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 space-y-3 overflow-y-auto spacing-3">
+      <div className="flex-1 space-y-3 overflow-y-auto p-4 bg-gray-50">
         {messages.length === 0 ? (
-          <div className="text-foreground-muted py-8 text-center">
+          <div className="text-gray-500 py-8 text-center">
             <div className="mb-2 text-3xl">👋</div>
-            <p>Welcome! How can we help you today?</p>
+            <p className="text-sm">Welcome! How can we help you today?</p>
           </div>
         ) : (
           messages.map((message) => (
             <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-xs rounded-ds-lg px-3 py-2 ${message.sender === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-800"
-                  }`}
+                className={`max-w-xs rounded-lg px-3 py-2 shadow-sm transition-all duration-200 ${
+                  message.sender === "user"
+                    ? "bg-blue-600 text-white rounded-br-sm"
+                    : "bg-white text-gray-800 border border-gray-200 rounded-bl-sm"
+                }`}
               >
-                <p className="text-sm">{message.content}</p>
-                <p className="mt-1 text-tiny opacity-70">
+                <p className="text-sm leading-relaxed">{message.content}</p>
+                <p className="mt-1 text-xs opacity-70">
                   {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </p>
               </div>
@@ -139,15 +142,15 @@ export const WidgetPanel: React.FC = () => {
         )}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-background rounded-ds-lg px-3 py-2">
+            <div className="bg-white rounded-lg px-3 py-2 border border-gray-200 shadow-sm">
               <div className="flex space-x-1">
-                <div className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400"></div>
+                <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
                 <div
-                  className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400"
+                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
                   style={{ animationDelay: "0.1s" }}
                 ></div>
                 <div
-                  className="h-2 w-2 animate-bounce rounded-ds-full bg-gray-400"
+                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
                   style={{ animationDelay: "0.2s" }}
                 ></div>
               </div>
@@ -158,19 +161,19 @@ export const WidgetPanel: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="border-ds-border border-t spacing-3">
-        <div className="flex items-center space-x-spacing-sm">
+      <div className="border-t border-gray-200 p-3 bg-white">
+        <div className="flex items-center space-x-2">
           {/* Action Buttons */}
           <button
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            className="text-foreground-muted hover:text-foreground rounded spacing-1 transition-colors"
+            className="text-gray-500 hover:text-gray-700 rounded p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="Add emoji"
           >
             😊
           </button>
           <button
             onClick={() => setShowFileUpload(!showFileUpload)}
-            className="text-foreground-muted hover:text-foreground rounded spacing-1 transition-colors"
+            className="text-gray-500 hover:text-gray-700 rounded p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="Upload file"
           >
             📎
@@ -183,14 +186,14 @@ export const WidgetPanel: React.FC = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="border-ds-border-strong flex-1 rounded-ds-lg border px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all duration-200"
           />
 
           {/* Send Button */}
           <button
             onClick={handleSendMessage}
             disabled={!inputValue.trim()}
-            className="bg-primary rounded-ds-lg p-spacing-sm text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-blue-600 rounded-lg p-2 text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="Send message"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

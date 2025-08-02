@@ -1,856 +1,1388 @@
-<testsuites id="" name="" tests="70" failures="0" skipped="0" errors="0" time="64.310653">
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="chromium" tests="10" failures="0" skipped="0" time="76.605" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="4.781">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
+<testsuites id="" name="" tests="49" failures="49" skipped="0" errors="0" time="10.396064999999998">
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="chromium" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="6.981">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="28.217">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="7.485">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="7.713">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="4.813">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="6.131">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [chromium] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="3.298">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 1134ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.333">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.853">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="firefox" tests="10" failures="0" skipped="0" time="72.138" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="3.225">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="7.675">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="19.493">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="8.487">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="8.232">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="3.487">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="5.389">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="5.882">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 1930ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="6.567">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="3.701">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0.2) Gecko/20100101 Firefox/140.0.2
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
+</failure>
 </testcase>
 </testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="webkit" tests="10" failures="0" skipped="0" time="45.139" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="3.871">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="firefox" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="5.31">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="8.15">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="5.955">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.624">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="2.474">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.626">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [firefox] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.751">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 923ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.028">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="2.35">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Mobile Chrome" tests="10" failures="0" skipped="0" time="43.487" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="2.522">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="4.335">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="8.629">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="5.135">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.59">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="2.775">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="3.98">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.888">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 926ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.062">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.571">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Mobile Safari/537.36
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
+</failure>
 </testcase>
 </testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Mobile Safari" tests="10" failures="0" skipped="0" time="34.211" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="1.604">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="webkit" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="4.004">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="6.8">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="4.067">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="5.03">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="1.688">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.246">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [webkit] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.3">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 739ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.256">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.216">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
-</testcase>
-</testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Microsoft Edge" tests="10" failures="0" skipped="0" time="51.626" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="4.183">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="6.317">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="10.282">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="6.593">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="6.267">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="3.183">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="3.887">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="4.067">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 1387ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="5.149">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
-]]>
-</system-out>
-</testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.698">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36 Edg/139.0.7258.5
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
-]]>
-</system-out>
+</failure>
 </testcase>
 </testsuite>
-<testsuite name="robust-inbox-dashboard-test.spec.ts" timestamp="2025-08-02T01:20:01.772Z" hostname="Google Chrome" tests="10" failures="0" skipped="0" time="30.885" errors="0">
-<testcase name="Robust Inbox Dashboard Test › should load inbox dashboard structure" classname="robust-inbox-dashboard-test.spec.ts" time="1.422">
-<system-out>
-<![CDATA[🧪 Testing inbox dashboard structure...
-📄 Current URL: http://localhost:3001/login
-📊 Found 0 dashboard elements
-✅ Page has content
-📄 Page title: Campfire - Customer Support Platform
-📊 Found 2 buttons, 2 inputs, 1 links
-✅ Dashboard structure test completed
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="Mobile Chrome" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test authentication flow" classname="robust-inbox-dashboard-test.spec.ts" time="3.696">
-<system-out>
-<![CDATA[🔐 Testing authentication flow...
-📊 Found 3 login elements
-ℹ️ Login form detected, attempting login
-✅ Login attempt completed
-✅ Authentication flow test completed
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test page navigation and routing" classname="robust-inbox-dashboard-test.spec.ts" time="5.692">
-<system-out>
-<![CDATA[🧭 Testing page navigation and routing...
-📄 /dashboard: http://localhost:3001/login
-✅ /dashboard loaded with content
-📄 /dashboard/inbox: http://localhost:3001/login
-✅ /dashboard/inbox loaded with content
-📄 /dashboard/conversations: http://localhost:3001/dashboard/conversations
-✅ /dashboard/conversations loaded with content
-📄 /dashboard/analytics: http://localhost:3001/dashboard/analytics
-✅ /dashboard/analytics loaded with content
-✅ Page navigation test completed
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test API endpoints and data loading" classname="robust-inbox-dashboard-test.spec.ts" time="3.023">
-<system-out>
-<![CDATA[🔌 Testing API endpoints and data loading...
-📡 /api/auth/session: 401
-📡 /api/conversations: 401
-📡 /api/messages: 404
-📡 /api/widget/auth: 405
-🔍 API Request: GET http://localhost:3001/api/auth/session
-📊 Captured 1 API calls
-✅ API endpoints test completed
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test real-time functionality" classname="robust-inbox-dashboard-test.spec.ts" time="4.356">
-<system-out>
-<![CDATA[📡 Testing real-time functionality...
-📊 Captured 0 real-time logs
-📊 Found 0 WebSocket connections
-✅ Real-time functionality test completed
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test UI components and interactions" classname="robust-inbox-dashboard-test.spec.ts" time="1.314">
-<system-out>
-<![CDATA[🎨 Testing UI components and interactions...
-📊 Found 2 buttons
-✅ buttons present
-📊 Found 2 inputs
-✅ inputs present
-📊 Found 0 textareas
-📊 Found 0 selects
-📊 Found 0 test elements
-📊 Found 0 inbox elements
-📊 Found 0 conversation elements
-📊 Found 0 message elements
-📊 Found 0 chat elements
-✅ Keyboard navigation working
-📊 Found 3 clickable elements
-✅ Clickable elements present
-✅ UI components test completed
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test error handling and edge cases" classname="robust-inbox-dashboard-test.spec.ts" time="2.412">
-<system-out>
-<![CDATA[🛡️ Testing error handling and edge cases...
-📡 /dashboard/nonexistent: 404
-📡 /api/invalid-endpoint: 404
-📡 /invalid-page: 404
-✅ Error handling test completed
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test performance and loading states" classname="robust-inbox-dashboard-test.spec.ts" time="2.621">
-<system-out>
-<![CDATA[⚡ Testing performance and loading states...
-📊 Page load time: 1064ms
-📊 Found 0 loading elements
-📊 Found 0 error elements
-✅ Performance test completed
+</testsuite>
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="Mobile Safari" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test responsive design" classname="robust-inbox-dashboard-test.spec.ts" time="4.798">
-<system-out>
-<![CDATA[📱 Testing responsive design...
-📊 Mobile viewport: Content present
-📊 Tablet viewport: Content present
-📊 Desktop viewport: Content present
-✅ Responsive design test completed
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
 </testcase>
-<testcase name="Robust Inbox Dashboard Test › should test browser compatibility" classname="robust-inbox-dashboard-test.spec.ts" time="1.551">
-<system-out>
-<![CDATA[🌐 Testing browser compatibility...
-📊 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36
-📊 JavaScript: Working
-📊 LocalStorage: Working
-✅ Browser compatibility test completed
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
 ]]>
-</system-out>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [Mobile Safari] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="Microsoft Edge" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="widget-agent-communication.spec.ts" timestamp="2025-08-02T02:00:08.928Z" hostname="Google Chrome" tests="7" failures="7" skipped="0" time="0" errors="0">
+<testcase name="Widget-Agent Communication E2E › should initialize widget and establish connection" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:65:7 should initialize widget and establish connection" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:65:7 › Widget-Agent Communication E2E › should initialize widget and establish connection 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle customer conversation initiation" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:113:7 should handle customer conversation initiation" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:113:7 › Widget-Agent Communication E2E › should handle customer conversation initiation 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle agent assignment and response" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:166:7 should handle agent assignment and response" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:166:7 › Widget-Agent Communication E2E › should handle agent assignment and response 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle emoji and rich text messages" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:221:7 should handle emoji and rich text messages" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:221:7 › Widget-Agent Communication E2E › should handle emoji and rich text messages 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle widget customization" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:264:7 should handle widget customization" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:264:7 › Widget-Agent Communication E2E › should handle widget customization 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle mobile responsiveness" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:314:7 should handle mobile responsiveness" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:314:7 › Widget-Agent Communication E2E › should handle mobile responsiveness 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
+</testcase>
+<testcase name="Widget-Agent Communication E2E › should handle conversation closure" classname="widget-agent-communication.spec.ts" time="0">
+<failure message="widget-agent-communication.spec.ts:358:7 should handle conversation closure" type="FAILURE">
+<![CDATA[  [Google Chrome] › widget-agent-communication.spec.ts:358:7 › Widget-Agent Communication E2E › should handle conversation closure 
+
+    Error: ENOENT: no such file or directory, open 'e2e/test-metadata.json'
+
+      32 |   test.beforeAll(async ({ browser }) => {
+      33 |     const testMetadata = JSON.parse(
+    > 34 |       require('fs').readFileSync('e2e/test-metadata.json', 'utf-8')
+         |                     ^
+      35 |     );
+      36 |
+      37 |     testContext = {
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:34:21
+
+    TypeError: Cannot read properties of undefined (reading 'widgetBrowser')
+
+      58 |
+      59 |   test.afterAll(async () => {
+    > 60 |     await testContext.widgetBrowser?.close();
+         |                       ^
+      61 |     await testContext.agentContext?.close();
+      62 |     await testContext.widgetContext?.close();
+      63 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/e2e/widget-agent-communication.spec.ts:60:23
+]]>
+</failure>
 </testcase>
 </testsuite>
 </testsuites>

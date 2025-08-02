@@ -17,7 +17,7 @@ export const WidgetButton: React.FC<WidgetButtonProps> = ({ onClick, isOpen, cla
   return (
     <button
       onClick={onClick}
-      className={`flex h-14 w-14 transform items-center justify-center rounded-ds-full bg-blue-600 text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-blue-700 focus:outline-none ${isOpen ? "rotate-45" : ""} ${className}`}
+      className={`flex h-14 w-14 transform items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 ${isOpen ? "rotate-45" : ""} ${className}`}
       aria-label={isOpen ? "Close chat" : "Open chat"}
     >
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -34,7 +34,7 @@ export const WidgetButton: React.FC<WidgetButtonProps> = ({ onClick, isOpen, cla
           </>
         )}
       </svg>
-      {!isOpen && <div className="absolute -right-1 -top-1 h-3 w-3 rounded-ds-full bg-red-500"></div>}
+      {!isOpen && <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>}
     </button>
   );
 };

@@ -7,6 +7,8 @@ import { useReadReceipts, useAutoMarkAsRead } from './hooks/useReadReceipts';
 import { ReadReceiptIndicator } from '@/components/ui/ReadReceiptIndicator';
 import { useWidget } from './index';
 import { WidgetComposer } from './components/WidgetComposer';
+import { NewMessagesIndicator, TypingIndicator, ConnectionStatus } from './components/NewMessagesIndicator';
+import { useWidgetUX, useWidgetConnection, useWidgetTyping } from './hooks/useWidgetUX';
 import { X, Minus } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -21,10 +23,13 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
 
   const [messageText, setMessageText] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
+  const [widgetError, setWidgetError] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [widgetError, setWidgetError] = useState<string | null>(null);
-  const [demoAgentIsTyping, setDemoAgentIsTyping] = useState(false);
+
+  // Enhanced UX hooks
+  const { connectionStatus, getStatusColor, getStatusText } = useWidgetConnection();
+  const { isUserTyping, isAgentTyping, setIsAgentTyping, startUserTyping, stopUserTyping } = useWidgetTyping();
 
   // Refs for auto-scroll functionality
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -265,10 +270,10 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           </div>
           <div>
             <div className="font-semibold text-sm">Campfire Support</div>
-            <div className="text-xs text-blue-100 flex items-center gap-1">
-              <div className={`w-2 h-2 rounded-full ${widgetState.conversationId ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-              {widgetState.conversationId ? 'Connected' : 'Connecting...'}
-            </div>
+            <ConnectionStatus
+              status={widgetState.conversationId ? 'connected' : 'connecting'}
+              className="text-blue-100"
+            />
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -391,25 +396,11 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
           ))
         )}
 
-        {/* Typing indicator */}
-        {isLoading && (
-          <div
-            className="flex justify-start"
-            data-testid="widget-typing-indicator"
-            data-campfire-typing-indicator
-          >
-            <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl shadow-sm">
-              <div className="flex items-center space-x-3">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                </div>
-                <span className="text-sm text-gray-500">AI is typing...</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Enhanced Typing Indicator */}
+        <TypingIndicator
+          show={isLoading || isAgentTyping}
+          agentName="Support Agent"
+        />
 
         {/* Messages end marker for auto-scroll */}
         <div ref={messagesEndRef} />
