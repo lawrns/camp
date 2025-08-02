@@ -4,7 +4,6 @@ import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { Badge } from '@/components/unified-ui/components/Badge';
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { motion } from 'framer-motion';
 import { 
   UserCircle, 
   Clock, 
@@ -149,23 +148,32 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
             const workloadPercentage = getWorkloadPercentage(member.activeConversations, member.maxConversations);
 
             return (
-              <motion.div
+              <div
                 key={member.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className={`p-3 rounded-lg border ${status.border} ${status.bg} hover:shadow-md transition-all duration-200`}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="relative">
-                    <Avatar className="w-10 h-10">
-                      {member.avatar ? (
-                        <img src={member.avatar} alt={member.name} />
-                      ) : (
-                        <AvatarFallback className="text-sm">
-                          {getInitials(member.name)}
-                        </AvatarFallback>
-                      )}
+                <div className={`p-3 rounded-lg border ${status.border} ${status.bg} hover:shadow-md transition-all duration-200`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="relative">
+                      <Avatar className="w-10 h-10">
+                        {member.avatar ? (
+                          <img src={member.avatar} alt={member.name} />
+                        ) : (
+                          <AvatarFallback className="text-sm">
+                            {getInitials(member.name)}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      <div className="absolute -bottom-1 -right-1">
+                        <StatusIcon className={`w-4 h-4 ${status.color} bg-white rounded-full`} />
+                      </div>
+                    </div>
+                  ) : (
+                    <Avatar>
+                      <AvatarFallback className="text-sm">
+                        {getInitials(member.name)}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="absolute -bottom-1 -right-1">
                       <StatusIcon className={`w-4 h-4 ${status.color} bg-white rounded-full`} />
@@ -202,16 +210,14 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
                   </div>
 
                   {/* Workload progress bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${workloadPercentage}%` }}
-                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div
                       className={`h-2 rounded-full ${
                         workloadPercentage > 80 ? 'bg-red-500' :
                         workloadPercentage > 60 ? 'bg-orange-500' :
                         'bg-green-500'
-                      }`}
+                      } animate-scale-in-x`}
+                      style={{ width: `${workloadPercentage}%` }}
                     />
                   </div>
 
@@ -245,7 +251,7 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
                     </div>
                   )}
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

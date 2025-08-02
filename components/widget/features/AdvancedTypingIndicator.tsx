@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRealtime } from "@/hooks/useRealtime";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { UNIFIED_EVENTS, UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 
 interface TypingIndicatorProps {
   conversationId: string;
@@ -26,41 +27,52 @@ export function AdvancedTypingIndicator({
   className = "",
 }: TypingIndicatorProps) {
   const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
-  const { subscribe } = useRealtime({ organizationId, conversationId });
 
   useEffect(() => {
-    // Subscribe to typing events
-    const unsubscribe = subscribe("typing_indicator", (payload: any) => {
-      const { user_id, user_name, user_type, is_typing, preview_text } = payload;
+    // Use direct Supabase subscription with UNIFIED_EVENTS
+    const supabase = createClientComponentClient();
+    const channel = supabase.channel(UNIFIED_CHANNELS.conversationTyping(organizationId, conversationId));
+
+    // Subscribe to typing start events
+    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+      const { user_id, user_name, user_type, is_typing, preview_text } = payload.payload;
 
       // Don't show typing indicator for current user
       if (user_id === currentUserId) return;
 
       setTypingUsers((prev) => {
-        if (is_typing) {
-          // Add or update typing user
-          const existingIndex = prev.findIndex((u) => u.userId === user_id);
-          const typingUser: TypingUser = {
-            userId: user_id,
-            userName: user_name || "Someone",
-            userType: user_type || "agent",
-            startedAt: new Date(),
-            previewText: preview_text,
-          };
+        // Add or update typing user
+        const existingIndex = prev.findIndex((u) => u.userId === user_id);
+        const typingUser: TypingUser = {
+          userId: user_id,
+          userName: user_name || "Someone",
+          userType: user_type || "agent",
+          startedAt: new Date(),
+          previewText: preview_text,
+        };
 
-          if (existingIndex >= 0) {
-            const updated = [...prev];
-            updated[existingIndex] = typingUser;
-            return updated;
-          } else {
-            return [...prev, typingUser];
-          }
+        if (existingIndex >= 0) {
+          const updated = [...prev];
+          updated[existingIndex] = typingUser;
+          return updated;
         } else {
-          // Remove typing user
-          return prev.filter((u) => u.userId !== user_id);
+          return [...prev, typingUser];
         }
       });
     });
+
+    // Subscribe to typing stop events
+    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+      const { user_id } = payload.payload;
+
+      // Don't process for current user
+      if (user_id === currentUserId) return;
+
+      setTypingUsers((prev) => prev.filter((u) => u.userId !== user_id));
+    });
+
+    // Subscribe to the channel
+    channel.subscribe();
 
     // Cleanup stale typing indicators (after 10 seconds)
     const cleanupInterval = setInterval(() => {
@@ -68,10 +80,10 @@ export function AdvancedTypingIndicator({
     }, 5000);
 
     return () => {
-      unsubscribe();
+      supabase.removeChannel(channel);
       clearInterval(cleanupInterval);
     };
-  }, [conversationId, organizationId, currentUserId, subscribe]);
+  }, [conversationId, organizationId, currentUserId]);
 
   if (typingUsers.length === 0) {
     return null;

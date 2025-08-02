@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     const token = authHeader.substring(7);
-    const { action, organizationId } = await request.json();
+    const { action, organizationId } = await request.json().catch(() => ({}));
 
     if (action !== "refresh_session") {
       return NextResponse.json(

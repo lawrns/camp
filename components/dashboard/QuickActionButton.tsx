@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/unified-ui/components/Card';
 import { Badge } from '@/components/unified-ui/components/Badge';
-import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface QuickActionButtonProps {
@@ -18,7 +17,7 @@ interface QuickActionButtonProps {
 
 const colorConfig = {
   blue: {
-    bg: 'bg-blue-50 hover:bg-blue-100',
+    bg: 'bg-gradient-to-br from-blue-50 to-indigo-100 hover:from-blue-100 hover:to-indigo-200',
     border: 'border-blue-200',
     icon: 'text-blue-600',
     text: 'text-blue-900',
@@ -93,10 +92,8 @@ export function QuickActionButton({
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -2, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2 }}
+    <div 
+      className="transition-transform duration-200 hover:-translate-y-0.5 hover:scale-105 active:scale-95"
     >
       <Card
         className={`${colors.bg} ${colors.border} cursor-pointer transition-all duration-200 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500`}
@@ -109,13 +106,11 @@ export function QuickActionButton({
         <CardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                className={`p-2 rounded-lg ${colors.bg} ${colors.border}`}
+              <div 
+                className={`p-2 rounded-lg ${colors.bg} ${colors.border} transition-transform duration-200 hover:scale-110`}
               >
                 <Icon className={`w-5 h-5 ${colors.icon}`} />
-              </motion.div>
+              </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -136,6 +131,6 @@ export function QuickActionButton({
           </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 } 

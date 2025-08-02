@@ -113,19 +113,48 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           });
       };
 
-      // Subscribe to typing events
+      // Subscribe to typing events (DATABASE-DRIVEN APPROACH - FIXED)
       const subscribeToTyping = (channel: RealtimeChannel) => {
-        channel
-          .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload) => {
-            if (config.onTyping && payload.payload) {
-              config.onTyping(true, payload.payload.userName);
-            }
-          })
-          .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (_payload) => {
-            if (config.onTyping) {
-              config.onTyping(false);
-            }
-          });
+        // Only subscribe to typing indicators on conversation-specific channels
+        if (config.conversationId) {
+          channel
+            .on("postgres_changes", {
+              event: "INSERT",
+              schema: "public",
+              table: "typing_indicators",
+              filter: `conversation_id=eq.${config.conversationId}`,
+            }, (payload: any) => {
+              console.log('[Widget Realtime] ✅ FIXED: Received typing indicator INSERT:', payload);
+              const typing = payload.new;
+              if (config.onTyping && typing.user_id !== config.userId) {
+                config.onTyping(typing.is_typing, typing.user_name || 'Agent');
+              }
+            })
+            .on("postgres_changes", {
+              event: "UPDATE",
+              schema: "public",
+              table: "typing_indicators",
+              filter: `conversation_id=eq.${config.conversationId}`,
+            }, (payload: any) => {
+              console.log('[Widget Realtime] ✅ FIXED: Received typing indicator UPDATE:', payload);
+              const typing = payload.new;
+              if (config.onTyping && typing.user_id !== config.userId) {
+                config.onTyping(typing.is_typing, typing.user_name || 'Agent');
+              }
+            })
+            .on("postgres_changes", {
+              event: "DELETE",
+              schema: "public",
+              table: "typing_indicators",
+              filter: `conversation_id=eq.${config.conversationId}`,
+            }, (payload: any) => {
+              console.log('[Widget Realtime] ✅ FIXED: Received typing indicator DELETE:', payload);
+              const typing = payload.old;
+              if (config.onTyping && typing.user_id !== config.userId) {
+                config.onTyping(false, typing.user_name || 'Agent');
+              }
+            });
+        }
       };
 
       // Subscribe to all channels
@@ -200,25 +229,56 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     });
   }, [config.organizationId, config.onConnectionChange]);
 
-  // Send typing indicator using tRPC
+  // Send typing indicator using database-driven approach (CORRECT METHOD)
   const sendTypingIndicator = useCallback(async (isTyping: boolean) => {
     if (!isConnected || !config.conversationId) {
+      console.log('[Widget Realtime] Skipping typing indicator - not connected or no conversation ID');
       return;
     }
 
     try {
-      // For now, use a simple console log until tRPC is properly configured
-      console.log('[Widget Realtime] Typing indicator:', {
+      console.log('[Widget Realtime] 🚀 FIXED: Sending typing indicator via API:', {
         conversationId: config.conversationId,
         userId: config.userId || 'visitor',
         organizationId: config.organizationId,
-        isTyping
+        isTyping,
+        timestamp: new Date().toISOString()
       });
 
-      // TODO: Implement proper tRPC call when client is configured
-      // const result = await api.widget.typingIndicators.mutate({...});
+      // CORRECT APPROACH: Use the widget typing API endpoint
+      const response = await fetch('/api/widget/typing', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-organization-id': config.organizationId,
+        },
+        body: JSON.stringify({
+          conversationId: config.conversationId,
+          userId: config.userId || 'visitor',
+          userName: 'Customer',
+          isTyping,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorData.error || 'Unknown error'}`);
+      }
+
+      const result = await response.json();
+      console.log('[Widget Realtime] ✅ Typing indicator sent successfully via API:', result);
+
     } catch (error) {
-      console.error('[Widget Realtime] Typing indicator error:', error);
+      console.error('[Widget Realtime] 💥 Typing indicator API error:', error);
+
+      // Log additional context for debugging
+      console.error('[Widget Realtime] Error context:', {
+        isConnected,
+        conversationId: config.conversationId,
+        organizationId: config.organizationId,
+        userId: config.userId,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   }, [isConnected, config.conversationId, config.organizationId, config.userId]);
 

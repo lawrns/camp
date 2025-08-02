@@ -8,6 +8,7 @@ import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
+import { broadcastToChannel } from "@/lib/realtime/standardized-realtime";
 import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
 import type { RealtimeMessagePayload } from "@/lib/realtime/constants";
 import { Robot, X } from "@phosphor-icons/react";
@@ -253,8 +254,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             metadata: data.metadata as Record<string, any> || {},
           };
 
-          console.log(`[SendMessage] 🚀 Calling realtimeActions.sendMessage with payload:`, messagePayload);
-          broadcastSuccess = await realtimeActions.sendMessage(messagePayload);
+          console.log(`[SendMessage] 🚀 Broadcasting message directly to channel:`, messagePayload);
+          broadcastSuccess = await broadcastToChannel(
+            UNIFIED_CHANNELS.conversation(organizationId, convId),
+            UNIFIED_EVENTS.MESSAGE_CREATED,
+            {
+              message: { ...data, attachments: [], read_status: "sent" as const },
+              conversation_id: convId,
+              organization_id: organizationId,
+              sender_type: senderType,
+            }
+          );
           const latency = performance.now() - startTime;
           const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
 

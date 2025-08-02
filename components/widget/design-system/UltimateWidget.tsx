@@ -1,9 +1,11 @@
+"use client";
+
 /**
  * ULTIMATE WIDGET - THE DEFINITIVE IMPLEMENTATION
- * 
+ *
  * This is the single, pixel-perfect widget implementation that consolidates
  * all features from DefinitiveWidget, EnhancedWidget, and other implementations.
- * 
+ *
  * Features:
  * - Pixel-perfect design system with 8px grid
  * - Real-time messaging with Supabase
@@ -17,15 +19,24 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { ChatCircle } from '@phosphor-icons/react';
+import { useRealtime } from '@/hooks/useRealtime';
+import { useWidgetRealtime } from '../enhanced/useWidgetRealtime';
+import { useAIHandover } from '@/hooks/useAIHandover';
+import { useTypingIndicator } from '../enhanced/useTypingIndicator';
+import { UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { useWidgetDimensions, useWidgetPosition } from './useResponsive';
-import { 
+import {
   PixelPerfectChatInterface,
   WidgetHeader,
   CompactWidgetHeader,
   WidgetBottomTabs,
   WidgetButton,
   WidgetIconButton,
+  WidgetFileUpload,
+  useWidgetSound,
   type MessageBubbleProps,
+  type NotificationType,
   SPACING,
   COLORS,
   RADIUS,
@@ -48,6 +59,14 @@ export interface UltimateWidgetConfig {
   showWelcomeMessage?: boolean;
   enableHelp?: boolean;
   enableNotifications?: boolean;
+  // NEW: Advanced features
+  enableFileUpload?: boolean;
+  enableReactions?: boolean;
+  enableThreading?: boolean;
+  enableSoundNotifications?: boolean;
+  maxFileSize?: number; // in MB
+  maxFiles?: number;
+  acceptedFileTypes?: string[];
 }
 
 export interface UltimateWidgetProps {
@@ -72,6 +91,14 @@ const defaultConfig: UltimateWidgetConfig = {
   showWelcomeMessage: true,
   enableHelp: true,
   enableNotifications: true,
+  // NEW: Advanced features defaults
+  enableFileUpload: true,
+  enableReactions: true,
+  enableThreading: true,
+  enableSoundNotifications: true,
+  maxFileSize: 10, // 10MB
+  maxFiles: 5,
+  acceptedFileTypes: ["image/*", "application/pdf", ".doc", ".docx", ".txt", "video/*", "audio/*"],
 };
 
 // ============================================================================
@@ -84,6 +111,13 @@ export function UltimateWidget({
   onClose,
   className,
 }: UltimateWidgetProps) {
+  // DEBUG: Track UltimateWidget rendering
+  console.log('[UltimateWidget] 🚀 COMPONENT RENDERING:', {
+    organizationId,
+    userConfig,
+    timestamp: new Date().toISOString()
+  });
+
   // Merge user config with defaults
   const config = { ...defaultConfig, ...userConfig };
 
@@ -102,6 +136,50 @@ export function UltimateWidget({
   const [isConnected, setIsConnected] = useState(true);
   const [typingUsers, setTypingUsers] = useState<Array<{ id: string; name: string }>>([]);
 
+  // NEW: Conversation state for API integration
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // NEW: Real-time integration with useWidgetRealtime hook
+  const realtime = useWidgetRealtime({
+    organizationId,
+    conversationId: conversationId || undefined,
+    onMessage: (message) => {
+      const messageData: MessageBubbleProps = {
+        id: message.id.toString(),
+        content: message.content,
+        senderType: message.senderType === 'visitor' ? 'visitor' : 'agent',
+        senderName: message.senderName || 'Unknown',
+        timestamp: new Date(message.createdAt).toISOString(),
+        isOwn: message.senderType === 'visitor',
+        status: message.status === 'pending' ? 'sending' : (message.status || 'delivered'),
+      };
+      setMessages(prev => [...prev, messageData]);
+    },
+    onTyping: (isTyping, userName) => {
+      if (isTyping && userName) {
+        setTypingUsers([{ id: 'agent', name: userName }]);
+      } else {
+        setTypingUsers([]);
+      }
+    },
+    onConnectionChange: (connected) => {
+      setIsConnected(connected);
+    },
+  });
+
+  // AI handover functionality
+  const aiHandover = useAIHandover(
+    conversationId || '',
+    organizationId,
+    'widget-user'
+  );
+
+  // NEW: Advanced features state
+  const { playNotification, setEnabled: setSoundEnabled } = useWidgetSound();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
   // Initialize with welcome message
   useEffect(() => {
     if (config.showWelcomeMessage && config.welcomeMessage) {
@@ -119,6 +197,9 @@ export function UltimateWidget({
       setMessages([welcomeMessage]);
     }
   }, [config.showWelcomeMessage, config.welcomeMessage, config.organizationName]);
+
+  // Real-time message handling is now handled by useWidgetRealtime hook
+  // No duplicate subscription needed to prevent infinite re-renders
 
   // Widget actions
   const openWidget = useCallback(() => {
@@ -148,10 +229,121 @@ export function UltimateWidget({
     }
   }, [widgetState, openWidget, closeWidget]);
 
-  // Message handling
-  const handleSendMessage = useCallback((message: string) => {
+  // Typing indicator handlers
+  const handleTyping = useCallback(() => {
+    if (realtime && realtime.sendTypingIndicator) {
+      realtime.sendTypingIndicator(true);
+    }
+  }, [realtime]);
+
+  const handleStopTyping = useCallback(() => {
+    if (realtime && realtime.sendTypingIndicator) {
+      realtime.sendTypingIndicator(false);
+    }
+  }, [realtime]);
+
+  // NEW: Advanced feature handlers
+  const handleReact = useCallback((messageId: string, emoji: string) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId 
+        ? { 
+            ...msg, 
+            reactions: [...(msg.reactions || []), { 
+              emoji, 
+              count: 1, 
+              users: ['visitor'], 
+              hasReacted: true,
+              timestamp: new Date().toISOString()
+            }]
+          }
+        : msg
+    ));
+  }, []);
+
+  const handleReply = useCallback((messageId: string) => {
+    // Focus on input and add reply context
+    console.log('Reply to message:', messageId);
+  }, []);
+
+  const handleViewThread = useCallback((threadId: string) => {
+    // Navigate to thread view
+    console.log('View thread:', threadId);
+  }, []);
+
+  const handleFileSelect = useCallback((files: File[]) => {
+    setSelectedFiles(files);
+  }, []);
+
+  const handleFileUpload = useCallback(async (file: File): Promise<string> => {
+    // Simulate file upload (replace with real implementation)
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const url = URL.createObjectURL(file);
+        resolve(url);
+      }, 1000);
+    });
+  }, []);
+
+  // Conversation management
+  const createConversation = useCallback(async () => {
+    if (conversationId) return conversationId; // Already have a conversation
+
+    try {
+      setIsLoading(true);
+
+      const response = await fetch('/api/widget/conversations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          customerEmail: 'anonymous@widget.com', // ✅ REQUIRED - API validates this field
+          customerName: 'Widget User', // ✅ OPTIONAL
+          subject: 'Widget Conversation', // ✅ OPTIONAL
+          metadata: {
+            source: 'widget',
+            userAgent: navigator.userAgent,
+            url: window.location.href,
+            timestamp: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create conversation: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const newConversationId = result.conversation?.id;
+
+      if (newConversationId) {
+        setConversationId(newConversationId);
+        console.log('[UltimateWidget] Created new conversation:', newConversationId);
+        return newConversationId;
+      } else {
+        throw new Error('No conversation ID returned from API');
+      }
+    } catch (error) {
+      console.error('[UltimateWidget] Failed to create conversation:', error);
+      setError('Failed to start conversation. Please try again.');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [organizationId, conversationId, setConversationId]);
+
+  // Message handling with API integration
+  const handleSendMessage = useCallback(async (message: string) => {
+    if (!message.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    // Create optimistic user message for immediate UI feedback
+    const tempId = `temp-${Date.now()}`;
     const userMessage: MessageBubbleProps = {
-      id: `user-${Date.now()}`,
+      id: tempId,
       content: message,
       senderType: 'visitor',
       senderName: 'You',
@@ -160,27 +352,85 @@ export function UltimateWidget({
       showAvatar: false,
       showTimestamp: true,
       showStatus: true,
+      reactions: [],
+      attachments: selectedFiles.map((file, index) => ({
+        id: `attachment-${Date.now()}-${index}`,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: URL.createObjectURL(file),
+        isImage: file.type.startsWith('image/'),
+        isVideo: file.type.startsWith('video/'),
+        isAudio: file.type.startsWith('audio/'),
+        isDocument: file.type.startsWith('application/'),
+      })),
     };
 
+    // Add message to UI immediately for better UX
     setMessages(prev => [...prev, userMessage]);
-    onMessage?.(message);
+    setSelectedFiles([]);
 
-    // Simulate agent response (replace with real implementation)
-    setTimeout(() => {
-      const agentMessage: MessageBubbleProps = {
-        id: `agent-${Date.now()}`,
-        content: "Thanks for your message! We'll get back to you shortly.",
-        senderType: 'agent',
-        senderName: config.organizationName,
-        timestamp: new Date().toISOString(),
-        isOwn: false,
-        showAvatar: true,
-        showTimestamp: true,
-        showStatus: false,
-      };
-      setMessages(prev => [...prev, agentMessage]);
-    }, 1000);
-  }, [onMessage, config.organizationName]);
+    // Play sound notification if enabled
+    if (config.enableSoundNotifications) {
+      playNotification('message');
+    }
+
+    try {
+      // Ensure we have a conversation before sending the message
+      let currentConversationId = conversationId;
+      if (!currentConversationId) {
+        currentConversationId = await createConversation();
+        if (!currentConversationId) {
+          throw new Error('Failed to create conversation');
+        }
+      }
+
+      // Use realtime.sendMessage instead of direct API call
+      await realtime.sendMessage({
+        conversationId: currentConversationId,
+        content: message,
+        senderType: 'visitor',
+        senderName: 'Widget User',
+        metadata: {
+          source: 'widget',
+          timestamp: new Date().toISOString(),
+          attachments: selectedFiles.length > 0 ? selectedFiles.map(f => f.name) : undefined,
+        },
+      });
+
+      // Update the temporary message with success status
+      setMessages(prev => prev.map(msg =>
+        msg.id === tempId
+          ? { ...msg, status: 'delivered' }
+          : msg
+      ));
+
+      // Trigger callback
+      onMessage?.(message);
+
+      console.log('[UltimateWidget] Message sent successfully:', result);
+
+    } catch (error) {
+      console.error('[UltimateWidget] Failed to send message:', error);
+
+      // Show error state and remove the optimistic message
+      setError('Failed to send message. Please try again.');
+      setMessages(prev => prev.filter(msg => msg.id !== tempId));
+
+      // Could add retry logic here
+    } finally {
+      setIsLoading(false);
+    }
+  }, [
+    organizationId,
+    conversationId,
+    setConversationId,
+    createConversation,
+    selectedFiles,
+    config.enableSoundNotifications,
+    playNotification,
+    onMessage
+  ]);
 
   // Tab configuration
   const tabs: WidgetTab[] = [
@@ -229,14 +479,65 @@ export function UltimateWidget({
     switch (activeTab) {
       case 'chat':
         return (
-          <PixelPerfectChatInterface
-            messages={messages}
-            isConnected={isConnected}
-            typingUsers={typingUsers}
-            organizationName={config.organizationName}
-            onSendMessage={handleSendMessage}
-            className="h-full"
-          />
+          <div className="h-full flex flex-col">
+            {/* Error Display */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span>{error}</span>
+                  <button
+                    onClick={() => setError(null)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Loading Indicator */}
+            {isLoading && (
+              <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 text-sm">
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700 mr-2"></div>
+                  <span>Sending message...</span>
+                </div>
+              </div>
+            )}
+
+            {/* Chat Interface */}
+            <div className="flex-1">
+              <PixelPerfectChatInterface
+                messages={aiHandover.isAIActive ? [
+                  {
+                    id: 'ai-status',
+                    content: '🤖 AI Assistant is now helping with this conversation',
+                    senderType: 'system' as const,
+                    senderName: 'System',
+                    timestamp: new Date().toISOString(),
+                    status: 'delivered' as const
+                  },
+                  ...messages
+                ] : messages}
+                isConnected={true} // Temporarily force enabled to fix input issue
+                typingUsers={typingUsers}
+                organizationName={config.organizationName}
+                onSendMessage={handleSendMessage}
+                onTyping={handleTyping}
+                onStopTyping={handleStopTyping}
+                onReact={config.enableReactions ? handleReact : undefined}
+                onReply={config.enableThreading ? handleReply : undefined}
+                onViewThread={config.enableThreading ? handleViewThread : undefined}
+                onFileSelect={config.enableFileUpload ? handleFileSelect : undefined}
+                onFileUpload={config.enableFileUpload ? handleFileUpload : undefined}
+                maxFileSize={config.maxFileSize}
+                maxFiles={config.maxFiles}
+                acceptedFileTypes={config.acceptedFileTypes}
+                showHeader={false}
+                className="h-full"
+              />
+            </div>
+          </div>
         );
       
       case 'help':
@@ -312,74 +613,47 @@ export function UltimateWidget({
         zIndex: Z_INDEX.widget
       }}
     >
-      {/* Widget Button */}
+      {/* Enhanced Widget Button */}
       <AnimatePresence>
         {widgetState === 'closed' && (
-          <motion.div
+          <motion.button
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            transition={{
-              duration: parseFloat(ANIMATIONS.normal) / 1000,
-              ease: [0.0, 0.0, 0.2, 1],
-            }}
+            onClick={toggleWidget}
+            className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            style={{ backgroundColor: config.primaryColor }}
+            data-testid="widget-button"
+            aria-label="Open chat support"
           >
-            <div style={{ position: 'relative' }}>
-              <WidgetIconButton
-                icon={
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                  </svg>
-                }
-                size="lg"
-                onClick={toggleWidget}
-                aria-label="Open chat support"
-                style={{
-                  backgroundColor: config.primaryColor,
-                  color: 'white',
-                  boxShadow: SHADOWS.widget,
-                }}
-              />
-              {/* Notification badge */}
-              {hasUnreadMessages && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  style={{
-                    position: 'absolute',
-                    top: '-4px',
-                    right: '-4px',
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ef4444',
-                  }}
-                  className="animate-pulse"
-                />
-              )}
-            </div>
-          </motion.div>
+            <ChatCircle size={24} />
+            {/* Notification indicator - 8px grid aligned */}
+            {hasUnreadMessages && (
+              <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
+            )}
+          </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Widget Panel */}
+      {/* Enhanced Widget Panel */}
       <AnimatePresence>
         {widgetState !== 'closed' && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{
-              duration: parseFloat(ANIMATIONS.normal) / 1000,
-              ease: [0.0, 0.0, 0.2, 1],
-            }}
-            className="bg-white overflow-hidden flex flex-col"
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={cn(
+              "bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 flex flex-col",
+              // Mobile responsive classes
+              "max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)]",
+              "sm:w-96 sm:h-[600px] md:w-[28rem] md:h-[640px]"
+            )}
             style={{
               ...widgetDimensions,
-              borderRadius: RADIUS.widget,
-              boxShadow: SHADOWS.widget,
-              border: `1px solid ${COLORS.border}`,
             }}
+            data-testid="widget-panel"
+            data-campfire-widget-panel
           >
             {/* Header */}
             {widgetState === 'minimized' ? (

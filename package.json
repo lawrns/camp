@@ -44,6 +44,10 @@
     "test:visual:debug": "playwright test --config=visual-testing.config.ts --debug",
     "test:visual:watch": "playwright test --config=visual-testing.config.ts --watch",
     "test:visual:continuous": "./scripts/visual-test-watch.sh",
+    "test:ultimate-widget": "node scripts/run-ultimate-widget-tests.js",
+    "test:ultimate-widget:e2e": "npx playwright test e2e/tests/ultimate-widget-bidirectional.spec.ts",
+    "test:ultimate-widget:performance": "npx playwright test e2e/tests/ultimate-widget-performance.spec.ts",
+    "test:ultimate-widget:accessibility": "npx playwright test e2e/tests/ultimate-widget-accessibility.spec.ts",
     "tokens:validate": "node scripts/validate-design-tokens.js",
     "tokens:fix": "node scripts/validate-design-tokens.js --fix",
     "tokens:check": "node scripts/validate-design-tokens.js --verbose"

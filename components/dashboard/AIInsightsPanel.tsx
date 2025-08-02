@@ -3,7 +3,6 @@
 import { Sparkle, TrendUp, Warning, CheckCircle, Lightbulb, Target } from '@phosphor-icons/react';
 import { Badge } from '@/components/unified-ui/components/Badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 interface AIInsightsPanelProps {
@@ -46,7 +45,7 @@ const insightConfig = {
   recommendation: {
     icon: Lightbulb,
     color: 'text-blue-600',
-    bg: 'bg-blue-50',
+    bg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
     border: 'border-blue-200',
   },
   goal: {
@@ -223,12 +222,9 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
               const InsightIcon = insight.icon;
 
               return (
-                <motion.div
+                <div
                   key={insight.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`p-3 rounded-lg border ${config.border} ${config.bg} hover:shadow-md transition-all duration-200`}
+                  className={`p-3 rounded-lg border ${config.border} ${config.bg} hover:shadow-md transition-all duration-200 animate-fade-in-left delay-${index * 100}`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`p-1 rounded ${config.bg}`}>
@@ -266,7 +262,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })
           )}

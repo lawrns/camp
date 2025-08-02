@@ -31,6 +31,15 @@ export interface PixelPerfectChatInterfaceProps {
   onExpand?: () => void;
   showHeader?: boolean; // New prop to control header visibility
   showInput?: boolean;
+  // NEW: Advanced features
+  onReact?: (messageId: string, emoji: string) => void;
+  onReply?: (messageId: string) => void;
+  onViewThread?: (threadId: string) => void;
+  onFileSelect?: (files: File[]) => void;
+  onFileUpload?: (file: File) => Promise<string>;
+  maxFileSize?: number;
+  maxFiles?: number;
+  acceptedFileTypes?: string[];
 }
 
 // ============================================================================
@@ -181,6 +190,15 @@ export function PixelPerfectChatInterface({
   onExpand,
   showHeader = true,
   showInput = true,
+  // NEW: Advanced features
+  onReact,
+  onReply,
+  onViewThread,
+  onFileSelect,
+  onFileUpload,
+  maxFileSize = 10,
+  maxFiles = 5,
+  acceptedFileTypes = ["image/*", "application/pdf", ".doc", ".docx", ".txt", "video/*", "audio/*"],
 }: PixelPerfectChatInterfaceProps) {
   const [inputValue, setInputValue] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -245,6 +263,9 @@ export function PixelPerfectChatInterface({
         typingUsers={typingUsers}
         enableAutoScroll={true}
         enableGrouping={true}
+        onReact={onReact}
+        onReply={onReply}
+        onViewThread={onViewThread}
         className="flex-1"
       />
 
@@ -267,6 +288,13 @@ export function PixelPerfectChatInterface({
             placeholder="Type your message..."
             disabled={!isConnected}
             autoFocus={true}
+            // NEW: Advanced features
+            onFileSelect={onFileSelect}
+            onFileUpload={onFileUpload}
+            maxFileSize={maxFileSize}
+            maxFiles={maxFiles}
+            acceptedFileTypes={acceptedFileTypes}
+            enableFileUpload={!!onFileSelect}
           />
         </div>
       )}

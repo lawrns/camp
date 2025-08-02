@@ -2,7 +2,7 @@
 // Updated to use unified types and proper error handling
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getServiceClient } from '@/lib/supabase/server';
 import { mapApiMessageToDbInsert, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 import { getSharedConversationChannel } from '@/lib/services/shared-conversation-service';
 import type { MessageCreateRequest } from '@/types/unified';
@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Create Supabase client
-    const supabase = await createClient();
+    // Use service client for widget operations to ensure access
+    const supabase = getServiceClient();
 
     // Get messages for the conversation
     const { data: messages, error } = await supabase
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body: MessageCreateRequest = await request.json();
+    const body: MessageCreateRequest = await request.json().catch(() => ({}));
 
     // Validate required fields
     if (!body.content || !body.conversationId) {
@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create Supabase client
-    const supabase = await createClient();
+    // Use service client for widget operations to ensure access
+    const supabase = getServiceClient();
 
     // Prepare message data
     const messageData = mapApiMessageToDbInsert({

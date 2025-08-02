@@ -28,6 +28,12 @@ export type { PixelPerfectChatInterfaceProps } from './PixelPerfectChatInterface
 export { UltimateWidget } from './UltimateWidget';
 export type { UltimateWidgetProps, UltimateWidgetConfig } from './UltimateWidget';
 
+export { WidgetFileUpload } from './WidgetFileUpload';
+export type { FileUploadProps, FileUploadProgress } from './WidgetFileUpload';
+
+export { useWidgetSound } from './WidgetSoundService';
+export type { SoundNotificationOptions, NotificationType } from './WidgetSoundService';
+
 // ============================================================================
 // UI COMPONENTS
 // ============================================================================

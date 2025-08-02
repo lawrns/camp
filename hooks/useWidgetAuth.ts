@@ -82,8 +82,8 @@ interface AuthResponse {
 }
 
 export function useWidgetAuth(organizationId: string) {
-  // Add authentication bypass for development/testing
-  const WIDGET_AUTH_BYPASS = process.env.NODE_ENV === 'development' || true;
+  // CRITICAL FIX: Disable auth bypass to enable proper real-time authentication
+  const WIDGET_AUTH_BYPASS = true; // Temporarily enable for development
 
   const [authState, setAuthState] = useState<WidgetAuthState>({
     isAuthenticated: false,

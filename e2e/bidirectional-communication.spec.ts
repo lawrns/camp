@@ -92,10 +92,11 @@ test.describe('Bidirectional Communication E2E', () => {
     await testContext.agentPage.waitForSelector('[data-testid="message-input"]');
 
     // ========================================
-    // 2. SETUP CUSTOMER WIDGET
+    // 2. SETUP CUSTOMER WIDGET (UltimateWidget)
     // ========================================
-    await testContext.customerPage.goto(`/widget?org=${testContext.organizationId}&conv=${testContext.conversationId}`);
+    await testContext.customerPage.goto('/');
     await testContext.customerPage.waitForLoadState('networkidle');
+    await testContext.customerPage.click('[data-testid="widget-button"]');
     await testContext.customerPage.waitForSelector('[data-testid="widget-message-input"]');
 
     // ========================================

@@ -137,9 +137,10 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
 };
 
 /**
- * @deprecated This hook is deprecated. Use hooks/useRealtime.ts instead.
+ * @deprecated OBSOLETE - This hook is deprecated and will be removed. Use hooks/useRealtime.ts instead.
  *
- * Hook for managing typing state
+ * DO NOT USE - Use the standardized useRealtime hook for all realtime functionality.
+ * This implementation uses outdated patterns and non-unified event names.
  */
 export const useTypingIndicator = (conversationId: string, currentUserId: string) => {
 

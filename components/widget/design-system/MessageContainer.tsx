@@ -24,6 +24,10 @@ export interface MessageContainerProps {
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   onReachTop?: () => void;
   onReachBottom?: () => void;
+  // NEW: Advanced features
+  onReact?: (messageId: string, emoji: string) => void;
+  onReply?: (messageId: string) => void;
+  onViewThread?: (threadId: string) => void;
 }
 
 // ============================================================================
@@ -182,6 +186,10 @@ export function MessageContainer({
   onScroll,
   onReachTop,
   onReachBottom,
+  // NEW: Advanced features
+  onReact,
+  onReply,
+  onViewThread,
 }: MessageContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -308,10 +316,18 @@ export function MessageContainer({
               key={`group-${index}-${group[0]?.id}`}
               messages={group}
               className="px-4"
+              onReact={onReact}
+              onReply={onReply}
+              onViewThread={onViewThread}
             />
           ) : (
             <div key={group[0]?.id} className="px-4">
-              <MessageBubble {...group[0]} />
+              <MessageBubble 
+                {...group[0]} 
+                onReact={onReact}
+                onReply={onReply}
+                onViewThread={onViewThread}
+              />
             </div>
           )
         ))}

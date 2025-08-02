@@ -22,12 +22,20 @@ const PUBLIC_ROUTES = [
 ];
 
 export async function middleware(request: NextRequest) {
-  console.log('[Middleware] Called for path:', request.nextUrl.pathname)
   const { pathname } = request.nextUrl;
+
+  // Performance optimization: Skip middleware for static assets
+  if (pathname.startsWith('/_next/') || 
+      pathname.startsWith('/static/') || 
+      pathname.includes('.') ||
+      pathname === '/favicon.ico' ||
+      pathname === '/favicon.svg' ||
+      pathname === '/icon.svg') {
+    return NextResponse.next();
+  }
 
   // Skip middleware for API routes (they have their own auth)
   if (pathname.startsWith('/api/')) {
-    console.log('[Middleware] Skipping API route:', pathname);
     return NextResponse.next();
   }
 
@@ -66,9 +74,7 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // IMPORTANT: This refreshes the session automatically
-  console.log('[Middleware] Refreshing session for path:', pathname)
-  
+  // Performance optimization: Only refresh session for protected routes
   let user = null;
   let authError = null;
   
@@ -80,14 +86,7 @@ export async function middleware(request: NextRequest) {
     
     user = authUser;
     authError = error;
-    
-    console.log('[Middleware] Session refresh result:', {
-      hasUser: !!user,
-      userId: user?.id,
-      error: error?.message
-    })
   } catch (err) {
-    console.error('[Middleware] Session refresh failed:', err)
     authError = err;
   }
 

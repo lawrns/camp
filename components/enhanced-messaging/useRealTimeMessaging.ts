@@ -1,10 +1,20 @@
 "use client";
 
+/**
+ * @deprecated MIGRATION NOTICE - This hook is being migrated to use UNIFIED_EVENTS.
+ *
+ * This implementation has been updated to use UNIFIED_EVENTS and UNIFIED_CHANNELS
+ * but should eventually be replaced with the standardized useRealtime hook.
+ *
+ * For new implementations, use hooks/useRealtime.ts instead.
+ */
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { MessageData } from './EnhancedMessageBubble';
 import { TypingUser, PresenceUser } from './PresenceIndicator';
 import { Notification } from './NotificationSystem';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 
 export interface RealTimeMessagingConfig {
   conversationId: string;
@@ -67,8 +77,8 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
     try {
       setState(prev => ({ ...prev, connectionStatus: 'connecting', error: null }));
 
-      // Create channel for this conversation
-      const channel = supabase.channel(`conversation:${config.conversationId}`, {
+      // Create channel for this conversation - UNIFIED CHANNELS
+      const channel = supabase.channel(UNIFIED_CHANNELS.conversation(config.organizationId, config.conversationId), {
         config: {
           broadcast: { self: true },
           presence: { key: config.userId },
@@ -86,8 +96,9 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
           filter: `conversation_id=eq.${config.conversationId}`,
         }, handleMessageChange)
         
-        // Subscribe to typing indicators
-        .on('broadcast', { event: 'typing' }, handleTypingBroadcast)
+        // Subscribe to typing indicators - UNIFIED EVENTS
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, handleTypingBroadcast)
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, handleTypingBroadcast)
         
         // Subscribe to presence changes
         .on('presence', { event: 'sync' }, handlePresenceSync)
@@ -367,14 +378,16 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
       clearTimeout(typingTimeoutRef.current);
     }
 
-    // Broadcast typing start
+    // Broadcast typing start - UNIFIED EVENTS
     channelRef.current.send({
       type: 'broadcast',
-      event: 'typing',
+      event: UNIFIED_EVENTS.TYPING_START,
       payload: {
         user_id: config.userId,
         user_name: 'Current User', // Should be actual user name
         is_typing: true,
+        conversationId: config.conversationId,
+        organizationId: config.organizationId,
       },
     });
 
@@ -393,14 +406,16 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
       typingTimeoutRef.current = null;
     }
 
-    // Broadcast typing stop
+    // Broadcast typing stop - UNIFIED EVENTS
     channelRef.current.send({
       type: 'broadcast',
-      event: 'typing',
+      event: UNIFIED_EVENTS.TYPING_STOP,
       payload: {
         user_id: config.userId,
         user_name: 'Current User',
         is_typing: false,
+        conversationId: config.conversationId,
+        organizationId: config.organizationId,
       },
     });
   }, [config.enableTypingIndicators, config.userId]);

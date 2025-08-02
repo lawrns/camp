@@ -18,6 +18,8 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Performance optimizations */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* App-specific body styles */
@@ -27,6 +29,9 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* Performance optimizations */
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
   }
 }
 
@@ -102,6 +107,12 @@
   /* ===== HOMEPAGE SPECIFIC STYLES ===== */
   /* Home page specific styles - scoped to this page only */
   .home-page {
+    /* Performance optimizations for homepage */
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    /* Hardware acceleration for smooth scrolling */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
   }
 
@@ -201,7 +212,6 @@
       right: 0.5rem !important;
     }
   }
-}
 
 /* COMPREHENSIVE ICON + TEXT NO-WRAP FIX */
 /* Prevent wrapping for icon-text combinations while avoiding overflow */
@@ -355,4 +365,5 @@ svg[class*="mx-"],
 [class*="tab"] .flex.items-center {
   white-space: nowrap !important;
   flex-wrap: nowrap !important;
+}
 }

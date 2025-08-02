@@ -9,6 +9,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { SPACING, TYPOGRAPHY, COLORS, RADIUS, SHADOWS, LAYOUT, ANIMATIONS } from './tokens';
+import { EmojiPicker } from '../features/EmojiPicker';
 
 // ============================================================================
 // TYPES
@@ -27,6 +28,13 @@ export interface WidgetInputProps {
   onChange?: (value: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  // NEW: Advanced features
+  onFileSelect?: (files: File[]) => void;
+  onFileUpload?: (file: File) => Promise<string>;
+  maxFileSize?: number;
+  maxFiles?: number;
+  acceptedFileTypes?: string[];
+  enableFileUpload?: boolean;
 }
 
 // ============================================================================
@@ -65,6 +73,7 @@ function SendButton({
         boxShadow: disabled ? 'none' : SHADOWS.button,
       }}
       aria-label="Send message"
+      data-testid="widget-send-button"
     >
       <svg
         width="16"
@@ -130,6 +139,60 @@ function EmojiButton({
 }
 
 // ============================================================================
+// FILE UPLOAD BUTTON COMPONENT
+// ============================================================================
+function FileUploadButton({ 
+  onClick,
+  disabled = false
+}: { 
+  onClick: () => void;
+  disabled?: boolean;
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.95 }}
+      transition={{
+        duration: parseFloat(ANIMATIONS.fast) / 1000,
+        ease: [0.4, 0.0, 0.2, 1],
+      }}
+      className={cn(
+        'flex items-center justify-center',
+        'transition-all duration-200',
+        'focus:outline-none focus:ring-2 focus:ring-offset-2',
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+      )}
+      style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: RADIUS.md,
+        backgroundColor: 'transparent',
+        color: COLORS.agent.timestamp,
+        border: 'none',
+      }}
+      aria-label="Upload file"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7,10 12,15 17,10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+      </svg>
+    </motion.button>
+  );
+}
+
+// ============================================================================
 // PIXEL-PERFECT WIDGET INPUT
 // ============================================================================
 export function WidgetInput({
@@ -146,12 +209,22 @@ export function WidgetInput({
   onChange,
   onFocus,
   onBlur,
+  // NEW: Advanced features
+  onFileSelect,
+  onFileUpload,
+  maxFileSize = 10,
+  maxFiles = 5,
+  acceptedFileTypes = ["image/*", "application/pdf", ".doc", ".docx", ".txt", "video/*", "audio/*"],
+  enableFileUpload = false,
 }: WidgetInputProps) {
   const [internalValue, setInternalValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Use controlled or uncontrolled value
   const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -233,6 +306,51 @@ export function WidgetInput({
     }
   }, [handleSend]);
 
+  // Handle emoji selection
+  const handleEmojiSelect = useCallback((emoji: string) => {
+    const newValue = value + emoji;
+    setValue?.(newValue);
+    setShowEmojiPicker(false);
+
+    // Focus back to textarea
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  }, [value, setValue]);
+
+  // File upload handlers
+  const handleFileUploadClick = useCallback(() => {
+    if (enableFileUpload && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, [enableFileUpload]);
+
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && onFileSelect) {
+      const fileArray = Array.from(files);
+      onFileSelect(fileArray);
+    }
+    // Reset input value
+    if (event.target) {
+      event.target.value = '';
+    }
+  }, [onFileSelect]);
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showEmojiPicker]);
+
   // Handle focus
   const handleFocus = useCallback(() => {
     setIsFocused(true);
@@ -286,10 +404,27 @@ export function WidgetInput({
         borderTop: `1px solid ${COLORS.border}`,
       }}
       data-campfire-widget-input
-      data-campfire-widget-composer
     >
       {/* Emoji button */}
-      <EmojiButton onClick={() => {/* TODO: Implement emoji picker */}} />
+      <div className="relative" ref={emojiPickerRef}>
+        <EmojiButton onClick={() => setShowEmojiPicker(!showEmojiPicker)} />
+        {showEmojiPicker && (
+          <div className="absolute bottom-full left-0 mb-2 z-50">
+            <EmojiPicker
+              onEmojiSelect={handleEmojiSelect}
+              onClose={() => setShowEmojiPicker(false)}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* File upload button */}
+      {enableFileUpload && (
+        <FileUploadButton 
+          onClick={handleFileUploadClick}
+          disabled={disabled}
+        />
+      )}
 
       {/* Input container */}
       <div
@@ -314,6 +449,7 @@ export function WidgetInput({
           disabled={disabled}
           maxLength={maxLength}
           rows={1}
+          data-testid="widget-message-input"
           className={cn(
             'w-full resize-none border-none outline-none bg-transparent',
             'placeholder:text-gray-400',
@@ -346,6 +482,19 @@ export function WidgetInput({
 
       {/* Send button */}
       <SendButton disabled={!canSend} onClick={handleSend} />
+
+      {/* Hidden file input */}
+      {enableFileUpload && (
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          onChange={handleFileSelect}
+          accept={acceptedFileTypes.join(',')}
+          className="hidden"
+          disabled={disabled}
+        />
+      )}
     </motion.div>
   );
 }

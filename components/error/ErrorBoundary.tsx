@@ -187,3 +187,6 @@ export function withErrorBoundary<P extends object>(
 }
 
 export default DashboardErrorBoundary;
+
+// Named export for backward compatibility
+export { DashboardErrorBoundary as ErrorBoundary };

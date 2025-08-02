@@ -7,13 +7,13 @@ import {
   X,
   Minus,
   ArrowsOut,
-  ArrowsIn
+  ArrowsIn,
+  Robot
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { WidgetConfig } from './EnhancedWidgetProvider';
 
 // Import existing widget components
-import { WidgetComposer } from '../components/WidgetComposer';
 import { WelcomeScreen } from '../components/WelcomeScreen';
 import { WidgetBottomTabs, WidgetTabType } from '../components/WidgetBottomTabs';
 import { HelpTab } from '../components/HelpTab';
@@ -28,6 +28,9 @@ import { PixelPerfectChatInterface } from '../design-system';
 
 // Import simplified real-time hook
 import { useWidgetRealtime } from '../hooks/useWidgetRealtime';
+
+// Import AI handover functionality
+import { useAIHandover } from '@/hooks/useAIHandover';
 
 interface EnhancedWidgetProps {
   organizationId: string;
@@ -64,6 +67,13 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+
+  // AI handover functionality
+  const aiHandover = useAIHandover(
+    state.conversationId || '',
+    organizationId,
+    'widget-user'
+  );
 
   // Auto-scroll utility functions
   const scrollToBottom = useCallback((smooth = true) => {
@@ -376,10 +386,26 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
       showStatus: message.senderType === "user",
     }));
 
+    // Add AI handover status message if AI is active
+    const messagesWithAIStatus = aiHandover.isAIActive
+      ? [
+          {
+            id: 'ai-status',
+            content: '🤖 AI Assistant is now helping with this conversation',
+            senderType: 'system' as const,
+            senderName: 'System',
+            timestamp: new Date().toISOString(),
+            status: 'delivered' as const,
+            metadata: { isSystemMessage: true }
+          },
+          ...pixelPerfectMessages
+        ]
+      : pixelPerfectMessages;
+
     return (
       <div className="h-full">
         <PixelPerfectChatInterface
-          messages={pixelPerfectMessages}
+          messages={messagesWithAIStatus}
           isConnected={!!state.conversationId}
           typingUsers={typingUsers}
           organizationName={config.organizationName}
@@ -453,10 +479,32 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
                   <div className="text-xs text-blue-100 flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${state.conversationId ? 'bg-green-400' : 'bg-yellow-400 animate-pulse'}`}></div>
                     {state.conversationId ? 'Connected' : 'Connecting...'}
+                    {aiHandover.isAIActive && (
+                      <div className="flex items-center gap-1 ml-2">
+                        <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                        <span>AI Active</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                {/* AI Handover Button */}
+                {state.conversationId && (
+                  <button
+                    onClick={() => aiHandover.isAIActive ? aiHandover.stopHandover() : aiHandover.startHandover()}
+                    className={`p-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                      aiHandover.isAIActive
+                        ? 'bg-green-500 bg-opacity-20 text-green-100 hover:bg-green-500 hover:bg-opacity-30'
+                        : 'hover:bg-white hover:bg-opacity-20'
+                    }`}
+                    title={aiHandover.isAIActive ? "Stop AI Assistant" : "Start AI Assistant"}
+                    aria-label={aiHandover.isAIActive ? "Stop AI Assistant" : "Start AI Assistant"}
+                    disabled={aiHandover.isProcessing}
+                  >
+                    <Robot className={`h-4 w-4 ${aiHandover.isProcessing ? 'animate-pulse' : ''}`} />
+                  </button>
+                )}
                 <button
                   onClick={minimizeWidget}
                   className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"

@@ -213,9 +213,11 @@ export function TypingIndicator({
 }
 
 /**
- * @deprecated This hook is deprecated. Use hooks/useRealtime.ts instead.
+ * @deprecated OBSOLETE - This hook is deprecated and will be removed. Use hooks/useRealtime.ts instead.
+ *
+ * DO NOT USE - Use the standardized useRealtime hook for all realtime functionality.
+ * This implementation uses outdated patterns and non-unified event names.
  */
-// Hook for sending typing indicators from input components
 export function useTypingIndicator(conversationId: string, organizationId: string, currentUserId?: string) {
 
   const [isTyping, setIsTyping] = useState(false);

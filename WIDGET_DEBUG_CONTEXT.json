@@ -1,0 +1,158 @@
+{
+  "issue_summary": {
+    "title": "Campfire Widget Disappeared - Deep Dive Debug Context",
+    "description": "The UltimateWidget has completely disappeared from the homepage after recent fixes. Need systematic debugging to restore functionality.",
+    "severity": "CRITICAL",
+    "status": "INVESTIGATION_REQUIRED"
+  },
+  "problem_analysis": {
+    "original_issues": [
+      "Widget not sticky to bottom right",
+      "Double header rendering", 
+      "Scroll requiring double scroll to work",
+      "Widget disappeared completely after fixes"
+    ],
+    "root_causes": [
+      "Multiple widget components being rendered simultaneously",
+      "CSS syntax errors breaking compilation",
+      "WidgetProvider vs direct UltimateWidget conflicts",
+      "Scroll behavior conflicts"
+    ]
+  },
+  "codebase_structure": {
+    "widget_components": {
+      "primary": "components/widget/design-system/UltimateWidget.tsx",
+      "provider": "components/widget/index.tsx",
+      "legacy": "app/LegacyHome.tsx",
+      "app_page": "app/app/page.tsx"
+    },
+    "rendering_hierarchy": {
+      "app/page.tsx": "Root page with WidgetProvider",
+      "app/LegacyHome.tsx": "Homepage content (previously had duplicate widget)",
+      "components/widget/index.tsx": "WidgetProvider wrapper",
+      "components/widget/design-system/UltimateWidget.tsx": "Main widget component"
+    },
+    "css_files": {
+      "global": "app/globals.css",
+      "widget_specific": "components/widget/design-system/tokens.ts"
+    }
+  },
+  "recent_changes": {
+    "removed_duplicate_widget": {
+      "file": "app/LegacyHome.tsx",
+      "change": "Removed UltimateWidget component to eliminate double rendering",
+      "impact": "May have broken widget rendering entirely"
+    },
+    "css_fixes": {
+      "file": "app/globals.css", 
+      "changes": [
+        "Removed scroll-behavior: smooth",
+        "Fixed CSS syntax errors",
+        "Added missing closing braces"
+      ]
+    },
+    "widget_provider_update": {
+      "file": "components/widget/index.tsx",
+      "change": "Updated UltimateWidget configuration with advanced features",
+      "features_added": [
+        "enableFileUpload: true",
+        "enableReactions: true", 
+        "enableThreading: true",
+        "enableSoundNotifications: true"
+      ]
+    }
+  },
+  "debugging_steps": {
+    "step_1": {
+      "action": "Verify WidgetProvider is rendering",
+      "check": "components/widget/index.tsx line 127-155",
+      "expected": "UltimateWidget should be rendered inside WidgetProvider"
+    },
+    "step_2": {
+      "action": "Check app routing structure",
+      "files": ["app/page.tsx", "app/app/page.tsx"],
+      "issue": "May have conflicting page structures"
+    },
+    "step_3": {
+      "action": "Verify CSS compilation",
+      "check": "app/globals.css syntax",
+      "issue": "CSS errors may prevent widget from loading"
+    },
+    "step_4": {
+      "action": "Check browser console for errors",
+      "method": "Open browser dev tools and check console/network tabs"
+    },
+    "step_5": {
+      "action": "Verify widget positioning",
+      "check": "components/widget/design-system/useResponsive.ts",
+      "method": "Check getPositionStyles function"
+    }
+  },
+  "critical_files_to_inspect": {
+    "app/page.tsx": {
+      "purpose": "Root page component",
+      "check": "Should render WidgetProvider with children"
+    },
+    "app/app/page.tsx": {
+      "purpose": "App page with WidgetProvider",
+      "check": "May be conflicting with root page"
+    },
+    "components/widget/index.tsx": {
+      "purpose": "WidgetProvider implementation",
+      "check": "UltimateWidget rendering logic"
+    },
+    "app/globals.css": {
+      "purpose": "Global styles",
+      "check": "CSS syntax errors preventing compilation"
+    }
+  },
+  "potential_solutions": {
+    "solution_1": {
+      "title": "Restore WidgetProvider in correct location",
+      "description": "Ensure WidgetProvider is rendered in the correct page component",
+      "files": ["app/page.tsx", "app/app/page.tsx"]
+    },
+    "solution_2": {
+      "title": "Fix CSS compilation errors",
+      "description": "Resolve any remaining CSS syntax issues",
+      "file": "app/globals.css"
+    },
+    "solution_3": {
+      "title": "Verify widget positioning logic",
+      "description": "Check useWidgetPosition hook for proper positioning",
+      "file": "components/widget/design-system/useResponsive.ts"
+    },
+    "solution_4": {
+      "title": "Add debugging console logs",
+      "description": "Add console.log statements to track widget rendering",
+      "files": ["components/widget/index.tsx", "components/widget/design-system/UltimateWidget.tsx"]
+    }
+  },
+  "testing_commands": {
+    "server_status": "curl -s http://localhost:3002 | head -5",
+    "css_check": "npm run build",
+    "type_check": "npm run type-check",
+    "dev_server": "npm run dev -- -p 3002"
+  },
+  "expected_behavior": {
+    "widget_should": [
+      "Be visible in bottom-right corner",
+      "Show single header with 'Campfire' and 'Connected'",
+      "Have chat interface with welcome message",
+      "Support file upload, reactions, threading",
+      "Be sticky and not disappear on scroll"
+    ]
+  },
+  "debugging_priority": [
+    "1. Check if WidgetProvider is being rendered at all",
+    "2. Verify CSS compilation is successful", 
+    "3. Check browser console for JavaScript errors",
+    "4. Verify widget positioning logic",
+    "5. Add debugging logs to track component lifecycle"
+  ],
+  "context_for_ai": {
+    "key_insight": "The widget disappeared after removing duplicate rendering. This suggests the remaining WidgetProvider may not be rendering correctly or there's a routing conflict.",
+    "critical_question": "Is the WidgetProvider actually being rendered in the current page structure?",
+    "immediate_action": "Add console.log statements to track widget rendering and check browser console for errors."
+  }
+} 

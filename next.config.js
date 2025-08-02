@@ -10,11 +10,31 @@ const nextConfig = {
   
   // Image optimization
   images: {
-    domains: [
-      'localhost',
-      'supabase.co',
-      'avatars.githubusercontent.com',
-      'lh3.googleusercontent.com'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp', 'image/avif']
   },
@@ -158,12 +178,6 @@ const nextConfig = {
   experimental: {
     // Enable optimized package imports
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'recharts'],
-    // Enable server components logging in development
-    logging: {
-      level: process.env.NODE_ENV === 'development' ? 'verbose' : 'error',
-    },
-    // Enable font optimization
-    optimizeFonts: true,
   },
 
   // Compiler optimizations

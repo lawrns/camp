@@ -41,9 +41,13 @@ export async function POST(request: NextRequest) {
         .from('typing_indicators')
         .upsert({
           conversation_id: body.conversationId,
+          organization_id: organizationId,
           user_id: body.userId || 'anonymous', // Use user_id for widget users
+          user_name: body.userName || 'Customer',
+          user_type: 'visitor',
           is_typing: true,
-          updated_at: new Date().toISOString(),
+          last_activity: new Date().toISOString(),
+          created_at: new Date().toISOString(),
         });
 
       if (error) {
@@ -59,6 +63,7 @@ export async function POST(request: NextRequest) {
         .from('typing_indicators')
         .delete()
         .eq('conversation_id', body.conversationId)
+        .eq('organization_id', organizationId)
         .eq('user_id', body.userId || 'anonymous'); // Use user_id for widget users
 
       if (error) {

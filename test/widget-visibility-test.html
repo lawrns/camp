@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widget Visibility Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .pass { background-color: #d4edda; color: #155724; }
+        .fail { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Widget Visibility Test</h1>
+    <p>This test checks if the Campfire widget is visible in the DOM.</p>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        function runWidgetVisibilityTest() {
+            const results = [];
+            
+            // Test 1: Check if WidgetProvider exists
+            const widgetProvider = document.querySelector('[data-widget-provider]') || 
+                                 document.querySelector('.widget-provider') ||
+                                 document.querySelector('div[class*="widget"]');
+            
+            results.push({
+                test: 'WidgetProvider in DOM',
+                passed: !!widgetProvider,
+                details: widgetProvider ? 'Found widget provider element' : 'No widget provider found'
+            });
+            
+            // Test 2: Check for UltimateWidget
+            const ultimateWidget = document.querySelector('[data-ultimate-widget]') ||
+                                 document.querySelector('.ultimate-widget') ||
+                                 document.querySelector('div[class*="ultimate"]');
+            
+            results.push({
+                test: 'UltimateWidget in DOM',
+                passed: !!ultimateWidget,
+                details: ultimateWidget ? 'Found ultimate widget element' : 'No ultimate widget found'
+            });
+            
+            // Test 3: Check for any widget-related elements
+            const anyWidget = document.querySelector('div[class*="widget"]') ||
+                            document.querySelector('div[id*="widget"]') ||
+                            document.querySelector('[data-testid*="widget"]');
+            
+            results.push({
+                test: 'Any widget elements',
+                passed: !!anyWidget,
+                details: anyWidget ? `Found widget element: ${anyWidget.className || anyWidget.id}` : 'No widget elements found'
+            });
+            
+            // Test 4: Check for chat interface
+            const chatInterface = document.querySelector('.chat-interface') ||
+                                document.querySelector('[data-chat]') ||
+                                document.querySelector('div[class*="chat"]');
+            
+            results.push({
+                test: 'Chat interface elements',
+                passed: !!chatInterface,
+                details: chatInterface ? 'Found chat interface' : 'No chat interface found'
+            });
+            
+            // Test 5: Check console for widget logs
+            const hasWidgetLogs = window.console && 
+                                (console.log.toString().includes('Widget') || 
+                                 console.error.toString().includes('Widget'));
+            
+            results.push({
+                test: 'Widget console logs',
+                passed: hasWidgetLogs,
+                details: 'Check browser console for [WidgetProvider] or [UltimateWidget] logs'
+            });
+            
+            // Display results
+            const resultsContainer = document.getElementById('test-results');
+            resultsContainer.innerHTML = '';
+            
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-result ${result.passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <strong>${result.test}:</strong> ${result.passed ? '✅ PASS' : '❌ FAIL'}<br>
+                    <small>${result.details}</small>
+                `;
+                resultsContainer.appendChild(div);
+            });
+            
+            // Summary
+            const passedCount = results.filter(r => r.passed).length;
+            const totalCount = results.length;
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = `test-result ${passedCount === totalCount ? 'pass' : 'info'}`;
+            summaryDiv.innerHTML = `
+                <strong>Summary:</strong> ${passedCount}/${totalCount} tests passed<br>
+                <small>${passedCount === totalCount ? 'Widget appears to be working!' : 'Widget may have issues - check failed tests'}</small>
+            `;
+            resultsContainer.appendChild(summaryDiv);
+            
+            return results;
+        }
+        
+        // Run test when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runWidgetVisibilityTest, 1000); // Wait 1 second for widget to load
+        });
+        
+        // Make test available globally
+        window.runWidgetVisibilityTest = runWidgetVisibilityTest;
+    </script>
+    
+    <div class="test-result info">
+        <strong>Instructions:</strong><br>
+        1. Open this page in the same browser as your Campfire app<br>
+        2. The test will run automatically after 1 second<br>
+        3. You can also run <code>window.runWidgetVisibilityTest()</code> in the console<br>
+        4. Check the results above to see if the widget is visible
+    </div>
+</body>
+</html>

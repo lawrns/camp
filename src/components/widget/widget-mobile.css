@@ -68,7 +68,7 @@
     position: sticky !important;
     bottom: 0 !important;
     background: inherit !important;
-    z-index: 20 !important;
+    z-index: 15 !important;
   }
 
   /* Input field mobile sizing */

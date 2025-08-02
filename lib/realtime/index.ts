@@ -103,10 +103,7 @@ export const subscribeToConversation = () => {
 };
 
 // LEGACY ALIASES – maintain backward-compat without touching callers
-export {
-  useNativeConversationRealtime as useConversationRealtime,
-  useNativeOrganizationRealtime as useOrganizationRealtime,
-};
+// Note: useConversationRealtime and useOrganizationRealtime are already exported above
 
 // Very light ConnectionHealth typedef & helper fallback for examples component
 export type ConnectionHealth = {

@@ -1,9 +1,8 @@
 'use client';
 
 import { Suspense } from 'react';
-import { InboxDashboard } from '@/components/InboxDashboard';
 import { MemoryMonitor } from '@/components/MemoryMonitor';
-import { useRealtimeDashboard } from '../app/hooks/useRealtimeDashboard';
+import { useRealtimeDashboard } from '../app-backup/hooks/useRealtimeDashboard';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
@@ -15,7 +14,6 @@ import { TeamStatusGrid } from '@/components/dashboard/TeamStatusGrid';
 import { QuickActionButton } from '@/components/dashboard/QuickActionButton';
 import { AIInsightsPanel } from '@/components/dashboard/AIInsightsPanel';
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
-import { motion } from 'framer-motion';
 import { 
   ChatCircle, 
   Brain, 
@@ -24,6 +22,7 @@ import {
   Gear, 
   ChartLine 
 } from '@phosphor-icons/react';
+import { useState, useEffect } from 'react';
 
 interface DisplayMetrics {
   conversations: number;
@@ -37,6 +36,16 @@ export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const { metrics, activities, systemStatus } = useRealtimeDashboard();
   const { loading: metricsLoading, error } = metrics;
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Trigger entrance animation after component mounts
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Use enhanced dashboard metrics
   const {
@@ -50,7 +59,7 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading dashboard...</p>
@@ -169,11 +178,9 @@ export default function DashboardPage() {
         />
 
         {/* Enhanced Metrics Overview */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 animate-fade-in-up"
+          style={{ animationDelay: '0.2s' }}
         >
           {enhancedMetricsLoading ? (
             // Loading skeleton
@@ -194,11 +201,10 @@ export default function DashboardPage() {
             </div>
           ) : (
             metricCards.map((metric, index) => (
-              <motion.div
+              <div
                 key={metric.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 * index }}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${0.1 * index}s` }}
               >
                 <EnhancedMetricCard
                   title={metric.title}
@@ -209,17 +215,15 @@ export default function DashboardPage() {
                   color={metric.color}
                   description={metric.description}
                 />
-              </motion.div>
+              </div>
             ))
           )}
-        </motion.div>
+        </div>
 
         {/* Team Collaboration Section */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+        <div 
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-8 animate-fade-in-up"
+          style={{ animationDelay: '0.3s' }}
         >
           <div className="lg:col-span-2">
             <TeamActivityFeed organizationId={user?.organizationId || ''} />
@@ -227,14 +231,12 @@ export default function DashboardPage() {
           <div>
             <TeamStatusGrid organizationId={user?.organizationId || ''} />
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Actions and AI Insights Section */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+        <div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 animate-fade-in-up"
+          style={{ animationDelay: '0.4s' }}
         >
           <Card>
             <CardHeader>
@@ -246,11 +248,10 @@ export default function DashboardPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {quickActions.map((action, index) => (
-                  <motion.div
+                  <div
                     key={action.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 * index }}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${0.1 * index}s` }}
                   >
                     <QuickActionButton
                       title={action.title}
@@ -260,7 +261,7 @@ export default function DashboardPage() {
                       color={action.color}
                       badge={action.badge}
                     />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </CardContent>
@@ -270,24 +271,23 @@ export default function DashboardPage() {
             metrics={displayMetrics}
             organizationId={user?.organizationId}
           />
-        </motion.div>
+        </div>
 
-        {/* Main Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        {/* Additional Widgets Section */}
+        <div 
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 animate-fade-in-up"
+          style={{ animationDelay: '0.5s' }}
+        >
           <div className="lg:col-span-2">
-            <Suspense fallback={
-              <Card>
-                <CardContent className="p-6">
-                  <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                    <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  </div>
-                </CardContent>
-              </Card>
-            }>
-              <InboxDashboard />
-            </Suspense>
+            <Card>
+              <CardHeader>
+                <CardTitle>System Overview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Your dashboard has been successfully upgraded with enhanced metrics and real-time team collaboration features.</p>
+                <p className="text-gray-600 mt-2">Navigate to specific sections using the quick actions above or the main navigation menu.</p>
+              </CardContent>
+            </Card>
           </div>
           <div className="space-y-6">
             <MemoryMonitor />

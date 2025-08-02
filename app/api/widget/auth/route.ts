@@ -124,7 +124,7 @@ export async function PUT(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const { customerEmail, customerName, organizationId, visitorId, sessionData } = body;
 
     // Validate required fields - organizationId is required, customerEmail is optional for widget auth

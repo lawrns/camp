@@ -4,7 +4,6 @@ import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { useOrganizationRealtimeSubscription } from '@/contexts/OrganizationRealtimeProvider';
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChatCircle, 
   CheckCircle, 
@@ -48,7 +47,7 @@ const activityIcons = {
 };
 
 const activityColors = {
-  conversation_started: 'text-blue-600 bg-blue-50',
+  conversation_started: 'text-blue-600 bg-gradient-to-br from-blue-50 to-indigo-100',
   message_sent: 'text-green-600 bg-green-50',
   conversation_resolved: 'text-purple-600 bg-purple-50',
   satisfaction_updated: 'text-yellow-600 bg-yellow-50',
@@ -221,76 +220,70 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
       </CardHeader>
       <CardContent>
         <div className="space-y-4 max-h-96 overflow-y-auto">
-          <AnimatePresence>
-            {activities.map((activity, index) => {
-              const Icon = activityIcons[activity.type];
-              const colorClasses = activityColors[activity.type];
-              
-              return (
-                <motion.div
-                  key={activity.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex-shrink-0">
-                    <Avatar className="w-8 h-8">
-                      {activity.memberAvatar ? (
-                        <img src={activity.memberAvatar} alt={activity.memberName} />
-                      ) : (
-                        <AvatarFallback className="text-xs">
-                          {getInitials(activity.memberName)}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
+          {activities.map((activity, index) => {
+            const Icon = activityIcons[activity.type];
+            const colorClasses = activityColors[activity.type];
+            
+            return (
+              <div
+                key={activity.id}
+                className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors animate-fade-in-left delay-100"
+              >
+                <div className="flex-shrink-0">
+                  <Avatar className="w-8 h-8">
+                    {activity.memberAvatar ? (
+                      <img src={activity.memberAvatar} alt={activity.memberName} />
+                    ) : (
+                      <AvatarFallback className="text-xs">
+                        {getInitials(activity.memberName)}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-medium text-sm text-gray-900">
+                      {activity.memberName}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {formatTimeAgo(activity.timestamp)}
+                    </span>
                   </div>
                   
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-sm text-gray-900">
-                        {activity.memberName}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {formatTimeAgo(activity.timestamp)}
-                      </span>
+                  <div className="flex items-center gap-2">
+                    <div className={`p-1 rounded ${colorClasses}`}>
+                      <Icon className="w-3 h-3" />
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <div className={`p-1 rounded ${colorClasses}`}>
-                        <Icon className="w-3 h-3" />
-                      </div>
-                      <p className="text-sm text-gray-700">{activity.message}</p>
-                    </div>
-                    
-                    {activity.metadata && (
-                      <div className="flex items-center gap-2 mt-1">
-                        {activity.metadata.satisfaction && (
-                          <span className="text-xs text-yellow-600 flex items-center gap-1">
-                            <Star className="w-3 h-3" />
-                            {activity.metadata.satisfaction}/5
-                          </span>
-                        )}
-                        {activity.metadata.responseTime && (
-                          <span className="text-xs text-blue-600 flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {activity.metadata.responseTime}s
-                          </span>
-                        )}
-                        {activity.metadata.messagesCount && (
-                          <span className="text-xs text-green-600 flex items-center gap-1">
-                            <MessageCircle className="w-3 h-3" />
-                            {activity.metadata.messagesCount} messages
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    <p className="text-sm text-gray-700">{activity.message}</p>
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                  
+                  {activity.metadata && (
+                    <div className="flex items-center gap-2 mt-1">
+                      {activity.metadata.satisfaction && (
+                        <span className="text-xs text-yellow-600 flex items-center gap-1">
+                          <Star className="w-3 h-3" />
+                          {activity.metadata.satisfaction}/5
+                        </span>
+                      )}
+                      {activity.metadata.responseTime && (
+                        <span className="text-xs text-blue-600 flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {activity.metadata.responseTime}s
+                        </span>
+                      )}
+                      {activity.metadata.messagesCount && (
+                        <span className="text-xs text-green-600 flex items-center gap-1">
+                          <MessageCircle className="w-3 h-3" />
+                          {activity.metadata.messagesCount} messages
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
           
           {activities.length === 0 && (
             <div className="text-center py-8 text-gray-500">

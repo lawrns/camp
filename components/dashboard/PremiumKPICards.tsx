@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useSpring, useTransform } from "framer-motion";
 import {
   CheckCircle as CheckCircle2,
   Clock,
   Heart,
   ChatCircle as MessageCircle,
   TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+  Users,
+  Star,
+  ArrowUpRight,
+  ArrowDownRight
+} from '@phosphor-icons/react';
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -29,15 +32,29 @@ interface PremiumKPICardsProps {
   className?: string;
 }
 
-const CountUpNumber = ({ value, duration = 0.6 }: { value: number; duration?: number }) => {
-  const spring = useSpring(0, { damping: 18, stiffness: 150 });
-  const display = useTransform(spring, (current) => Math.round(current).toLocaleString());
+const CountUpNumber = ({ value }: { value: number }) => {
+  const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    spring.set(value);
-  }, [spring, value]);
+    let start = 0;
+    const end = value;
+    const duration = 600; // ms
+    const increment = end / (duration / 16); // 16ms per frame
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        clearInterval(timer);
+        setDisplayValue(end);
+      } else {
+        setDisplayValue(Math.round(start));
+      }
+    }, 16);
 
-  return <motion.span>{display}</motion.span>;
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <span>{displayValue.toLocaleString()}</span>;
 };
 
 const KPICard = ({ metric, index }: { metric: KPIMetric; index: number }) => {
@@ -90,30 +107,17 @@ const KPICard = ({ metric, index }: { metric: KPIMetric; index: number }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        delay: index * 0.05,
-        duration: 0.4,
-        ease: [0.21, 1.11, 0.81, 0.99],
-      }}
-      className="group relative"
-    >
-      <motion.div
+    <div className="group relative animate-fade-in-up" style={{ animationDelay: `${index * 50}ms` }}>
+      <div
         className={cn(
           "relative overflow-hidden radius-2xl border backdrop-blur-sm",
           "bg-gradient-to-br from-white/80 to-white/60",
           "shadow-card transition-all duration-300",
           colors.border,
-          isHovered && "-translate-y-0.5 shadow-card-hover"
+          "hover:-translate-y-0.5 hover:shadow-card-hover"
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        whileHover={{
-          scale: 1.02,
-          transition: { duration: 0.15 },
-        }}
       >
         {/* Gradient Background */}
         <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50", colors.gradient)} />
@@ -162,15 +166,12 @@ const KPICard = ({ metric, index }: { metric: KPIMetric; index: number }) => {
               </div>
             ) : (
               <>
-                <motion.div
-                  className="text-3xl font-bold tabular-nums leading-none text-gray-900"
+                <div
+                  className="text-3xl font-bold tabular-nums leading-none text-gray-900 animate-scale-in"
                   key={metric.value}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
                 >
                   {formatValue(metric.value)}
-                </motion.div>
+                </div>
                 <div className="text-foreground text-sm font-medium">{metric.title}</div>
               </>
             )}
@@ -187,14 +188,14 @@ const KPICard = ({ metric, index }: { metric: KPIMetric; index: number }) => {
         </div>
 
         {/* Hover Effect Highlight */}
-        <motion.div
+        <div
           className="bg-background/20 absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
             background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
           }}
         />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

@@ -91,7 +91,7 @@ export function MetricCard({
         return 'border-red-200 bg-red-50';
       case 'info':
       default:
-        return 'border-blue-200 bg-blue-50';
+        return 'border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-100';
     }
   };
 

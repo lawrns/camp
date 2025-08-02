@@ -7,6 +7,8 @@ import { useConversations } from "@/hooks/useConversations";
 import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
+import { broadcastToChannel } from "@/lib/realtime/standardized-realtime";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Robot } from "@phosphor-icons/react";
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
@@ -219,27 +221,26 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
         // Broadcast real-time event using standardized system
         try {
-          const channelName = `org:${organizationId}:conv:${convId}`;
-          const channel = supabase.browser().channel(channelName);
-          
-          // Subscribe to channel first (required for broadcasts)
-          await channel.subscribe();
+          console.log('[InboxDashboard] Broadcasting message using standardized system');
 
-          await channel.send({
-            type: "broadcast",
-            event: "message_created",
-            payload: {
+          const success = await broadcastToChannel(
+            UNIFIED_CHANNELS.conversation(organizationId, convId),
+            UNIFIED_EVENTS.MESSAGE_CREATED,
+            {
               message: { ...data, attachments: [], read_status: "sent" as const },
               conversation_id: convId,
               organization_id: organizationId,
               sender_type: senderType,
-            },
-          });
-          
-          // Clean up the channel after sending
-          await channel.unsubscribe();
+            }
+          );
+
+          if (success) {
+            console.log('[InboxDashboard] ✅ Real-time broadcast successful');
+          } else {
+            console.warn('[InboxDashboard] ⚠️ Real-time broadcast failed');
+          }
         } catch (broadcastError) {
-          console.warn("Failed to broadcast message:", broadcastError);
+          console.error('[InboxDashboard] Real-time broadcast error:', broadcastError);
           // Don't throw - message was saved successfully
         }
 

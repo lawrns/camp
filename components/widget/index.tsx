@@ -118,6 +118,15 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
     debug,
   };
 
+  // DEBUG: Track widget rendering
+  console.log('[WidgetProvider] 🔥 RENDERING UltimateWidget:', {
+    organizationId,
+    isAuthenticated,
+    isLoading,
+    error: error?.message,
+    timestamp: new Date().toISOString()
+  });
+
   return (
     <WidgetErrorBoundary organizationId={organizationId}>
       <FeatureFlagProvider config={featureFlagConfig}>
@@ -129,19 +138,26 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
             organizationId={organizationId}
             config={{
               organizationName: "Campfire",
-              primaryColor: "#3b82f6",
+              primaryColor: "#6366F1",
               position: "bottom-right",
-              welcomeMessage: "Hi there! 👋 Welcome to Campfire. How can we help you today?",
+              welcomeMessage: "Hi there! 👋 Welcome to Campfire. This is the UltimateWidget with all advanced features! Try uploading files, reacting to messages, and more!",
               showWelcomeMessage: true,
               enableHelp: true,
               enableNotifications: true,
+              // Advanced features - ALL ENABLED
+              enableFileUpload: true,
+              enableReactions: true,
+              enableThreading: true,
+              enableSoundNotifications: true,
+              maxFileSize: 10, // 10MB
+              maxFiles: 5,
+              acceptedFileTypes: ["image/*", "application/pdf", ".doc", ".docx", ".txt", "video/*", "audio/*"],
             }}
             onMessage={(message) => {
-              console.log('Widget message:', message);
-              // TODO: Handle message sending
+              console.log('UltimateWidget: Message sent:', message);
             }}
             onClose={() => {
-              console.log('Widget closed');
+              console.log('UltimateWidget: Widget closed');
             }}
           />
         </WidgetContext.Provider>
