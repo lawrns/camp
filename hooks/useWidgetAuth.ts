@@ -355,32 +355,19 @@ export function useWidgetAuth(organizationId: string) {
     authLogger.info("Logged out");
   };
 
-  // ENHANCED: Periodic token refresh check for widgets
+  // PERFORMANCE: Disable custom token refresh for Supabase auth to prevent 401 errors
+  // The widget now uses Supabase authentication which handles token refresh automatically
+  // The custom refresh endpoint is for custom JWT tokens, not Supabase tokens
   React.useEffect(() => {
     if (!authState.isAuthenticated || !authState.token) {
       return;
     }
 
-    // Check token immediately
-    checkAndRefreshWidgetToken().catch((error) => {
-      authLogger.error("Initial widget token check failed:", error);
-    });
+    // Only log that we're using the auth system, don't try to refresh manually
+    authLogger.debugThrottled('Widget authentication active - using Supabase auto-refresh');
 
-    // Set up periodic check every 2 minutes
-    const interval = setInterval(async () => {
-      try {
-        const refreshSuccess = await checkAndRefreshWidgetToken();
-        if (!refreshSuccess) {
-          authLogger.warn("Widget token refresh failed, may need re-authentication");
-        }
-      } catch (error) {
-        authLogger.error("Periodic widget token check failed:", error);
-      }
-    }, 2 * 60 * 1000); // 2 minutes
-
-    return () => {
-      clearInterval(interval);
-    };
+    // Supabase client handles token refresh automatically
+    // No manual intervention needed to prevent 401 errors
   }, [authState.isAuthenticated, authState.token]);
 
   // Return bypass auth state for development

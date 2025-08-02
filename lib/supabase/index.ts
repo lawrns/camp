@@ -70,7 +70,13 @@ async function validateAuthToken(client: any) {
       return true;
     }
 
-    console.log('🔐 [Auth] ✅ Valid token found:', session.session.access_token.substring(0, 20) + '...');
+    // PERFORMANCE: Throttle auth validation logging to prevent spam
+    const currentTime = Date.now();
+    const lastLog = (globalThis as any)._lastAuthValidationLog || 0;
+    if (currentTime - lastLog > 5000) { // Only log every 5 seconds
+      console.log('🔐 [Auth] ✅ Valid token found:', session.session.access_token.substring(0, 20) + '...');
+      (globalThis as any)._lastAuthValidationLog = currentTime;
+    }
     return true;
   } catch (error) {
     console.error('🔐 [Auth] Validation error:', error);

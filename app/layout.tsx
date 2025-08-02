@@ -24,10 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <script src="/sw-cleanup.js" async></script>
-        {/* Preload critical fonts */}
-        <link rel="preload" href="/fonts/Sundry-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/Sundry-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/Sundry-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* PERFORMANCE: Removed unused Sundry font preloads to fix preload warnings */}
+        {/* Application uses Inter fonts which are loaded via Google Fonts in design-system.css */}
       </head>
       <body>
         <ClientConsoleManager />

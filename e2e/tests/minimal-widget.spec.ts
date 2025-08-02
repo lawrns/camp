@@ -13,8 +13,8 @@ test.describe('Minimal Widget Test', () => {
   test('should test minimal widget functionality', async ({ page }) => {
     console.log('🔧 Testing minimal widget...');
     
-    // Navigate to widget test page
-    await page.goto(`${TEST_CONFIG.BASE_URL}/widget-test`);
+    // FIXED: Navigate to homepage where widget is located
+    await page.goto(`${TEST_CONFIG.BASE_URL}/`);
     await page.waitForLoadState('networkidle');
     
     console.log('✅ Widget test page loaded');
@@ -82,7 +82,8 @@ test.describe('Minimal Widget Test', () => {
   test('should test widget state management', async ({ page }) => {
     console.log('🔄 Testing widget state management...');
     
-    await page.goto(`${TEST_CONFIG.BASE_URL}/widget-test`);
+    // FIXED: Use homepage instead of /widget-test
+    await page.goto(`${TEST_CONFIG.BASE_URL}/`);
     await page.waitForLoadState('networkidle');
     
     // Check initial state - widget should be closed

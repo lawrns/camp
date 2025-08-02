@@ -57,20 +57,22 @@ test.describe('Performance - Core Web Vitals', () => {
 
   test('should load widget quickly', async ({ page }) => {
     const startTime = Date.now();
-    await page.goto('/app/widget-test');
-    await page.waitForSelector('[data-testid="widget-button"]');
+    // FIXED: Use homepage instead of /app/widget-test
+    await page.goto('/');
+    await page.waitForSelector('[data-testid="widget-button"]', { timeout: 10000 });
     const loadTime = Date.now() - startTime;
-    
+
     // Widget should load in under 3 seconds
     expect(loadTime).toBeLessThan(3000);
   });
 
   test('should handle rapid interactions', async ({ page }) => {
-    await page.goto('/app/widget-test');
-    await page.waitForSelector('[data-testid="widget-button"]');
-    
+    // FIXED: Use homepage instead of /app/widget-test
+    await page.goto('/');
+    await page.waitForSelector('[data-testid="widget-button"]', { timeout: 10000 });
+
     const startTime = Date.now();
-    
+
     // Perform rapid interactions
     for (let i = 0; i < 10; i++) {
       await page.click('[data-testid="widget-button"]');
@@ -78,26 +80,28 @@ test.describe('Performance - Core Web Vitals', () => {
       await page.click('[data-testid="widget-button"]');
       await page.waitForTimeout(100);
     }
-    
+
     const totalTime = Date.now() - startTime;
-    
+
     // Should handle rapid interactions without significant delay
     expect(totalTime).toBeLessThan(5000);
   });
 
   test('should maintain performance under load', async ({ page }) => {
-    await page.goto('/app/widget-test');
-    
+    // FIXED: Use homepage instead of /app/widget-test
+    await page.goto('/');
+    await page.waitForSelector('[data-testid="widget-button"]', { timeout: 10000 });
+
     // Simulate load by opening multiple elements
     const promises = [];
     for (let i = 0; i < 5; i++) {
       promises.push(page.click('[data-testid="widget-button"]'));
     }
-    
+
     const startTime = Date.now();
     await Promise.all(promises);
     const loadTime = Date.now() - startTime;
-    
+
     // Should handle multiple simultaneous interactions
     expect(loadTime).toBeLessThan(2000);
   });

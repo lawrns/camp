@@ -93,25 +93,95 @@ const testWebSocketConnection = (client: any): Promise<boolean> => {
 
 /**
  * Ensure authentication session is valid before channel subscription
+ * CRITICAL FIX: Enhanced authentication with proper error handling and token validation
  */
-const ensureAuthSession = async (client: any): Promise<string | null> => {
+const ensureAuthSession = async (client: any, organizationId: string): Promise<string | null> => {
   try {
+    widgetDebugger.logRealtime('info', '🔐 Checking authentication session...');
+
     const { data: { session }, error } = await client.auth.getSession();
-    
+
     if (error) {
       widgetDebugger.logRealtime('warn', 'Auth session error, attempting anonymous sign-in', { error });
-      const { data: anonSession, error: anonError } = await client.auth.signInAnonymously();
-      if (anonError) throw anonError;
-      return anonSession.session?.access_token || null;
+
+      // Clear any existing session first
+      await client.auth.signOut();
+
+      const { data: anonSession, error: anonError } = await client.auth.signInAnonymously({
+        options: {
+          data: {
+            organization_id: organizationId,
+            widget_session: true,
+            visitor_id: `visitor_${Date.now()}`,
+            source: "widget",
+          },
+        },
+      });
+
+      if (anonError) {
+        widgetDebugger.logRealtime('error', 'Anonymous sign-in failed', anonError);
+        throw anonError;
+      }
+
+      if (!anonSession.session?.access_token) {
+        throw new Error('No access token received from anonymous sign-in');
+      }
+
+      widgetDebugger.logRealtime('info', '✅ Anonymous authentication successful');
+      return anonSession.session.access_token;
     }
 
     if (!session?.access_token) {
       widgetDebugger.logRealtime('info', 'No session found, creating anonymous session');
-      const { data: anonSession, error: anonError } = await client.auth.signInAnonymously();
-      if (anonError) throw anonError;
-      return anonSession.session?.access_token || null;
+
+      const { data: anonSession, error: anonError } = await client.auth.signInAnonymously({
+        options: {
+          data: {
+            organization_id: organizationId,
+            widget_session: true,
+            visitor_id: `visitor_${Date.now()}`,
+            source: "widget",
+          },
+        },
+      });
+
+      if (anonError) {
+        widgetDebugger.logRealtime('error', 'Anonymous sign-in failed', anonError);
+        throw anonError;
+      }
+
+      if (!anonSession.session?.access_token) {
+        throw new Error('No access token received from anonymous sign-in');
+      }
+
+      widgetDebugger.logRealtime('info', '✅ Anonymous authentication successful');
+      return anonSession.session.access_token;
     }
 
+    // Validate existing token
+    try {
+      const tokenParts = session.access_token.split('.');
+      if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        const now = Math.floor(Date.now() / 1000);
+
+        if (payload.exp && payload.exp < now) {
+          widgetDebugger.logRealtime('warn', 'Token expired, refreshing session');
+
+          const { data: refreshData, error: refreshError } = await client.auth.refreshSession();
+          if (refreshError || !refreshData.session?.access_token) {
+            throw new Error('Token refresh failed');
+          }
+
+          widgetDebugger.logRealtime('info', '✅ Token refreshed successfully');
+          return refreshData.session.access_token;
+        }
+      }
+    } catch (tokenError) {
+      widgetDebugger.logRealtime('warn', 'Token validation failed, using existing token', tokenError);
+    }
+
+    widgetDebugger.logRealtime('info', '✅ Using existing valid session');
     return session.access_token;
   } catch (error) {
     widgetDebugger.logRealtime('error', 'Failed to ensure auth session', { error });
@@ -188,8 +258,8 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     }
 
     return {
-      id: parseInt(supabaseMessage.id) || Date.now(), // Convert to number as expected by Message interface
-      conversationId: parseInt(supabaseMessage.conversation_id) || 0,
+      id: String(supabaseMessage.id || Date.now()), // Convert to string as expected by WidgetMessage interface
+      conversationId: String(supabaseMessage.conversation_id || ''),
       content: supabaseMessage.content || '',
       senderType,
       senderName: supabaseMessage.sender_name || 'Unknown',
@@ -314,11 +384,17 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       await testWebSocketConnection(supabaseRef.current);
       widgetDebugger.logRealtime('info', '✅ Pre-connection WebSocket test passed');
 
-      // Ensure authentication
-      const accessToken = await ensureAuthSession(supabaseRef.current);
+      // Ensure authentication with enhanced error handling
+      const accessToken = await ensureAuthSession(supabaseRef.current, config.organizationId);
       if (accessToken) {
+        // CRITICAL FIX: Set auth token before creating channel
         supabaseRef.current.realtime.setAuth(accessToken);
         widgetDebugger.logRealtime('info', '🔐 Authentication token set for realtime');
+
+        // Wait a moment for auth to be processed
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } else {
+        throw new Error('Failed to obtain access token for realtime connection');
       }
 
       // Check for existing channel and reuse if valid
@@ -617,10 +693,27 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       return;
     }
 
-    // CRITICAL: Prevent duplicate connection attempts
+    // CRITICAL: Prevent duplicate connection attempts and thrashing
     if (isConnectingRef.current) {
       widgetDebugger.logRealtime('warn', '🔄 Connection already in progress, skipping duplicate attempt');
       return;
+    }
+
+    // PERFORMANCE: Check if we already have a healthy connection
+    if (channelRef.current && connectionStatus === 'connected') {
+      widgetDebugger.logRealtime('info', 'Already connected, skipping connection attempt');
+      return;
+    }
+
+    // PERFORMANCE: Cleanup any existing connection first to prevent thrashing
+    if (channelRef.current) {
+      widgetDebugger.logRealtime('info', 'Cleaning up existing connection before reconnecting');
+      try {
+        await channelRef.current.unsubscribe();
+      } catch (error) {
+        widgetDebugger.logRealtime('warn', 'Error during connection cleanup', error);
+      }
+      channelRef.current = null;
     }
 
     isConnectingRef.current = true;
@@ -661,18 +754,35 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           }
         });
 
-      // Subscribe to channel
+      // Subscribe to channel with enhanced error handling
       channel.subscribe((status: string) => {
+        widgetDebugger.logRealtime('info', `Channel status: ${status}`);
+
         if (status === 'SUBSCRIBED') {
           setIsConnected(true);
           setConnectionStatus('connected');
           setConnectionError(null);
           config.onConnectionChange?.(true);
+          widgetDebugger.logRealtime('info', '✅ Successfully connected to realtime channel');
         } else if (status === 'CLOSED' || status === 'TIMED_OUT') {
           setIsConnected(false);
           setConnectionStatus('error');
           setConnectionError(`Connection failed: ${status}`);
           config.onConnectionChange?.(false);
+          widgetDebugger.logRealtime('warn', `❌ Connection closed: ${status}`);
+        } else if (status === 'CHANNEL_ERROR') {
+          // CRITICAL FIX: Handle errored state to prevent infinite reconnection loops
+          setIsConnected(false);
+          setConnectionStatus('error');
+          setConnectionError('Channel error occurred');
+          config.onConnectionChange?.(false);
+          widgetDebugger.logRealtime('error', '❌ Channel error - stopping reconnection attempts');
+
+          // Clean up the errored channel
+          if (channelRef.current) {
+            channelRef.current.unsubscribe();
+            channelRef.current = null;
+          }
         }
       });
 

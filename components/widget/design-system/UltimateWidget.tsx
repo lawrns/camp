@@ -16,7 +16,7 @@
  * - Error boundaries and loading states
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ChatCircle } from '@phosphor-icons/react';
@@ -111,15 +111,20 @@ export function UltimateWidget({
   onClose,
   className,
 }: UltimateWidgetProps) {
-  // DEBUG: Track UltimateWidget rendering
-  console.log('[UltimateWidget] 🚀 COMPONENT RENDERING:', {
-    organizationId,
-    userConfig,
-    timestamp: new Date().toISOString()
-  });
+  // PERFORMANCE: Remove debug logging to prevent render spam
+  // Only log in development and throttle to prevent console spam
+  if (process.env.NODE_ENV === 'development') {
+    // Throttle logging to once per second using a global variable
+    const now = Date.now();
+    const lastLog = (globalThis as any)._lastWidgetRenderLog || 0;
+    if (now - lastLog > 1000) {
+      console.log('[UltimateWidget] 🚀 COMPONENT RENDERING:', { organizationId, timestamp: new Date().toISOString() });
+      (globalThis as any)._lastWidgetRenderLog = now;
+    }
+  }
 
-  // Merge user config with defaults
-  const config = { ...defaultConfig, ...userConfig };
+  // PERFORMANCE: Memoize config to prevent unnecessary re-renders
+  const config = useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]);
 
   // Responsive hooks
   const { getWidgetDimensions, isMobile, isTouch } = useWidgetDimensions();
@@ -141,33 +146,42 @@ export function UltimateWidget({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // NEW: Real-time integration with useWidgetRealtime hook
-  const realtime = useWidgetRealtime({
+  // PERFORMANCE: Memoize realtime callbacks to prevent connection thrashing
+  const handleRealtimeMessage = useCallback((message: any) => {
+    const messageData: MessageBubbleProps = {
+      id: message.id.toString(),
+      content: message.content,
+      senderType: message.senderType === 'visitor' ? 'visitor' : 'agent',
+      senderName: message.senderName || 'Unknown',
+      timestamp: new Date(message.createdAt).toISOString(),
+      isOwn: message.senderType === 'visitor',
+      status: message.status === 'pending' ? 'sending' : (message.status || 'delivered'),
+    };
+    setMessages(prev => [...prev, messageData]);
+  }, []);
+
+  const handleRealtimeTyping = useCallback((isTyping: boolean, userName?: string) => {
+    if (isTyping && userName) {
+      setTypingUsers([{ id: 'agent', name: userName }]);
+    } else {
+      setTypingUsers([]);
+    }
+  }, []);
+
+  const handleConnectionChange = useCallback((connected: boolean) => {
+    setIsConnected(connected);
+  }, []);
+
+  // NEW: Real-time integration with memoized callbacks to prevent thrashing
+  const realtimeConfig = useMemo(() => ({
     organizationId,
     conversationId: conversationId || undefined,
-    onMessage: (message) => {
-      const messageData: MessageBubbleProps = {
-        id: message.id.toString(),
-        content: message.content,
-        senderType: message.senderType === 'visitor' ? 'visitor' : 'agent',
-        senderName: message.senderName || 'Unknown',
-        timestamp: new Date(message.createdAt).toISOString(),
-        isOwn: message.senderType === 'visitor',
-        status: message.status === 'pending' ? 'sending' : (message.status || 'delivered'),
-      };
-      setMessages(prev => [...prev, messageData]);
-    },
-    onTyping: (isTyping, userName) => {
-      if (isTyping && userName) {
-        setTypingUsers([{ id: 'agent', name: userName }]);
-      } else {
-        setTypingUsers([]);
-      }
-    },
-    onConnectionChange: (connected) => {
-      setIsConnected(connected);
-    },
-  });
+    onMessage: handleRealtimeMessage,
+    onTyping: handleRealtimeTyping,
+    onConnectionChange: handleConnectionChange,
+  }), [organizationId, conversationId, handleRealtimeMessage, handleRealtimeTyping, handleConnectionChange]);
+
+  const realtime = useWidgetRealtime(realtimeConfig);
 
   // AI handover functionality
   const aiHandover = useAIHandover(
@@ -385,18 +399,8 @@ export function UltimateWidget({
         }
       }
 
-      // Use realtime.sendMessage instead of direct API call
-      await realtime.sendMessage({
-        conversationId: currentConversationId,
-        content: message,
-        senderType: 'visitor',
-        senderName: 'Widget User',
-        metadata: {
-          source: 'widget',
-          timestamp: new Date().toISOString(),
-          attachments: selectedFiles.length > 0 ? selectedFiles.map(f => f.name) : undefined,
-        },
-      });
+      // Use realtime.sendMessage with just the message content
+      await realtime.sendMessage(message);
 
       // Update the temporary message with success status
       setMessages(prev => prev.map(msg =>
@@ -405,10 +409,13 @@ export function UltimateWidget({
           : msg
       ));
 
+      // Clear input and files
+      setSelectedFiles([]);
+
       // Trigger callback
       onMessage?.(message);
 
-      console.log('[UltimateWidget] Message sent successfully:', result);
+      console.log('[UltimateWidget] Message sent successfully');
 
     } catch (error) {
       console.error('[UltimateWidget] Failed to send message:', error);

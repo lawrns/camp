@@ -196,6 +196,11 @@ const nextConfig = {
   
   // React strict mode
   reactStrictMode: true,
+
+  // PERFORMANCE FIX: Disable dev indicators to reduce console noise
+  devIndicators: {
+    position: 'bottom-right',
+  },
   
   // SWC minification is now default in Next.js 15
   

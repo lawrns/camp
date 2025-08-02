@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- alert
+- navigation "Main navigation":
+  - img "Campfire logo"
+  - navigation:
+    - text: Primary
+    - link "Dashboard":
+      - /url: /dashboard
+      - img
+      - text: Dashboard
+    - link "Inbox":
+      - /url: /dashboard/inbox
+      - img
+      - text: Inbox
+    - link "Tickets":
+      - /url: /dashboard/tickets
+      - img
+      - text: Tickets
+    - link "Knowledge":
+      - /url: /dashboard/knowledge
+      - img
+      - text: Knowledge
+    - link "Analytics":
+      - /url: /dashboard/analytics
+      - img
+      - text: Analytics
+    - link "AI Insights":
+      - /url: /dashboard/ai-insights
+      - img
+      - text: AI Insights
+    - text: Tools
+    - link "Settings":
+      - /url: /dashboard/settings
+      - img
+      - text: Settings
+    - link "Team":
+      - /url: /dashboard/team
+      - img
+      - text: Team
+    - link "Integrations":
+      - /url: /dashboard/integrations
+      - img
+      - text: Integrations
+  - link "Notifications":
+    - /url: /dashboard/notifications
+    - img
+    - text: Notifications
+  - link "Help":
+    - /url: /dashboard/help
+    - img
+    - text: Help
+  - link "Profile":
+    - /url: /dashboard/profile
+    - img
+    - text: Profile
+- main
+```

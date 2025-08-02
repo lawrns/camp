@@ -39,7 +39,8 @@ test.describe('Basic Widget-Dashboard Communication', () => {
       
       // Test 2: Set up widget
       console.log('🔧 Setting up widget...');
-      await widgetPage.goto(`${TEST_CONFIG.BASE_URL}/widget-test`);
+      // FIXED: Use homepage instead of /widget-test
+      await widgetPage.goto(`${TEST_CONFIG.BASE_URL}/`);
       await widgetPage.waitForLoadState('networkidle');
       
       const widgetButton = widgetPage.locator('[data-testid="widget-button"]');
@@ -174,7 +175,8 @@ test.describe('Basic Widget-Dashboard Communication', () => {
   test('should test error handling', async ({ page }) => {
     console.log('🛡️ Testing error handling...');
     
-    await page.goto(`${TEST_CONFIG.BASE_URL}/widget-test`);
+    // FIXED: Use homepage instead of /widget-test
+    await page.goto(`${TEST_CONFIG.BASE_URL}/`);
     await page.waitForLoadState('networkidle');
     
     // Open widget

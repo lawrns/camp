@@ -1,6 +1,9 @@
 /* ===== IMPORT DESIGN SYSTEM ===== */
 @import "../styles/design-system.css";
 
+/* ===== IMPORT BRAND TOKENS ===== */
+@import "../styles/brand-tokens.css";
+
 /* ===== IMPORT TAILWIND ===== */
 @tailwind base;
 @tailwind components;
