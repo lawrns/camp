@@ -235,8 +235,10 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         );
         console.log(`[SendMessage] 🔄 Replaced optimistic message with real message: ${data.id}`);
 
-        // 3. Real-time broadcast - attempt to notify other clients
+        // 3. Real-time broadcast - PHASE 2 FIX: Enhanced error handling
         console.log(`[SendMessage] 📡 Attempting real-time broadcast...`);
+        let broadcastSuccess = false;
+
         try {
           const startTime = performance.now();
 
@@ -251,24 +253,41 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             metadata: data.metadata as Record<string, any> || {},
           };
 
-          const success = await realtimeActions.sendMessage(messagePayload);
+          console.log(`[SendMessage] 🚀 Calling realtimeActions.sendMessage with payload:`, messagePayload);
+          broadcastSuccess = await realtimeActions.sendMessage(messagePayload);
           const latency = performance.now() - startTime;
           const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
 
-          if (success) {
+          if (broadcastSuccess) {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
             console.log(`[SendMessage] ✅ Real-time broadcast successful: ${channelName} (${latency.toFixed(1)}ms)`);
           } else {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, false, "Broadcast failed");
-            console.warn(`[SendMessage] ⚠️  Real-time broadcast failed: ${channelName}`);
-            console.warn(`[SendMessage] ℹ️  Message was saved successfully, but real-time sync may be delayed`);
-            // Don't throw - message was saved successfully, broadcast failure is not critical
+            console.error(`[SendMessage] ❌ Real-time broadcast failed: ${channelName}`);
+            console.warn(`[SendMessage] ⚠️  Message saved to DB but real-time sync failed - widget may not update`);
+            // PHASE 2 FIX: Don't throw - message was saved successfully
           }
         } catch (broadcastError) {
           RealtimeLogger.error("message broadcast", broadcastError);
-          console.warn(`[SendMessage] ⚠️  Real-time broadcast error:`, broadcastError);
-          console.warn(`[SendMessage] ℹ️  Message was saved successfully, but real-time sync may be delayed`);
-          // Don't throw - message was saved successfully, broadcast failure is not critical
+          console.error(`[SendMessage] 💥 Real-time broadcast error:`, broadcastError);
+          console.error(`[SendMessage] 🔍 Broadcast error details:`, {
+            name: broadcastError.name,
+            message: broadcastError.message,
+            stack: broadcastError.stack
+          });
+          console.warn(`[SendMessage] ⚠️  Message saved to DB but real-time sync failed - widget may not update`);
+          // PHASE 2 FIX: Don't throw - message was saved successfully
+        }
+
+        // PHASE 2 FIX: Update message status based on broadcast result
+        if (!broadcastSuccess) {
+          console.log(`[SendMessage] 🔄 Updating message status to indicate sync issue`);
+          // Update the message in UI to show sync status
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === data.id ? { ...msg, read_status: "sent" as const } : msg
+            )
+          );
         }
 
         return data;

@@ -35,8 +35,52 @@ let browserClientInitialized = false;
 let serviceClient: ReturnType<typeof createSupabaseClient<Database>> | null = null;
 
 /**
+ * PHASE 1 FIX: Auth validation for realtime connections
+ * Validates and refreshes JWT token to prevent auth rejection
+ */
+async function validateAuthToken(client: any) {
+  try {
+    const { data: session, error } = await client.auth.getSession();
+
+    if (error) {
+      console.warn('🔐 [Auth] Session error:', error);
+      return false;
+    }
+
+    if (!session?.session?.access_token) {
+      console.warn('🔐 [Auth] No access token found - realtime may fail');
+      return false;
+    }
+
+    // Check if token is expired or expiring soon (within 5 minutes)
+    const expiresAt = session.session.expires_at;
+    const now = Math.floor(Date.now() / 1000);
+    const fiveMinutes = 5 * 60;
+
+    if (expiresAt && (expiresAt - now) < fiveMinutes) {
+      console.log('🔐 [Auth] Token expiring soon, refreshing...');
+      const { data: refreshed, error: refreshError } = await client.auth.refreshSession();
+
+      if (refreshError) {
+        console.error('🔐 [Auth] Token refresh failed:', refreshError);
+        return false;
+      }
+
+      console.log('🔐 [Auth] ✅ Token refreshed successfully');
+      return true;
+    }
+
+    console.log('🔐 [Auth] ✅ Valid token found:', session.session.access_token.substring(0, 20) + '...');
+    return true;
+  } catch (error) {
+    console.error('🔐 [Auth] Validation error:', error);
+    return false;
+  }
+}
+
+/**
  * Get browser client (client-side only)
- * Enhanced with singleton protection to prevent multiple GoTrueClient instances
+ * Enhanced with singleton protection and auth validation
  */
 export function getBrowserClient() {
   if (typeof window === "undefined") {
@@ -45,6 +89,8 @@ export function getBrowserClient() {
 
   // Prevent multiple instances by checking global state
   if (browserClientInitialized && browserClient) {
+    // PHASE 1 FIX: Validate auth token before returning existing client
+    validateAuthToken(browserClient);
     return browserClient;
   }
 
@@ -52,6 +98,8 @@ export function getBrowserClient() {
   if (typeof window !== 'undefined' && (window as any).__SUPABASE_CLIENT__) {
     browserClient = (window as any).__SUPABASE_CLIENT__;
     browserClientInitialized = true;
+    // PHASE 1 FIX: Validate auth token for existing global client
+    validateAuthToken(browserClient);
     return browserClient;
   }
 
