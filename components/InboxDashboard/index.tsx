@@ -168,22 +168,23 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<any> => {
       if (!organizationId || !content.trim()) return null;
 
-      try {
-        // Create optimistic message for immediate UI update
-        const tempId = `temp_${Date.now()}_${Math.random()}`;
-        const optimisticMessage: Message = {
-          id: tempId,
-          conversation_id: convId,
-          content: content.trim(),
-          sender_type: senderType as "agent" | "customer",
-          sender_name: senderType === "agent" ? "Support Agent" : "Customer",
-          created_at: new Date().toISOString(),
-          attachments: [],
-          read_status: "sent", // Use valid read_status value
-        };
+      // Create optimistic message for immediate UI update
+      const tempId = `temp_${Date.now()}_${Math.random()}`;
+      const optimisticMessage: Message = {
+        id: tempId,
+        conversation_id: convId,
+        content: content.trim(),
+        sender_type: senderType as "agent" | "customer",
+        sender_name: senderType === "agent" ? "Support Agent" : "Customer",
+        created_at: new Date().toISOString(),
+        attachments: [],
+        read_status: "sent", // Use valid read_status value
+      };
 
-        // Add optimistic message to UI immediately
-        setMessages(prev => [...prev, optimisticMessage]);
+      // Add optimistic message to UI immediately
+      setMessages(prev => [...prev, optimisticMessage]);
+
+      try {
 
         // Send to database
         const { data, error } = await supabase
@@ -254,16 +255,23 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           } else {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, false, "Broadcast failed");
             console.warn(`📡 [Realtime] ❌ Message broadcast failed on ${channelName}`);
+            console.warn("⚠️  Real-time broadcast failed, but message was saved to database successfully");
+            // Continue execution - message was saved successfully even if broadcast failed
           }
         } catch (broadcastError) {
           RealtimeLogger.error("message broadcast", broadcastError);
           console.warn("Failed to broadcast message:", broadcastError);
-          // Don't throw - message was saved successfully
+          console.warn("⚠️  Real-time broadcast error, but message was saved to database successfully");
+          // Don't throw - message was saved successfully even if broadcast failed
         }
 
         return data;
       } catch (error) {
         console.error("Failed to send message:", error);
+
+        // Clean up optimistic message on database error
+        setMessages(prev => prev.filter(msg => msg.id !== tempId));
+
         throw error;
       }
     },
@@ -431,21 +439,30 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) return;
 
     setIsSending(true);
+    const messageContent = newMessage.trim();
 
     try {
       // Use high-performance real-time sending for <30ms delivery
-      await sendMessageHP(selectedConversation.id, newMessage.trim(), "agent");
+      await sendMessageHP(selectedConversation.id, messageContent, "agent");
 
-      // Clear form immediately for better UX
+      // Clear form only on success
       setNewMessage("");
       setAttachments([]);
       handleStopTyping();
-    } catch (error) {
 
+      console.log("✅ Message sent successfully");
+    } catch (error) {
+      console.error("❌ Failed to send message:", error);
+
+      // Show user-friendly error message
+      // TODO: Add toast notification or error state
+      alert("Failed to send message. Please try again.");
+
+      // Don't clear the message content so user can retry
     } finally {
       setIsSending(false);
     }
-  }, [newMessage, selectedConversation, isSending, user, attachments, handleStopTyping]);
+  }, [newMessage, selectedConversation, isSending, organizationId, sendMessageHP, setNewMessage, setAttachments, handleStopTyping]);
 
   // File handling
   const onFileInput = useCallback(

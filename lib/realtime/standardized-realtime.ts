@@ -253,6 +253,30 @@ export async function broadcastToChannel(
   try {
     const channel = channelManager.getChannel(channelName, config);
 
+    // CRITICAL FIX: Ensure channel is subscribed before broadcasting
+    // Supabase requires channels to be subscribed to send broadcasts
+    const channelStatus = channel.state;
+    if (channelStatus !== 'joined') {
+      console.log(`[Realtime] Channel ${channelName} not subscribed (${channelStatus}), subscribing...`);
+
+      // Subscribe to the channel and wait for it to be ready
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error(`Channel subscription timeout for ${channelName}`));
+        }, 5000);
+
+        channel.subscribe((status) => {
+          clearTimeout(timeout);
+          if (status === 'SUBSCRIBED') {
+            console.log(`[Realtime] Channel ${channelName} successfully subscribed`);
+            resolve();
+          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+            reject(new Error(`Channel subscription failed: ${status}`));
+          }
+        });
+      });
+    }
+
     const result = await channel.send({
       type: 'broadcast',
       event: eventType,
