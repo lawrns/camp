@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   House,
   Tray,
@@ -15,14 +16,15 @@ import {
   Bell,
   Question,
   User,
-  Fire,
   List as Menu,
   X,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/Button-unified";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/unified-ui/components/sheet";
+import { Sheet, SheetContent } from "@/components/unified-ui/components/sheet";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
+import { PremiumHeader } from "../ui/PremiumHeader";
+import { NavigationCard } from "../ui/NavigationCard";
 
 interface MobileSidebarProps {
   className?: string;
@@ -31,18 +33,78 @@ interface MobileSidebarProps {
 }
 
 const navigationItems = [
-  { name: "Dashboard", href: "/dashboard", icon: House },
-  { name: "Inbox", href: "/inbox", icon: Tray },
-  { name: "Tickets", href: "/tickets", icon: Ticket },
-  { name: "Knowledge", href: "/knowledge", icon: BookOpen },
-  { name: "Analytics", href: "/analytics", icon: ChartBar },
-  { name: "AI Insights", href: "/ai-insights", icon: Lightbulb },
-  { name: "Settings", href: "/settings", icon: Gear },
-  { name: "Team", href: "/team", icon: Users },
-  { name: "Integrations", href: "/integrations", icon: Plug },
-  { name: "Notifications", href: "/notifications", icon: Bell },
-  { name: "Help", href: "/help", icon: Question },
-  { name: "Profile", href: "/profile", icon: User },
+  { 
+    name: "Dashboard", 
+    href: "/dashboard", 
+    icon: House,
+    description: "Overview and analytics"
+  },
+  { 
+    name: "Inbox", 
+    href: "/inbox", 
+    icon: Tray,
+    description: "Manage conversations"
+  },
+  { 
+    name: "Tickets", 
+    href: "/tickets", 
+    icon: Ticket,
+    description: "Support tickets"
+  },
+  { 
+    name: "Knowledge", 
+    href: "/knowledge", 
+    icon: BookOpen,
+    description: "Documentation & guides"
+  },
+  { 
+    name: "Analytics", 
+    href: "/analytics", 
+    icon: ChartBar,
+    description: "Performance insights"
+  },
+  { 
+    name: "AI Insights", 
+    href: "/ai-insights", 
+    icon: Lightbulb,
+    description: "AI-powered recommendations"
+  },
+  { 
+    name: "Settings", 
+    href: "/settings", 
+    icon: Gear,
+    description: "Configuration & preferences"
+  },
+  { 
+    name: "Team", 
+    href: "/team", 
+    icon: Users,
+    description: "Manage team members"
+  },
+  { 
+    name: "Integrations", 
+    href: "/integrations", 
+    icon: Plug,
+    description: "Third-party connections"
+  },
+  { 
+    name: "Notifications", 
+    href: "/notifications", 
+    icon: Bell,
+    description: "Alerts & updates"
+  },
+  { 
+    name: "Help", 
+    href: "/help", 
+    icon: Question,
+    description: "Support & documentation"
+  },
+  { 
+    name: "Profile", 
+    href: "/profile", 
+    icon: User,
+    description: "Account settings"
+  },
 ];
 
 export function MobileSidebar({ className, isOpen = false, onOpenChange }: MobileSidebarProps) {
@@ -70,42 +132,50 @@ export function MobileSidebar({ className, isOpen = false, onOpenChange }: Mobil
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn("fixed left-4 top-4 z-50 md:hidden", className)}
-        onClick={() => handleOpenChange(!sheetOpen)}
+      {/* Enhanced Mobile Menu Button */}
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed left-4 top-4 z-50 md:hidden"
       >
-        {sheetOpen ? <Icon icon={X} className="h-5 w-5" /> : <Icon icon={Menu} className="h-5 w-5" />}
-      </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200/50",
+            "hover:bg-white/95 transition-all duration-200",
+            className
+          )}
+          onClick={() => handleOpenChange(!sheetOpen)}
+        >
+          {sheetOpen ? <Icon icon={X} className="h-5 w-5" /> : <Icon icon={Menu} className="h-5 w-5" />}
+        </Button>
+      </motion.div>
 
-      {/* Mobile Sidebar Sheet */}
+      {/* Premium Mobile Sidebar */}
       <Sheet open={sheetOpen} onOpenChange={handleOpenChange}>
-        <SheetContent className="w-[280px] p-0 !left-0 !right-auto">
-          <SheetHeader className="p-6 pb-4">
-            <SheetTitle className="flex items-center gap-3">
-              <Icon icon={Fire} className="h-8 w-8 text-orange-500" />
-              <span className="text-lg font-bold">Campfire</span>
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className="px-3 pb-6">
-            {/* Navigation */}
-            <nav className="space-y-1">
-              {navigationItems.map((item) => (
-                <Button
+        <SheetContent className="w-[320px] p-0 !left-0 !right-auto bg-gradient-to-b from-orange-50 to-red-50">
+          <PremiumHeader onClose={() => handleOpenChange(false)} />
+          
+          <div className="px-4 pb-6 space-y-3">
+            <nav className="space-y-2">
+              {navigationItems.map((item, index) => (
+                <motion.div
                   key={item.name}
-                  variant={isActive(item.href) ? "secondary" : "ghost"}
-                  className={cn(
-                    "h-12 w-full flex items-center gap-3 justify-start",
-                    isActive(item.href) && "bg-secondary font-medium"
-                  )}
-                  onClick={() => handleNavigate(item.href)}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: index * 0.05,
+                    ease: "easeOut"
+                  }}
                 >
-                  <Icon icon={item.icon} className="h-5 w-5" />
-                  {item.name}
-                </Button>
+                  <NavigationCard
+                    item={item}
+                    isActive={isActive(item.href)}
+                    onClick={() => handleNavigate(item.href)}
+                  />
+                </motion.div>
               ))}
             </nav>
           </div>

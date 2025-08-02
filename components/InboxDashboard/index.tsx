@@ -9,6 +9,7 @@ import { useRealtime } from "@/hooks/useRealtime";
 import { supabase } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
+import type { RealtimeMessagePayload } from "@/lib/realtime/constants";
 import { Robot, X } from "@phosphor-icons/react";
 import * as React from "react";
 import { useCallback, useRef, useState, memo, useMemo } from "react";
@@ -26,7 +27,7 @@ import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
 import ShortcutsModal from "./sub-components/ShortcutsModal";
 // Import types
-import type { AISuggestion, Conversation, FileAttachment } from "./types";
+import type { AISuggestion, Conversation, FileAttachment, Message } from "./types";
 import { debounce, mapConversation } from "./utils/channelUtils";
 import { handleFileDrop, handleFileInput } from "./utils/fileUtils";
 // NEW: Import dialog components
@@ -111,7 +112,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
   // Fetch conversations using the useConversations hook
-  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations(organizationId);
+  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
@@ -164,26 +165,21 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
   // Send message function with real-time broadcasting
   const sendMessageHP = useCallback(
-    async (convId: string, content: string, senderType: "customer" | "agent" = "agent") => {
-      if (!organizationId || !content.trim()) return;
+    async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<any> => {
+      if (!organizationId || !content.trim()) return null;
 
       try {
         // Create optimistic message for immediate UI update
         const tempId = `temp_${Date.now()}_${Math.random()}`;
-        const optimisticMessage = {
+        const optimisticMessage: Message = {
           id: tempId,
           conversation_id: convId,
-          organization_id: organizationId,
           content: content.trim(),
-          sender_type: senderType,
+          sender_type: senderType as "agent" | "customer",
           sender_name: senderType === "agent" ? "Support Agent" : "Customer",
           created_at: new Date().toISOString(),
-          metadata: {
-            source: "dashboard",
-            timestamp: new Date().toISOString(),
-          },
           attachments: [],
-          read_status: "sending" as const,
+          read_status: "sent", // Use valid read_status value
         };
 
         // Add optimistic message to UI immediately
@@ -214,49 +210,52 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         }
 
         // Replace optimistic message with real one
+        const realMessage: Message = {
+          id: data.id,
+          conversation_id: data.conversation_id,
+          content: data.content,
+          sender_type: data.sender_type as "agent" | "customer" | "visitor" | "ai",
+          sender_name: data.sender_name || (senderType === "agent" ? "Support Agent" : "Customer"),
+          created_at: data.created_at,
+          attachments: [],
+          read_status: "sent",
+        };
+
         setMessages(prev =>
           prev.map(msg =>
-            msg.id === tempId
-              ? { ...data, attachments: [], read_status: "sent" as const }
-              : msg
+            msg.id === tempId ? realMessage : msg
           )
         );
 
-        // Broadcast real-time event using unified standards with monitoring
+        // Broadcast real-time event using persistent channels for bidirectional communication
         try {
-          const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
-          const channel = supabase.browser().channel(channelName);
-          const connectionId = `dashboard-${organizationId}-${convId}`;
           const startTime = performance.now();
 
-          // Track connection attempt
-          realtimeMonitor.trackConnection(channelName, connectionId);
+          // Use existing persistent channel from real-time system instead of creating temporary ones
+          const messagePayload: RealtimeMessagePayload = {
+            id: data.id,
+            conversation_id: convId,
+            organization_id: organizationId,
+            content: data.content,
+            sender_type: senderType,
+            sender_name: data.sender_name || (senderType === "agent" ? "Support Agent" : "Customer"),
+            created_at: data.created_at,
+            metadata: data.metadata as Record<string, any> || {},
+          };
 
-          // Subscribe to channel first (required for broadcasts)
-          await channel.subscribe();
-          realtimeMonitor.updateConnectionStatus(connectionId, "connected");
-
-          await channel.send({
-            type: "broadcast",
-            event: UNIFIED_EVENTS.MESSAGE_CREATED,
-            payload: {
-              message: { ...data, attachments: [], read_status: "sent" as const },
-              conversation_id: convId,
-              organization_id: organizationId,
-              sender_type: senderType,
-            },
-          });
+          const success = await realtimeActions.sendMessage(messagePayload);
 
           const latency = performance.now() - startTime;
-          realtimeMonitor.trackBroadcast(connectionId, UNIFIED_EVENTS.MESSAGE_CREATED, true, latency);
-          RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
+          const channelName = UNIFIED_CHANNELS.conversation(organizationId, convId);
 
-          // Clean up the channel after sending
-          await channel.unsubscribe();
+          if (success) {
+            RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
+            console.log(`📡 [Realtime] ✅ Message broadcast successful on ${channelName} (${latency.toFixed(1)}ms)`);
+          } else {
+            RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, false, "Broadcast failed");
+            console.warn(`📡 [Realtime] ❌ Message broadcast failed on ${channelName}`);
+          }
         } catch (broadcastError) {
-          const errorMessage = broadcastError instanceof Error ? broadcastError.message : String(broadcastError);
-          const connectionId = `dashboard-${organizationId}-${convId}`;
-          realtimeMonitor.trackBroadcast(connectionId, UNIFIED_EVENTS.MESSAGE_CREATED, false, undefined, errorMessage);
           RealtimeLogger.error("message broadcast", broadcastError);
           console.warn("Failed to broadcast message:", broadcastError);
           // Don't throw - message was saved successfully
