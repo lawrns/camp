@@ -7,6 +7,7 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useState } from 'react';
 import { DashboardErrorBoundary } from '@/components/error/ErrorBoundary';
 import { DashboardSkeleton } from '@/components/ui/SkeletonLoader';
+import { OrganizationRealtimeProvider } from '@/contexts/OrganizationRealtimeProvider';
 
 export default function DashboardLayout({
   children,
@@ -49,9 +50,11 @@ export default function DashboardLayout({
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Page Content */}
           <main className="flex-1 overflow-auto">
-            <Suspense fallback={<DashboardSkeleton />}>
-              {children}
-            </Suspense>
+            <OrganizationRealtimeProvider>
+              <Suspense fallback={<DashboardSkeleton />}>
+                {children}
+              </Suspense>
+            </OrganizationRealtimeProvider>
           </main>
         </div>
       </div>

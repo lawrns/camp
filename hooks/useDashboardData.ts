@@ -45,7 +45,12 @@ export function useDashboardData() {
 
         if (response.ok) {
           const data = await response.json();
-          setMetrics(data);
+          // Handle both structured and flat API responses
+          if (data.structured) {
+            setMetrics(data.structured);
+          } else {
+            setMetrics(data);
+          }
         } else {
           // If API fails, use realistic mock data instead of hardcoded values
           console.warn('Dashboard API not available, using mock data');
@@ -64,7 +69,31 @@ export function useDashboardData() {
     fetchDashboardData();
   }, []);
 
-  return { metrics, loading, error };
+  // Add defensive check to ensure metrics are safe to use
+  const safeMetrics = metrics ? {
+    activeConversations: {
+      value: metrics.activeConversations?.value ?? 0,
+      change: String(metrics.activeConversations?.change ?? ''),
+      trend: metrics.activeConversations?.trend ?? 'neutral'
+    },
+    responseTime: {
+      value: String(metrics.responseTime?.value ?? '0s'),
+      change: String(metrics.responseTime?.change ?? ''),
+      trend: metrics.responseTime?.trend ?? 'neutral'
+    },
+    aiResolutionRate: {
+      value: String(metrics.aiResolutionRate?.value ?? '0%'),
+      change: String(metrics.aiResolutionRate?.change ?? ''),
+      trend: metrics.aiResolutionRate?.trend ?? 'neutral'
+    },
+    customerSatisfaction: {
+      value: String(metrics.customerSatisfaction?.value ?? '0/5'),
+      change: String(metrics.customerSatisfaction?.change ?? ''),
+      trend: metrics.customerSatisfaction?.trend ?? 'neutral'
+    }
+  } : null;
+
+  return { metrics: safeMetrics, loading, error };
 }
 
 function generateMockData(): DashboardMetrics {

@@ -105,6 +105,23 @@
     background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
   }
 
+  /* ===== Z-INDEX MANAGEMENT ===== */
+  /* Systematic z-index hierarchy for Hero section */
+  .z-0 { z-index: 0; }
+  .z-10 { z-index: 10; }
+  .z-15 { z-index: 15; }
+  .z-20 { z-index: 20; }
+  .z-30 { z-index: 30; }
+  .z-40 { z-index: 40; }
+  .z-50 { z-index: 50; }
+
+  /* Hero section container overflow management */
+  .hero-container {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+  }
+
   /* Animation classes for the homepage */
   @keyframes fadeInUp {
     from {
@@ -153,6 +170,36 @@
 
   .home-page::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+  }
+
+  /* ===== HERO SECTION RESPONSIVE FIXES ===== */
+  /* Mobile-specific positioning for Hero elements */
+  @media (max-width: 768px) {
+    .hero-chat-bubble {
+      bottom: 1rem !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      max-width: 85% !important;
+    }
+
+    .hero-floating-metrics {
+      position: relative !important;
+      right: auto !important;
+      bottom: auto !important;
+      top: auto !important;
+      margin: 1rem 0 !important;
+    }
+
+    .hero-operator-image {
+      max-width: 280px !important;
+    }
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-floating-metrics {
+      right: 0.5rem !important;
+    }
   }
 }
 

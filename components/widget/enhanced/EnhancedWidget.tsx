@@ -23,6 +23,9 @@ import { EnhancedMessageList } from '@/components/enhanced-messaging/EnhancedMes
 import { MessageData } from '@/components/enhanced-messaging/EnhancedMessageBubble';
 import { TypingUser } from '@/components/enhanced-messaging/EnhancedTypingIndicator';
 
+// Import pixel-perfect design system
+import { PixelPerfectChatInterface } from '../design-system';
+
 // Import simplified real-time hook
 import { useWidgetRealtime } from '../hooks/useWidgetRealtime';
 
@@ -334,14 +337,14 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     );
   };
 
-  // Get position classes
+  // Get position classes with 8px grid spacing
   const getPositionClasses = () => {
     const base = 'fixed z-50';
     switch (config.position) {
       case 'bottom-left':
-        return `${base} bottom-4 left-4`;
+        return `${base} bottom-4 left-4`; // 16px from edges (follows 8px grid)
       default:
-        return `${base} bottom-4 right-4`;
+        return `${base} bottom-4 right-4`; // 16px from edges (follows 8px grid)
     }
   };
 
@@ -356,60 +359,39 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     </div>
   );
 
-  // Enhanced chat tab using enterprise-grade components
-  const renderChatTab = () => (
-    <div className="flex flex-col h-full pb-16">
-      {/* Enhanced Message List with Auto-scroll */}
-      <div
-        ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto"
-        onScroll={handleScroll}
-      >
-        <EnhancedMessageList
-          messages={messages}
+  // Enhanced chat tab using pixel-perfect design system
+  const renderChatTab = () => {
+    // Convert messages to pixel-perfect format
+    const pixelPerfectMessages = messages.map((message) => ({
+      id: message.id,
+      content: message.content,
+      senderType: message.senderType === "user" ? "visitor" as const :
+                  message.senderType === "ai" ? "agent" as const :
+                  message.senderType as "agent" | "system",
+      senderName: message.senderName,
+      timestamp: message.timestamp,
+      isOwn: message.senderType === "user",
+      showAvatar: true,
+      showTimestamp: true,
+      showStatus: message.senderType === "user",
+    }));
+
+    return (
+      <div className="h-full">
+        <PixelPerfectChatInterface
+          messages={pixelPerfectMessages}
+          isConnected={!!state.conversationId}
           typingUsers={typingUsers}
-          isLoading={isLoading}
-          enableVirtualization={messages.length > 50}
-          enableAutoScroll={false} // We handle auto-scroll manually
-          enableGrouping={true}
-          enableLoadMore={false}
-          onReact={handleReact}
-          onCopy={handleCopy}
-          onMessageAction={handleMessageAction}
-          className="min-h-full"
-        />
-      </div>
-
-      {/* Scroll to bottom button (when user scrolled up) */}
-      <AnimatePresence>
-        {isUserScrolledUp && (
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            onClick={() => scrollToBottom(true)}
-            className="absolute bottom-20 right-4 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition-colors z-10"
-            title="Scroll to bottom"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Enhanced Composer - Using existing WidgetComposer */}
-      <div className="absolute bottom-16 left-0 right-0 border-t bg-white p-4">
-        <WidgetComposer
-          onSend={handleSendMessage}
-          placeholder="Type your message..."
+          organizationName={config.organizationName}
+          onSendMessage={handleSendMessage}
           onTyping={handleTyping}
           onStopTyping={handleStopTyping}
-          className="w-full border-none outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-full"
+          showHeader={false}
         />
       </div>
-    </div>
-  );
+    );
+  };
 
 
 
@@ -435,7 +417,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
             aria-label="Open chat support"
           >
             <ChatCircle size={24} />
-            {/* Notification indicator */}
+            {/* Notification indicator - 8px grid aligned */}
             <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
           </motion.button>
         )}
@@ -460,15 +442,15 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
             data-testid="widget-panel"
             data-campfire-widget-panel
           >
-            {/* Enhanced Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 flex items-center justify-between">
+            {/* Enhanced Header - Using 8px grid spacing */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-bold">🔥</span>
                 </div>
                 <div>
                   <div className="font-semibold text-sm">{config.organizationName}</div>
-                  <div className="text-xs text-blue-100 flex items-center gap-1">
+                  <div className="text-xs text-blue-100 flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${state.conversationId ? 'bg-green-400' : 'bg-yellow-400 animate-pulse'}`}></div>
                     {state.conversationId ? 'Connected' : 'Connecting...'}
                   </div>
@@ -477,7 +459,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={minimizeWidget}
-                  className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   title="Minimize"
                   aria-label="Minimize widget"
                 >
@@ -485,7 +467,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
                 </button>
                 <button
                   onClick={expandWidget}
-                  className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   title={state.isExpanded ? "Restore" : "Expand"}
                   aria-label={state.isExpanded ? "Restore widget" : "Expand widget"}
                 >
@@ -493,7 +475,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
                 </button>
                 <button
                   onClick={closeWidget}
-                  className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   title="Close"
                   aria-label="Close widget"
                 >
@@ -505,17 +487,17 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
             {!state.isMinimized && (
               <>
                 {/* Content */}
-                <div className="flex-1 overflow-hidden relative">
+                <div className="flex-1 overflow-hidden relative pb-14">
                   {state.activeTab === 'home' && renderHomeTab()}
                   {state.activeTab === 'messages' && renderChatTab()}
                   {state.activeTab === 'help' && renderHelpTab()}
-
-                  {/* Bottom Tab Navigation - positioned within widget */}
-                  <WidgetBottomTabs
-                    activeTab={state.activeTab}
-                    onTabChange={switchTab}
-                  />
                 </div>
+                
+                {/* Bottom Tab Navigation - positioned outside content */}
+                <WidgetBottomTabs
+                  activeTab={state.activeTab}
+                  onTabChange={switchTab}
+                />
               </>
             )}
           </motion.div>

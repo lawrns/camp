@@ -4,10 +4,11 @@ import { getFeatureFlagConfig } from "@/lib/feature-flags/config";
 import { FeatureFlagProvider } from "@/lib/feature-flags/index";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { config } from "./config/env";
-import { DefinitiveButton } from "./DefinitiveButton";
-import { DefinitiveWidget } from "./DefinitiveWidget";
+import { UltimateWidget } from "../../../components/widget/design-system";
 import { useAuth } from "./hooks/useAuth";
 import { WidgetErrorBoundary } from "./WidgetErrorBoundary";
+import { DefinitiveButton } from "./DefinitiveButton";
+import { DefinitiveWidget } from "./DefinitiveWidget";
 
 interface WidgetContextType {
   isOpen: boolean;
@@ -102,21 +103,26 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
         <WidgetContext.Provider value={contextValue}>
           {children}
 
-          {/* DEFINITIVE WIDGET - Single Source of Truth */}
-          {/* Button is always rendered */}
-          <DefinitiveButton
-            onClick={() => setIsOpen(!isOpen)}
-            isOpen={isOpen}
-            messageCount={0} // TODO: Get from widget state
+          {/* ULTIMATE WIDGET - Single Source of Truth */}
+          <UltimateWidget
+            organizationId={organizationId}
+            config={{
+              organizationName: "Campfire",
+              primaryColor: "#3b82f6",
+              position: "bottom-right",
+              welcomeMessage: "Hi there! 👋 Welcome to Campfire. How can we help you today?",
+              showWelcomeMessage: true,
+              enableHelp: true,
+              enableNotifications: true,
+            }}
+            onMessage={(message) => {
+              console.log('Widget message:', message);
+              // TODO: Handle message sending
+            }}
+            onClose={() => {
+              console.log('Widget closed');
+            }}
           />
-
-          {/* Widget panel is always rendered but controlled by CSS */}
-          <div className={isOpen ? 'block' : 'hidden'} data-testid="widget-container">
-            <DefinitiveWidget
-              organizationId={organizationId}
-              onClose={() => setIsOpen(false)}
-            />
-          </div>
         </WidgetContext.Provider>
       </FeatureFlagProvider>
     </WidgetErrorBoundary>

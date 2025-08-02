@@ -8,6 +8,7 @@ import {
   Lifebuoy 
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
+import { SPACING, COLORS, RADIUS, LAYOUT, ANIMATIONS } from '../design-system/tokens';
 
 export type WidgetTabType = "home" | "messages" | "help";
 
@@ -44,12 +45,22 @@ export const WidgetBottomTabs: React.FC<WidgetBottomTabsProps> = ({
   ];
 
   return (
-    <div className={cn(
-      "absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2",
-      "flex justify-around items-center",
-      "shadow-lg z-10",
-      className
-    )}>
+    <div 
+      className={cn(
+        "absolute bottom-0 left-0 right-0 flex justify-around items-center",
+        "shadow-lg z-10",
+        className
+      )}
+      style={{
+        height: LAYOUT.tabBar.height,
+        padding: LAYOUT.tabBar.padding,
+        backgroundColor: 'white',
+        borderTop: `1px solid ${COLORS.border}`,
+        borderBottomLeftRadius: RADIUS.widget,
+        borderBottomRightRadius: RADIUS.widget,
+      }}
+      data-campfire-widget-tabs
+    >
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -59,13 +70,17 @@ export const WidgetBottomTabs: React.FC<WidgetBottomTabsProps> = ({
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={cn(
-              "relative flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-all duration-200",
-              "min-w-[60px] min-h-[60px]",
-              "focus:outline-none focus:ring-2 focus:ring-blue-300",
-              isActive 
-                ? "bg-blue-50 text-blue-600" 
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              "relative flex flex-col items-center justify-center transition-all",
+              "focus:outline-none focus:ring-2",
+              "min-w-[60px] min-h-[60px]"
             )}
+            style={{
+              padding: SPACING.sm,
+              borderRadius: RADIUS.button,
+              transitionDuration: ANIMATIONS.normal,
+              backgroundColor: isActive ? COLORS.primary[50] : 'transparent',
+              color: isActive ? COLORS.primary[600] : COLORS.agent.timestamp,
+            }}
             aria-pressed={isActive}
             role="tab"
             aria-selected={isActive}
@@ -80,10 +95,14 @@ export const WidgetBottomTabs: React.FC<WidgetBottomTabsProps> = ({
             />
             
             {/* Label */}
-            <span className={cn(
-              "text-xs font-medium",
-              isActive ? "text-blue-600" : "text-gray-500"
-            )}>
+            <span 
+              className="text-xs font-medium"
+              style={{
+                color: isActive ? COLORS.primary[600] : COLORS.agent.timestamp,
+                fontSize: '11px',
+                lineHeight: '14px',
+              }}
+            >
               {tab.label}
             </span>
 

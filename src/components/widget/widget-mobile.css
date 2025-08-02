@@ -51,8 +51,8 @@
     max-width: calc(100% - 3rem) !important;
   }
 
-  /* Input area mobile optimization */
-  form {
+  /* Input area mobile optimization - align with design system */
+  [data-campfire-widget-input] {
     padding: 1rem !important;
     position: sticky !important;
     bottom: 0 !important;
@@ -62,10 +62,13 @@
     flex-shrink: 0 !important;
   }
 
-  /* Ensure composer sticks to bottom */
-  .sticky {
+  /* Ensure composer sticks to bottom - consistent with design system */
+  [data-campfire-widget-composer] {
     position: -webkit-sticky !important;
     position: sticky !important;
+    bottom: 0 !important;
+    background: inherit !important;
+    z-index: 20 !important;
   }
 
   /* Input field mobile sizing */
@@ -106,7 +109,22 @@
     min-width: 20rem !important;
     min-height: 28rem !important;
     max-width: 32rem !important;
-    max-height: 48rem !important;
+  }
+
+  /* Desktop composer positioning - ensure it's above tabs */
+  [data-campfire-widget-composer] {
+    position: relative !important;
+    z-index: 20 !important;
+    background: white !important;
+    border-top: 1px solid #e5e7eb !important;
+  }
+
+  /* Desktop tabs positioning */
+  [data-campfire-widget-tabs] {
+    position: relative !important;
+    z-index: 10 !important;
+    background: white !important;
+    border-top: 1px solid #e5e7eb !important;
   }
 
   /* Message bubbles desktop sizing */
@@ -175,11 +193,16 @@
     background-color: #111827 !important;
   }
 
-  /* Dark mode message bubbles */
-  [data-campfire-message] .bg-white {
+  /* Dark mode message bubbles - use design system colors */
+  [data-campfire-message][data-sender-type="agent"] {
     background-color: #374151 !important;
     border-color: #4b5563 !important;
     color: #f9fafb !important;
+  }
+  
+  [data-campfire-message][data-sender-type="visitor"] {
+    background-color: #1d4ed8 !important; /* Darker blue for dark mode */
+    color: #ffffff !important;
   }
 
   /* Dark mode input */

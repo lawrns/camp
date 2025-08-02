@@ -8,6 +8,12 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Bot, CheckCircle, Flame, MessageCircle, Shield, Sparkles, Star, Terminal, User } from 'lucide-react';
 import Link from "next/link";
 
+// Import the additional sections
+import { FeaturesShowcase } from './FeaturesShowcase';
+import { SocialProof } from './SocialProof';
+import { FinalCTA } from './FinalCTA';
+import { Footer } from './Footer';
+
 // Animation variants for reuse
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -98,6 +104,7 @@ const HandoverChatBubble = ({ onAnimationStateChange }: { onAnimationStateChange
 
             return () => clearTimer(timer);
         }
+        return () => {}; // Return empty cleanup function for other states
     }, [typedText, animationState, humanMessage]);
 
     // Cursor movement animation
@@ -115,6 +122,7 @@ const HandoverChatBubble = ({ onAnimationStateChange }: { onAnimationStateChange
             }, 100));
             return () => clearTimer(timer);
         }
+        return () => {}; // Return empty cleanup function for other states
     }, [animationState]);
 
     // Handover progress animation
@@ -179,7 +187,7 @@ const HandoverChatBubble = ({ onAnimationStateChange }: { onAnimationStateChange
                             x: { type: "spring", stiffness: 100, damping: 20 },
                             y: { type: "spring", stiffness: 100, damping: 20 }
                         }}
-                        className="absolute pointer-events-none z-50"
+                        className="absolute pointer-events-none z-40"
                         style={{
                             filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
                         }}
@@ -406,7 +414,7 @@ const HandoverChatBubble = ({ onAnimationStateChange }: { onAnimationStateChange
             </div>
 
             {/* Chat bubble tail pointing upward to operator */}
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45 z-[-1]"></div>
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-gray-100 rotate-45" style={{ zIndex: -1 }}></div>
         </motion.div>
     );
 };
@@ -424,14 +432,14 @@ const ParallaxBackground = () => {
     const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
     return (
-        <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none z-0">
             <motion.div
                 style={{ y: y1 }}
-                className="absolute w-96 h-96 bg-gradient-to-r from-blue-600/10 to-blue-800/10 rounded-full blur-3xl -top-20 -left-20"
+                className="absolute w-96 h-96 bg-gradient-to-r from-blue-600/10 to-blue-800/10 rounded-full blur-3xl top-10 left-10"
             />
             <motion.div
                 style={{ y: y2 }}
-                className="absolute w-64 h-64 bg-gradient-to-l from-blue-500/10 to-transparent rounded-full blur-2xl top-1/3 -right-20"
+                className="absolute w-64 h-64 bg-gradient-to-l from-blue-500/10 to-transparent rounded-full blur-2xl top-1/3 right-10"
             />
             <motion.div
                 style={{ y: y1 }}
@@ -468,7 +476,7 @@ const HeroSection = () => {
 
             {/* Interactive cursor follower */}
             <motion.div
-                className="absolute w-4 h-4 bg-blue-600/20 rounded-full pointer-events-none z-10"
+                className="absolute w-4 h-4 bg-blue-600/20 rounded-full pointer-events-none z-30"
                 animate={{
                     x: mousePosition.x - 8,
                     y: mousePosition.y - 8,
@@ -481,8 +489,8 @@ const HeroSection = () => {
                 }}
             />
 
-            <div className="container mx-auto px-6 lg:px-8 relative z-20">
-                <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            <div className="container mx-auto px-6 lg:px-8 relative z-10 max-w-full overflow-x-hidden">
+                <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto overflow-hidden">
                     {/* Left Column - Text Content */}
                     <motion.div
                         initial="hidden"
@@ -566,7 +574,7 @@ const HeroSection = () => {
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="relative flex flex-col items-center lg:items-end"
+                        className="relative flex flex-col items-center lg:items-end overflow-hidden"
                     >
                         {/* Main Operator Image with Transition */}
                         <div className="relative">
@@ -576,7 +584,7 @@ const HeroSection = () => {
                                         key="human-operator"
                                         src="/images/operator.png"
                                         alt="Human Customer Service Operator"
-                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100"
+                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100 hero-operator-image"
                                         transition={{
                                             opacity: { duration: 0.5 }
                                         }}
@@ -588,7 +596,7 @@ const HeroSection = () => {
                                         key="ai-operator"
                                         src="/images/rag.png"
                                         alt="AI Customer Service Specialist"
-                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100"
+                                        className="w-full h-auto max-w-md lg:max-w-lg object-contain transform -scale-x-100 hero-operator-image"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
@@ -599,12 +607,12 @@ const HeroSection = () => {
                                 )}
                             </AnimatePresence>
 
-                            {/* Floating Metrics - repositioned for better layout */}
+                            {/* Floating Metrics - contained within bounds */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 1.5, duration: 0.5 }}
-                                className="absolute bottom-8 -right-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg"
+                                className="absolute bottom-8 right-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg z-15 hero-floating-metrics"
                             >
                                 <div className="text-2xl font-bold">12s</div>
                                 <div className="text-sm opacity-90">Response time</div>
@@ -614,7 +622,7 @@ const HeroSection = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 2, duration: 0.5 }}
-                                className="absolute top-1/3 -right-16 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg"
+                                className="absolute top-1/3 right-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 shadow-lg z-15 hero-floating-metrics"
                             >
                                 <div className="text-2xl font-bold">96%</div>
                                 <div className="text-sm opacity-90">CSAT Score</div>
@@ -622,7 +630,7 @@ const HeroSection = () => {
                         </div>
 
                         {/* Interactive Handover Chat Bubble - Overlay on Images */}
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+                        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 max-w-[90%] lg:max-w-none hero-chat-bubble">
                             <HandoverChatBubble onAnimationStateChange={handleChatAnimationStateChange} />
                         </div>
                     </motion.div>
@@ -652,8 +660,20 @@ export default function Homepage() {
 
     return (
         <div className="min-h-screen bg-white">
+            {/* Hero Section */}
             <HeroSection />
-            {/* Other sections would continue here but keeping this minimal for now */}
+            
+            {/* Features Showcase Section */}
+            <FeaturesShowcase />
+            
+            {/* Social Proof Section */}
+            <SocialProof />
+            
+            {/* Final CTA Section */}
+            <FinalCTA />
+            
+            {/* Footer */}
+            <Footer />
         </div>
     );
 } 

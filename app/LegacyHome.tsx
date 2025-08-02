@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { EnhancedWidgetProvider } from "@/components/widget/enhanced";
+import { ObjectRenderErrorBoundary } from "@/components/error/ObjectRenderErrorBoundary";
 
 // Beautiful Homepage with animations - imported from components
 const BeautifulHomepage = dynamic(() => import("../components/homepage/Homepage"), {
@@ -25,7 +26,7 @@ const BeautifulHomepage = dynamic(() => import("../components/homepage/Homepage"
  */
 export default function LegacyHome() {
     return (
-        <div className="min-h-screen home-page">
+        <div className="min-h-screen home-page hero-container">
             {/* Beautiful Homepage with operator.png and rag.png */}
             <Suspense fallback={
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
@@ -35,7 +36,9 @@ export default function LegacyHome() {
                     </div>
                 </div>
             }>
-                <BeautifulHomepage />
+                <ObjectRenderErrorBoundary>
+                    <BeautifulHomepage />
+                </ObjectRenderErrorBoundary>
             </Suspense>
 
             {/* Enhanced Campfire Widget - Intercom-Quality Design with Tabs */}

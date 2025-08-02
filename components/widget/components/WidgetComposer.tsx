@@ -227,7 +227,7 @@ export function WidgetComposer({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <div className="flex items-end gap-3 p-4">
+          <div className="flex items-end gap-2 px-3 py-3">
             {/* Action Buttons (Left) */}
             <div className="flex items-center gap-2">
               <Tooltip>
@@ -265,7 +265,7 @@ export function WidgetComposer({
 
             {/* Text Input */}
             <div className={cn(
-              "flex-1 relative rounded-lg border transition-all duration-200 px-3 py-2",
+              "flex-1 relative rounded-lg border transition-all duration-200 px-3 py-2 min-w-0",
               isFocused
                 ? "border-blue-500 bg-white shadow-sm"
                 : "border-gray-200 bg-gray-50 hover:bg-white hover:border-gray-300"
