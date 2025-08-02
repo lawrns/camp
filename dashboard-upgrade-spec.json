@@ -1,0 +1,430 @@
+{
+  "project": {
+    "name": "Campfire Dashboard Upgrade",
+    "description": "Upgrade the dashboard to create an Intercom-level beautiful welcome experience with enhanced metrics, team collaboration, and AI insights",
+    "version": "1.0.0",
+    "baseDirectory": "/Users/lukatenbosch/Downloads/campfire-v2"
+  },
+  "currentState": {
+    "mainDashboardFile": "app/dashboard/page.tsx",
+    "welcomeComponent": "components/dashboard/WelcomeDashboard.tsx",
+    "existingComponents": [
+      "components/InboxDashboard/index.tsx",
+      "components/MemoryMonitor/index.tsx",
+      "components/analytics/ComprehensiveDashboard.tsx",
+      "components/collaboration/TeamCollaboration.tsx",
+      "components/collaboration/TeamAssignmentSystem.tsx"
+    ],
+    "dataHooks": [
+      "hooks/useDashboardMetrics.ts",
+      "hooks/useOrganizationMembers.ts"
+    ],
+    "apiEndpoints": [
+      "app/api/dashboard/metrics/route.ts",
+      "app/api/analytics/dashboard/route.ts"
+    ],
+    "realtimeProviders": [
+      "contexts/OrganizationRealtimeProvider.tsx",
+      "lib/realtime.ts"
+    ]
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Enhanced Welcome Experience",
+      "description": "Create beautiful hero section and enhanced metrics dashboard",
+      "tasks": [
+        {
+          "id": "1.1",
+          "name": "Create Enhanced Hero Section Component",
+          "file": "components/dashboard/EnhancedHeroSection.tsx",
+          "action": "create",
+          "dependencies": [
+            "@phosphor-icons/react",
+            "components/unified-ui/components/Card"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { Sparkle, Users, Clock, Star } from '@phosphor-icons/react';",
+              "import { Card, CardContent } from '@/components/unified-ui/components/Card';",
+              "import { useAuth } from '@/hooks/useAuth';"
+            ],
+            "component": "EnhancedHeroSection",
+            "props": "{ metrics, userName }",
+            "features": [
+              "Personalized greeting with time-based salutation",
+              "Gradient background with dark mode support",
+              "Goal progress indicator",
+              "Animated sparkle icon",
+              "Responsive layout (mobile-first)"
+            ]
+          }
+        },
+        {
+          "id": "1.2",
+          "name": "Create Enhanced Metric Card Component",
+          "file": "components/dashboard/EnhancedMetricCard.tsx",
+          "action": "create",
+          "dependencies": [
+            "@phosphor-icons/react",
+            "framer-motion",
+            "components/unified-ui/components/Card"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { motion } from 'framer-motion';",
+              "import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';"
+            ],
+            "component": "EnhancedMetricCard",
+            "props": "{ title, value, change, trend, icon, color, description }",
+            "features": [
+              "Smooth animations on mount and data updates",
+              "Trend indicators with colored arrows",
+              "Hover effects and transitions",
+              "Color-coded icons and accents",
+              "Loading and error states"
+            ]
+          }
+        },
+        {
+          "id": "1.3",
+          "name": "Update Main Dashboard Page",
+          "file": "app/dashboard/page.tsx",
+          "action": "modify",
+          "changes": [
+            "Replace basic welcome message with EnhancedHeroSection",
+            "Replace basic metric cards with EnhancedMetricCard components",
+            "Switch from useDashboardMetrics to analytics API data",
+            "Add proper loading states and error handling",
+            "Implement responsive grid layout"
+          ],
+          "dataIntegration": {
+            "apiEndpoint": "/api/analytics/dashboard",
+            "hook": "useDashboardMetrics",
+            "realTimeUpdates": "useOrganizationRealtimeSubscription"
+          }
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Team Collaboration & Activity",
+      "description": "Add real-time team presence, activity feed, and status overview",
+      "tasks": [
+        {
+          "id": "2.1",
+          "name": "Create Team Activity Feed Component",
+          "file": "components/dashboard/TeamActivityFeed.tsx",
+          "action": "create",
+          "dependencies": [
+            "components/collaboration/TeamCollaboration.tsx",
+            "hooks/useOrganizationMembers.ts",
+            "contexts/OrganizationRealtimeProvider.tsx"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';",
+              "import { useOrganizationRealtimeSubscription } from '@/contexts/OrganizationRealtimeProvider';",
+              "import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';"
+            ],
+            "component": "TeamActivityFeed",
+            "props": "{ organizationId }",
+            "features": [
+              "Real-time team member activity updates",
+              "Message handling notifications",
+              "Conversation status changes",
+              "Performance milestones",
+              "Scrollable activity timeline"
+            ]
+          }
+        },
+        {
+          "id": "2.2",
+          "name": "Create Team Status Grid Component",
+          "file": "components/dashboard/TeamStatusGrid.tsx",
+          "action": "create",
+          "dependencies": [
+            "components/collaboration/TeamPresenceIndicator.tsx",
+            "hooks/useOrganizationMembers.ts"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';",
+              "import { Badge } from '@/components/unified-ui/components/Badge';"
+            ],
+            "component": "TeamStatusGrid",
+            "props": "{ organizationId }",
+            "features": [
+              "Team member presence indicators",
+              "Current activity status",
+              "Active conversation counts",
+              "Performance metrics per member",
+              "Online/offline status with last seen"
+            ]
+          }
+        },
+        {
+          "id": "2.3",
+          "name": "Integrate Team Section into Dashboard",
+          "file": "app/dashboard/page.tsx",
+          "action": "modify",
+          "changes": [
+            "Add team collaboration section below metrics",
+            "Implement 2/3 + 1/3 grid layout for activity feed and status",
+            "Connect to real-time team data",
+            "Add proper loading states for team components"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Quick Actions & AI Insights",
+      "description": "Add smart quick actions and AI-powered insights panel",
+      "tasks": [
+        {
+          "id": "3.1",
+          "name": "Create Quick Action Button Component",
+          "file": "components/dashboard/QuickActionButton.tsx",
+          "action": "create",
+          "dependencies": [
+            "@phosphor-icons/react",
+            "next/navigation"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { useRouter } from 'next/navigation';",
+              "import { Card, CardContent } from '@/components/unified-ui/components/Card';"
+            ],
+            "component": "QuickActionButton",
+            "props": "{ title, description, icon, href, color, badge }",
+            "features": [
+              "Hover animations and transitions",
+              "Color-coded backgrounds and icons",
+              "Optional badge for notifications",
+              "Keyboard navigation support",
+              "Click analytics tracking"
+            ]
+          }
+        },
+        {
+          "id": "3.2",
+          "name": "Create AI Insights Panel Component",
+          "file": "components/dashboard/AIInsightsPanel.tsx",
+          "action": "create",
+          "dependencies": [
+            "hooks/useDashboardMetrics.ts"
+          ],
+          "codeTemplate": {
+            "imports": [
+              "import { Sparkle, TrendUp, Warning } from '@phosphor-icons/react';",
+              "import { Badge } from '@/components/unified-ui/components/Badge';"
+            ],
+            "component": "AIInsightsPanel",
+            "props": "{ metrics, organizationId }",
+            "features": [
+              "Performance trend analysis",
+              "Personalized recommendations",
+              "Goal progress insights",
+              "Alert notifications",
+              "Actionable suggestions with links"
+            ]
+          }
+        },
+        {
+          "id": "3.3",
+          "name": "Add Quick Actions and AI Insights to Dashboard",
+          "file": "app/dashboard/page.tsx",
+          "action": "modify",
+          "changes": [
+            "Add quick actions and AI insights section",
+            "Implement 1/2 + 1/2 grid layout",
+            "Connect AI insights to analytics data",
+            "Add contextual quick actions based on user role"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Polish & Optimization",
+      "description": "Add animations, responsive design, accessibility, and performance optimizations",
+      "tasks": [
+        {
+          "id": "4.1",
+          "name": "Implement Smooth Animations",
+          "files": [
+            "components/dashboard/EnhancedMetricCard.tsx",
+            "components/dashboard/TeamActivityFeed.tsx",
+            "components/dashboard/QuickActionButton.tsx"
+          ],
+          "action": "modify",
+          "dependencies": [
+            "framer-motion"
+          ],
+          "changes": [
+            "Add stagger animations for metric cards",
+            "Implement smooth data update transitions",
+            "Add hover and focus animations",
+            "Create loading skeleton animations"
+          ]
+        },
+        {
+          "id": "4.2",
+          "name": "Enhance Responsive Design",
+          "file": "app/dashboard/page.tsx",
+          "action": "modify",
+          "changes": [
+            "Optimize mobile layout (single column)",
+            "Adjust tablet layout (2-column grid)",
+            "Ensure touch-friendly interactions",
+            "Test across different screen sizes"
+          ]
+        },
+        {
+          "id": "4.3",
+          "name": "Add Accessibility Features",
+          "files": [
+            "components/dashboard/EnhancedMetricCard.tsx",
+            "components/dashboard/QuickActionButton.tsx",
+            "components/dashboard/TeamStatusGrid.tsx"
+          ],
+          "action": "modify",
+          "changes": [
+            "Add ARIA labels and descriptions",
+            "Ensure keyboard navigation support",
+            "Verify color contrast ratios",
+            "Add screen reader announcements for data updates"
+          ]
+        },
+        {
+          "id": "4.4",
+          "name": "Performance Optimization",
+          "files": [
+            "app/dashboard/page.tsx",
+            "components/dashboard/TeamActivityFeed.tsx"
+          ],
+          "action": "modify",
+          "changes": [
+            "Implement React.memo for expensive components",
+            "Add lazy loading for analytics charts",
+            "Optimize API calls with caching",
+            "Monitor and maintain FCP < 2s"
+          ]
+        }
+      ]
+    }
+  ],
+  "dataIntegration": {
+    "primaryDataSources": {
+      "analytics": {
+        "endpoint": "/api/analytics/dashboard",
+        "hook": "useDashboardMetrics",
+        "provides": [
+          "conversations (total, open, resolved, uniqueCustomers)",
+          "messages (total, customer, agent, avgResponseTime)",
+          "tickets (total, open, urgent)",
+          "performance (responseRate, avgMessagesPerConversation)"
+        ]
+      },
+      "teamMembers": {
+        "hook": "useOrganizationMembers",
+        "provides": [
+          "member profiles and roles",
+          "availability status",
+          "workload metrics",
+          "performance data"
+        ]
+      },
+      "realTimeUpdates": {
+        "provider": "OrganizationRealtimeProvider",
+        "subscriptions": [
+          "onNewMessage",
+          "onConversationUpdate",
+          "onPresenceUpdate"
+        ]
+      }
+    },
+    "mockDataFallbacks": {
+      "teamActivities": "components/collaboration/TeamCollaboration.tsx",
+      "aiInsights": "Generate based on metrics analysis"
+    }
+  },
+  "uiDesignSystem": {
+    "colors": {
+      "primary": "blue (conversations, actions)",
+      "secondary": "orange (response time)",
+      "success": "green (satisfaction, goals)",
+      "warning": "yellow (alerts)",
+      "purple": "AI features",
+      "gradients": [
+        "from-blue-50 to-indigo-100 (hero background)",
+        "from-green-400 to-blue-500 (goal indicator)"
+      ]
+    },
+    "icons": {
+      "library": "@phosphor-icons/react",
+      "weight": "duotone for primary actions, regular for secondary",
+      "mappings": {
+        "conversations": "Users",
+        "responseTime": "Clock",
+        "satisfaction": "Star",
+        "aiFeatures": "Sparkle",
+        "team": "Users",
+        "insights": "TrendUp"
+      }
+    },
+    "animations": {
+      "library": "framer-motion",
+      "patterns": [
+        "Stagger animations for metric cards",
+        "Smooth data update transitions",
+        "Hover and focus effects",
+        "Loading skeleton animations"
+      ]
+    },
+    "layout": {
+      "mobile": "Single column, stacked sections",
+      "tablet": "2-column grid for metrics, single column for content",
+      "desktop": "4-column metrics, 2/3 + 1/3 team section, 1/2 + 1/2 actions"
+    }
+  },
+  "performanceTargets": {
+    "firstContentfulPaint": "< 2 seconds",
+    "largestContentfulPaint": "< 2.5 seconds",
+    "cumulativeLayoutShift": "< 0.1",
+    "bundleSize": "Monitor and lazy-load heavy components",
+    "apiResponseTime": "< 500ms for dashboard metrics"
+  },
+  "accessibilityRequirements": {
+    "colorContrast": "WCAG AA compliant (4.5:1 minimum)",
+    "keyboardNavigation": "All interactive elements accessible via keyboard",
+    "screenReader": "ARIA labels and announcements for dynamic content",
+    "focusManagement": "Visible focus indicators and logical tab order"
+  },
+  "testingStrategy": {
+    "unitTests": [
+      "components/dashboard/__tests__/EnhancedMetricCard.test.tsx",
+      "components/dashboard/__tests__/TeamActivityFeed.test.tsx",
+      "components/dashboard/__tests__/QuickActionButton.test.tsx"
+    ],
+    "integrationTests": [
+      "app/dashboard/__tests__/page.test.tsx"
+    ],
+    "e2eTests": [
+      "Dashboard loads with real data",
+      "Real-time updates work correctly",
+      "Responsive design across devices",
+      "Accessibility compliance"
+    ]
+  },
+  "deploymentChecklist": [
+    "All components render without errors",
+    "API integrations work correctly",
+    "Real-time updates function properly",
+    "Performance targets are met",
+    "Accessibility requirements satisfied",
+    "Cross-browser compatibility verified",
+    "Mobile responsiveness tested"
+  ]
+}

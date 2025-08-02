@@ -2,27 +2,26 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChatCircle, 
-  Question, 
-  Phone, 
-  X, 
+import {
+  ChatCircle,
+  X,
   Minus,
   ArrowsOut,
   ArrowsIn
 } from '@phosphor-icons/react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { WidgetConfig } from './EnhancedWidgetProvider';
 
-// Import mobile responsive styles
-import '../../../src/components/Widget/widget-mobile.css';
+// Import existing widget components
+import { WidgetComposer } from '../components/WidgetComposer';
+import { WelcomeScreen } from '../components/WelcomeScreen';
+import { WidgetBottomTabs, WidgetTabType } from '../components/WidgetBottomTabs';
+import { HelpTab } from '../components/HelpTab';
 
 // Import enterprise-grade enhanced-messaging components
-import { EnhancedComposer } from '@/components/enhanced-messaging/EnhancedComposer';
 import { EnhancedMessageList } from '@/components/enhanced-messaging/EnhancedMessageList';
-import { EnhancedMessageBubble, MessageData } from '@/components/enhanced-messaging/EnhancedMessageBubble';
-import { EnhancedTypingIndicator, TypingUser } from '@/components/enhanced-messaging/EnhancedTypingIndicator';
+import { MessageData } from '@/components/enhanced-messaging/EnhancedMessageBubble';
+import { TypingUser } from '@/components/enhanced-messaging/EnhancedTypingIndicator';
 
 // Import simplified real-time hook
 import { useWidgetRealtime } from '../hooks/useWidgetRealtime';
@@ -37,7 +36,7 @@ interface WidgetState {
   isOpen: boolean;
   isMinimized: boolean;
   isExpanded: boolean;
-  activeTab: 'chat' | 'faq' | 'help';
+  activeTab: WidgetTabType;
   conversationId?: string;
 }
 
@@ -50,7 +49,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     isOpen: false,
     isMinimized: false,
     isExpanded: false,
-    activeTab: 'chat'
+    activeTab: 'home'
   });
 
   // Use enhanced-messaging data structures
@@ -258,7 +257,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     setState(prev => ({ ...prev, isOpen: false }));
   }, []);
 
-  const switchTab = useCallback((tab: 'chat' | 'faq' | 'help') => {
+  const switchTab = useCallback((tab: WidgetTabType) => {
     setState(prev => ({ ...prev, activeTab: tab }));
   }, []);
 
@@ -292,6 +291,15 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     }
   };
 
+  // Home/Welcome tab with organization-specific content
+  const renderHomeTab = () => (
+    <WelcomeScreen
+      organizationId={organizationId}
+      onStartChat={() => switchTab('messages')}
+      onViewFAQ={() => switchTab('help')}
+    />
+  );
+
   // Enhanced chat tab using enterprise-grade components
   const renderChatTab = () => (
     <div className="flex flex-col h-full">
@@ -312,71 +320,23 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         />
       </div>
 
-      {/* Enhanced Composer */}
+      {/* Enhanced Composer - Using existing WidgetComposer */}
       <div className="border-t bg-white p-4">
-        <EnhancedComposer
+        <WidgetComposer
           onSend={handleSendMessage}
           placeholder="Type your message..."
-          enableEmoji={true}
-          enableAttachments={true}
-          enableDrafts={true}
-          maxLength={2000}
-          variant="widget"
           onTyping={handleTyping}
           onStopTyping={handleStopTyping}
-          className="w-full"
+          className="w-full border-none outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
     </div>
   );
 
-  const renderFAQTab = () => (
-    <div className="p-4 space-y-4">
-      <h3 className="font-semibold text-lg">Frequently Asked Questions</h3>
-      <div className="space-y-3">
-        <div className="border rounded-lg p-3">
-          <h4 className="font-medium mb-2">How can I get help?</h4>
-          <p className="text-sm text-gray-600">You can start a chat with us or browse our help articles.</p>
-        </div>
-        <div className="border rounded-lg p-3">
-          <h4 className="font-medium mb-2">What are your business hours?</h4>
-          <p className="text-sm text-gray-600">
-            {config.contactInfo?.businessHours?.monday || "9:00 AM - 6:00 PM"}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+
 
   const renderHelpTab = () => (
-    <div className="p-4 space-y-4">
-      <h3 className="font-semibold text-lg">Contact Information</h3>
-      <div className="space-y-3">
-        {config.contactInfo?.email && (
-          <div>
-            <h4 className="font-medium">Email</h4>
-            <p className="text-sm text-gray-600">{config.contactInfo.email}</p>
-          </div>
-        )}
-        {config.contactInfo?.phone && (
-          <div>
-            <h4 className="font-medium">Phone</h4>
-            <p className="text-sm text-gray-600">{config.contactInfo.phone}</p>
-          </div>
-        )}
-        <div>
-          <h4 className="font-medium">Business Hours</h4>
-          <div className="text-sm text-gray-600 space-y-1">
-            {config.contactInfo?.businessHours && Object.entries(config.contactInfo.businessHours).map(([day, hours]) => (
-              <div key={day} className="flex justify-between">
-                <span className="capitalize">{day}:</span>
-                <span>{String(hours)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+    <HelpTab organizationId={organizationId} />
   );
 
   return (
@@ -464,58 +424,20 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
             {!state.isMinimized && (
               <>
-                {/* Enhanced Tabs */}
-                <div className="border-b border-gray-200 bg-gray-50">
-                  <div className="flex">
-                    <button
-                      onClick={() => switchTab('chat')}
-                      className={cn(
-                        "flex-1 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center justify-center gap-2",
-                        state.activeTab === 'chat'
-                          ? "border-blue-500 text-blue-600 bg-white"
-                          : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                      )}
-                    >
-                      <ChatCircle size={16} />
-                      Chat
-                    </button>
-                    {config.enableFAQ && (
-                      <button
-                        onClick={() => switchTab('faq')}
-                        className={cn(
-                          "flex-1 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center justify-center gap-2",
-                          state.activeTab === 'faq'
-                            ? "border-blue-500 text-blue-600 bg-white"
-                            : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                        )}
-                      >
-                        <Question size={16} />
-                        FAQ
-                      </button>
-                    )}
-                    {config.enableHelp && (
-                      <button
-                        onClick={() => switchTab('help')}
-                        className={cn(
-                          "flex-1 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center justify-center gap-2",
-                          state.activeTab === 'help'
-                            ? "border-blue-500 text-blue-600 bg-white"
-                            : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-                        )}
-                      >
-                        <Phone size={16} />
-                        Help
-                      </button>
-                    )}
-                  </div>
-                </div>
+
 
                 {/* Content */}
-                <div className="flex-1 overflow-hidden">
-                  {state.activeTab === 'chat' && renderChatTab()}
-                  {state.activeTab === 'faq' && renderFAQTab()}
+                <div className="flex-1 overflow-hidden pb-16">
+                  {state.activeTab === 'home' && renderHomeTab()}
+                  {state.activeTab === 'messages' && renderChatTab()}
                   {state.activeTab === 'help' && renderHelpTab()}
                 </div>
+
+                {/* Bottom Tab Navigation */}
+                <WidgetBottomTabs
+                  activeTab={state.activeTab}
+                  onTabChange={switchTab}
+                />
               </>
             )}
           </motion.div>
