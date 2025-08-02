@@ -441,71 +441,8 @@ const ParallaxBackground = () => {
     );
 };
 
-// Animated Navigation
-const AnimatedNav = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    return (
-        <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className={`border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white/90"
-                }`}
-        >
-            <div className="container mx-auto px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-2">
-                        <Flame size={24} className="text-blue-600" />
-                        <span className="text-xl font-bold text-gray-900">Campfire</span>
-                    </motion.div>
-
-                    <div className="hidden md:flex items-center space-x-8">
-                        {["Features", "Pricing", "Enterprise"].map((item, index) => (
-                            <motion.a
-                                key={item}
-                                href={`/${item.toLowerCase()}`}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 * index }}
-                                whileHover={{ y: -2 }}
-                                className="text-gray-600 hover:text-blue-600 transition-colors duration-200"
-                            >
-                                {item}
-                            </motion.a>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <Link href="/login" className="text-gray-600 hover:text-blue-600 transition-colors">
-                                Sign In
-                            </Link>
-                        </motion.div>
-                        <motion.div whileHover={scaleOnHover} whileTap={{ scale: 0.95 }}>
-                            <Link
-                                href="/register"
-                                className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
-                            >
-                                <span>Get Started</span>
-                                <ArrowRight size={16} />
-                            </Link>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-        </motion.nav>
-    );
-};
+// Navigation is now handled by the layout's ConditionalNavigation component
+// which renders the Navigation component with the flamey.png logo
 
 // Animated Hero Section
 const HeroSection = () => {
@@ -715,7 +652,6 @@ export default function Homepage() {
 
     return (
         <div className="min-h-screen bg-white">
-            <AnimatedNav />
             <HeroSection />
             {/* Other sections would continue here but keeping this minimal for now */}
         </div>

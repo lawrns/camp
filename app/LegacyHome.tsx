@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Script from "next/script";
 import { Suspense } from "react";
+import { WidgetProvider } from "@/components/widget";
 
 // Beautiful Homepage with animations - imported from components
 const BeautifulHomepage = dynamic(() => import("../components/homepage/Homepage"), {
@@ -38,19 +38,10 @@ export default function LegacyHome() {
                 <BeautifulHomepage />
             </Suspense>
 
-            {/* Campfire Intercom-Style Widget - True Intercom-Level Design */}
-            <Script
-                src={`/widget-intercom.js?v=production-clean-v5&t=${Date.now()}`}
-                strategy="afterInteractive"
-                data-organization-id="b5e80170-004c-4e82-a88c-3e2166b169dd"
-                data-primary-color="#6366F1"
-                data-position="bottom-right"
-                data-company-name="Campfire"
-                data-greeting="Hi there! 👋 Welcome to Campfire. How can we help you today?"
-                onLoad={() => {
-                    console.log('🔥 Campfire Intercom Widget loaded with true Intercom-level design');
-                    // Widget will auto-initialize via script with proper backend integration
-                }}
+            {/* Enhanced Campfire Widget - Intercom-Quality Design */}
+            <WidgetProvider
+                organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
+                debug={false}
             />
         </div>
     );

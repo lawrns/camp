@@ -10,7 +10,7 @@ import {
   Clock, 
   CheckCircle, 
   Star, 
-  MessageCircle,
+  ChatCircle,
   Circle,
   XCircle
 } from '@phosphor-icons/react';
@@ -233,7 +233,7 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
                       <span className="font-medium">{member.resolvedToday}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <MessageCircle className="w-3 h-3 text-purple-600" />
+                      <ChatCircle className="w-3 h-3 text-purple-600" />
                       <span className="text-gray-600">Workload:</span>
                       <span className="font-medium">{workloadPercentage.toFixed(0)}%</span>
                     </div>
