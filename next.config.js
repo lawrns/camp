@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Moved to serverExternalPackages
-  serverExternalPackages: ['@supabase/supabase-js', 'openai', '@anthropic-ai/sdk', 'stripe'],
+  serverExternalPackages: ['openai', '@anthropic-ai/sdk', 'stripe'],
   
   // Environment variables
   env: {

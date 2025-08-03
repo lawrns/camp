@@ -183,25 +183,18 @@ export function UltimateWidget({
 
   const realtime = useWidgetRealtime(realtimeConfig);
 
-  // CRITICAL FIX: Prevent infinite reconnection loop by tracking connection state
-  const hasConnectedRef = useRef(false);
+  // FIXED: Track last connected conversation ID to prevent loops but allow new conversations
+  const lastConnectedConversationRef = useRef<string | null>(null);
 
-  // Reconnect realtime when conversation ID becomes available (only once)
+  // Connect realtime when conversation ID becomes available or changes
   useEffect(() => {
-    if (conversationId && realtime && !hasConnectedRef.current) {
-      console.log('[UltimateWidget] Conversation ID available, triggering realtime reconnect:', conversationId);
-      hasConnectedRef.current = true;
-      // Trigger a reconnection to ensure realtime has the conversation ID
+    if (conversationId && realtime && conversationId !== lastConnectedConversationRef.current) {
+      console.log('[UltimateWidget] Conversation ID available/changed, connecting realtime:', conversationId);
+      lastConnectedConversationRef.current = conversationId;
+      // Trigger connection with new conversation ID
       realtime.connect?.();
     }
-  }, [conversationId]); // Removed realtime from dependencies to prevent infinite loop
-
-  // Reset connection flag when conversationId changes
-  useEffect(() => {
-    if (!conversationId) {
-      hasConnectedRef.current = false;
-    }
-  }, [conversationId]);
+  }, [conversationId]); // Only depend on conversationId
 
   // Cleanup effect to disconnect realtime when component unmounts
   useEffect(() => {
@@ -449,6 +442,19 @@ export function UltimateWidget({
 
       const result = await response.json();
       console.log('[UltimateWidget] Message sent via API:', result);
+
+      // CRITICAL FIX: Broadcast message to realtime after successful API call
+      if (realtime && realtime.isConnected) {
+        try {
+          console.log('[UltimateWidget] Broadcasting message to realtime channel');
+          await realtime.sendMessage(message);
+        } catch (broadcastError) {
+          console.warn('[UltimateWidget] Failed to broadcast message:', broadcastError);
+          // Don't fail the whole operation if broadcast fails
+        }
+      } else {
+        console.log('[UltimateWidget] Realtime not connected, skipping broadcast');
+      }
 
       // Update the temporary message with success status
       setMessages(prev => prev.map(msg =>

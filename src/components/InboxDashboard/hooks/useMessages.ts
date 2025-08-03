@@ -37,11 +37,11 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
 
       // Add mock read receipt data for testing
       const messagesWithReadReceipts = (data || []).map((message, index) => {
-        // Fix sender_type to allowed union
-        const allowedSenderTypes = ["agent", "customer", "visitor", "ai"];
+        // Fix sender_type to allowed union - map database values to client types
+        const allowedSenderTypes = ["agent", "visitor", "ai", "system"];
         let sender_type: Message["sender_type"] = allowedSenderTypes.includes(message.sender_type)
           ? (message.sender_type as Message["sender_type"])
-          : "customer";
+          : "visitor";  // Default to visitor instead of customer
         // Fix attachments to always be FileAttachment[]
         let attachments: FileAttachment[] = [];
         if (Array.isArray(message.attachments)) {
