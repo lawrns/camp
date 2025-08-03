@@ -18,8 +18,6 @@ import {
   X,
   Zap,
 } from "lucide-react";
-  Lightning as Zap,
-} from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import {

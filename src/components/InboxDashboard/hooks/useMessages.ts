@@ -123,11 +123,16 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
           event: "INSERT",
           schema: "public",
           table: "messages",
-          filter: `conversation_id=eq.${conversationId}`,
+          // Temporarily remove filter to fix binding mismatch
+          // filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-
           const newMessage = payload.new as Message;
+
+          // Filter on client side instead of server side
+          if (newMessage.conversation_id !== conversationId) {
+            return; // Ignore messages from other conversations
+          }
 
           // Avoid duplicates by checking if message already exists
           setMessages((prev) => {

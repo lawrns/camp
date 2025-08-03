@@ -131,10 +131,10 @@
 }
 
 .metric-success {
-  --metric-icon: var(--color-positive);
-  --metric-bg: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-  --metric-border: var(--color-positive);
-  --metric-text: #065F46;
+  --metric-icon: var(--brand-accent);
+  --metric-bg: linear-gradient(135deg, #E6F4F1 0%, #D1E7DD 100%);
+  --metric-border: var(--brand-accent);
+  --metric-text: #0C6A4F;
 }
 
 .metric-danger {

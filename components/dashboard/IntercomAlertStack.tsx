@@ -58,11 +58,11 @@ const alertConfig = {
   },
   positive: {
     icon: Sparkle,
-    color: 'text-emerald-600',
-    bg: 'bg-gradient-to-br from-emerald-50 to-green-100',
-    border: 'border-emerald-200/50',
-    iconBg: 'bg-emerald-100',
-    badge: 'bg-emerald-100 text-emerald-700'
+    color: 'text-[var(--brand-accent)]',
+    bg: 'bg-gradient-to-br from-[#E6F4F1] to-[#D1E7DD]',
+    border: 'border-[var(--brand-accent)]/20',
+    iconBg: 'bg-[#E6F4F1]',
+    badge: 'bg-[#E6F4F1] text-[var(--brand-accent)]'
   }
 };
 
