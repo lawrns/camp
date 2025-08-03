@@ -10,8 +10,8 @@ export const WorldClassHero = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Left Column - Content */}
           <motion.div
@@ -39,7 +39,7 @@ export const WorldClassHero = () => {
               className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
             >
               Customer support that{' '}
-              <span className="text-blue-600">feels human</span>
+              <span className="text-blue-600 text-4xl lg:text-6xl font-bold">feels human</span>
             </motion.h1>
 
             {/* Description */}
@@ -110,7 +110,7 @@ export const WorldClassHero = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="flex justify-center relative"
           >
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-w-md w-full">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-lg">
               {/* Header */}
               <div className="bg-blue-600 px-6 py-4">
                 <div className="flex items-center space-x-3">
@@ -127,7 +127,7 @@ export const WorldClassHero = () => {
               <div className="p-6 space-y-4 h-80">
                 {/* Customer message */}
                 <div className="flex justify-end">
-                  <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl rounded-br-md max-w-xs">
+                  <div className="bg-blue-600 text-white px-4 py-2 rounded-2xl rounded-br-md max-w-sm">
                     Hi! I need help with my billing
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export const WorldClassHero = () => {
                   transition={{ delay: 1, duration: 0.5 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-gray-100 px-4 py-2 rounded-2xl rounded-bl-md max-w-xs">
+                  <div className="bg-gray-100 px-4 py-2 rounded-2xl rounded-bl-md max-w-sm">
                     I'd be happy to help with your billing! Let me look up your account...
                   </div>
                 </motion.div>
@@ -163,7 +163,7 @@ export const WorldClassHero = () => {
                   transition={{ delay: 2.5, duration: 0.5 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-gray-100 px-4 py-2 rounded-2xl rounded-bl-md max-w-xs">
+                  <div className="bg-gray-100 px-4 py-2 rounded-2xl rounded-bl-md max-w-sm">
                     Hi! I'm Sarah from billing. I can see your account and I'm ready to help!
                   </div>
                 </motion.div>

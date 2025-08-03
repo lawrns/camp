@@ -5,7 +5,7 @@
 // export { VirtualizedConversationList } from "./VirtualizedConversationList"; // Component doesn't exist
 export { ResponsiveInboxLayout } from "./ResponsiveInboxLayout";
 export { MobileInboxLayout } from "./MobileInboxLayout";
-// export { UnifiedInboxDashboard } from "./UnifiedInboxDashboard"; // Component doesn't exist
+// UnifiedInboxDashboard has been removed - use InboxDashboard instead
 // export { TabbedDetailsSidebar } from "./TabbedDetailsSidebar"; // Component doesn't exist
 // export { UnifiedChatPanel } from "./UnifiedChatPanel"; // Component doesn't exist
 

@@ -23,6 +23,8 @@
     -moz-osx-font-smoothing: grayscale;
     /* Performance optimizations */
     -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scroll caused by any overflowing child */
+    overflow-x: hidden;
   }
 
   /* App-specific body styles */
@@ -34,7 +36,8 @@
     flex-direction: column;
     /* Performance optimizations */
     -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
+    /* Clip any horizontal overflow strictly (more aggressive than hidden) */
+    overflow-x: clip;
   }
 }
 

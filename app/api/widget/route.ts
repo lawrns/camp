@@ -354,6 +354,53 @@ async function handleSendMessage(body: any, organizationId: string, request: Nex
 
     console.log('[Widget API] Message sent:', message.id);
 
+    // CRITICAL FIX: Broadcast message to real-time channels for dashboard
+    try {
+      // Import the standardized broadcast function
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+      const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+
+      const messagePayload = {
+        message,
+        conversationId,
+        organizationId,
+        timestamp: new Date().toISOString(),
+        source: 'widget'
+      };
+
+      // Broadcast to conversation-specific channel (for dashboard agents viewing this conversation)
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
+
+      // Broadcast to organization channel (for conversation list updates)
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.organization(organizationId),
+        UNIFIED_EVENTS.CONVERSATION_UPDATED,
+        {
+          conversationId,
+          organizationId,
+          lastMessage: message,
+          timestamp: new Date().toISOString(),
+          source: 'widget'
+        }
+      );
+
+      // Broadcast to conversations channel for dashboard conversation list updates
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversations(organizationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
+
+      console.log('[Widget API] Real-time broadcast sent successfully');
+    } catch (broadcastError) {
+      console.error('[Widget API] Real-time broadcast failed:', broadcastError);
+      // Don't fail the request if broadcast fails, but log it
+    }
+
     return NextResponse.json({
       success: true,
       message,

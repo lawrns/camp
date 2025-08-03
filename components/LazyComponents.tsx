@@ -105,10 +105,7 @@ export const LazyPerformanceMonitoringDashboard = dynamic(
   }
 );
 
-export const LazyUnifiedInboxDashboard = dynamic(() => import("@/components/inbox/UnifiedInboxDashboard"), {
-  loading: () => <InboxDashboardSkeletonV2 />,
-  ssr: true,
-});
+
 
 export const LazyAIInsightsDashboard = dynamic(
   () => import("@/components/ai/AIInsightsDashboard").then((mod) => ({ default: mod.AIInsightsDashboard })),

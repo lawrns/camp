@@ -89,16 +89,16 @@ class ChannelManager {
         // Note: Auth validation happens in getBrowserClient()
       }
 
-      const channel = client.channel(name, {
+      // STEP 3 TEST: Use broadcast-only channel to prevent mismatch errors
+      const channel = client.channel(`bcast:${name}`, {
         ...config,
-        // PHASE 1 FIX: Enhanced config for proper bindings
         config: {
           ...config?.config,
           heartbeatIntervalMs: 25000, // Reduced from 30s to prevent timeouts
           rejoinAfterMs: (tries: number) => Math.min(1000 * Math.pow(2, tries), 10000),
-          // PHASE 1 FIX: Ensure proper postgres_changes bindings
-          broadcast: { self: true },
-          presence: { key: 'user_id' },
+          broadcast: { ack: false },
+          presence: { ack: false },
+          postgres_changes: [] // <-- disable automatic CDC
         }
       });
 
@@ -128,10 +128,10 @@ class ChannelManager {
         }
       });
 
-      // PHASE 3 FIX: Add comprehensive error listeners
-      channel.on('postgres_changes', { event: '*', schema: 'public' }, (payload) => {
-        console.log(`[Realtime] 📝 Postgres change on ${name}:`, payload);
-      });
+      // STEP 3 TEST: Temporarily disable postgres_changes to test broadcast-only
+      // channel.on('postgres_changes', { event: '*', schema: 'public' }, (payload) => {
+      //   console.log(`[Realtime] 📝 Postgres change on ${name}:`, payload);
+      // });
 
       channel.on('broadcast', { event: '*' }, (payload) => {
         console.log(`[Realtime] 📡 Broadcast received on ${name}:`, payload);

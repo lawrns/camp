@@ -6,15 +6,19 @@ This guide explains how to integrate React Query (TanStack Query) into the Campf
 
 ## Quick Start
 
-### 1. Import the New Dashboard Component
+### 1. Import the Dashboard Component
 
-To use the React Query-enhanced inbox dashboard, import the V2 component:
+To use the React Query-enhanced inbox dashboard, import the InboxDashboard component:
 
 ```tsx
-import { UnifiedInboxDashboardV2 } from "@/components/inbox/UnifiedInboxDashboardV2";
+import { InboxDashboard } from "@/components/InboxDashboard";
 
-// Use it instead of the original UnifiedInboxDashboard
-<UnifiedInboxDashboardV2 organizationId={organizationId} />;
+// Use the standardized InboxDashboard component
+<InboxDashboard
+  currentUserId={user?.id || ''}
+  currentUserName={userName}
+  currentUserRole="agent"
+/>;
 ```
 
 ### 2. Available React Query Hooks

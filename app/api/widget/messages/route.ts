@@ -5,7 +5,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServiceClient } from '@/lib/supabase/server';
 import { mapApiMessageToDbInsert, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 import { getSharedConversationChannel } from '@/lib/services/shared-conversation-service';
-import type { MessageCreateRequest } from '@/types/unified';
+// Define the request type inline
+interface MessageCreateRequest {
+  conversationId: string;
+  content: string;
+  senderType?: string;
+  senderId?: string;
+  senderName?: string;
+  messageType?: string;
+  metadata?: Record<string, any>;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,6 +31,12 @@ export async function GET(request: NextRequest) {
 
     // Use service client for widget operations to ensure access
     const supabase = getServiceClient();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 500 }
+      );
+    }
 
     // Get messages for the conversation
     const { data: messages, error } = await supabase
@@ -80,6 +95,12 @@ export async function POST(request: NextRequest) {
 
     // Use service client for widget operations to ensure access
     const supabase = getServiceClient();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 500 }
+      );
+    }
 
     // Prepare message data
     const messageData = mapApiMessageToDbInsert({
@@ -126,6 +147,53 @@ export async function POST(request: NextRequest) {
 
     // Map to API format
     const mappedMessage = mapDbMessagesToApi([message])[0];
+
+    // CRITICAL FIX: Broadcast message to real-time channels for dashboard and other widgets
+    try {
+      // Import the standardized broadcast function
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+      const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+
+      const messagePayload = {
+        message: mappedMessage,
+        conversationId: body.conversationId,
+        organizationId,
+        timestamp: new Date().toISOString(),
+        source: 'widget'
+      };
+
+      // Broadcast to conversation-specific channel (for dashboard agents viewing this conversation)
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversation(organizationId, body.conversationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
+
+      // Broadcast to organization channel (for conversation list updates)
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.organization(organizationId),
+        UNIFIED_EVENTS.CONVERSATION_UPDATED,
+        {
+          conversationId: body.conversationId,
+          organizationId,
+          lastMessage: mappedMessage,
+          timestamp: new Date().toISOString(),
+          source: 'widget'
+        }
+      );
+
+      // Broadcast to conversations channel for dashboard conversation list updates
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversations(organizationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        messagePayload
+      );
+
+      console.log('[Widget Messages API] Real-time broadcast sent successfully');
+    } catch (broadcastError) {
+      console.error('[Widget Messages API] Real-time broadcast failed:', broadcastError);
+      // Don't fail the request if broadcast fails, but log it
+    }
 
     // Log shared conversation channel for debugging
     const sharedChannel = getSharedConversationChannel(organizationId, body.conversationId);
