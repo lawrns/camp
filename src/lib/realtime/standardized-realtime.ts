@@ -216,9 +216,9 @@ async function ensureChannelSubscription(channelName: string, config?: any): Pro
 
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
-      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 5 seconds`);
-      reject(new Error(`Channel subscription timeout for ${channelName} after 5 seconds`));
-    }, 5000);
+      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 15 seconds`);
+      reject(new Error(`Channel subscription timeout for ${channelName} after 15 seconds`));
+    }, 15000); // Increased from 5 seconds to 15 seconds
 
     // Subscribe and wait for confirmation
     console.log(`[Realtime] 📡 Calling channel.subscribe() for: ${channelName}`);

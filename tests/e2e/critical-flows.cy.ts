@@ -21,8 +21,8 @@ describe('Critical User Flows', () => {
       cy.contains('Start Free Trial').click();
       
       // Fill registration form
-      cy.get('[data-testid="email-input"]').type('test@example.com');
-      cy.get('[data-testid="password-input"]').type('SecurePassword123!');
+      cy.get('[data-testid="email-input"]').type('jam@jam.com');
+      cy.get('[data-testid="password-input"]').type('password123');
       cy.get('[data-testid="company-name-input"]').type('Test Company');
       
       // Submit registration
@@ -33,7 +33,7 @@ describe('Critical User Flows', () => {
       cy.contains('Check your email').should('be.visible');
       
       // Simulate email verification (in real test, would check email)
-      cy.task('createTestUser', { email: 'test@example.com', verified: true });
+      cy.task('createTestUser', { email: 'jam@jam.com', verified: true });
       
       // Navigate to dashboard
       cy.visit('/dashboard');
@@ -45,7 +45,7 @@ describe('Critical User Flows', () => {
 
     it('should complete organization setup', () => {
       // Login as new user
-      cy.login('test@example.com', 'SecurePassword123!');
+      cy.login('jam@jam.com', 'password123');
       
       // Navigate to organization setup
       cy.visit('/setup/organization');
@@ -66,7 +66,7 @@ describe('Critical User Flows', () => {
     });
 
     it('should configure first mailbox', () => {
-      cy.login('test@example.com', 'SecurePassword123!');
+      cy.login('jam@jam.com', 'password123');
       cy.visit('/setup/mailbox');
       
       // Configure mailbox
@@ -90,12 +90,12 @@ describe('Critical User Flows', () => {
   describe('Customer Support Conversation', () => {
     beforeEach(() => {
       // Setup authenticated user with configured organization
-      cy.task('createTestUser', { 
-        email: 'agent@acmecorp.com', 
+      cy.task('createTestUser', {
+        email: 'jam@jam.com',
         role: 'agent',
-        organizationId: 'test-org-1' 
+        organizationId: 'test-org-1'
       });
-      cy.login('agent@acmecorp.com', 'password123');
+      cy.login('jam@jam.com', 'password123');
     });
 
     it('should handle complete AI conversation flow', () => {
@@ -219,12 +219,12 @@ describe('Critical User Flows', () => {
 
   describe('Dashboard Analytics', () => {
     beforeEach(() => {
-      cy.task('createTestUser', { 
-        email: 'admin@acmecorp.com', 
+      cy.task('createTestUser', {
+        email: 'jam@jam.com',
         role: 'admin',
-        organizationId: 'test-org-1' 
+        organizationId: 'test-org-1'
       });
-      cy.login('admin@acmecorp.com', 'password123');
+      cy.login('jam@jam.com', 'password123');
     });
 
     it('should display real-time metrics', () => {

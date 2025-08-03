@@ -1,36 +1,36 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChatCircle, House, Gear as Settings, TestTube, User } from "@phosphor-icons/react";
+import { Icons } from '@/lib/icons/standardized-icons';
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navigationItems = [
   {
-    name: "Dashboard",
-    href: "/app/dashboard",
-    icon: House,
+    name: "Home",
+    href: "/dashboard",
+    icon: Icons.home,
   },
   {
-    name: "Live Chat",
-    href: "/app/chat",
-    icon: ChatCircle,
+    name: "Inbox",
+    href: "/inbox",
+    icon: Icons.chat,
   },
   {
-    name: "Auth Test",
-    href: "/auth-test",
-    icon: TestTube,
+    name: "Testing",
+    href: "/testing",
+    icon: Icons.beaker,
   },
   {
     name: "Profile",
-    href: "/app/profile",
-    icon: User,
+    href: "/profile",
+    icon: Icons.user,
   },
   {
     name: "Settings",
-    href: "/app/settings",
-    icon: Settings,
+    href: "/settings",
+    icon: Icons.settings,
   },
 ];
 

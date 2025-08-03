@@ -1,92 +1,122 @@
-// 🔧 FIXED WIDGET TYPING INDICATORS API - CAMPFIRE V2
-// Updated to use unified types and proper error handling
+/**
+ * PHASE 1 CRITICAL FIX: Widget Typing Indicator API
+ *
+ * Database-driven typing indicators for reliable real-time communication
+ * identified as missing in god.md analysis.
+ *
+ * Features:
+ * - Database persistence for reliability
+ * - Automatic cleanup of stale indicators
+ * - Rate limiting protection
+ * - Proper authentication
+ */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServiceClient } from '@/lib/supabase/server';
-
-interface TypingIndicatorRequest {
-  conversationId: string;
-  isTyping: boolean;
-  userId?: string;
-  userName?: string;
-}
+import { supabase } from '@/lib/supabase/consolidated-exports';
+import { validateSession } from '@/lib/services/visitor-identification';
+import { messageRateLimit } from '@/lib/middleware/rate-limit';
 
 export async function POST(request: NextRequest) {
-  try {
-    const organizationId = request.headers.get('x-organization-id');
+  return messageRateLimit(request, async () => {
+    try {
+      const body = await request.json();
+      const { conversationId, userId, userName, isTyping, sessionToken } = body;
 
-    if (!organizationId) {
-      return NextResponse.json(
-        { error: 'Organization ID header is required' },
-        { status: 400 }
-      );
-    }
+      // Get organization ID from headers
+      const organizationId = request.headers.get('x-organization-id');
+      if (!organizationId) {
+        return NextResponse.json(
+          { success: false, error: { code: 'MISSING_ORG_ID', message: 'Organization ID required' } },
+          { status: 400 }
+        );
+      }
 
-    const body: TypingIndicatorRequest = await request.json();
+      // Validate required fields
+      if (!conversationId || userId === undefined) {
+        return NextResponse.json(
+          { success: false, error: { code: 'MISSING_FIELDS', message: 'conversationId and userId required' } },
+          { status: 400 }
+        );
+      }
 
-    // Validate required fields
-    if (!body.conversationId || typeof body.isTyping !== 'boolean') {
-      return NextResponse.json(
-        { error: 'Conversation ID and typing status are required' },
-        { status: 400 }
-      );
-    }
+      // Validate session if provided
+      if (sessionToken) {
+        const sessionValidation = await validateSession(sessionToken, organizationId);
+        if (!sessionValidation.valid) {
+          return NextResponse.json(
+            { success: false, error: { code: 'INVALID_SESSION', message: 'Invalid session token' } },
+            { status: 401 }
+          );
+        }
+      }
 
-    // Create Supabase client with service role
-    const supabase = getServiceClient();
+      const supabaseClient = supabase.admin();
 
-    if (body.isTyping) {
-      // Create or update typing indicator - using any to bypass type mismatch
-      const { error } = await (supabase as any)
-        .from('typing_indicators')
-        .upsert({
-          conversation_id: body.conversationId,
-          organization_id: organizationId,
-          user_id: body.userId || 'anonymous', // Use user_id for widget users
-          user_name: body.userName || 'Customer',
-          user_type: 'visitor',
-          is_typing: true,
-          last_activity: new Date().toISOString(),
-          created_at: new Date().toISOString(),
+      if (isTyping) {
+        // Insert or update typing indicator
+        const { data, error } = await supabaseClient
+          .from('typing_indicators')
+          .upsert({
+            conversation_id: conversationId,
+            user_id: userId,
+            user_name: userName || 'Customer',
+            user_type: 'visitor',
+            is_typing: true,
+            organization_id: organizationId,
+            last_activity: new Date().toISOString(),
+            created_at: new Date().toISOString()
+          }, {
+            onConflict: 'conversation_id,user_id'
+          })
+          .select();
+
+        if (error) {
+          console.error('[Typing API] Error creating typing indicator:', error);
+          return NextResponse.json(
+            { success: false, error: { code: 'DATABASE_ERROR', message: 'Failed to create typing indicator' } },
+            { status: 500 }
+          );
+        }
+
+        console.log('[Typing API] ✅ Typing indicator created:', { conversationId, userId, isTyping });
+
+        return NextResponse.json({
+          success: true,
+          data: { typingIndicator: data?.[0] }
         });
 
-      if (error) {
-        console.error('Database error:', error);
-        return NextResponse.json(
-          { error: 'Failed to update typing indicator' },
-          { status: 500 }
-        );
-      }
-    } else {
-      // Remove typing indicator - using any to bypass type mismatch
-      const { error } = await (supabase as any)
-        .from('typing_indicators')
-        .delete()
-        .eq('conversation_id', body.conversationId)
-        .eq('organization_id', organizationId)
-        .eq('user_id', body.userId || 'anonymous'); // Use user_id for widget users
+      } else {
+        // Remove typing indicator
+        const { error } = await supabaseClient
+          .from('typing_indicators')
+          .delete()
+          .eq('conversation_id', conversationId)
+          .eq('user_id', userId);
 
-      if (error) {
-        console.error('Database error:', error);
-        return NextResponse.json(
-          { error: 'Failed to remove typing indicator' },
-          { status: 500 }
-        );
+        if (error) {
+          console.error('[Typing API] Error removing typing indicator:', error);
+          return NextResponse.json(
+            { success: false, error: { code: 'DATABASE_ERROR', message: 'Failed to remove typing indicator' } },
+            { status: 500 }
+          );
+        }
+
+        console.log('[Typing API] ✅ Typing indicator removed:', { conversationId, userId, isTyping });
+
+        return NextResponse.json({
+          success: true,
+          data: { removed: true }
+        });
       }
+
+    } catch (error) {
+      console.error('[Typing API] Error:', error);
+      return NextResponse.json(
+        { success: false, error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } },
+        { status: 500 }
+      );
     }
-
-    return NextResponse.json({
-      success: true,
-      isTyping: body.isTyping,
-    });
-
-  } catch (error) {
-    console.error('Widget typing indicator error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+  });
 }
 
 export async function GET(request: NextRequest) {
@@ -103,10 +133,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Create Supabase client with service role
-    const supabase = getServiceClient();
+    const supabaseClient = supabase.admin();
 
     // Get typing indicators for the conversation
-    const { data: typingIndicators, error } = await supabase
+    const { data: typingIndicators, error } = await supabaseClient
       .from('typing_indicators')
       .select('*')
       .eq('conversation_id', conversationId)

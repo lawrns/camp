@@ -8,6 +8,7 @@
  */
 
 // PERFORMANCE: Import only specific icons to enable tree shaking
+import React from 'react';
 import {
   AlertCircle,
   AlertTriangle,
@@ -15,8 +16,11 @@ import {
   ArrowRight,
   BarChart,
   Bookmark,
+  Building2,
+  Globe,
   // Widget specific
   Bot,
+  Beaker,
   // AI & Automation
   Brain,
   // Business
@@ -25,9 +29,9 @@ import {
   Check,
   CheckCircle,
   ChevronDown,
+  ChevronUp,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   Clock,
   Copy,
   Cpu,
@@ -50,7 +54,9 @@ import {
   Loader,
   Lock,
   Mail,
+  MapPin,
   Meh,
+  Monitor,
   // Navigation & UI
   Menu,
   MessageCircle,
@@ -74,6 +80,7 @@ import {
   Share,
   Shield,
   Smile,
+  Smartphone,
   Star,
   Tag,
   ThumbsDown,
@@ -91,15 +98,133 @@ import {
   UserPlus,
   Users,
   Video,
+  Wifi,
+  WifiOff,
   X,
   XCircle,
   X as XIcon,
   Zap,
+  Archive,
   type LucideIcon
 } from 'lucide-react';
 
+// Define the type for the Icons object
+export interface IconsType {
+  // Navigation
+  menu: LucideIcon;
+  close: LucideIcon;
+  chevronDown: LucideIcon;
+  chevronUp: LucideIcon;
+  chevronLeft: LucideIcon;
+  chevronRight: LucideIcon;
+  arrowLeft: LucideIcon;
+  arrowRight: LucideIcon;
+  home: LucideIcon;
+  settings: LucideIcon;
+
+  // Communication
+  chat: LucideIcon;
+  send: LucideIcon;
+  email: LucideIcon;
+  phone: LucideIcon;
+  video: LucideIcon;
+  attachment: LucideIcon;
+  link: LucideIcon;
+  search: LucideIcon;
+  message: LucideIcon;
+
+  // User & People
+  user: LucideIcon;
+  users: LucideIcon;
+  userPlus: LucideIcon;
+  userMinus: LucideIcon;
+  userCheck: LucideIcon;
+  userAdd: LucideIcon;
+  userRemove: LucideIcon;
+
+  // Device & Hardware
+  smartphone: LucideIcon;
+  monitor: LucideIcon;
+  wifi: LucideIcon;
+  wifiOff: LucideIcon;
+  mapPin: LucideIcon;
+
+  // Actions
+  add: LucideIcon;
+  remove: LucideIcon;
+  edit: LucideIcon;
+  delete: LucideIcon;
+  save: LucideIcon;
+  copy: LucideIcon;
+  download: LucideIcon;
+  upload: LucideIcon;
+  refresh: LucideIcon;
+  filter: LucideIcon;
+  sort: LucideIcon;
+
+  // Status & Feedback
+  check: LucideIcon;
+  checkCircle: LucideIcon;
+  x: LucideIcon;
+  xCircle: LucideIcon;
+  warning: LucideIcon;
+  warningCircle: LucideIcon;
+  info: LucideIcon;
+  alert: LucideIcon;
+  clock: LucideIcon;
+
+  // Content
+  archive: LucideIcon;
+  file: LucideIcon;
+  document: LucideIcon;
+  image: LucideIcon;
+  visible: LucideIcon;
+  hidden: LucideIcon;
+
+  // Business
+  building: LucideIcon;
+  calendar: LucideIcon;
+  globe: LucideIcon;
+  star: LucideIcon;
+  heart: LucideIcon;
+  bookmark: LucideIcon;
+  tag: LucideIcon;
+  ticket: LucideIcon;
+  trending: LucideIcon;
+  trendingDown: LucideIcon;
+  chart: LucideIcon;
+  pie: LucideIcon;
+
+  // Technical
+  refreshing: LucideIcon;
+  loading: LucideIcon;
+  lightning: LucideIcon;
+  shield: LucideIcon;
+  lock: LucideIcon;
+  unlock: LucideIcon;
+  key: LucideIcon;
+
+  // Widget & Emotions
+  bot: LucideIcon;
+  beaker: LucideIcon;
+  happy: LucideIcon;
+  sad: LucideIcon;
+  neutral: LucideIcon;
+  thumbsUp: LucideIcon;
+  thumbsDown: LucideIcon;
+
+  // AI
+  brain: LucideIcon;
+  cpu: LucideIcon;
+  database: LucideIcon;
+  server: LucideIcon;
+  share: LucideIcon;
+  microphone: LucideIcon;
+  microphoneOff: LucideIcon;
+}
+
 // Icon mapping for easy migration from other libraries
-export const Icons = {
+export const Icons: IconsType = {
   // Navigation
   menu: Menu,
   close: X,
@@ -125,6 +250,8 @@ export const Icons = {
   // User
   user: User,
   users: Users,
+  userPlus: UserPlus,
+  userMinus: UserMinus,
   userAdd: UserPlus,
   userRemove: UserMinus,
   userCheck: UserCheck,
@@ -141,6 +268,7 @@ export const Icons = {
   share: Share,
   search: Search,
   filter: Filter,
+  sort: Filter,
 
   // Status
   check: Check,
@@ -154,6 +282,7 @@ export const Icons = {
   clock: Clock,
 
   // Content
+  archive: Archive,
   file: File,
   document: FileText,
   image: Image,
@@ -163,7 +292,9 @@ export const Icons = {
   hidden: EyeOff,
 
   // Business
+  building: Building2,
   calendar: Calendar,
+  globe: Globe,
   star: Star,
   heart: Heart,
   bookmark: Bookmark,
@@ -186,6 +317,7 @@ export const Icons = {
 
   // Widget & Emotions
   bot: Bot,
+  beaker: Beaker,
   happy: Smile,
   sad: Frown,
   neutral: Meh,
@@ -197,6 +329,13 @@ export const Icons = {
   cpu: Cpu,
   database: Database,
   server: Server,
+
+  // Device & Hardware
+  smartphone: Smartphone,
+  monitor: Monitor,
+  wifi: Wifi,
+  wifiOff: WifiOff,
+  mapPin: MapPin,
 } as const;
 
 // Legacy icon mappings for migration from @phosphor-icons/react
@@ -228,6 +367,8 @@ export const PhosphorToLucide = {
   Search: Icons.search,
   Star: Icons.star,
   TrendingUp: Icons.trending,
+  House: Icons.home,
+  TestTube: Icons.beaker,
 } as const;
 
 // Legacy icon mappings for migration from @heroicons/react
@@ -276,22 +417,31 @@ export const HeroiconsToLucide = {
 } as const;
 
 // Icon component with consistent styling
-export interface IconProps {
-  icon: LucideIcon;
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
+  icon?: LucideIcon;
+  name?: keyof typeof Icons;
   size?: number | string;
   className?: string;
   strokeWidth?: number;
 }
 
-export function Icon({ icon: IconComponent, size = 20, className = '', strokeWidth = 2 }: IconProps) {
+export const Icon = React.forwardRef<SVGSVGElement, IconProps>(({ icon, name, size = 20, className = '', strokeWidth = 2, ...props }, ref) => {
+  const IconComponent = icon || (name ? Icons[name] : null);
+
+  if (!IconComponent) {
+    return null;
+  }
+
   return (
     <IconComponent
+      ref={ref}
       size={size}
       className={className}
       strokeWidth={strokeWidth}
+      {...props}
     />
   );
-}
+});
 
 // Utility function for dynamic icon rendering
 export function renderIcon(iconName: keyof typeof Icons, props?: Omit<IconProps, 'icon'>) {

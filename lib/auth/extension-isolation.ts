@@ -184,30 +184,15 @@ export function isExtensionError(error: Error | string): boolean {
 }
 
 /**
- * Suppress extension-related console errors
+ * PHASE 0 CRITICAL FIX: Removed console suppression
+ * Extension errors will now be visible for proper debugging
  */
 export function suppressExtensionErrors(): () => void {
-  if (typeof window === 'undefined') {
-    return () => {};
-  }
+  // DEPRECATED: No longer suppressing console errors
+  console.log('🔧 [Extension Isolation] Console suppression removed - extension errors now visible');
 
-  const originalConsoleError = console.error;
-  const originalConsoleWarn = console.warn;
-
-  // Override console.error to filter extension errors
-  console.error = (...args: any[]) => {
-    const message = args.join(' ');
-    if (!isExtensionError(message)) {
-      originalConsoleError.apply(console, args);
-    }
-  };
-
-  // Override console.warn to filter extension warnings
-  console.warn = (...args: any[]) => {
-    const message = args.join(' ');
-    if (!isExtensionError(message)) {
-      originalConsoleWarn.apply(console, args);
-    }
+  return () => {
+    // No cleanup needed since we're not overriding console methods
   };
 
   // Handle unhandled promise rejections

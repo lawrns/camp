@@ -276,6 +276,7 @@ export function MessageBubble({
                 <div
                   key={attachment.id}
                   className="border border-gray-200 rounded-lg p-2 bg-gray-50"
+                  data-testid="file-attachment"
                 >
                   {attachment.isImage ? (
                     <img
@@ -355,6 +356,7 @@ export function MessageBubble({
                       ? 'bg-blue-100 border-blue-300 text-blue-700'
                       : 'bg-gray-100 border-gray-200 text-gray-700 hover:bg-gray-200'
                   )}
+                  data-testid="reaction"
                 >
                   {reaction.emoji} {reaction.count}
                 </button>
@@ -370,6 +372,7 @@ export function MessageBubble({
                 className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors duration-150"
                 title="React"
                 aria-label="Add reaction"
+                data-testid="reaction-button"
               >
                 😊
               </button>

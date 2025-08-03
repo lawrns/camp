@@ -773,16 +773,26 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
         } else if (status === 'CHANNEL_ERROR') {
           // CRITICAL FIX: Handle errored state to prevent infinite reconnection loops
           setIsConnected(false);
-          setConnectionStatus('error');
-          setConnectionError('Channel error occurred');
+          setConnectionStatus('fallback');
+          setConnectionError('Channel error - using fallback mode');
           config.onConnectionChange?.(false);
-          widgetDebugger.logRealtime('error', '❌ Channel error - stopping reconnection attempts');
+          widgetDebugger.logRealtime('warn', '⚠️ Channel error - switching to fallback mode');
 
-          // Clean up the errored channel
+          // Clean up the errored channel using safe method
           if (channelRef.current) {
-            channelRef.current.unsubscribe();
+            try {
+              // Use removeChannel instead of unsubscribe to prevent recursive calls
+              if (supabaseRef.current) {
+                supabaseRef.current.removeChannel(channelRef.current);
+              }
+            } catch (cleanupError) {
+              widgetDebugger.logRealtime('warn', '⚠️ Channel cleanup error (ignoring)', cleanupError);
+            }
             channelRef.current = null;
           }
+
+          // Don't throw error, just continue in fallback mode
+          connectionMetricsRef.current.fallbackActivated = true;
         }
       });
 

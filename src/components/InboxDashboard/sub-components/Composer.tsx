@@ -1,6 +1,6 @@
 // Composer component for message input
 
-import { Paperclip as Attachment, PaperPlaneRight, Smiley, Sparkle, Note as Template } from "@phosphor-icons/react";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import * as React from "react";
 import { useRef } from "react";
 import type { ComposerProps } from "../types";
@@ -95,7 +95,7 @@ export const Composer: React.FC<ComposerProps> = ({
       {isDragOver && (
         <div className="absolute inset-0 z-10 flex items-center justify-center border-2 border-dashed border-[var(--color-primary-300)] bg-[var(--color-primary-50)] bg-opacity-90" data-testid="composer-drag-overlay">
           <div className="text-center" data-testid="composer-drag-content">
-            <Attachment className="mx-auto mb-2 h-12 w-12 text-[var(--color-info)]" data-testid="composer-drag-icon" />
+            <Icon icon={Icons.attachment} className="mx-auto mb-2 h-12 w-12 text-[var(--color-info)]" data-testid="composer-drag-icon" />
             <p className="font-medium text-[var(--color-primary-700)]" style={{fontSize: 'var(--font-size-lg)'}} data-testid="composer-drag-title">Drop files to attach</p>
             <p className="text-[var(--color-primary-600)]" style={{fontSize: 'var(--font-size-sm)'}} data-testid="composer-drag-description">Supports images, documents, and more</p>
           </div>
@@ -174,7 +174,7 @@ export const Composer: React.FC<ComposerProps> = ({
               <label className="cursor-pointer" aria-label="Attach files" data-testid="composer-attachment-button">
                 <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileInput} data-testid="composer-file-input" />
                 <div className="hover:bg-background hover:text-foreground rounded-ds-lg text-[var(--color-text-muted)] transition-all flex items-center justify-center" style={{padding: 'var(--spacing-3)', minHeight: 'var(--spacing-12)', minWidth: 'var(--spacing-12)'}}>
-                  <Attachment className="h-5 w-5" data-testid="composer-attachment-icon" />
+                  <Icon icon={Icons.attachment} className="h-5 w-5" data-testid="composer-attachment-icon" />
                 </div>
               </label>
 
@@ -189,7 +189,7 @@ export const Composer: React.FC<ComposerProps> = ({
                 aria-label="Quick templates"
                 data-testid="composer-templates-button"
               >
-                <Template className="h-5 w-5" data-testid="composer-templates-icon" />
+                <Icon icon={Icons.document} className="h-5 w-5" data-testid="composer-templates-icon" />
               </button>
 
               {/* AI Suggestions */}
@@ -205,7 +205,7 @@ export const Composer: React.FC<ComposerProps> = ({
                 aria-label="Generate AI suggestions"
                 data-testid="composer-ai-suggestions-button"
               >
-                <Sparkle className="h-5 w-5" data-testid="composer-ai-suggestions-icon" />
+                <Icon icon={Icons.brain} className="h-5 w-5" data-testid="composer-ai-suggestions-icon" />
               </button>
             </div>
 
@@ -248,7 +248,7 @@ export const Composer: React.FC<ComposerProps> = ({
                 }}
                 aria-label="Add emoji"
               >
-                <Smiley className="h-5 w-5" />
+                <Icon icon={Icons.happy} className="h-5 w-5" />
               </button>
             </div>
 
@@ -271,7 +271,7 @@ export const Composer: React.FC<ComposerProps> = ({
               {isSending ? (
                 <div className="h-5 w-5 animate-spin rounded-ds-full border-b-2 border-[var(--color-text-inverse)]"></div>
               ) : (
-                <PaperPlaneRight className="h-5 w-5" />
+                <Icon icon={Icons.send} className="h-5 w-5" />
               )}
             </button>
           </div>

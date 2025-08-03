@@ -30,21 +30,8 @@ export function ArchitecturalWrapper({ children }: ArchitecturalWrapperProps) {
       // Start performance monitoring
       const cleanup = PerformanceReporter.startAutoReporting(30000); // Every 30 seconds
 
-      // Improved console warnings for development
-      const originalConsoleWarn = console.warn;
-      console.warn = (...args) => {
-        const message = args[0];
-
-        // Detect common React issues
-        if (typeof message === "string") {
-          if (message.includes("useEffect")) {
-          } else if (message.includes("Cannot update a component while rendering")) {
-          } else if (message.includes("validateDOMNesting")) {
-          }
-        }
-
-        originalConsoleWarn(...args);
-      };
+      // PHASE 0 CRITICAL FIX: Removed console override to prevent errors
+      // All console warnings will now show naturally for better debugging
 
       // Monitor for unhandled promise rejections
       const handleUnhandledRejection = (event: PromiseRejectionEvent) => {

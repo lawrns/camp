@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+// Removed Supabase import to avoid environment variable issues in testing
 
 /**
  * AI Handover Flow E2E Tests

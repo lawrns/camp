@@ -1,10 +1,22 @@
 # 🛡️ Robust WebSocket Connection Fixes
 
-## 🚨 **Critical Issue Resolved**
+## 🚨 **Critical Issues Resolved**
 
+### **Issue #1: Stack Overflow (RESOLVED)**
 **Problem**: Maximum call stack size exceeded error caused by recursive `channel.unsubscribe()` calls in Supabase Realtime.
 
 **Root Cause**: The Supabase Realtime library has a known issue where `channel.unsubscribe()` can trigger recursive calls in certain error conditions, leading to stack overflow.
+
+### **Issue #2: Widget Channel Errors (IDENTIFIED - January 2025)**
+**Problem**: Widget realtime showing "❌ Channel error - stopping reconnection attempts" causing complete communication failure.
+
+**Root Cause**: Supabase Realtime channels encountering `CHANNEL_ERROR` status due to authentication or configuration issues, causing the widget to stop all reconnection attempts instead of gracefully falling back.
+
+**Database Verification**: Direct Supabase database connection confirmed:
+- ✅ RLS policies properly configured for anonymous access
+- ✅ Realtime publications active for messages/conversations tables
+- ✅ Test data properly configured with organization_id requirements
+- ⚠️ Channel authentication may be failing intermittently
 
 ## 🔧 **Robust Solutions Implemented**
 
@@ -18,6 +30,42 @@ await channel.unsubscribe(); // Can cause recursive calls
 **After (Robust)**:
 ```typescript
 await supabaseClient.removeChannel(channel); // Safe cleanup method
+```
+
+### 2. **New Fix: Channel Error Fallback Mode (January 2025)**
+
+**Problem**: Widget stops all reconnection attempts on `CHANNEL_ERROR` status.
+
+**Before (Problematic)**:
+```typescript
+} else if (status === 'CHANNEL_ERROR') {
+  setConnectionError('Channel error occurred');
+  widgetDebugger.logRealtime('error', '❌ Channel error - stopping reconnection attempts');
+  // Stops all reconnection attempts - BAD!
+}
+```
+
+**After (Robust)**:
+```typescript
+} else if (status === 'CHANNEL_ERROR') {
+  setConnectionStatus('fallback');
+  setConnectionError('Channel error - using fallback mode');
+  widgetDebugger.logRealtime('warn', '⚠️ Channel error - switching to fallback mode');
+
+  // Clean up errored channel gracefully
+  if (channelRef.current) {
+    try {
+      await supabaseClient.removeChannel(channelRef.current);
+    } catch (cleanupError) {
+      widgetDebugger.logRealtime('warn', '⚠️ Channel cleanup error (ignoring)', cleanupError);
+    }
+    channelRef.current = null;
+  }
+
+  // Continue in fallback mode instead of stopping
+  connectionMetricsRef.current.fallbackActivated = true;
+  // Could implement polling fallback here
+}
 ```
 
 **Why This Works**:

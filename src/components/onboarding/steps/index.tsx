@@ -1,7 +1,7 @@
 // Placeholder components for remaining onboarding steps
 "use client";
 
-import { Spinner as Loader2 } from "@phosphor-icons/react";
+import { Icons } from '@/lib/icons/standardized-icons';
 import { Button } from "@/components/ui/Button-unified";
 import { Icon } from "@/lib/ui/Icon";
 

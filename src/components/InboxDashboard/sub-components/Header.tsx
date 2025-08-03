@@ -1,6 +1,6 @@
 // Header component for inbox dashboard
 
-import { CaretDown, Keyboard, List, MagnifyingGlass, X } from "@phosphor-icons/react";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import * as React from "react";
 import { useState } from "react";
 import type { HeaderProps } from "../types";
@@ -36,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
           data-testid="mobile-menu-button"
         >
           <div className={`transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : 'rotate-0'}`}>
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <List className="h-6 w-6" />}
+            {isMobileMenuOpen ? <Icon icon={Icons.close} className="h-6 w-6" /> : <Icon icon={Icons.menu} className="h-6 w-6" />}
           </div>
         </button>
       </div>
@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="inline-flex items-center justify-center rounded-ds-lg p-spacing-sm text-gray-400 hover:bg-background hover:text-foreground-muted active:bg-gray-200 btn-height-lg transition-colors duration-200"
                 aria-label="Close menu"
               >
-                <X className="h-6 w-6" />
+                <Icon icon={Icons.close} className="h-6 w-6" />
               </button>
             </div>
             <div className="p-spacing-md space-y-6 overflow-y-auto h-full pb-20" data-testid="mobile-menu-content">
@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <label className="block text-sm font-medium text-foreground" data-testid="mobile-search-label">Search Conversations</label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <MagnifyingGlass className="h-5 w-5 text-gray-400" data-testid="mobile-search-icon" />
+                    <Icon icon={Icons.search} className="h-5 w-5 text-gray-400" data-testid="mobile-search-icon" />
                   </div>
                   <input
                     type="text"
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="w-full inline-flex items-center justify-center rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-4 text-base font-medium text-foreground transition-all hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[48px]"
                   data-testid="mobile-shortcuts-button"
                 >
-                  <Keyboard className="mr-3 h-5 w-5" data-testid="mobile-shortcuts-icon" />
+                  <Icon icon={Icons.settings} className="mr-3 h-5 w-5" data-testid="mobile-shortcuts-icon" />
                   Keyboard Shortcuts
                 </button>
               </div>
@@ -175,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Search */}
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <MagnifyingGlass className="h-4 w-4 text-gray-400" />
+              <Icon icon={Icons.search} className="h-4 w-4 text-gray-400" />
             </div>
             <input
               ref={searchInputRef}
@@ -203,7 +203,7 @@ export const Header: React.FC<HeaderProps> = ({
               <option value="escalated">Escalated</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-              <CaretDown className="h-4 w-4 text-gray-400" />
+              <Icon icon={Icons.chevronDown} className="h-4 w-4 text-gray-400" />
             </div>
           </div>
 
@@ -221,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
               <option value="low">Low</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-              <CaretDown className="h-4 w-4 text-gray-400" />
+              <Icon icon={Icons.chevronDown} className="h-4 w-4 text-gray-400" />
             </div>
           </div>
 
@@ -231,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="inline-flex items-center rounded-ds-lg border border-[var(--fl-color-border-strong)] bg-background px-4 py-3 text-sm font-medium text-foreground transition-all hover:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 min-h-[44px]"
             aria-label="Show keyboard shortcuts"
           >
-            <Keyboard className="mr-2 h-5 w-5" />
+            <Icon icon={Icons.settings} className="mr-2 h-5 w-5" />
             Shortcuts
           </button>
         </div>

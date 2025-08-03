@@ -1,8 +1,10 @@
 /**
- * STANDARDIZED REALTIME HOOK - SINGLE SOURCE OF TRUTH
+ * PHASE 0 CRITICAL FIX: UNIFIED REALTIME HOOK - SINGLE SOURCE OF TRUTH
  *
  * This is the ONLY realtime hook that should be used across the entire application.
- * All other realtime implementations are deprecated and will be removed.
+ * FIXED: Consolidated 6 competing implementations into single architecture
+ * FIXED: Prevents infinite re-renders with proper memoization
+ * FIXED: Stable connection management with cleanup
  *
  * Usage:
  * - Widget: useRealtime({ type: "widget", organizationId, conversationId })

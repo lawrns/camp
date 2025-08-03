@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { format } from "date-fns";
-import { Download, FileXls as FileSpreadsheet, FileText, Spinner as Loader2 } from "@phosphor-icons/react";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Checkbox } from "@/components/unified-ui/components/checkbox";
@@ -164,13 +164,13 @@ export function ExportReports() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-ds-2">
-            <Icon icon={Download} className="h-5 w-5" />
+            <Icon icon={Icons.download} className="h-5 w-5" />
             Export Reports
           </CardTitle>
           <CardDescription>Download your data in various formats for analysis</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={() => setShowDialog(true)} className="w-full" leftIcon={<Icon icon={FileText} className="h-4 w-4" />}>
+          <Button onClick={() => setShowDialog(true)} className="w-full" leftIcon={<Icon icon={Icons.document} className="h-4 w-4" />}>
             Export Report
           </Button>
         </CardContent>
@@ -213,21 +213,21 @@ export function ExportReports() {
                 <div className="flex items-center space-x-spacing-sm">
                   <RadioGroupItem value="csv" id="csv" />
                   <Label htmlFor="csv" className="flex cursor-pointer items-center gap-ds-2">
-                    <Icon icon={FileSpreadsheet} className="h-4 w-4" />
+                    <Icon icon={Icons.file} className="h-4 w-4" />
                     CSV (Excel Compatible)
                   </Label>
                 </div>
                 <div className="flex items-center space-x-spacing-sm">
                   <RadioGroupItem value="pdf" id="pdf" disabled />
                   <Label htmlFor="pdf" className="flex cursor-pointer items-center gap-ds-2 opacity-50">
-                    <Icon icon={FileText} className="h-4 w-4" />
+                    <Icon icon={Icons.document} className="h-4 w-4" />
                     PDF (Coming Soon)
                   </Label>
                 </div>
                 <div className="flex items-center space-x-spacing-sm">
                   <RadioGroupItem value="json" id="json" />
                   <Label htmlFor="json" className="flex cursor-pointer items-center gap-ds-2">
-                    <Icon icon={FileText} className="h-4 w-4" />
+                    <Icon icon={Icons.document} className="h-4 w-4" />
                     JSON (Raw Data)
                   </Label>
                 </div>
@@ -354,12 +354,12 @@ export function ExportReports() {
             <Button onClick={handleExport} disabled={isExporting}>
               {isExporting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Icon icon={Icons.loading} className="mr-2 h-4 w-4 animate-spin" />
                   Exporting...
                 </>
               ) : (
                 <>
-                  <Icon icon={Download} className="mr-2 h-4 w-4" />
+                  <Icon icon={Icons.download} className="mr-2 h-4 w-4" />
                   Export Report
                 </>
               )}

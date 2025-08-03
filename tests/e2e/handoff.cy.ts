@@ -2,8 +2,8 @@ describe('AI-Human Handoff Flow', () => {
   beforeEach(() => {
     // Login as test user
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type('test@example.com');
-    cy.get('[data-testid="password-input"]').type('testpassword');
+    cy.get('[data-testid="email-input"]').type('jam@jam.com');
+    cy.get('[data-testid="password-input"]').type('password123');
     cy.get('[data-testid="login-button"]').click();
     cy.url().should('include', '/dashboard');
   });

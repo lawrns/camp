@@ -2,7 +2,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ConditionalNavigation } from '@/components/ConditionalNavigation';
 import { AuthProviders } from './app-backup/client-providers';
-import { ExtensionIsolationProvider } from '@/components/system/ExtensionIsolationProvider';
+
 import { initializeMonitoring } from '@/lib/monitoring/init';
 import type { Metadata } from 'next';
 import { ClientConsoleManager } from '@/components/system/ClientConsoleManager';
@@ -29,14 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ClientConsoleManager />
-        <ExtensionIsolationProvider>
-          <ThemeProvider>
-            <AuthProviders>
-              <ConditionalNavigation />
-              {children}
-            </AuthProviders>
-          </ThemeProvider>
-        </ExtensionIsolationProvider>
+        <ThemeProvider>
+          <AuthProviders>
+            <ConditionalNavigation />
+            {children}
+          </AuthProviders>
+        </ThemeProvider>
       </body>
     </html>
   );

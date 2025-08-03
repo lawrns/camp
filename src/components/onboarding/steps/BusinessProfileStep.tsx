@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Buildings as Building2, Globe, Spinner as Loader2, TrendUp as TrendingUp, Users } from "@phosphor-icons/react";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Button } from "@/components/ui/Button-unified";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/unified-ui/components/select";
 import { Textarea } from "@/components/unified-ui/components/textarea";
-import { Icon } from "@/lib/ui/Icon";
+
 import { apiGet, apiPost } from "@/lib/utils/api-client";
 
 interface BusinessProfileData {
@@ -171,7 +171,7 @@ export function BusinessProfileStep({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <Icon icon={Loader2} className="mx-auto mb-4 h-8 w-8 animate-spin text-blue-600" />
+          <Icon icon={Icons.loading} className="mx-auto mb-4 h-8 w-8 animate-spin text-blue-600" />
           <p className="text-foreground">Loading your business profile...</p>
         </div>
       </div>
@@ -190,7 +190,7 @@ export function BusinessProfileStep({
         {/* Industry */}
         <div className="space-y-spacing-sm">
           <Label htmlFor="industry" className="flex items-center gap-ds-2">
-            <Icon icon={Building2} className="h-4 w-4" />
+            <Icon icon={Icons.building} className="h-4 w-4" />
             Industry *
           </Label>
           <Select value={profile.industry} onValueChange={(value: string) => updateProfile("industry", value)}>
@@ -211,7 +211,7 @@ export function BusinessProfileStep({
         {/* Company Size */}
         <div className="space-y-spacing-sm">
           <Label htmlFor="companySize" className="flex items-center gap-ds-2">
-            <Icon icon={Users} className="h-4 w-4" />
+            <Icon icon={Icons.users} className="h-4 w-4" />
             Company Size *
           </Label>
           <Select value={profile.companySize} onValueChange={(value: string) => updateProfile("companySize", value)}>
@@ -232,7 +232,7 @@ export function BusinessProfileStep({
         {/* Support Volume */}
         <div className="space-y-spacing-sm">
           <Label htmlFor="supportVolume" className="flex items-center gap-ds-2">
-            <Icon icon={TrendingUp} className="h-4 w-4" />
+            <Icon icon={Icons.trending} className="h-4 w-4" />
             Monthly Support Volume *
           </Label>
           <Select
@@ -256,7 +256,7 @@ export function BusinessProfileStep({
         {/* Website */}
         <div className="space-y-spacing-sm">
           <Label htmlFor="website" className="flex items-center gap-ds-2">
-            <Icon icon={Globe} className="h-4 w-4" />
+            <Icon icon={Icons.globe} className="h-4 w-4" />
             Website URL
           </Label>
           <Input
@@ -303,7 +303,7 @@ export function BusinessProfileStep({
         >
           {loading || isLoading ? (
             <>
-              <Icon icon={Loader2} className="mr-2 h-4 w-4 animate-spin" />
+              <Icon icon={Icons.loading} className="mr-2 h-4 w-4 animate-spin" />
               Saving...
             </>
           ) : (

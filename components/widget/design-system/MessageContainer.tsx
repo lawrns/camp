@@ -52,6 +52,7 @@ function TypingIndicator({ users }: { users: Array<{ id: string; name: string }>
         ease: [0.0, 0.0, 0.2, 1],
       }}
       className="flex justify-start"
+      data-testid="typing-indicator"
       style={{
         marginBottom: SPACING.messageMargin,
         paddingLeft: SPACING.containerPadding,

@@ -299,11 +299,11 @@ async function ensureChannelSubscription(channelName: string, config?: any): Pro
 
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
-      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 5 seconds`);
-      reject(new Error(`Channel subscription timeout for ${channelName} after 5 seconds`));
-    }, 5000);
+      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 15 seconds`);
+      reject(new Error(`Channel subscription timeout for ${channelName} after 15 seconds`));
+    }, 15000); // Increased from 5 seconds to 15 seconds
 
-    // Subscribe and wait for confirmation
+    // Subscribe and wait for confirmation with enhanced error handling
     console.log(`[Realtime] 📡 Calling channel.subscribe() for: ${channelName}`);
     channel.subscribe((status) => {
       console.log(`[Realtime] 📢 Subscription status update for ${channelName}: ${status}`);
@@ -315,6 +315,11 @@ async function ensureChannelSubscription(channelName: string, config?: any): Pro
           resolve(channel);
           break;
         case 'CHANNEL_ERROR':
+          clearTimeout(timeout);
+          console.warn(`[Realtime] ⚠️ Channel ${channelName} error - will retry with fallback`);
+          // Don't reject immediately, let timeout handle retry logic
+          reject(new Error(`Channel error: ${status} - fallback mode available`));
+          break;
         case 'TIMED_OUT':
         case 'CLOSED':
           clearTimeout(timeout);

@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3005',
+    baseUrl: 'http://localhost:3001',
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,
@@ -28,10 +28,10 @@ export default defineConfig({
       SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
       
       // Test user credentials
-      TEST_USER_EMAIL: 'test@example.com',
-      TEST_USER_PASSWORD: 'testpassword123',
-      TEST_ADMIN_EMAIL: 'admin@example.com',
-      TEST_ADMIN_PASSWORD: 'adminpassword123'
+      TEST_USER_EMAIL: 'jam@jam.com',
+      TEST_USER_PASSWORD: 'password123',
+      TEST_ADMIN_EMAIL: 'jam@jam.com',
+      TEST_ADMIN_PASSWORD: 'password123'
     },
     
     setupNodeEvents(on, config) {

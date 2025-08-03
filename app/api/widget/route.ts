@@ -4,14 +4,39 @@ import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { validateOrganizationId, sanitizeErrorMessage, checkRateLimit } from '@/lib/utils/validation';
 import { createWidgetClient } from '@/lib/supabase/secure-client-factory';
+import { widgetRateLimit } from '@/lib/middleware/rate-limit';
+import { identifyVisitor, validateSession, associateConversation } from '@/lib/services/visitor-identification';
+import { WidgetSchemas, validateRequest, BaseSchemas } from '@/lib/validation/schemas';
+import { z } from 'zod';
 
 // Widget API route handler for various actions
 export async function POST(request: NextRequest) {
-  try {
+  // PHASE 1 CRITICAL FIX: Apply rate limiting to widget endpoints
+  return widgetRateLimit(request, async () => {
+    try {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action');
     const body = await request.json();
-    
+
+    // PHASE 2 CRITICAL FIX: Input validation with Zod schemas
+    const actionValidation = validateRequest(z.object({
+      action: BaseSchemas.widgetAction
+    }), body);
+
+    if (!actionValidation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid request format',
+            details: actionValidation.errors
+          }
+        },
+        { status: 400 }
+      );
+    }
+
     // SECURITY FIX: Validate organization ID format and prevent injection
     let organizationId: string;
     try {
@@ -58,10 +83,10 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'create-conversation':
-        return await handleCreateConversation(body, organizationId);
-      
+        return await handleCreateConversation(body, organizationId, request);
+
       case 'send-message':
-        return await handleSendMessage(body, organizationId);
+        return await handleSendMessage(body, organizationId, request);
       
       default:
         return NextResponse.json(
@@ -88,13 +113,55 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+  }); // Close rate limiting wrapper
 }
 
-async function handleCreateConversation(body: any, organizationId: string) {
+async function handleCreateConversation(body: any, organizationId: string, request: NextRequest) {
   try {
-    const { visitorId, initialMessage, customerEmail, customerName } = body;
-    
-    // Initialize Supabase service role client to bypass RLS for widget operations
+    // PHASE 2 CRITICAL FIX: Validate create conversation request
+    const validation = validateRequest(WidgetSchemas.createConversation, body);
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid create conversation request',
+            details: validation.errors
+          }
+        },
+        { status: 400 }
+      );
+    }
+
+    const validatedData = validation.data as z.infer<typeof WidgetSchemas.createConversation>;
+    const { providedVisitorId, initialMessage, customerEmail, customerName } = validatedData;
+
+    // PHASE 1 CRITICAL FIX: Replace hardcoded visitor IDs with proper identification
+    const visitorInfo = await identifyVisitor(organizationId, request, providedVisitorId);
+
+    // PHASE 0 CRITICAL FIX: Implement proper widget token validation before RLS bypass
+    // Validate widget token before allowing admin access
+    const authHeader = request.headers.get('authorization');
+    const widgetToken = authHeader?.replace('Bearer ', '');
+
+    if (!widgetToken) {
+      return NextResponse.json(
+        { success: false, error: { code: 'UNAUTHORIZED', message: 'Widget token required' } },
+        { status: 401 }
+      );
+    }
+
+    // Validate widget token belongs to the organization
+    const isValidToken = await validateWidgetToken(widgetToken, organizationId);
+    if (!isValidToken) {
+      return NextResponse.json(
+        { success: false, error: { code: 'INVALID_TOKEN', message: 'Invalid widget token' } },
+        { status: 401 }
+      );
+    }
+
+    // Only after validation, use admin client for widget operations
     const supabaseClient = supabase.admin();
     
     // Generate UUID for conversation ID
@@ -113,7 +180,11 @@ async function handleCreateConversation(body: any, organizationId: string) {
         created_at: new Date().toISOString(),
         metadata: {
           source: 'widget',
-          visitorId: visitorId || `visitor_${Date.now()}`,
+          visitorId: visitorInfo.visitorId,
+          sessionId: visitorInfo.sessionId,
+          sessionToken: visitorInfo.sessionToken,
+          isReturning: visitorInfo.isReturning,
+          browserInfo: visitorInfo.metadata.browserInfo,
           userAgent: body.userAgent,
           referrer: body.referrer,
           currentUrl: body.currentUrl
@@ -138,10 +209,19 @@ async function handleCreateConversation(body: any, organizationId: string) {
 
     console.log('[Widget API] Created conversation:', conversationId);
 
+    // Associate conversation with session
+    await associateConversation(visitorInfo.sessionToken, conversation.id);
+
     return NextResponse.json({
       success: true,
       conversationId,
       conversation,
+      visitorInfo: {
+        visitorId: visitorInfo.visitorId,
+        sessionId: visitorInfo.sessionId,
+        sessionToken: visitorInfo.sessionToken,
+        isReturning: visitorInfo.isReturning
+      },
       data: {
         conversation
       }
@@ -161,11 +241,28 @@ async function handleCreateConversation(body: any, organizationId: string) {
   }
 }
 
-async function handleSendMessage(body: any, organizationId: string) {
+async function handleSendMessage(body: any, organizationId: string, request: NextRequest) {
   try {
-    const { conversationId, content, senderEmail, senderName, senderType = 'customer' } = body;
+    // PHASE 2 CRITICAL FIX: Validate send message request
+    const validation = validateRequest(WidgetSchemas.sendMessage, body);
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid send message request',
+            details: validation.errors
+          }
+        },
+        { status: 400 }
+      );
+    }
 
-    // Validate required fields
+    const validatedData = validation.data as z.infer<typeof WidgetSchemas.sendMessage>;
+    const { conversationId, content, senderEmail, senderName, senderType = 'customer' } = validatedData;
+
+    // Validate required fields (additional check)
     if (!conversationId || !content) {
       return NextResponse.json(
         { 
@@ -179,7 +276,27 @@ async function handleSendMessage(body: any, organizationId: string) {
       );
     }
 
-    // Initialize Supabase service role client to bypass RLS for widget operations
+    // PHASE 0 CRITICAL FIX: Implement proper widget token validation before RLS bypass
+    const authHeader = request.headers.get('authorization');
+    const widgetToken = authHeader?.replace('Bearer ', '');
+
+    if (!widgetToken) {
+      return NextResponse.json(
+        { success: false, error: { code: 'UNAUTHORIZED', message: 'Widget token required' } },
+        { status: 401 }
+      );
+    }
+
+    // Validate widget token belongs to the organization
+    const isValidToken = await validateWidgetToken(widgetToken, organizationId);
+    if (!isValidToken) {
+      return NextResponse.json(
+        { success: false, error: { code: 'INVALID_TOKEN', message: 'Invalid widget token' } },
+        { status: 401 }
+      );
+    }
+
+    // Only after validation, use admin client for widget operations
     const supabaseClient = supabase.admin();
 
     // Verify conversation exists and belongs to organization
@@ -314,7 +431,7 @@ async function handleGetSession(organizationId: string) {
   try {
     // Generate session data
     const sessionId = `session_${Date.now()}`;
-    const token = `token_${Math.random().toString(36).substr(2, 16)}`;
+    const token = `token_${Math.random().toString(36).substring(2, 16)}`;
     
     return NextResponse.json({
       success: true,
@@ -342,5 +459,34 @@ async function handleGetSession(organizationId: string) {
       },
       { status: 500 }
     );
+  }
+}
+
+/**
+ * PHASE 0 CRITICAL FIX: Widget token validation function
+ * Validates that a widget token belongs to the specified organization
+ */
+async function validateWidgetToken(token: string, organizationId: string): Promise<boolean> {
+  try {
+    // Use regular client for token validation (not admin)
+    const supabaseClient = supabase.browser();
+
+    // Check if token exists and belongs to organization
+    const { data: widgetSettings, error } = await supabaseClient
+      .from('widget_settings')
+      .select('organization_id')
+      .eq('api_key', token)
+      .eq('organization_id', organizationId)
+      .single();
+
+    if (error || !widgetSettings) {
+      console.warn('[Widget Auth] Invalid token validation:', { token: token.substring(0, 8) + '...', organizationId });
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('[Widget Auth] Token validation error:', error);
+    return false;
   }
 }

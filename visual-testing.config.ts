@@ -12,7 +12,7 @@ export default defineConfig({
     ['junit', { outputFile: 'visual-reports/results.xml' }]
   ],
   use: {
-    baseURL: 'http://localhost:3005',
+    baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

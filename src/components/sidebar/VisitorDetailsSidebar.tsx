@@ -1,24 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Buildings as Building,
-  Clock,
-  Globe,
-  MapPin,
-  ChatCircle as MessageSquare,
-  Monitor,
-  Phone,
-  DeviceMobile as Smartphone,
-  User,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-} from "@phosphor-icons/react";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/unified-ui/components/collapsible";
-import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
 interface VisitorDetailsSidebarProps {
@@ -72,13 +59,15 @@ interface VisitorData {
 
 interface AccordionSectionProps {
   title: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string }> | keyof typeof Icons;
   children: React.ReactNode;
   defaultOpen?: boolean;
   className?: string;
 }
 
 function AccordionSection({ title, icon: Icon, children, defaultOpen = false, className }: AccordionSectionProps) {
+  // Handle both icon components and icon names
+  const IconComponent = typeof Icon === 'string' ? Icons[Icon as keyof typeof Icons] : Icon;
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
@@ -89,13 +78,10 @@ function AccordionSection({ title, icon: Icon, children, defaultOpen = false, cl
           className="h-auto w-full justify-between spacing-3 text-left font-medium hover:bg-[var(--fl-color-background-subtle)] focus-visible:ring-2 focus-visible:ring-amber-500 dark:hover:bg-neutral-800"
         >
           <div className="flex items-center gap-ds-2">
-            <Icon className="text-foreground h-4 w-4 dark:text-gray-400" />
+            {IconComponent ? <IconComponent className="text-foreground h-4 w-4 dark:text-gray-400" /> : null}
             <span className="text-sm font-medium text-gray-900 dark:text-neutral-100">{title}</span>
           </div>
-          <Icon
-            name="ChevronDown"
-            className={cn("h-4 w-4 text-neutral-500 transition-transform duration-150", isOpen && "rotate-180")}
-          />
+          <Icons.chevronDown className={cn("h-4 w-4 text-neutral-500 transition-transform duration-150", isOpen && "rotate-180")} />
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent className="data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
@@ -147,7 +133,7 @@ function MapPreview({ location }: { location: VisitorData["location"] }) {
       ) : (
         <div className="flex h-full items-center justify-center">
           <div className="text-center">
-            <Icon icon={MapPin} className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+            <Icon icon={Icons.mapPin as any} className="mx-auto mb-2 h-8 w-8 text-gray-400" />
             <p className="text-sm text-[var(--fl-color-text-muted)] dark:text-gray-400">
               {location.city}, {location.country}
             </p>
@@ -162,9 +148,9 @@ function getDeviceIcon(deviceType?: string) {
   switch (deviceType) {
     case "mobile":
     case "tablet":
-      return Smartphone;
+      return "smartphone";
     default:
-      return Monitor;
+      return "monitor";
   }
 }
 
@@ -216,11 +202,11 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
             <div className="absolute -bottom-1 -right-1">
               {visitor.isOnline ? (
                 <div className="bg-semantic-success flex h-5 w-5 items-center justify-center rounded-ds-full border-2 border-white dark:border-neutral-900">
-                  <Icon icon={WifiHigh} className="h-2.5 w-2.5 text-white" />
+                  <Icon icon={Icons.wifi as any} className="h-2.5 w-2.5 text-white" />
                 </div>
               ) : (
                 <div className="flex h-5 w-5 items-center justify-center rounded-ds-full border-2 border-white bg-neutral-400 dark:border-neutral-900">
-                  <Icon icon={WifiHighOff} className="h-2.5 w-2.5 text-white" />
+                  <Icon icon={Icons.wifiOff as any} className="h-2.5 w-2.5 text-white" />
                 </div>
               )}
             </div>
@@ -231,7 +217,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
           {/* Location and Local Time */}
           <div className="mb-3 flex items-center gap-ds-2 text-sm text-muted-foreground">
-            <Icon icon={MapPin} className="h-4 w-4" />
+            <Icon icon={Icons.mapPin as any} className="h-4 w-4" />
             <span>
               {visitor.location.city}, {visitor.location.country}
             </span>
@@ -239,7 +225,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
           {visitor.localTime && (
             <Badge variant="secondary" className="text-tiny">
-              <Icon icon={Clock} className="mr-1 h-3 w-3" />
+              <Icon icon={Icons.clock as any} className="mr-1 h-3 w-3" />
               {visitor.localTime}
             </Badge>
           )}
@@ -255,7 +241,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
       <div className="flex-1 space-y-3 overflow-y-auto spacing-3">
         {/* Contact Information Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Contact Information" icon={User as any} defaultOpen>
+          <AccordionSection title="Contact Information" icon={Icons.user} defaultOpen>
             <div className="space-y-3">
               {/* Identity sub-block with status badges */}
               <div className="space-y-spacing-sm">
@@ -269,7 +255,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
                       variant="secondary"
                       className="text-green-600-dark border-status-success-light bg-[var(--fl-color-success-subtle)] text-tiny"
                     >
-                      <Icon name="Shield" className="mr-1 h-3 w-3" />
+                      <Icon name="shield" className="mr-1 h-3 w-3" />
                       Verified
                     </Badge>
                   )}
@@ -278,7 +264,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
               {visitor.company && (
                 <div className="flex items-center gap-ds-2">
-                  <Icon name="Building" className="h-4 w-4 text-muted-foreground" />
+                  <Icon icon={Icons.monitor as any} className="mr-2 h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium text-primary">{visitor.company}</p>
                     {visitor.role && <p className="text-tiny text-muted-foreground">{visitor.role}</p>}
@@ -288,7 +274,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
               {visitor.phone && (
                 <div className="flex items-center gap-ds-2">
-                  <Icon icon={Phone} className="h-4 w-4 text-muted-foreground" />
+                  <Icon icon={Icons.smartphone as any} className="mr-2 h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-primary">{visitor.phone}</p>
                 </div>
               )}
@@ -309,7 +295,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Customer Value Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Customer Value" icon={Building as any}>
+          <AccordionSection title="Customer Value" icon={Icons.building as any}>
             <div className="space-y-3">
               {visitor.sessions && (
                 <div>
@@ -333,10 +319,10 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Technical Information Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Technical Information" icon={Globe as any}>
+          <AccordionSection title="Technical Information" icon={Icons.globe as any}>
             <div className="space-y-3">
               <div className="flex items-center gap-ds-2">
-                <DeviceIcon className="h-4 w-4 text-muted-foreground" />
+                <Icon name={DeviceIcon} className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium text-primary">
                     {visitor.deviceType
@@ -361,7 +347,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Conversation Insights Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Conversation Insights" icon={MessageSquare as any}>
+          <AccordionSection title="Recent Activity" icon={Icons.messageSquare as any}>
             <div className="space-y-spacing-sm">
               {/* Visited Pages */}
               <div className="mb-4">

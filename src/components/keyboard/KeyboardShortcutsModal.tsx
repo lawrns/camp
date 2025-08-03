@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X } from "@phosphor-icons/react";
+import { Icon as StandardizedIcon, Icons } from '@/lib/icons/standardized-icons';
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { KeyboardShortcut } from "@/lib/keyboard/KeyboardShortcutManager";
-import { Icon } from "@/lib/ui/Icon";
+
 import { cn } from "@/lib/utils";
 
 interface KeyboardShortcutsModalProps {
@@ -94,7 +94,7 @@ export function KeyboardShortcutsModal({ open: controlledOpen, onClose }: Keyboa
               className="hover:bg-background rounded-ds-lg p-spacing-sm transition-colors dark:hover:bg-neutral-800"
               aria-label="Close"
             >
-              <Icon icon={X} className="h-5 w-5 text-[var(--color-text-muted)] dark:text-gray-400" />
+              <StandardizedIcon icon={Icons.close} className="h-5 w-5 text-[var(--color-text-muted)] dark:text-gray-400" />
             </button>
           </div>
         </div>

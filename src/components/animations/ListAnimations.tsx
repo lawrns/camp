@@ -7,8 +7,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, PanInfo, Reorder, useMotionValue, useTransform } from "framer-motion";
-import { Archive, DotsThreeVertical as MoreVertical, Trash as Trash2 } from "@phosphor-icons/react";
-import { Icon } from "@/lib/ui/Icon";
+import { Icon, Icons } from '@/lib/icons/standardized-icons';
+
 import { cn } from "@/lib/utils";
 
 // Stagger list animation
@@ -151,12 +151,12 @@ export function SwipeableListItem({ children, onDelete, onArchive, className }: 
         style={{ opacity: backgroundOpacity }}
       >
         <motion.div className="flex items-center gap-ds-2 text-white" style={{ opacity: deleteOpacity }}>
-          <Icon icon={Trash2} className="h-5 w-5" />
+          <Icon icon={Icons.delete} className="h-5 w-5" />
           <span>Delete</span>
         </motion.div>
 
         <motion.div className="flex items-center gap-ds-2 text-white" style={{ opacity: archiveOpacity }}>
-          <Icon icon={Archive} className="h-5 w-5" />
+          <Icon icon={Icons.archive} className="h-5 w-5" />
           <span>Archive</span>
         </motion.div>
       </motion.div>

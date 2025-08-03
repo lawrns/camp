@@ -213,6 +213,7 @@ export function WidgetFileUpload({
         accept={acceptedTypes.join(',')}
         className="hidden"
         disabled={disabled}
+        data-testid="file-upload-input"
       />
 
       {/* Upload Progress */}

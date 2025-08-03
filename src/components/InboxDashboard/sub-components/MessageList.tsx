@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ChatCircle } from "@phosphor-icons/react";
+import { Icon } from '@/lib/icons/standardized-icons';
+import { Icons } from '@/lib/icons/standardized-icons';
 import { VariableSizeList as List } from "react-window";
 import type { Conversation, Message } from "../types";
 import { getMessageItemSize } from "../utils/channelUtils";
@@ -215,7 +216,7 @@ export const MessageList: React.FC<MessageListProps> = ({
           style={{ padding: 'var(--ds-spacing-3)' }}
           aria-label="Scroll to bottom"
         >
-          <ArrowDown className="h-5 w-5" />
+          <Icon icon={Icons.chevronDown} className="h-5 w-5" />
         </button>
       )}
     </div>
