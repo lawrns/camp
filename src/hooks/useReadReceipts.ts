@@ -127,7 +127,7 @@ export function useReadReceipts({
 
         // Broadcast read receipt
         try {
-          const channel = supabaseClient.channel(`org:${organizationId}:conversation:${conversationId}`);
+          const channel = supabaseClient.channel(`cf-org-conv-bcast-${organizationId}-${conversationId}`);
           await channel.send({
             type: "broadcast",
             event: "read_receipt",
@@ -188,7 +188,7 @@ export function useReadReceipts({
 
         // Broadcast read receipts
         try {
-          const channel = supabaseClient.channel(`org:${organizationId}:conversation:${conversationId}`);
+          const channel = supabaseClient.channel(`cf-org-conv-bcast-${organizationId}-${conversationId}`);
           for (const messageId of messageIds) {
             await channel.send({
               type: "broadcast",
@@ -277,7 +277,7 @@ export function useReadReceipts({
     if (!enableRealtime || !conversationId || !organizationId) return;
 
     const supabaseClient = supabase.browser();
-    const channelName = `org:${organizationId}:conversation:${conversationId}`;
+    const channelName = `cf-org-conv-bcast-${organizationId}-${conversationId}`;
 
     channelRef.current = supabaseClient.channel(channelName);
 

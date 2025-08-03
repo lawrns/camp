@@ -47,7 +47,7 @@ export function useMessageNotifications({
 
     // Use native Supabase client for notifications since this is browser-only
     const supabaseClient = supabase.browser();
-    const channelName = `org:${organizationId}:messages:${conversationId || "all"}`;
+    const channelName = `cf-org-messages-bcast-${organizationId}-${conversationId || "all"}`;
     const channel = supabase.channel(channelName);
 
     // Subscribe to new messages

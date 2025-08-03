@@ -7,9 +7,8 @@ import { useState, useEffect } from 'react';
 
 export const WorldClassHero = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  // Scroll position (reserved for future animations)
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 300], [0, 100]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
 
   // Performance optimization: Debounce scroll events and use will-change
   useEffect(() => {
@@ -195,7 +194,7 @@ export const WorldClassHero = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg md:col-span-1"
+            className="relative w-full md:col-span-1 flex justify-center md:justify-end max-w-sm sm:max-w-md lg:max-w-lg"
           >
             {/* Main Demo Container */}
             <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
