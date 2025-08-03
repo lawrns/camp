@@ -132,6 +132,7 @@ export interface IconsType {
   link: LucideIcon;
   search: LucideIcon;
   message: LucideIcon;
+  messageSquare: LucideIcon;
 
   // User & People
   user: LucideIcon;
@@ -240,6 +241,7 @@ export const Icons: IconsType = {
   // Communication
   chat: MessageSquare,
   message: MessageCircle,
+  messageSquare: MessageSquare,
   send: Send,
   email: Mail,
   phone: Phone,
