@@ -206,6 +206,10 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
         }
       });
 
+    // PHASE 0: DISABLED typing_indicators postgres_changes subscription (causing binding mismatch)
+    console.log('[RealtimeMessageLoader] Typing indicators PostgreSQL subscription temporarily disabled');
+
+    /*
     // Subscribe to typing indicators (both database changes and broadcast events)
     // FIXED: Use same conversation channel for typing events
     const typingChannel = supabase
@@ -236,6 +240,11 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           }
         }
       )
+    */
+
+    // Create a dummy typing channel for now (will use broadcast events later)
+    const typingChannel = supabase
+      .channel(`org:${organizationId}:conversation:${conversationIdStr}:typing-disabled`)
       .on(
         "postgres_changes",
         {

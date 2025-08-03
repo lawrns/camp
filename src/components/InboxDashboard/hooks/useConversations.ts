@@ -121,6 +121,25 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
       .on("broadcast", { event: "*" }, (payload) => {
 
         const { event, payload: data } = payload;
+        console.log('[Conversations] Broadcast received:', { event, data });
+
+        // PHASE 0: Handle conversation insert broadcasts from trigger
+        if (event === "conv:insert" && data?.id) {
+          console.log('[Conversations] New conversation via broadcast:', data);
+          const newConversation = mapConversation(data);
+          setConversations((prev) => {
+            const exists = prev.some((conv) => conv.id === newConversation.id);
+            if (exists) return prev;
+            return [newConversation, ...prev];
+          });
+        }
+
+        // PHASE 0: Handle conversation update broadcasts from trigger
+        if (event === "conv:update" && data?.id) {
+          console.log('[Conversations] Updated conversation via broadcast:', data);
+          // Invalidate and reload conversations to get fresh data
+          queryClient.invalidateQueries({ queryKey: ["conversations", organizationId] });
+        }
 
         // Handle conversation updated broadcasts from widget messages
         if (event === "conversation_updated" && data?.conversationId) {

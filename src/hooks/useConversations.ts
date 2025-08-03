@@ -75,10 +75,13 @@ export function useConversations() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // Set up real-time subscription
+  // STEP 0: DISABLED - Real-time subscription causing binding mismatch
   useEffect(() => {
     if (shouldSkipQuery) return;
 
+    console.log('[useConversations] PostgreSQL subscription disabled due to binding mismatch');
+
+    /*
     const channel = supabase
       .browser()
       .channel(`conversations:${organizationId}`)
@@ -125,7 +128,6 @@ export function useConversations() {
           filter: `organization_id=eq.${organizationId}`,
         },
         (payload) => {
-
           queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
             if (!old) return [];
             return old.filter((conv) => conv.id !== payload.old.id);
@@ -133,6 +135,9 @@ export function useConversations() {
         }
       )
       .subscribe();
+    */
+
+    // Temporary: No realtime subscription to avoid binding mismatch
 
     return () => {
 

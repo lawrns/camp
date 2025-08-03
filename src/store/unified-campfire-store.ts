@@ -122,6 +122,10 @@ export const useCampfireStore = create<CampfireState>((set, get) => ({
     const organization = get().organization;
     if (!organization) return () => {};
 
+    // STEP 0: DISABLED - postgres_changes subscription causing binding mismatch
+    console.log('[unified-campfire-store] PostgreSQL subscription disabled due to binding mismatch');
+
+    /*
     const channel = client
       .channel(`org:${organization.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, (payload) => {
@@ -137,6 +141,11 @@ export const useCampfireStore = create<CampfireState>((set, get) => ({
           });
         }
       })
+    */
+
+    // Create dummy channel for now
+    const channel = client
+      .channel(`org:${organization.id}:disabled`)
       .subscribe();
 
     return () => {

@@ -1,185 +1,112 @@
-<testsuites id="" name="" tests="42" failures="42" skipped="0" errors="0" time="216.88576999999998">
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="chromium" tests="6" failures="6" skipped="0" time="194.095" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="32.399">
+<testsuites id="" name="" tests="42" failures="7" skipped="35" errors="0" time="87.91739299999999">
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="chromium" tests="6" failures="6" skipped="0" time="278.525" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="46.486">
 <failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/error-context.md
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 ]]>
 </failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-chromium/error-context.md]]
-]]>
-</system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="32.336">
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="46.496">
 <failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/error-context.md
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 ]]>
 </failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-chromium/error-context.md]]
-]]>
-</system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="32.364">
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="46.525">
 <failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 
     Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/error-context.md
 ]]>
 </failure>
 <system-out>
 <![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/video.webm]]
-
 [[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-chromium/error-context.md]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="32.363">
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="46.964">
 <failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/error-context.md
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 ]]>
 </failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-chromium/error-context.md]]
-]]>
-</system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="32.346">
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="45.433">
 <failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/video.webm
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
     Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/error-context.md
@@ -189,1466 +116,210 @@
 <![CDATA[
 [[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/test-failed-1.png]]
 
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/video.webm]]
-
 [[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-chromium/error-context.md]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="32.287">
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="46.621">
 <failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
 <![CDATA[  [chromium] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/error-context.md
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 ]]>
 </failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-chromium/error-context.md]]
-]]>
-</system-out>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="firefox" tests="6" failures="6" skipped="0" time="190.111" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="32.041">
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="firefox" tests="6" failures="1" skipped="5" time="47.56" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="47.56">
 <failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
 <![CDATA[  [firefox] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
 
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
+      - navigating to "http://localhost:3001/dashboard/inbox", waiting until "load"
 
 
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to the inbox dashboard
+    > 6 |     await page.goto('/dashboard/inbox');
+        |                ^
+      7 |     // Wait for the conversation list to load
+      8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
+      9 |   });
+        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:6:16
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/error-context.md
 ]]>
 </failure>
 <system-out>
 <![CDATA[
 [[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-firefox/error-context.md]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="31.784">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [firefox] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-firefox/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="31.427">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [firefox] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-firefox/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="31.649">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [firefox] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-firefox/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="31.615">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [firefox] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-firefox/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="31.595">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [firefox] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-firefox/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="webkit" tests="6" failures="6" skipped="0" time="185.685" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="31.272">
-<failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-webkit/error-context.md]]
-]]>
-</system-out>
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="webkit" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="30.922">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-webkit/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="30.892">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-webkit/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="30.906">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-webkit/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="30.905">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-webkit/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="30.788">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [webkit] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-webkit/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="Mobile Chrome" tests="6" failures="6" skipped="0" time="184.803" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="30.747">
-<failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="Mobile Chrome" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="30.963">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="30.811">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="30.676">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="30.698">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="30.908">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [Mobile Chrome] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="Mobile Safari" tests="6" failures="6" skipped="0" time="186.494" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="31.257">
-<failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="Mobile Safari" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="31.233">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="31.067">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="31.509">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="30.714">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="30.714">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [Mobile Safari] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Mobile-Safari/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="Microsoft Edge" tests="6" failures="6" skipped="0" time="193.375" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="34.025">
-<failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="Microsoft Edge" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="33.05">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="31.83">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="31.886">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="31.164">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="31.42">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [Microsoft Edge] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Microsoft-Edge/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
-<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:23:49.475Z" hostname="Google Chrome" tests="6" failures="6" skipped="0" time="200.388" errors="0">
-<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="31.688">
-<failure message="conversation-list.spec.ts:11:7 conversation list fills parent width at different breakpoints" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:11:7 › Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-cbeb1-th-at-different-breakpoints-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testsuite name="conversation-list.spec.ts" timestamp="2025-08-03T20:48:58.520Z" hostname="Google Chrome" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Conversation List Responsive Behavior › conversation list fills parent width at different breakpoints" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="32.226">
-<failure message="conversation-list.spec.ts:41:7 no horizontal scrollbar at any breakpoint" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:41:7 › Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-7cba5-scrollbar-at-any-breakpoint-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › no horizontal scrollbar at any breakpoint" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="33.187">
-<failure message="conversation-list.spec.ts:66:7 conversation items maintain 56px height" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:66:7 › Conversation List Responsive Behavior › conversation items maintain 56px height 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b2e8a--items-maintain-56px-height-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › conversation items maintain 56px height" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="33.143">
-<failure message="conversation-list.spec.ts:89:7 text truncation works properly" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:89:7 › Conversation List Responsive Behavior › text truncation works properly 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-5e699-t-truncation-works-properly-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › text truncation works properly" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="34.495">
-<failure message="conversation-list.spec.ts:121:7 vertical scrolling works within conversation list" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:121:7 › Conversation List Responsive Behavior › vertical scrolling works within conversation list 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-bdd9c-ks-within-conversation-list-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › vertical scrolling works within conversation list" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
-<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="35.649">
-<failure message="conversation-list.spec.ts:149:7 blank area on right is minimal" type="FAILURE">
-<![CDATA[  [Google Chrome] › conversation-list.spec.ts:149:7 › Conversation List Responsive Behavior › blank area on right is minimal 
-
-    TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('[data-testid="conversation-list-container"]') to be visible
-
-
-       6 |     await page.goto('/inbox');
-       7 |     // Wait for the conversation list to load
-    >  8 |     await page.waitForSelector('[data-testid="conversation-list-container"]');
-         |                ^
-       9 |   });
-      10 |
-      11 |   test('conversation list fills parent width at different breakpoints', async ({ page }) => {
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/conversation-list.spec.ts:8:16
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/error-context.md
-]]>
-</failure>
-<system-out>
-<![CDATA[
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/test-failed-1.png]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/video.webm]]
-
-[[ATTACHMENT|conversation-list-Conversa-b56aa-nk-area-on-right-is-minimal-Google-Chrome/error-context.md]]
-]]>
-</system-out>
+<testcase name="Conversation List Responsive Behavior › blank area on right is minimal" classname="conversation-list.spec.ts" time="0">
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>
