@@ -64,5 +64,5 @@ export type Subscription = {
 };
 
 interface Window {
-  authDebug: any[];
+  authDebug: Record<string, unknown>[];
 }

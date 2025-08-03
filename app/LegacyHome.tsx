@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { UltimateWidget } from "@/components/widget/design-system/UltimateWidget";
 import { ObjectRenderErrorBoundary } from "@/components/error/ObjectRenderErrorBoundary";
 
 // Beautiful Homepage with animations - imported from components

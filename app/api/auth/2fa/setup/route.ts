@@ -5,6 +5,29 @@ import speakeasy from "speakeasy";
 import { z } from "zod";
 import { withTenantGuard, type TenantContext } from "@/lib/core/auth";
 import { supabase } from "@/lib/supabase";
+import type { Tables } from "@/types/supabase";
+
+// Types for 2FA operations
+interface TwoFactorProfile {
+  metadata?: {
+    two_factor_enabled?: boolean;
+    two_factor_secret?: string;
+    two_fa_setup?: {
+      secret: string;
+      token: string;
+      expires_at: string;
+    };
+    [key: string]: unknown;
+  };
+}
+
+interface TwoFactorCode {
+  user_id: string;
+  code: string;
+  expires_at: string;
+}
+
+type ProfileRow = Tables<'profiles'>;
 
 // Enable 2FA schema
 const enable2FASchema = z.object({
@@ -32,7 +55,8 @@ export const GET = withTenantGuard(async (req: NextRequest, { user, organization
     // Check if 2FA is already enabled
     const { data: profile } = await supabaseClient.from("profiles").select("*").eq("id", user.id).single();
 
-    if ((profile as any)?.two_factor_enabled) {
+    const typedProfile = profile as TwoFactorProfile;
+    if (typedProfile?.metadata?.two_factor_enabled) {
       return NextResponse.json(
         {
           error: "Two-factor authentication is already enabled",
@@ -128,7 +152,8 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
       .eq("user_id", user.id)
       .single();
 
-    const setupData = (profile?.metadata as any)?.two_fa_setup;
+    const typedProfile = profile as TwoFactorProfile;
+    const setupData = typedProfile?.metadata?.two_fa_setup;
     if (!setupData || setupData.token !== sessionToken || new Date(setupData.expires_at) < new Date()) {
       return NextResponse.json({ error: "Invalid or expired session token" }, { status: 400 });
     }
@@ -166,13 +191,12 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
       .from("profiles")
       .update({
         metadata: {
-          ...(((await supabaseClient.from("profiles").select("metadata").eq("id", user.id).single()).data as any)
-            ?.metadata || {}),
+          ...((await supabaseClient.from("profiles").select("metadata").eq("id", user.id).single()).data?.metadata as Record<string, unknown> || {}),
           two_factor_enabled: true,
           two_factor_secret: secret, // In production, encrypt this!
         },
         updated_at: new Date().toISOString(),
-      } as any)
+      } as Partial<ProfileRow>)
       .eq("id", user.id);
 
     if (updateError) {
@@ -193,8 +217,9 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
 
     // Store recovery codes (hashed in production) - table doesn't exist yet
     try {
-      await (supabase as any).from("two_factor_codes").insert(
-        recoveryCodes.map((code: any) => ({
+      const supabaseAdmin = supabase.admin();
+      await supabaseAdmin.from("two_factor_codes").insert(
+        recoveryCodes.map((code: string): TwoFactorCode => ({
           user_id: user.id,
           code: crypto.createHash("sha256").update(code).digest("hex"),
           expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
@@ -246,7 +271,8 @@ export const DELETE = withTenantGuard(
       // Get user profile
       const { data: profile } = await supabaseClient.from("profiles").select("metadata").eq("id", user.id).single();
 
-      if (!(profile as any)?.metadata?.two_factor_enabled) {
+      const typedProfile = profile as TwoFactorProfile;
+      if (!typedProfile?.metadata?.two_factor_enabled) {
         return NextResponse.json(
           {
             error: "Two-factor authentication is not enabled",
@@ -258,7 +284,7 @@ export const DELETE = withTenantGuard(
       // If token provided, verify it
       if (token) {
         const verified = speakeasy.totp.verify({
-          secret: (profile as any)?.metadata?.two_factor_secret,
+          secret: typedProfile?.metadata?.two_factor_secret || "",
           encoding: "base32",
           token,
           window: 2,
@@ -279,12 +305,12 @@ export const DELETE = withTenantGuard(
         .from("profiles")
         .update({
           metadata: {
-            ...((profile as any)?.metadata || {}),
+            ...(typedProfile?.metadata || {}),
             two_factor_enabled: false,
             two_factor_secret: null,
           },
           updated_at: new Date().toISOString(),
-        } as any)
+        } as Partial<ProfileRow>)
         .eq("id", user.id);
 
       if (updateError) {
@@ -298,7 +324,8 @@ export const DELETE = withTenantGuard(
 
       // Delete all recovery codes - table doesn't exist yet
       try {
-        await (supabase as any).from("two_factor_codes").delete().eq("user_id", user.id);
+        const supabaseAdmin = supabase.admin();
+        await supabaseAdmin.from("two_factor_codes").delete().eq("user_id", user.id);
       } catch (error) {}
 
       return NextResponse.json({

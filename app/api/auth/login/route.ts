@@ -3,6 +3,28 @@ import { authLoginRateLimit } from "@/lib/middleware/restRateLimit";
 import { applySecurityHeaders, generateCsrfToken } from "@/lib/middleware/securityHeaders";
 import { NextRequest, NextResponse } from "next/server";
 
+// Organization member with joined organization data
+interface OrganizationMembershipResponse {
+  organization_id: string;
+  role: string;
+  organizations: {
+    name: string;
+  } | null;
+}
+
+// Type for metadata updates
+interface UserMetadataUpdate {
+  organization_id?: string;
+  [key: string]: unknown;
+}
+
+interface AppMetadataUpdate {
+  organization_id?: string;
+  organization_name?: string;
+  organization_role?: string;
+  [key: string]: unknown;
+}
+
 export const POST = withPublic(async (request: NextRequest) => {
   // Apply strict rate limiting for login (5 attempts/min)
   const rateLimitResponse = authLoginRateLimit(request, async () => NextResponse.next());
@@ -72,22 +94,26 @@ export const POST = withPublic(async (request: NextRequest) => {
           .select("organization_id, role, organizations(name)")
           .eq("user_id", data.user.id)
           .eq("status", "active")
-          .single();
+          .single() as { data: OrganizationMembershipResponse | null };
 
         if (membership) {
           // Update user metadata with organization context
           const adminClient = supabase.admin();
+          const userMetadata: UserMetadataUpdate = {
+            ...(data.user.user_metadata || {}),
+            organization_id: membership.organization_id,
+          };
+          
+          const appMetadata: AppMetadataUpdate = {
+            ...(data.user.app_metadata || {}),
+            organization_id: membership.organization_id,
+            organization_name: membership.organizations?.name || null,
+            organization_role: membership.role,
+          };
+          
           const { error: updateError } = await adminClient.auth.admin.updateUserById(data.user.id, {
-            user_metadata: {
-              ...data.user.user_metadata,
-              organization_id: membership.organization_id,
-            },
-            app_metadata: {
-              ...data.user.app_metadata,
-              organization_id: membership.organization_id,
-              organization_name: (membership.organizations as any)?.name,
-              organization_role: membership.role,
-            },
+            user_metadata: userMetadata,
+            app_metadata: appMetadata,
           });
           
           if (updateError) {
@@ -108,7 +134,7 @@ export const POST = withPublic(async (request: NextRequest) => {
               outcome: "success",
               details: {
                 email: data.user.email,
-                organizationName: (membership.organizations as any)?.name,
+                organizationName: membership.organizations?.name || null,
                 organizationRole: membership.role,
                 timestamp: new Date().toISOString(),
               },

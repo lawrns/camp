@@ -1,8 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export async function GET(request: NextRequest) {
+interface Message {
+  createdAt: string;
+  senderType: string;
+}
+
+interface Conversation {
+  id: string;
+  status: string;
+  aiHandoverActive?: boolean;
+}
+
+interface SatisfactionRecord {
+  rating: number;
+}
+
+export async function GET(_request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const supabaseClient = supabase.server(cookieStore);
@@ -22,22 +38,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch real metrics from database
-    const [conversationsResult, messagesResult] = await Promise.allSettled([
+    const [conversationsResult] = await Promise.allSettled([
       // Get active conversations count
       supabaseClient
         .from('conversations')
         .select('id', { count: 'exact' })
-        .eq('organization_id', organizationId)
-        .eq('status', 'open'),
-      
-      // Get recent messages for response time calculation
-      supabaseClient
-        .from('messages')
-        .select('created_at, sender_type')
-        .eq('organization_id', organizationId)
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-        .order('created_at', { ascending: false })
-        .limit(100)
+        .eq('organizationId', organizationId)
+        .eq('status', 'open')
     ]);
 
     // Calculate metrics
@@ -98,14 +105,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function calculateResponseTime(supabaseClient: any, organizationId: string): Promise<number> {
+async function calculateResponseTime(supabaseClient: SupabaseClient, organizationId: string): Promise<number> {
   try {
     // Calculate real average response time from messages table
     const { data, error } = await supabaseClient
       .from('messages')
-      .select('created_at, sender_type')
-      .eq('organization_id', organizationId)
-      .in('sender_type', ['agent', 'ai_assistant'])
+      .select('createdAt, senderType')
+      .eq('organizationId', organizationId)
+      .in('senderType', ['agent', 'ai_assistant'])
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       .order('created_at', { ascending: true });
 
@@ -121,8 +128,8 @@ async function calculateResponseTime(supabaseClient: any, organizationId: string
       const currentMessage = data[i];
       const previousMessage = data[i - 1];
       
-      if (currentMessage.sender_type === 'agent' || currentMessage.sender_type === 'ai_assistant') {
-        const responseTime = new Date(currentMessage.created_at).getTime() - new Date(previousMessage.created_at).getTime();
+      if (currentMessage.senderType === 'agent' || currentMessage.senderType === 'ai_assistant') {
+        const responseTime = new Date(currentMessage.createdAt).getTime() - new Date(previousMessage.createdAt).getTime();
         totalResponseTime += responseTime;
         responseCount++;
       }
@@ -135,21 +142,21 @@ async function calculateResponseTime(supabaseClient: any, organizationId: string
   }
 }
 
-async function calculateAIResolutionRate(supabaseClient: any, organizationId: string): Promise<number> {
+async function calculateAIResolutionRate(supabaseClient: SupabaseClient, organizationId: string): Promise<number> {
   try {
     // Get conversations with AI handover
     const { data: aiConversations, error: aiError } = await supabaseClient
       .from('conversations')
-      .select('id, status, ai_handover_active')
-      .eq('organization_id', organizationId)
-      .eq('ai_handover_active', true)
+      .select('id, status, aiHandoverActive')
+      .eq('organizationId', organizationId)
+      .eq('aiHandoverActive', true)
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
     if (aiError || !aiConversations) {
       return 85; // Fallback
     }
 
-    const resolvedAI = aiConversations.filter((c: any) => c.status === 'resolved').length;
+    const resolvedAI = aiConversations.filter((c: Conversation) => c.status === 'resolved').length;
     const totalAI = aiConversations.length;
 
     return totalAI > 0 ? Math.round((resolvedAI / totalAI) * 100) : 85;
@@ -159,20 +166,20 @@ async function calculateAIResolutionRate(supabaseClient: any, organizationId: st
   }
 }
 
-async function calculateCustomerSatisfaction(supabaseClient: any, organizationId: string): Promise<number> {
+async function calculateCustomerSatisfaction(supabaseClient: SupabaseClient, organizationId: string): Promise<number> {
   try {
     // Get real satisfaction scores from customer_satisfaction table
     const { data, error } = await supabaseClient
       .from('customer_satisfaction')
       .select('rating')
-      .eq('organization_id', organizationId)
-      .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+      .eq('organizationId', organizationId)
+      .gte('createdAt', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
     if (error || !data || data.length === 0) {
       return 4.5; // Fallback to reasonable default
     }
 
-    const totalRating = data.reduce((sum: number, item: any) => sum + item.rating, 0);
+    const totalRating = data.reduce((sum: number, item: SatisfactionRecord) => sum + item.rating, 0);
     const averageRating = totalRating / data.length;
     
     return Math.round(averageRating * 10) / 10;

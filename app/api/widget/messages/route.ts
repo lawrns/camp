@@ -13,7 +13,7 @@ interface MessageCreateRequest {
   senderId?: string;
   senderName?: string;
   messageType?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export async function GET(request: NextRequest) {
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('conversations')
       .update({
-        last_message_at: new Date().toISOString(),
+        lastMessageAt: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', body.conversationId);

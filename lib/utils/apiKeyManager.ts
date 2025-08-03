@@ -31,8 +31,8 @@ export async function createWidgetApiKey(organizationId: string): Promise<{
     const { error } = await supabase
       .from("organizations")
       .update({
-        widget_api_key: newApiKey,
-        widget_enabled: true,
+        widgetApiKey: newApiKey,
+        widgetEnabled: true,
         updated_at: new Date().toISOString(),
       })
       .eq("id", organizationId);
@@ -60,7 +60,7 @@ export async function disableWidgetApiKey(organizationId: string): Promise<{
     const { error } = await supabase
       .from("organizations")
       .update({
-        widget_enabled: false,
+        widgetEnabled: false,
         updated_at: new Date().toISOString(),
       })
       .eq("id", organizationId);
@@ -92,7 +92,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
 
     const { data, error } = await supabase
       .from("organizations")
-      .select("widget_api_key, widget_enabled, updated_at")
+      .select("widgetApiKey, widgetEnabled, updated_at")
       .eq("id", organizationId)
       .single();
 
@@ -100,7 +100,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
       return { success: false, error: "Organization not found" };
     }
 
-    if (!data.widget_api_key) {
+    if (!data.widgetApiKey) {
       return {
         success: true,
         keyInfo: {
@@ -111,7 +111,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
     }
 
     // Mask the API key (show first 4 and last 4 characters)
-    const apiKey = data.widget_api_key;
+    const apiKey = data.widgetApiKey;
     const masked =
       apiKey.length > 8
         ? `${apiKey.slice(0, 9)}${"*".repeat(apiKey.length - 13)}${apiKey.slice(-4)}`
@@ -121,7 +121,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
       success: true,
       keyInfo: {
         masked,
-        enabled: data.widget_enabled || false,
+        enabled: data.widgetEnabled || false,
         lastUsed: data.updated_at,
       },
     };

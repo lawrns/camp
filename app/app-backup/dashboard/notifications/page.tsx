@@ -29,31 +29,30 @@ import {
 import { useState } from "react";
 
 function NotificationsContent() {
-  // Auth context validation - this will help debug any remaining issues
-  try {
-    const {
-      notifications,
-      settings,
-      loading,
-      error,
-      markAsRead,
-      markAllAsRead,
-      deleteNotification,
-      updateSettings,
-      refresh,
-    } = useNotifications();
+  // Hook calls must be at the top level, not inside try-catch
+  const {
+    notifications,
+    settings,
+    loading,
+    error,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+    updateSettings,
+    refresh,
+  } = useNotifications();
 
-    const [filter, setFilter] = useState<string>("all");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [isRefreshing, setIsRefreshing] = useState(false);
+  const [filter, setFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const handleRefresh = async () => {
-      setIsRefreshing(true);
-      await refresh();
-      setIsRefreshing(false);
-    };
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refresh();
+    setIsRefreshing(false);
+  };
 
-    const getNotificationIcon = (type: string) => {
+  const getNotificationIcon = (type: string) => {
       switch (type) {
         case "message":
           return <Icon icon={MessageSquare} className="h-5 w-5 text-blue-600" />;

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = createClient();
     
@@ -34,14 +34,14 @@ export async function GET(request: NextRequest) {
       .from('profiles')
       .select(`
         id,
-        full_name,
+        fullName,
         email,
         avatar_url,
         role
       `)
       .eq('organization_id', profile.organization_id)
       .in('role', ['admin', 'agent'])
-      .order('full_name');
+      .order('fullName');
 
     if (error) {
       console.error('Error fetching agents:', error);
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     // Transform agents data with availability info
     const agentsWithAvailability = (agents || []).map(agent => ({
       user_id: agent.id,
-      full_name: agent.full_name || agent.email,
+      fullName: agent.fullName || agent.email,
       email: agent.email,
       avatar_url: agent.avatar_url,
       workload: 0, // TODO: Calculate actual workload

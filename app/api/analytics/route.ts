@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     // Fetch conversation metrics
     const { data: conversationMetrics, error: convError } = await supabase
       .from('conversations')
-      .select('id, status, created_at, assigned_to_user_id')
+      .select('id, status, created_at, assignedToUserId')
       .eq('organization_id', organizationId)
       .gte('created_at', thirtyDaysAgo.toISOString());
 
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     // Fetch message metrics
     const { data: messageMetrics, error: msgError } = await supabase
       .from('messages')
-      .select('id, sender_type, created_at, conversation_id')
+      .select('id, senderType, created_at, conversation_id')
       .eq('organization_id', organizationId)
       .gte('created_at', thirtyDaysAgo.toISOString());
 
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
     // Fetch AI processing metrics
     const { data: aiMetrics, error: aiError } = await supabase
       .from('ai_processing_logs')
-      .select('id, status, processing_time_ms, created_at')
+      .select('id, status, processingTimeMs, created_at')
       .eq('organization_id', organizationId)
       .gte('created_at', thirtyDaysAgo.toISOString());
 
@@ -86,14 +86,14 @@ export async function GET(request: NextRequest) {
     const avgMessagesPerConversation = totalConversations > 0 ? totalMessages / totalConversations : 0;
 
     // Conversation status breakdown
-    const statusBreakdown = conversationMetrics?.reduce((acc: any, conv) => {
+    const statusBreakdown = conversationMetrics?.reduce((acc: unknown, conv) => {
       acc[conv.status] = (acc[conv.status] || 0) + 1;
       return acc;
     }, {}) || {};
 
     // Message sender breakdown
-    const senderBreakdown = messageMetrics?.reduce((acc: any, msg) => {
-      acc[msg.sender_type] = (acc[msg.sender_type] || 0) + 1;
+    const senderBreakdown = messageMetrics?.reduce((acc: unknown, msg) => {
+      acc[msg.senderType] = (acc[msg.senderType] || 0) + 1;
       return acc;
     }, {}) || {};
 
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
     const aiPerformance = aiMetrics ? {
       totalProcessed: aiMetrics.length,
       avgProcessingTime: aiMetrics.length > 0 
-        ? aiMetrics.reduce((sum, log) => sum + (log.processing_time_ms || 0), 0) / aiMetrics.length 
+        ? aiMetrics.reduce((sum, log) => sum + (log.processingTimeMs || 0), 0) / aiMetrics.length 
         : 0,
       successRate: aiMetrics.length > 0 
         ? (aiMetrics.filter(log => log.status === 'completed').length / aiMetrics.length) * 100 

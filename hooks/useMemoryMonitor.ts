@@ -46,7 +46,7 @@ export const useMemoryMonitor = (options: MemoryMonitorOptions = {}) => {
       return;
     }
 
-    // @ts-ignore - performance.memory is Chrome-specific
+    // @ts-expect-error - performance.memory is Chrome-specific
     const memory = window.performance.memory;
     if (!memory) return;
 
@@ -137,7 +137,7 @@ export const useMemoryLeakDetector = (componentName: string) => {
   const initialMemoryRef = useRef<number>(0);
 
   useEffect(() => {
-    // @ts-ignore
+    // @ts-expect-error
     const memory = window.performance?.memory;
     if (memory) {
       initialMemoryRef.current = memory.usedJSHeapSize;

@@ -183,9 +183,9 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
     if (!enableMemoryTracking || typeof window === "undefined") return;
 
     const measureMemory = () => {
-      // @ts-ignore - performance.memory is available in Chrome
+      // @ts-expect-error - performance.memory is available in Chrome
       if (performance.memory) {
-        // @ts-ignore
+        // @ts-expect-error
         const memoryUsage = performance.memory.usedJSHeapSize;
         updateMetric("memoryUsage", memoryUsage);
       }
@@ -204,16 +204,16 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
     if (!enableNetworkTracking || typeof navigator === "undefined") return;
 
     // Connection type
-    // @ts-ignore - connection is available in modern browsers
+    // @ts-expect-error - connection is available in modern browsers
     if (navigator.connection) {
-      // @ts-ignore
+      // @ts-expect-error
       updateMetric("connectionType", navigator.connection.effectiveType);
     }
 
     // Device capabilities
-    // @ts-ignore
+    // @ts-expect-error
     if (navigator.deviceMemory) {
-      // @ts-ignore
+      // @ts-expect-error
       updateMetric("deviceMemory", navigator.deviceMemory);
     }
 

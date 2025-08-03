@@ -33,14 +33,14 @@ export async function logActivity({
     if (actorType === "user") {
       const { data: profile } = await client
         .from("profiles")
-        .select("firstName, last_name, avatar_url, organization_id")
+        .select("firstName, lastName, avatarUrl, organization_id")
         .eq("user_id", actorId)
         .single();
 
       if (profile) {
         actorMetadata = {
-          user_name: `${profile.firstName || ""} ${profile.last_name || ""}`.trim(),
-          user_avatar: profile.avatar_url,
+          user_name: `${profile.firstName || ""} ${profile.lastName || ""}`.trim(),
+          user_avatar: profile.avatarUrl,
         };
       }
     }
@@ -48,12 +48,12 @@ export async function logActivity({
     // Insert activity event
     const { error } = await client.from("activity_events").insert({
       organization_id: organizationId,
-      event_type: eventData.eventType,
-      event_category: eventData.eventCategory,
-      actor_id: actorId,
-      actor_type: actorType,
-      resource_type: eventData.resourceType,
-      resource_id: eventData.resourceId,
+      eventType: eventData.eventType,
+      eventCategory: eventData.eventCategory,
+      actorId: actorId,
+      actorType: actorType,
+      resourceType: eventData.resourceType,
+      resourceId: eventData.resourceId,
       description: eventData.description,
       metadata: {
         ...actorMetadata,

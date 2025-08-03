@@ -92,7 +92,7 @@ async function generateSuggestions({
   sentiment: string;
   urgency: string;
   category: string;
-  conversationHistory: any[];
+  conversationHistory: unknown[];
 }): Promise<AISuggestion[]> {
   const suggestions: AISuggestion[] = [];
 
@@ -149,7 +149,7 @@ function buildContextPrompt(
   sentiment: string,
   urgency: string,
   category: string,
-  conversationHistory: any[]
+  conversationHistory: unknown[]
 ): string {
   const historyContext = conversationHistory.length > 0 
     ? `Previous conversation context: ${conversationHistory.slice(-3).map(msg => `${msg.senderType}: ${msg.content}`).join('\n')}`
@@ -284,7 +284,7 @@ function categorizeMessage(message: string): string {
   return 'general';
 }
 
-function calculateConfidence(suggestion: any, sentiment: string, urgency: string): number {
+function calculateConfidence(suggestion: unknown, sentiment: string, urgency: string): number {
   let confidence = 0.7; // Base confidence
   
   // Adjust based on sentiment match

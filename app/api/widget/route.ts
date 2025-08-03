@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { validateOrganizationId, sanitizeErrorMessage, checkRateLimit } from '@/lib/utils/validation';
-import { createWidgetClient } from '@/lib/supabase/secure-client-factory';
 import { widgetRateLimit } from '@/lib/middleware/rate-limit';
-import { identifyVisitor, validateSession, associateConversation } from '@/lib/services/visitor-identification';
+import { identifyVisitor, associateConversation } from '@/lib/services/visitor-identification';
 import { WidgetSchemas, validateRequest, BaseSchemas } from '@/lib/validation/schemas';
 import { z } from 'zod';
+import { Message, Conversation } from '@/types/unified-types';
 
 // Widget API route handler for various actions
 export async function POST(request: NextRequest) {
@@ -116,7 +114,18 @@ export async function POST(request: NextRequest) {
   }); // Close rate limiting wrapper
 }
 
-async function handleCreateConversation(body: any, organizationId: string, request: NextRequest) {
+interface CreateConversationRequest {
+  providedVisitorId?: string;
+  initialMessage?: string;
+  customerEmail?: string;
+  customerName?: string;
+  userAgent?: string;
+  referrer?: string;
+  currentUrl?: string;
+  organizationId?: string;
+}
+
+async function handleCreateConversation(body: CreateConversationRequest, organizationId: string, request: NextRequest) {
   try {
     // PHASE 2 CRITICAL FIX: Validate create conversation request
     const validation = validateRequest(WidgetSchemas.createConversation, body);
@@ -172,12 +181,12 @@ async function handleCreateConversation(body: any, organizationId: string, reque
       .from('conversations')
       .insert({
         id: conversationId,
-        organization_id: organizationId,
-        customer_email: customerEmail || null,
-        customer_name: customerName || 'Anonymous User',
+        organizationId: organizationId,
+        customerEmail: customerEmail || null,
+        customerName: customerName || 'Anonymous User',
         status: 'open',
         priority: 'medium',
-        created_at: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         metadata: {
           source: 'widget',
           visitorId: visitorInfo.visitorId,
@@ -241,7 +250,15 @@ async function handleCreateConversation(body: any, organizationId: string, reque
   }
 }
 
-async function handleSendMessage(body: any, organizationId: string, request: NextRequest) {
+interface SendMessageRequest {
+  conversationId: string;
+  content: string;
+  senderEmail?: string;
+  senderName?: string;
+  senderType?: string;
+}
+
+async function handleSendMessage(body: SendMessageRequest, organizationId: string, request: NextRequest) {
   try {
     // PHASE 2 CRITICAL FIX: Validate send message request
     const validation = validateRequest(WidgetSchemas.sendMessage, body);
@@ -304,7 +321,7 @@ async function handleSendMessage(body: any, organizationId: string, request: Nex
       .from('conversations')
       .select('id')
       .eq('id', conversationId)
-      .eq('organization_id', organizationId)
+      .eq('organizationId', organizationId)
       .single();
 
     if (conversationError || !conversation) {
@@ -324,12 +341,12 @@ async function handleSendMessage(body: any, organizationId: string, request: Nex
     const { data: message, error } = await supabaseClient
       .from('messages')
       .insert({
-        conversation_id: conversationId,
-        organization_id: organizationId,
+        conversationId: conversationId,
+        organizationId: organizationId,
         content,
-        sender_email: senderEmail,
-        sender_name: senderName,
-        sender_type: senderType === 'customer' ? 'visitor' : senderType,
+        senderEmail: senderEmail,
+        senderName: senderName,
+        senderType: senderType === 'customer' ? 'visitor' : senderType,
         metadata: {
           source: 'widget',
           timestamp: new Date().toISOString(),
@@ -521,9 +538,9 @@ async function validateWidgetToken(token: string, organizationId: string): Promi
     // Check if token exists and belongs to organization
     const { data: widgetSettings, error } = await supabaseClient
       .from('widget_settings')
-      .select('organization_id')
-      .eq('api_key', token)
-      .eq('organization_id', organizationId)
+      .select('organizationId')
+      .eq('apiKey', token)
+      .eq('organizationId', organizationId)
       .single();
 
     if (error || !widgetSettings) {

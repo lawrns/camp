@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Get recent message history
     const { data: messages, error: msgError } = await supabase
       .from('messages')
-      .select('id, content, sender_type, created_at')
+      .select('id, content, senderType, created_at')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: false })
       .limit(10);
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     const messageHistory = messages?.map(msg => ({
       id: msg.id,
       content: msg.content,
-      senderType: msg.sender_type as 'customer' | 'ai' | 'agent',
+      senderType: msg.senderType as 'customer' | 'ai' | 'agent',
       timestamp: msg.created_at
     })) || [];
 
@@ -115,8 +115,8 @@ export async function POST(request: NextRequest) {
         await supabase
           .from('conversations')
           .update({
-            ai_handover_active: true,
-            assigned_to_user_id: targetOperatorId || null,
+            aiHandoverActive: true,
+            assignedToUserId: targetOperatorId || null,
             status: 'ai_active',
             updated_at: new Date().toISOString()
           })
@@ -140,8 +140,8 @@ export async function POST(request: NextRequest) {
       await supabase
         .from('conversations')
         .update({
-          ai_handover_active: false,
-          assigned_to_user_id: targetOperatorId || null,
+          aiHandoverActive: false,
+          assignedToUserId: targetOperatorId || null,
           status: 'open',
           updated_at: new Date().toISOString()
         })
@@ -152,8 +152,8 @@ export async function POST(request: NextRequest) {
         .from('campfire_handoffs')
         .update({
           status: 'cancelled',
-          assigned_agent_id: targetOperatorId,
-          completed_at: new Date().toISOString(),
+          assignedAgentId: targetOperatorId,
+          completedAt: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
         .eq('conversation_id', conversationId)
@@ -222,7 +222,7 @@ export async function GET(request: NextRequest) {
     // Get conversation status
     const { data: conversation, error: convError } = await supabase
       .from('conversations')
-      .select('ai_handover_active, status, assigned_to_user_id')
+      .select('aiHandoverActive, status, assignedToUserId')
       .eq('id', conversationId)
       .single();
 
@@ -237,16 +237,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       conversationId,
       organizationId,
-      handoverActive: conversation?.ai_handover_active || false,
+      handoverActive: conversation?.aiHandoverActive || false,
       conversationStatus: conversation?.status || 'unknown',
-      assignedAgent: conversation?.assigned_to_user_id,
+      assignedAgent: conversation?.assignedToUserId,
       latestHandover: latestHandover ? {
         id: latestHandover.id,
         reason: latestHandover.reason,
         priority: latestHandover.priority,
         status: latestHandover.status,
         createdAt: latestHandover.created_at,
-        assignedAgent: latestHandover.assigned_agent_id
+        assignedAgent: latestHandover.assignedAgentId
       } : null,
       available: true,
       message: 'Handover service is available'
@@ -326,15 +326,15 @@ export async function PUT(request: NextRequest) {
 
     // Restore conversation to previous state if checkpoint exists
     if (handover.last_checkpoint_id) {
-      const checkpoints = handover.checkpoints as any;
-      const lastCheckpoint = checkpoints?.[handover.last_checkpoint_id];
+      const checkpoints = handover.checkpoints as Record<string, unknown>;
+      const lastCheckpoint = checkpoints?.[handover.last_checkpoint_id] as Record<string, unknown>;
 
       if (lastCheckpoint) {
         await supabase
           .from('conversations')
           .update({
             status: lastCheckpoint.conversation_status,
-            assigned_agent_id: lastCheckpoint.assigned_agent_id,
+            assignedAgentId: lastCheckpoint.assignedAgentId,
             ai_session_id: lastCheckpoint.ai_session_id,
             updated_at: new Date().toISOString()
           })

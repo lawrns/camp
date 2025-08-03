@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
             organization_id: organizationId,
             reason: aiResponse.handoverReason || `Low AI confidence: ${aiResponse.confidence}`,
             priority: aiResponse.metadata?.urgency || 'medium',
-            transfer_type: 'ai-to-human',
-            conversation_state: {
+            transferType: 'ai-to-human',
+            conversationState: {
               messageHistory: [{
                 id: crypto.randomUUID(),
                 sender: 'customer',
@@ -66,11 +66,11 @@ export async function POST(request: NextRequest) {
               sessionVariables: {},
               tags: []
             },
-            customer_sentiment: aiResponse.sentiment || 'neutral',
-            topic_complexity: aiResponse.metadata?.complexity || 'medium',
-            urgency_score: 1.0 - aiResponse.confidence, // Higher urgency for lower confidence
-            escalation_triggers: [aiResponse.handoverReason || 'low_confidence'],
-            automated_triggers: {
+            customerSentiment: aiResponse.sentiment || 'neutral',
+            topicComplexity: aiResponse.metadata?.complexity || 'medium',
+            urgencyScore: 1.0 - aiResponse.confidence, // Higher urgency for lower confidence
+            escalationTriggers: [aiResponse.handoverReason || 'low_confidence'],
+            automatedTriggers: {
               sentimentThreshold: false,
               responseTimeExceeded: false,
               keywordDetected: false,
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
           conversation_id: conversationId,
           organization_id: organizationId,
           content: aiResponse.content,
-          sender_type: 'ai',
+          senderType: 'ai',
           metadata: {
             confidence: aiResponse.confidence,
             sources: aiResponse.sources,

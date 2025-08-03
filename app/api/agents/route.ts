@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       .from('profiles')
       .select(`
         id,
-        full_name,
+        fullName,
         email,
         avatar_url,
         role,
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       `)
       .eq('organization_id', targetOrgId)
       .in('role', ['admin', 'agent'])
-      .order('full_name');
+      .order('fullName');
 
     if (error) {
       console.error('Error fetching agents:', error);
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     const transformedAgents = (agents || []).map(agent => ({
       id: agent.id,
       user_id: agent.id,
-      full_name: agent.full_name || agent.email,
+      fullName: agent.fullName || agent.email,
       email: agent.email,
       avatar_url: agent.avatar_url,
       role: agent.role,

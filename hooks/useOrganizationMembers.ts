@@ -12,9 +12,9 @@ export interface OrganizationMember {
   created_at: string | null;
   profile: {
     user_id: string;
-    full_name: string | null;
+    fullName: string | null;
     email: string;
-    avatar_url: string | null;
+    avatarUrl: string | null;
     last_seen?: string | null;
   };
   availability?: "available" | "busy" | "away" | "offline";
@@ -66,7 +66,7 @@ export function useOrganizationMembers(organizationId: string) {
         // Get profiles for these users
         const { data: profiles, error: profilesError } = await supabaseClient
           .from("profiles")
-          .select("user_id, full_name, email, avatar_url")
+          .select("user_id, fullName, email, avatarUrl")
           .in("user_id", userIds);
 
         if (profilesError) {
@@ -87,14 +87,14 @@ export function useOrganizationMembers(organizationId: string) {
               .from("conversations")
               .select("id, status")
               .eq("organization_id", organizationId)
-              .eq("assigned_to_user_id", member.user_id)
+              .eq("assignedToUserId", member.user_id)
               .eq("status", "open");
 
             const { data: memberMessages } = await supabaseClient
               .from("messages")
               .select("created_at, sender_type")
               .eq("organization_id", organizationId)
-              .eq("sender_id", member.user_id)
+              .eq("senderId", member.user_id)
               .in("sender_type", ["agent", "ai_assistant"])
               .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
@@ -107,9 +107,9 @@ export function useOrganizationMembers(organizationId: string) {
               ...member,
               profile: profile || {
                 user_id: member.user_id,
-                full_name: null,
+                fullName: null,
                 email: `user-${member.user_id}@example.com`,
-                avatar_url: null,
+                avatarUrl: null,
               },
               availability: ["available", "busy", "away", "offline"][Math.floor(Math.random() * 4)] as
                 | "available"

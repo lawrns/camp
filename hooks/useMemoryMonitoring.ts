@@ -9,7 +9,7 @@ export function useMemoryMonitoring(interval = 30000) {
   useEffect(() => {
     const checkMemory = () => {
       if (typeof window !== "undefined" && "performance" in window) {
-        // @ts-ignore - memory API might not be available in all browsers
+        // @ts-expect-error - memory API might not be available in all browsers
         const memory = window.performance.memory;
         if (memory) {
           // setMemoryUsage not implemented in store
@@ -41,7 +41,7 @@ export function useMemoryMonitoring(interval = 30000) {
   return {
     checkMemoryNow: () => {
       if (typeof window !== "undefined" && "performance" in window) {
-        // @ts-ignore
+        // @ts-expect-error
         const memory = window.performance.memory;
         if (memory) {
           return {

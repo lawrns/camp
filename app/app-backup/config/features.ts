@@ -173,7 +173,7 @@ export const DEV_UTILS = {
     }
 
     // Type-safe override for development only
-    (FEATURE_FLAGS as any)[feature] = enabled;
+    (FEATURE_FLAGS as Record<string, boolean>)[feature] = enabled;
   },
 
   /**

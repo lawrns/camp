@@ -124,7 +124,7 @@ export const WorldClassHero = () => {
               </div>
 
               {/* Chat */}
-              <div className="p-4 sm:p-6 space-y-4 min-h-80">
+              <div className="p-4 sm:p-6 space-y-4 min-h-[320px]">
                 {/* Customer message */}
                 <div className="flex justify-end">
                   <div className="bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-br-md max-w-[280px] sm:max-w-sm text-sm">
