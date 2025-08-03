@@ -14,13 +14,13 @@ import {
   CheckCircle,
   Clock,
   Eye,
-  Lightning,
-  Pulse,
+  Zap as Lightning,
+  Activity as Pulse,
   Target,
-  TrendDown,
-  TrendUp,
-  Warning,
-} from "@phosphor-icons/react";
+  TrendingDown as TrendDown,
+  TrendingUp as TrendUp,
+  AlertTriangle as Warning,
+} from "lucide-react";
 
 interface PerformanceMetric {
   id: string;
