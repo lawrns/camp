@@ -95,6 +95,11 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
       });
     }
 
+    // TEMPORARILY DISABLED: Conversation postgres_changes subscription causing binding mismatch
+    // Will use polling fallback until v2 migration
+    console.log('[Conversations] PostgreSQL subscription temporarily disabled due to binding mismatch');
+
+    /*
     channel
       .on(
         "postgres_changes",
@@ -105,11 +110,13 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
           filter: `organization_id=eq.${organizationId}`,
         },
         (payload) => {
-
           const newConversation = mapConversation(payload.new);
           setConversations((prev) => [newConversation, ...prev]);
         }
       )
+    */
+
+    channel
       // CRITICAL FIX: Listen for broadcast events from widget
       .on("broadcast", { event: "*" }, (payload) => {
 

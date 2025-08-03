@@ -242,6 +242,9 @@ export function useNativeOrganizationRealtime(organizationId: string, options: U
       handleNewConversation
     );
 
+    // TEMPORARILY DISABLED: Conversation postgres_changes subscription causing binding mismatch
+    console.log('[Native] Conversation PostgreSQL subscription temporarily disabled due to binding mismatch');
+    /*
     // Listen for conversation updates
     channel.on(
       "postgres_changes",
@@ -253,6 +256,7 @@ export function useNativeOrganizationRealtime(organizationId: string, options: U
       },
       handleConversationUpdate
     );
+    */
 
     // Listen for new messages (organization-wide)
     channel.on(
