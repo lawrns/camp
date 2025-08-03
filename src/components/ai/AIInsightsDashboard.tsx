@@ -14,15 +14,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 import {
-  Warning as AlertTriangle,
+  AlertTriangle,
   Brain,
   CheckCircle,
   Clock,
-  ChatCircle as MessageSquare,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+  MessageSquare,
+  RefreshCw,
+  Search,
+  TrendingUp,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 // AI Insights API Response Types

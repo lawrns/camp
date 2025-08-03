@@ -35,7 +35,7 @@ import {
   ChatCircle as MessageSquare,
   TrendDown as TrendingDown,
   TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface AIPerformanceData {

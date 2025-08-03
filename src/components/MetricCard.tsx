@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { TrendDown, TrendUp } from "@phosphor-icons/react/dist/ssr";
+import { TrendingDown as TrendDown, TrendingUp as TrendUp } from "lucide-react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { cn } from "@/lib/utils";

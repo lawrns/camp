@@ -1,6 +1,6 @@
 "use client";
 
-import { UserPlus } from "@phosphor-icons/react";
+import { UserPlus } from "lucide-react";
 import {
   Dialog,
   DialogContent,

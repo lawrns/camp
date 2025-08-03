@@ -3,16 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { cookies } from "next/headers";
 import {
-  Warning as AlertCircle,
-  Robot as Bot,
+  AlertCircle,
+  Bot,
   CheckCircle,
-  ChatCircle as MessageSquare,
+  MessageSquare,
   Pause,
   Play,
   Terminal,
-  Trash as Trash2,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Trash2,
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

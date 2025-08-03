@@ -18,7 +18,7 @@ import {
   Gear as Settings,
   Sparkle as Sparkles,
   Lightning as Zap,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card as GlassCard } from "@/components/unified-ui/components/Card";

@@ -7,7 +7,7 @@ import {
   Bug,
   House as Home,
   ArrowsClockwise as RefreshCw,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Icon } from "@/lib/ui/Icon";
 import { CriticalErrorBoundary as UnifiedCriticalErrorBoundary } from "./ErrorBoundaryProvider";

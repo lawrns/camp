@@ -22,7 +22,7 @@ import {
 } from "@/components/unified-ui/components/select";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { useAuth } from "@/hooks/useAuth";
-import { ArrowRight, CheckCircle, Ticket, User, Warning } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle, Ticket, User, AlertTriangle as Warning } from "lucide-react";
 import { useEffect, useState } from "react";
 // REMOVED: Old fragmented ticket creation - now using unified API
 import { getAvailableAgents } from "@/lib/tickets";

@@ -10,24 +10,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Archive,
-  ArrowSquareOut,
+  ArrowUpRight,
   Download,
   Eye,
   File,
   FileText,
-  Image as ImageIcon,
-  MusicNote as Music,
+  ImageIcon,
+  Music,
   Pause,
   Play,
-  ArrowClockwise as RotateCw,
+  RotateCw,
   Share,
-  VideoCamera as Video,
-  SpeakerHigh as Volume2,
-  SpeakerSlash as VolumeX,
+  Video,
+  Volume2,
+  VolumeX,
   X,
-  MagnifyingGlassPlus as ZoomIn,
-  MagnifyingGlassMinus as ZoomOut,
-} from "@phosphor-icons/react";
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

@@ -2,17 +2,17 @@
 
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import {
-  ChartLine as Activity,
+  Activity,
   Clock,
   Cpu,
   Database,
-  HardDrives,
+  HardDrive as HardDrives,
   Monitor,
   SimCard,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  WifiHigh,
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp,
+  Wifi,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Icon } from "@/lib/ui/Icon";

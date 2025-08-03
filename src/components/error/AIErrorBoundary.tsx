@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Warning as AlertTriangle, Robot as Bot, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { AlertTriangle, Bot, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Icon } from "@/lib/ui/Icon";
 import { ErrorBoundary } from "./ErrorBoundary";

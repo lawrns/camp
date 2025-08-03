@@ -7,13 +7,13 @@ import {
   Brain,
   PencilSimple as Edit,
   File,
-  Microphone as Mic,
-  ArrowsClockwise as RefreshCw,
-  PaperPlaneTilt as Send,
-  Sparkle as Sparkles,
+  Mic,
+  RefreshCw,
+  Send,
+  Sparkles,
   X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Progress } from "@/components/unified-ui/components/Progress";

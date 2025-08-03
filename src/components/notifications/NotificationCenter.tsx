@@ -14,17 +14,17 @@ import { Icon } from "@/lib/ui/Icon";
 import { formatRelativeTimeShort } from "@/lib/utils/date";
 import {
   Bell,
-  BellSlash as BellOff,
-  CheckCircle as Check,
-  Checks as CheckCheck,
+  BellOff,
+  Check,
+  CheckCheck,
   Clock,
-  ChatCircle as MessageSquare,
-  Gear as Settings,
-  Trash as Trash2,
+  MessageSquare,
+  Settings,
+  Trash2,
   X,
-  Warning,
+  AlertTriangle as Warning,
   Info,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 interface NotificationCenterProps {

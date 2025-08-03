@@ -3,12 +3,12 @@ import {
   Warning as AlertCircle,
   Robot as Bot,
   Brain,
-  Spinner as Loader2,
-  ChatCircle as MessageSquare,
+  Loader2,
+  MessageSquare,
   Play,
   Square,
   User,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

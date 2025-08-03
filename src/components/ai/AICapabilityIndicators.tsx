@@ -11,12 +11,12 @@ import {
   Cpu,
   Database,
   Gauge,
-  ChatCircle as MessageSquare,
+  MessageSquare,
   Shield,
-  TrendUp as TrendingUp,
+  TrendingUp,
   XCircle,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";

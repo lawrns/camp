@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Activity, Warning as AlertTriangle, CheckCircle, Clock, Lightning as Zap } from "@phosphor-icons/react";
+import { Activity, AlertTriangle, CheckCircle, Clock, Zap } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

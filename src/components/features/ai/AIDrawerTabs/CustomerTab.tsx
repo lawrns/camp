@@ -2,13 +2,13 @@
 
 import React from "react";
 import {
-  Warning as AlertCircle,
+  AlertCircle,
   Clock,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  TrendUp as TrendingUp,
+  Mail,
+  MessageSquare,
+  TrendingUp,
   User,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card } from "@/components/unified-ui/components/Card";

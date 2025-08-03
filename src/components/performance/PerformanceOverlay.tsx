@@ -14,7 +14,7 @@ import {
   Warning,
   X,
   XCircle,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { inboxPerformanceMonitor } from "@/lib/performance/inbox-performance-monitor";
 import { ReactPerformanceMetrics, reactPerformanceMonitor } from "@/lib/performance/react-performance-monitor";

@@ -3,24 +3,23 @@
 
 import React from "react";
 import {
-  ChartLine as Activity,
-  Warning as AlertTriangle,
+  Activity,
+  AlertTriangle,
   Brain,
-  CheckCircle as CheckCircle2,
+  CheckCircle,
   Clock,
   Eye,
-  Spinner as Loader2,
-  ChatCircle as MessageSquare,
+  EyeSlash,
   Pause,
   Play,
   Shield,
-  Sparkle as Sparkles,
+  Sparkles,
   Target,
   ThumbsUp,
-  TrendUp as TrendingUp,
+  TrendingUp,
   User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

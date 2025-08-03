@@ -11,7 +11,7 @@ import {
   Clock,
   WifiHigh,
   Lightning as Zap,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Warning as AlertTriangle, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Button } from "@/components/ui/Button-unified";
 import { isFeatureEnabled } from "@/lib/feature-flags";

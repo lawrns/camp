@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  Warning as AlertCircle,
-  ClockCounterClockwise as History,
-  Spinner as Loader2,
-  ChatCircle as MessageSquare,
-} from "@phosphor-icons/react";
+  AlertCircle,
+  History,
+  Loader2,
+  MessageSquare,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

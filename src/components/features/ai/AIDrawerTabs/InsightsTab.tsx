@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import {
-  Warning as AlertTriangle,
-  CaretRight as ChevronRight,
+  AlertTriangle,
+  ChevronRight,
   Clock,
   Lightbulb,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";

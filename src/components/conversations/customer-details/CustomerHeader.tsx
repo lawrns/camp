@@ -8,13 +8,13 @@ import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {
   CheckCircle,
-  CaretRight as ChevronRight,
+  ChevronRight,
   Shield,
   Star,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
+  Wifi,
+  WifiOff as WifiHighOff,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 
 interface CustomerHeaderProps {
   customer: CustomerData;

@@ -24,7 +24,7 @@ import {
   X,
   MagnifyingGlassPlus as ZoomIn,
   MagnifyingGlassMinus as ZoomOut,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Dialog, DialogContent } from "@/components/unified-ui/components/dialog";

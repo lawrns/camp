@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import {
   Clock,
-  PencilSimple as Edit3,
-  ChatCircle as MessageSquare,
+  Edit3,
+  MessageSquare,
   Plus,
-  FloppyDisk as Save,
+  Save,
   Tag,
   User,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

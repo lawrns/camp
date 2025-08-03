@@ -11,11 +11,11 @@ import {
   Globe,
   Envelope as Mail,
   MapPin,
-  ChatCircle as MessageSquare,
+  MessageSquare,
   Phone,
   Tag,
   User,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface VisitorData {

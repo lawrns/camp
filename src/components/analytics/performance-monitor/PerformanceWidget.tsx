@@ -3,11 +3,11 @@
 import { Card } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 import {
-  ChartLine as Activity,
+  Activity,
   Monitor,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { SystemMetrics } from "./types";
 import { generatePerformanceData, getMetricStatus } from "./utils";

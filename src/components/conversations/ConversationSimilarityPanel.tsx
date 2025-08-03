@@ -14,12 +14,12 @@ import {
   CheckCircle,
   Clock,
   Lightbulb,
-  ChatCircle as MessageSquare,
-  MagnifyingGlass as Search,
+  MessageSquare,
+  Search,
   Target,
   TrendUp as TrendingUp,
   Users,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";

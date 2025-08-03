@@ -14,15 +14,13 @@ import {
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import {
-  BookOpen,
-  CaretRight as ChevronRight,
-  Eye,
-  MagnifyingGlass as Search,
-  Sparkle as Sparkles,
+  ExternalLink,
+  Search,
+  Sparkles,
   Tag,
   ThumbsDown,
   ThumbsUp
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 interface FAQCategory {

@@ -2,15 +2,15 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  Warning as AlertCircle,
+  AlertCircle,
   ArrowRight,
-  Robot as Bot,
+  Bot,
   CheckCircle,
   Clock,
-  DotsThreeVertical as MoreVertical,
-  PaperPlaneTilt as Send,
+  MoreVertical,
+  Send,
   User,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 // ===== UNIFIED HOOKS IMPORT =====
 import { AIReplySuggestions, type AISuggestion } from "@/components/ai/AIReplySuggestions";
 import { VirtualizedMessageList } from "@/components/inbox/VirtualizedMessageList";

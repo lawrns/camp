@@ -37,7 +37,7 @@ import {
   TrendDown as TrendingDown,
   TrendUp as TrendingUp,
   Users,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface DashboardProps {

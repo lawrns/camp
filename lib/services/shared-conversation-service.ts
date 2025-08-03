@@ -41,7 +41,7 @@ export async function createOrGetSharedConversation(
   // Use service role client to bypass RLS
   const supabaseClient = supabase.admin();
 
-  // First, try to find an existing conversation for this customer/visitor
+  // Simple conversation lookup logic
   let existingConversation = null;
 
   if (customerEmail) {
@@ -58,23 +58,22 @@ export async function createOrGetSharedConversation(
 
     existingConversation = emailConversation;
   } else if (visitorId) {
-    // Look for existing conversation by visitor ID in metadata
-    const { data: visitorConversations } = await supabaseClient
+    // Look for existing conversation by visitor ID
+    const { data: visitorConversation } = await supabaseClient
       .from('conversations')
       .select('*')
       .eq('organization_id', organizationId)
+      .eq('visitor_id', visitorId)
       .eq('status', 'open')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    // Filter by visitor ID in metadata (since we can't query JSONB directly in this context)
-    existingConversation = visitorConversations?.find(conv => 
-      conv.metadata && 
-      (conv.metadata as any).visitorId === visitorId
-    ) || null;
+    existingConversation = visitorConversation;
   }
 
+  // If we found an existing conversation, return it
   if (existingConversation) {
-    // Return existing conversation in standardized format
     return {
       id: existingConversation.id,
       organizationId: existingConversation.organization_id,
@@ -93,14 +92,14 @@ export async function createOrGetSharedConversation(
     organization_id: organizationId,
     customer_email: customerEmail || null,
     customer_name: customerName || 'Anonymous User',
+    visitor_id: visitorId || null,
     status: 'open',
     priority: 'medium',
     metadata: {
       ...metadata,
       source,
-      visitorId: visitorId || `visitor_${Date.now()}`,
       createdBy: source,
-      sharedConversation: true, // Mark as shared conversation
+      sharedConversation: true,
     },
   };
 

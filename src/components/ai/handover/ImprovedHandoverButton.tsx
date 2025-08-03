@@ -12,15 +12,15 @@ import { Progress } from "@/components/unified-ui/components/Progress";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {
-  Warning as AlertTriangle,
+  AlertTriangle,
   ArrowRight,
-  Robot as Bot,
+  Bot,
   CheckCircle,
   Clock,
   Target,
   User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import React, { useState } from "react";
 
 export interface HandoverReason {

@@ -12,13 +12,13 @@ import { Icon } from "@/lib/ui/Icon";
 import { formatDistanceToNowShort } from "@/lib/utils/date";
 import {
   ChartLine as Activity,
-  Robot as Bot,
+  Bot,
   CheckCircle,
-  ChatCircle as MessageSquare,
+  MessageSquare,
   Star,
   User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 // Activity types

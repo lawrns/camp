@@ -3,20 +3,20 @@
 import React from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import {
-  ChartLine as Activity,
+  Activity,
   ArrowDown,
   ArrowUp,
-  ChartBar as BarChart3,
+  BarChart3,
   Brain,
   Info,
-  ChatCircle as MessageSquare,
+  MessageSquare,
   Minus,
-  Sparkle as Sparkles,
+  Sparkles,
   Target,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";

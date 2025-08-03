@@ -6,14 +6,13 @@ import {
   CheckCircle,
   Clock,
   Code,
-  File,
   FileText,
   Globe,
   Link,
   Plus,
   Upload,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";

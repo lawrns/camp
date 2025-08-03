@@ -14,20 +14,20 @@ import {
   Eye,
   File,
   FileText,
-  Funnel as Filter,
-  GridFour as Grid3X3,
-  Image as ImageIcon,
+  Filter,
+  Grid3X3,
+  ImageIcon,
   List,
-  DotsThreeVertical as MoreVertical,
-  MusicNote as Music,
-  MagnifyingGlass as Search,
+  MoreVertical,
+  Music,
+  Search,
   Share,
-  SortAscending as SortAsc,
-  SortDescending as SortDesc,
-  Trash as Trash2,
+  ArrowUp as SortAsc,
+  ArrowDown as SortDesc,
+  Trash2,
   Upload,
-  VideoCamera as Video,
-} from "@phosphor-icons/react";
+  Video,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

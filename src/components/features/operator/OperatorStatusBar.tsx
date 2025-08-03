@@ -2,7 +2,7 @@
 
 import React from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Warning as AlertCircle, CheckCircle, Clock, User } from "@phosphor-icons/react";
+import { Phone, Video, Mic, MicOff, MoreVertical, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

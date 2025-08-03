@@ -15,19 +15,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {
-  ChartLineUp as Activity,
+  Activity,
   BookOpen,
   Brain,
-  ChartPie,
+  PieChart as ChartPie,
   Clock,
   Download,
   Eye,
-  MagnifyingGlass as Search,
+  Search,
   Star,
   Target,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp
+} from "lucide-react";
 import { useState } from "react";
 
 interface AnalyticsData {

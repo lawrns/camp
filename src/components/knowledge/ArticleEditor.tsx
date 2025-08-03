@@ -22,25 +22,22 @@ import {
 } from "@/components/unified-ui/components/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Textarea } from "@/components/unified-ui/components/textarea";
-import { Icon } from "@/lib/ui/Icon";
 import {
-  TextB as Bold,
+  ArrowLeftIcon,
+  Bold,
   Code,
+  Eye,
   FileText,
-  TextHOne as Heading1,
-  TextHTwo as Heading2,
-  TextHThree as Heading3,
-  Image,
-  TextItalic as Italic,
+  Italic,
   Link,
   List,
   Plus,
-  Quotes as Quote,
-  FloppyDisk as Save,
-  Gear as Settings,
-  Sparkle as Sparkles,
+  Quote,
+  Save,
+  Settings,
+  Sparkles,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import DOMPurify from "dompurify";
 import React, { useRef, useState } from "react";
 

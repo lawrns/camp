@@ -7,14 +7,14 @@ import {
   Bell,
   Robot as Bot,
   Crown,
-  ChatCircle as MessageCircle,
+  MessageCircle,
   Phone,
-  PaperPlaneTilt as Send,
-  Gear as Settings,
+  Send,
+  Settings,
   Shield,
   Users,
-  VideoCamera as Video,
-} from "@phosphor-icons/react";
+  Video,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";

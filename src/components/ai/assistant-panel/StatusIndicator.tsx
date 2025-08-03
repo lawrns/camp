@@ -3,7 +3,7 @@
  */
 
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import { CheckCircle, Clock, Robot, XCircle } from "@phosphor-icons/react";
+import { CheckCircle, Clock, Bot as Robot, XCircle } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { AIStatus } from "./types";

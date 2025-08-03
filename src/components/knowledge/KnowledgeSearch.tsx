@@ -5,14 +5,14 @@ import DOMPurify from "dompurify";
 import {
   Calendar,
   Eye,
-  Funnel as Filter,
-  MagnifyingGlass as Search,
-  Sparkle as Sparkles,
+  Filter,
+  Search,
+  Sparkles,
   Star,
   Tag,
   User,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

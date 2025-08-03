@@ -18,7 +18,7 @@ import {
   MusicNote as Music,
   Share,
   VideoCamera as Video,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

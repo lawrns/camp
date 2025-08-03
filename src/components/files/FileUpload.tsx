@@ -9,17 +9,17 @@
 
 import React, { useCallback, useRef, useState } from "react";
 import {
-  Warning as AlertCircle,
+  AlertCircle,
   Archive,
   CheckCircle,
   File,
   FileText,
   Image,
-  MusicNote as Music,
+  Music,
   Upload,
-  VideoCamera as Video,
+  Video,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { FileMetadata, fileService, FileUploadOptions } from "@/lib/files/FileService";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

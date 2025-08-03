@@ -6,15 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";
 import {
-  ChartLine as Activity,
-  ChartBar as BarChart3,
+  Activity,
+  BarChart3,
   Globe,
   Monitor,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  WifiHigh,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp,
+  Wifi,
+  Zap,
+} from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { MetricCard } from "./MetricCard";

@@ -9,7 +9,7 @@ import {
   Spinner as Loader2,
   TrendUp as TrendingUp,
   Users,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Checkbox } from "@/components/unified-ui/components/checkbox";
 import { Label } from "@/components/unified-ui/components/label";

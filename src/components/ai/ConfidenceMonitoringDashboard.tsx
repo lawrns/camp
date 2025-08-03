@@ -25,19 +25,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {
-  ChartLine as Activity,
-  Warning as AlertTriangle,
-  ChartBar as BarChart3,
+  Activity,
+  AlertTriangle,
+  BarChart3,
   Brain,
   CheckCircle,
   Clock,
-  Spinner as Loader2,
-  Gear as Settings,
+  Loader2,
+  Settings,
   Target,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  TrendingDown,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { useEffect, useState } from "react";
 

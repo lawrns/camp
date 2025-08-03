@@ -8,20 +8,20 @@
 import React, { useEffect, useState } from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import {
-  Warning as AlertTriangle,
+  AlertTriangle,
   Brain,
   CheckCircle,
   Clock,
-  Funnel as Filter,
-  ChatCircle as MessageSquare,
+  Filter,
+  MessageSquare,
   Pencil,
-  FloppyDisk as Save,
-  MagnifyingGlass as Search,
+  Save,
+  Search,
   Star,
   ThumbsDown,
   ThumbsUp,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

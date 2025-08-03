@@ -182,9 +182,9 @@ export async function POST(request: NextRequest) {
         source: 'widget',
         metadata: {
           widget_session: true,
-          user_agent: body.userAgent,
-          referrer: body.referrer,
-          current_url: body.currentUrl,
+          user_agent: sessionData?.userAgent,
+          referrer: sessionData?.referrer,
+          current_url: sessionData?.currentUrl,
         }
       });
     } catch (error) {

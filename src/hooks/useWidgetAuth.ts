@@ -114,6 +114,7 @@ export function useWidgetAuth(organizationId: string) {
     token: `campfire_widget_token_${organizationId}`,
     conversationId: `campfire_widget_conversation_${organizationId}`,
     visitorId: `campfire_widget_visitor_${organizationId}`,
+    fingerprint: `campfire_widget_fingerprint_${organizationId}`,
     user: `campfire_widget_user_${organizationId}`,
   };
 
@@ -214,12 +215,27 @@ export function useWidgetAuth(organizationId: string) {
 
       authLogger.once("info", `auth_start_${organizationId}`, "Starting authentication for org:", organizationId);
 
+      // Simple visitor ID management
+      const getOrCreateVisitorId = (orgId: string): string => {
+        const key = `campfire_visitor_${orgId}`;
+        let visitorId = localStorage.getItem(key);
+
+        if (!visitorId) {
+          visitorId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          localStorage.setItem(key, visitorId);
+        }
+
+        return visitorId;
+      };
+
+      const visitorId = getOrCreateVisitorId(organizationId);
+
       const response = await fetch("/api/widget/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           organizationId: organizationId,
-          visitorId: localStorage.getItem(STORAGE_KEYS.visitorId) || undefined,
+          visitorId: visitorId,
           sessionData: {
             userAgent: navigator.userAgent,
             timestamp: Date.now(),
