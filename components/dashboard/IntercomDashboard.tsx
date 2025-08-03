@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
-import { supabase } from '@/lib/supabase';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent } from '@/components/unified-ui/components/Card';
 import { IntercomMetricCard } from './IntercomMetricCard';
@@ -67,82 +67,85 @@ export function IntercomDashboard() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetch team activities effect
-  useEffect(() => {
-    const fetchTeamActivities = async () => {
-      if (!user?.organizationId) return;
+  // Fetch team activities effect with useCallback for performance
+  const fetchTeamActivities = useCallback(async () => {
+    if (!user?.organizationId) return;
 
-      try {
-        const supabaseClient = supabase.browser();
-        if (!supabaseClient) return;
-        
-        // Get recent conversations
-        const { data: recentConversations } = await supabaseClient
-          .from('conversations')
-          .select('id, subject, status, created_at, assigned_to_user_id')
-          .eq('organization_id', user.organizationId)
-          .order('created_at', { ascending: false })
-          .limit(5);
+    try {
+      const supabaseClient = createClientComponentClient();
+      
+      // Get recent conversations
+      const { data: recentConversations } = await supabaseClient
+        .from('conversations')
+        .select('id, subject, status, created_at, assigned_to_user_id')
+        .eq('organization_id', user.organizationId)
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-        // Get recent messages
-        const { data: recentMessages } = await supabaseClient
-          .from('messages')
-          .select('id, content, created_at, sender_id, conversation_id')
-          .eq('organization_id', user.organizationId)
-          .order('created_at', { ascending: false })
-          .limit(5);
+      // Get recent messages
+      const { data: recentMessages } = await supabaseClient
+        .from('messages')
+        .select('id, content, created_at, sender_id, conversation_id')
+        .eq('organization_id', user.organizationId)
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-        // Transform into activity format
-        const activities = [];
-        
-        if (recentConversations) {
-          for (const conv of recentConversations) {
-            activities.push({
-              id: conv.id,
-              type: 'conversation_started' as const,
-              message: `Started conversation: ${conv.subject || 'No subject'}`,
-              memberId: conv.assigned_to_user_id || 'unassigned',
-              memberName: 'Team Member', // Would need to join with profiles table
-              memberAvatar: undefined,
-              timestamp: new Date(conv.created_at || new Date()),
-              metadata: {
-                conversationId: conv.id,
-                status: conv.status,
-              },
-            });
-          }
+      // Transform into activity format
+      const activities = [];
+      
+      if (recentConversations) {
+        for (const conv of recentConversations) {
+          activities.push({
+            id: conv.id,
+            type: 'conversation_started' as const,
+            message: `Started conversation: ${conv.subject || 'No subject'}`,
+            memberId: conv.assigned_to_user_id || 'unassigned',
+            memberName: 'Team Member', // Would need to join with profiles table
+            memberAvatar: undefined,
+            timestamp: new Date(conv.created_at || new Date()),
+            metadata: {
+              conversationId: conv.id,
+              status: conv.status,
+            },
+          });
         }
-
-        if (recentMessages) {
-          for (const msg of recentMessages) {
-            activities.push({
-              id: msg.id,
-              type: 'message_sent' as const,
-              message: `Sent message: ${msg.content?.substring(0, 50)}...`,
-              memberId: msg.sender_id || 'unknown',
-              memberName: 'Team Member',
-              memberAvatar: undefined,
-              timestamp: new Date(msg.created_at || new Date()),
-              metadata: {
-                conversationId: msg.conversation_id,
-                messageId: msg.id,
-              },
-            });
-          }
-        }
-
-        // Sort by timestamp and take the most recent 10
-        activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-        setTeamActivities(activities.slice(0, 10));
-      } catch (error) {
-        console.error('Error fetching team activities:', error);
-        // Fallback to empty array
-        setTeamActivities([]);
       }
-    };
 
-    fetchTeamActivities();
+      if (recentMessages) {
+        for (const msg of recentMessages) {
+          activities.push({
+            id: msg.id,
+            type: 'message_sent' as const,
+            message: `Sent message: ${msg.content?.substring(0, 50)}...`,
+            memberId: msg.sender_id || 'unknown',
+            memberName: 'Team Member',
+            memberAvatar: undefined,
+            timestamp: new Date(msg.created_at || new Date()),
+            metadata: {
+              conversationId: msg.conversation_id,
+              messageId: msg.id,
+            },
+          });
+        }
+      }
+
+      // Sort by timestamp and take the most recent 10
+      activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      setTeamActivities(activities.slice(0, 10));
+    } catch (error) {
+      console.error('Error fetching team activities:', error);
+      // Fallback to empty array with error notification
+      setTeamActivities([]);
+      // Could add toast notification here for better UX
+      if (error instanceof Error) {
+        console.warn('Team activities fetch failed:', error.message);
+      }
+    }
   }, [user?.organizationId]);
+
+  useEffect(() => {
+    fetchTeamActivities();
+  }, [fetchTeamActivities]);
 
   // Generate insights effect
   useEffect(() => {
@@ -150,7 +153,16 @@ export function IntercomDashboard() {
 
     const dashboardMetrics: DashboardMetrics = {
       activeChats: enhancedMetrics.openConversations || 0,
-      avgResponse: Math.round(parseFloat(enhancedMetrics.responseTime?.replace('s', '') || '0')),
+      avgResponse: (() => {
+        const responseTime = enhancedMetrics.responseTime;
+        if (!responseTime) return 0;
+        // Handle different formats: "120s", "120", 120
+        const cleanTime = typeof responseTime === 'string' 
+          ? responseTime.replace(/[^\d.]/g, '') 
+          : String(responseTime);
+        const parsed = parseFloat(cleanTime);
+        return isNaN(parsed) ? 0 : Math.round(parsed);
+      })(),
       csat: enhancedMetrics.satisfactionRate || 0,
       resolvedToday: enhancedMetrics.resolvedToday || 0,
       pendingChats: enhancedMetrics.openConversations || 0,
@@ -236,6 +248,7 @@ export function IntercomDashboard() {
     setAiInsights(insights);
   }, [enhancedMetrics]);
 
+  // Handle loading and error states
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
@@ -247,22 +260,54 @@ export function IntercomDashboard() {
     );
   }
 
-  // Transform metrics to dashboard format
-  const dashboardMetrics: DashboardMetrics = enhancedMetrics ? {
-    activeChats: enhancedMetrics.openConversations || 0,
-    avgResponse: Math.round(parseFloat(enhancedMetrics.responseTime?.replace('s', '') || '0')),
-    csat: enhancedMetrics.satisfactionRate || 0,
-    resolvedToday: enhancedMetrics.resolvedToday || 0,
-    pendingChats: enhancedMetrics.openConversations || 0,
-    activeChatsDelta: 12, // Mock trend data
-    avgResponseDelta: -8,
-    resolvedTodayDelta: 15,
-  } : {
-    activeChats: 0,
-    avgResponse: 0,
-    csat: 0,
-    resolvedToday: 0,
-  };
+  // Handle metrics error
+  if (metricsError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 mb-4">
+            <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <p className="text-lg font-semibold">Dashboard Error</p>
+            <p className="text-sm text-gray-600 mt-2">Failed to load metrics: {metricsError.message}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Transform metrics to dashboard format with memoization
+  const dashboardMetrics: DashboardMetrics = useMemo(() => {
+    if (!enhancedMetrics) {
+      return {
+        activeChats: 0,
+        avgResponse: 0,
+        csat: 0,
+        resolvedToday: 0,
+      };
+    }
+
+    return {
+      activeChats: enhancedMetrics.openConversations || 0,
+      avgResponse: (() => {
+        const responseTime = enhancedMetrics.responseTime;
+        if (!responseTime) return 0;
+        // Handle different formats: "120s", "120", 120
+        const cleanTime = typeof responseTime === 'string' 
+          ? responseTime.replace(/[^\d.]/g, '') 
+          : String(responseTime);
+        const parsed = parseFloat(cleanTime);
+        return isNaN(parsed) ? 0 : Math.round(parsed);
+      })(),
+      csat: enhancedMetrics.satisfactionRate || 0,
+      resolvedToday: enhancedMetrics.resolvedToday || 0,
+      pendingChats: enhancedMetrics.openConversations || 0,
+      activeChatsDelta: 12, // Mock trend data
+      avgResponseDelta: -8,
+      resolvedTodayDelta: 15,
+    };
+  }, [enhancedMetrics]);
 
   // Hero metrics cards configuration
   const metricCards = [

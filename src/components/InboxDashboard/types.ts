@@ -28,12 +28,28 @@ export interface Conversation {
 export interface Message {
   id: string;
   conversation_id: string;
+  organization_id: string;
   content: string;
-  sender_type: "agent" | "visitor" | "system" | "ai_assistant" | "tool";  // Fixed: match exact DB constraints
-  sender_name: string | null;  // Fixed: made nullable to match DB
+  sender_id: string | null;
+  sender_type: "agent" | "visitor" | "system" | "ai_assistant" | "tool";
+  sender_name: string | null;
+  sender_email: string | null;
+  message_type: string | null;
+  content_type: string | null;
+  status: string | null;
+  is_internal: boolean | null;
+  is_deleted: boolean | null;
+  is_private: boolean | null;
+  confidence_score: number | null;
+  escalation_required: boolean | null;
+  ai_metadata: Record<string, any> | null;
+  attachments: FileAttachment[] | null;
+  metadata: Record<string, any> | null;
   created_at: string;
-  message_type?: string;
-  attachments?: FileAttachment[];
+  updated_at: string | null;
+  agent_id: string | null;
+  edited_at: string | null;
+  // Legacy fields for backward compatibility
   read_status?: "sent" | "delivered" | "read";
   read_at?: string;
   delivered_at?: string;
