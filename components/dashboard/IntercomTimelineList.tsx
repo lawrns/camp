@@ -50,10 +50,10 @@ const activityConfig = {
   },
   message_sent: {
     icon: ChatCircle,
-    color: 'text-green-600',
-    bg: 'bg-gradient-to-br from-green-50 to-emerald-100',
-    border: 'border-green-200/50',
-    badge: 'bg-green-100 text-green-700'
+    color: 'text-blue-600',
+    bg: 'bg-gradient-to-br from-blue-50 to-blue-100',
+    border: 'border-blue-200/50',
+    badge: 'bg-blue-100 text-blue-700'
   },
   conversation_resolved: {
     icon: CheckCircle,

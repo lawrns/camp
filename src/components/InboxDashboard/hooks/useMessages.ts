@@ -37,11 +37,11 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
 
       // Add mock read receipt data for testing
       const messagesWithReadReceipts = (data || []).map((message, index) => {
-        // Fix sender_type to allowed union - map database values to client types
-        const allowedSenderTypes = ["agent", "visitor", "ai", "system"];
+        // Fix sender_type to allowed union - match exact database constraints
+        const allowedSenderTypes = ["agent", "visitor", "system", "ai_assistant", "tool"];
         let sender_type: Message["sender_type"] = allowedSenderTypes.includes(message.sender_type)
           ? (message.sender_type as Message["sender_type"])
-          : "visitor";  // Default to visitor instead of customer
+          : "visitor";  // Default to visitor if unknown type
         // Fix attachments to always be FileAttachment[]
         let attachments: FileAttachment[] = [];
         if (Array.isArray(message.attachments)) {
@@ -104,42 +104,48 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
     // Initial load
     loadMessages();
 
-    // ENHANCED: Set up real-time subscription with STANDARDIZED channel naming
+    // ENHANCED: Set up real-time subscription with exact binding match
     const client = supabase.browser();
-    const channelName = `org:${organizationId}:conv:${conversationId}`;
+    const channelName = `messages:${conversationId}`;
 
-    // Supabase client does not have getChannel; channel() is idempotent by name.
-    const channel = client.channel(channelName, {
-      config: {
-        presence: { key: "dashboard_messages" },
-        broadcast: { self: true },
-      },
-    });
+    const channel = client.channel(channelName);
 
     channel
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "*",  // Listen to all events (INSERT, UPDATE, DELETE)
           schema: "public",
           table: "messages",
-          // Temporarily remove filter to fix binding mismatch
-          // filter: `conversation_id=eq.${conversationId}`,
+          filter: `conversation_id=eq.${conversationId}`,  // Exact match with proper UUID format
         },
         (payload) => {
-          const newMessage = payload.new as Message;
+          console.log('[Realtime] Message event received:', payload);
 
-          // Filter on client side instead of server side
-          if (newMessage.conversation_id !== conversationId) {
-            return; // Ignore messages from other conversations
+          // Handle payload with type guards for nulls
+          if (payload.new) {
+            const message = payload.new as any;  // Use any first, then transform
+
+            // Transform to match our Message interface
+            const transformedMessage: Message = {
+              id: message.id,
+              conversation_id: message.conversation_id,
+              content: message.content,
+              sender_type: message.sender_type,
+              sender_name: message.sender_name ?? 'Anonymous',  // Handle null
+              created_at: message.created_at,
+              message_type: message.message_type,
+              attachments: Array.isArray(message.attachments) ? message.attachments : [],
+              read_status: "sent",
+            };
+
+            // Avoid duplicates by checking if message already exists
+            setMessages((prev) => {
+              const exists = prev.some((msg) => msg.id === transformedMessage.id);
+              if (exists) return prev;
+              return [...prev, transformedMessage];
+            });
           }
-
-          // Avoid duplicates by checking if message already exists
-          setMessages((prev) => {
-            const exists = prev.some((msg) => msg.id === newMessage.id);
-            if (exists) return prev;
-            return [...prev, newMessage];
-          });
         }
       )
       // CRITICAL FIX: Also listen for broadcast events from widget

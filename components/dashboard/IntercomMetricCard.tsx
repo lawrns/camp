@@ -33,14 +33,14 @@ const colorConfig = {
     }
   },
   success: {
-    icon: 'text-[var(--brand-accent)]',
-    iconBg: 'bg-gradient-to-br from-[#E6F4F1] to-[#D1E7DD]',
+    icon: 'text-blue-600',
+    iconBg: 'bg-gradient-to-br from-blue-50 to-blue-100',
     cardBg: 'glass-card metric-success',
-    border: 'border-[var(--brand-accent)]/20',
+    border: 'border-blue-200/50',
     trend: {
-      up: 'text-[var(--brand-accent)] bg-[#E6F4F1]',
-      down: 'text-[var(--brand-accent)] bg-[#E6F4F1]',
-      stable: 'text-[var(--brand-accent)] bg-[#E6F4F1]'
+      up: 'text-blue-700 bg-blue-50',
+      down: 'text-blue-600 bg-blue-50',
+      stable: 'text-blue-600 bg-blue-50'
     }
   },
   danger: {

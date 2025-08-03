@@ -70,7 +70,7 @@ export function MetricCard({
   const getStatusIcon = (status: 'success' | 'warning' | 'error' | 'info') => {
     switch (status) {
       case 'success':
-        return <CheckCircleIcon className="h-4 w-4 text-[var(--brand-accent)]" />;
+        return <CheckCircleIcon className="h-4 w-4 text-blue-600" />;
       case 'warning':
         return <AlertTriangleIcon className="h-4 w-4 text-yellow-600" />;
       case 'error':
@@ -84,7 +84,7 @@ export function MetricCard({
   const getStatusColor = (status: 'success' | 'warning' | 'error' | 'info') => {
     switch (status) {
       case 'success':
-        return 'border-[var(--brand-accent)] bg-[#E6F4F1]';
+        return 'border-blue-200 bg-blue-50';
       case 'warning':
         return 'border-yellow-200 bg-yellow-50';
       case 'error':

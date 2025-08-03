@@ -41,9 +41,9 @@ interface IntercomAgentPresencePanelProps {
 
 const statusConfig = {
   online: {
-    color: 'bg-green-500',
-    text: 'text-green-700',
-    bg: 'bg-green-50',
+    color: 'bg-blue-500',
+    text: 'text-blue-700',
+    bg: 'bg-blue-50',
     label: 'Online'
   },
   busy: {
@@ -213,7 +213,7 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
               </div>
               
               <div className="flex items-center gap-1">
-                <CheckCircle className="w-3 h-3 text-green-500" />
+                <CheckCircle className="w-3 h-3 text-blue-500" />
                 <span className="text-gray-600">Resolved:</span>
                 <span className="font-medium font-numeric tabular-nums">
                   {agent.kpis.resolvedToday}

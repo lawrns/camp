@@ -29,7 +29,7 @@ export interface Message {
   id: string;
   conversation_id: string;
   content: string;
-  sender_type: "agent" | "visitor" | "ai" | "system";  // Fixed: removed "customer", added "system"
+  sender_type: "agent" | "visitor" | "system" | "ai_assistant" | "tool";  // Fixed: match exact DB constraints
   sender_name: string | null;  // Fixed: made nullable to match DB
   created_at: string;
   message_type?: string;
