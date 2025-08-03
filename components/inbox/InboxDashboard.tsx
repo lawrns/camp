@@ -377,7 +377,7 @@ export function InboxDashboard({
   return (
     <div className={`flex h-full gap-0 md:gap-1 ${className}`}>
       {/* Sidebar - Conversation List */}
-      <div className="w-1/3 border-r flex flex-col bg-background">
+      <aside className="conversation-list flex-1 min-w-0 border-r flex flex-col bg-background">
         {/* Header */}
         <div className="p-4 border-b bg-background space-y-4">
           <div className="flex items-center justify-between">
@@ -410,17 +410,18 @@ export function InboxDashboard({
         </div>
 
         {/* Conversation List */}
-        <ScrollArea className="flex-1">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          ) : filteredConversations.length === 0 ? (
-            <div className="flex items-center justify-center h-32">
-              <p className="text-muted-foreground">No conversations found</p>
-            </div>
-          ) : (
-            <div className="space-y-1 p-2">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="overflow-y-auto h-full scroll-pl-4 pr-4 pb-6">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : filteredConversations.length === 0 ? (
+              <div className="flex items-center justify-center h-32">
+                <p className="text-muted-foreground">No conversations found</p>
+              </div>
+            ) : (
+              <ul className="space-y-1 p-2" data-testid="conversation-list-container">
               {filteredConversations.map((conversation) => {
                 // Transform conversation data to match ConversationCard format
                 const transformedConversation = {
@@ -449,20 +450,22 @@ export function InboxDashboard({
                 };
 
                 return (
-                  <ConversationCard
-                    key={conversation.id}
-                    conversation={transformedConversation}
-                    isSelected={selectedConversation?.id === conversation.id}
-                    onSelect={() => handleConversationSelect(conversation)}
-                    onBulkSelect={handleBulkSelect}
-                    isBulkSelectMode={isBulkSelectMode}
-                  />
+                  <li key={conversation.id} className="cl-item">
+                    <ConversationCard
+                      conversation={transformedConversation}
+                      isSelected={selectedConversation?.id === conversation.id}
+                      onSelect={() => handleConversationSelect(conversation)}
+                      onBulkSelect={handleBulkSelect}
+                      isBulkSelectMode={isBulkSelectMode}
+                    />
+                  </li>
                 );
               })}
-            </div>
-          )}
-        </ScrollArea>
-      </div>
+              </ul>
+            )}
+          </div>
+        </div>
+      </aside>
 
       {/* Main Content - Chat View with Management */}
       <div className="flex-1 flex flex-col gap-6 md:gap-8">

@@ -245,7 +245,7 @@ export const ConversationCard = memo(function ConversationCard({
               {/* Top row: Name, badges, time */}
               <div className="mb-1 flex items-start justify-between gap-ds-2">
                 <div className="flex min-w-0 items-center gap-ds-2">
-                  <h3 className="truncate font-semibold text-fl-text">{customerDisplay.displayName}</h3>
+                  <h3 className="truncate font-semibold text-fl-text min-w-0">{customerDisplay.displayName}</h3>
 
                   {/* Customer badges */}
                   <div className="flex flex-shrink-0 items-center gap-1">
@@ -298,13 +298,13 @@ export const ConversationCard = memo(function ConversationCard({
 
               {/* Subject line */}
               {conversation.subject && (
-                <h4 className="text-fl-text-primary mb-1 truncate text-sm font-medium">{conversation.subject}</h4>
+                <h4 className="text-fl-text-primary mb-1 truncate text-sm font-medium min-w-0">{conversation.subject}</h4>
               )}
 
               {/* Message preview */}
               <p
                 className={cn(
-                  "text-typography-sm mb-2 line-clamp-2",
+                  "text-typography-sm mb-2 line-clamp-2 min-w-0",
                   conversation.unread ? "font-medium text-fl-text" : "text-fl-text-muted"
                 )}
               >
@@ -326,9 +326,9 @@ export const ConversationCard = memo(function ConversationCard({
                 <div className="flex min-w-0 items-center gap-ds-2">
                   {/* Priority indicator */}
                   {conversation.priority !== "low" && (
-                    <Badge variant={getPriorityVariant()} size="sm" className="flex items-center gap-1">
+                    <Badge variant={getPriorityVariant()} size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
                       <Icon icon={Flag} className="h-2.5 w-2.5" />
-                      {conversation.priority}
+                      <span className="truncate">{conversation.priority}</span>
                     </Badge>
                   )}
 
@@ -336,33 +336,33 @@ export const ConversationCard = memo(function ConversationCard({
                   {conversation.aiStatus ? (
                     <AIStatusBadge aiData={conversation.aiStatus} variant="compact" showConfidence={true} />
                   ) : conversation.aiEnabled ? (
-                    <Badge variant="info" size="sm" className="flex items-center gap-1">
+                    <Badge variant="info" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
                       <Icon icon={Zap} className="h-2.5 w-2.5" />
-                      AI
+                      <span className="truncate">AI</span>
                     </Badge>
                   ) : conversation.assignedTo ? (
-                    <Badge variant="success" size="sm" className="flex items-center gap-1">
+                    <Badge variant="success" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
                       <Icon icon={User} className="h-2.5 w-2.5" />
-                      Human
+                      <span className="truncate">Human</span>
                     </Badge>
                   ) : (
-                    <Badge variant="info" size="sm" className="bg-brand-blue-500 text-white">
-                      Open
+                    <Badge variant="info" size="sm" className="bg-brand-blue-500 text-white max-w-[70px] overflow-hidden text-ellipsis">
+                      <span className="truncate">Open</span>
                     </Badge>
                   )}
 
                   {/* Escalation risk */}
                   {conversation.escalationRisk === "high" && (
-                    <Badge variant="warning" size="sm" className="flex items-center gap-1">
+                    <Badge variant="warning" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
                       <Icon icon={TrendingUp} className="h-2.5 w-2.5" />
-                      Risk
+                      <span className="truncate">Risk</span>
                     </Badge>
                   )}
 
                   {/* Tags (limited to 2) */}
                   {conversation.tags.slice(0, 2).map((tag: string) => (
-                    <Badge key={tag} variant="outline" size="sm" className="text-fl-text-subtle">
-                      {tag}
+                    <Badge key={tag} variant="outline" size="sm" className="text-fl-text-subtle max-w-[70px] overflow-hidden text-ellipsis">
+                      <span className="truncate">{tag}</span>
                     </Badge>
                   ))}
 

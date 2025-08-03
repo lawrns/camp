@@ -167,7 +167,7 @@ export function IntercomMetricCard({
         colors.border,
         "transition-all duration-300 relative overflow-hidden",
         "hover:shadow-xl hover:-translate-y-1",
-        onClick && "cursor-pointer focus-brand"
+        onClick && "cursor-pointer focus-visible:focus-brand"
       )}>
         {/* Glass overlay for extra depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
