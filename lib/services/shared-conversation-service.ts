@@ -72,8 +72,29 @@ export async function createOrGetSharedConversation(
     existingConversation = visitorConversation;
   }
 
-  // If we found an existing conversation, return it
+  // If we found an existing conversation, update it with visitor_id if needed
   if (existingConversation) {
+    // CRITICAL FIX: Update existing conversation with visitor_id for continuity
+    if (visitorId && !existingConversation.visitor_id) {
+      console.log(`[SharedConversation] Updating conversation ${existingConversation.id} with visitor_id: ${visitorId}`);
+
+      const { error: updateError } = await supabaseClient
+        .from('conversations')
+        .update({
+          visitor_id: visitorId,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', existingConversation.id);
+
+      if (updateError) {
+        console.error('[SharedConversation] Failed to update visitor_id:', updateError);
+      } else {
+        // Update the local object to reflect the change
+        existingConversation.visitor_id = visitorId;
+        existingConversation.updated_at = new Date().toISOString();
+      }
+    }
+
     return {
       id: existingConversation.id,
       organizationId: existingConversation.organization_id,

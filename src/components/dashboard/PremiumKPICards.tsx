@@ -3,12 +3,12 @@
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {
-  CheckCircle as CheckCircle2,
+  CheckCircle2,
   Clock,
   Heart,
-  ChatCircle as MessageCircle,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+  MessageCircle,
+  TrendingUp,
+} from "lucide-react";
 import { motion, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 

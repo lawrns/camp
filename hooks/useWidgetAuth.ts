@@ -83,7 +83,7 @@ interface AuthResponse {
 
 export function useWidgetAuth(organizationId: string) {
   // CRITICAL FIX: Disable auth bypass to enable proper real-time authentication
-  const WIDGET_AUTH_BYPASS = true; // Temporarily enable for development
+  const WIDGET_AUTH_BYPASS = false; // Disabled to enable real authentication
 
   const [authState, setAuthState] = useState<WidgetAuthState>({
     isAuthenticated: false,

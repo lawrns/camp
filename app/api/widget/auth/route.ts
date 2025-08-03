@@ -127,17 +127,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => ({}));
     const { customerEmail, customerName, organizationId, visitorId, sessionData } = body;
 
+    // CRITICAL FIX: Handle organizationId from header if not in body (UltimateWidget compatibility)
+    const orgIdFromHeader = request.headers.get('X-Organization-ID');
+    const finalOrganizationId = organizationId || orgIdFromHeader;
+
     // Validate required fields - organizationId is required, customerEmail is optional for widget auth
-    if (!organizationId) {
+    if (!finalOrganizationId) {
       return NextResponse.json(
-        { 
-          error: 'Missing required fields', 
+        {
+          error: 'Missing required fields',
           code: 'VALIDATION_ERROR',
           details: {
-            required: ['organizationId'],
-            provided: Object.keys(body)
+            required: ['organizationId (in body or X-Organization-ID header)'],
+            provided: Object.keys(body),
+            headers: { 'X-Organization-ID': orgIdFromHeader }
           }
-        }, 
+        },
         { status: 400 }
       );
     }
@@ -149,7 +154,7 @@ export async function POST(request: NextRequest) {
     const { data: organization, error: orgError } = await supabaseClient
       .from('organizations')
       .select('id, settings')
-      .eq('id', organizationId)
+      .eq('id', finalOrganizationId)
       .single();
 
     if (orgError || !organization) {
@@ -175,7 +180,7 @@ export async function POST(request: NextRequest) {
     let conversation;
     try {
       conversation = await createOrGetSharedConversation({
-        organizationId,
+        organizationId: finalOrganizationId,
         customerEmail,
         customerName,
         visitorId: generatedVisitorId,
@@ -205,12 +210,12 @@ export async function POST(request: NextRequest) {
       userId: userId,
       visitorId: generatedVisitorId,
       conversationId: conversation.id,
-      organizationId: organizationId,
+      organizationId: finalOrganizationId,
       user: {
         id: userId,
         email: customerEmail || null,
         displayName: customerName || customerEmail || 'Anonymous User',
-        organizationId: organizationId
+        organizationId: finalOrganizationId
       },
       organization: {
         id: organization.id,

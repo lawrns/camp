@@ -194,7 +194,8 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   const [isConnected, setIsConnected] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('connecting');
   const [connectionError, setConnectionError] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState(config.conversationId);
+  // CRITICAL FIX: Remove internal conversationId state to prevent desynchronization
+  // Use config.conversationId directly instead
   const [isInitializing, setIsInitializing] = useState(false);
   const [initializationError, setInitializationError] = useState<string | null>(null);
   
@@ -270,61 +271,16 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
   // Initialize conversation if needed
   const initializeConversation = useCallback(async (): Promise<string> => {
-    if (conversationId) {
-      return conversationId;
+    // CRITICAL FIX: Always use provided conversationId if available
+    if (config.conversationId) {
+      widgetDebugger.logRealtime('info', '✅ Using provided conversation ID', { conversationId: config.conversationId });
+      return config.conversationId;
     }
 
-    if (initializationPromiseRef.current) {
-      return initializationPromiseRef.current;
-    }
-
-    setIsInitializing(true);
-    setInitializationError(null);
-
-    const promise = (async () => {
-      try {
-        const headers = await config.getAuthHeaders?.() || {};
-        const response = await fetch('/api/widget/conversations', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-organization-id': config.organizationId,
-            ...headers,
-          },
-          body: JSON.stringify({
-            organizationId: config.organizationId,
-            visitorId: config.userId,
-            customerName: 'Website Visitor',
-            customerEmail: config.userId || 'anonymous@widget.com',
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to initialize conversation: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const newConversationId = data.conversation?.id || data.conversationId || data.id;
-
-        if (!newConversationId) {
-          throw new Error('No conversation ID returned from API');
-        }
-
-        setConversationId(newConversationId);
-        return newConversationId;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setInitializationError(errorMessage);
-        throw error;
-      } finally {
-        setIsInitializing(false);
-        initializationPromiseRef.current = null;
-      }
-    })();
-
-    initializationPromiseRef.current = promise;
-    return promise;
-  }, [conversationId, config.organizationId, config.userId, config.getAuthHeaders]);
+    // CRITICAL FIX: If no conversation ID provided, return empty string and let UltimateWidget handle auth
+    widgetDebugger.logRealtime('warn', '⚠️ No conversation ID provided - UltimateWidget should handle auth first');
+    return '';
+  }, [config.conversationId, config.organizationId, config.userId, config.getAuthHeaders]);
 
   // ENHANCED CONNECTION MANAGEMENT FUNCTIONS
 
@@ -595,14 +551,24 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   // Send message to conversation
   const sendMessage = useCallback(async (content: string, senderType: SenderType = 'visitor') => {
     try {
-      const activeConversationId = await initializeConversation();
+      // CRITICAL FIX: Use provided conversation ID instead of creating new one
+      const activeConversationId = config.conversationId;
+      if (!activeConversationId) {
+        throw new Error('No conversation ID available - UltimateWidget must authenticate first');
+      }
+
+      widgetDebugger.logRealtime('info', '📤 Sending message via API:', {
+        conversationId: activeConversationId,
+        content: content.substring(0, 50) + '...',
+        senderType
+      });
 
       const headers = await config.getAuthHeaders?.() || {};
       const response = await fetch('/api/widget/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-organization-id': config.organizationId,
+          'X-Organization-ID': config.organizationId, // Use capital X for consistency
           ...headers,
         },
         body: JSON.stringify({
@@ -720,11 +686,16 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     setConnectionStatus('connecting');
 
     try {
-      // Ensure we have a conversation
-      const convId = await initializeConversation();
+      // CRITICAL FIX: Use provided conversation ID instead of creating new one
+      const convId = config.conversationId;
       if (!convId) {
-        throw new Error('Failed to get conversation ID');
+        widgetDebugger.logRealtime('warn', '⏳ No conversation ID provided - waiting for UltimateWidget auth');
+        setConnectionStatus('disconnected');
+        isConnectingRef.current = false;
+        return;
       }
+
+      widgetDebugger.logRealtime('info', '✅ Using conversation ID from UltimateWidget:', { conversationId: convId });
 
       // Create channel name using unified naming convention
       const channelName = UNIFIED_CHANNELS.conversation(config.organizationId, convId);
@@ -863,19 +834,14 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
     stopHeartbeat();
   }, [config, stopHeartbeat]);
 
-  // Auto-connect when component mounts
-  useEffect(() => {
-    connect();
-    return () => {
-      disconnect();
-    };
-  }, [connect, disconnect]);
+  // Auto-connect removed - UltimateWidget controls connection timing explicitly
+  // This prevents the dependency loop where auto-connect triggers on every config change
 
   return {
     isConnected,
     connectionStatus,
     connectionError,
-    conversationId,
+    conversationId: config.conversationId, // Use config.conversationId directly
     isInitializing,
     initializationError,
     sendMessage,

@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import {
   ArrowRight,
-  CheckCircle as CheckCircle2,
+  CheckCircle2,
   Clock,
-  ArrowsClockwise as RefreshCw,
-  Gear as Settings,
-  Sparkle as Sparkles,
+  RefreshCw,
+  Settings,
+  Sparkles,
   X,
-} from "@phosphor-icons/react";
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

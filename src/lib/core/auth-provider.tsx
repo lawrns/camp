@@ -404,6 +404,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       authLogger.once('info', `widget_auth_attempt_${organizationId}`, "Attempting widget authentication for org:", organizationId);
 
+      // CRITICAL FIX: Include visitorId for conversation continuity
+      const getOrCreateVisitorId = (orgId: string): string => {
+        const key = `campfire_visitor_${orgId}`;
+        let visitorId = localStorage.getItem(key);
+
+        if (!visitorId) {
+          visitorId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          localStorage.setItem(key, visitorId);
+        }
+
+        return visitorId;
+      };
+
+      const visitorId = getOrCreateVisitorId(organizationId);
+
       // Try to create widget session
       const widgetAuthRes = await fetch("/api/widget/auth", {
         method: "POST",
@@ -411,7 +426,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          organizationId: organizationId, // Fixed: API expects 'organizationId', not 'orgId'
+          organizationId: organizationId,
+          visitorId: visitorId, // CRITICAL: Include visitorId for conversation continuity
           sessionData: {
             userAgent: navigator.userAgent,
             timestamp: Date.now(),

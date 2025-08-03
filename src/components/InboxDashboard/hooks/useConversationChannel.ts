@@ -19,6 +19,7 @@ export const useConversationChannel = (
 ): UseConversationChannelReturn => {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
 
   // Refs for managing timeouts and channel
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -177,11 +178,24 @@ export const useConversationChannel = (
           });
 
         } else if (status === "CHANNEL_ERROR" || status === "CLOSED") {
+          console.warn(`[ConversationChannel] Channel ${channelName} ${status}, attempting reconnection...`);
 
+          // Attempt reconnection after delay with exponential backoff
+          const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 10000);
+          setTimeout(() => {
+            if (reconnectAttempts < 5) {
+              setReconnectAttempts(prev => prev + 1);
+              setupChannel();
+            }
+          }, delay);
         }
 
         if (error) {
-
+          console.error(`[ConversationChannel] Channel error:`, error);
+          // Reset reconnect attempts on successful connection
+          if (status === "SUBSCRIBED") {
+            setReconnectAttempts(0);
+          }
         }
       });
 

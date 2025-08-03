@@ -446,8 +446,21 @@ export function subscribeToChannel(
   channel.on('broadcast', { event: eventType }, callback);
 
   // Subscribe to the channel if not already subscribed
-  channel.subscribe((status) => {
+  channel.subscribe((status, error) => {
     console.log(`[Realtime] Channel ${channelName} status: ${status}`);
+
+    if (error) {
+      console.error(`[Realtime] Channel ${channelName} error:`, error);
+    }
+
+    // Handle connection failures with reconnection
+    if (status === 'CHANNEL_ERROR' || status === 'CLOSED') {
+      console.warn(`[Realtime] Channel ${channelName} failed, will retry automatically`);
+    }
+
+    if (status === 'SUBSCRIBED') {
+      console.log(`[Realtime] ✅ Channel ${channelName} successfully connected`);
+    }
   });
 
   // Return unsubscribe function

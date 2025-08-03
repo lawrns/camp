@@ -6,15 +6,16 @@ import {
   ArrowUpRight,
   Brain,
   Calendar,
-  ChatCircle,
+  MessageSquare as ChatCircle,
   Clock,
-  Fire,
-  Lightning,
-  Sparkle,
-  TrendUp,
+  FileText,
+  Settings,
+  Lightbulb,
+  Megaphone,
+  Sparkles,
   Users,
-  Warning,
-} from "@phosphor-icons/react";
+  AlertTriangle as Warning,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ListItem } from "@/components/unified-ui/components/ListItem";

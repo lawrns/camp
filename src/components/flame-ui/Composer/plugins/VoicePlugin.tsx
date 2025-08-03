@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Microphone as Mic, Square } from "@phosphor-icons/react";
+import { Mic, Square } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { ComposerPluginProps } from "../types";

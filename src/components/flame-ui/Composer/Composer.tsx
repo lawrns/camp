@@ -1,7 +1,7 @@
 "use client";
 
 import { ButtonHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
-import { Microphone as Mic, Paperclip, PaperPlaneTilt as Send, Smiley as Smile } from "@phosphor-icons/react";
+import { Mic, Paperclip, Send, Smile } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

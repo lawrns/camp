@@ -111,42 +111,12 @@ export function useWidgetState(
       };
       const mockConversationId = generateUUID();
 
-      // Try to create conversation via API, but fallback to mock if it fails
-      try {
-        const response = await fetch('/api/widget', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Organization-ID': organizationId,
-          },
-          body: JSON.stringify({
-            action: 'create-conversation',
-            organizationId,
-            visitorId: `visitor-${Date.now()}`,
-            initialMessage: null
-          })
-        });
+      // CRITICAL FIX: Disable conversation creation via useWidgetState
+      // The UltimateWidget handles conversation creation via /api/widget/auth
+      // This hook should not create conversations independently
+      console.warn('[useWidgetState] Conversation creation disabled - UltimateWidget handles auth');
 
-        if (response.ok) {
-          const data = await response.json();
-          const conversationId = data.conversationId || data.conversation?.id || data.data?.conversation?.id;
-
-          if (data.success && conversationId) {
-            setState(prev => ({
-              ...prev,
-              conversationId: conversationId,
-              isInitialized: true,
-              error: null
-            }));
-            logDebug('Conversation created via API', { conversationId });
-            return;
-          }
-        }
-      } catch (apiError) {
-        console.warn('[WidgetState] API call failed, using mock conversation:', apiError);
-      }
-
-      // Fallback to mock conversation for testing
+      // Use mock conversation for testing only - real conversations created by UltimateWidget
       setState(prev => ({
         ...prev,
         conversationId: mockConversationId,

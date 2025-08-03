@@ -16,7 +16,7 @@
  * - Error boundaries and loading states
  */
 
-import React, { useState, useCallback, useEffect, useMemo, memo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ChatCircle } from '@phosphor-icons/react';
@@ -183,6 +183,36 @@ export function UltimateWidget({
 
   const realtime = useWidgetRealtime(realtimeConfig);
 
+  // CRITICAL FIX: Prevent infinite reconnection loop by tracking connection state
+  const hasConnectedRef = useRef(false);
+
+  // Reconnect realtime when conversation ID becomes available (only once)
+  useEffect(() => {
+    if (conversationId && realtime && !hasConnectedRef.current) {
+      console.log('[UltimateWidget] Conversation ID available, triggering realtime reconnect:', conversationId);
+      hasConnectedRef.current = true;
+      // Trigger a reconnection to ensure realtime has the conversation ID
+      realtime.connect?.();
+    }
+  }, [conversationId]); // Removed realtime from dependencies to prevent infinite loop
+
+  // Reset connection flag when conversationId changes
+  useEffect(() => {
+    if (!conversationId) {
+      hasConnectedRef.current = false;
+    }
+  }, [conversationId]);
+
+  // Cleanup effect to disconnect realtime when component unmounts
+  useEffect(() => {
+    return () => {
+      if (realtime && realtime.disconnect) {
+        console.log('[UltimateWidget] Component unmounting, disconnecting realtime');
+        realtime.disconnect();
+      }
+    };
+  }, [realtime]);
+
   // AI handover functionality
   const aiHandover = useAIHandover(
     conversationId || '',
@@ -305,21 +335,19 @@ export function UltimateWidget({
     try {
       setIsLoading(true);
 
-      const response = await fetch('/api/widget/conversations', {
+      const response = await fetch('/api/widget/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Organization-ID': organizationId,
         },
         body: JSON.stringify({
-          customerEmail: 'anonymous@widget.com', // ✅ REQUIRED - API validates this field
-          customerName: 'Widget User', // ✅ OPTIONAL
-          subject: 'Widget Conversation', // ✅ OPTIONAL
-          metadata: {
-            source: 'widget',
+          organizationId: organizationId,
+          sessionData: {
             userAgent: navigator.userAgent,
-            url: window.location.href,
-            timestamp: new Date().toISOString(),
+            timestamp: Date.now(),
+            referrer: document.referrer,
+            currentUrl: window.location.href,
           },
         }),
       });
@@ -329,7 +357,8 @@ export function UltimateWidget({
       }
 
       const result = await response.json();
-      const newConversationId = result.conversation?.id;
+      // CRITICAL FIX: Auth endpoint returns conversationId directly
+      const newConversationId = result.conversationId;
 
       if (newConversationId) {
         setConversationId(newConversationId);
@@ -399,8 +428,27 @@ export function UltimateWidget({
         }
       }
 
-      // Use realtime.sendMessage with just the message content
-      await realtime.sendMessage(message);
+      // CRITICAL FIX: Send message directly via API instead of realtime to avoid timing issues
+      const response = await fetch('/api/widget/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          conversationId: currentConversationId,
+          content: message,
+          senderType: 'visitor',
+          senderName: 'Anonymous',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send message: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('[UltimateWidget] Message sent via API:', result);
 
       // Update the temporary message with success status
       setMessages(prev => prev.map(msg =>

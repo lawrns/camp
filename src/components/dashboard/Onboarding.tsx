@@ -3,20 +3,21 @@ import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/Opti
 import {
   ArrowLeft,
   ArrowRight,
-  Robot as Bot,
+  Bot,
   Brain,
-  CheckCircle as Check,
+  Check,
   Code,
   FileText,
-  Fire as Flame,
-  ChatCircle as MessageSquare,
+  Flame,
+  MessageSquare,
   Palette,
-  IconProps as PhosphorIconProps,
-  Gear as Settings,
-  Sparkle as Sparkles,
+  Settings,
+  Sparkles,
   UserPlus,
   Users,
   X,
+  Zap,
+} from "lucide-react";
   Lightning as Zap,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";

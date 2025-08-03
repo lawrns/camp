@@ -158,22 +158,23 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
         }
       })
       .subscribe((status, error) => {
+        console.log(`[Messages] Channel status: ${status}`, error ? { error } : '');
 
         if (status === "SUBSCRIBED") {
-
+          console.log(`[Messages] Successfully subscribed to conversation ${conversationId}`);
         }
 
         if (error) {
-
+          console.error(`[Messages] Channel error:`, error);
         }
 
         if (status === "CHANNEL_ERROR") {
-
+          console.warn(`[Messages] Channel error for conversation ${conversationId}, Supabase will retry`);
           // Supabase handles reconnection automatically
         }
 
         if (status === "CLOSED") {
-
+          console.warn(`[Messages] Channel closed for conversation ${conversationId}`);
         }
       });
 

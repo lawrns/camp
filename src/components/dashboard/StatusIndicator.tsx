@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, Clock, Eye, EyeSlash, Lightning, Pause, Play, Warning, XCircle } from "@phosphor-icons/react";
+import { CheckCircle, Clock, Eye, EyeOff as EyeSlash, Zap as Lightning, Pause, Play, AlertTriangle as Warning, XCircle } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
