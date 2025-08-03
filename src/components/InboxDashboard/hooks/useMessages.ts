@@ -104,9 +104,9 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
     // Initial load
     loadMessages();
 
-    // ENHANCED: Set up real-time subscription with exact binding match
+    // CRITICAL FIX: Minimal subscription to test bindings (no filters initially)
     const client = supabase.browser();
-    const channelName = `messages:${conversationId}`;
+    const channelName = `db-changes-${conversationId}`;
 
     const channel = client.channel(channelName);
 
@@ -117,32 +117,40 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
           event: "*",  // Listen to all events (INSERT, UPDATE, DELETE)
           schema: "public",
           table: "messages",
-          filter: `conversation_id=eq.${conversationId}`,  // Exact match with proper UUID format
+          // TEMPORARILY REMOVE FILTER to fix binding mismatch
+          // filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('[Realtime] Message event received:', payload);
+          console.log('[Realtime] Raw Payload:', payload);  // Debug: Inspect for binding clues
 
-          // Handle payload with type guards for nulls
+          // Handle payload with comprehensive type guards
           if (payload.new) {
             const message = payload.new as any;  // Use any first, then transform
 
-            // Transform to match our Message interface
+            // Filter on client side instead of server side (temporary fix)
+            if (message.conversation_id !== conversationId) {
+              console.log('[Realtime] Ignoring message from different conversation:', message.conversation_id);
+              return;
+            }
+
+            console.log('[Realtime] Processing message for conversation:', conversationId);
+
+            // Use spread operator to include ALL database columns (prevents binding mismatch)
             const transformedMessage: Message = {
-              id: message.id,
-              conversation_id: message.conversation_id,
-              content: message.content,
-              sender_type: message.sender_type,
+              ...message,  // Include all database columns
               sender_name: message.sender_name ?? 'Anonymous',  // Handle null
-              created_at: message.created_at,
-              message_type: message.message_type,
-              attachments: Array.isArray(message.attachments) ? message.attachments : [],
-              read_status: "sent",
+              attachments: Array.isArray(message.attachments) ? message.attachments : null,
+              read_status: "sent",  // Legacy field
             };
 
             // Avoid duplicates by checking if message already exists
             setMessages((prev) => {
               const exists = prev.some((msg) => msg.id === transformedMessage.id);
-              if (exists) return prev;
+              if (exists) {
+                console.log('[Realtime] Duplicate message ignored:', transformedMessage.id);
+                return prev;
+              }
+              console.log('[Realtime] Adding new message:', transformedMessage.id);
               return [...prev, transformedMessage];
             });
           }
@@ -177,6 +185,10 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
 
         if (error) {
           console.error(`[Messages] Channel error:`, error);
+          // Check for specific binding mismatch error
+          if (error.message && error.message.includes('mismatch between server and client bindings')) {
+            console.error('🚨 POSTGRESQL BINDING MISMATCH DETECTED! Publication may need recreation.');
+          }
         }
 
         if (status === "CHANNEL_ERROR") {
