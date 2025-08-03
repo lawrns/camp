@@ -276,21 +276,22 @@ export function convertDatabaseMessageToApi(dbMsg: DatabaseMessage): Message {
     senderId: dbMsg.sender_id,
     senderName: dbMsg.sender_name,
     senderEmail: dbMsg.sender_email,
-    operatorId: dbMsg.operator_id,
+    operatorId: dbMsg.agent_id, // Use agent_id instead of operator_id
     
-    // Message metadata
-    role: dbMsg.role as Message['role'],
-    source: dbMsg.source as Message['source'],
+    // Message metadata - using available fields
+    role: undefined, // Not available in database schema
+    source: undefined, // Not available in database schema
+    status: dbMsg.status as Message['status'],
     
     // Timestamps
     createdAt: dbMsg.created_at || new Date().toISOString(),
     updatedAt: dbMsg.updated_at,
-    readAt: dbMsg.read_at,
+    readAt: undefined, // Not available in database schema
     
     // Content and metadata
-    metadata: dbMsg.metadata as Record<string, any> | null,
+    metadata: dbMsg.metadata ? (dbMsg.metadata as Record<string, any>) : null,
     isDeleted: dbMsg.is_deleted,
-    typingDurationMs: dbMsg.typing_duration_ms,
+    typingDurationMs: undefined, // Not available in database schema
     
     // Legacy fields
     conversation_id: dbMsg.conversation_id,
@@ -299,10 +300,10 @@ export function convertDatabaseMessageToApi(dbMsg: DatabaseMessage): Message {
     sender_id: dbMsg.sender_id,
     sender_name: dbMsg.sender_name,
     sender_email: dbMsg.sender_email,
-    operator_id: dbMsg.operator_id,
+    operator_id: dbMsg.agent_id, // Use agent_id instead of operator_id
     created_at: dbMsg.created_at,
     updated_at: dbMsg.updated_at,
-    read_at: dbMsg.read_at,
+    read_at: undefined, // Not available in database schema
   };
 }
 
@@ -324,8 +325,7 @@ export function isDatabaseMessage(obj: any): obj is DatabaseMessage {
   return obj && typeof obj.id === 'string' && typeof obj.conversation_id === 'string';
 }
 
-// Export database types for direct use
-export type { DatabaseConversation, DatabaseMessage, DatabaseOrganization };
+// Database types are already exported above
 
 // Conversion utilities for new types
 export function convertDatabaseTagToApi(dbTag: DatabaseTag): Tag {
@@ -369,16 +369,16 @@ export function convertDatabaseConversationHistoryToApi(dbHistory: DatabaseConve
     conversationId: dbHistory.conversation_id,
     userId: dbHistory.user_id,
     action: dbHistory.action,
-    oldValue: dbHistory.old_value as Record<string, any> | null,
-    newValue: dbHistory.new_value as Record<string, any> | null,
-    metadata: dbHistory.metadata as Record<string, any> | null,
+    oldValue: dbHistory.old_value ? (dbHistory.old_value as Record<string, any>) : null,
+    newValue: dbHistory.new_value ? (dbHistory.new_value as Record<string, any>) : null,
+    metadata: dbHistory.metadata ? (dbHistory.metadata as Record<string, any>) : null,
     createdAt: dbHistory.created_at || new Date().toISOString(),
 
     // Legacy fields
     conversation_id: dbHistory.conversation_id,
     user_id: dbHistory.user_id,
-    old_value: dbHistory.old_value,
-    new_value: dbHistory.new_value,
+    old_value: dbHistory.old_value ? (dbHistory.old_value as Record<string, any>) : null,
+    new_value: dbHistory.new_value ? (dbHistory.new_value as Record<string, any>) : null,
     created_at: dbHistory.created_at,
   };
 }
@@ -392,8 +392,8 @@ export function convertDatabaseConversationNotesToApi(dbNotes: DatabaseConversat
   return dbNotes.map(convertDatabaseConversationNoteToApi);
 }
 
-export function convertDatabaseConversationHistoryToApi(dbHistory: DatabaseConversationHistory[]): ConversationHistory[] {
-  return dbHistory.map(convertDatabaseConversationHistoryToApi);
+export function convertDatabaseConversationHistoriesToApi(dbHistories: DatabaseConversationHistory[]): ConversationHistory[] {
+  return dbHistories.map(convertDatabaseConversationHistoryToApi);
 }
 
 // Re-export the generated database type

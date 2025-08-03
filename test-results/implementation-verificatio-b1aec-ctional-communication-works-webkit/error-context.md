@@ -1,0 +1,174 @@
+# Page snapshot
+
+```yaml
+- alert
+- navigation "Main navigation":
+  - img "Campfire logo"
+  - navigation:
+    - text: Primary
+    - link "Dashboard":
+      - /url: /dashboard
+      - img
+      - text: Dashboard
+    - link "Inbox":
+      - /url: /dashboard/inbox
+      - img
+      - text: Inbox
+    - link "Tickets":
+      - /url: /dashboard/tickets
+      - img
+      - text: Tickets
+    - link "Knowledge":
+      - /url: /dashboard/knowledge
+      - img
+      - text: Knowledge
+    - link "Analytics":
+      - /url: /dashboard/analytics
+      - img
+      - text: Analytics
+    - link "AI Insights":
+      - /url: /dashboard/ai-insights
+      - img
+      - text: AI Insights
+    - text: Tools
+    - link "Settings":
+      - /url: /dashboard/settings
+      - img
+      - text: Settings
+    - link "Team":
+      - /url: /dashboard/team
+      - img
+      - text: Team
+    - link "Integrations":
+      - /url: /dashboard/integrations
+      - img
+      - text: Integrations
+  - link "Notifications":
+    - /url: /dashboard/notifications
+    - img
+    - text: Notifications
+  - link "Help":
+    - /url: /dashboard/help
+    - img
+    - text: Help
+  - link "Profile":
+    - /url: /dashboard/profile
+    - img
+    - text: Profile
+- main:
+  - heading "Good morning, jam" [level=1]
+  - paragraph: Manage customer conversations and support requests
+  - img
+  - text: Inbox
+  - img
+  - textbox "Search conversations"
+  - button "Filters":
+    - img
+    - text: Filters
+  - button "Sort":
+    - img
+    - text: Sort
+  - text: 5556326.458823529ms connected
+  - button:
+    - img
+  - button "Advanced filters":
+    - img
+  - button "Keyboard shortcuts":
+    - img
+  - button "Start new conversation":
+    - img
+    - text: New Conversation
+  - button "All"
+  - button "Unread"
+  - button "Unassigned"
+  - button "AI Managed"
+  - button "Human Managed"
+  - button "Conversation with Widget User":
+    - img "Widget User"
+    - heading "Widget User" [level=3]
+    - img
+    - text: Human
+    - paragraph: anonymous@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Magenta Heron":
+    - img "Magenta Heron"
+    - heading "Magenta Heron" [level=3]
+    - img
+    - text: Human
+    - paragraph: anonymous@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Widget User":
+    - img "Widget User"
+    - heading "Widget User" [level=3]
+    - img
+    - text: Human
+    - paragraph: anonymous@widget.com
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=2]
+  - text: Open medium
+  - paragraph
+  - text: Active now
+  - button "Assign conversation"
+  - button "Convert to ticket"
+  - button "Manage conversation"
+  - button "Toggle customer details"
+  - button "More actions"
+  - img
+  - heading "Start the conversation" [level=3]
+  - paragraph: Send a message to to begin the conversation.
+  - img
+  - text: AI Inactive
+  - button "Start":
+    - img
+    - text: Start
+  - img
+  - button "Quick templates":
+    - img
+  - button "Generate AI suggestions":
+    - img
+  - textbox "Type your message..."
+  - button "Add emoji":
+    - img
+  - button "Send message" [disabled]:
+    - img
+```

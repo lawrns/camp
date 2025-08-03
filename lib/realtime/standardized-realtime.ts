@@ -276,58 +276,97 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// CRITICAL FIX: Enhanced channel subscription with auth validation
-async function ensureChannelSubscription(channelName: string, config?: any): Promise<RealtimeChannel> {
-  console.log(`[Realtime] 🔍 EMERGENCY-FIX: ensureChannelSubscription called for: ${channelName}`);
+// Enhanced subscription with exponential backoff and comprehensive monitoring
+async function ensureChannelSubscription(channelName: string, config?: any, attempt: number = 1): Promise<RealtimeChannel> {
+  const maxAttempts = 3;
+  const timeouts = [15000, 30000, 60000]; // Progressive timeouts: 15s → 30s → 60s
+  const currentTimeout = timeouts[attempt - 1] || timeouts[timeouts.length - 1];
 
-  // EMERGENCY FIX: Completely skip auth validation for all channels temporarily
-  console.log(`[Realtime] 🔐 ⚠️ EMERGENCY FIX: Skipping ALL auth validation for channel: ${channelName}`);
-  console.log(`[Realtime] 🔐 ⚠️ This is a temporary fix to resolve typing indicator issues`);
+  console.log(`[Realtime] 🔍 Attempt ${attempt}/${maxAttempts}: Ensuring subscription for: ${channelName}`);
+  console.log(`[Realtime] ⏱️ Using timeout: ${currentTimeout / 1000}s (exponential backoff)`);
 
-  // Skip all authentication validation to fix the immediate issue
+  // Skip auth validation temporarily as per existing code
+  console.log(`[Realtime] 🔐 ⚠️ Skipping auth validation`);
 
   const channel = channelManager.getChannel(channelName, config);
-  console.log(`[Realtime] 📊 Channel state before subscription: ${channel.state}`);
 
-  // Check if channel is already subscribed
   if (channel.state === 'joined') {
-    console.log(`[Realtime] ✅ Channel ${channelName} already subscribed`);
+    console.log(`[Realtime] ✅ Already subscribed to ${channelName}`);
     return channel;
   }
 
-  console.log(`[Realtime] 🔄 Starting subscription process for: ${channelName}`);
-
   return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      console.error(`[Realtime] ⏰ Subscription timeout for ${channelName} after 15 seconds`);
-      reject(new Error(`Channel subscription timeout for ${channelName} after 15 seconds`));
-    }, 15000); // Increased from 5 seconds to 15 seconds
+    const startTime = Date.now();
 
-    // Subscribe and wait for confirmation with enhanced error handling
-    console.log(`[Realtime] 📡 Calling channel.subscribe() for: ${channelName}`);
+    const timer = setTimeout(() => {
+      const elapsed = Date.now() - startTime;
+      console.warn(`[Realtime] ⏰ Subscription timeout after ${elapsed}ms on attempt ${attempt}/${maxAttempts} for ${channelName}`);
+
+      if (attempt < maxAttempts) {
+        console.log(`[Realtime] 🔄 Retrying subscription with exponential backoff...`);
+        // Add delay before retry to prevent overwhelming the server
+        setTimeout(() => {
+          ensureChannelSubscription(channelName, config, attempt + 1)
+            .then(resolve)
+            .catch(reject);
+        }, 1000 * attempt); // 1s, 2s delay between retries
+      } else {
+        const error = new Error(`Max subscription attempts (${maxAttempts}) reached for ${channelName} after ${elapsed}ms total`);
+        console.error(`[Realtime] ❌ ${error.message}`);
+        reject(error);
+      }
+    }, currentTimeout);
+
     channel.subscribe((status) => {
-      console.log(`[Realtime] 📢 Subscription status update for ${channelName}: ${status}`);
+      const elapsed = Date.now() - startTime;
+      console.log(`[Realtime] 📢 Subscription status for ${channelName}: ${status} (attempt ${attempt}, elapsed: ${elapsed}ms)`);
 
       switch (status) {
         case 'SUBSCRIBED':
-          clearTimeout(timeout);
-          console.log(`[Realtime] ✅ Channel ${channelName} successfully subscribed`);
+          clearTimeout(timer);
+          console.log(`[Realtime] ✅ Successfully subscribed to ${channelName} on attempt ${attempt} after ${elapsed}ms`);
           resolve(channel);
           break;
+
         case 'CHANNEL_ERROR':
-          clearTimeout(timeout);
-          console.warn(`[Realtime] ⚠️ Channel ${channelName} error - will retry with fallback`);
-          // Don't reject immediately, let timeout handle retry logic
-          reject(new Error(`Channel error: ${status} - fallback mode available`));
+          clearTimeout(timer);
+          console.warn(`[Realtime] ⚠️ Channel error for ${channelName} on attempt ${attempt} after ${elapsed}ms`);
+
+          if (attempt < maxAttempts) {
+            console.log(`[Realtime] 🔄 Retrying due to channel error...`);
+            setTimeout(() => {
+              ensureChannelSubscription(channelName, config, attempt + 1)
+                .then(resolve)
+                .catch(reject);
+            }, 2000 * attempt); // Longer delay for channel errors: 2s, 4s
+          } else {
+            const error = new Error(`Channel error on final attempt for ${channelName}: ${status}`);
+            console.error(`[Realtime] ❌ ${error.message}`);
+            reject(error);
+          }
           break;
+
         case 'TIMED_OUT':
         case 'CLOSED':
-          clearTimeout(timeout);
-          console.error(`[Realtime] ❌ Channel ${channelName} subscription failed: ${status}`);
-          reject(new Error(`Channel subscription failed: ${status}`));
+          clearTimeout(timer);
+          console.error(`[Realtime] ❌ Channel ${status.toLowerCase()} for ${channelName} on attempt ${attempt} after ${elapsed}ms`);
+
+          if (attempt < maxAttempts) {
+            console.log(`[Realtime] 🔄 Retrying due to ${status.toLowerCase()}...`);
+            setTimeout(() => {
+              ensureChannelSubscription(channelName, config, attempt + 1)
+                .then(resolve)
+                .catch(reject);
+            }, 1500 * attempt); // Medium delay: 1.5s, 3s
+          } else {
+            const error = new Error(`Subscription ${status.toLowerCase()} on final attempt for ${channelName}`);
+            console.error(`[Realtime] ❌ ${error.message}`);
+            reject(error);
+          }
           break;
+
         default:
-          console.log(`[Realtime] 🔄 Channel ${channelName} intermediate status: ${status}`);
+          console.log(`[Realtime] 🔄 Intermediate status for ${channelName}: ${status} (continuing to wait...)`);
           // Continue waiting for SUBSCRIBED status
       }
     });

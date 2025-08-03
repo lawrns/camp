@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Warning as AlertCircle,
-  CheckCircle as Check,
   Clock,
   ArrowsClockwise as RefreshCw,
 } from "@phosphor-icons/react";

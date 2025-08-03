@@ -5,7 +5,7 @@
  * event validation, and monitoring systems.
  */
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { 
   UNIFIED_CHANNELS, 
   UNIFIED_EVENTS, 
@@ -15,33 +15,18 @@ import {
   extractResourceType,
   extractResourceId
 } from '../../lib/realtime/unified-channel-standards';
-import { 
-  ChannelTestRunner, 
-  runQuickChannelTest,
-  testChannelFunction 
-} from '../../lib/realtime/bidirectional-testing';
+// Note: ChannelTestRunner, runQuickChannelTest, testChannelFunction imports removed as they're not used in current tests
 import { 
   ChannelEventValidator,
   validateMessagePayload,
   validateTypingPayload,
-  validatePresencePayload,
-  safeSendChannelEvent
+  validatePresencePayload
 } from '../../lib/realtime/channel-validation';
 import { 
-  ChannelMonitor,
-  ChannelDebugger,
-  globalChannelMonitor 
+  ChannelMonitor
 } from '../../lib/realtime/channel-monitoring';
 
-// Mock Supabase client
-const mockSupabaseClient = {
-  channel: jest.fn().mockReturnValue({
-    on: jest.fn().mockReturnThis(),
-    subscribe: jest.fn().mockResolvedValue(undefined),
-    unsubscribe: jest.fn().mockResolvedValue(undefined),
-    send: jest.fn().mockResolvedValue(undefined),
-  }),
-};
+// Note: mockSupabaseClient removed as it's not used in current tests
 
 describe('Unified Channel Standards', () => {
   describe('Channel Naming Conventions', () => {
@@ -361,9 +346,9 @@ describe('Channel Monitoring', () => {
 
     const events = monitor.getRecentEvents(10);
     expect(events).toHaveLength(1);
-    expect(events[0].channelName).toBe(channelName);
-    expect(events[0].eventName).toBe(eventName);
-    expect(events[0].source).toBe('incoming');
+    expect(events[0]?.channelName).toBe(channelName);
+    expect(events[0]?.eventName).toBe(eventName);
+    expect(events[0]?.source).toBe('incoming');
   });
 
   it('should track channel metrics', () => {

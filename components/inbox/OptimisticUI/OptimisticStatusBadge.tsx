@@ -5,7 +5,6 @@ import {
   Clock,
   ArrowsClockwise as RefreshCw,
 } from "@phosphor-icons/react";
-import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
 interface OptimisticStatusBadgeProps {
@@ -43,7 +42,7 @@ export const OptimisticStatusBadge: React.FC<OptimisticStatusBadgeProps> = ({ st
   };
 
   const config = getStatusConfig();
-  const Icon = config.icon;
+  const IconComponent = config.icon;
 
   return (
     <div
@@ -54,11 +53,11 @@ export const OptimisticStatusBadge: React.FC<OptimisticStatusBadgeProps> = ({ st
         className
       )}
     >
-      <Icon className="h-3 w-3" />
+      <IconComponent className="h-3 w-3" />
       <span>{config.text}</span>
       {status === "error" && onRetry && (
         <button onClick={onRetry} className="ml-1 transition-opacity hover:opacity-80" title="Retry">
-          <Icon name="RefreshCw" className="h-3 w-3" />
+          <RefreshCw className="h-3 w-3" />
         </button>
       )}
     </div>

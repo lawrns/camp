@@ -3,6 +3,7 @@ import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
+import { jest } from "@jest/globals";
 import { AIMessageComposer, AISuggestion, TypingStatus } from "../AIMessageComposer";
 
 // Mock framer-motion to avoid animation issues in tests

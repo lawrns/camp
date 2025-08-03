@@ -22,80 +22,80 @@
   - button "Unassigned"
   - button "AI Managed"
   - button "Human Managed"
-  - button "Conversation with Widget User":
-    - img "Widget User"
-    - heading "Widget User" [level=3]
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Anonymous User":
+    - img "Anonymous User"
+    - heading "Anonymous User" [level=3]
+    - img
+    - text: Human
+    - paragraph
+    - paragraph: No messages yet
+    - text: Open medium
+    - img
+    - text: less than a minute ago
+  - button "Conversation with Copper Woodpecker":
+    - img "Copper Woodpecker"
+    - heading "Copper Woodpecker" [level=3]
     - img
     - text: Human
     - paragraph: anonymous@widget.com
     - paragraph: No messages yet
     - text: Open medium
     - img
-    - text: 1 minute ago
-  - button "Conversation with Anonymous User":
-    - img "Anonymous User"
-    - heading "Anonymous User" [level=3]
-    - img
-    - text: Human
-    - paragraph
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - button "Conversation with Anonymous User":
-    - img "Anonymous User"
-    - heading "Anonymous User" [level=3]
-    - img
-    - text: Human
-    - paragraph
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - button "Conversation with Anonymous User":
-    - img "Anonymous User"
-    - heading "Anonymous User" [level=3]
-    - img
-    - text: Human
-    - paragraph
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - button "Conversation with Orange Flea":
-    - img "Orange Flea"
-    - heading "Orange Flea" [level=3]
-    - img
-    - text: Human
-    - paragraph: anonymous@widget.com
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - button "Conversation with Widget User":
-    - img "Widget User"
-    - heading "Widget User" [level=3]
-    - img
-    - text: Human
-    - paragraph: anonymous@widget.com
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - button "Conversation with Anonymous User":
-    - img "Anonymous User"
-    - heading "Anonymous User" [level=3]
-    - img
-    - text: Human
-    - paragraph
-    - paragraph: No messages yet
-    - text: Open medium
-    - img
-    - text: 1 minute ago
-  - img "Anonymous User"
-  - heading "Anonymous User" [level=2]
+    - text: less than a minute ago
+  - img "White Kite"
+  - heading "White Kite" [level=2]
   - text: Open medium
-  - paragraph
+  - paragraph: anonymous@widget.com
   - text: Active now
   - button "Assign conversation"
   - button "Convert to ticket"

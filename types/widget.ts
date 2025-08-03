@@ -212,10 +212,10 @@ export function convertToWidgetMessage(message: Message): WidgetMessagePayload {
 /**
  * Utility function to convert widget message to regular message type
  */
-export function convertFromWidgetMessage(widgetMessage: WidgetMessagePayload, messageId: number): Partial<Message> {
+export function convertFromWidgetMessage(widgetMessage: WidgetMessagePayload, messageId: string): Partial<Message> {
   return {
     id: messageId,
-    conversationId: parseInt(widgetMessage.conversationId) || 0,
+    conversationId: widgetMessage.conversationId,
     content: widgetMessage.content,
     senderId: widgetMessage.sender_id,
     senderType: widgetMessage.sender_type === "visitor" ? "customer" : (widgetMessage.sender_type as any),

@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
+interface AuthUser {
+  userId: string;
+  organizationId: string;
+  email?: string;
+}
+
 // Simplified auth wrapper for API endpoints
-async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: AuthUser) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
@@ -37,7 +43,7 @@ async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextRe
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
   try {
     const { searchParams } = new URL(request.url);
     const period = searchParams.get('period') || '7d';

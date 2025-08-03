@@ -22,6 +22,16 @@ const badgeVariants = cva(
           "hover:bg-[var(--fl-color-brand-hover)]",
           "shadow-[var(--fl-shadow-sm)]",
         ],
+        primary: [
+          "bg-[var(--fl-color-brand)] text-[var(--fl-color-text-inverse)]",
+          "hover:bg-[var(--fl-color-brand-hover)]",
+          "shadow-[var(--fl-shadow-sm)]",
+        ],
+        destructive: [
+          "bg-[var(--fl-color-error)] text-[var(--fl-color-text-inverse)]",
+          "hover:bg-[var(--fl-color-error-hover)]",
+          "shadow-[var(--fl-shadow-sm)]",
+        ],
         secondary: [
           "bg-[var(--fl-color-background-subtle)] text-[var(--fl-color-text)]",
           "hover:bg-[var(--fl-color-background-muted)]",

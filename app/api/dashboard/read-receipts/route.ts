@@ -4,8 +4,15 @@ import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 
+interface AuthUser {
+  userId: string;
+  organizationId: string;
+  email?: string;
+  name?: string;
+}
+
 // Authentication wrapper for dashboard read receipts
-async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: AuthUser) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
@@ -48,7 +55,7 @@ async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextRe
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: AuthUser) => {
   try {
     const body = await request.json();
     const {
@@ -222,7 +229,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
   try {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
@@ -278,7 +285,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
     }
 
     // Extract read receipts from message metadata
-    const readReceipts: Record<string, any> = {};
+    const readReceipts: Record<string, unknown> = {};
     const summary = {
       totalMessages: messages?.length || 0,
       readMessages: 0,
@@ -318,7 +325,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
       // Filter by specific reader if requested
       if (readerId) {
         readReceipts[msgId].readBy = readReceipts[msgId].readBy.filter(
-          (receipt: any) => receipt.readerId === readerId
+          (receipt: { readerId: string }) => receipt.readerId === readerId
         );
         readReceipts[msgId].isRead = readReceipts[msgId].readBy.length > 0;
       }
