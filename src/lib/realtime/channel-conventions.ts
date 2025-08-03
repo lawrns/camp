@@ -70,7 +70,7 @@ export function getOrganizationChannel(organizationId: string): string {
  */
 /**
  * Generate conversation-level channel name (organization-scoped)
- * Pattern: org:${organizationId}:conv:${conversationId}
+ * Pattern: bcast:conv:${organizationId}:${conversationId}
  * STANDARDIZED: This is the ONLY format for conversation channels across widget and dashboard
  * SPECIFICATION COMPLIANT: Uses 'conv' as per 08-realtime-system.json
  */
@@ -205,7 +205,7 @@ export interface ConversationChannels {
 
 export interface ChannelNamePatterns {
   organization: "org:${organizationId}";
-  conversation: "org:${organizationId}:conv:${conversationId}";
+  conversation: "bcast:conv:${organizationId}:${conversationId}";
   user: "org:${organizationId}:user:${userId}";
   presence: "org:${organizationId}:presence";
   typing: "org:${organizationId}:typing:${conversationId}";
@@ -333,7 +333,7 @@ export function createChannelIdentifier(parts: Partial<ChannelIdentifier>): Chan
  */
 export const CHANNEL_PATTERNS = {
   ORGANIZATION: "org:${organizationId}",
-  CONVERSATION: "org:${organizationId}:conv:${conversationId}",
+  CONVERSATION: "bcast:conv:${organizationId}:${conversationId}",
   USER: "org:${organizationId}:user:${userId}",
   PRESENCE: "org:${organizationId}:presence",
   TYPING: "org:${organizationId}:typing:${conversationId}",

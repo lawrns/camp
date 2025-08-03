@@ -34,7 +34,7 @@ function getServerClient() {
 export async function nativeServerBroadcastToOrganization(organizationId: string, event: string, payload: any) {
   try {
     const client = getServerClient();
-    const channelName = `org:${organizationId}`;
+    const channelName = `bcast:org:${organizationId}`;
 
     const result = await client.channel(channelName).send({
       type: "broadcast",
@@ -59,7 +59,7 @@ export async function nativeServerBroadcastToConversation(
 ) {
   try {
     const client = getServerClient();
-    const channelName = `org:${organizationId}:conversation:${conversationId}`;
+    const channelName = `bcast:conv:${organizationId}:${conversationId}`;
 
     const result = await client.channel(channelName).send({
       type: "broadcast",
@@ -79,7 +79,7 @@ export async function nativeServerBroadcastToConversation(
 export async function nativeServerBroadcastToDashboard(organizationId: string, event: string, payload: any) {
   try {
     const client = getServerClient();
-    const channelName = `org:${organizationId}:dashboard`;
+    const channelName = `bcast:dashboard:${organizationId}`;
 
     const result = await client.channel(channelName).send({
       type: "broadcast",
@@ -118,9 +118,9 @@ export async function nativeServerPublishToRealtime(options: { channel: string; 
 export const nativeConversationChannel = (organizationId: string, conversationId: string) =>
   `org:${organizationId}:conversation:${conversationId}`;
 
-export const nativeOrganizationChannel = (organizationId: string) => `org:${organizationId}`;
+export const nativeOrganizationChannel = (organizationId: string) => `bcast:org:${organizationId}`;
 
-export const nativeDashboardChannel = (organizationId: string) => `org:${organizationId}:dashboard`;
+export const nativeDashboardChannel = (organizationId: string) => `bcast:dashboard:${organizationId}`;
 
 export const nativeTypingChannel = (organizationId: string, conversationId: string) =>
   `org:${organizationId}:typing:${conversationId}`;

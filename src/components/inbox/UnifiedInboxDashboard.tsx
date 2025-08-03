@@ -458,7 +458,7 @@ const UnifiedInboxDashboard: React.FC<UnifiedInboxDashboardProps> = ({ className
 
     // Subscribe to new conversations
     const conversationsChannel = supabaseClient
-      .channel(`org:${user.organizationId}:conversations`)
+      .channel(`bcast:conversations:${user.organizationId}`)
       .on(
         "postgres_changes",
         {

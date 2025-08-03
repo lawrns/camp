@@ -105,7 +105,7 @@ class RealtimeManager {
   ): string {
     switch (type) {
       case "conversations":
-        return `org:${organizationId}:conversations`;
+        return `bcast:conversations:${organizationId}`;
       case "messages":
         return `org:${organizationId}:conversation:${conversationId}`;
       case "widget":

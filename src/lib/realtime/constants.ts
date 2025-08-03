@@ -41,9 +41,9 @@ export type RealtimeEventType = (typeof REALTIME_EVENTS)[keyof typeof REALTIME_E
  */
 export const CHANNELS = {
   organization: (orgId: string) => `org:${orgId}`,
-  conversation: (orgId: string, convId: string) => `org:${orgId}:conv:${convId}`,
+  conversation: (orgId: string, convId: string) => `bcast:conv:${orgId}:${convId}`,
   widget: (orgId: string, convId: string) => `org:${orgId}:widget:${convId}`,
-  typing: (orgId: string, convId: string) => `org:${orgId}:typing:${convId}`,
+  typing: (orgId: string, convId: string) => `bcast:typing:${orgId}:${convId}`,
 } as const;
 
 /**

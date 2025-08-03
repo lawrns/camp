@@ -56,7 +56,7 @@ export async function widgetBroadcast(
   data: Record<string, unknown>
 ): Promise<boolean> {
   // Use standardized channel naming (specification compliant)
-  const channelName = `org:${organizationId}:conv:${conversationId}`;
+  const channelName = `bcast:conv:${organizationId}:${conversationId}`;
 
   for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt++) {
     try {
