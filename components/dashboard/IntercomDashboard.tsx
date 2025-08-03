@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
+import { supabase } from '@/lib/supabase';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent } from '@/components/unified-ui/components/Card';
 import { IntercomMetricCard } from './IntercomMetricCard';
@@ -180,72 +181,172 @@ export function IntercomDashboard() {
     },
   ];
 
-  // Mock team activity data
-  const teamActivities = [
-    {
-      id: '1',
-      type: 'conversation_started' as const,
-      message: 'Started a new conversation with customer support',
-      memberId: '1',
-      memberName: 'Sarah Johnson',
-      memberAvatar: undefined,
-      timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
-      metadata: {
-        conversationId: 'conv-123',
-        messagesCount: 1,
-      },
-    },
-    {
-      id: '2',
-      type: 'conversation_resolved' as const,
-      message: 'Successfully resolved a billing inquiry',
-      memberId: '2',
-      memberName: 'Mike Chen',
-      memberAvatar: undefined,
-      timestamp: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-      metadata: {
-        conversationId: 'conv-124',
-        satisfaction: 5,
-        responseTime: 120,
-      },
-    },
-    {
-      id: '3',
-      type: 'performance_milestone' as const,
-      message: 'Achieved 95% customer satisfaction this week',
-      memberId: '3',
-      memberName: 'Emma Davis',
-      memberAvatar: undefined,
-      timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-      metadata: {
-        satisfaction: 95,
-      },
-    },
-  ];
+  // Real team activity data - will be populated from database
+  const [teamActivities, setTeamActivities] = useState<any[]>([]);
 
-  // Mock AI insights
-  const aiInsights = [
-    {
-      id: '1',
-      type: 'positive' as const,
-      title: 'Excellent Performance Today',
-      description: `You've resolved ${dashboardMetrics.resolvedToday} conversations today, exceeding your daily goal!`,
-      priority: 'high' as const,
-      dismissible: true,
-    },
-    {
-      id: '2',
-      type: 'medium' as const,
-      title: 'AI-Powered Suggestion',
-      description: 'Enable AI handover for complex technical queries to improve response time.',
-      priority: 'medium' as const,
-      action: {
-        label: 'Configure AI',
-        href: '/dashboard/settings',
-      },
-      dismissible: true,
-    },
-  ];
+  // Fetch real team activities
+  useEffect(() => {
+    const fetchTeamActivities = async () => {
+      if (!user?.organizationId) return;
+
+      try {
+        const supabaseClient = supabase.browser();
+        
+        // Get recent conversations
+        const { data: recentConversations } = await supabaseClient
+          .from('conversations')
+          .select('id, subject, status, created_at, assigned_to_user_id')
+          .eq('organization_id', user.organizationId)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        // Get recent messages
+        const { data: recentMessages } = await supabaseClient
+          .from('messages')
+          .select('id, content, created_at, sender_id, conversation_id')
+          .eq('organization_id', user.organizationId)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        // Transform into activity format
+        const activities = [];
+        
+        if (recentConversations) {
+          for (const conv of recentConversations) {
+            activities.push({
+              id: conv.id,
+              type: 'conversation_started' as const,
+              message: `Started conversation: ${conv.subject || 'No subject'}`,
+              memberId: conv.assigned_to_user_id || 'unassigned',
+              memberName: 'Team Member', // Would need to join with profiles table
+              memberAvatar: undefined,
+              timestamp: new Date(conv.created_at),
+              metadata: {
+                conversationId: conv.id,
+                status: conv.status,
+              },
+            });
+          }
+        }
+
+        if (recentMessages) {
+          for (const msg of recentMessages) {
+            activities.push({
+              id: msg.id,
+              type: 'message_sent' as const,
+              message: `Sent message: ${msg.content?.substring(0, 50)}...`,
+              memberId: msg.sender_id || 'unknown',
+              memberName: 'Team Member',
+              memberAvatar: undefined,
+              timestamp: new Date(msg.created_at),
+              metadata: {
+                conversationId: msg.conversation_id,
+                messageId: msg.id,
+              },
+            });
+          }
+        }
+
+        // Sort by timestamp and take the most recent 10
+        activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+        setTeamActivities(activities.slice(0, 10));
+      } catch (error) {
+        console.error('Error fetching team activities:', error);
+        // Fallback to empty array
+        setTeamActivities([]);
+      }
+    };
+
+    fetchTeamActivities();
+  }, [user?.organizationId]);
+
+  // Real AI insights based on actual performance data
+  const [aiInsights, setAiInsights] = useState<any[]>([]);
+
+  // Generate insights based on real metrics
+  useEffect(() => {
+    const generateInsights = () => {
+      const insights = [];
+
+      // Performance insights
+      if (dashboardMetrics.resolvedToday > 20) {
+        insights.push({
+          id: '1',
+          type: 'positive' as const,
+          title: 'Excellent Performance Today',
+          description: `You've resolved ${dashboardMetrics.resolvedToday} conversations today, exceeding your daily goal!`,
+          priority: 'high' as const,
+          dismissible: true,
+        });
+      }
+
+      // Response time insights
+      if (dashboardMetrics.avgResponse > 300) { // 5 minutes
+        insights.push({
+          id: '2',
+          type: 'medium' as const,
+          title: 'Response Time Alert',
+          description: 'Average response time is above target. Consider enabling AI assistance for faster responses.',
+          priority: 'medium' as const,
+          action: {
+            label: 'Configure AI',
+            href: '/dashboard/settings',
+          },
+          dismissible: true,
+        });
+      }
+
+      // Satisfaction insights
+      if (dashboardMetrics.csat < 80) {
+        insights.push({
+          id: '3',
+          type: 'medium' as const,
+          title: 'Customer Satisfaction Alert',
+          description: 'Customer satisfaction is below target. Review recent conversations for improvement opportunities.',
+          priority: 'medium' as const,
+          action: {
+            label: 'Review Conversations',
+            href: '/dashboard/inbox',
+          },
+          dismissible: true,
+        });
+      }
+
+      // Workload insights
+      if (dashboardMetrics.activeChats > 50) {
+        insights.push({
+          id: '4',
+          type: 'medium' as const,
+          title: 'High Workload Detected',
+          description: 'High conversation volume detected. Consider adding more agents or enabling AI handover.',
+          priority: 'medium' as const,
+          action: {
+            label: 'Manage Team',
+            href: '/dashboard/team',
+          },
+          dismissible: true,
+        });
+      }
+
+      // Positive performance insight
+      if (dashboardMetrics.csat > 90 && dashboardMetrics.avgResponse < 120) {
+        insights.push({
+          id: '5',
+          type: 'positive' as const,
+          title: 'Outstanding Performance',
+          description: 'Excellent performance! Team is exceeding targets for both satisfaction and response time.',
+          priority: 'high' as const,
+          dismissible: true,
+        });
+      }
+
+      setAiInsights(insights);
+    };
+
+    if (dashboardMetrics) {
+      generateInsights();
+    }
+  }, [dashboardMetrics]);
 
   // Transform members to agents format
   const agents = members.map(member => ({
