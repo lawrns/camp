@@ -30,7 +30,7 @@ export interface RealtimeMessagePayload {
   eventType: string;
   new: Message;
   old?: Message;
-  errors?: any[];
+  errors?: unknown[];
 }
 
 export interface TypingPayload {

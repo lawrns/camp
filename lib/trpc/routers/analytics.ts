@@ -78,7 +78,7 @@ export const analyticsRouter = createTRPCRouter({
         // Get message metrics
         const { data: messages, error: msgError } = await ctx.supabase
           .from('messages')
-          .select('id, sender_type, created_at, conversation_id')
+          .select('id, senderType, created_at, conversation_id')
           .in('conversation_id', conversations?.map(c => c.id) || [])
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString());
@@ -116,9 +116,9 @@ export const analyticsRouter = createTRPCRouter({
           },
           messages: {
             total: messages?.length || 0,
-            user: messages?.filter(m => m.sender_type === 'user').length || 0,
-            ai: messages?.filter(m => m.sender_type === 'ai').length || 0,
-            agent: messages?.filter(m => m.sender_type === 'agent').length || 0,
+            user: messages?.filter(m => m.senderType === 'user').length || 0,
+            ai: messages?.filter(m => m.senderType === 'ai').length || 0,
+            agent: messages?.filter(m => m.senderType === 'agent').length || 0,
           },
           tickets: {
             total: tickets?.length || 0,
@@ -176,7 +176,7 @@ export const analyticsRouter = createTRPCRouter({
             status,
             created_at,
             updated_at,
-            messages(id, sender_type, created_at)
+            messages(id, senderType, created_at)
           `)
           .eq('organization_id', input.organizationId)
           .gte('created_at', startDate.toISOString());
@@ -208,8 +208,8 @@ export const analyticsRouter = createTRPCRouter({
         if (conversations && input.includeAI) {
           conversations.forEach(conv => {
             const messages = conv.messages || [];
-            const hasAI = messages.some(m => m.sender_type === 'ai');
-            const hasHuman = messages.some(m => m.sender_type === 'agent');
+            const hasAI = messages.some(m => m.senderType === 'ai');
+            const hasHuman = messages.some(m => m.senderType === 'agent');
             
             if (hasAI && !hasHuman) {
               analytics.ai_handled++;
@@ -264,7 +264,7 @@ export const analyticsRouter = createTRPCRouter({
         // Get recent messages (last hour)
         const { data: recentMessages, error: msgError } = await ctx.supabase
           .from('messages')
-          .select('id, sender_type, created_at')
+          .select('id, senderType, created_at')
           .in('conversation_id', activeConversations?.map(c => c.id) || [])
           .gte('created_at', oneHourAgo.toISOString());
 

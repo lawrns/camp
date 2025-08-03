@@ -64,7 +64,7 @@ export const conversationsRouter = createTRPCRouter({
             title: input.title || 'New Conversation',
             priority: input.priority,
             status: 'open',
-            created_by: ctx.user.id,
+            createdBy: ctx.user.id,
             tags: input.tags,
             metadata: input.metadata || {},
           })
@@ -77,8 +77,8 @@ export const conversationsRouter = createTRPCRouter({
             updated_at,
             tags,
             metadata,
-            assigned_to,
-            created_by
+            assignedTo,
+            createdBy
           `)
           .single();
 
@@ -118,8 +118,8 @@ export const conversationsRouter = createTRPCRouter({
             updated_at,
             tags,
             metadata,
-            assigned_to,
-            created_by,
+            assignedTo,
+            createdBy,
             message_count:messages(count),
             last_message:messages(content, created_at, sender_type)
           `)
@@ -133,7 +133,7 @@ export const conversationsRouter = createTRPCRouter({
         }
 
         if (input.assignedTo) {
-          query = query.eq('assigned_to', input.assignedTo);
+          query = query.eq('assignedTo', input.assignedTo);
         }
 
         if (input.search) {
@@ -181,14 +181,14 @@ export const conversationsRouter = createTRPCRouter({
             updated_at,
             tags,
             metadata,
-            assigned_to,
-            created_by,
+            assignedTo,
+            createdBy,
             messages(
               id,
               content,
               type,
               sender_type,
-              sender_id,
+              senderId,
               created_at,
               metadata
             )
@@ -283,7 +283,7 @@ export const conversationsRouter = createTRPCRouter({
             content: input.content,
             type: input.type,
             sender_type: 'user',
-            sender_id: ctx.user.id,
+            senderId: ctx.user.id,
             metadata: input.metadata || {},
           })
           .select()

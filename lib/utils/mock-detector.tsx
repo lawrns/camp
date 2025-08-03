@@ -275,5 +275,20 @@ export function MockDataWarning() {
         {warnings.length} issue{warnings.length !== 1 ? "s" : ""} found
       </div>
       <button
-        onClick={() => /* console.log removed */
+}
+        onClick={() => console.log(report)}
+        style={{
+          background: "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "3px",
+          padding: "4px 8px",
+          fontSize: "10px",
+          cursor: "pointer",
+        }}
+      >
+        View Report
+      </button>
+    </div>
+  );
 }

@@ -33,13 +33,13 @@ export async function logActivity({
     if (actorType === "user") {
       const { data: profile } = await client
         .from("profiles")
-        .select("first_name, last_name, avatar_url, organization_id")
+        .select("firstName, last_name, avatar_url, organization_id")
         .eq("user_id", actorId)
         .single();
 
       if (profile) {
         actorMetadata = {
-          user_name: `${profile.first_name || ""} ${profile.last_name || ""}`.trim(),
+          user_name: `${profile.firstName || ""} ${profile.last_name || ""}`.trim(),
           user_avatar: profile.avatar_url,
         };
       }
