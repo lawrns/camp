@@ -1,57 +1,48 @@
 "use client";
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, Play, Star, Users, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export const WorldClassHero = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  // Scroll position (reserved for future animations)
-  const { scrollY } = useScroll();
 
-  // Performance optimization: Debounce scroll events and use will-change
+  // Handle escape key for modal
   useEffect(() => {
-    const handleScroll = () => {
-      // Debounced scroll handling
-      requestAnimationFrame(() => {
-        // Scroll handling logic here if needed
-      });
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isVideoPlaying) {
+        setIsVideoPlaying(false);
+      }
     };
+    
+    if (isVideoPlaying) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isVideoPlaying]);
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute top-20 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          style={{ willChange: 'transform' }}
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          className="absolute top-20 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 motion-safe:animate-pulse"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.7 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         />
         <motion.div
-          className="absolute top-40 right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          style={{ willChange: 'transform' }}
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          className="absolute top-40 right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 motion-safe:animate-pulse"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1.1, opacity: 0.7 }}
+          transition={{ duration: 2, ease: "easeOut", delay: 0.3 }}
         />
       </div>
 
@@ -113,19 +104,19 @@ export const WorldClassHero = () => {
               className="grid grid-cols-2 gap-4 mb-8"
             >
               <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span className="text-sm text-gray-600">Instant responses</span>
               </div>
               <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span className="text-sm text-gray-600">24/7 availability</span>
               </div>
               <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span className="text-sm text-gray-600">Seamless handover</span>
               </div>
               <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500" aria-hidden="true" />
                 <span className="text-sm text-gray-600">Multi-language</span>
               </div>
             </motion.div>
@@ -277,13 +268,30 @@ export const WorldClassHero = () => {
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
           onClick={() => setIsVideoPlaying(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="video-title"
         >
-          <div className="bg-white rounded-lg p-8 max-w-4xl w-full mx-4">
-            <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <Play className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Demo video would play here</p>
-              </div>
+          <div 
+            className="bg-white rounded-lg p-4 max-w-4xl w-full mx-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsVideoPlaying(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl font-bold z-10"
+              aria-label="Close video"
+            >
+              ×
+            </button>
+            <h2 id="video-title" className="sr-only">Campfire Demo Video</h2>
+            <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0"
+                title="Campfire Demo Video"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
         </motion.div>
