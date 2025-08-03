@@ -80,16 +80,15 @@ export class ChannelManager {
       return this.channels.get(channelName)!;
     }
 
-    const channel = this.supabaseClient.channel(channelName).on(
-      "postgres_changes",
+    // STEP 1 FIX: Use broadcast-only channel to prevent mismatch errors
+    const channel = this.supabaseClient.channel(
+      `bcast:${config.organizationId}:${config.conversationId}`,
       {
-        event: "*",
-        schema: "public",
-        table: "messages",
-        filter: `conversation_id=eq.${config.conversationId}`,
-      },
-      (payload: PostgresChangesPayload) => {
-        this.handleMessageEvent(payload, config);
+        config: {
+          broadcast: { ack: false },
+          presence: { ack: false },
+          postgres_changes: [] // <-- disable automatic CDC
+        }
       }
     );
 

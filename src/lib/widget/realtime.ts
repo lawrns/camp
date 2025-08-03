@@ -48,23 +48,15 @@ export class WidgetRealtimeClient {
       // UNIFIED STANDARD: Use unified channel naming convention
       const channelName = UNIFIED_CHANNELS.conversation(this.config.organizationId, this.config.sessionId);
 
+      // STEP 1 FIX: Use broadcast-only channel to prevent mismatch errors
       this.channel = this.supabase
-        .channel(channelName)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "messages",
-            filter: `conversation_id=eq.${this.config.sessionId}`,
-          },
-          (payload: any) => {
-
-            if (this.onMessage) {
-              this.onMessage(payload.new);
-            }
+        .channel(`bcast:${this.config.organizationId}:${this.config.sessionId}`, {
+          config: {
+            broadcast: { ack: false },
+            presence: { ack: false },
+            postgres_changes: [] // <-- disable automatic CDC
           }
-        )
+        })
         // Listen for unified broadcast events
         .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
           if (this.onTyping) {

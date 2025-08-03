@@ -230,41 +230,8 @@ export function useNativeOrganizationRealtime(organizationId: string, options: U
       }
     };
 
-    // Listen for new conversations
-    channel.on(
-      "postgres_changes",
-      {
-        event: "INSERT",
-        schema: "public",
-        table: "conversations",
-        filter: `organization_id=eq.${organizationId}`,
-      },
-      handleNewConversation
-    );
-
-    // Listen for conversation updates
-    channel.on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "conversations",
-        filter: `organization_id=eq.${organizationId}`,
-      },
-      handleConversationUpdate
-    );
-
-    // Listen for new messages (organization-wide)
-    channel.on(
-      "postgres_changes",
-      {
-        event: "INSERT",
-        schema: "public",
-        table: "messages",
-        filter: `organization_id=eq.${organizationId}`,
-      },
-      handleNewMessage
-    );
+    // STEP 1 FIX: Remove postgres_changes subscriptions to prevent mismatch errors
+    // All data updates will come through broadcast events instead
 
     // Listen for broadcast events
     channel.on("broadcast", { event: "*" }, handleBroadcastEvent);

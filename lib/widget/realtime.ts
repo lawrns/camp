@@ -54,25 +54,15 @@ export class WidgetRealtimeClient {
       realtimeMonitor.trackConnection(channelName, connectionId);
       RealtimeLogger.connection(channelName, "connecting");
 
+      // STEP 1 FIX: Use broadcast-only channel to prevent mismatch errors
       this.channel = this.supabase
-        .channel(channelName)
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "messages",
-            filter: `conversation_id=eq.${this.config.sessionId}`,
-          },
-          (payload: any) => {
-            realtimeMonitor.trackMessage(connectionId, "received", "postgres_insert", true);
-            RealtimeLogger.message(channelName, "received", payload.new?.content);
-
-            if (this.onMessage) {
-              this.onMessage(payload.new);
-            }
+        .channel(`bcast:${this.config.organizationId}:${this.config.sessionId}`, {
+          config: {
+            broadcast: { ack: false },
+            presence: { ack: false },
+            postgres_changes: [] // <-- disable automatic CDC
           }
-        )
+        })
         // UNIFIED EVENTS: Listen for standardized events
         .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
           if (this.onTyping) {
