@@ -201,7 +201,7 @@ function TimelineItem({ activity, index }: { activity: TimelineActivity; index: 
             )}
             {activity.metadata.messagesCount && (
               <div className="flex items-center gap-1">
-                <ChatCircle className="w-3 h-3 text-green-500" />
+                <ChatCircle className="w-3 h-3 text-blue-500" />
                 <span className="font-numeric tabular-nums">
                   {activity.metadata.messagesCount} messages
                 </span>

@@ -23,10 +23,10 @@ const colorConfig = {
     text: 'text-blue-900',
   },
   green: {
-    bg: 'bg-green-50 hover:bg-green-100',
-    border: 'border-green-200',
-    icon: 'text-green-600',
-    text: 'text-green-900',
+    bg: 'bg-blue-50 hover:bg-blue-100',
+    border: 'border-blue-200',
+    icon: 'text-blue-600',
+    text: 'text-blue-900',
   },
   purple: {
     bg: 'bg-purple-50 hover:bg-purple-100',

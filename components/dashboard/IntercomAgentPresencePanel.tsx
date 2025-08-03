@@ -281,7 +281,7 @@ function AvatarStack({ agents, maxVisible = 5 }: { agents: Agent[]; maxVisible?:
       
       {/* Online count */}
       <div className="ml-3 flex items-center gap-1 text-sm text-gray-600">
-        <Circle className="w-2 h-2 text-green-500" weight="fill" />
+                        <Circle className="w-2 h-2 text-blue-500" weight="fill" />
         <span className="font-medium font-numeric tabular-nums">
           {agents.filter(a => a.status === 'online').length}
         </span>
@@ -332,7 +332,7 @@ export function IntercomAgentPresencePanel({
             <div className="flex items-center gap-4 text-sm">
               {onlineAgents.length > 0 && (
                 <div className="flex items-center gap-1">
-                  <Circle className="w-2 h-2 text-green-500" weight="fill" />
+                  <Circle className="w-2 h-2 text-blue-500" weight="fill" />
                   <span className="font-medium font-numeric tabular-nums">{onlineAgents.length}</span>
                   <span className="text-gray-600">online</span>
                 </div>
