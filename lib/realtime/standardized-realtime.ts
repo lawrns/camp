@@ -5,7 +5,7 @@
  * All other realtime implementations should be deprecated and replaced with this.
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase, getClient } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS, CHANNEL_CONFIG } from "./unified-channel-standards";
 
@@ -37,12 +37,12 @@ class ChannelManager {
   private startCleanup() {
     if (this.cleanupInterval) return;
 
-    this.cleanupInterval = setInterval(async () => {
-      await this.cleanup();
+    this.cleanupInterval = setInterval(() => {
+      this.cleanup();
     }, this.CLEANUP_INTERVAL);
   }
 
-  private async cleanup() {
+  private cleanup() {
     const now = Date.now();
     const channelsToRemove: string[] = [];
 
@@ -61,14 +61,12 @@ class ChannelManager {
             clearInterval(info.heartbeatInterval);
           }
 
-          // FIXED: Use conditional client for server/browser context
-          const client = typeof window === "undefined"
-            ? (await import('@/lib/supabase/consolidated-exports')).supabase.server()
-            : supabase.browser();
-
-          if (client) {
+          // FIXED: Use getClient which handles server/browser context automatically
+          const client = getClient();
+          if (client && client.removeChannel) {
             client.removeChannel(info.channel);
           }
+          console.log(`[Realtime] 🧹 Cleanup successful with environment-appropriate client: ${typeof window === "undefined" ? 'server' : 'browser'}`);
           this.channels.delete(name);
           console.log(`[Realtime] Cleaned up idle channel: ${name}`);
         } catch (error) {
@@ -236,8 +234,10 @@ class ChannelManager {
     const info = this.channels.get(name);
     if (info) {
       try {
-        const client = supabase.browser();
-        client.removeChannel(info.channel);
+        const client = getClient();
+        if (client && client.removeChannel) {
+          client.removeChannel(info.channel);
+        }
         this.channels.delete(name);
         console.log(`[Realtime] Manually removed channel: ${name}`);
       } catch (error) {
@@ -263,8 +263,10 @@ class ChannelManager {
     // Remove all channels
     this.channels.forEach((info, name) => {
       try {
-        const client = supabase.browser();
-        client.removeChannel(info.channel);
+        const client = getClient();
+        if (client && client.removeChannel) {
+          client.removeChannel(info.channel);
+        }
       } catch (error) {
         console.warn(`[Realtime] Failed to cleanup channel ${name} during destroy:`, error);
       }

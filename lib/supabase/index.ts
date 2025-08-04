@@ -8,6 +8,7 @@
 import type { Database } from "@/types/supabase";
 import { createBrowserClient, createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Environment variables - server-side only
 const getEnv = () => {
@@ -34,72 +35,48 @@ let browserClientInitialized = false;
 // Service client singleton
 let serviceClient: ReturnType<typeof createSupabaseClient<Database>> | null = null;
 
+// validateAuthToken is imported from ./auth-validation - removed duplicate definition
+
 /**
- * PHASE 1 FIX: Auth validation for realtime connections
- * Validates and refreshes JWT token to prevent auth rejection
+ * Get environment-appropriate client (SPAM ELIMINATION FIX)
+ * Automatically returns server client in server context, browser client in browser
  */
-async function validateAuthToken(client: any) {
-  try {
-    const { data: session, error } = await client.auth.getSession();
-
-    if (error) {
-      console.warn('🔐 [Auth] Session error:', error);
-      return false;
+export function getClient() {
+  if (typeof window === "undefined") {
+    // Server environment: Use server component client for realtime cleanup
+    try {
+      // Dynamic import to avoid client-side issues
+      const { cookies } = require('next/headers');
+      return createServerComponentClient<Database>({ cookies: () => cookies() });
+    } catch (error) {
+      // Fallback to simple server client if cookies not available
+      return getSimpleServerClient();
     }
-
-    if (!session?.session?.access_token) {
-      console.warn('🔐 [Auth] No access token found - realtime may fail');
-      return false;
-    }
-
-    // Check if token is expired or expiring soon (within 5 minutes)
-    const expiresAt = session.session.expires_at;
-    const now = Math.floor(Date.now() / 1000);
-    const fiveMinutes = 5 * 60;
-
-    if (expiresAt && (expiresAt - now) < fiveMinutes) {
-      console.log('🔐 [Auth] Token expiring soon, refreshing...');
-      const { data: refreshed, error: refreshError } = await client.auth.refreshSession();
-
-      if (refreshError) {
-        console.error('🔐 [Auth] Token refresh failed:', refreshError);
-        return false;
-      }
-
-      console.log('🔐 [Auth] ✅ Token refreshed successfully');
-      return true;
-    }
-
-    // PERFORMANCE: Throttle auth validation logging to prevent spam
-    const currentTime = Date.now();
-    const lastLog = (globalThis as any)._lastAuthValidationLog || 0;
-    if (currentTime - lastLog > 5000) { // Only log every 5 seconds
-      console.log('🔐 [Auth] ✅ Valid token found:', session.session.access_token.substring(0, 20) + '...');
-      (globalThis as any)._lastAuthValidationLog = currentTime;
-    }
-    return true;
-  } catch (error) {
-    console.error('🔐 [Auth] Validation error:', error);
-    return false;
+  } else {
+    // Browser environment: Use existing browser client
+    return getBrowserClientInternal();
   }
 }
 
 /**
- * Get browser client (client-side only)
+ * Get browser client (client-side only) - UPDATED to use getClient
  * Enhanced with singleton protection and auth validation
  */
 export function getBrowserClient() {
   if (typeof window === "undefined") {
-    throw new Error("Browser client can only be used in browser environment");
+    // Server environment: Use getClient which handles this properly
+    return getClient();
   }
+  return getBrowserClientInternal();
+}
+
+/**
+ * Internal browser client function (renamed from getBrowserClient)
+ */
+function getBrowserClientInternal() {
 
   // Prevent multiple instances by checking global state
   if (browserClientInitialized && browserClient) {
-    // CRITICAL FIX: Start async auth validation but don't block client return
-    // The validation will happen in background and log results
-    validateAuthToken(browserClient).catch(error =>
-      console.error('🔐 [Auth] Background validation failed:', error)
-    );
     return browserClient;
   }
 
@@ -107,10 +84,6 @@ export function getBrowserClient() {
   if (typeof window !== 'undefined' && (window as any).__SUPABASE_CLIENT__) {
     browserClient = (window as any).__SUPABASE_CLIENT__;
     browserClientInitialized = true;
-    // CRITICAL FIX: Start async auth validation but don't block client return
-    validateAuthToken(browserClient).catch(error =>
-      console.error('🔐 [Auth] Background validation failed:', error)
-    );
     return browserClient;
   }
 
@@ -236,6 +209,23 @@ function getServiceClient() {
   }
 
   return serviceClient;
+}
+
+/**
+ * Get simple server client for cleanup operations (no cookies needed)
+ */
+function getSimpleServerClient() {
+  if (typeof window !== "undefined") {
+    throw new Error("Server client cannot be used in browser environment");
+  }
+
+  const env = getEnv();
+  return createServerClient<Database>(env.url, env.anonKey, {
+    cookies: {
+      getAll() { return []; },
+      setAll() { /* no-op */ }
+    }
+  });
 }
 
 /**

@@ -1,20 +1,20 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="28.376296">
-<testsuite name="simple-homepage-widget-test.spec.ts" timestamp="2025-08-04T01:41:42.943Z" hostname="chromium" tests="2" failures="0" skipped="0" time="30.127" errors="0">
-<testcase name="Simple homepage widget bidirectional test" classname="simple-homepage-widget-test.spec.ts" time="27.871">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="28.949446">
+<testsuite name="simple-homepage-widget-test.spec.ts" timestamp="2025-08-04T01:56:35.930Z" hostname="chromium" tests="2" failures="0" skipped="0" time="30.272" errors="0">
+<testcase name="Simple homepage widget bidirectional test" classname="simple-homepage-widget-test.spec.ts" time="28.42">
 <system-out>
 <![CDATA[🎯 SIMPLE HOMEPAGE WIDGET BIDIRECTIONAL TEST
 ==============================================
 🏠 Step 1: Testing homepage widget...
 📋 Widget button exists: YES
 ✅ Widget opened
-💬 Sending message from widget: SIMPLE TEST: Widget message 1754271710500
+💬 Sending message from widget: SIMPLE TEST: Widget message 1754272603123
 ✅ Widget message sent
 📥 Step 2: Checking dashboard...
 ✅ Agent logged in
 📋 Dashboard conversations found: 38
 ✅ Widget message found in conversation 3
 💬 Step 3: Testing dashboard to widget...
-✅ Dashboard reply sent: SIMPLE TEST: Dashboard reply 1754271728145
+✅ Dashboard reply sent: SIMPLE TEST: Dashboard reply 1754272621706
 📋 Dashboard reply in widget: NO
 
 🎯 SIMPLE TEST SUMMARY
@@ -26,13 +26,13 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="Database conversation verification" classname="simple-homepage-widget-test.spec.ts" time="2.256">
+<testcase name="Database conversation verification" classname="simple-homepage-widget-test.spec.ts" time="1.852">
 <system-out>
 <![CDATA[🔍 DATABASE CONVERSATION VERIFICATION
 ====================================
 📋 Conversation Check Result: {
   "exists": true,
-  "messageCount": 9,
+  "messageCount": 11,
   "data": {
     "messages": [
       {
@@ -216,12 +216,50 @@
         "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
         "sender_type": "visitor",
         "created_at": "2025-08-04T01:41:16.043248+00:00"
+      },
+      {
+        "id": "2eee0261-a632-4cf7-a665-526aa7fc92f4",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "SUPABASE DIRECT TEST: Dashboard message",
+        "senderType": "agent",
+        "senderId": "test@agent.com",
+        "senderName": "Test Agent",
+        "senderEmail": "test@agent.com",
+        "createdAt": "2025-08-04T01:44:04.42289+00:00",
+        "updatedAt": "2025-08-04T01:44:04.42289+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "agent",
+        "created_at": "2025-08-04T01:44:04.42289+00:00"
+      },
+      {
+        "id": "44ad9962-8f1d-4589-bbae-7b9387e23c11",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "SPAM ELIMINATION TEST: Widget message to trigger cleanup",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Test User",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T01:55:47.221404+00:00",
+        "updatedAt": "2025-08-04T01:55:47.221404+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-04T01:55:47.221404+00:00"
       }
     ],
-    "count": 9
+    "count": 11
   }
 }
-✅ Conversation exists with 9 messages
+✅ Conversation exists with 11 messages
 ]]>
 </system-out>
 </testcase>
