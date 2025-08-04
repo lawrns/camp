@@ -640,27 +640,6 @@ export function UltimateWidget({
                 <p>To claim your bonus page, head over to...</p>
               </div>
             </div>
-            <div className="p-4 sticky bottom-0 bg-white border-t border-gray-200 z-10">
-              <input 
-                type="text" 
-                placeholder="Search for help" 
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              <ul className="mt-2 space-y-2 text-sm">
-                <li className="flex justify-between items-center">
-                  <span>How do I claim the Welcome Package?</span>
-                  <span>&gt;</span>
-                </li>
-                <li className="flex justify-between items-center">
-                  <span>How to activate bonuses?</span>
-                  <span>&gt;</span>
-                </li>
-                <li className="flex justify-between items-center">
-                  <span>Self exclusion and Account Closure</span>
-                  <span>&gt;</span>
-                </li>
-              </ul>
-            </div>
           </div>
         );
     }
