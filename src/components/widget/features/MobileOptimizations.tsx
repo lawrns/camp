@@ -55,7 +55,7 @@ export function useMobileOptimizations() {
       ...prev,
       isMobile: browser.isMobile,
       isTablet: browser.isTablet,
-      touchSupport: "ontouchstart" in window,
+      touchSupport: "ontouchstart" in window || navigator.maxTouchPoints > 0 || Boolean((window as any).touch)
       networkType: network.effectiveType,
       isSlowConnection: network.isSlowConnection,
     }));
@@ -282,7 +282,7 @@ export function MobileOptimizations({ children }: MobileOptimizationsProps) {
       if (metaViewport) {
         metaViewport.setAttribute(
           "content",
-          "width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+          "width=device-width, initial-scale=1, viewport-fit=cover"
         );
       }
 
@@ -382,8 +382,8 @@ export function useMobileInput() {
   const performance = useMobilePerformance();
 
   const getInputProps = useCallback(
-    (baseProps: unknown = {}) => {
-      const mobileProps: unknown = { ...baseProps };
+    (baseProps: Record<string, any> = {}) => {
+      const mobileProps: Record<string, any> = { ...baseProps };
 
       if (mobileState.isMobile) {
         // Prevent zoom on iOS

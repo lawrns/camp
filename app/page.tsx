@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="home-page min-h-screen">
+    <div className="home-page">
       <ClientHomePage />
       <WidgetOrchestrator
         organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"

@@ -146,7 +146,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
             .update({ usedAt: new Date().toISOString() })
             .eq("id", recoveryCode.id);
         }
-      } catch (_error) {}
+      } catch {}
     }
 
     if (!verified) {
@@ -159,7 +159,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
           ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
           userAgent: req.headers.get("user-agent"),
         });
-      } catch (_error) {}
+      } catch {}
 
       return NextResponse.json(
         {
@@ -206,7 +206,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
           },
         } as unknown)
         .eq("id", pendingSession.user_id);
-    } catch (error) {}
+    } catch {}
 
     // Log successful login - table may not exist yet
     try {
@@ -216,7 +216,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
         ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
         userAgent: req.headers.get("user-agent"),
       });
-    } catch (error) {}
+    } catch {}
 
     // Set session cookie
     const response = NextResponse.json({
@@ -235,7 +235,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
     });
 
     return response;
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });
@@ -243,7 +243,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
 // Resend 2FA code (for future implementation of SMS/Email 2FA)
 export const PUT = withTenantGuard(async (req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
   try {
-    const supabaseClient = supabase.admin();
+    // const supabaseClient = supabase.admin();
     const { sessionId } = await req.json();
 
     if (!sessionId) {
@@ -289,7 +289,7 @@ export const PUT = withTenantGuard(async (req: NextRequest, { user: _user, organ
     return NextResponse.json({
       message: "Please check your authenticator app for the current code",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });

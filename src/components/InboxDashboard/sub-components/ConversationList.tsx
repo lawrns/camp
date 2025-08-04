@@ -97,48 +97,52 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     );
   }, [filteredConversations]);
 
-  // Loading skeleton
+  // Enhanced loading skeleton with pulse animation
   const LoadingSkeleton = () => (
     <div className="border-b border-gray-100 p-4" data-testid="conversation-list-loading-item">
       <div className="animate-pulse">
         <div className="flex items-start space-x-3">
-          <div className="h-12 w-12 rounded-full bg-gray-200" data-testid="conversation-loading-avatar"></div>
-          <div className="flex-1 space-y-3">
-            <div className="h-4 w-3/4 rounded bg-gray-200" data-testid="conversation-loading-name"></div>
-            <div className="h-3 w-1/2 rounded bg-gray-200" data-testid="conversation-loading-email"></div>
+          <div className="h-10 w-10 rounded-full bg-gray-200" data-testid="conversation-loading-avatar"></div>
+          <div className="flex-1 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="h-4 w-32 rounded bg-gray-200" data-testid="conversation-loading-name"></div>
+              <div className="h-3 w-12 rounded bg-gray-200" data-testid="conversation-loading-time"></div>
+            </div>
+            <div className="h-3 w-24 rounded bg-gray-200" data-testid="conversation-loading-status"></div>
             <div className="h-3 w-full rounded bg-gray-200" data-testid="conversation-loading-preview"></div>
+            <div className="h-3 w-2/3 rounded bg-gray-200" data-testid="conversation-loading-preview-2"></div>
           </div>
         </div>
       </div>
     </div>
   );
 
-  // Empty state
+  // Enhanced empty state with illustration
   const EmptyState = () => (
-    <div className="absolute inset-0 flex flex-col items-center justify-center" data-testid="conversation-list-empty-state">
-      <div className="text-center">
-        <div className="mb-4">
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-8" data-testid="conversation-list-empty-state">
+      <div className="text-center max-w-sm">
+        <div className="mb-6">
           {searchQuery ? (
-            <MagnifyingGlass className="mx-auto h-16 w-16 text-neutral-300" data-testid="conversation-empty-search-icon" />
+            <Search className="mx-auto h-16 w-16 text-gray-300" data-testid="conversation-empty-search-icon" />
           ) : (
-            <svg className="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" data-testid="conversation-empty-chat-icon">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-              />
-            </svg>
+            <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <MessageSquare className="h-12 w-12 text-gray-400" data-testid="conversation-empty-chat-icon" />
+            </div>
           )}
         </div>
-        <h3 className="mb-2 text-lg font-medium text-neutral-300" data-testid="conversation-empty-title">
+        <h3 className="mb-3 text-lg font-semibold text-gray-900" data-testid="conversation-empty-title">
           {searchQuery ? "No conversations found" : "No conversations yet"}
         </h3>
-        <p className="text-sm text-neutral-300 max-w-xs" data-testid="conversation-empty-message">
+        <p className="text-sm text-gray-500 leading-relaxed" data-testid="conversation-empty-message">
           {searchQuery
-            ? "Try adjusting your search terms or filters"
-            : "New conversations will appear here when customers reach out"}
+            ? "Try adjusting your search terms or filters to find what you're looking for."
+            : "New conversations will appear here when customers reach out. Start engaging with your audience!"}
         </p>
+        {!searchQuery && (
+          <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+            Start New Conversation
+          </button>
+        )}
       </div>
     </div>
   );

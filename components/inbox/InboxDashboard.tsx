@@ -30,7 +30,7 @@ import {
 } from '@phosphor-icons/react';
 import { DashboardChatView } from '@/components/chat/DashboardChatView';
 import { ConversationCard } from '@/components/inbox/ConversationCard';
-import { ConversationList } from '@/src/components/InboxDashboard/sub-components/ConversationList';
+import { ConversationList } from '@/components/InboxDashboard/sub-components/ConversationList';
 import type { Conversation as InboxConversation } from '@/src/components/InboxDashboard/types';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';

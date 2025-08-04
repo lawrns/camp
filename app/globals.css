@@ -24,18 +24,22 @@
     /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    height: 100%; /* Ensure html takes full height */
+    overscroll-behavior-y: auto; /* Allow natural scroll behavior */
   }
 
   /* App-specific body styles */
   body {
     margin: 0;
     padding: 0;
-    min-height: 100vh;
+    min-height: 100dvh; /* Use dynamic viewport height for mobile */
     display: flex;
     flex-direction: column;
     /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden; /* Only prevent horizontal scroll, don't clip */
+    overscroll-behavior-y: auto; /* Allow natural scroll behavior */
+    touch-action: auto; /* Allow touch scrolling */
   }
 }
 
@@ -114,7 +118,11 @@
     /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden; /* Only prevent horizontal scroll */
+    overflow-y: auto; /* Allow vertical scrolling */
     background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
+    min-height: 100dvh; /* Ensure full height */
+    overscroll-behavior-y: auto; /* Allow natural scroll behavior */
+    touch-action: auto; /* Allow touch scrolling */
   }
 
   /* Fix overflow issues for hero section elements */
@@ -231,9 +239,9 @@
       max-width: 280px !important;
     }
 
-    /* Prevent floating stats from causing overflow */
+    /* Allow proper scrolling */
     .grid.grid-cols-1 {
-      overflow: hidden;
+      overflow: visible;
     }
 
     /* Ensure proper spacing between grid items on mobile */
@@ -375,7 +383,7 @@ h1, h2, h3, h4, h5, h6, p, div, span {
   word-break: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Enhanced chat message overflow prevention */

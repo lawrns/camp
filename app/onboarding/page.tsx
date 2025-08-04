@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { User } from '@supabase/supabase-js';
@@ -16,11 +16,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
-  useEffect(() => {
-    checkAuthAndOnboarding();
-  }, []);
-
-  const checkAuthAndOnboarding = async () => {
+  const checkAuthAndOnboarding = useCallback(async () => {
     try {
       // Check if user is authenticated
       const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -69,7 +65,11 @@ export default function OnboardingPage() {
       setError('An unexpected error occurred');
       setIsLoading(false);
     }
-  };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    checkAuthAndOnboarding();
+  }, [checkAuthAndOnboarding]);
 
   const handleOnboardingComplete = (data: unknown) => {
     console.log('[Onboarding] Completed with data:', data);

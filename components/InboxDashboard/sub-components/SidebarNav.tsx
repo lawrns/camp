@@ -23,6 +23,11 @@ interface SidebarNavProps {
   priorityFilter: string;
   isLoading: boolean;
   className?: string;
+  // Bulk selection props
+  selectedConversations?: string[];
+  onToggleConversationSelection?: (conversationId: string) => void;
+  onSelectAllConversations?: () => void;
+  onClearSelection?: () => void;
 }
 
 /**
@@ -39,17 +44,53 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
   priorityFilter,
   isLoading,
   className = "",
+  selectedConversations = [],
+  onToggleConversationSelection,
+  onSelectAllConversations,
+  onClearSelection,
 }) => {
   return (
     <div className={`w-80 border-r border-gray-200 bg-white flex flex-col h-full ${className}`}>
       {/* Header section */}
       <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-gray-50">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Conversations
-        </h2>
-        <p className="text-sm text-gray-600 mt-1">
-          {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Conversations
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+              {selectedConversations.length > 0 && (
+                <span className="ml-2 text-blue-600 font-medium">
+                  ({selectedConversations.length} selected)
+                </span>
+              )}
+            </p>
+          </div>
+
+          {/* Bulk selection controls */}
+          {onToggleConversationSelection && (
+            <div className="flex items-center gap-2">
+              {selectedConversations.length > 0 ? (
+                <button
+                  onClick={onClearSelection}
+                  className="text-xs px-2 py-1 text-gray-600 hover:text-gray-800 border border-gray-300 rounded hover:bg-gray-100 transition-colors"
+                  title="Clear selection"
+                >
+                  Clear
+                </button>
+              ) : (
+                <button
+                  onClick={onSelectAllConversations}
+                  className="text-xs px-2 py-1 text-blue-600 hover:text-blue-800 border border-blue-300 rounded hover:bg-blue-50 transition-colors"
+                  title="Select all conversations"
+                >
+                  Select All
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Scrollable conversation list */}
@@ -78,6 +119,9 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
                 conversation={conversation}
                 isSelected={selectedConversationId === conversation.id}
                 onSelect={() => onSelectConversation(conversation)}
+                isBulkSelected={selectedConversations.includes(conversation.id)}
+                onToggleBulkSelection={onToggleConversationSelection ? () => onToggleConversationSelection(conversation.id) : undefined}
+                showBulkSelection={!!onToggleConversationSelection}
               />
             ))}
           </div>
@@ -91,9 +135,19 @@ interface ConversationCardProps {
   conversation: Conversation;
   isSelected: boolean;
   onSelect: () => void;
+  isBulkSelected?: boolean;
+  onToggleBulkSelection?: () => void;
+  showBulkSelection?: boolean;
 }
 
-function ConversationCard({ conversation, isSelected, onSelect }: ConversationCardProps) {
+function ConversationCard({
+  conversation,
+  isSelected,
+  onSelect,
+  isBulkSelected = false,
+  onToggleBulkSelection,
+  showBulkSelection = false
+}: ConversationCardProps) {
   // Generate unique avatar for this conversation using design system
   const avatarPath = getAvatarPath(conversation.customerEmail || conversation.id.toString(), 'customer');
 
@@ -138,6 +192,22 @@ function ConversationCard({ conversation, isSelected, onSelect }: ConversationCa
       onClick={onSelect}
     >
       <div className={`${layoutClasses.flexStart} ${layoutClasses.conversationGap}`}>
+        {/* Bulk selection checkbox */}
+        {showBulkSelection && (
+          <div className="flex-shrink-0">
+            <input
+              type="checkbox"
+              checked={isBulkSelected}
+              onChange={(e) => {
+                e.stopPropagation();
+                onToggleBulkSelection?.();
+              }}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              aria-label={`Select conversation with ${conversation.customerName}`}
+            />
+          </div>
+        )}
+
         {/* Circular Avatar with cartoon character fallbacks */}
         <div className="flex-shrink-0 relative">
           <div className={`w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center ${avatarRingClasses}`}>

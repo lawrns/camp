@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/auth/auth-store'
 
@@ -106,7 +106,7 @@ export default function AuthChainDebugPage() {
   useEffect(() => {
     // Auto-run diagnostics on mount
     runDiagnostics()
-  }, [])
+  }, [runDiagnostics])
 
   const decodeJWT = (token: string) => {
     try {

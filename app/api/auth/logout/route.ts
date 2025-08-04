@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { clearAuthCookies, withOptionalAuth } from "@/lib/middleware/auth";
 
 // User type from auth middleware (compatible with AuthContext)
-interface AuthUser {
-  id: string;
-  email: string;
-  organization_id: string;
-  role?: string;
-}
+// interface AuthUser {
+//   id: string;
+//   email: string;
+//   organization_id: string;
+//   role?: string;
+// }
 
 // Force dynamic rendering for API routes
 export const dynamic = "force-dynamic";

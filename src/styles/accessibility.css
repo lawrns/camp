@@ -161,7 +161,7 @@ a:focus-visible {
     animation-duration: 0.01ms;
     animation-iteration-count: 1;
     transition-duration: 0.01ms;
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
   }
 
   /* Remove transform animations */
@@ -390,8 +390,7 @@ a:focus-visible {
   backdrop-filter: blur(10px);
 
   /* Fix Safari border-radius with overflow */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  /* Removed hardware acceleration that can interfere with scrolling */
 }
 
 .browser-safari.is-mobile .widget-panel {
@@ -417,7 +416,7 @@ a:focus-visible {
 .browser-chrome .widget-panel,
 .browser-edge .widget-panel {
   /* Use hardware acceleration */
-  will-change: transform, opacity;
+  /* Removed will-change that can interfere with scrolling */
 }
 
 /* Mobile-specific optimizations */

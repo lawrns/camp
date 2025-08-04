@@ -1,0 +1,143 @@
+# Page snapshot
+
+```yaml
+- alert
+- navigation:
+  - link "Campfire logo Campfire":
+    - /url: /
+    - img "Campfire logo"
+    - text: Campfire
+  - link "Features":
+    - /url: /features
+  - link "Pricing":
+    - /url: /pricing
+  - link "Docs":
+    - /url: /docs
+  - link "Sign In":
+    - /url: /login
+  - link "Get Started":
+    - /url: /register
+- text: Trusted by 10,000+ companies
+- heading "Customer support that feels human" [level=1]
+- paragraph: AI that understands context and seamlessly hands over to humans when needed. Deliver instant, intelligent responses your customers love.
+- text: Instant responses 24/7 availability Human handoff Multi-language
+- link "Start Free Trial":
+  - /url: /demo
+- button "Watch Demo"
+- text: Campfire Support Hi! I need help with my billing I'd be happy to help with your billing! Let me look up your account... 🤝 Connecting you with Sarah... Hi! I'm Sarah from billing. I can see your account and I'm ready to help! 2.3s avg response 98% satisfaction
+- heading "Built for Modern Support Teams" [level=2]
+- paragraph: Everything you need, nothing you don't. Optimized for performance and user experience.
+- text: 2 min Response Time 98% Satisfaction 70% Cost Reduction 95% Resolution Rate
+- heading "AI-Powered Intelligence" [level=3]
+- paragraph: Human-like responses with context understanding
+- paragraph: 98% accuracy
+- heading "Seamless Handoffs" [level=3]
+- paragraph: AI to human transitions with full context
+- paragraph: Zero friction
+- heading "Enterprise Security" [level=3]
+- paragraph: SOC 2 compliant, GDPR ready
+- paragraph: 100% secure
+- heading "Lightning Fast" [level=3]
+- paragraph: Sub-2 second response times
+- paragraph: 99.9% uptime
+- heading "Team Collaboration" [level=3]
+- paragraph: Real-time support team tools
+- paragraph: 10x efficiency
+- heading "24/7 Availability" [level=3]
+- paragraph: Always-on customer support
+- paragraph: Round the clock
+- paragraph: "\"Response time dropped from 4 hours to 2 minutes\""
+- text: SC Sarah Chen Head of Support, TechFlow
+- paragraph: "\"AI is indistinguishable from human agents\""
+- text: MR Marcus Rodriguez Customer Success, DataSync SOC 2 Compliant GDPR Ready 99.9% Uptime SOC 2 Compliant GDPR Ready 99.9% Uptime
+- heading "Transform Your Customer Service Today" [level=2]
+- paragraph: Join thousands of companies using Campfire to deliver exceptional support experiences.
+- link "Start Free Trial":
+  - /url: /register
+- link "Book a Live Demo":
+  - /url: /demo
+- text: No credit card required 14-day free trial Cancel anytime Full feature access
+- paragraph: Trusted by 10,000+ companies • 99.9% uptime • SOC 2 compliant
+- contentinfo:
+  - text: Campfire
+  - paragraph: Transform your customer service with AI-powered support that feels human. Built for scale, designed for humans.
+  - link:
+    - /url: "#"
+  - link:
+    - /url: "#"
+  - link:
+    - /url: "#"
+  - link:
+    - /url: "#"
+  - heading "Product" [level=3]
+  - list:
+    - listitem:
+      - link "Features":
+        - /url: /features
+    - listitem:
+      - link "Pricing":
+        - /url: /pricing
+    - listitem:
+      - link "Integrations":
+        - /url: /integrations
+    - listitem:
+      - link "API":
+        - /url: /api
+    - listitem:
+      - link "Widget":
+        - /url: /widget
+    - listitem:
+      - link "Live Demo":
+        - /url: /demo
+  - heading "Company" [level=3]
+  - list:
+    - listitem:
+      - link "About Us":
+        - /url: /about
+    - listitem:
+      - link "Careers":
+        - /url: /careers
+    - listitem:
+      - link "Blog":
+        - /url: /blog
+    - listitem:
+      - link "Press":
+        - /url: /press
+    - listitem:
+      - link "Partners":
+        - /url: /partners
+    - listitem:
+      - link "Contact":
+        - /url: /contact
+  - heading "Support" [level=3]
+  - list:
+    - listitem:
+      - link "Help Center":
+        - /url: /help
+    - listitem:
+      - link "Documentation":
+        - /url: /docs
+    - listitem:
+      - link "Community":
+        - /url: /community
+    - listitem:
+      - link "System Status":
+        - /url: /status
+    - listitem:
+      - link "Security":
+        - /url: /security
+    - listitem:
+      - link "Privacy":
+        - /url: /privacy
+  - text: Email support@campfire.com Phone +1 (555) 123-4567 Address San Francisco, CA © 2025 Campfire. All rights reserved.
+  - link "Terms of Service":
+    - /url: /terms
+  - link "Privacy Policy":
+    - /url: /privacy
+  - link "Cookie Policy":
+    - /url: /cookies
+  - link "Sitemap":
+    - /url: /sitemap
+- button "Open chat support":
+  - img
+```

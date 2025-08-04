@@ -43,34 +43,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const organizationId = user?.organizationId;
   const userId = user?.id;
 
-  // Early return if auth is loading or missing required data
-  if (authLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-ds-full border-b-2 border-[var(--fl-color-brand)]"></div>
-          <p className="text-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Check for valid organizationId - reject empty strings and undefined
-  if (!organizationId || organizationId.trim() === "") {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
-        <div className="text-center">
-          <p className="mb-4 text-red-600">No organization context</p>
-          <p className="text-foreground">Unable to determine organization ID. Please contact your administrator.</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Debug: organizationId = "{organizationId || 'undefined'}"
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // UI state
+  // UI state - ALL HOOKS MUST BE DECLARED BEFORE ANY CONDITIONAL LOGIC
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [showCustomerDetails, setShowCustomerDetails] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -133,6 +106,33 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     organizationId
   );
 
+  // Early return if auth is loading or missing required data - MOVED AFTER ALL HOOKS
+  if (authLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-ds-full border-b-2 border-[var(--fl-color-brand)]"></div>
+          <p className="text-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check for valid organizationId - reject empty strings and undefined
+  if (!organizationId || organizationId.trim() === "") {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
+        <div className="text-center">
+          <p className="mb-4 text-red-600">No organization context</p>
+          <p className="text-foreground">Unable to determine organization ID. Please contact your administrator.</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Debug: organizationId = "{organizationId || 'undefined'}"
+          </p>
+        </div>
+      </div>
+    );
+  }
+
 
   const onlineUsers: unknown[] = []; // TODO: Implement presence  const loadConversations = () => { }; // TODO: Implement
   const loadMessages = () => { }; // TODO: Implement
@@ -145,6 +145,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     reconnectionCount: 0
   };
 
+  // Send message function using proper API endpoint for bidirectional communication
   // Send message function using proper API endpoint for bidirectional communication
   const sendMessageHP = useCallback(
     async (convId: string, content: string, senderType: "customer" | "agent" = "agent") => {
@@ -173,7 +174,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         setMessages(prev => [...prev, optimisticMessage]);
 
         // Use proper API endpoint for bidirectional communication
-
         const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
           method: 'POST',
           headers: {
@@ -193,8 +193,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         }
 
         const result = await response.json();
-
-        // Response already parsed above, use existing result variable
         const data = result.message;
 
         if (!data) {
@@ -350,7 +348,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     } finally {
       setIsSending(false);
     }
-  }, [newMessage, selectedConversation, isSending, user, attachments, handleStopTyping]);
+  }, [newMessage, selectedConversation, isSending, organizationId, attachments, handleStopTyping, sendMessageHP]);
 
   // File handling
   const onFileInput = useCallback(

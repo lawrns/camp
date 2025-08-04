@@ -96,36 +96,112 @@ export const colors = {
   "surface-secondary": "bg-gray-50",
   "surface-tertiary": "bg-gray-100",
   "surface-inverse": "bg-gray-900",
-  
+
   // Text colors
   "text-primary": "text-gray-900",
   "text-secondary": "text-gray-700",
   "text-tertiary": "text-gray-500",
   "text-inverse": "text-white",
   "text-disabled": "text-gray-400",
-  
+
   // Border colors
   "border-primary": "border-gray-200",
   "border-secondary": "border-gray-300",
   "border-focus": "border-blue-500",
   "border-error": "border-red-500",
   "border-success": "border-green-500",
-  
+
   // Status colors (using accessibility-compliant combinations)
   "success-subtle": "bg-green-50 text-green-900 border-green-200",
   "success-emphasis": "bg-green-600 text-white border-green-600",
-  
+
   "warning-subtle": "bg-amber-50 text-amber-900 border-amber-200",
   "warning-emphasis": "bg-amber-600 text-white border-amber-600",
-  
+
   "error-subtle": "bg-red-50 text-red-900 border-red-200",
   "error-emphasis": "bg-red-600 text-white border-red-600",
-  
+
   "info-subtle": "bg-blue-50 text-blue-900 border-blue-200",
   "info-emphasis": "bg-blue-600 text-white border-blue-600",
-  
+
   "neutral-subtle": "bg-gray-50 text-gray-900 border-gray-200",
   "neutral-emphasis": "bg-gray-600 text-white border-gray-600",
+} as const;
+
+// ===== INBOX-SPECIFIC DESIGN TOKENS =====
+
+export const INBOX_DESIGN_TOKENS = {
+  spacing: {
+    xs: '0.25rem',    // 4px
+    sm: '0.5rem',     // 8px
+    md: '0.75rem',    // 12px
+    lg: '1rem',       // 16px
+    xl: '1.5rem',     // 24px
+    '2xl': '2rem',    // 32px
+  },
+  colors: {
+    primary: '#2563eb',
+    primaryHover: '#1d4ed8',
+    gray: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    },
+    success: '#22c55e',
+    warning: '#facc15',
+    error: '#ef4444',
+  },
+  borderRadius: {
+    sm: '0.375rem',   // 6px
+    md: '0.5rem',     // 8px
+    lg: '0.75rem',    // 12px
+    xl: '1rem',       // 16px
+  },
+  typography: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: {
+      xs: '0.75rem',    // 12px
+      sm: '0.875rem',   // 14px
+      base: '1rem',     // 16px
+      lg: '1.125rem',   // 18px
+      xl: '1.25rem',    // 20px
+    },
+    lineHeight: {
+      tight: '1.25',
+      normal: '1.5',
+      relaxed: '1.625',
+    },
+    fontWeight: {
+      normal: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+    },
+  },
+  shadows: {
+    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+  },
+} as const;
+
+// ===== DARK MODE TOKENS =====
+
+export const darkModeTokens = {
+  surface: "#1F2937",
+  "text.default": "#F3F4F6",
+  border: "#374151",
+  "text-muted": "#9CA3AF",
+  "surface-hover": "#374151",
+  primary: "#3B82F6",
+  "primary-hover": "#2563EB",
 } as const;
 
 // ===== COMPONENT TOKENS =====
@@ -240,6 +316,34 @@ export function getResponsiveToken(
 }
 
 /**
+ * Apply dark mode tokens with CSS custom properties
+ */
+export function applyDarkModeTokens(): Record<string, string> {
+  return Object.entries(darkModeTokens).reduce((acc, [key, value]) => {
+    acc[`--${key}`] = value;
+    return acc;
+  }, {} as Record<string, string>);
+}
+
+/**
+ * Get inbox design token value
+ */
+export function getInboxToken(path: string): string {
+  const keys = path.split('.');
+  let value: unknown = INBOX_DESIGN_TOKENS;
+
+  for (const key of keys) {
+    if (value && typeof value === 'object' && key in value) {
+      value = (value as Record<string, unknown>)[key];
+    } else {
+      return path; // Return original path if not found
+    }
+  }
+
+  return typeof value === 'string' ? value : path;
+}
+
+/**
  * All design tokens grouped by category
  */
 export const tokens = {
@@ -251,6 +355,8 @@ export const tokens = {
   components,
   layout,
   animations,
+  inbox: INBOX_DESIGN_TOKENS,
+  darkMode: darkModeTokens,
 } as const;
 
 /**

@@ -20,29 +20,31 @@ import { InboxHeader } from "@/components/inbox/InboxHeader";
 interface InboxPageProps {}
 
 export default React.memo(function InboxPage(): JSX.Element {
+  // State for connecting InboxHeader to InboxDashboard
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [showAdvancedFilters, setShowAdvancedFilters] = React.useState(false);
+  const [showNotifications, setShowNotifications] = React.useState(false);
+  const [showShortcuts, setShowShortcuts] = React.useState(false);
+  const [showSettings, setShowSettings] = React.useState(false);
+
   const handleSearch = (query: string) => {
-    console.log("Search query:", query);
-    // TODO: Implement search functionality
+    setSearchQuery(query);
   };
 
   const handleFilter = () => {
-    console.log("Filter clicked");
-    // TODO: Implement filter functionality
+    setShowAdvancedFilters(true);
   };
 
   const handleNotifications = () => {
-    console.log("Notifications clicked");
-    // TODO: Implement notifications functionality
+    setShowNotifications(true);
   };
 
   const handleShortcuts = () => {
-    console.log("Shortcuts clicked");
-    // TODO: Implement shortcuts functionality
+    setShowShortcuts(true);
   };
 
   const handleSettings = () => {
-    console.log("Settings clicked");
-    // TODO: Implement settings functionality
+    setShowSettings(true);
   };
 
   return (
@@ -62,6 +64,11 @@ export default React.memo(function InboxPage(): JSX.Element {
           <Suspense fallback={<div className="flex items-center justify-center h-full">Loading inbox...</div>}>
             <InboxDashboard
               className="h-full w-full"
+              initialSearchQuery={searchQuery}
+              showAdvancedFilters={showAdvancedFilters}
+              setShowAdvancedFilters={setShowAdvancedFilters}
+              showShortcuts={showShortcuts}
+              setShowShortcuts={setShowShortcuts}
             />
           </Suspense>
         </div>

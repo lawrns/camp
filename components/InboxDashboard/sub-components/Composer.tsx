@@ -1,22 +1,14 @@
 // Composer component for message input
 
-import { 
-  Paperclip, 
-  Send, 
-  Smile, 
-  Sparkles, 
-  FileText,
-  AtSign,
+import {
+  Paperclip,
+  Send,
+  Smile,
   Image,
-  Heart,
-  Star,
-  HelpCircle,
-  Bookmark,
-  Clipboard,
-  Grid,
-  MessageSquare,
   Forward,
-  Edit3
+  Edit3,
+  MessageSquare,
+  HelpCircle
 } from "lucide-react";
 import * as React from "react";
 import { useRef, memo, useState, useCallback, useEffect } from "react";
@@ -335,139 +327,59 @@ export const Composer: React.FC<ComposerProps> = memo(({
             </div>
           )}
 
-          {/* Enhanced icon row */}
-          <div className="flex items-center gap-2 mb-3" data-testid="composer-icon-row">
-            <button 
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Document"
-              data-testid="composer-icon-document"
-            >
-              <FileText className="h-4 w-4" />
-            </button>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Bookmark"
-              data-testid="composer-icon-bookmark"
-            >
-              <Bookmark className="h-4 w-4" />
-            </button>
-            
-            <button 
-              type="button"
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Emoji"
-              data-testid="composer-icon-emoji"
-            >
-              <Smile className="h-4 w-4" />
-            </button>
-            
-            <span className="text-[var(--ds-font-size-sm)] text-[var(--ds-color-text-muted)] px-2">GIF</span>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Image"
-              data-testid="composer-icon-image"
-            >
-              <Image className="h-4 w-4" />
-            </button>
-            
-            <label className="cursor-pointer p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors" title="Attachment">
-              <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileInput} />
-              <Paperclip className="h-4 w-4" />
-            </label>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Clipboard"
-              data-testid="composer-icon-clipboard"
-            >
-              <Clipboard className="h-4 w-4" />
-            </button>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] hover:bg-[var(--ds-color-surface-hover)] rounded-md transition-colors"
-              title="Grid"
-              data-testid="composer-icon-grid"
-            >
-              <Grid className="h-4 w-4" />
-            </button>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-primary)] hover:text-[var(--ds-color-primary-hover)] hover:bg-[var(--ds-color-primary-alpha)] rounded-md transition-colors"
-              title="Star"
-              data-testid="composer-icon-star"
-            >
-              <Star className="h-4 w-4" />
-            </button>
-            
-            <button 
-              className="p-2 text-[var(--ds-color-error)] hover:text-[var(--ds-color-error)] hover:bg-[var(--ds-color-error-subtle)] rounded-md transition-colors"
-              title="Heart"
-              data-testid="composer-icon-heart"
-            >
-              <Heart className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="flex items-end gap-3" data-testid="composer-input-row">
-            {/* Left side actions */}
-            <div className="flex items-center gap-2" data-testid="composer-actions-left">
+          {/* Clean single toolbar - Intercom style */}
+          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3" data-testid="composer-toolbar">
+            {/* Left: Core actions only */}
+            <div className="flex items-center gap-2" role="toolbar" aria-label="Message formatting tools" data-testid="composer-actions-left">
               {/* File Attachment */}
-              <label className="cursor-pointer" aria-label="Attach files" data-testid="composer-attachment-button">
-                <input ref={fileInputRef} type="file" multiple className="hidden" onChange={handleFileInput} data-testid="composer-file-input" />
-                <div className="hover:bg-[var(--ds-color-surface-hover)] hover:text-[var(--ds-color-text-primary)] rounded-ds-lg text-[var(--ds-color-text-muted)] transition-all flex items-center justify-center w-12 h-12">
+              <label className="cursor-pointer" data-testid="composer-attachment-button">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  className="sr-only"
+                  onChange={handleFileInput}
+                  aria-label="Attach files"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx"
+                  data-testid="composer-file-input"
+                />
+                <button
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  tabIndex={0}
+                  aria-label="Attach files"
+                >
                   <Paperclip className="h-5 w-5" data-testid="composer-attachment-icon" />
-                </div>
+                </button>
               </label>
 
-              {/* Templates */}
+              {/* Image Upload */}
               <button
-                onClick={() => setShowTemplates(!showTemplates)}
-                className={`rounded-ds-lg transition-colors flex items-center justify-center w-12 h-12 ${
-                  showTemplates ? "bg-[var(--ds-color-primary-alpha)] text-[var(--ds-color-primary)]" : "text-[var(--ds-color-text-muted)] hover:bg-[var(--ds-color-surface-hover)] hover:text-[var(--ds-color-text-primary)]"
-                }`}
-                title="Quick templates"
-                aria-label="Quick templates"
-                data-testid="composer-templates-button"
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                title="Upload image"
+                aria-label="Upload image"
+                tabIndex={0}
+                data-testid="composer-image-button"
               >
-                <FileText className="h-5 w-5" data-testid="composer-templates-icon" />
+                <Image className="h-5 w-5" />
               </button>
 
-              {/* AI Suggestions */}
+              {/* Emoji Picker */}
               <button
-                onClick={generateAISuggestions}
-                className={`rounded-ds-lg transition-colors flex items-center justify-center w-12 h-12 ${
-                  showAISuggestions
-                    ? "bg-[var(--ds-color-primary-alpha)] text-[var(--ds-color-primary)]"
-                    : "text-[var(--ds-color-text-muted)] hover:bg-[var(--ds-color-surface-hover)] hover:text-[var(--ds-color-text-primary)]"
-                }`}
-                title="AI suggestions"
-                aria-label="Generate AI suggestions"
-                data-testid="composer-ai-suggestions-button"
+                type="button"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                title="Add emoji"
+                aria-label={showEmojiPicker ? "Close emoji picker" : "Open emoji picker"}
+                aria-expanded={showEmojiPicker}
+                tabIndex={0}
+                data-testid="composer-emoji-button"
               >
-                <Sparkles className="h-5 w-5" data-testid="composer-ai-suggestions-icon" />
-              </button>
-
-              {/* Mentions Button */}
-              <button
-                onClick={() => setShowMentions(!showMentions)}
-                className={`rounded-ds-lg transition-colors flex items-center justify-center w-12 h-12 ${
-                  showMentions
-                    ? "bg-[var(--ds-color-primary-alpha)] text-[var(--ds-color-primary)]"
-                    : "text-[var(--ds-color-text-muted)] hover:bg-[var(--ds-color-surface-hover)] hover:text-[var(--ds-color-text-primary)]"
-                }`}
-                title="Mention team members"
-                aria-label="Mention team members"
-                data-testid="composer-mentions-button"
-              >
-                <AtSign className="h-5 w-5" data-testid="composer-mentions-icon" />
+                <Smile className="h-5 w-5" />
               </button>
             </div>
 
-            {/* Message input - Increased size with design system tokens */}
-            <div className="relative flex-1">
+            {/* Message input area */}
+            <div className="flex-1 mx-4" data-testid="composer-input-container">
               <textarea
                 ref={textareaRef}
                 value={newMessage}
@@ -475,54 +387,49 @@ export const Composer: React.FC<ComposerProps> = memo(({
                 onBlur={stopTyping}
                 onKeyDown={handleKeyDown}
                 placeholder={getPlaceholder()}
-                className={`w-full resize-none rounded-ds-xl border transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-[var(--ds-color-primary)] ${
-                  isOverLimit ? "border-[var(--ds-color-error)]" : "border-[var(--ds-color-border)]"
+                className={`w-full resize-none rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                  isOverLimit ? "border-red-500" : ""
                 }`}
                 style={{
-                  maxHeight: '200px', // Increased from 120px
-                  minHeight: '80px',  // Increased from 48px
-                  padding: '16px',    // Increased padding
-                  paddingRight: '48px',
-                  fontSize: 'var(--ds-font-size-sm)', // Use design system font size
-                  lineHeight: 'var(--ds-line-height-normal)'
+                  maxHeight: '120px',
+                  minHeight: '44px',
+                  fontSize: '14px',
+                  lineHeight: '20px'
                 }}
-                rows={3} // Increased from 1
+                rows={1}
                 maxLength={maxCharacters}
                 disabled={isSending || isSubmitting}
+                aria-label="Type your message"
+                aria-describedby={isOverLimit ? "character-limit-error" : undefined}
+                aria-invalid={isOverLimit}
                 data-testid="composer-textarea"
               />
-
-              {/* Emoji picker button */}
-              <button
-                type="button"
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="hover:text-foreground absolute top-1/2 -translate-y-1/2 transform text-[var(--ds-color-text-muted)] transition-colors flex items-center justify-center rounded-ds-lg w-12 h-12"
-                style={{
-                  right: '12px'
-                }}
-                aria-label="Add emoji"
-                data-testid="composer-emoji-button"
-              >
-                <Smile className="h-5 w-5" />
-              </button>
             </div>
 
-            {/* Send button */}
+            {/* Right: Send button */}
             <button
               onClick={handleSubmit}
               disabled={!newMessage.trim() || isSending || isSubmitting || isOverLimit}
-              className={`rounded-ds-xl transition-all flex items-center justify-center w-12 h-12 ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none ${
                 newMessage.trim() && !isSending && !isSubmitting && !isOverLimit
-                  ? "bg-[var(--ds-color-primary)] text-[var(--ds-color-text-inverse)] hover:bg-[var(--ds-color-primary-hover)]"
-                  : "cursor-not-allowed bg-[var(--ds-color-surface-hover)] text-[var(--ds-color-text-muted)]"
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
               aria-label={getSendButtonText()}
+              aria-describedby={isOverLimit ? "character-limit-error" : undefined}
+              tabIndex={0}
               data-testid="composer-send-button"
             >
               {isSending || isSubmitting ? (
-                <div className="h-5 w-5 animate-spin rounded-ds-full border-b-2 border-[var(--ds-color-text-inverse)]"></div>
+                <>
+                  <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-white" aria-hidden="true"></div>
+                  <span className="sr-only">Sending message...</span>
+                </>
               ) : (
-                <Send className="h-5 w-5" />
+                <span className="flex items-center gap-2">
+                  Send
+                  <Send className="h-4 w-4" aria-hidden="true" />
+                </span>
               )}
             </button>
           </div>

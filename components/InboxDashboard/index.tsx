@@ -52,13 +52,25 @@ import {
 
 interface InboxDashboardProps {
   className?: string;
+  initialSearchQuery?: string;
+  showAdvancedFilters?: boolean;
+  setShowAdvancedFilters?: (show: boolean) => void;
+  showShortcuts?: boolean;
+  setShowShortcuts?: (show: boolean) => void;
 }
 
 /**
  * Main InboxDashboard component - now much smaller and focused on orchestration
  * Performance optimized with memoization and optimized state management
  */
-export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className = "" }) => {
+export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({
+  className = "",
+  initialSearchQuery = "",
+  showAdvancedFilters: propShowAdvancedFilters,
+  setShowAdvancedFilters: propSetShowAdvancedFilters,
+  showShortcuts: propShowShortcuts,
+  setShowShortcuts: propSetShowShortcuts
+}) => {
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
@@ -151,6 +163,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     organizationId
   );
 
+  // Sync initial search query from props
+  React.useEffect(() => {
+    if (initialSearchQuery && initialSearchQuery !== searchQuery) {
+      setSearchQuery(initialSearchQuery);
+    }
+  }, [initialSearchQuery, searchQuery, setSearchQuery]);
+
+  // Override state setters with props when provided
+  const finalSetShowAdvancedFilters = propSetShowAdvancedFilters || setShowAdvancedFilters;
+  const finalSetShowShortcuts = propSetShowShortcuts || setShowShortcuts;
+
   // Debug logging in development only
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
@@ -159,9 +182,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         selectedConversation: selectedConversation?.id,
         messagesCount: messages?.length || 0,
         messagesLoading,
+        searchQuery,
+        showAdvancedFilters,
+        showShortcuts,
       });
     }
-  }, [conversations, selectedConversation, messages, messagesLoading]);
+  }, [conversations, selectedConversation, messages, messagesLoading, searchQuery, showAdvancedFilters, showShortcuts]);
 
   // Performance metrics using real stats
   const performanceMetrics = useMemo(() => ({
@@ -169,29 +195,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     memoryUsage: 0, // Memory tracking not critical for MVP
     cpuUsage: 0, // CPU usage tracking requires Web Workers - not critical for MVP
   }), [stats?.averageResponseTime]);
-
-  // Early return if auth is loading or missing required data
-  if (authLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-ds-full border-b-2 border-[var(--ds-color-primary-500)]"></div>
-          <p className="text-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user || !organizationId) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
-        <div className="text-center">
-          <p className="mb-4 text-red-600">Authentication required</p>
-          <p className="text-foreground">Please log in to access the inbox</p>
-        </div>
-      </div>
-    );
-  }
 
   // PHASE 2: Improved error handling with proper cleanup
   const sendMessageHP = useCallback(
@@ -447,6 +450,20 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     clearAllFilters();
   }, [clearAllFilters]);
 
+  // Bulk selection handlers
+  const handleToggleConversationSelection = useCallback((conversationId: string) => {
+    setSelectedConversations(prev =>
+      prev.includes(conversationId)
+        ? prev.filter(id => id !== conversationId)
+        : [...prev, conversationId]
+    );
+  }, [setSelectedConversations]);
+
+  const handleSelectAllConversations = useCallback(() => {
+    const allIds = filteredConversations.map(conv => conv.id);
+    setSelectedConversations(allIds);
+  }, [filteredConversations, setSelectedConversations]);
+
   // Memoized callback for clearing bulk selection
   const handleClearBulkSelection = useCallback(() => {
     clearBulkSelection();
@@ -619,6 +636,29 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     handleSendMessage,
   ]);
 
+  // Early return conditions - MOVED AFTER ALL HOOKS to comply with Rules of Hooks
+  if (authLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-ds-full border-b-2 border-[var(--ds-color-primary-500)]"></div>
+          <p className="text-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || !organizationId) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[var(--fl-color-background-subtle)]">
+        <div className="text-center">
+          <p className="mb-4 text-red-600">Authentication required</p>
+          <p className="text-foreground">Please log in to access the inbox</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`flex h-screen overflow-hidden bg-gray-50 ${className}`} data-testid="inbox-dashboard">
       {/* Add wrapper with padding */}
@@ -632,8 +672,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           setStatusFilter={setStatusFilter}
           priorityFilter={priorityFilter}
           setPriorityFilter={setPriorityFilter}
-          setShowShortcuts={setShowShortcuts}
-          setShowAdvancedFilters={setShowAdvancedFilters}
+          setShowShortcuts={finalSetShowShortcuts}
+          setShowAdvancedFilters={finalSetShowAdvancedFilters}
           searchInputRef={searchInputRef}
           performanceMetrics={performanceMetrics}
           connectionStatus={connectionStatus as "error" | "connecting" | "connected" | "disconnected"}
@@ -660,6 +700,10 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             statusFilter={statusFilter}
             priorityFilter={priorityFilter}
             isLoading={loadingConversations}
+            selectedConversations={selectedConversations}
+            onToggleConversationSelection={handleToggleConversationSelection}
+            onSelectAllConversations={handleSelectAllConversations}
+            onClearSelection={handleClearBulkSelection}
           />
 
           {/* Chat Pane */}

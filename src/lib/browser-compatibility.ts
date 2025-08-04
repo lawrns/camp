@@ -191,7 +191,7 @@ export async function loadPolyfills(browserInfo: BrowserInfo): Promise<void> {
   if (!browserInfo.supportsIntersectionObserver) {
     polyfillPromises.push(
       import("intersection-observer").catch((error) => {
-
+        console.warn('Failed to load intersection-observer polyfill:', error);
       })
     );
   }
@@ -200,7 +200,7 @@ export async function loadPolyfills(browserInfo: BrowserInfo): Promise<void> {
   if (!browserInfo.supportsResizeObserver) {
     polyfillPromises.push(
       import("resize-observer-polyfill").catch((error) => {
-
+        console.warn('Failed to load resize-observer-polyfill:', error);
       })
     );
   }
@@ -209,10 +209,10 @@ export async function loadPolyfills(browserInfo: BrowserInfo): Promise<void> {
   if (!browserInfo.supportsES6) {
     polyfillPromises.push(
       import("core-js/stable").catch((error) => {
-
+        console.warn('Failed to load core-js polyfill:', error);
       }),
       import("regenerator-runtime/runtime").catch((error) => {
-
+        console.warn('Failed to load regenerator-runtime polyfill:', error);
       })
     );
   }
@@ -226,8 +226,8 @@ export function applyCSSFallbacks(browserInfo: BrowserInfo): void {
   const root = document.documentElement;
 
   // Add browser-specific classes
-  root.classList.add(`browser-${browserInfo.name.toLowerCase()}`);
-  root.classList.add(`browser-version-${browserInfo.version}`);
+  root.classList.add(`browser-${(browserInfo.name || 'unknown').toLowerCase()}`);
+  root.classList.add(`browser-version-${(browserInfo.version || '0').toString()}`);
 
   if (browserInfo.isMobile) {
     root.classList.add("is-mobile");
@@ -268,9 +268,6 @@ export function setupPerformanceMonitoring(browserInfo: BrowserInfo): void {
 }
 
 function setupSafariOptimizations(): void {
-  // Disable momentum scrolling issues
-  document.addEventListener("touchstart", () => {}, { passive: true });
-
   // Handle viewport height issues on iOS Safari
   const setVH = () => {
     const vh = window.innerHeight * 0.01;
@@ -284,9 +281,9 @@ function setupSafariOptimizations(): void {
 
 function setupFirefoxOptimizations(): void {
   // Firefox-specific performance optimizations
-  // Disable smooth scrolling for better performance
+  // Enable smooth scrolling for better user experience
   if (document.documentElement.style.scrollBehavior !== undefined) {
-    document.documentElement.style.scrollBehavior = "auto";
+    document.documentElement.style.scrollBehavior = "smooth";
   }
 }
 
@@ -303,10 +300,8 @@ function setupChromeOptimizations(): void {
 // Network adaptation strategies
 export function adaptToNetwork(networkInfo: NetworkInfo): void {
   if (networkInfo.isSlowConnection) {
-    // Reduce update frequency
-    document.documentElement.style.setProperty("--animation-duration", "0ms");
-
-    // Disable non-critical features
+    // Keep animations for better UX, just reduce their duration slightly
+    document.documentElement.style.setProperty("--animation-duration", "150ms");
     document.documentElement.classList.add("slow-connection");
   }
 
@@ -348,20 +343,20 @@ export async function initializeBrowserCompatibility(): Promise<BrowserInfo> {
   const optimizations = getMobileOptimizations(browserInfo, networkInfo);
 
   // Store browser info globally for other components
-  (window as unknown).__BROWSER_INFO__ = browserInfo;
-  (window as unknown).__NETWORK_INFO__ = networkInfo;
-  (window as unknown).__OPTIMIZATIONS__ = optimizations;
+  (window as any).__BROWSER_INFO__ = browserInfo;
+  (window as any).__NETWORK_INFO__ = networkInfo;
+  (window as any).__OPTIMIZATIONS__ = optimizations;
 
   return browserInfo;
 }
 
 // Utility to check if a feature is supported
 export function isFeatureSupported(feature: keyof BrowserInfo): boolean {
-  const browserInfo = (window as unknown).__BROWSER_INFO__ || detectBrowser();
+  const browserInfo = (window as any).__BROWSER_INFO__ || detectBrowser();
   return browserInfo[feature] as boolean;
 }
 
 // Utility to get current optimizations
 export function getCurrentOptimizations() {
-  return (window as unknown).__OPTIMIZATIONS__ || {};
+  return (window as any).__OPTIMIZATIONS__ || {};
 }

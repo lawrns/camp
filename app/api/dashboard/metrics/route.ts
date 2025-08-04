@@ -1,24 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-interface Message {
-  createdAt: string;
-  senderType: string;
-}
+// interface Message {
+//   createdAt: string;
+//   senderType: string;
+// }
 
-interface Conversation {
-  id: string;
-  status: string;
-  aiHandoverActive?: boolean;
-}
+// interface Conversation {
+//   id: string;
+//   status: string;
+//   aiHandoverActive?: boolean;
+// }
 
-interface SatisfactionRecord {
-  rating: number;
-}
+// interface SatisfactionRecord {
+//   rating: number;
+// }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const supabaseClient = supabase.server(cookieStore);

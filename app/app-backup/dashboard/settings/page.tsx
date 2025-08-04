@@ -19,6 +19,13 @@ export default function SettingsPage() {
   const { user } = useAuth();
   const organizationId = user?.organizationId;
 
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL LOGIC - Rules of Hooks
+  const { settings, isLoading, error } = useOrganizationSettings({
+    organizationId,
+    autoLoad: true,
+  });
+
+  // Early return AFTER all hooks are declared
   if (!organizationId) {
     return (
       <div className="container mx-auto flex items-center justify-center spacing-6">
@@ -29,11 +36,6 @@ export default function SettingsPage() {
       </div>
     );
   }
-
-  const { settings, isLoading, error } = useOrganizationSettings({
-    organizationId,
-    autoLoad: true,
-  });
 
   return (
     <OptimizedMotion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

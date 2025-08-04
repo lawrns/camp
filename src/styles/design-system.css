@@ -574,7 +574,7 @@ a:focus-visible {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-        scroll-behavior: smooth !important;
+        scroll-behavior: smooth;
     }
 }
 
@@ -793,10 +793,10 @@ button:hover,
 
 /* ===== PERFORMANCE OPTIMIZATIONS ===== */
 
-/* Hardware acceleration for animations */
+/* Removed hardware acceleration that can interfere with scrolling */
 .animate-transform {
-    transform: translateZ(0);
-    will-change: transform;
+    /* transform: translateZ(0); */
+    /* will-change: transform; */
 }
 
 /* Optimized transitions */
@@ -905,7 +905,7 @@ button:hover,
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     background: var(--ds-color-background);
 }
 

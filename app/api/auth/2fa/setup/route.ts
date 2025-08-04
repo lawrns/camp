@@ -102,7 +102,7 @@ export const GET = withTenantGuard(async (_req: NextRequest, { user: _user, orga
       manualEntryKey: secret.base32,
       expiresAt: new Date(Date.now() + 600000),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });
@@ -225,13 +225,13 @@ export const POST = withTenantGuard(async (req: NextRequest, { user: _user, orga
           expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
         }))
       );
-    } catch (_error) {}
+    } catch {}
 
     return NextResponse.json({
       message: "Two-factor authentication enabled successfully",
       recoveryCodes,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });
@@ -326,12 +326,12 @@ export const DELETE = withTenantGuard(
       try {
         const supabaseAdmin = supabase.admin();
         await supabaseAdmin.from("two_factor_codes").delete().eq("user_id", user.id);
-      } catch (_error) {}
+      } catch {}
 
       return NextResponse.json({
         message: "Two-factor authentication disabled successfully",
       });
-    } catch (_error) {
+    } catch {
       return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
   }

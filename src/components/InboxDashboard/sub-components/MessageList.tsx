@@ -44,7 +44,7 @@ export const MessageList: React.FC<MessageListProps> = ({
           if (listRef.current) {
             listRef.current.scrollToItem(messages.length - 1, "end");
           } else {
-            messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
           }
           setIsInitialLoad(false);
         }, 100);
@@ -142,9 +142,10 @@ export const MessageList: React.FC<MessageListProps> = ({
   // Row renderer for virtualization
   const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
     const message = messages[index];
+    if (!message) return null;
     return (
       <MessageRow
-        key={message.id}
+        key={message.id || index}
         message={message}
         selectedConversation={selectedConversation}
         hoveredMessage={hoveredMessage}
