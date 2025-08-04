@@ -289,7 +289,7 @@ async function checkMFAEnabled(): Promise<boolean> {
   return false; // Would need to check Supabase auth configuration
 }
 
-async function checkRLSPolicies(supabase: any): Promise<boolean> {
+async function checkRLSPolicies(supabase: unknown): Promise<boolean> {
   try {
     // Check if RLS is enabled on critical tables
     const { data, error } = await supabase
@@ -309,12 +309,12 @@ async function checkAPIKeyValidation(): Promise<boolean> {
   return true; // We implemented this in our endpoints
 }
 
-async function checkOrganizationIsolation(supabase: any, organizationId?: string): Promise<boolean> {
+async function checkOrganizationIsolation(supabase: unknown, organizationId?: string): Promise<boolean> {
   // Check if organization data is properly isolated
   return true; // Our RLS policies handle this
 }
 
-async function checkPIIHandling(supabase: any): Promise<boolean> {
+async function checkPIIHandling(supabase: unknown): Promise<boolean> {
   // Check if PII data is properly handled
   return true; // Supabase provides encryption
 }
@@ -343,7 +343,7 @@ function checkEnvironmentSecurity(): boolean {
   });
 }
 
-async function checkDatabaseSecurity(supabase: any): Promise<boolean> {
+async function checkDatabaseSecurity(supabase: unknown): Promise<boolean> {
   // Check database security configuration
   return true; // Supabase handles database security
 }

@@ -139,8 +139,8 @@ export const getGuideSessionsForMailbox = async (
     const totalCount = totalResult[0]?.count || 0;
 
     const sessions = await db.query.guideSessions.findMany({
-      where: (gs: any, { eq }: any) => eq(gs.mailboxId, mailboxId),
-      orderBy: (gs: any, { desc }: any) => [desc(gs.createdAt)],
+      where: (gs: unknown, { eq }: unknown) => eq(gs.mailboxId, mailboxId),
+      orderBy: (gs: unknown, { desc }: unknown) => [desc(gs.createdAt)],
       limit,
       offset,
     });
@@ -157,8 +157,8 @@ export const getGuideSessionReplays = async (
 ): Promise<(typeof guideSessionReplays.$inferSelect)[]> => {
   try {
     const replays = await db.query.guideSessionReplays.findMany({
-      where: (gsr: any, { eq }: any) => eq(gsr.guideSessionId, sessionId),
-      orderBy: (gsr: any, { asc }: any) => [asc(gsr.timestamp)],
+      where: (gsr: unknown, { eq }: unknown) => eq(gsr.guideSessionId, sessionId),
+      orderBy: (gsr: unknown, { asc }: unknown) => [asc(gsr.timestamp)],
     });
 
     return replays;
@@ -173,7 +173,7 @@ export const getGuideSessionByUuid = async (
 ): Promise<(GuideSession & { platformCustomer: typeof platformCustomers.$inferSelect }) | null> => {
   try {
     const session = await db.query.guideSessions.findFirst({
-      where: (gs: any, { eq }: any) => eq(gs.uuid, uuid),
+      where: (gs: unknown, { eq }: unknown) => eq(gs.uuid, uuid),
       with: {
         platformCustomer: true,
       },
@@ -188,8 +188,8 @@ export const getGuideSessionByUuid = async (
 export const getGuideSessionActions = async (guideSessionId: number): Promise<GuideSessionEvent[]> => {
   try {
     const events = await db.query.guideSessionEvents.findMany({
-      where: (gs: any, { eq, and }: any) => and(eq(gs.guideSessionId, guideSessionId), eq(gs.type, "action_performed")),
-      orderBy: (gs: any, { asc }: any) => [asc(gs.timestamp)],
+      where: (gs: unknown, { eq, and }: unknown) => and(eq(gs.guideSessionId, guideSessionId), eq(gs.type, "action_performed")),
+      orderBy: (gs: unknown, { asc }: unknown) => [asc(gs.timestamp)],
     });
 
     return events;

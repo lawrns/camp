@@ -191,19 +191,19 @@ export class PerformanceMonitor {
   /**
    * Get bundle size analysis
    */
-  getBundleAnalysis(): any {
+  getBundleAnalysis(): unknown {
     const resources = this.metrics.get("resources") || [];
-    const jsResources = resources.filter((r: any) => r.type === "javascript");
-    const cssResources = resources.filter((r: any) => r.type === "stylesheet");
-    const chunks = resources.filter((r: any) => r.type === "chunk");
+    const jsResources = resources.filter((r: unknown) => r.type === "javascript");
+    const cssResources = resources.filter((r: unknown) => r.type === "stylesheet");
+    const chunks = resources.filter((r: unknown) => r.type === "chunk");
 
     return {
-      totalJSSize: jsResources.reduce((sum: number, r: any) => sum + (r.size || 0), 0),
-      totalCSSSize: cssResources.reduce((sum: number, r: any) => sum + (r.size || 0), 0),
+      totalJSSize: jsResources.reduce((sum: number, r: unknown) => sum + (r.size || 0), 0),
+      totalCSSSize: cssResources.reduce((sum: number, r: unknown) => sum + (r.size || 0), 0),
       chunkCount: chunks.length,
-      largestChunk: chunks.reduce((largest: any, current: any) =>
+      largestChunk: chunks.reduce((largest: unknown, current: unknown) =>
         (current.size || 0) > (largest.size || 0) ? current : largest, {}),
-      averageLoadTime: resources.reduce((sum: number, r: any) => sum + (r.loadTime || 0), 0) / resources.length || 0
+      averageLoadTime: resources.reduce((sum: number, r: unknown) => sum + (r.loadTime || 0), 0) / resources.length || 0
     };
   }
 
@@ -249,7 +249,7 @@ export class PerformanceMonitor {
   /**
    * Generate performance report
    */
-  generateReport(): any {
+  generateReport(): unknown {
     const metrics = this.getMetrics();
     const bundleAnalysis = this.getBundleAnalysis();
     const recommendations = this.getOptimizationRecommendations();
@@ -274,7 +274,7 @@ export class PerformanceMonitor {
     // Simplified CLS calculation
     try {
       const clsEntries = performance.getEntriesByType("layout-shift");
-      return clsEntries.reduce((sum, entry: any) => {
+      return clsEntries.reduce((sum, entry: unknown) => {
         if (!entry.hadRecentInput) {
           return sum + entry.value;
         }
@@ -329,11 +329,11 @@ export function measureComponentLoad<T>(
   });
 }
 
-export function withPerformanceTracking<T extends (...args: any[]) => any>(
+export function withPerformanceTracking<T extends (...args: unknown[]) => any>(
   fn: T,
   label: string
 ): T {
-  return ((...args: any[]) => {
+  return ((...args: unknown[]) => {
     performanceMonitor.startTiming(label);
     const result = fn(...args);
 

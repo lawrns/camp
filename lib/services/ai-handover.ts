@@ -9,7 +9,7 @@ export interface AIHandoverEvent {
   handover_reason: string;
   ai_confidence: number;
   assigned_agent: string | null;
-  context: any;
+  context: unknown;
   status: "pending" | "in_queue" | "assigned" | "completed";
   created_at: string;
   completed_at?: string;
@@ -62,7 +62,7 @@ export class AIHandoverService {
     conversationId: string,
     organizationId: string,
     aiConfidence: number,
-    context: any = {},
+    context: unknown = {},
     reason: string = "Low AI confidence"
   ): Promise<AIHandoverEvent> {
 
@@ -79,7 +79,7 @@ export class AIHandoverService {
           ...context,
           original_confidence: aiConfidence,
           handover_triggered_at: new Date().toISOString(),
-          user_agent: navigator.userAgent,
+          userAgent: navigator.userAgent,
           page_url: window.location.href,
         },
         status: "pending",
@@ -167,7 +167,7 @@ export class AIHandoverService {
       .update({
         assigned_agent: agentName,
         status: "assigned",
-        completed_at: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
       })
       .eq("id", handover.id);
 
@@ -180,7 +180,7 @@ export class AIHandoverService {
       ...handover,
       assigned_agent: agentName,
       status: "assigned" as const,
-      completed_at: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
     };
     this.activeHandovers.set(conversationId, updatedHandover);
 
@@ -208,7 +208,7 @@ export class AIHandoverService {
   /**
    * Broadcast handover events via Supabase Realtime with proper error handling
    */
-  private async broadcastHandoverEvent(conversationId: string, organizationId: string, eventData: any): Promise<void> {
+  private async broadcastHandoverEvent(conversationId: string, organizationId: string, eventData: unknown): Promise<void> {
     try {
       const channelName = `org:${organizationId}:conv:${conversationId}`;
       const channel = supabase.channel(channelName, {

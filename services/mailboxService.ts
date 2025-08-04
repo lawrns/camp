@@ -199,7 +199,7 @@ export async function reorderMailboxes(organizationId: string, newOrder: string[
     });
 
     // Create a map for quick lookup
-    const mailboxMap = new Map(allMailboxes.map((m: any) => [m.slug, m]));
+    const mailboxMap = new Map(allMailboxes.map((m: unknown) => [m.slug, m]));
 
     // Reorder based on newOrder
     const ordered: Mailbox[] = [];
@@ -212,7 +212,7 @@ export async function reorderMailboxes(organizationId: string, newOrder: string[
 
     // Add any remaining mailboxes not in newOrder
     const orderedSlugs = new Set(newOrder);
-    const remaining = allMailboxes.filter((m: any) => !orderedSlugs.has(m.slug));
+    const remaining = allMailboxes.filter((m: unknown) => !orderedSlugs.has(m.slug));
 
     return [...ordered, ...remaining];
   } catch (error) {

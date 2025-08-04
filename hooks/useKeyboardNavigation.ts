@@ -281,7 +281,7 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions = {}) {
 }
 
 // Specialized hook for list navigation (e.g., FAQ items, menu items)
-export function useListNavigation(items: any[], onSelect?: (index: number) => void, isActive: boolean = true) {
+export function useListNavigation(items: unknown[], onSelect?: (index: number) => void, isActive: boolean = true) {
   const currentIndex = useRef(0);
 
   const handleArrowUp = useCallback(() => {

@@ -111,7 +111,7 @@ export async function createWidgetClient(organizationId: string) {
     organizationId: validatedOrgId,
     organization: org,
     // Helper method to ensure all queries include organization filter
-    scopedQuery: (table: any) => {
+    scopedQuery: (table: unknown) => {
       return adminClient.from(table).eq('organization_id', validatedOrgId);
     }
   };

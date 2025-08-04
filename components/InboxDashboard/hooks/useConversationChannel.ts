@@ -35,7 +35,7 @@ export const useConversationChannel = (
         return;
       }
 
-      const payload = { user_id: userId, is_typing: isTyping };
+      const payload = { user_id: userId, isTyping: isTyping };
 
       conversationChannelRef.current.send({
         type: "broadcast",
@@ -118,17 +118,17 @@ export const useConversationChannel = (
 
         // FIXED: Handle both widget and dashboard typing payload formats
         const data = payload.payload;
-        const typingUserId = data.user_id || data.sender_id || data.visitorId;
-        const isTyping = data.is_typing !== undefined ? data.is_typing : data.isTyping;
+        const typingUserId = data.user_id || data.senderId || data.visitorId;
+        const isTyping = data.isTyping !== undefined ? data.isTyping : data.isTyping;
         const content = data.content || "";
 
         if (typingUserId === userId) return; // Don't show own typing
 
         // Determine display name based on sender type
         let displayName = "Someone";
-        if (data.sender_type === "visitor") {
+        if (data.senderType === "visitor") {
           displayName = "Visitor";
-        } else if (data.sender_type === "agent") {
+        } else if (data.senderType === "agent") {
           displayName = "Agent";
         } else {
           displayName = typingUserId?.slice(0, 8) || "Someone";

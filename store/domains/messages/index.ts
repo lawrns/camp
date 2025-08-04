@@ -18,5 +18,5 @@ export type MessageThread = ReturnType<typeof import("./messages-store").useMess
 export const useMessageById = (conversationId: string, messageId: string) => {
   const { useMessages } = require("./messages-store");
   const messages = useMessages(conversationId);
-  return messages.find((m: any) => m.id === messageId);
+  return messages.find((m: unknown) => m.id === messageId);
 };

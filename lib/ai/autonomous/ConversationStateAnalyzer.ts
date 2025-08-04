@@ -101,7 +101,7 @@ export class ConversationStateAnalyzer {
 
     // Check for urgency keywords
     const messageText = messages
-      .map((m: unknown) => (m as any).content || "")
+      .map((m: unknown) => (m as unknown).content || "")
       .join(" ")
       .toLowerCase();
     if (this.config.urgencyThresholds.keywordTriggers.some((keyword) => messageText.includes(keyword))) {
@@ -129,7 +129,7 @@ export class ConversationStateAnalyzer {
     return {
       id: conversationId,
       status,
-      participantCount: new Set(messages.map((m: unknown) => (m as any).senderId || (m as any).userId)).size,
+      participantCount: new Set(messages.map((m: unknown) => (m as unknown).senderId || (m as unknown).userId)).size,
       messageCount: messages.length,
       lastActivity,
       sentiment,
@@ -146,7 +146,7 @@ export class ConversationStateAnalyzer {
 
     // Stub implementation - extract common topics
     const text = messages
-      .map((m: unknown) => (m as any).content || "")
+      .map((m: unknown) => (m as unknown).content || "")
       .join(" ")
       .toLowerCase();
     const commonTopics = ["billing", "technical", "support", "feature", "bug", "account", "payment"];
@@ -225,7 +225,7 @@ export class ConversationStateAnalyzer {
 
   async predictNextState(
     currentState: ConversationState,
-    context?: any
+    context?: unknown
   ): Promise<{
     predictedState: string;
     probability: number;

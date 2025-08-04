@@ -192,12 +192,12 @@ export class WidgetRateLimiter {
 /**
  * Sanitize and validate widget input data
  */
-export function sanitizeWidgetInput(data: any): any {
+export function sanitizeWidgetInput(data: unknown): unknown {
   if (typeof data !== "object" || data === null) {
     return {};
   }
 
-  const sanitized: any = {};
+  const sanitized: unknown = {};
 
   // Allowed fields for widget requests
   const allowedFields = ["content", "visitorId", "conversationId", "organizationId", "metadata", "initialMessage"];
@@ -222,12 +222,12 @@ export function sanitizeWidgetInput(data: any): any {
 /**
  * Sanitize metadata object
  */
-function sanitizeMetadata(metadata: any): any {
+function sanitizeMetadata(metadata: unknown): unknown {
   if (typeof metadata !== "object" || metadata === null) {
     return {};
   }
 
-  const sanitized: any = {};
+  const sanitized: unknown = {};
   const allowedMetadataFields = [
     "customer_email",
     "customer_name",

@@ -125,7 +125,7 @@ export function useDashboardReadReceipts(
       setReadReceipts(prev => {
         const updated = { ...prev };
         
-        data.readReceipts?.forEach((receipt: any) => {
+        data.readReceipts?.forEach((receipt: unknown) => {
           const messageId = receipt.messageId;
           const existingReceipt = prev[messageId];
           

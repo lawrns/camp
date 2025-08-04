@@ -43,8 +43,8 @@ export function extractAuthToken(request: NextRequest): string | null {
   // First, try the simplified auth token cookie
   const authTokenCookie = cookieHeader
     .split(/;\s*/)
-    .map((c: any) => c.trim())
-    .find((c: any) => c.startsWith(`${AUTH_COOKIE_NAMES.AUTH_TOKEN}=`));
+    .map((c: unknown) => c.trim())
+    .find((c: unknown) => c.startsWith(`${AUTH_COOKIE_NAMES.AUTH_TOKEN}=`));
 
   if (authTokenCookie) {
     try {
@@ -71,8 +71,8 @@ export function extractAuthToken(request: NextRequest): string | null {
   // Try HTTP-only access token cookie
   const accessTokenCookie = cookieHeader
     .split(/;\s*/)
-    .map((c: any) => c.trim())
-    .find((c: any) => c.startsWith(`${AUTH_COOKIE_NAMES.ACCESS_TOKEN}=`));
+    .map((c: unknown) => c.trim())
+    .find((c: unknown) => c.startsWith(`${AUTH_COOKIE_NAMES.ACCESS_TOKEN}=`));
 
   if (accessTokenCookie) {
     return accessTokenCookie.split("=")[1];
@@ -81,8 +81,8 @@ export function extractAuthToken(request: NextRequest): string | null {
   // Backward compatibility: Try Supabase format cookies
   const supabaseAuthCookie = cookieHeader
     .split(/;\s*/)
-    .map((c: any) => c.trim())
-    .find((c: any) => /sb-.*-auth-token=/.test(c));
+    .map((c: unknown) => c.trim())
+    .find((c: unknown) => /sb-.*-auth-token=/.test(c));
 
   if (supabaseAuthCookie) {
     try {
@@ -120,7 +120,7 @@ export function createSessionCookieValue(session: {
   refresh_token: string;
   expires_at?: number;
   token_type?: string;
-  user?: any;
+  user?: unknown;
 }): string {
   return `base64-${Buffer.from(JSON.stringify(session)).toString("base64")}`;
 }

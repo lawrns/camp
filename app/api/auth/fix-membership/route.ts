@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     const supabaseAdmin = supabase.admin();
     const fixes = [];
 
-    // Check if user has any organization membership
+    // Check if user has unknown organization membership
     const { data: existingMembership } = await supabaseAdmin
       .from("organization_members")
       .select("organization_id, role, status")
@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
         .insert({
           id: user.id,
           email: user.email,
-          fullName: user.user_metadata?.full_name || user.email?.split("@")[0],
+          fullName: user.user_metadata?.fullName || user.email?.split("@")[0],
           organization_id: user.user_metadata?.organization_id
         });
 

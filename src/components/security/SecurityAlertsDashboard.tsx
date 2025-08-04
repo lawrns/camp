@@ -136,7 +136,7 @@ export function SecurityAlertsDashboard({ organizationId, className }: SecurityA
             variant: "destructive",
           });
         } else if (payload.type === "alert_update") {
-          setAlerts((prev) => prev.map((a: any) => (a.id === payload.alert.id ? payload.alert : a)));
+          setAlerts((prev) => prev.map((a: unknown) => (a.id === payload.alert.id ? payload.alert : a)));
         }
       },
     });
@@ -178,7 +178,7 @@ export function SecurityAlertsDashboard({ organizationId, className }: SecurityA
     }
   };
 
-  const filteredAlerts = alerts.filter((alert: any) => {
+  const filteredAlerts = alerts.filter((alert: unknown) => {
     if (filterSeverity !== "all" && alert.severity !== filterSeverity) return false;
     if (filterStatus !== "all" && alert.status !== filterStatus) return false;
     if (
@@ -506,7 +506,7 @@ export function SecurityAlertsDashboard({ organizationId, className }: SecurityA
   );
 }
 
-function Select({ value, onValueChange, children }: any) {
+function Select({ value, onValueChange, children }: unknown) {
   return (
     <select
       value={value}
@@ -518,15 +518,15 @@ function Select({ value, onValueChange, children }: any) {
   );
 }
 
-function SelectTrigger({ children, className }: any) {
+function SelectTrigger({ children, className }: unknown) {
   return <div className={className}>{children}</div>;
 }
 
-function SelectContent({ children }: any) {
+function SelectContent({ children }: unknown) {
   return <>{children}</>;
 }
 
-function SelectItem({ value, children }: any) {
+function SelectItem({ value, children }: unknown) {
   return <option value={value}>{children}</option>;
 }
 

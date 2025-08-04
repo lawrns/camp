@@ -68,7 +68,7 @@ const AGENT_LAST_INITIALS = [
 export function generateAgentName(seed?: string): string {
   // If we have a seed (like conversation ID), use it for consistent names
   if (seed) {
-    const hash = seed.split("").reduce((acc: any, char: unknown) => {
+    const hash = seed.split("").reduce((acc: unknown, char: unknown) => {
       return (acc << 5) - acc + char.charCodeAt(0);
     }, 0);
 
@@ -89,7 +89,7 @@ export function generateAgentName(seed?: string): string {
  * Get or generate an agent name for a conversation
  * Ensures consistency across handovers
  */
-export function getAgentNameForConversation(conversationMetadata?: any, conversationId?: string): string {
+export function getAgentNameForConversation(conversationMetadata?: unknown, conversationId?: string): string {
   // First, check if we have a preserved original agent name
   if (conversationMetadata?.original_agent_name) {
     return conversationMetadata.original_agent_name;

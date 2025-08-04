@@ -10,7 +10,7 @@ import { queryKeys } from "@/lib/cache/optimized-query-config";
 interface Message {
   id: string;
   content: string;
-  sender_type: "customer" | "agent" | "system";
+  senderType: "customer" | "agent" | "system";
   created_at: string;
   conversation_id: string;
 }
@@ -39,7 +39,7 @@ export function useRAG(): UseRAGReturn {
       ) as unknown as Message[];
       if (!messages || messages.length === 0) return;
 
-      const lastCustomerMessage = messages.filter((m: any) => m.sender_type === "customer").pop();
+      const lastCustomerMessage = messages.filter((m: unknown) => m.senderType === "customer").pop();
 
       if (!lastCustomerMessage) return;
 
@@ -64,7 +64,7 @@ export function useRAG(): UseRAGReturn {
       const { error } = await tenantClient.from("messages").insert({
         content: data.response,
         conversation_id: conversationId,
-        sender_type: "agent",
+        senderType: "agent",
         created_at: new Date().toISOString(),
         organization_id: organizationId,
         metadata: { rag_generated: true, confidence: data.confidence },

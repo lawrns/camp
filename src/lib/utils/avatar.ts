@@ -243,11 +243,11 @@ export const getUserAvatar = (user: {
   // Use comprehensive identifier extraction for customers/visitors
   const identifier =
     user.email ||
-    user.customer_email ||
+    user.customerEmail ||
     user.visitor_email ||
     user.id ||
     user.name ||
-    user.customer_name ||
+    user.customerName ||
     user.visitor_name ||
     "anonymous";
 
@@ -268,7 +268,7 @@ export interface UnifiedCustomerData {
   fallbackGradient: string;
 }
 
-export const getUnifiedCustomerData = (conversation: any): UnifiedCustomerData => {
+export const getUnifiedCustomerData = (conversation: unknown): UnifiedCustomerData => {
   if (!conversation) {
     return {
       displayName: "Unknown Customer",
@@ -282,18 +282,18 @@ export const getUnifiedCustomerData = (conversation: any): UnifiedCustomerData =
 
   // Extract customer name from various sources
   const customerName =
-    conversation.customer_name ||
+    conversation.customerName ||
     conversation.visitor_name ||
     conversation.customer?.name ||
     conversation.metadata?.name ||
-    conversation.customer_email?.split("@")[0] ||
+    conversation.customerEmail?.split("@")[0] ||
     conversation.visitor_email?.split("@")[0] ||
     conversation.emailFrom?.split("@")[0] ||
     "Anonymous";
 
   // Extract customer email
   const customerEmail =
-    conversation.customer_email || conversation.visitor_email || conversation.customer?.email || conversation.emailFrom;
+    conversation.customerEmail || conversation.visitor_email || conversation.customer?.email || conversation.emailFrom;
 
   // Get avatar using unified system
   const avatarUrl = getUserAvatar({

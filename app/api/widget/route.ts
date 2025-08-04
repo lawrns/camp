@@ -4,6 +4,7 @@ import { validateOrganizationId, sanitizeErrorMessage, checkRateLimit } from '@/
 import { widgetRateLimit } from '@/lib/middleware/rate-limit';
 import { identifyVisitor, associateConversation } from '@/lib/services/visitor-identification';
 import { WidgetSchemas, validateRequest, BaseSchemas } from '@/lib/validation/schemas';
+import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
 import { z } from 'zod';
 import { Message, Conversation } from '@/types/unified-types';
 
@@ -183,7 +184,7 @@ async function handleCreateConversation(body: CreateConversationRequest, organiz
         id: conversationId,
         organizationId: organizationId,
         customerEmail: customerEmail || null,
-        customerName: customerName || 'Anonymous User',
+        customerName: customerName || generateUniqueVisitorName(providedVisitorId || 'anonymous'),
         status: 'open',
         priority: 'medium',
         createdAt: new Date().toISOString(),

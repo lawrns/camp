@@ -58,7 +58,7 @@ export async function generateBatchEmbeddings(texts: string[], options: Embeddin
       input: texts,
     });
 
-    return response.data.map((item: any) => item.embedding);
+    return response.data.map((item: unknown) => item.embedding);
   } catch (error) {
     throw new Error(`Batch embedding generation failed: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
@@ -71,7 +71,7 @@ export async function generateConversationEmbedding(
 ): Promise<number[]> {
   const conversationText = messages
     .slice(-5) // Last 5 messages for context
-    .map((msg: any) => `${msg.role}: ${msg.content}`)
+    .map((msg: unknown) => `${msg.role}: ${msg.content}`)
     .join("\n");
 
   return generateEmbedding(conversationText, { organizationId });
@@ -199,18 +199,18 @@ export function cosineSimilarity(a: number[], b: number[]): number {
 
 export function findSimilarEmbeddings(
   queryEmbedding: number[],
-  embeddings: Array<{ id: string; embedding: number[]; metadata?: any }>,
+  embeddings: Array<{ id: string; embedding: number[]; metadata?: unknown }>,
   threshold: number = 0.7,
   limit: number = 10
-): Array<{ id: string; similarity: number; metadata?: any }> {
-  const similarities = embeddings.map((item: any) => ({
+): Array<{ id: string; similarity: number; metadata?: unknown }> {
+  const similarities = embeddings.map((item: unknown) => ({
     id: item.id,
     similarity: cosineSimilarity(queryEmbedding, item.embedding),
     metadata: item.metadata,
   }));
 
   return similarities
-    .filter((item: any) => item.similarity >= threshold)
+    .filter((item: unknown) => item.similarity >= threshold)
     .sort((a, b) => b.similarity - a.similarity)
     .slice(0, limit);
 }

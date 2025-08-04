@@ -20,7 +20,7 @@ export interface MessageMetadata {
     parameters: Record<string, unknown>;
     result?: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MessageAttachment {
@@ -225,7 +225,7 @@ export interface DatabaseMessage {
   content: string;
   sender_name?: string | null;
   sender_email?: string | null;
-  sender_type: SenderType;
+  senderType: SenderType;
   role?: MessageRole;
   source?: "email" | "chat" | "api" | "helpscout" | "slack";
   in_reply_to_id?: string | null; // Fixed: Database uses UUID strings
@@ -260,13 +260,13 @@ export function transformDatabaseMessage(dbMessage: DatabaseMessage): Message {
     id: dbMessage.id,
     conversationId: dbMessage.conversation_id,
     content: dbMessage.content,
-    senderType: dbMessage.sender_type,
-    senderName: dbMessage.sender_name ?? null,
-    senderEmail: dbMessage.sender_email ?? null,
+    senderType: dbMessage.senderType,
+    senderName: dbMessage.senderName ?? null,
+    senderEmail: dbMessage.senderEmail ?? null,
     createdAt: dbMessage.created_at,
     organizationId: dbMessage.organization_id,
     // Required legacy fields
-    sender_type: dbMessage.sender_type,
+    senderType: dbMessage.senderType,
     conversation_id: dbMessage.conversation_id,
     created_at: dbMessage.created_at,
     organization_id: dbMessage.organization_id,
@@ -298,10 +298,10 @@ export function transformDatabaseMessage(dbMessage: DatabaseMessage): Message {
   if (dbMessage.summary !== undefined) message.summary = dbMessage.summary;
 
   // Legacy fields - only add if defined and not null
-  if (dbMessage.sender_name !== undefined && dbMessage.sender_name !== null)
-    message.sender_name = dbMessage.sender_name;
-  if (dbMessage.sender_email !== undefined && dbMessage.sender_email !== null)
-    message.sender_email = dbMessage.sender_email;
+  if (dbMessage.senderName !== undefined && dbMessage.senderName !== null)
+    message.senderName = dbMessage.senderName;
+  if (dbMessage.senderEmail !== undefined && dbMessage.senderEmail !== null)
+    message.senderEmail = dbMessage.senderEmail;
   if (dbMessage.updated_at !== undefined) message.updated_at = dbMessage.updated_at;
   if (dbMessage.delivery_status !== undefined) message.delivery_status = dbMessage.delivery_status;
 
@@ -322,17 +322,17 @@ export function transformToDatabase(message: Partial<Message>): Partial<Database
   if (message.content !== undefined) {
     result.content = message.content;
   }
-  const senderType = message.senderType ?? message.sender_type;
+  const senderType = message.senderType ?? message.senderType;
   if (senderType !== undefined) {
-    result.sender_type = senderType;
+    result.senderType = senderType;
   }
-  const senderName = message.senderName ?? message.sender_name;
+  const senderName = message.senderName ?? message.senderName;
   if (senderName !== undefined) {
-    result.sender_name = senderName;
+    result.senderName = senderName;
   }
-  const senderEmail = message.senderEmail ?? message.sender_email;
+  const senderEmail = message.senderEmail ?? message.senderEmail;
   if (senderEmail !== undefined) {
-    result.sender_email = senderEmail;
+    result.senderEmail = senderEmail;
   }
   if (message.role !== undefined) {
     result.role = message.role;
@@ -415,7 +415,7 @@ export function transformToDatabase(message: Partial<Message>): Partial<Database
 export interface MessageInsert {
   conversation_id: string; // Fixed: Database uses UUID strings
   content: string;
-  sender_type: SenderType;
+  senderType: SenderType;
   sender_id?: string | null;
   sender_name?: string | null;
   operator_id?: string | null;

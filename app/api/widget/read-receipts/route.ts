@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 
 // Widget read receipts API - handles message delivery tracking
 
-export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export const POST = optionalWidgetAuth(async (request: NextRequest, context: unknown, auth) => {
   try {
     const body = await request.json();
     const { messageId, conversationId, status = 'read' } = body;
@@ -91,7 +91,7 @@ export const POST = optionalWidgetAuth(async (request: NextRequest, context: any
   }
 });
 
-export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export const GET = optionalWidgetAuth(async (request: NextRequest, context: unknown, auth) => {
   try {
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get('messageId');

@@ -187,7 +187,7 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
       const WIDGET_JWT_SECRET = process.env.WIDGET_JWT_SECRET;
 
       if (WIDGET_JWT_SECRET) {
-        const decoded = jwt.verify(token, WIDGET_JWT_SECRET) as any;
+        const decoded = jwt.verify(token, WIDGET_JWT_SECRET) as unknown;
 
         // Check if this is a widget token
         if (decoded.user_metadata?.widget_session && decoded.organization_id) {
@@ -273,7 +273,7 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
   // 2) FALLBACK: Try auth cookies in order of preference
   // ------------------------------------------------------------------
   const cookieHeader = req.headers.get("cookie") || "";
-  const cookies = cookieHeader.split(/;\s*/).map((c: any) => c.trim());
+  const cookies = cookieHeader.split(/;\s*/).map((c: unknown) => c.trim());
 
   // Debug: Log available cookies (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -292,7 +292,7 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
   ];
 
   for (const pattern of cookiePatterns) {
-    const authTokenCookie = cookies.find((c: any) => pattern.test(c));
+    const authTokenCookie = cookies.find((c: unknown) => pattern.test(c));
     if (authTokenCookie) {
       try {
         const cookieValue = decodeURIComponent(authTokenCookie.split("=")[1]);
@@ -327,7 +327,7 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
 
   // If no auth token, try access token cookie
   if (!token) {
-    const accessTokenCookie = cookies.find((c: any) => c.startsWith("sb-access-token="));
+    const accessTokenCookie = cookies.find((c: unknown) => c.startsWith("sb-access-token="));
     if (accessTokenCookie) {
       try {
         token = decodeURIComponent(accessTokenCookie.split("=")[1]);
@@ -341,7 +341,7 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
 
   // Finally try project-specific cookies with enhanced error handling
   if (!token) {
-    const tokenFromCookie = cookies.find((c: any) => /sb-.*-auth-token=/.test(c) || /access-token=/.test(c));
+    const tokenFromCookie = cookies.find((c: unknown) => /sb-.*-auth-token=/.test(c) || /access-token=/.test(c));
     if (tokenFromCookie) {
       try {
         const cookieValue = decodeURIComponent(tokenFromCookie.split("=")[1]);
@@ -536,7 +536,7 @@ export function createErrorResponse(
   error: string,
   status: number = 500,
   code?: string,
-  details?: any,
+  details?: unknown,
   headers?: Record<string, string>
 ): Response {
   return new Response(
@@ -711,7 +711,7 @@ export function withWidget<T extends Record<string, string | string[]> = Record<
       }
 
       // Create widget context
-      const widgetContext: any = {
+      const widgetContext: unknown = {
         organizationId,
         client: supabase.admin(),
       };

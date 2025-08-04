@@ -207,7 +207,7 @@ export const Legend: React.FC<ComponentProps<typeof LegendType>> = (props) => {
 // Chart elements
 export const Area: React.FC<ComponentProps<typeof AreaType>> = (props) => (
   <Suspense fallback={null}>
-    <LazyArea {...(props as any)} />
+    <LazyArea {...(props as unknown)} />
   </Suspense>
 );
 
@@ -222,13 +222,13 @@ export const Line: React.FC<ComponentProps<typeof LineType>> = (props) => {
 
 export const Bar: React.FC<ComponentProps<typeof BarType>> = (props) => (
   <Suspense fallback={null}>
-    <LazyBar {...(props as any)} />
+    <LazyBar {...(props as unknown)} />
   </Suspense>
 );
 
 export const Pie: React.FC<ComponentProps<typeof PieType>> = (props) => (
   <Suspense fallback={null}>
-    <LazyPie {...(props as any)} />
+    <LazyPie {...(props as unknown)} />
   </Suspense>
 );
 
@@ -270,7 +270,7 @@ export const PolarRadiusAxis: React.FC<ComponentProps<typeof PolarRadiusAxisType
 
 export const Radar: React.FC<ComponentProps<typeof RadarType>> = (props) => (
   <Suspense fallback={null}>
-    <LazyRadar {...(props as any)} />
+    <LazyRadar {...(props as unknown)} />
   </Suspense>
 );
 

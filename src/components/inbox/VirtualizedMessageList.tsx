@@ -2,21 +2,20 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import {
-  Warning as AlertCircle,
-  Robot as Bot,
+  AlertCircle,
+  Bot,
   CheckCircle,
   Clock,
   ThumbsDown,
   ThumbsUp,
   User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+  Zap,
+} from "lucide-react";
 // import AutoSizer from "react-virtualized-auto-sizer"; // Package not installed
 import { VariableSizeList as List, ListChildComponentProps, ListOnScrollProps } from "react-window";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
-import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Message } from "@/types/entities";
 
@@ -64,15 +63,15 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
   const getMessageIcon = (senderType: string) => {
     switch (senderType) {
       case "system":
-        return <Icon icon={Bot} className="h-4 w-4" />;
+        return <Bot className="h-4 w-4" />;
       case "operator":
       case "agent":
-        return <Icon icon={User} className="h-4 w-4" />;
+        return <User className="h-4 w-4" />;
       case "customer":
       case "visitor":
-        return <Icon icon={User} className="h-4 w-4" />;
+        return <User className="h-4 w-4" />;
       default:
-        return <Icon icon={Clock} className="h-4 w-4" />;
+        return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -82,15 +81,15 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
 
     switch (status.status) {
       case "sending":
-        return <Icon icon={Clock} className="h-3 w-3 animate-spin text-gray-400" />;
+        return <Clock className="h-3 w-3 animate-spin text-gray-400" />;
       case "sent":
-        return <Icon icon={CheckCircle} className="h-3 w-3 text-gray-400" />;
+        return <CheckCircle className="h-3 w-3 text-gray-400" />;
       case "delivered":
-        return <Icon icon={CheckCircle} className="h-3 w-3 text-blue-600" />;
+        return <CheckCircle className="h-3 w-3 text-blue-600" />;
       case "read":
-        return <Icon icon={CheckCircle} className="text-semantic-success-dark h-3 w-3" />;
+        return <CheckCircle className="h-3 w-3 text-green-600" />;
       case "error":
-        return <Icon icon={AlertCircle} className="h-3 w-3 text-red-600" />;
+        return <AlertCircle className="h-3 w-3 text-red-600" />;
       default:
         return null;
     }
@@ -140,8 +139,8 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
             {/* AI Metadata */}
             {message?.metadata && "ragUsed" in message.metadata && message.metadata.ragUsed && (
               <div className="mt-2 border-t border-white/20 pt-2">
-                <div className="flex items-center gap-1 text-tiny opacity-75">
-                  <Icon icon={Zap} className="h-3 w-3" />
+                <div className="flex items-center gap-1 text-xs opacity-75">
+                  <Zap className="h-3 w-3" />
                   AI Response
                   {message?.metadata &&
                     "confidence" in message.metadata &&
@@ -156,7 +155,7 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
           {/* Message Footer */}
           <div
             className={cn(
-              "text-typography-xs mt-1 flex items-center gap-2 text-neutral-500",
+              "text-xs mt-1 flex items-center gap-2 text-gray-500",
               (message?.senderType === "operator" || message?.senderType === "agent") && "justify-end"
             )}
           >
@@ -169,10 +168,10 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
           {message?.senderType === "system" && (
             <div className="mt-2 flex gap-1">
               <Button variant="ghost" size="sm" className="h-6 px-2">
-                <Icon icon={ThumbsUp} className="h-3 w-3" />
+                <ThumbsUp className="h-3 w-3" />
               </Button>
               <Button variant="ghost" size="sm" className="h-6 px-2">
-                <Icon icon={ThumbsDown} className="h-3 w-3" />
+                <ThumbsDown className="h-3 w-3" />
               </Button>
             </div>
           )}

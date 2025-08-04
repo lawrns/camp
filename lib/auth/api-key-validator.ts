@@ -137,7 +137,7 @@ async function validateGeneralApiKey(apiKey: string): Promise<UnifiedAuthResult>
     }
 
     // Check expiration
-    if (data.expires_at && new Date(data.expires_at) < new Date()) {
+    if (data.expiresAt && new Date(data.expiresAt) < new Date()) {
       return { success: false, error: 'API key expired' };
     }
 
@@ -147,7 +147,7 @@ async function validateGeneralApiKey(apiKey: string): Promise<UnifiedAuthResult>
     // Create metadata
     const authMetadata: AuthMetadata = {
       tokenType: 'api-key',
-      expiresAt: data.expires_at ? Math.floor(new Date(data.expires_at).getTime() / 1000) : undefined,
+      expiresAt: data.expiresAt ? Math.floor(new Date(data.expiresAt).getTime() / 1000) : undefined,
     };
 
     // Create unified user object

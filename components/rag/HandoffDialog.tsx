@@ -22,7 +22,7 @@ interface HandoffDialogProps {
   currentAgent?: Agent;
   availableAgents?: Agent[];
   ragProfiles?: Array<{ id: string; name: string; description: string }>;
-  onHandoff: (data: any) => Promise<void>;
+  onHandoff: (data: unknown) => Promise<void>;
 }
 
 export default function HandoffDialog({

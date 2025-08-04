@@ -46,7 +46,7 @@ export interface Message {
   messageType: 'text' | 'image' | 'file' | 'system' | 'notification' | 'action' | 'automated';
   metadata?: Record<string, any>;
   aiConfidence?: number;
-  aiSources?: any[];
+  aiSources?: unknown[];
   isDeleted?: boolean;
   readStatus?: 'sent' | 'delivered' | 'read';
   readAt?: string;
@@ -263,15 +263,15 @@ export type OrganizationUpdate = TablesUpdate<'organizations'>;
 // TYPE GUARDS
 // ============================================================================
 
-export function isConversation(obj: any): obj is Conversation {
+export function isConversation(obj: unknown): obj is Conversation {
   return obj && typeof obj.id === 'string' && typeof obj.customerEmail === 'string';
 }
 
-export function isMessage(obj: any): obj is Message {
+export function isMessage(obj: unknown): obj is Message {
   return obj && typeof obj.id === 'string' && typeof obj.conversationId === 'string';
 }
 
-export function isUser(obj: any): obj is User {
+export function isUser(obj: unknown): obj is User {
   return obj && typeof obj.id === 'string' && typeof obj.email === 'string';
 }
 

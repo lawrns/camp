@@ -54,8 +54,15 @@ function createCompatibleCookieStore() {
   };
 }
 
+interface AuthenticatedUser {
+  userId: string;
+  organizationId: string;
+  email: string;
+  name?: string;
+}
+
 // Authentication wrapper for dashboard endpoints (FIXED: removed async from function declaration)
-function withAuth(handler: (req: NextRequest, user: any, conversationId: string) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: AuthenticatedUser, conversationId: string) => Promise<NextResponse>) {
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
       console.log('[Dashboard withAuth] Starting authentication for conversation:', params.id);
@@ -84,14 +91,39 @@ function withAuth(handler: (req: NextRequest, user: any, conversationId: string)
         );
       }
 
-      // Get user organization
-      const organizationId = session.user.user_metadata?.organization_id;
-      console.log('[Dashboard withAuth] Organization ID:', organizationId);
+      // Get user organization from metadata or membership
+      let organizationId = session.user.user_metadata?.organization_id || session.user.app_metadata?.organization_id;
+      console.log('[Dashboard withAuth] Organization ID from metadata:', organizationId);
+
+      // If no organization ID in metadata, check organization membership
+      if (!organizationId) {
+        console.log('[Dashboard withAuth] No organization ID in metadata, checking membership...');
+
+        const { data: membership, error: membershipError } = await supabaseClient
+          .from('organization_members')
+          .select('organization_id, role, status')
+          .eq('user_id', session.user.id)
+          .eq('status', 'active')
+          .single();
+
+        if (!membershipError && membership) {
+          organizationId = membership.organization_id;
+          console.log('[Dashboard withAuth] Found organization membership:', {
+            organizationId,
+            role: membership.role
+          });
+        } else {
+          console.log('[Dashboard withAuth] No active organization membership found:', {
+            userId: session.user.id,
+            membershipError: membershipError?.message
+          });
+        }
+      }
 
       if (!organizationId) {
-        console.log('[Dashboard withAuth] No organization ID found');
+        console.log('[Dashboard withAuth] No organization ID found in metadata or membership');
         return NextResponse.json(
-          { error: 'Organization not found', code: 'FORBIDDEN' },
+          { error: 'Organization not found - user must be member of an organization', code: 'FORBIDDEN' },
           { status: 403 }
         );
       }
@@ -123,7 +155,7 @@ function withAuth(handler: (req: NextRequest, user: any, conversationId: string)
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown, conversationId: string) => {
   try {
     console.log('[Dashboard Messages API] Starting request for conversation:', conversationId);
 
@@ -227,12 +259,24 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
   }
 });
 
-export const POST = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
+export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUser, conversationId: string) => {
   try {
+    console.log('[Messages API] 📥 Received message creation request:', {
+      conversationId,
+      userId: user.userId,
+      organizationId: user.organizationId
+    });
+
     const body = await request.json();
     const { content, senderType = 'agent' } = body;
 
+    console.log('[Messages API] 📝 Request body:', {
+      contentLength: content?.length,
+      senderType
+    });
+
     if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      console.error('[Messages API] ❌ Validation error: Missing or empty content');
       return NextResponse.json(
         { error: 'Message content is required', code: 'VALIDATION_ERROR' },
         { status: 400 }
@@ -251,13 +295,20 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       .single();
 
     if (conversationError || !conversation) {
+      console.error('[Messages API] ❌ Conversation validation error:', {
+        conversationId,
+        organizationId: user.organizationId,
+        error: conversationError?.message
+      });
       return NextResponse.json(
         { error: 'Conversation not found', code: 'NOT_FOUND' },
         { status: 404 }
       );
     }
 
-    // Create message with agent context
+    console.log('[Messages API] ✅ Conversation validated successfully');
+
+    // Create message with agent context - using snake_case for database
     const { data: message, error } = await supabaseClient
       .from('messages')
       .insert({
@@ -268,6 +319,8 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
         sender_name: user.name,
         sender_type: senderType,
         sender_id: user.userId,
+        topic: 'message', // Required field
+        extension: 'text', // Required field
         metadata: {
           source: 'dashboard',
           timestamp: new Date().toISOString(),
@@ -278,16 +331,11 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       .single();
 
     if (error) {
-      console.error('🚨 [DASHBOARD API] DB Insert Error Details:', {
-        error: error,
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
+      console.error('[Messages API] ❌ Database error creating message:', {
         conversationId,
         organizationId: user.organizationId,
-        senderType,
-        contentLength: content.trim().length
+        error: error.message,
+        code: error.code
       });
       return NextResponse.json(
         { error: 'Failed to create message', code: 'DATABASE_ERROR', details: error.message },
@@ -295,12 +343,13 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       );
     }
 
-    console.log('🚨 [DASHBOARD API] ✅ Message inserted successfully:', {
+    console.log('[Messages API] ✅ Message created successfully:', {
       messageId: message.id,
       conversationId,
-      senderType,
-      content: content.substring(0, 50) + '...'
+      contentLength: content.trim().length
     });
+
+
 
     // CRITICAL: Broadcast message to real-time channels for widget and other agents
     try {
@@ -317,18 +366,12 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
 
       // Broadcast to conversation-specific channel (for widget and other agents viewing this conversation)
       const conversationChannel = UNIFIED_CHANNELS.conversation(user.organizationId, conversationId);
-      console.log('🚨 [DASHBOARD BROADCAST] Broadcasting to conversation channel:', {
-        channel: conversationChannel,
-        event: UNIFIED_EVENTS.MESSAGE_CREATED,
-        payload: messagePayload
-      });
-
+      
       const convResult = await broadcastToChannel(
         conversationChannel,
         UNIFIED_EVENTS.MESSAGE_CREATED,
         messagePayload
       );
-      console.log('🚨 [DASHBOARD BROADCAST] Conversation channel result:', convResult);
 
       // Broadcast to organization channel (for conversation list updates)
       await broadcastToChannel(
@@ -345,19 +388,12 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
 
       // Broadcast to widget channel for bidirectional communication
       const widgetChannel = UNIFIED_CHANNELS.widget(user.organizationId, conversationId);
-      console.log('🚨 [DASHBOARD BROADCAST] Broadcasting to widget channel:', {
-        channel: widgetChannel,
-        event: UNIFIED_EVENTS.MESSAGE_CREATED,
-        payload: messagePayload,
-        isWidgetChannelSameAsConv: widgetChannel === conversationChannel
-      });
 
       const widgetResult = await broadcastToChannel(
         widgetChannel,
         UNIFIED_EVENTS.MESSAGE_CREATED,
         messagePayload
       );
-      console.log('🚨 [DASHBOARD BROADCAST] Widget channel result:', widgetResult);
 
       // Broadcast to conversations channel for dashboard conversation list updates
       await broadcastToChannel(
@@ -378,7 +414,7 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
         .from('conversations')
         .update({
           updated_at: new Date().toISOString(),
-          last_message_at: new Date().toISOString(),
+          lastMessageAt: new Date().toISOString(),
         })
         .eq('id', conversationId)
         .eq('organization_id', user.organizationId);
@@ -392,7 +428,13 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
     return NextResponse.json({ message: apiMessage }, { status: 201 });
 
   } catch (error) {
-    console.error('[Dashboard Messages API] Unexpected error:', error);
+    console.error('[Dashboard Messages API] ❌ Unexpected error:', {
+      conversationId,
+      userId: user.userId,
+      organizationId: user.organizationId,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
     return NextResponse.json(
       { error: 'Internal server error', code: 'INTERNAL_ERROR' },
       { status: 500 }

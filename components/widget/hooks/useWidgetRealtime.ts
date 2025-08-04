@@ -47,7 +47,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   useEffect(() => {
     if (!config.conversationId || !config.organizationId) return;
 
-    console.log('[Widget Realtime] 🔧 BIDIRECTIONAL FIX: Setting up message callbacks for:', {
+    console.log('[Widget Realtime] Setting up message callbacks for:', {
       organizationId: config.organizationId,
       conversationId: config.conversationId
     });

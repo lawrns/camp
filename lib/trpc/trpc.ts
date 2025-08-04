@@ -133,7 +133,7 @@ export const rateLimitedProcedure = protectedProcedure.use(async ({ ctx, next })
  */
 export const orgScopedProcedure = protectedProcedure.use(async ({ ctx, next, input }) => {
   // Extract organizationId from input (must be present in input schema)
-  const organizationId = (input as any)?.organizationId;
+  const organizationId = (input as unknown)?.organizationId;
 
   console.log('[orgScopedProcedure] Input:', JSON.stringify(input, null, 2));
   console.log('[orgScopedProcedure] Extracted organizationId:', organizationId);

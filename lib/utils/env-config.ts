@@ -29,7 +29,7 @@ const urlValidator = z
   .string()
   .url()
   .refine(
-    (url: any) =>
+    (url: unknown) =>
       url.startsWith("https://") ||
       url.startsWith("http://localhost") ||
       url.includes("localhost") ||
@@ -147,17 +147,17 @@ const serverSchema = z.object({
   DRIZZLE_LOGGING: z.enum(["true", "false"]).optional(),
   SUPABASE_REALTIME_PILOT: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
 
   // Development flags
   DISABLE_STRICT_MODE: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   SKIP_ENV_VALIDATION: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
 });
 
@@ -180,33 +180,33 @@ const clientSchema = z.object({
   // Feature flags (client-side)
   NEXT_PUBLIC_REALTIME_PILOT: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
 
   // Recovery feature flags
   NEXT_PUBLIC_RECOVERY_2025_P1_HOMEPAGE: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   NEXT_PUBLIC_RECOVERY_2025_P1_DASHBOARD: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   NEXT_PUBLIC_RECOVERY_2025_P1_SETTINGS: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   NEXT_PUBLIC_RECOVERY_2025_P2_CONVERSATIONS: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   NEXT_PUBLIC_RECOVERY_2025_P2_MESSAGING: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
   NEXT_PUBLIC_RECOVERY_2025_P2_PROFILE: z
     .enum(["true", "false"])
-    .transform((s: any) => s === "true")
+    .transform((s: unknown) => s === "true")
     .default("false"),
 });
 
@@ -227,10 +227,10 @@ function validateEnv() {
   if (!parsed.success) {
     // List missing required variables
     const errors = parsed.error.errors;
-    const missing = errors.filter((e: any) => e.message.includes("Required")).map((e: any) => e.path.join("."));
+    const missing = errors.filter((e: unknown) => e.message.includes("Required")).map((e: unknown) => e.path.join("."));
 
     if (missing.length > 0) {
-      missing.forEach((v: any) => {
+      missing.forEach((v: unknown) => {
         // Handle missing environment variable
       });
     }
@@ -253,16 +253,16 @@ const skipValidation = process.env.SKIP_ENV_VALIDATION === "true" || typeof wind
 /**
  * Validated environment variables with error handling
  */
-let env: any;
+let env: unknown;
 try {
-  env = skipValidation ? (process.env as any) : validateEnv();
+  env = skipValidation ? (process.env as unknown) : validateEnv();
 } catch (error) {
   // Fallback to process.env with safe defaults
   env = {
     ...process.env,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001",
     NODE_ENV: process.env.NODE_ENV || "development",
-  } as any;
+  } as unknown;
 }
 
 // Ensure env is never undefined
@@ -271,7 +271,7 @@ if (!env) {
     ...process.env,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3012",
     NODE_ENV: process.env.NODE_ENV || "development",
-  } as any;
+  } as unknown;
 }
 
 export { env };
@@ -357,7 +357,7 @@ export const RECOVERY_FLAGS = {
 /**
  * Security monitoring
  */
-export function logSecurityEvent(event: string, details?: any) {
+export function logSecurityEvent(event: string, details?: unknown) {
   if (isDevelopment) {
   }
   // In production, this would send to monitoring service
@@ -369,7 +369,7 @@ export function logSecurityEvent(event: string, details?: any) {
 export function validateSecurityConfig() {
   const critical = ["NEXTAUTH_SECRET", "CRYPTO_SECRET", "WIDGET_JWT_SECRET", "SUPABASE_SERVICE_ROLE_KEY"] as const;
 
-  const missing = critical.filter((key: any) => !env[key]);
+  const missing = critical.filter((key: unknown) => !env[key]);
 
   if (missing.length > 0 && (isProduction || isVercelProduction)) {
     throw new Error(`Critical security variables missing: ${missing.join(", ")}`);
@@ -386,5 +386,5 @@ if (typeof window === "undefined" && (isProduction || isVercelProduction)) {
  * @deprecated Use env object directly
  */
 export function getEnvVar(key: string, fallback?: string): string {
-  return (env as any)[key] || process.env[key] || fallback || "";
+  return (env as unknown)[key] || process.env[key] || fallback || "";
 }

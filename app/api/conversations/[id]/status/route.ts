@@ -27,16 +27,16 @@ export async function PUT(
     const supabaseClient = supabase.admin();
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: unknown = {
       status: status as Status,
       updated_at: new Date().toISOString()
     };
 
     // Set closed_at timestamp if status is closed or resolved
     if (status === 'closed' || status === 'resolved') {
-      updateData.closed_at = new Date().toISOString();
+      updateData.closedAt = new Date().toISOString();
     } else {
-      updateData.closed_at = null;
+      updateData.closedAt = null;
     }
 
     // Update conversation status
@@ -44,7 +44,7 @@ export async function PUT(
       .from('conversations')
       .update(updateData)
       .eq('id', conversationId)
-      .select('id, status, closed_at, updated_at')
+      .select('id, status, closedAt, updated_at')
       .single();
 
     if (updateError) {
@@ -67,7 +67,7 @@ export async function PUT(
       conversation: {
         id: conversation.id,
         status: conversation.status,
-        closedAt: conversation.closed_at,
+        closedAt: conversation.closedAt,
         updatedAt: conversation.updated_at
       }
     });
@@ -92,7 +92,7 @@ export async function GET(
 
     const { data: conversation, error } = await supabaseClient
       .from('conversations')
-      .select('id, status, closed_at')
+      .select('id, status, closedAt')
       .eq('id', conversationId)
       .single();
 
@@ -113,7 +113,7 @@ export async function GET(
     return NextResponse.json({
       id: conversation.id,
       status: conversation.status,
-      closedAt: conversation.closed_at,
+      closedAt: conversation.closedAt,
       validStatuses: VALID_STATUSES
     });
 

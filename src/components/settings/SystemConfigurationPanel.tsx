@@ -139,7 +139,7 @@ export function SystemConfigurationPanel({ organizationId }: SystemConfiguration
     }
   };
 
-  const updateConfig = (section: keyof SystemConfig, field: string, value: any) => {
+  const updateConfig = (section: keyof SystemConfig, field: string, value: unknown) => {
     if (!config) return;
 
     setConfig((prev) => ({
@@ -152,7 +152,7 @@ export function SystemConfigurationPanel({ organizationId }: SystemConfiguration
     setHasChanges(true);
   };
 
-  const updateNestedConfig = (section: keyof SystemConfig, subsection: string, field: string, value: any) => {
+  const updateNestedConfig = (section: keyof SystemConfig, subsection: string, field: string, value: unknown) => {
     if (!config) return;
 
     setConfig((prev) => ({
@@ -160,7 +160,7 @@ export function SystemConfigurationPanel({ organizationId }: SystemConfiguration
       [section]: {
         ...prev![section],
         [subsection]: {
-          ...(prev![section] as any)[subsection],
+          ...(prev![section] as unknown)[subsection],
           [field]: value,
         },
       },

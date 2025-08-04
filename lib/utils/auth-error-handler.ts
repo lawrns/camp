@@ -198,7 +198,7 @@ export async function fetchWithAuthHandling(
 /**
  * Check if error is an authentication error
  */
-export function isAuthError(error: any): error is AuthError {
+export function isAuthError(error: unknown): error is AuthError {
   return (
     error &&
     typeof error.status === "number" &&

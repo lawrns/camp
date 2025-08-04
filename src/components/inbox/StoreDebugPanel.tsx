@@ -51,7 +51,7 @@ export function StoreDebugPanel() {
 
         <div>
           <h4 className="font-semibold">First 3 Conversations:</h4>
-          {conversations.slice(0, 3).map((conv: any) => (
+          {conversations.slice(0, 3).map((conv: unknown) => (
             <div key={conv.id} className="ml-2 text-tiny">
               ID: {conv.id}, Status: {conv.status}
             </div>

@@ -18,7 +18,7 @@ interface DatabaseConversation {
   priority?: string;
   subject?: string;
   channel?: string;
-  metadata?: any;
+  metadata?: unknown;
   created_at?: string;
   updated_at?: string;
   last_message_at?: string;
@@ -32,14 +32,19 @@ interface DatabaseConversation {
   // Direct customer fields in conversations table
   customer_name?: string;
   customer_email?: string;
-  customer?: any; // JSONB field
+  customer?: unknown; // JSONB field
+  // STANDARD-003 FIX: Add missing fields
+  avatar_url?: string;
+  online_status?: string;
   // Legacy joined customers table (for backward compatibility)
   customers?: {
     id: string;
     name?: string;
     email?: string;
+    avatar_url?: string;
+    online_status?: string;
   } | null | any; // Allow for error states and flexible types
-  [key: string]: any; // Allow additional properties
+  [key: string]: unknown; // Allow additional properties
 }
 
 /**
@@ -54,14 +59,16 @@ export function mapDatabaseConversation(dbConversation: DatabaseConversation): C
     throw new Error("Invalid conversation data: missing id");
   }
 
-  // Extract customer data - prioritize direct fields in conversations table
+  // STANDARD-003 FIX: Extract customer data with new fields - prioritize direct fields in conversations table
   const customerName = dbConversation.customer_name || dbConversation.customers?.name || "";
   const customerEmail = dbConversation.customer_email || dbConversation.customers?.email || "";
+  const avatarUrl = dbConversation.avatar_url || dbConversation.customers?.avatar_url || "";
+  const onlineStatus = dbConversation.online_status || dbConversation.customers?.online_status || "offline";
 
   // Generate a friendly name if customer_name is missing or is just an email
   let finalCustomerName = customerName;
 
-  // Check if we need to generate a friendly name
+  // ✅ RESTORE: Generate unique visitor names like "Blue Owl", "Orange Cat"
   const needsNameGeneration =
     !finalCustomerName ||
     finalCustomerName.includes("@") ||
@@ -71,32 +78,50 @@ export function mapDatabaseConversation(dbConversation: DatabaseConversation): C
     finalCustomerName === "visitor@widget.com";
 
   if (needsNameGeneration) {
-    // Generate a friendly visitor name using the conversation ID as primary seed for uniqueness
+    // ✅ RESTORE: Generate unique visitor names using conversation ID as seed
     const seed = dbConversation.id?.toString() || customerEmail || "anonymous";
     finalCustomerName = generateUniqueVisitorName(seed);
   }
 
   // Ensure we have a valid last_message_preview
   let lastMessagePreview = dbConversation.last_message_content || "";
-  if (!lastMessagePreview || lastMessagePreview.trim() === "") {
+  
+  // If no last message content, try to get it from messages relation
+  if (!lastMessagePreview && dbConversation.messages && Array.isArray(dbConversation.messages) && dbConversation.messages.length > 0) {
+    const lastMessage = dbConversation.messages[dbConversation.messages.length - 1] as any;
+    lastMessagePreview = lastMessage?.content || "";
+  }
+
+  // Clean and truncate the preview
+  if (lastMessagePreview && lastMessagePreview.trim() !== "") {
+    lastMessagePreview = lastMessagePreview
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .trim();
+    
+    // Truncate to 100 characters
+    if (lastMessagePreview.length > 100) {
+      lastMessagePreview = lastMessagePreview.substring(0, 97) + '...';
+    }
+  } else {
     lastMessagePreview = "No messages yet";
   }
 
   // Ensure we have a valid timestamp
-  let lastMessageAt = dbConversation.last_message_at || "";
+  let lastMessageAt = dbConversation.lastMessageAt || "";
   if (!lastMessageAt || lastMessageAt === "1969-12-31T00:00:00.000Z" || lastMessageAt === "1970-01-01T00:00:00.000Z") {
     lastMessageAt = dbConversation.updated_at || dbConversation.created_at || new Date().toISOString();
   }
 
   // Map status to valid enum values
   const validStatuses = ["open", "pending", "resolved", "escalated"] as const;
-  const status = validStatuses.includes(dbConversation.status as any) 
+  const status = validStatuses.includes(dbConversation.status as unknown) 
     ? dbConversation.status as "open" | "pending" | "resolved" | "escalated"
     : "open";
 
   // Map priority to valid enum values
   const validPriorities = ["low", "medium", "high", "urgent"] as const;
-  const priority = validPriorities.includes(dbConversation.priority as any)
+  const priority = validPriorities.includes(dbConversation.priority as unknown)
     ? dbConversation.priority as "low" | "medium" | "high" | "urgent"
     : "medium";
 
@@ -113,6 +138,9 @@ export function mapDatabaseConversation(dbConversation: DatabaseConversation): C
     ai_handover_session_id: dbConversation.ai_handover_session_id,
     priority: priority,
     tags: dbConversation.tags || [],
+    // STANDARD-003 FIX: Add missing fields to mapped conversation
+    customerAvatar: avatarUrl,
+    isOnline: onlineStatus === "online" || onlineStatus === "available",
   };
 }
 
@@ -130,7 +158,7 @@ export function mapDatabaseConversations(dbConversations: DatabaseConversation[]
  * @param data - Raw data to validate
  * @returns True if data has required fields
  */
-export function validateDatabaseConversation(data: any): data is DatabaseConversation {
+export function validateDatabaseConversation(data: unknown): data is DatabaseConversation {
   return (
     typeof data === "object" &&
     data !== null &&
@@ -143,7 +171,7 @@ export function validateDatabaseConversation(data: any): data is DatabaseConvers
  * @param data - Array of raw data to validate
  * @returns True if all items have required fields
  */
-export function validateDatabaseConversations(data: any[]): data is DatabaseConversation[] {
+export function validateDatabaseConversations(data: unknown[]): data is DatabaseConversation[] {
   return Array.isArray(data) && data.every(validateDatabaseConversation);
 }
 
@@ -152,7 +180,7 @@ export function validateDatabaseConversations(data: any[]): data is DatabaseConv
  * @param data - Raw data that might be a conversation
  * @returns Conversation object or null if invalid
  */
-export function safeMapConversation(data: any): Conversation | null {
+export function safeMapConversation(data: unknown): Conversation | null {
   try {
     // More lenient validation - just check if it has an id
     if (!data || typeof data !== "object" || !data.id) {
@@ -171,7 +199,7 @@ export function safeMapConversation(data: any): Conversation | null {
  * @param data - Raw data that might be an array of conversations
  * @returns Array of Conversation objects, filtering out invalid ones
  */
-export function safeMapConversations(data: any[]): Conversation[] {
+export function safeMapConversations(data: unknown[]): Conversation[] {
   try {
     if (!Array.isArray(data)) {
       console.warn("Expected array of conversations, got:", typeof data);

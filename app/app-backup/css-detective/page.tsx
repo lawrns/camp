@@ -17,7 +17,7 @@ export default function CSSDetectivePage() {
     const computedStyle = window.getComputedStyle(testDiv);
 
     // Get all CSS rules that apply to this element
-    const allRules: any[] = [];
+    const allRules: unknown[] = [];
     for (let i = 0; i < document.styleSheets.length; i++) {
       try {
         const styleSheet = document.styleSheets[i];
@@ -99,7 +99,7 @@ export default function CSSDetectivePage() {
             <div>
               <h3 className="font-medium text-gray-900">Matching CSS Rules with Border Radius:</h3>
               <div className="mt-2 max-h-96 space-y-2 overflow-y-auto">
-                {analysis.matchingRules?.map((rule: any, index: number) => (
+                {analysis.matchingRules?.map((rule: unknown, index: number) => (
                   <div key={index} className="rounded bg-gray-100 spacing-3 text-sm">
                     <div>
                       <strong>Selector:</strong> {rule.selector}

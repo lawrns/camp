@@ -92,7 +92,7 @@ export const createTRPCContext = async (opts: { headers: Headers }): Promise<Bas
           organizationId: profile.organization_id,
           organizationRole: membership?.role || "agent",
           fullName:
-            profile.full_name || supabaseUser.user_metadata?.full_name || supabaseUser.user_metadata?.name || "",
+            profile.fullName || supabaseUser.user_metadata?.fullName || supabaseUser.user_metadata?.name || "",
           firstName: supabaseUser.user_metadata?.firstName,
           lastName: supabaseUser.user_metadata?.lastName,
           access_token: undefined, // Will be set by session management

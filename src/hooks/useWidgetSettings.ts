@@ -15,12 +15,12 @@ interface UseWidgetSettingsOptions {
 
 interface UseWidgetSettingsReturn {
   // Data
-  settings: any | null;
+  settings: unknown | null;
   isLoading: boolean;
   error: Error | null;
 
   // Actions
-  updateSettings: (updates: any) => Promise<void>;
+  updateSettings: (updates: unknown) => Promise<void>;
   refreshSettings: () => void;
 
   // Utilities
@@ -52,13 +52,13 @@ export function useWidgetSettings(options: UseWidgetSettingsOptions = {}): UseWi
     onMutate: () => {
       setIsUpdating(true);
     },
-    onSuccess: (updatedSettings: any) => {
+    onSuccess: (updatedSettings: unknown) => {
       // Update cache optimistically
       queryClient.setQueryData([["widget", "getSettings"], { input: { mailboxId }, type: "query" }], updatedSettings);
 
       toast.success("Widget settings updated successfully");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast.error(`Failed to update widget settings: ${error.message}`);
     },
     onSettled: () => {
@@ -68,7 +68,7 @@ export function useWidgetSettings(options: UseWidgetSettingsOptions = {}): UseWi
 
   // Update settings function
   const updateSettings = useCallback(
-    async (updates: any) => {
+    async (updates: unknown) => {
       await updateSettingsMutation.mutateAsync({
         mailboxId,
         ...updates,

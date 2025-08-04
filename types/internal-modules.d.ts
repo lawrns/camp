@@ -33,9 +33,9 @@ declare module "@/lib/supabase/admin-client" {
 
 declare module "@/lib/auth/service" {
   export interface AuthService {
-    validateToken(token: string): Promise<{ valid: boolean; user?: any }>;
+    validateToken(token: string): Promise<{ valid: boolean; user?: unknown }>;
     getUser(token: string): Promise<any>;
-    createSession(user: any): Promise<string>;
+    createSession(user: unknown): Promise<string>;
     destroySession(token: string): Promise<void>;
   }
 
@@ -49,7 +49,7 @@ declare module "@/lib/auth/api-auth" {
   export function authenticateRequest(request: Request): Promise<{
     success: boolean;
     context?: {
-      user: any;
+      user: unknown;
       organizationId?: string;
     };
     error?: string;
@@ -58,8 +58,8 @@ declare module "@/lib/auth/api-auth" {
 
 declare module "@/lib/db" {
   export interface DatabaseConnection {
-    query(sql: string, params?: any[]): Promise<any>;
-    transaction(fn: (trx: any) => Promise<any>): Promise<any>;
+    query(sql: string, params?: unknown[]): Promise<any>;
+    transaction(fn: (trx: unknown) => Promise<any>): Promise<any>;
   }
 
   export const db: DatabaseConnection;
@@ -85,7 +85,7 @@ declare module "@/lib/realtime" {
     createChannel(name: string): RealtimeChannel;
     getChannel(name: string): RealtimeChannel | null;
     removeChannel(name: string): void;
-    broadcast(channel: string, event: string, payload: any): void;
+    broadcast(channel: string, event: string, payload: unknown): void;
   }
 
   export const realtime: RealtimeService;
@@ -94,7 +94,7 @@ declare module "@/lib/realtime" {
 
 declare module "@/lib/feature-flags" {
   export function isFeatureEnabled(flag: string): boolean;
-  export function getFeatureValue(flag: string): any;
+  export function getFeatureValue(flag: string): unknown;
   export function getAllFeatures(): Record<string, any>;
 }
 
@@ -125,7 +125,7 @@ declare module "@/lib/simple-require-auth" {
   export function authenticateRequest(request: NextRequest): Promise<{
     success: boolean;
     context?: {
-      user: any;
+      user: unknown;
       organizationId?: string;
     };
     error?: string;
@@ -134,15 +134,15 @@ declare module "@/lib/simple-require-auth" {
 
 declare module "@/lib/ai/conversation-state-analyzer" {
   export class ConversationStateAnalyzer {
-    analyzeState(conversation: any, messages: any[]): Promise<any>;
+    analyzeState(conversation: unknown, messages: unknown[]): Promise<any>;
   }
 }
 
 declare module "@/lib/ai/resolution-detector" {
   export class ResolutionDetector {
     isResolved(
-      conversation: any,
-      messages: any[]
+      conversation: unknown,
+      messages: unknown[]
     ): Promise<{
       isResolved: boolean;
       confidence: number;
@@ -153,7 +153,7 @@ declare module "@/lib/ai/resolution-detector" {
 
 declare module "@/lib/ai/cost-management-service" {
   export class CostManagementService {
-    trackUsage(organizationId: string, usage: any): Promise<void>;
+    trackUsage(organizationId: string, usage: unknown): Promise<void>;
     getCosts(organizationId: string): Promise<any>;
     checkLimits(organizationId: string): Promise<{ allowed: boolean; remaining: number }>;
   }
@@ -161,7 +161,7 @@ declare module "@/lib/ai/cost-management-service" {
 
 declare module "@/lib/ai/ai-cost-management-service" {
   export class AICostManagementService {
-    trackUsage(organizationId: string, usage: any): Promise<void>;
+    trackUsage(organizationId: string, usage: unknown): Promise<void>;
     getCosts(organizationId: string): Promise<any>;
     checkLimits(organizationId: string): Promise<{ allowed: boolean; remaining: number }>;
   }
@@ -249,17 +249,17 @@ declare module "@/lib/analytics/metrics" {
 
 // Additional missing modules
 declare module "jest-axe" {
-  export function axe(element: any): Promise<any>;
-  export function toHaveNoViolations(received: any): any;
+  export function axe(element: unknown): Promise<any>;
+  export function toHaveNoViolations(received: unknown): unknown;
 }
 
 declare module "@/hooks/use-enhanced-toast" {
   export interface EnhancedToast {
-    success: (message: string, options?: any) => void;
-    error: (message: string, options?: any) => void;
-    info: (message: string, options?: any) => void;
-    warning: (message: string, options?: any) => void;
-    loading: (message: string, options?: any) => void;
+    success: (message: string, options?: unknown) => void;
+    error: (message: string, options?: unknown) => void;
+    info: (message: string, options?: unknown) => void;
+    warning: (message: string, options?: unknown) => void;
+    loading: (message: string, options?: unknown) => void;
     dismiss: (id?: string) => void;
   }
 
@@ -269,7 +269,7 @@ declare module "@/hooks/use-enhanced-toast" {
 
 declare module "@/components/conversations/ConversationList" {
   export interface ConversationListProps {
-    conversations: any[];
+    conversations: unknown[];
     selectedConversationId?: string;
     onConversationSelect: (conversationId: string) => void;
     loading?: boolean;
@@ -281,11 +281,11 @@ declare module "@/components/conversations/ConversationList" {
 
 declare module "@campfire/api-router" {
   export interface ApiRouter {
-    get: (path: string, handler: any) => void;
-    post: (path: string, handler: any) => void;
-    put: (path: string, handler: any) => void;
-    delete: (path: string, handler: any) => void;
-    patch: (path: string, handler: any) => void;
+    get: (path: string, handler: unknown) => void;
+    post: (path: string, handler: unknown) => void;
+    put: (path: string, handler: unknown) => void;
+    delete: (path: string, handler: unknown) => void;
+    patch: (path: string, handler: unknown) => void;
   }
 
   export function createApiRouter(): ApiRouter;
@@ -294,11 +294,11 @@ declare module "@campfire/api-router" {
 
 declare module "@campfire/api-router/client" {
   export interface ApiClient {
-    get: (path: string, options?: any) => Promise<any>;
-    post: (path: string, data?: any, options?: any) => Promise<any>;
-    put: (path: string, data?: any, options?: any) => Promise<any>;
-    delete: (path: string, options?: any) => Promise<any>;
-    patch: (path: string, data?: any, options?: any) => Promise<any>;
+    get: (path: string, options?: unknown) => Promise<any>;
+    post: (path: string, data?: unknown, options?: unknown) => Promise<any>;
+    put: (path: string, data?: unknown, options?: unknown) => Promise<any>;
+    delete: (path: string, options?: unknown) => Promise<any>;
+    patch: (path: string, data?: unknown, options?: unknown) => Promise<any>;
   }
 
   export function createApiClient(baseUrl: string): ApiClient;
@@ -317,8 +317,8 @@ declare module "@campfire/inbox" {
 
 declare module "@campfire/job-queue" {
   export interface JobQueue {
-    add: (name: string, data: any, options?: any) => Promise<void>;
-    process: (name: string, handler: (job: any) => Promise<void>) => void;
+    add: (name: string, data: unknown, options?: unknown) => Promise<void>;
+    process: (name: string, handler: (job: unknown) => Promise<void>) => void;
     start: () => Promise<void>;
     stop: () => Promise<void>;
   }
@@ -329,9 +329,9 @@ declare module "@campfire/job-queue" {
 
 declare module "@/lib/core/messaging" {
   export interface MessagingService {
-    sendMessage: (message: any) => Promise<void>;
-    receiveMessage: (handler: (message: any) => void) => void;
-    broadcastMessage: (message: any) => Promise<void>;
+    sendMessage: (message: unknown) => Promise<void>;
+    receiveMessage: (handler: (message: unknown) => void) => void;
+    broadcastMessage: (message: unknown) => Promise<void>;
   }
 
   export const messagingService: MessagingService;
@@ -376,9 +376,9 @@ declare module "../realtime-server/WebSocketV2Service" {
   export interface WebSocketV2Service {
     connect: (url: string) => Promise<void>;
     disconnect: () => void;
-    send: (data: any) => void;
-    on: (event: string, handler: (data: any) => void) => void;
-    off: (event: string, handler: (data: any) => void) => void;
+    send: (data: unknown) => void;
+    on: (event: string, handler: (data: unknown) => void) => void;
+    off: (event: string, handler: (data: unknown) => void) => void;
   }
 
   export const webSocketV2Service: WebSocketV2Service;
@@ -411,10 +411,10 @@ declare module "./embeddings" {
 declare global {
   // More missing globals
   const auth: {
-    currentUser: any;
+    currentUser: unknown;
     signIn: (email: string, password: string) => Promise<any>;
     signOut: () => Promise<void>;
-    onAuthStateChange: (callback: (user: any) => void) => () => void;
+    onAuthStateChange: (callback: (user: unknown) => void) => () => void;
   };
 
   const SearchInput: React.ComponentType<{
@@ -425,7 +425,7 @@ declare global {
   }>;
 
   const ConversationList: React.ComponentType<{
-    conversations: any[];
+    conversations: unknown[];
     selectedConversationId?: string;
     onConversationSelect: (conversationId: string) => void;
     loading?: boolean;
@@ -433,7 +433,7 @@ declare global {
   }>;
 
   const MessageList: React.ComponentType<{
-    messages: any[];
+    messages: unknown[];
     conversationId: string;
     loading?: boolean;
     error?: string;
@@ -441,7 +441,7 @@ declare global {
 
   const TypingIndicator: React.ComponentType<{
     isTyping: boolean;
-    users?: any[];
+    users?: unknown[];
   }>;
 
   const UploadProgress: React.ComponentType<{
@@ -471,7 +471,7 @@ declare global {
   const createChannelName: (organizationId: string, resourceType: string, resourceId?: string) => string;
   const getGlobalRealtimeClient: () => any;
 
-  const enhanced: any;
+  const enhanced: unknown;
 }
 
 // Export type definitions

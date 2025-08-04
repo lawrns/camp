@@ -5,7 +5,7 @@ import { trainingDatasets } from "@/db/schema/trainingDatasets";
 import { inngest } from "../client";
 
 // Simple fallback function for missing module
-const ingestTrainingData = async (data: any): Promise<void> => {
+const ingestTrainingData = async (data: unknown): Promise<void> => {
   console.log("ingestTrainingData called with:", data);
 };
 
@@ -19,7 +19,7 @@ const s3Client = new S3Client({
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         }
       : undefined,
-} as any);
+} as unknown);
 
 // Function to handle dataset processing
 export const processTrainingDataFunction = inngest.createFunction(

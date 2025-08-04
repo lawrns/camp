@@ -27,9 +27,9 @@ export interface AgentPresence {
 }
 
 export class WidgetRealtimeClient {
-  private supabase: any;
+  private supabase: unknown;
   private config: WidgetRealtimeConfig;
-  private channel: any = null;
+  private channel: unknown = null;
   private isConnected = false;
 
   // Event callbacks
@@ -64,17 +64,17 @@ export class WidgetRealtimeClient {
           }
         })
         // UNIFIED EVENTS: Listen for standardized events
-        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: unknown) => {
           if (this.onTyping) {
             this.onTyping(payload.payload);
           }
         })
-        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: unknown) => {
           if (this.onTyping) {
             this.onTyping(payload.payload);
           }
         })
-        .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: unknown) => {
           const connectionId = `widget-${this.config.organizationId}-${this.config.sessionId}`;
           realtimeMonitor.trackMessage(connectionId, "received", UNIFIED_EVENTS.MESSAGE_CREATED, true);
           RealtimeLogger.message(channelName, "received", payload.payload.message?.content);
@@ -83,7 +83,7 @@ export class WidgetRealtimeClient {
             this.onMessage(payload.payload.message);
           }
         })
-        .on("broadcast", { event: UNIFIED_EVENTS.AGENT_STATUS_ONLINE }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.AGENT_STATUS_ONLINE }, (payload: unknown) => {
           if (this.onPresence) {
             this.onPresence({ ...payload.payload, status: "online" });
           }
@@ -167,7 +167,7 @@ export class WidgetRealtimeClient {
   }
 
   // ENHANCED: Bidirectional communication methods
-  async broadcastMessage(message: any): Promise<void> {
+  async broadcastMessage(message: unknown): Promise<void> {
     if (!this.channel || !this.isConnected) {
 
       return;
@@ -286,7 +286,7 @@ export function createWidgetPostMessageBridge(client: WidgetRealtimeClient, targ
             messageId: event.data.messageId,
             success: true,
           },
-          targetOrigin as any
+          targetOrigin as unknown
         );
       } catch (error) {
         event.source?.postMessage(
@@ -295,7 +295,7 @@ export function createWidgetPostMessageBridge(client: WidgetRealtimeClient, targ
             messageId: event.data.messageId,
             error: (error as Error).message,
           },
-          targetOrigin as any
+          targetOrigin as unknown
         );
       }
     }

@@ -137,7 +137,7 @@ export function HandoffButton({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="priority">Priority Level</Label>
-            <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
+            <Select value={priority} onValueChange={(value: unknown) => setPriority(value)}>
               <SelectTrigger data-testid="priority-select">
                 <SelectValue placeholder="Select priority" />
               </SelectTrigger>

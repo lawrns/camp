@@ -35,7 +35,7 @@ type RouteContext = {
 };
 
 // Type for the auth handler function
-type AuthHandler = (req: Request, context: RouteContext, auth: { user: any; client: any }) => Promise<Response>;
+type AuthHandler = (req: Request, context: RouteContext, auth: { user: unknown; client: unknown }) => Promise<Response>;
 
 export const withAuth = (handler: AuthHandler) => {
   return async (req: Request, context: RouteContext) => {

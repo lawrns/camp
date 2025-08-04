@@ -215,7 +215,7 @@ export class MessageDeduplicationManager {
         .select("id, content, created_at")
         .eq("conversation_id", message.conversationId)
         .eq("content", message.content.trim())
-        .eq("sender_type", message.senderType)
+        .eq("senderType", message.senderType)
         .gte("created_at", timeThreshold)
         .limit(1);
 
@@ -463,7 +463,7 @@ export async function createMessageWithDeduplication(
     senderId?: string;
     senderName?: string;
     senderEmail?: string;
-    metadata?: any;
+    metadata?: unknown;
   },
   options: {
     useStrictMode?: boolean;
@@ -472,7 +472,7 @@ export async function createMessageWithDeduplication(
   } = {}
 ): Promise<{
   success: boolean;
-  message?: any;
+  message?: unknown;
   isDuplicate?: boolean;
   reason?: string;
   error?: string;
@@ -536,9 +536,9 @@ export async function createMessageWithDeduplication(
  * Insert message into database
  */
 async function insertMessage(
-  messageData: any,
+  messageData: unknown,
   tableName: string = "messages"
-): Promise<{ success: boolean; message?: any; error?: string }> {
+): Promise<{ success: boolean; message?: unknown; error?: string }> {
   try {
     const supabaseClient = supabase.admin();
 
@@ -547,10 +547,10 @@ async function insertMessage(
       conversation_id: messageData.conversationId,
       organization_id: messageData.organizationId,
       content: messageData.content,
-      sender_type: messageData.senderType,
-      sender_id: messageData.senderId,
-      sender_name: messageData.senderName,
-      sender_email: messageData.senderEmail,
+      senderType: messageData.senderType,
+      senderId: messageData.senderId,
+      senderName: messageData.senderName,
+      senderEmail: messageData.senderEmail,
       created_at: new Date().toISOString(),
       metadata: messageData.metadata || {},
     };

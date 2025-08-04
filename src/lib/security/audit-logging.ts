@@ -149,7 +149,7 @@ export class AuditLogger {
   }
 
   // Create audit event with integrity hash
-  private createAuditEvent(type: AuditEventType, action: string, options: any): AuditEvent {
+  private createAuditEvent(type: AuditEventType, action: string, options: unknown): AuditEvent {
     const event: Omit<AuditEvent, "integrity"> = {
       id: crypto.randomUUID(),
       timestamp: new Date().toISOString(),
@@ -321,7 +321,7 @@ export function createAuditMiddleware(
     includeResponseBody?: boolean;
   } = {}
 ) {
-  return async function auditMiddleware(req: any, res: any, next: any) {
+  return async function auditMiddleware(req: unknown, res: unknown, next: unknown) {
     const { excludePaths = [], includeRequestBody = false, includeResponseBody = false } = options;
 
     // Skip excluded paths
@@ -358,7 +358,7 @@ export function createAuditMiddleware(
 
     // Intercept response
     const originalSend = res.send;
-    res.send = function (body: any) {
+    res.send = function (body: unknown) {
       const duration = Date.now() - startTime;
 
       // Log response

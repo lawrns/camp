@@ -38,7 +38,7 @@ class WidgetCache {
   async cacheMessages(
     conversationId: string,
     organizationId: string,
-    messages: any[],
+    messages: unknown[],
     options: CacheOptions = {}
   ): Promise<void> {
     const { ttl = this.MESSAGES_TTL } = options;
@@ -61,7 +61,7 @@ class WidgetCache {
   async getCachedMessages(
     conversationId: string,
     organizationId: string
-  ): Promise<{ messages: any[]; cached: boolean; age: number } | null> {
+  ): Promise<{ messages: unknown[]; cached: boolean; age: number } | null> {
     const startTime = performance.now();
     const cacheKey = this.getMessagesKey(conversationId, organizationId);
     
@@ -99,7 +99,7 @@ class WidgetCache {
   async cacheConversation(
     conversationId: string,
     organizationId: string,
-    conversation: any,
+    conversation: unknown,
     options: CacheOptions = {}
   ): Promise<void> {
     const { ttl = this.CONVERSATION_TTL } = options;
@@ -121,7 +121,7 @@ class WidgetCache {
   async getCachedConversation(
     conversationId: string,
     organizationId: string
-  ): Promise<{ conversation: any; cached: boolean; age: number } | null> {
+  ): Promise<{ conversation: unknown; cached: boolean; age: number } | null> {
     const cacheKey = this.getConversationKey(conversationId, organizationId);
     
     try {

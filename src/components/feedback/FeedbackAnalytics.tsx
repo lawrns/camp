@@ -108,7 +108,7 @@ export function FeedbackAnalyticsDashboard({ organizationId, timeRange }: Feedba
       fid: totals.fid / count,
       cls: totals.cls / count,
       networkType: "mixed",
-      deviceType: "mixed" as any,
+      deviceType: "mixed" as unknown,
       browserName: "mixed",
       browserVersion: "mixed",
     };

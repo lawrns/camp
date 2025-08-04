@@ -6,7 +6,7 @@ import { publishToSupabaseRealtime } from "@/inngest/lib/realtime";
 import { assertDefinedOrRaiseNonRetriableError } from "@/inngest/utils";
 
 // Simple fallback function for missing module
-const createHumanSupportRequestEventPayload = (event: any, mailbox: any) => {
+const createHumanSupportRequestEventPayload = (event: unknown, mailbox: unknown) => {
   return {
     eventId: event.id,
     conversationId: event.conversation.id,

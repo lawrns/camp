@@ -75,7 +75,7 @@ export class TypingSimulationService {
       await supabase.from("typing_indicators").upsert({
         conversation_id: conversationId,
         operator_id: operatorId,
-        is_typing: true,
+        isTyping: true,
         preview_text: "",
         current_position: 0,
         started_typing_at: new Date().toISOString(),
@@ -118,7 +118,7 @@ export class TypingSimulationService {
       await supabase
         .from("typing_indicators")
         .update({
-          is_typing: false,
+          isTyping: false,
           preview_text: "",
         })
         .eq("conversation_id", conversationId)

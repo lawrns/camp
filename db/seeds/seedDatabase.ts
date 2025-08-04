@@ -28,7 +28,7 @@ const getTables = async () => {
   FROM information_schema.tables
   WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
   `);
-  return result.rows.map((row: any) => row.table_name as string);
+  return result.rows.map((row: unknown) => row.table_name as string);
 };
 
 const checkIfAllTablesAreEmpty = async () => {
@@ -161,7 +161,7 @@ export const seedDatabase = async () => {
     if (existsSync(path.join(import.meta.dirname, "localSeeds.ts"))) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - localSeeds.ts is optional
-      await import("./localSeeds").then((module: any) => module.default());
+      await import("./localSeeds").then((module: unknown) => module.default());
     }
   } else {
   }
@@ -220,9 +220,9 @@ const generateSeedsFromFixtures = async (mailboxId: number) => {
       .sort(([keyA], [keyB]) => parseInt(keyA) - parseInt(keyB))
       .map(async ([, fixture], fixtureIndex) => {
         const lastUserEmailCreatedAt = subHours(new Date(), (fixtures.length - fixtureIndex) * 8);
-        const fixtureData = fixture as { isClosed?: boolean; messages?: any[] };
+        const fixtureData = fixture as { isClosed?: boolean; messages?: unknown[] };
         const conversationResult = await conversationFactory.create(mailboxId, {
-          ...(fixture as any),
+          ...(fixture as unknown),
           lastUserEmailCreatedAt,
           closedAt: fixtureData.isClosed ? addHours(lastUserEmailCreatedAt, 8) : null,
           createdAt: subDays(lastUserEmailCreatedAt, fixtureData.messages?.length || 1 - 1),

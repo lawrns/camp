@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils';
 // Enhanced Composer Props
 export interface EnhancedComposerProps {
   // Core functionality
-  onSend: (content: string, attachments?: File[], metadata?: any) => Promise<void>;
+  onSend: (content: string, attachments?: File[], metadata?: unknown) => Promise<void>;
   onTyping?: () => void;
   onStopTyping?: () => void;
   onContentChange?: (content: string) => void;

@@ -115,7 +115,7 @@ export function useReadReceipts(
       setReadReceipts(prev => {
         const updated = { ...prev };
         
-        data.readReceipts?.forEach((receipt: any) => {
+        data.readReceipts?.forEach((receipt: unknown) => {
           const messageId = receipt.messageId;
           updated[messageId] = {
             messageId,

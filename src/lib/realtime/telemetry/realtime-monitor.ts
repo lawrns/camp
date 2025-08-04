@@ -16,11 +16,11 @@ export class RealtimeMonitor {
     return this.instance;
   }
 
-  recordEvent(event: string, data?: any): void {}
+  recordEvent(event: string, data?: unknown): void {}
 
   recordMetric(metric: string, value: number): void {}
 
-  getMetrics(): any {
+  getMetrics(): unknown {
     return {
       connectionsActive: 1,
       messagesProcessed: 0,

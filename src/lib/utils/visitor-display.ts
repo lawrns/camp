@@ -32,7 +32,7 @@ function getVisitorColor(id: string): string {
     "from-violet-500 to-purple-500",
   ];
 
-  const hash = id.split("").reduce((acc: any, char: any) => {
+  const hash = id.split("").reduce((acc: unknown, char: unknown) => {
     return (acc << 5) - acc + char.charCodeAt(0);
   }, 0);
 
@@ -95,7 +95,7 @@ export function getVisitorDisplay(visitor: VisitorInfo): VisitorDisplay {
   const visitorNumber =
     parseInt(shortId, 16) % 10000 ||
     Math.abs(
-      visitor.id.split("").reduce((acc: any, char: any) => {
+      visitor.id.split("").reduce((acc: unknown, char: unknown) => {
         return (acc << 5) - acc + char.charCodeAt(0);
       }, 0)
     ) % 10000;
@@ -115,7 +115,7 @@ export function getVisitorDisplay(visitor: VisitorInfo): VisitorDisplay {
  * Implements the smart display name system from the inbox improvement proposal
  * Returns simplified display name and tooltip for better user experience
  */
-export function getVisitorDisplayName(visitor: { id: string; name?: string; email?: string; metadata?: any }): {
+export function getVisitorDisplayName(visitor: { id: string; name?: string; email?: string; metadata?: unknown }): {
   displayName: string;
   tooltip: string;
 } {

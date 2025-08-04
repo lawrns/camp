@@ -12,7 +12,7 @@ export interface ComposerProps {
   maxLength?: number;
   className?: string;
   plugins?: string[];
-  [key: string]: any; // For additional props
+  [key: string]: unknown; // For additional props
 }
 
 // Plugin System Types
@@ -30,7 +30,7 @@ export interface ComposerPluginProps {
   pluginId: string;
   content: string;
   onContentChange: (content: string) => void;
-  onAction: (pluginId: string, action: string, data?: any) => void;
+  onAction: (pluginId: string, action: string, data?: unknown) => void;
   disabled?: boolean;
   config?: Record<string, any>;
 }
@@ -40,7 +40,7 @@ export interface UseComposerPluginsReturn {
   enabledPlugins: ComposerPlugin[];
   registerPlugin: (plugin: ComposerPlugin) => void;
   unregisterPlugin: (pluginId: string) => void;
-  executePlugin: (pluginId: string, action: string, data?: any) => void;
+  executePlugin: (pluginId: string, action: string, data?: unknown) => void;
   getPlugin: (pluginId: string) => ComposerPlugin | undefined;
 }
 
@@ -67,7 +67,7 @@ export interface TemplateVariable {
   name: string;
   type: "text" | "number" | "select";
   required: boolean;
-  default?: any;
+  default?: unknown;
   options?: string[];
 }
 

@@ -106,7 +106,7 @@ export async function handleFormSubmission<T>(
 // Real-time Event Notifications
 export function notifyRealtimeEvent(
   event: string,
-  data?: any,
+  data?: unknown,
   options?: {
     variant?: "info" | "success" | "warning";
     duration?: number;
@@ -128,7 +128,7 @@ export function notifyRealtimeEvent(
   toast({
     title: event
       .split(".")
-      .map((s: any) => s.charAt(0).toUpperCase() + s.slice(1))
+      .map((s: unknown) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(" "),
     description: message,
     variant: options?.variant || "info",

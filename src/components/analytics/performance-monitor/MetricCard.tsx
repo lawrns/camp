@@ -86,7 +86,7 @@ export function MetricCard({ metric, chartData }: MetricCardProps) {
         {chartData && chartData.length > 10 && (
           <div className="flex h-8 items-end gap-1">
             {chartData.slice(-20).map((point, index) => {
-              const height = Math.max(4, (point.value / Math.max(...chartData.map((p: any) => p.value))) * 100);
+              const height = Math.max(4, (point.value / Math.max(...chartData.map((p: unknown) => p.value))) * 100);
               return (
                 <div
                   key={index}

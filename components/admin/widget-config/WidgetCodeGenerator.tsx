@@ -9,7 +9,7 @@ import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
 interface WidgetCodeGeneratorProps {
-  config: any;
+  config: unknown;
   organizationId?: string;
   onGenerate: () => string;
 }

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Basic Authentication Tests', () => {
   // Helper function to handle dev overlay interference
-  const forceClickSubmit = async (page: any) => {
+  const forceClickSubmit = async (page: unknown) => {
     // Try multiple strategies to click the submit button
     const submitButton = page.locator('button[type="submit"]');
 

@@ -160,7 +160,7 @@ export function FileUpload({
   // Remove selected file
   const removeFile = useCallback((fileId: string) => {
     setSelectedFiles((prev) => {
-      const updated = prev.filter((f: any) => f.id !== fileId);
+      const updated = prev.filter((f: unknown) => f.id !== fileId);
       // Revoke object URL to prevent memory leaks
       const removedFile = prev.find((f) => f.id === fileId);
       if (removedFile?.preview) {
@@ -329,7 +329,7 @@ export function FileUpload({
           </div>
 
           <div className="space-y-spacing-sm">
-            {selectedFiles.map((file: any) => {
+            {selectedFiles.map((file: unknown) => {
               const File = getFile(file.type);
 
               return (
@@ -370,7 +370,7 @@ export function FileUpload({
           </h4>
 
           <div className="space-y-spacing-sm">
-            {uploadedFiles.map((file: any) => {
+            {uploadedFiles.map((file: unknown) => {
               const File = getFile(file.mimeType);
 
               return (

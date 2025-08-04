@@ -19,13 +19,13 @@ interface BatchedMessage {
   conversation_id: string;
   organization_id: string;
   content: string;
-  sender_type: "customer" | "agent";
-  sender_name: string;
-  metadata?: any;
+  senderType: "customer" | "agent";
+  senderName: string;
+  metadata?: unknown;
   timestamp: number;
   priority: "high" | "medium" | "low";
   retryCount: number;
-  clientCallback?: (result: any) => void;
+  clientCallback?: (result: unknown) => void;
 }
 
 interface BatchProcessorConfig {
@@ -40,7 +40,7 @@ export class MessageBatchProcessor {
   private batchTimer: NodeJS.Timeout | null = null;
   private processing = false;
   private config: BatchProcessorConfig;
-  private supabase: any;
+  private supabase: unknown;
 
   // Performance metrics
   private metrics = {
@@ -76,9 +76,9 @@ export class MessageBatchProcessor {
       conversation_id: string;
       organization_id: string;
       content: string;
-      sender_type: "customer" | "agent";
-      sender_name: string;
-      metadata?: any;
+      senderType: "customer" | "agent";
+      senderName: string;
+      metadata?: unknown;
     },
     priority: "high" | "medium" | "low" = "medium"
   ): Promise<{ success: boolean; messageId: string; estimatedDelivery: number }> {
@@ -158,8 +158,8 @@ export class MessageBatchProcessor {
         conversation_id: msg.conversation_id,
         organization_id: msg.organization_id,
         content: msg.content,
-        sender_type: msg.sender_type,
-        sender_name: msg.sender_name,
+        senderType: msg.senderType,
+        senderName: msg.senderName,
         created_at: new Date(msg.timestamp).toISOString(),
         metadata: {
           ...msg.metadata,

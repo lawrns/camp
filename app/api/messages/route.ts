@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 
     // Add sender type filter
     if (senderType) {
-      query = query.eq('sender_type', senderType);
+      query = query.eq('senderType', senderType);
     }
 
     const { data: messages, error } = await query;
@@ -81,8 +81,8 @@ export async function GET(request: NextRequest) {
       ...message,
       ai_enhanced: message.ai_sessions?.length > 0,
       ai_metadata: message.ai_sessions?.[0] || null,
-      is_ai_generated: message.sender_type === 'ai',
-      confidence_score: message.ai_sessions?.[0]?.session_metadata?.confidence_score || null
+      is_ai_generated: message.senderType === 'ai',
+      confidence_score: message.ai_sessions?.[0]?.sessionMetadata?.confidence_score || null
     }));
 
     return NextResponse.json({
@@ -140,8 +140,8 @@ export async function POST(request: NextRequest) {
         conversation_id,
         organization_id,
         content,
-        sender_type,
-        sender_name: sender_name || (sender_type === 'ai' ? 'AI Assistant' : 'User'),
+        senderType,
+        senderName: sender_name || (sender_type === 'ai' ? 'AI Assistant' : 'User'),
         metadata: {
           ...metadata,
           ai_session_id,
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
         .from('ai_sessions')
         .update({
           updated_at: new Date().toISOString(),
-          session_metadata: {
+          sessionMetadata: {
             last_message_id: message.id,
             last_response_at: new Date().toISOString()
           }

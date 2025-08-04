@@ -196,7 +196,7 @@ export const useConversation = (id: string | null) => {
     if (!id) return null;
 
     const cached = conversationCache.get(id);
-    const current = state.conversations.find((c: any) => c.id === id) as Conversation | undefined;
+    const current = state.conversations.find((c: unknown) => c.id === id) as Conversation | undefined;
 
     if (cached === current) {
       return cached;
@@ -217,13 +217,13 @@ export const useActiveConversations = () => {
 
     if (cached) {
       // Quick check if cache is still valid
-      const activeCount = state.conversations.filter((c: any) => c.status === "active").length;
+      const activeCount = state.conversations.filter((c: unknown) => c.status === "active").length;
       if (cached.length === activeCount) {
         return cached;
       }
     }
 
-    const active = state.conversations.filter((c: any) => c.status === "active");
+    const active = state.conversations.filter((c: unknown) => c.status === "active");
     arrayCache.set(cacheKey, active);
     return active;
   });
@@ -235,7 +235,7 @@ export const useSelectedConversation = () => {
     if (!selectedId) return null;
 
     const cached = conversationCache.get(selectedId);
-    const current = state.conversations.find((c: any) => c.id === selectedId) as Conversation | undefined;
+    const current = state.conversations.find((c: unknown) => c.id === selectedId) as Conversation | undefined;
 
     if (cached === current) {
       return cached;
@@ -301,7 +301,7 @@ export const useAgents = () => {
       return cached;
     }
 
-    const agents: any[] = [];
+    const agents: unknown[] = [];
     arrayCache.set(cacheKey, agents);
     return agents;
   });
@@ -323,7 +323,7 @@ export const useOnlineAgents = () => {
       return cached;
     }
 
-    const online: any[] = [];
+    const online: unknown[] = [];
     arrayCache.set(cacheKey, online);
     return online;
   });
@@ -351,7 +351,7 @@ export const useActiveChannels = () => {
       return cached;
     }
 
-    const channels: any[] = [];
+    const channels: unknown[] = [];
     arrayCache.set(cacheKey, channels);
     return channels;
   });
@@ -366,7 +366,7 @@ export const useOnlineUsers = () => {
       return cached;
     }
 
-    const users: any[] = [];
+    const users: unknown[] = [];
     arrayCache.set(cacheKey, users);
     return users;
   });
@@ -410,7 +410,7 @@ export const useKnowledgeItems = () => {
       return cached;
     }
 
-    const items: any[] = [];
+    const items: unknown[] = [];
     arrayCache.set(cacheKey, items);
     return items;
   });
@@ -452,9 +452,9 @@ export const useConversationStats = () => {
     const conversations = state.conversations;
     const stats = {
       total: conversations.length,
-      active: conversations.filter((c: any) => c.status === "active").length,
-      resolved: conversations.filter((c: any) => c.status === "resolved").length,
-      pending: conversations.filter((c: any) => c.status === "pending").length,
+      active: conversations.filter((c: unknown) => c.status === "active").length,
+      resolved: conversations.filter((c: unknown) => c.status === "resolved").length,
+      pending: conversations.filter((c: unknown) => c.status === "pending").length,
     };
 
     // Note: Cache expects arrays, but this is an object. Skip caching for now.

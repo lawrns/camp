@@ -80,7 +80,7 @@ export function WidgetDebugPanel({ isOpen, onToggle, className }: WidgetDebugPan
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setSelectedTab(tab.id as any)}
+            onClick={() => setSelectedTab(tab.id as unknown)}
             className={cn(
               "flex-1 px-3 py-2 text-xs font-medium border-b-2 transition-colors",
               selectedTab === tab.id

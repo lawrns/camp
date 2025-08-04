@@ -67,11 +67,11 @@ export function checkAndClearExpiredTokens(): boolean {
     if (!authData) return false;
 
     const parsed = JSON.parse(authData);
-    if (!parsed?.access_token || !parsed?.expires_at) return false;
+    if (!parsed?.access_token || !parsed?.expiresAt) return false;
 
     // Check if token is expired (with 30 second buffer)
     const now = Math.floor(Date.now() / 1000);
-    const isExpired = (parsed.expires_at - 30) <= now;
+    const isExpired = (parsed.expiresAt - 30) <= now;
 
     if (isExpired) {
       console.log('[ClearTokens] Expired token detected, clearing storage...');

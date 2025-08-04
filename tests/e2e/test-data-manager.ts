@@ -25,7 +25,7 @@ export interface TestData {
 }
 
 export class TestDataManager {
-  private supabase: any;
+  private supabase: unknown;
   private testData: TestData | null = null;
   private cleanupTasks: Array<() => Promise<void>> = [];
   
@@ -109,8 +109,8 @@ export class TestDataManager {
         .from('conversations')
         .insert({
           organization_id: org.id,
-          customer_email: 'test-customer@example.com',
-          customer_name: 'Test Customer',
+          customerEmail: 'test-customer@example.com',
+          customerName: 'Test Customer',
           status: 'open',
           priority: 'medium',
           subject: 'Test conversation'
@@ -125,16 +125,16 @@ export class TestDataManager {
         {
           conversation_id: conversation.id,
           content: 'Hello, I need help with my account',
-          sender_type: 'visitor',
-          sender_email: 'test-customer@example.com',
-          sender_name: 'Test Customer'
+          senderType: 'visitor',
+          senderEmail: 'test-customer@example.com',
+          senderName: 'Test Customer'
         },
         {
           conversation_id: conversation.id,
           content: 'Hi! I\'d be happy to help you with your account. What specific issue are you experiencing?',
-          sender_type: 'agent',
-          sender_email: 'test-agent@example.com',
-          sender_name: 'Test Agent'
+          senderType: 'agent',
+          senderEmail: 'test-agent@example.com',
+          senderName: 'Test Agent'
         }
       ];
       
@@ -151,7 +151,7 @@ export class TestDataManager {
         createdMessages.push({
           id: message.id,
           content: message.content,
-          senderType: message.sender_type,
+          senderType: message.senderType,
           timestamp: message.created_at
         });
       }
@@ -205,9 +205,9 @@ export class TestDataManager {
       .insert({
         conversation_id: this.testData.conversationId,
         content,
-        sender_type: senderType,
-        sender_email: senderEmail,
-        sender_name: senderName
+        senderType: senderType,
+        senderEmail: senderEmail,
+        senderName: senderName
       })
       .select()
       .single();
@@ -217,7 +217,7 @@ export class TestDataManager {
     this.testData.messages.push({
       id: message.id,
       content: message.content,
-      senderType: message.sender_type,
+      senderType: message.senderType,
       timestamp: message.created_at
     });
     

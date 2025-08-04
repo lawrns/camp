@@ -104,8 +104,8 @@ export function useConversation(conversationId: string | null) {
             id: conversationData.conversation.id,
             customer: {
               id: conversationData.conversation.customer_id || "unknown",
-              name: conversationData.conversation.customer_name || "Unknown Customer",
-              email: conversationData.conversation.customer_email || "",
+              name: conversationData.conversation.customerName || "Unknown Customer",
+              email: conversationData.conversation.customerEmail || "",
               status: "online",
               createdAt: new Date(conversationData.conversation.created_at),
               totalConversations: 1,
@@ -123,7 +123,7 @@ export function useConversation(conversationId: string | null) {
 
         // Transform messages data
         if (messagesData.messages) {
-          const transformedMessages: Message[] = messagesData.messages.map((msg: any) => ({
+          const transformedMessages: Message[] = messagesData.messages.map((msg: unknown) => ({
             id: msg.id,
             content: msg.content,
             sender: {
@@ -185,7 +185,7 @@ export function useConversation(conversationId: string | null) {
           body: JSON.stringify({
             conversation_id: conversationId,
             content,
-            sender_type: "agent",
+            senderType: "agent",
             metadata: attachments ? { attachments: attachments.map((f) => f.name) } : undefined,
           }),
         });

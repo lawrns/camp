@@ -58,7 +58,7 @@ export const initPerformanceMonitoring = () => {
   // Log performance budget violations
   const checkBudgets = () => {
     const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
-    const totalSize = resources.reduce((total: any, resource: any) => {
+    const totalSize = resources.reduce((total: unknown, resource: unknown) => {
       return total + (resource.transferSize || resource.encodedBodySize || 0);
     }, 0);
 
@@ -97,7 +97,7 @@ export const performanceUtils = {
   },
 
   // Debounce function
-  debounce: <T extends (...args: any[]) => void>(func: T, wait: number): ((...args: Parameters<T>) => void) => {
+  debounce: <T extends (...args: unknown[]) => void>(func: T, wait: number): ((...args: Parameters<T>) => void) => {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<T>) => {
       clearTimeout(timeout);
@@ -106,7 +106,7 @@ export const performanceUtils = {
   },
 
   // Throttle function
-  throttle: <T extends (...args: any[]) => void>(func: T, limit: number): ((...args: Parameters<T>) => void) => {
+  throttle: <T extends (...args: unknown[]) => void>(func: T, limit: number): ((...args: Parameters<T>) => void) => {
     let inThrottle: boolean;
     return (...args: Parameters<T>) => {
       if (!inThrottle) {

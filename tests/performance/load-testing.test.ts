@@ -83,7 +83,7 @@ describe('Performance & Load Testing', () => {
       const startTime = performance.now();
       
       // Mock processing large context
-      const processLargeContext = async (context: any) => {
+      const processLargeContext = async (context: unknown) => {
         // Simulate context processing time
         const processingTime = context.conversationHistory.length * 2 + context.knowledgeChunks.length * 5;
         await new Promise(resolve => setTimeout(resolve, processingTime));

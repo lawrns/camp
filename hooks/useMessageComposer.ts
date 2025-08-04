@@ -71,7 +71,7 @@ export function useMessageComposer({
     removeAttachment: useCallback((id: string) => {
       setState((prev) => ({
         ...prev,
-        attachments: prev.attachments.filter((a: any) => a.id !== id),
+        attachments: prev.attachments.filter((a: unknown) => a.id !== id),
       }));
     }, []),
 
@@ -85,7 +85,7 @@ export function useMessageComposer({
     removeMention: useCallback((userId: string) => {
       setState((prev: ComposerState) => ({
         ...prev,
-        mentions: prev.mentions.filter((m: any) => m.id !== userId),
+        mentions: prev.mentions.filter((m: unknown) => m.id !== userId),
       }));
     }, []),
 
@@ -99,11 +99,11 @@ export function useMessageComposer({
     removeTag: useCallback((tagId: string) => {
       setState((prev: ComposerState) => ({
         ...prev,
-        tags: prev.tags.filter((t: any) => t.id !== tagId),
+        tags: prev.tags.filter((t: unknown) => t.id !== tagId),
       }));
     }, []),
 
-    applyTemplate: useCallback((template: any, variables: any) => {
+    applyTemplate: useCallback((template: unknown, variables: unknown) => {
       // Template application logic
       setState((prev: ComposerState) => ({ ...prev, selectedTemplate: template }));
     }, []),
@@ -129,8 +129,8 @@ export function useMessageComposer({
           senderType: "agent",
           timestamp: new Date(),
           attachments: state.attachments,
-          mentions: state.mentions.map((m: any) => m.id),
-          tags: state.tags.map((t: any) => t.id),
+          mentions: state.mentions.map((m: unknown) => m.id),
+          tags: state.tags.map((t: unknown) => t.id),
           status: "sent",
         });
 

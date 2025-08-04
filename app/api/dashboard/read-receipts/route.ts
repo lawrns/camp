@@ -106,7 +106,7 @@ export const POST = withAuth(async (request: NextRequest, user: AuthUser) => {
         // Get current message to update metadata
         const { data: message, error: fetchError } = await supabaseClient
           .from('messages')
-          .select('id, metadata, sender_type')
+          .select('id, metadata, senderType')
           .eq('id', messageId)
           .eq('organization_id', user.organizationId)
           .single();
@@ -117,7 +117,7 @@ export const POST = withAuth(async (request: NextRequest, user: AuthUser) => {
         }
 
         // Don't mark own messages as read (if agent is reading their own message)
-        if (message.sender_type === 'operator' && user.userId) {
+        if (message.senderType === 'operator' && user.userId) {
           // Could check if this specific agent sent the message, but for now skip all operator messages
           continue;
         }
@@ -265,7 +265,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
     // Build query for messages
     let query = supabaseClient
       .from('messages')
-      .select('id, metadata, sender_type, sender_name, created_at')
+      .select('id, metadata, senderType, senderName, created_at')
       .eq('conversation_id', conversationId)
       .eq('organization_id', user.organizationId)
       .order('created_at', { ascending: false });
@@ -312,8 +312,8 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
 
       readReceipts[msgId] = {
         messageId: msgId,
-        senderType: message.sender_type,
-        senderName: message.sender_name,
+        senderType: message.senderType,
+        senderName: message.senderName,
         createdAt: message.created_at,
         readBy: readByList,
         isRead,

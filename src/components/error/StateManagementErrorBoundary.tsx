@@ -58,8 +58,8 @@ export class StateManagementErrorBoundary extends Component<Props, State> {
     }));
 
     // Log to monitoring service
-    if (typeof window !== "undefined" && (window as any).Sentry) {
-      (window as any).Sentry.captureException(error, {
+    if (typeof window !== "undefined" && (window as unknown).Sentry) {
+      (window as unknown).Sentry.captureException(error, {
         contexts: {
           react: {
             componentStack: errorInfo.componentStack,

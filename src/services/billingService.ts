@@ -9,7 +9,7 @@ type MailboxInput = Pick<typeof mailboxes.$inferSelect, "id" | "slug" | "name" |
   [K in keyof typeof mailboxes.$inferSelect]?: (typeof mailboxes.$inferSelect)[K];
 } & {
   // Allow additional properties that might be passed from the context
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 /**

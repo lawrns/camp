@@ -7,7 +7,7 @@ jest.mock('@supabase/supabase-js');
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>;
 
 describe('Authentication Integration Tests', () => {
-  let mockSupabase: any;
+  let mockSupabase: unknown;
   
   beforeEach(() => {
     // Reset mocks
@@ -52,7 +52,7 @@ describe('Authentication Integration Tests', () => {
         id: 'user-123',
         email: userData.email,
         user_metadata: {
-          full_name: userData.fullName
+          fullName: userData.fullName
         }
       };
       
@@ -73,7 +73,7 @@ describe('Authentication Integration Tests', () => {
         password: userData.password,
         options: {
           data: {
-            full_name: userData.fullName,
+            fullName: userData.fullName,
             organization_name: userData.organizationName
           }
         }
@@ -243,13 +243,13 @@ describe('Authentication Integration Tests', () => {
       const expiredSession = {
         access_token: 'expired-token',
         refresh_token: 'refresh-token',
-        expires_at: Date.now() - 1000 // Expired
+        expiresAt: Date.now() - 1000 // Expired
       };
       
       const newSession = {
         access_token: 'new-token',
         refresh_token: 'new-refresh-token',
-        expires_at: Date.now() + 3600000 // Valid for 1 hour
+        expiresAt: Date.now() + 3600000 // Valid for 1 hour
       };
       
       mockSupabase.auth.getSession
@@ -272,7 +272,7 @@ describe('Authentication Integration Tests', () => {
     it('should update user profile', async () => {
       const userId = 'user-123';
       const profileData = {
-        full_name: 'Updated Name',
+        fullName: 'Updated Name',
         avatar_url: 'https://example.com/avatar.jpg'
       };
       
@@ -282,7 +282,7 @@ describe('Authentication Integration Tests', () => {
       });
       
       // Mock function to update profile
-      const updateProfile = async (id: string, data: any) => {
+      const updateProfile = async (id: string, data: unknown) => {
         const result = await mockSupabase
           .from('profiles')
           .update(data)
@@ -301,7 +301,7 @@ describe('Authentication Integration Tests', () => {
     it('should handle profile update errors', async () => {
       const userId = 'user-123';
       const profileData = {
-        full_name: 'Updated Name'
+        fullName: 'Updated Name'
       };
       
       mockSupabase.from().update().eq().single.mockResolvedValue({
@@ -309,7 +309,7 @@ describe('Authentication Integration Tests', () => {
         error: { message: 'Profile update failed' }
       });
       
-      const updateProfile = async (id: string, data: any) => {
+      const updateProfile = async (id: string, data: unknown) => {
         const result = await mockSupabase
           .from('profiles')
           .update(data)
@@ -339,7 +339,7 @@ describe('Authentication Integration Tests', () => {
         error: null
       });
       
-      const createOrganization = async (data: any) => {
+      const createOrganization = async (data: unknown) => {
         const result = await mockSupabase
           .from('organizations')
           .insert(data)
@@ -365,7 +365,7 @@ describe('Authentication Integration Tests', () => {
         error: { message: 'Organization name already exists' }
       });
       
-      const createOrganization = async (data: any) => {
+      const createOrganization = async (data: unknown) => {
         const result = await mockSupabase
           .from('organizations')
           .insert(data)

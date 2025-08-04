@@ -18,7 +18,7 @@ export function PerformanceWidget() {
   useEffect(() => {
     const interval = setInterval(() => {
       const newMetrics = generatePerformanceData();
-      Object.keys(newMetrics).forEach((key: any) => {
+      Object.keys(newMetrics).forEach((key: unknown) => {
         const metric = newMetrics[key as keyof SystemMetrics];
         metric.status = getMetricStatus(metric);
       });
@@ -28,8 +28,8 @@ export function PerformanceWidget() {
     return () => clearInterval(interval);
   }, []);
 
-  const criticalCount = Object.values(metrics).filter((m: any) => m.status === "critical").length;
-  const warningCount = Object.values(metrics).filter((m: any) => m.status === "warning").length;
+  const criticalCount = Object.values(metrics).filter((m: unknown) => m.status === "critical").length;
+  const warningCount = Object.values(metrics).filter((m: unknown) => m.status === "warning").length;
 
   return (
     <Card className="spacing-3">

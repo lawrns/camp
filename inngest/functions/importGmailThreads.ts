@@ -123,7 +123,7 @@ export const processGmailThreads = async (gmailSupportEmailId: number, weekStart
     includeSpamTrash: false,
   });
   // Cast to GaxiosResponse for assertSuccessResponseOrThrow
-  assertSuccessResponseOrThrow(result as any);
+  assertSuccessResponseOrThrow(result as unknown);
   if (result.data.nextPageToken) {
     captureExceptionAndLogIfDevelopment(new Error("Pagination not supported by this function"));
   }

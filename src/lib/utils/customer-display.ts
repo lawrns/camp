@@ -156,7 +156,7 @@ export function generateInitials(name: string, email: string): string {
  * Get customer initials for fallback avatars (legacy compatibility)
  */
 export function getCustomerInitials(name: string): string {
-  const words = name.split(" ").filter((word: any) => word.length > 0);
+  const words = name.split(" ").filter((word: unknown) => word.length > 0);
   if (words.length === 0) return "??";
   if (words.length === 1) return words[0]?.substring(0, 2).toUpperCase() || "??";
   return ((words[0]?.[0] || "") + (words[1]?.[0] || "")).toUpperCase();
@@ -208,11 +208,11 @@ export interface CustomerDisplay {
 /**
  * Get comprehensive customer display information (legacy compatibility)
  */
-export function getCustomerDisplay(conversation: any): CustomerDisplay {
+export function getCustomerDisplay(conversation: unknown): CustomerDisplay {
   // Extract customer info from conversation
   const customerId = conversation.customer_id || conversation.visitor_id;
-  const customerName = conversation.customer_name || conversation.visitor_name;
-  const customerEmail = conversation.customer_email || conversation.visitor_email;
+  const customerName = conversation.customerName || conversation.visitor_name;
+  const customerEmail = conversation.customerEmail || conversation.visitor_email;
 
   // Determine if this is a known customer or anonymous visitor
   const isKnownCustomer = !!(customerName && customerEmail);
@@ -240,13 +240,13 @@ export function formatCustomerName(display: CustomerDisplay): string {
 /**
  * Synchronous customer display info generation
  */
-export function getCustomerDisplayInfoSync(customer: any): CustomerDisplayInfo {
+export function getCustomerDisplayInfoSync(customer: unknown): CustomerDisplayInfo {
   // Extract customer data with comprehensive fallbacks
   const id = customer?.id || customer?.customer_id || customer?.visitor_id || `temp-${Date.now()}`;
 
   const email =
     customer?.email ||
-    customer?.customer_email ||
+    customer?.customerEmail ||
     customer?.visitor_email ||
     customer?.customerEmail ||
     customer?.visitorEmail ||
@@ -254,7 +254,7 @@ export function getCustomerDisplayInfoSync(customer: any): CustomerDisplayInfo {
 
   const providedName =
     customer?.name ||
-    customer?.customer_name ||
+    customer?.customerName ||
     customer?.visitor_name ||
     customer?.customerName ||
     customer?.visitorName ||
@@ -309,6 +309,6 @@ export function getCustomerDisplayInfoSync(customer: any): CustomerDisplayInfo {
 /**
  * Bulk process customer display info (for conversation lists)
  */
-export function bulkGetCustomerDisplayInfo(customers: any[]): CustomerDisplayInfo[] {
-  return customers.map((customer: any) => getCustomerDisplayInfoSync(customer));
+export function bulkGetCustomerDisplayInfo(customers: unknown[]): CustomerDisplayInfo[] {
+  return customers.map((customer: unknown) => getCustomerDisplayInfoSync(customer));
 }

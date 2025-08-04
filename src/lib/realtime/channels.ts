@@ -33,9 +33,9 @@ export interface ChannelSubscription {
  */
 export class ChannelFactory {
   private channels = new Map<string, ChannelSubscription>();
-  private client: any = null; // Supabase client
+  private client: unknown = null; // Supabase client
 
-  constructor(supabaseClient: any) {
+  constructor(supabaseClient: unknown) {
     this.client = supabaseClient;
   }
 
@@ -116,8 +116,8 @@ export class ChannelFactory {
   subscribe(
     channelName: string,
     eventType: "broadcast" | "presence" | "postgres_changes",
-    callback: (payload: any) => void,
-    options: any = {}
+    callback: (payload: unknown) => void,
+    options: unknown = {}
   ): ChannelSubscription | null {
     const subscription = this.channels.get(channelName);
 
@@ -126,7 +126,7 @@ export class ChannelFactory {
     }
 
     // Set up event listener
-    subscription.channel.on(eventType, options, (payload: any) => {
+    subscription.channel.on(eventType, options, (payload: unknown) => {
       subscription.metadata.lastActivity = new Date();
       subscription.metadata.messageCount++;
       callback(payload);
@@ -166,7 +166,7 @@ export class ChannelFactory {
   /**
    * Broadcast message to channel
    */
-  broadcast(channelName: string, event: string, payload: any): boolean {
+  broadcast(channelName: string, event: string, payload: unknown): boolean {
     const subscription = this.channels.get(channelName);
 
     if (!subscription || !subscription.isActive) {
@@ -188,7 +188,7 @@ export class ChannelFactory {
   /**
    * Track presence in channel
    */
-  trackPresence(channelName: string, presenceData: any): boolean {
+  trackPresence(channelName: string, presenceData: unknown): boolean {
     const subscription = this.channels.get(channelName);
 
     if (!subscription || !subscription.isActive) {
@@ -279,7 +279,7 @@ let globalChannelFactory: ChannelFactory | null = null;
 /**
  * Get or create global channel factory
  */
-export function getChannelFactory(supabaseClient?: any): ChannelFactory {
+export function getChannelFactory(supabaseClient?: unknown): ChannelFactory {
   if (!globalChannelFactory && supabaseClient) {
     globalChannelFactory = new ChannelFactory(supabaseClient);
   }

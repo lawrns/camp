@@ -156,13 +156,13 @@ test.describe('Simple Bidirectional Communication Test', () => {
 
       // Check widget console logs for broadcast events
       const widgetLogs = await widgetPage.evaluate(() => {
-        return (window as any).widgetBroadcastLogs || [];
+        return (window as unknown).widgetBroadcastLogs || [];
       });
       console.log('🔍 Widget broadcast logs:', JSON.stringify(widgetLogs, null, 2));
 
       // Check for any console errors
       const consoleMessages = await widgetPage.evaluate(() => {
-        return (window as any).console?.logs || 'No console logs captured';
+        return (window as unknown).console?.logs || 'No console logs captured';
       });
       console.log('🔍 Widget console messages:', consoleMessages);
 

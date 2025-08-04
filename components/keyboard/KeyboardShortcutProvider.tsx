@@ -40,12 +40,12 @@ export function KeyboardShortcutProvider({ children }: KeyboardShortcutProviderP
     };
 
     // Add event listeners
-    window.addEventListener("campfire:navigate", handleNavigate as any);
+    window.addEventListener("campfire:navigate", handleNavigate as unknown);
     window.addEventListener("campfire:theme:toggle", handleThemeToggle);
     window.addEventListener("campfire:sidebar:toggle", handleSidebarToggle);
 
     return () => {
-      window.removeEventListener("campfire:navigate", handleNavigate as any);
+      window.removeEventListener("campfire:navigate", handleNavigate as unknown);
       window.removeEventListener("campfire:theme:toggle", handleThemeToggle);
       window.removeEventListener("campfire:sidebar:toggle", handleSidebarToggle);
     };

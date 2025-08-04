@@ -16,13 +16,13 @@ import { initializeAuthPersistence, forceSessionRecovery } from "@/lib/auth/auth
 // Extend Window interface for debug properties
 declare global {
   interface Window {
-    CampfireWidgetConfig?: any;
+    CampfireWidgetConfig?: unknown;
   }
 }
 
 // Reset state between HMR refreshes
-if (typeof window !== "undefined" && (module as any).hot) {
-  (module as any).hot.dispose(() => {
+if (typeof window !== "undefined" && (module as unknown).hot) {
+  (module as unknown).hot.dispose(() => {
     // Clear any auth state on hot reload
     window.localStorage.removeItem("auth-state");
   });
@@ -180,7 +180,7 @@ async function enrichJWTWithOrganization(organizationId: string | undefined, ret
     if (!response.ok) {
       console.log('[Auth] JWT enrichment failed with status:', response.status);
 
-      let errorDetails: any;
+      let errorDetails: unknown;
       try {
         errorDetails = await response.json();
       } catch {
@@ -204,9 +204,16 @@ async function enrichJWTWithOrganization(organizationId: string | undefined, ret
         });
       }
 
-      // Detailed logging for 400 errors
+      // Detailed logging for specific error types
       if (response.status === 400) {
         console.error("🚨 JWT enrichment 400 details:", { organizationId, responseBody: errorDetails });
+      } else if (response.status === 403) {
+        console.warn("🚨 JWT enrichment 403 - User not member of organization:", {
+          organizationId,
+          errorDetails,
+          suggestion: "User may need to be added to organization or organization may not exist"
+        });
+        return { success: false, reason: "not_organization_member", error: errorDetails };
       }
       return { success: false, reason: "api_error", error: errorDetails };
     }
@@ -344,9 +351,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Convert Supabase user to AuthenticatedUser (non-null)
   const convertUser = async (supabaseUser: SupabaseUser): Promise<AuthenticatedUser> => {
-    // Use default organization ID if user doesn't have one
-    const defaultOrgId = "550e8400-e29b-41d4-a716-446655440000";
-    const userOrgId = supabaseUser.user_metadata?.organization_id || defaultOrgId;
+    // First try to get organization ID from user metadata
+    let userOrgId = supabaseUser.user_metadata?.organization_id || supabaseUser.app_metadata?.organization_id;
+
+    // If no organization ID in metadata, check organization membership
+    if (!userOrgId) {
+      try {
+        const { supabase } = await import("@/lib/supabase");
+        const client = supabase.browser();
+
+        const { data: membership, error: membershipError } = await client
+          .from('organization_members')
+          .select('organization_id, role, status')
+          .eq('user_id', supabaseUser.id)
+          .eq('status', 'active')
+          .single();
+
+        if (!membershipError && membership) {
+          userOrgId = membership.organization_id;
+          console.log("🔍 Found organization membership for user:", {
+            userId: supabaseUser.id,
+            organizationId: userOrgId,
+            role: membership.role
+          });
+        } else {
+          console.warn("🚨 No active organization membership found for user:", {
+            userId: supabaseUser.id,
+            email: supabaseUser.email,
+            membershipError: membershipError?.message
+          });
+        }
+      } catch (error) {
+        console.warn("🚨 Failed to check organization membership:", error);
+      }
+    }
     
     // Create auth user with basic info (organization will be set during onboarding)
     const authUser = {
@@ -357,7 +395,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       organizationRole: "viewer",
       firstName: supabaseUser.user_metadata?.first_name,
       lastName: supabaseUser.user_metadata?.last_name,
-      fullName: supabaseUser.user_metadata?.full_name,
+      fullName: supabaseUser.user_metadata?.fullName,
       user_metadata: supabaseUser.user_metadata,
     };
 
@@ -393,7 +431,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const urlParams = new URLSearchParams(window.location.search);
       const organizationId =
         urlParams.get("organizationId") ||
-        (window as any).CampfireWidgetConfig?.organizationId ||
+        (window as unknown).CampfireWidgetConfig?.organizationId ||
         localStorage.getItem("campfire_widget_org_id");
 
       if (!organizationId) {
@@ -507,8 +545,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Debug array for capturing messages
   const initDebugArray = () => {
     if (typeof window !== 'undefined') {
-      if (!Array.isArray((window as any).authDebug)) {
-        (window as any).authDebug = [];
+      if (!Array.isArray((window as unknown).authDebug)) {
+        (window as unknown).authDebug = [];
       }
     }
   };
@@ -518,7 +556,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setError(null);
 
-      ((window as any).authDebug as string[])?.push('[SignIn Debug] Starting signIn with email: ' + email);
+      ((window as unknown).authDebug as string[])?.push('[SignIn Debug] Starting signIn with email: ' + email);
       console.log('[Auth] Starting signIn with email:', email);
 
       // Use our working API endpoint instead of direct Supabase call
@@ -533,18 +571,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         body: body,
       });
 
-      ((window as any).authDebug as string[])?.push('[SignIn Debug] API response status: ' + response.status);
+      ((window as unknown).authDebug as string[])?.push('[SignIn Debug] API response status: ' + response.status);
       console.log('[Auth] API response status:', response.status);
 
       const result = await response.json();
 
-      ((window as any).authDebug as string[])?.push('[SignIn Debug] API result: ' + JSON.stringify(result));
+      ((window as unknown).authDebug as string[])?.push('[SignIn Debug] API result: ' + JSON.stringify(result));
       console.log('[Auth] API result:', result);
 
       if (!response.ok) {
         const errorMessage = result.error || "Login failed";
 
-        ((window as any).authDebug as string[])?.push('[SignIn Debug] Login failed: ' + errorMessage);
+        ((window as unknown).authDebug as string[])?.push('[SignIn Debug] Login failed: ' + errorMessage);
 
         setError(new Error(errorMessage));
         return { success: false, error: errorMessage };
@@ -553,7 +591,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // API login successful, now set the session in the browser client
       if (result.data?.session) {
         console.log('[Auth] Session received, setting in Supabase');
-        ((window as any).authDebug as string[])?.push('[SignIn Debug] Session received, setting in Supabase');
+        ((window as unknown).authDebug as string[])?.push('[SignIn Debug] Session received, setting in Supabase');
         const { session: apiSession, user: apiUser } = result.data;
 
         // Set the session in the browser Supabase client
@@ -636,7 +674,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }
           }
         } else {
-          authLogger.warn("🚨 No organizationId found for user after login - using basic auth mode");
+          authLogger.warn("🚨 No organizationId found for user after login - using basic auth mode", {
+            userId: authUser.id,
+            email: authUser.email,
+            hasUserMetadata: !!authUser.user_metadata,
+            isWidgetSession: !!authUser.user_metadata?.widget_session
+          });
         }
 
         // CRITICAL: Set user and session state AFTER all async operations complete
@@ -660,10 +703,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return { success: true };
       }
 
-      ((window as any).authDebug as string[])?.push('[SignIn Debug] Invalid response, no session');
+      ((window as unknown).authDebug as string[])?.push('[SignIn Debug] Invalid response, no session');
       return { success: false, error: "Invalid response from server" };
     } catch (error) {
-      ((window as any).authDebug as string[])?.push('[SignIn Debug] Catch error: ' + (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)));
+      ((window as unknown).authDebug as string[])?.push('[SignIn Debug] Catch error: ' + (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)));
       console.log('[Auth] signIn error:', error);
       const errorMessage = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Sign in failed";
 
@@ -703,7 +746,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         body: JSON.stringify({
           email,
           password,
-          ...(metadata as any), // Spread metadata for firstName, lastName, etc.
+          ...(metadata as unknown), // Spread metadata for firstName, lastName, etc.
         }),
       });
 
@@ -749,13 +792,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Check if we're in widget context and have a widget token
         const isWidgetContext = window.location.pathname.includes('/widget') ||
           window.location.search.includes('widget=true') ||
-          (window as any).CampfireWidgetConfig;
+          (window as unknown).CampfireWidgetConfig;
 
         console.log('[AuthProvider] Widget context detection:', {
           pathname: window.location.pathname,
           search: window.location.search,
-          hasWidgetConfig: !!(window as any).CampfireWidgetConfig,
-          widgetConfig: (window as any).CampfireWidgetConfig,
+          hasWidgetConfig: !!(window as unknown).CampfireWidgetConfig,
+          widgetConfig: (window as unknown).CampfireWidgetConfig,
           isWidgetContext
         });
 
@@ -861,7 +904,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
               user_metadata: apiUser.user_metadata ?? {},
               firstName: apiUser.first_name ?? apiUser.firstName,
               lastName: apiUser.last_name ?? apiUser.lastName,
-              fullName: apiUser.full_name ?? apiUser.fullName,
+              fullName: apiUser.fullName ?? apiUser.fullName,
             });
           } else {
             console.log("[AuthProvider] No user data in response");
@@ -877,7 +920,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           // Only try widget authentication if we're in a widget context
           const isWidgetContext = window.location.pathname.includes('/widget') ||
             window.location.search.includes('widget=true') ||
-            (window as any).CampfireWidgetConfig;
+            (window as unknown).CampfireWidgetConfig;
 
           if (isWidgetContext) {
             console.log("[AuthProvider] Widget context detected, trying widget authentication");
@@ -916,7 +959,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Only try widget authentication if we're in a widget context
         const isWidgetContext = window.location.pathname.includes('/widget') ||
           window.location.search.includes('widget=true') ||
-          (window as any).CampfireWidgetConfig;
+          (window as unknown).CampfireWidgetConfig;
 
         if (isWidgetContext) {
           console.log("[AuthProvider] Widget context detected, trying widget authentication after error");
@@ -953,7 +996,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const {
       data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange(async (event: any, supabaseSession: any) => {
+    } = supabaseClient.auth.onAuthStateChange(async (event: unknown, supabaseSession: unknown) => {
       try {
         console.log("🔐 Auth state change:", event, supabaseSession?.user?.id);
 

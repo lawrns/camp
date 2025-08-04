@@ -126,7 +126,7 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
         await cleanupOldCaches();
 
         // Claim all clients
-        await (self as any).clients.claim();
+        await (self as unknown).clients.claim();
 
         // Initialize background sync
         await initializeBackgroundSync();
@@ -172,7 +172,7 @@ self.addEventListener("fetch", (event: FetchEvent) => {
 /**
  * Background Sync Event Handler
  */
-self.addEventListener("sync", (event: any) => {
+self.addEventListener("sync", (event: unknown) => {
 
   if (event.tag === "background-sync") {
     event.waitUntil(processBackgroundSync());
@@ -182,7 +182,7 @@ self.addEventListener("sync", (event: any) => {
 /**
  * Push Event Handler for notifications
  */
-self.addEventListener("push", (event: any) => {
+self.addEventListener("push", (event: unknown) => {
 
   const options = {
     body: "You have new updates in Campfire",
@@ -219,12 +219,12 @@ self.addEventListener("push", (event: any) => {
 /**
  * Notification Click Handler
  */
-self.addEventListener("notificationclick", (event: any) => {
+self.addEventListener("notificationclick", (event: unknown) => {
 
   event.notification.close();
 
   if (event.action === "explore") {
-    event.waitUntil((self as any).clients.openWindow("/dashboard"));
+    event.waitUntil((self as unknown).clients.openWindow("/dashboard"));
   }
 });
 
@@ -657,8 +657,8 @@ function updateMetrics(type: keyof PerformanceMetrics, responseTime?: number): v
  */
 async function sendMetricsToMainThread(): Promise<void> {
   try {
-    const clients = await (self as any).clients.matchAll();
-    clients.forEach((client: any) => {
+    const clients = await (self as unknown).clients.matchAll();
+    clients.forEach((client: unknown) => {
       client.postMessage({
         type: "PERFORMANCE_METRICS",
         data: performanceMetrics,
@@ -744,7 +744,7 @@ async function openDB(): Promise<IDBDatabase> {
   });
 }
 
-async function storeBackgroundSyncRequest(requestData: any): Promise<void> {
+async function storeBackgroundSyncRequest(requestData: unknown): Promise<void> {
   try {
     const db = await openDB();
     const transaction = db.transaction(["backgroundSync"], "readwrite");

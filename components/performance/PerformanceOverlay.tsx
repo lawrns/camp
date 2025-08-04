@@ -398,7 +398,7 @@ export function PerformanceOverlay({
                   {inboxMetrics.budgetStatus && inboxMetrics.budgetStatus.length > 0 && (
                     <div className="space-y-1">
                       <h4 className="text-foreground text-tiny font-medium">Performance Budgets</h4>
-                      {inboxMetrics.budgetStatus.map((budget: any, index: number) => (
+                      {inboxMetrics.budgetStatus.map((budget: unknown, index: number) => (
                         <div
                           key={index}
                           className={cn(

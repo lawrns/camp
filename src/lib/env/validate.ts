@@ -18,7 +18,7 @@ export class EnvironmentValidationError extends Error {
 
 export interface ValidationResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   errors?: string[];
   warnings?: string[];
 }

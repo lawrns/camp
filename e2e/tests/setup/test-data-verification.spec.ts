@@ -166,7 +166,7 @@ test.describe('Test Data Setup Verification', () => {
       const getResponse = await page.request.get(`/api/dashboard/conversations/${TEST_DATA.CONVERSATIONS.ACTIVE.id}/messages`);
       if (getResponse.status() === 200) {
         const data = await getResponse.json();
-        const createdMessage = data.messages.find((m: any) => m.content === testMessage);
+        const createdMessage = data.messages.find((m: unknown) => m.content === testMessage);
         expect(createdMessage).toBeTruthy();
         console.log('✅ Test data isolation verified');
       }

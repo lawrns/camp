@@ -36,7 +36,7 @@ const LoadingComponent = ({ progress = 0 }: { progress?: number }) => (
 // Memory monitoring utilities
 const getMemoryInfo = () => {
   if (typeof window !== "undefined" && "memory" in performance) {
-    return (performance as any).memory;
+    return (performance as unknown).memory;
   }
   return null;
 };

@@ -18,7 +18,7 @@ export async function validateWidgetJWT(token: string): Promise<UnifiedAuthResul
 
     // Verify token signature
     const secret = getJWTSecret();
-    const decoded = jwt.verify(token, secret) as any;
+    const decoded = jwt.verify(token, secret) as unknown;
 
     // Validate widget token structure
     const validation = validateWidgetTokenStructure(decoded);
@@ -152,7 +152,7 @@ export async function refreshWidgetJWT(token: string, organizationId: string): P
 /**
  * Validate widget token structure
  */
-function validateWidgetTokenStructure(payload: any): { valid: boolean; error?: string } {
+function validateWidgetTokenStructure(payload: unknown): { valid: boolean; error?: string } {
   if (!payload) {
     return { valid: false, error: 'Invalid widget token payload' };
   }
@@ -238,7 +238,7 @@ export async function validateWidgetSession(user: UnifiedUser): Promise<{ valid:
     }
 
     // Check expiration
-    if (session.expires_at && new Date(session.expires_at) < new Date()) {
+    if (session.expiresAt && new Date(session.expiresAt) < new Date()) {
       return { valid: false, error: 'Widget session expired' };
     }
 
@@ -332,7 +332,7 @@ export async function extractWidgetPermissions(organizationId: string): Promise<
 /**
  * Helper function to decode JWT payload
  */
-function decodeJwtPayload(token: string): any {
+function decodeJwtPayload(token: string): unknown {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;

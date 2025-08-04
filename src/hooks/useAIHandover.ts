@@ -120,7 +120,7 @@ export function useAIHandover(conversationId: string, organizationId: string, us
         setState((prev) => ({ ...prev, processingProgress: 30 }));
 
         // Try the main AI handover endpoint first
-        let response = await fetch("/api/ai?action=handover", {
+        let response = await fetch("/api/ai/handover", {
           method: "POST",
           headers,
           credentials: "include", // Include cookies for authentication
@@ -203,7 +203,7 @@ export function useAIHandover(conversationId: string, organizationId: string, us
       setState((prev) => ({ ...prev, processingProgress: 50 }));
 
       // Use the AI stop endpoint
-      const response = await fetch("/api/ai?action=handover", {
+      const response = await fetch("/api/ai/handover", {
         method: "POST",
         headers,
         credentials: "include",

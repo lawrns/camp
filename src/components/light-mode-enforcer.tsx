@@ -15,8 +15,8 @@ export function LightModeEnforcer() {
     applyLightModeOverrides();
 
     // Create a more comprehensive MutationObserver
-    const observer = new MutationObserver((mutations: any) => {
-      mutations.forEach((mutation: any) => {
+    const observer = new MutationObserver((mutations: unknown) => {
+      mutations.forEach((mutation: unknown) => {
         if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
           const target = mutation.target;
 

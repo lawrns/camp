@@ -94,7 +94,7 @@ export function HandoverTransitionAnimation({
       },
     },
     complete: { scale: 1, rotate: 0 },
-  } as any;
+  } as unknown;
 
   const arrowVariants = {
     start: { x: -20, opacity: 0 },
@@ -114,7 +114,7 @@ export function HandoverTransitionAnimation({
         ease: "easeIn",
       },
     },
-  } as any;
+  } as unknown;
 
   const sparkleVariants = {
     start: { scale: 0, opacity: 0 },
@@ -128,7 +128,7 @@ export function HandoverTransitionAnimation({
       },
     },
     complete: { scale: 0, opacity: 0 },
-  } as any;
+  } as unknown;
 
   if (!isVisible) return null;
 

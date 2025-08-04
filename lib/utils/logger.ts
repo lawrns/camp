@@ -57,8 +57,8 @@ class Logger {
     }
   }
 
-  private formatMessage(level: string, args: any[]): any[] {
-    const formatted: any[] = [];
+  private formatMessage(level: string, args: unknown[]): unknown[] {
+    const formatted: unknown[] = [];
 
     if (this.options.showTimestamp) {
       formatted.push(`[${new Date().toISOString()}]`);
@@ -75,25 +75,25 @@ class Logger {
     return formatted;
   }
 
-  debug(...args: any[]) {
+  debug(...args: unknown[]) {
     if (this.level <= LOG_LEVELS.debug) {
       console.debug(...this.formatMessage("debug", args));
     }
   }
 
-  info(...args: any[]) {
+  info(...args: unknown[]) {
     if (this.level <= LOG_LEVELS.info) {
       console.info(...this.formatMessage("info", args));
     }
   }
 
-  warn(...args: any[]) {
+  warn(...args: unknown[]) {
     if (this.level <= LOG_LEVELS.warn) {
 
     }
   }
 
-  error(...args: any[]) {
+  error(...args: unknown[]) {
     if (this.level <= LOG_LEVELS.error) {
       const formatted = this.formatMessage("error", args);
       if (this.options.showStackTrace) {
@@ -132,23 +132,23 @@ class Logger {
   }
 
   // Throttled versions for high-frequency logs
-  debugThrottled(message: string, ...args: any[]) {
+  debugThrottled(message: string, ...args: unknown[]) {
     if (this.shouldThrottle(message)) return;
     this.debug(message, ...args);
   }
 
-  infoThrottled(message: string, ...args: any[]) {
+  infoThrottled(message: string, ...args: unknown[]) {
     if (this.shouldThrottle(message)) return;
     this.info(message, ...args);
   }
 
-  warnThrottled(message: string, ...args: any[]) {
+  warnThrottled(message: string, ...args: unknown[]) {
     if (this.shouldThrottle(message)) return;
     this.warn(message, ...args);
   }
 
   // One-time logging for initialization messages
-  once(level: LogLevel, key: string, message: string, ...args: any[]) {
+  once(level: LogLevel, key: string, message: string, ...args: unknown[]) {
     const storageKey = `widget_logged_${key}`;
 
     if (typeof window !== "undefined" && sessionStorage.getItem(storageKey)) {

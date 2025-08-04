@@ -50,8 +50,8 @@ export function ComposerInput({ className, ...props }: ComposerInputProps) {
     <div className="flame-composer-border flex items-end gap-ds-2 rounded-ds-md border border-fl-border bg-fl-background-muted p-spacing-sm transition-all duration-150 ease-out">
       {/* Left tools */}
       <ComposerTools side="left">
-        <ComposerTool icon={Paperclip as any} label="Attach file" />
-        <ComposerTool icon={Smile as any} label="Add emoji" />
+        <ComposerTool icon={Paperclip as unknown} label="Attach file" />
+        <ComposerTool icon={Smile as unknown} label="Add emoji" />
       </ComposerTools>
 
       {/* Textarea */}
@@ -77,7 +77,7 @@ export function ComposerInput({ className, ...props }: ComposerInputProps) {
 
       {/* Right tools */}
       <ComposerTools side="right">
-        <ComposerTool icon={Mic as any} label="Voice message" />
+        <ComposerTool icon={Mic as unknown} label="Voice message" />
         <ComposerSendButton />
       </ComposerTools>
     </div>
@@ -218,7 +218,7 @@ interface ComposerAISuggestionsProps {
     confidence: "high" | "medium" | "low";
     category: string;
   }[];
-  onSelectSuggestion: (suggestion: any) => void;
+  onSelectSuggestion: (suggestion: unknown) => void;
   className?: string;
 }
 
@@ -242,7 +242,7 @@ export function ComposerAISuggestions({ suggestions, onSelectSuggestion, classNa
       <h4 className="text-sm font-medium text-fl-text-muted">AI Suggestions</h4>
 
       <div className="flex flex-col gap-ds-2">
-        {suggestions.map((suggestion: any) => (
+        {suggestions.map((suggestion: unknown) => (
           <button
             key={suggestion.id}
             onClick={() => onSelectSuggestion(suggestion)}

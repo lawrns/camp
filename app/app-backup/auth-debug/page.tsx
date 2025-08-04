@@ -3,12 +3,13 @@
 import { useAuth } from "@/hooks/useAuth";
 import { getBrowserClient } from "@/lib/supabase";
 import { useEffect, useState } from "react";
+import type { User, Session } from "@supabase/supabase-js";
 
 export default function AuthDebugPage() {
   const { user, loading, isAuthenticated, error } = useAuth();
-  const [supabaseUser, setSupabaseUser] = useState<any>(null);
-  const [supabaseSession, setSupabaseSession] = useState<any>(null);
-  const [apiResponse, setApiResponse] = useState<any>(null);
+  const [supabaseUser, setSupabaseUser] = useState<User | null>(null);
+  const [supabaseSession, setSupabaseSession] = useState<Session | null>(null);
+  const [apiResponse, setApiResponse] = useState<unknown>(null);
   const [logs, setLogs] = useState<string[]>([]);
 
   const addLog = (message: string) => {

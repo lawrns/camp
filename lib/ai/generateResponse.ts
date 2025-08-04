@@ -13,7 +13,7 @@ import { buildTools } from "./tools";
 // import { fetchPromptRetrievalData, getPastConversationsPrompt } from "@/lib/data/retrieval"; // Module not found
 
 // Simple fallbacks for retrieval functions
-const fetchPromptRetrievalData = async (mailbox: any, userPrompt: string, metadata: unknown) => {
+const fetchPromptRetrievalData = async (mailbox: unknown, userPrompt: string, metadata: unknown) => {
   return {
     knowledgeBank: null,
     websitePagesPrompt: null,

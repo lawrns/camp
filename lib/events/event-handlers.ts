@@ -26,7 +26,7 @@ export const MESSAGE_RATE_LIMIT = {
  * Debounced typing start handler
  */
 export const createTypingStartHandler = (
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   userId: string,
   userName: string
@@ -52,7 +52,7 @@ export const createTypingStartHandler = (
  * Typing stop handler
  */
 export const createTypingStopHandler = (
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   userId: string
 ) => {
@@ -94,7 +94,7 @@ export const createTypingTimeoutHandler = (
  * Batched read receipt handler
  */
 export const createReadReceiptHandler = (
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   userId: string
 ) => {
@@ -196,7 +196,7 @@ export class MessageRateLimiter {
  * Create message sending handler with rate limiting
  */
 export const createMessageSender = (
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   organizationId: string,
   conversationId: string,
@@ -254,10 +254,10 @@ export const createMessageSender = (
  * Create message received handler
  */
 export const createMessageReceivedHandler = (
-  onMessage: (message: any) => void,
+  onMessage: (message: unknown) => void,
   onError?: (error: Error) => void
 ) => {
-  return (payload: any) => {
+  return (payload: unknown) => {
     try {
       onMessage(payload);
     } catch (error) {
@@ -276,7 +276,7 @@ export const createTypingIndicatorHandler = (
 ) => {
   const typingUsers = new Map<string, NodeJS.Timeout>();
 
-  return (payload: any) => {
+  return (payload: unknown) => {
     const { event, payload: data } = payload;
 
     if (event === EVENT_TYPES.TYPING_START) {
@@ -317,9 +317,9 @@ export const createTypingIndicatorHandler = (
  * Create conversation update handler
  */
 export const createConversationUpdateHandler = (
-  onConversationUpdate: (conversation: any) => void
+  onConversationUpdate: (conversation: unknown) => void
 ) => {
-  return (payload: any) => {
+  return (payload: unknown) => {
     try {
       onConversationUpdate(payload);
     } catch (error) {
@@ -332,9 +332,9 @@ export const createConversationUpdateHandler = (
  * Create assignment handler
  */
 export const createAssignmentHandler = (
-  onAssignment: (assignment: any) => void
+  onAssignment: (assignment: unknown) => void
 ) => {
-  return (payload: any) => {
+  return (payload: unknown) => {
     try {
       onAssignment(payload);
     } catch (error) {
@@ -351,11 +351,11 @@ export const createAssignmentHandler = (
  * Create AI handover handler
  */
 export const createAIHandoverHandler = (
-  onHandoverRequested: (data: any) => void,
-  onHandoverCompleted: (data: any) => void,
-  onConfidenceUpdate: (data: any) => void
+  onHandoverRequested: (data: unknown) => void,
+  onHandoverCompleted: (data: unknown) => void,
+  onConfidenceUpdate: (data: unknown) => void
 ) => {
-  return (payload: any) => {
+  return (payload: unknown) => {
     const { event, payload: data } = payload;
 
     try {

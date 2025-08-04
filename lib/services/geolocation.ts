@@ -148,7 +148,7 @@ export async function updateConversationLocation(conversationId: string, ip: str
 /**
  * Format location for display
  */
-export function formatLocation(location: any): string {
+export function formatLocation(location: unknown): string {
   if (!location) return "Unknown";
 
   const parts = [];

@@ -134,7 +134,7 @@ declare global {
       cleanTestData(): Chainable<void>;
       loginAsUser(email: string, password: string): Chainable<void>;
       loginAsAdmin(): Chainable<void>;
-      createTestConversation(data?: any): Chainable<void>;
+      createTestConversation(data?: unknown): Chainable<void>;
       sendTestMessage(content: string): Chainable<void>;
       triggerTestHandoff(reason?: string): Chainable<void>;
     }

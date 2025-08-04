@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 interface Agent {
   id: string;
   user_id: string;
-  full_name: string;
+  fullName: string;
   email: string;
   avatar_url: string | null;
   workload: number;
@@ -60,9 +60,9 @@ export function AssignmentDialog({
   const loadAgents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/agents/availability?organizationId=${organizationId}`, {
-        credentials: "include", // CRITICAL FIX: Include cookies for authentication
-      });
+      // CRITICAL-003 FIX: Use enhanced authentication
+      const { fetchWithAuth } = await import('@/hooks/useRealtimeAuth');
+      const response = await fetchWithAuth(`/api/agents/availability?organizationId=${organizationId}`);
       if (!response.ok) {
         throw new Error("Failed to load agents");
       }
@@ -103,7 +103,7 @@ export function AssignmentDialog({
       const data = await response.json();
       const assignedAgent = agents.find((a) => a.user_id === selectedAgentId);
 
-      toast.success(`Assigned to ${assignedAgent?.full_name || "agent"}`);
+      toast.success(`Assigned to ${assignedAgent?.fullName || "agent"}`);
       onAssigned?.(data.assigneeId);
       onOpenChange(false);
     } catch (error) {
@@ -148,7 +148,7 @@ export function AssignmentDialog({
       }
 
       const data = await response.json();
-      toast.success(`Auto-assigned to ${bestAgent.full_name}`);
+      toast.success(`Auto-assigned to ${bestAgent.fullName}`);
       onAssigned?.(data.assigneeId);
       onOpenChange(false);
     } catch (error) {
@@ -162,20 +162,20 @@ export function AssignmentDialog({
   const getWorkloadColor = (status: string) => {
     switch (status) {
       case "available":
-        return "bg-green-400";
+        return "bg-[var(--ds-color-success)]";
       case "busy":
-        return "bg-yellow-400";
+        return "bg-[var(--ds-color-warning)]";
       case "near-capacity":
-        return "bg-red-400";
+        return "bg-[var(--ds-color-error)]";
       default:
-        return "bg-gray-400";
+        return "bg-[var(--ds-color-text-muted)]";
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
+      <DialogContent className="max-w-md ds-modal">
+        <DialogHeader className="ds-modal-header">
           <DialogTitle className="flex items-center gap-ds-2">
             <Icon icon={UserPlus} className="h-5 w-5" />
             Assign to Agent
@@ -185,15 +185,15 @@ export function AssignmentDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-spacing-md">
+        <div className="space-y-spacing-md ds-modal-body">
           {/* Auto-assign option */}
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-spacing-md">
+          <div className="rounded-lg border border-[var(--ds-color-primary-200)] bg-[var(--ds-color-primary-50)] p-spacing-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-ds-2">
-                <Icon icon={Bot} className="h-5 w-5 text-blue-600" />
+                <Icon icon={Bot} className="h-5 w-5 text-[var(--ds-color-primary-600)]" />
                 <div>
-                  <p className="font-medium text-blue-900">Auto-assign to best agent</p>
-                  <p className="text-sm text-blue-700">Based on current workload and availability</p>
+                  <p className="font-medium text-[var(--ds-color-primary-900)]">Auto-assign to best agent</p>
+                  <p className="text-sm text-[var(--ds-color-primary-700)]">Based on current workload and availability</p>
                 </div>
               </div>
               <Button
@@ -201,7 +201,7 @@ export function AssignmentDialog({
                 size="sm"
                 onClick={handleAutoAssign}
                 disabled={isAssigning || isLoading}
-                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                className="ds-button-secondary border-[var(--ds-color-primary-300)] text-[var(--ds-color-primary-700)] hover:bg-[var(--ds-color-primary-100)]"
               >
                 Auto-assign
               </Button>
@@ -211,8 +211,8 @@ export function AssignmentDialog({
           {/* Agent list */}
           {isLoading ? (
             <div className="flex items-center justify-center py-spacing-lg">
-              <Icon icon={Loader2} className="h-6 w-6 animate-spin text-gray-400" />
-              <span className="ml-ds-2 text-sm text-gray-600">Loading agents...</span>
+              <Icon icon={Loader2} className="h-6 w-6 animate-spin text-[var(--ds-color-text-muted)]" />
+              <span className="ml-ds-2 text-sm text-[var(--ds-color-text-secondary)]">Loading agents...</span>
             </div>
           ) : (
             <div className="space-y-spacing-sm max-h-64 overflow-y-auto">
@@ -222,8 +222,8 @@ export function AssignmentDialog({
                   className={cn(
                     "flex items-center justify-between rounded-lg border p-spacing-sm cursor-pointer transition-colors",
                     selectedAgentId === agent.user_id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50",
+                      ? "border-[var(--ds-color-primary)] bg-[var(--ds-color-primary-50)]"
+                      : "border-[var(--ds-color-border)] hover:border-[var(--ds-color-border-strong)] hover:bg-[var(--ds-color-surface-hover)]",
                     !agent.available && "opacity-50 cursor-not-allowed"
                   )}
                   onClick={() => agent.available && setSelectedAgentId(agent.user_id)}
@@ -231,18 +231,18 @@ export function AssignmentDialog({
                   <div className="flex items-center gap-ds-2">
                     <Avatar className="h-8 w-8">
                       {agent.avatar_url && <AvatarImage src={agent.avatar_url} />}
-                      <AvatarFallback className="text-xs">{agent.full_name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback className="text-xs">{agent.fullName.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium text-gray-900">{agent.full_name}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="font-medium text-[var(--ds-color-text-primary)]">{agent.fullName}</p>
+                      <p className="text-sm text-[var(--ds-color-text-secondary)]">
                         {agent.workload}/{agent.capacity} conversations
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-ds-2">
                     {selectedAgentId === agent.user_id && (
-                      <Icon icon={Check} className="h-4 w-4 text-blue-600" />
+                      <Icon icon={Check} className="h-4 w-4 text-[var(--ds-color-primary)]" />
                     )}
                     <div
                       className={cn("h-2 w-2 rounded-full", getWorkloadColor(agent.status))}
@@ -255,11 +255,12 @@ export function AssignmentDialog({
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="ds-modal-footer">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isAssigning}
+            className="ds-button-secondary"
           >
             Cancel
           </Button>
@@ -267,6 +268,7 @@ export function AssignmentDialog({
             onClick={handleAssign}
             disabled={!selectedAgentId || isAssigning || isLoading}
             loading={isAssigning}
+            className="ds-button-primary"
           >
             {isAssigning ? "Assigning..." : "Assign Agent"}
           </Button>

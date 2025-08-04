@@ -56,7 +56,7 @@ export async function GET(
     // Get organization with settings
     const { data: organization, error } = await supabase
       .from('organizations')
-      .select('id, name, settings, widget_api_key')
+      .select('id, name, settings, widgetApiKey')
       .eq('id', organizationId)
       .single();
 
@@ -106,9 +106,9 @@ export async function GET(
       try {
         const { data: recentMessage } = await supabase
           .from('messages')
-          .select('content, created_at, sender_type')
+          .select('content, created_at, senderType')
           .eq('organization_id', organizationId)
-          .eq('sender_type', 'agent')
+          .eq('senderType', 'agent')
           .order('created_at', { ascending: false })
           .limit(1)
           .single();

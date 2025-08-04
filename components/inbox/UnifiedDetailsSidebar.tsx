@@ -28,7 +28,7 @@ interface DetailsSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   conversationId?: string;
-  conversation?: any;
+  conversation?: unknown;
   className?: string;
 }
 
@@ -63,7 +63,7 @@ export function DetailsSidebar({ isOpen, onClose, conversationId, conversation, 
     return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
   };
 
-  const calculateLTV = (orders: any[]) => {
+  const calculateLTV = (orders: unknown[]) => {
     if (!orders || orders.length === 0) return "$0";
     const totalAmount = orders.reduce((sum, order) => sum + parseFloat(order.amount.replace("$", "")), 0);
     return `$${totalAmount.toFixed(2)}`;
@@ -84,9 +84,9 @@ export function DetailsSidebar({ isOpen, onClose, conversationId, conversation, 
   }, [conversation]);
 
   const customerData = {
-    name: conversation?.customer_name || conversation?.customer_email?.split("@")[0] || "Unknown",
-    email: conversation?.customer_email || "",
-    avatar: getAvatarUrl(conversation?.customer_email) || "",
+    name: conversation?.customerName || conversation?.customerEmail?.split("@")[0] || "Unknown",
+    email: conversation?.customerEmail || "",
+    avatar: getAvatarUrl(conversation?.customerEmail) || "",
     location: conversation?.customer_data?.location || "",
     lifetime_value: conversation?.orders ? calculateLTV(conversation.orders) : "$0",
     total_conversations: conversation?.total_count || 0,
@@ -160,7 +160,7 @@ function CustomerDetails({ customer }: { customer: typeof mockCustomer }) {
         <Avatar src={customer.avatar} name={customer.name} className="mx-auto mb-3 h-20 w-20" />
         <h3 className="text-base font-semibold">{customer.name}</h3>
         <div className="mt-2 flex items-center justify-center gap-ds-2">
-          {customer.tags?.map((tag: any) => (
+          {customer.tags?.map((tag: unknown) => (
             <Badge key={tag} variant="secondary" className="text-tiny">
               {tag}
             </Badge>
@@ -269,7 +269,7 @@ function CustomerDetails({ customer }: { customer: typeof mockCustomer }) {
         </div>
 
         <div className="space-y-spacing-sm">
-          {customer.recent_orders?.map((order: any) => (
+          {customer.recent_orders?.map((order: unknown) => (
             <div
               key={order.id}
               className="flex items-center justify-between rounded-ds-lg border bg-muted/20 p-spacing-sm transition-colors hover:bg-muted/30"
@@ -307,7 +307,7 @@ function CustomerDetails({ customer }: { customer: typeof mockCustomer }) {
         </div>
 
         <div className="space-y-spacing-sm">
-          {customer.notes?.map((note: any) => (
+          {customer.notes?.map((note: unknown) => (
             <div key={note.id} className="rounded-ds-lg border bg-muted/20 spacing-3">
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-sm font-medium">{note.author}</span>

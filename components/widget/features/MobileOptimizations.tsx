@@ -382,8 +382,8 @@ export function useMobileInput() {
   const performance = useMobilePerformance();
 
   const getInputProps = useCallback(
-    (baseProps: any = {}) => {
-      const mobileProps: any = { ...baseProps };
+    (baseProps: unknown = {}) => {
+      const mobileProps: unknown = { ...baseProps };
 
       if (mobileState.isMobile) {
         // Prevent zoom on iOS

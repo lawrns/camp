@@ -7,7 +7,7 @@
 
 // For production, you would use Redis. For development, we'll use in-memory cache
 interface CacheEntry {
-  data: any;
+  data: unknown;
   expiry: number;
   tags: string[];
 }
@@ -16,7 +16,7 @@ class InMemoryCache {
   private cache = new Map<string, CacheEntry>();
   private maxSize = 1000; // Maximum number of entries
 
-  set(key: string, data: any, ttlSeconds: number = 300, tags: string[] = []): void {
+  set(key: string, data: unknown, ttlSeconds: number = 300, tags: string[] = []): void {
     // Clean up expired entries if cache is getting full
     if (this.cache.size >= this.maxSize) {
       this.cleanup();
@@ -26,7 +26,7 @@ class InMemoryCache {
     this.cache.set(key, { data, expiry, tags });
   }
 
-  get(key: string): any | null {
+  get(key: string): unknown | null {
     const entry = this.cache.get(key);
     
     if (!entry) {
@@ -87,7 +87,7 @@ export class CacheService {
   async cacheApiResponse(
     endpoint: string,
     params: Record<string, any>,
-    data: any,
+    data: unknown,
     ttlSeconds: number = 300
   ): Promise<void> {
     const key = this.generateApiKey(endpoint, params);
@@ -109,8 +109,8 @@ export class CacheService {
   async cacheQuery(
     table: string,
     query: string,
-    params: any[],
-    data: any,
+    params: unknown[],
+    data: unknown,
     ttlSeconds: number = 600
   ): Promise<void> {
     const key = this.generateQueryKey(table, query, params);
@@ -121,7 +121,7 @@ export class CacheService {
   async getCachedQuery(
     table: string,
     query: string,
-    params: any[]
+    params: unknown[]
   ): Promise<any | null> {
     const key = this.generateQueryKey(table, query, params);
     return this.cache.get(key);
@@ -133,7 +133,7 @@ export class CacheService {
   async cacheAIResponse(
     messageContent: string,
     organizationId: string,
-    response: any,
+    response: unknown,
     ttlSeconds: number = 1800 // 30 minutes
   ): Promise<void> {
     const key = this.generateAIKey(messageContent, organizationId);
@@ -156,7 +156,7 @@ export class CacheService {
     organizationId: string,
     type: string,
     timeRange: string,
-    data: any,
+    data: unknown,
     ttlSeconds: number = 900 // 15 minutes
   ): Promise<void> {
     const key = `analytics:${organizationId}:${type}:${timeRange}`;
@@ -211,7 +211,7 @@ export class CacheService {
     return `api:${endpoint}:${this.hashString(sortedParams)}`;
   }
 
-  private generateQueryKey(table: string, query: string, params: any[]): string {
+  private generateQueryKey(table: string, query: string, params: unknown[]): string {
     const paramString = JSON.stringify(params);
     return `query:${table}:${this.hashString(query + paramString)}`;
   }
@@ -239,9 +239,9 @@ export const cacheService = new CacheService();
 export function withCache(
   handler: Function,
   ttlSeconds: number = 300,
-  cacheKey?: (req: any) => string
+  cacheKey?: (req: unknown) => string
 ) {
-  return async (req: any, ...args: any[]) => {
+  return async (req: unknown, ...args: unknown[]) => {
     const key = cacheKey ? cacheKey(req) : `${req.url}:${JSON.stringify(req.query || {})}`;
     
     // Try to get from cache first
@@ -259,11 +259,11 @@ export function withCache(
 }
 
 // Cache decorator for functions
-export function cached(ttlSeconds: number = 300, keyGenerator?: (...args: any[]) => string) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+export function cached(ttlSeconds: number = 300, keyGenerator?: (...args: unknown[]) => string) {
+  return function (target: unknown, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       const key = keyGenerator 
         ? keyGenerator(...args)
         : `${target.constructor.name}:${propertyName}:${JSON.stringify(args)}`;

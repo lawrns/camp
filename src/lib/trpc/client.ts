@@ -20,7 +20,7 @@ export const api = createTRPCNext<AppRouter>({
       transformer: superjson,
       links: [
         loggerLink({
-          enabled: (opts: any) =>
+          enabled: (opts: unknown) =>
             process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
@@ -36,7 +36,7 @@ export const api = createTRPCNext<AppRouter>({
         defaultOptions: {
           queries: {
             staleTime: 60 * 1000, // 1 minute
-            retry: (failureCount: any, error: any) => {
+            retry: (failureCount: unknown, error: unknown) => {
               // Don't retry on 4xx errors
               if (error?.data?.httpStatus >= 400 && error?.data?.httpStatus < 500) {
                 return false;

@@ -35,7 +35,7 @@ export const websitesRouter = {
       },
     });
 
-    const websiteIds = websitesList.map((w: any) => w.id);
+    const websiteIds = websitesList.map((w: unknown) => w.id);
 
     const pageCounts =
       websiteIds.length > 0
@@ -49,7 +49,7 @@ export const websitesRouter = {
             .groupBy(websitePages.websiteId)
         : [];
 
-    return websitesList.map((website: any) => ({
+    return websitesList.map((website: unknown) => ({
       ...website,
       latestCrawl: website.crawls[0],
       pagesCount: pageCounts.find((c) => c.websiteId === website.id)?.count ?? 0,

@@ -27,7 +27,7 @@ export function useCollapsiblePanels(options: UseCollapsiblePanelsOptions = {}) 
         const saved = localStorage.getItem(storageKey);
         if (saved) {
           const parsedStates = JSON.parse(saved);
-          Object.keys(defaultPanels).forEach((panelId: any) => {
+          Object.keys(defaultPanels).forEach((panelId: unknown) => {
             const defaultPanel = defaultPanels[panelId];
             const savedPanel = parsedStates[panelId];
 
@@ -45,7 +45,7 @@ export function useCollapsiblePanels(options: UseCollapsiblePanelsOptions = {}) 
     }
 
     // Use default states
-    Object.keys(defaultPanels).forEach((panelId: any) => {
+    Object.keys(defaultPanels).forEach((panelId: unknown) => {
       const defaultPanel = defaultPanels[panelId];
       initialStates[panelId] = {
         isCollapsed: defaultPanel?.isCollapsed ?? false,

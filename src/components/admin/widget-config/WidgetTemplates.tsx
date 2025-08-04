@@ -13,7 +13,7 @@ interface WidgetTemplate {
   description: string;
   icon: React.ReactNode;
   category: string;
-  config: any;
+  config: unknown;
 }
 
 const templates: WidgetTemplate[] = [
@@ -141,7 +141,7 @@ export function WidgetTemplates({ onApply }: WidgetTemplatesProps) {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {templates.map((template: any) => (
+          {templates.map((template: unknown) => (
             <div
               key={template.id}
               className="cursor-pointer rounded-ds-lg border spacing-3 transition-colors hover:border-primary"

@@ -42,7 +42,7 @@ export async function DELETE(
     // Check if user can delete this message
     // Users can delete their own messages or if they're an admin/agent in the conversation
     const canDelete = 
-      message.sender_id === user.id || 
+      message.senderId === user.id || 
       message.conversations.assigned_agent_id === user.id ||
       message.conversations.organization_id === user.organization_id;
 
@@ -127,7 +127,7 @@ export async function PATCH(
     }
 
     // Check if user can edit this message (only own messages)
-    if (message.sender_id !== user.id) {
+    if (message.senderId !== user.id) {
       return NextResponse.json(
         { error: "You can only edit your own messages" },
         { status: 403 }
@@ -140,7 +140,7 @@ export async function PATCH(
       .update({
         content,
         updated_at: new Date().toISOString(),
-        is_edited: true
+        isEdited: true
       })
       .eq("id", params.id)
       .select()

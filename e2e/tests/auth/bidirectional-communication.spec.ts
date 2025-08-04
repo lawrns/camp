@@ -215,8 +215,8 @@ test.describe('Bidirectional Communication', () => {
     const realtimeTest = await page.evaluate(async (orgId) => {
       try {
         // Check if Supabase is available
-        if (typeof window !== 'undefined' && (window as any).supabase) {
-          const supabase = (window as any).supabase;
+        if (typeof window !== 'undefined' && (window as unknown).supabase) {
+          const supabase = (window as unknown).supabase;
           
           // Create a test channel
           const channel = supabase.channel(`test-${Date.now()}`);
@@ -230,7 +230,7 @@ test.describe('Bidirectional Communication', () => {
           });
           
           // Set up message listener
-          channel.on('broadcast', { event: 'test' }, (payload: any) => {
+          channel.on('broadcast', { event: 'test' }, (payload: unknown) => {
             messageReceived = true;
           });
           

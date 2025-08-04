@@ -59,7 +59,7 @@ export const generateConversationSummary = async (conversationId: string, { forc
     "Avoid starting with generic descriptions like 'The conversation involves a discussion about a technical issue with a software application.' Instead, start with the most specific and relevant point from the conversation.",
   ].join("\n");
 
-  const messages = constructAnthropicMessagesForConversationSummary(emails as any);
+  const messages = constructAnthropicMessagesForConversationSummary(emails as unknown);
 
   const { summary } = await runAIObjectQuery({
     mailbox: conversation.mailbox,

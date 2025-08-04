@@ -117,7 +117,7 @@ test.describe('Complete E2E Flow', () => {
     const apiTestResult = await page.evaluate(async () => {
       try {
         // Test if tRPC client is available
-        if (typeof window !== 'undefined' && (window as any).fetch) {
+        if (typeof window !== 'undefined' && (window as unknown).fetch) {
           const response = await fetch('/api/trpc/analytics.getDashboardMetrics?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22organizationId%22%3A%22b5e80170-004c-4e82-a88c-3e2166b169dd%22%7D%7D%7D', {
             method: 'GET',
             credentials: 'include',

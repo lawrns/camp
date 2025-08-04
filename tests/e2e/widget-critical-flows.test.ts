@@ -25,7 +25,7 @@ async function createTestConversation(page: Page, customerData?: {
   name?: string;
   email?: string;
   message?: string;
-}): Promise<{ conversationId: string; visitorInfo: any }> {
+}): Promise<{ conversationId: string; visitorInfo: unknown }> {
   const response = await page.evaluate(async (data) => {
     const response = await fetch('/api/widget', {
       method: 'POST',

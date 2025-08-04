@@ -86,7 +86,7 @@ class ErrorBoundary extends React.Component<
   { children: ReactNode; fallback: ReactNode; retryCount: number },
   ErrorBoundaryState
 > {
-  constructor(props: any) {
+  constructor(props: unknown) {
     super(props);
     this.state = {
       hasError: false,

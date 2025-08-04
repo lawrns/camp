@@ -119,7 +119,7 @@ export function AgentWorkloadIndicators({ organizationId, teamId, className }: A
 
   return (
     <div className={cn("grid gap-4 md:grid-cols-2 lg:grid-cols-3", className)}>
-      {workloads.map((agent: any) => (
+      {workloads.map((agent: unknown) => (
         <Card key={agent.id} className="overflow-hidden">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">

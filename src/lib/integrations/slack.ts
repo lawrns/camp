@@ -162,7 +162,7 @@ class SlackService {
       const data = await response.json();
 
       if (data.ok && data.channels) {
-        return data.channels.map((channel: any) => ({
+        return data.channels.map((channel: unknown) => ({
           id: channel.id,
           name: channel.name,
           isPrivate: channel.is_private,

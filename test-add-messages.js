@@ -45,9 +45,9 @@ async function addSampleMessages() {
         .insert({
           conversation_id: conversation.id,
           content: message,
-          sender_type: 'visitor',
-          sender_name: conversation.customer_name || 'Visitor',
-          sender_email: conversation.customer_email || 'visitor@example.com',
+          senderType: 'visitor',
+          senderName: conversation.customerName || 'Visitor',
+          senderEmail: conversation.customerEmail || 'visitor@example.com',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })

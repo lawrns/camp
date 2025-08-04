@@ -96,7 +96,7 @@ export class ResolutionDetector {
     ];
 
     messages.forEach((message: unknown) => {
-      const typedMessage = message as any;
+      const typedMessage = message as unknown;
       if (typedMessage.role === "user") {
         const content = typedMessage.content.toLowerCase();
         const foundPhrases = explicitPhrases.filter((phrase: unknown) => content.includes(phrase as string));
@@ -130,7 +130,7 @@ export class ResolutionDetector {
     ];
 
     messages.forEach((message: unknown) => {
-      const typedMessage = message as any;
+      const typedMessage = message as unknown;
       if (typedMessage.role === "user") {
         const content = typedMessage.content.toLowerCase();
         const foundIndicators = positiveIndicators.filter((indicator: unknown) => content.includes(indicator as string));
@@ -166,7 +166,7 @@ export class ResolutionDetector {
     // Check for message frequency decrease
     const recentMessages = messages.slice(-5);
     if (recentMessages.length >= 3) {
-      const userMessages = recentMessages.filter((m: unknown) => (m as any).role === "user");
+      const userMessages = recentMessages.filter((m: unknown) => (m as unknown).role === "user");
       if (userMessages.length <= 1) {
         signals.push({
           type: "behavioral",
@@ -195,9 +195,9 @@ export class ResolutionDetector {
   private calculateOverallConfidence(signals: ResolutionSignal[]): number {
     if (signals.length === 0) return 0;
 
-    const explicitSignals = signals.filter((s: unknown) => (s as any).type === "explicit");
-    const implicitSignals = signals.filter((s: unknown) => (s as any).type === "implicit");
-    const behavioralSignals = signals.filter((s: unknown) => (s as any).type === "behavioral");
+    const explicitSignals = signals.filter((s: unknown) => (s as unknown).type === "explicit");
+    const implicitSignals = signals.filter((s: unknown) => (s as unknown).type === "implicit");
+    const behavioralSignals = signals.filter((s: unknown) => (s as unknown).type === "behavioral");
 
     // Weight explicit signals more heavily
     const explicitWeight = 0.6;
@@ -205,11 +205,11 @@ export class ResolutionDetector {
     const behavioralWeight = 0.1;
 
     const explicitScore =
-      explicitSignals.reduce((sum: any, s: unknown) => sum + (s as any).confidence, 0) / Math.max(explicitSignals.length, 1);
+      explicitSignals.reduce((sum: unknown, s: unknown) => sum + (s as unknown).confidence, 0) / Math.max(explicitSignals.length, 1);
     const implicitScore =
-      implicitSignals.reduce((sum: any, s: unknown) => sum + (s as any).confidence, 0) / Math.max(implicitSignals.length, 1);
+      implicitSignals.reduce((sum: unknown, s: unknown) => sum + (s as unknown).confidence, 0) / Math.max(implicitSignals.length, 1);
     const behavioralScore =
-      behavioralSignals.reduce((sum: any, s: unknown) => sum + (s as any).confidence, 0) / Math.max(behavioralSignals.length, 1);
+      behavioralSignals.reduce((sum: unknown, s: unknown) => sum + (s as unknown).confidence, 0) / Math.max(behavioralSignals.length, 1);
 
     const weightedScore =
       explicitScore * explicitWeight + implicitScore * implicitWeight + behavioralScore * behavioralWeight;
@@ -222,8 +222,8 @@ export class ResolutionDetector {
       return "No clear resolution signals detected in the conversation.";
     }
 
-    const explicitSignals = signals.filter((s: unknown) => (s as any).type === "explicit");
-    const implicitSignals = signals.filter((s: unknown) => (s as any).type === "implicit");
+    const explicitSignals = signals.filter((s: unknown) => (s as unknown).type === "explicit");
+    const implicitSignals = signals.filter((s: unknown) => (s as unknown).type === "implicit");
 
     if (isResolved) {
       let reasoning = "Resolution detected based on ";
@@ -307,7 +307,7 @@ export class ResolutionDetector {
     const totalAnalyzed = analyses.length;
     const resolvedCount = analyses.filter((a: unknown) => a.isResolved).length;
     const resolutionRate = totalAnalyzed > 0 ? resolvedCount / totalAnalyzed : 0;
-    const averageConfidence = analyses.reduce((sum: any, a: unknown) => sum + a.confidence, 0) / Math.max(totalAnalyzed, 1);
+    const averageConfidence = analyses.reduce((sum: unknown, a: unknown) => sum + a.confidence, 0) / Math.max(totalAnalyzed, 1);
 
     return {
       totalAnalyzed,

@@ -73,7 +73,7 @@ class WidgetLogger {
     return this.isDevelopment;
   }
 
-  private log(level: LogLevel, message: string, context?: LogContext, data?: any): void {
+  private log(level: LogLevel, message: string, context?: LogContext, data?: unknown): void {
     if (!this.shouldLog(level)) return;
 
     const formattedMessage = this.formatMessage(level, message, context);
@@ -118,16 +118,16 @@ class WidgetLogger {
   }
 
   // Message logging
-  messageSent(context: LogContext, messageData: any): void {
+  messageSent(context: LogContext, messageData: unknown): void {
     this.log("info", "Message sent", context, {
       messageLength: messageData.content?.length || 0,
       hasAttachments: !!messageData.attachments?.length,
     });
   }
 
-  messageReceived(context: LogContext, messageData: any): void {
+  messageReceived(context: LogContext, messageData: unknown): void {
     this.log("info", "Message received", context, {
-      sender: messageData.sender_type,
+      sender: messageData.senderType,
       messageLength: messageData.content?.length || 0,
     });
   }
@@ -210,17 +210,17 @@ class WidgetLogger {
   }
 
   // Warning logging
-  warn(message: string, context?: LogContext, data?: any): void {
+  warn(message: string, context?: LogContext, data?: unknown): void {
     this.log("warn", message, context, data);
   }
 
   // Info logging
-  info(message: string, context?: LogContext, data?: any): void {
+  info(message: string, context?: LogContext, data?: unknown): void {
     this.log("info", message, context, data);
   }
 
   // Debug logging
-  debug(message: string, context?: LogContext, data?: any): void {
+  debug(message: string, context?: LogContext, data?: unknown): void {
     this.log("debug", message, context, data);
   }
 
@@ -229,7 +229,7 @@ class WidgetLogger {
     if (!this.isDevelopment) return;
 
     const uptime = Math.round(performance.now() - this.startTime);
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown).memory;
 
     console.group("📊 Widget Performance Summary");
 
@@ -254,8 +254,8 @@ export const logConnection = {
 };
 
 export const logMessage = {
-  sent: (context: LogContext, data: any) => widgetLogger.messageSent(context, data),
-  received: (context: LogContext, data: any) => widgetLogger.messageReceived(context, data),
+  sent: (context: LogContext, data: unknown) => widgetLogger.messageSent(context, data),
+  received: (context: LogContext, data: unknown) => widgetLogger.messageReceived(context, data),
   error: (context: LogContext, error: Error) => widgetLogger.messageError(context, error),
 };
 

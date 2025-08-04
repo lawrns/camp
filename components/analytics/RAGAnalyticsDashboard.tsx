@@ -68,7 +68,7 @@ interface DashboardState {
   metrics: RAGMetrics | null;
   insights: PerformanceInsight[];
   recommendations: OptimizationRecommendation[];
-  realTimeData: any;
+  realTimeData: unknown;
   loading: boolean;
   error: string | null;
   timeRange: "1h" | "24h" | "7d" | "30d";
@@ -286,7 +286,7 @@ export function RAGAnalyticsDashboard({
     const requestsData = state.metrics.usage.requestsByDay || [];
     const responseTimeData =
       requestsData.length > 0
-        ? requestsData.map((item: any) => ({
+        ? requestsData.map((item: unknown) => ({
           time: new Date(item.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
           responseTime: item.avgResponseTime || 0,
           requests: item.requests || 0,
@@ -698,7 +698,7 @@ export function RAGAnalyticsDashboard({
                 <CardTitle>Top Organizations</CardTitle>
               </CardHeader>
               <CardContent>
-                {state.metrics?.usage.topOrganizations.slice(0, 5).map((org: any, index: number) => (
+                {state.metrics?.usage.topOrganizations.slice(0, 5).map((org: unknown, index: number) => (
                   <div key={index} className="flex items-center justify-between py-2">
                     <span className="text-sm">{org.name}</span>
                     <span className="font-medium">{org.requestCount}</span>

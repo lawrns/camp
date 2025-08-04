@@ -99,7 +99,7 @@ export interface HandoverRequest {
   reason: string;
   confidence?: number;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  context?: any;
+  context?: unknown;
   requestedAt: Date;
 }
 

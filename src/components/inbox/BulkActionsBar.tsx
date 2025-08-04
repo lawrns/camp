@@ -29,7 +29,7 @@ import { Icon } from "@/lib/ui/Icon";
 interface BulkActionsBarProps {
   selectedCount: number;
   onClearSelection: () => void;
-  onBulkAction: (action: string, data?: any) => Promise<void>;
+  onBulkAction: (action: string, data?: unknown) => Promise<void>;
   className?: string;
 }
 
@@ -37,7 +37,7 @@ export function BulkActionsBar({ selectedCount, onClearSelection, onBulkAction, 
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleAction = async (action: string, data?: any) => {
+  const handleAction = async (action: string, data?: unknown) => {
     setIsProcessing(true);
     try {
       await onBulkAction(action, data);

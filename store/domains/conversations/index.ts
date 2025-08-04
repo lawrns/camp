@@ -44,7 +44,7 @@ export const useAssignConversation = () => {
 
 export const useUpdatePriority = () => {
   const { updateConversation, conversations } = useConversationsStore.getState();
-  return (conversationId: number, priority: any) => {
+  return (conversationId: number, priority: unknown) => {
     const conversation = conversations.get(conversationId);
     if (conversation) {
       updateConversation({ ...conversation, priority });
@@ -54,7 +54,7 @@ export const useUpdatePriority = () => {
 
 export const useAddReaction = () => {
   const { updateConversation, conversations } = useConversationsStore.getState();
-  return (conversationId: number, reaction: any) => {
+  return (conversationId: number, reaction: unknown) => {
     const conversation = conversations.get(conversationId);
     if (conversation) {
       // TODO: Implement reactions when ConversationWithVersion supports it
@@ -70,7 +70,7 @@ export const useRemoveReaction = () => {
     const conversation = conversations.get(conversationId);
     if (conversation) {
       // TODO: Implement reactions when ConversationWithVersion supports it
-      // const reactions = conversation.reactions?.filter((r: any) => r.id !== reactionId) || [];
+      // const reactions = conversation.reactions?.filter((r: unknown) => r.id !== reactionId) || [];
       // updateConversation({ ...conversation, reactions });
     }
   };

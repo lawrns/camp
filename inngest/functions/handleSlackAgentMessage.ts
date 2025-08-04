@@ -21,10 +21,10 @@ const getThreadMessages = async (
 };
 
 const generateAgentResponse = async (
-  messages: any[],
-  mailbox: any,
+  messages: unknown[],
+  mailbox: unknown,
   slackUserId: string | null,
-  showStatus: (status: string | null, tool?: any) => Promise<void>,
+  showStatus: (status: string | null, tool?: unknown) => Promise<void>,
   confirmedReplyText: string | null
 ): Promise<{ text: string; confirmReplyText: string | null }> => {
   // Fallback implementation - return a simple response
@@ -152,7 +152,7 @@ export const handleSlackAgentMessage = async (
             action_id: "proposed_message",
             initial_value:
               typeof confirmReplyText === "object" && confirmReplyText && "args" in confirmReplyText
-                ? (confirmReplyText as any).args?.proposedMessage || ""
+                ? (confirmReplyText as unknown).args?.proposedMessage || ""
                 : confirmReplyText || "",
           },
           label: {
@@ -194,7 +194,7 @@ export const handleSlackAgentMessage = async (
         role: "assistant",
         content: `Confirming reply text: ${
           typeof confirmReplyText === "object" && confirmReplyText && "args" in confirmReplyText
-            ? (confirmReplyText as any).args?.proposedMessage || confirmReplyText
+            ? (confirmReplyText as unknown).args?.proposedMessage || confirmReplyText
             : confirmReplyText
         }`,
         slackChannel: agentThread.slackChannel,

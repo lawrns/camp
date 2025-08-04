@@ -205,7 +205,7 @@ export function useRealtimeStore(channelName: string) {
   }, [channelName]);
 
   const sendRealtimeMessage = useCallback(
-    (message: any) => {
+    (message: unknown) => {
       setLastMessage({
         ...message,
         timestamp: new Date().toISOString(),

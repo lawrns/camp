@@ -192,7 +192,7 @@ export const POST = withPublic(async (request: NextRequest) => {
       const sessionData = {
         access_token: data.session.access_token,
         refresh_token: data.session.refresh_token,
-        expires_at: data.session.expires_at || Math.floor(Date.now() / 1000) + 3600, // Default to 1 hour from now
+        expiresAt: data.session.expiresAt || Math.floor(Date.now() / 1000) + 3600, // Default to 1 hour from now
         token_type: data.session.token_type,
         user: data.user,
       };

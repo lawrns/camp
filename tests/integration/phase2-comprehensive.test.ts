@@ -23,7 +23,7 @@ function createMockRequest(options: {
   method?: string;
   url?: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   ip?: string;
 }): NextRequest {
   const { method = 'POST', url = 'http://localhost:3001/api/widget', headers = {}, ip = '127.0.0.1' } = options;
@@ -40,7 +40,7 @@ function createMockRequest(options: {
     json: async () => options.body || {},
     text: async () => JSON.stringify(options.body || {}),
     clone: () => request
-  } as any;
+  } as unknown;
   
   return request as NextRequest;
 }

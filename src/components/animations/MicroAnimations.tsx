@@ -28,7 +28,7 @@ export function AnimatedButton({
   size?: "small" | "medium" | "large";
   disabled?: boolean;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   const { config, getTransition, shouldUseEffect } = useAdaptiveAnimations();
 

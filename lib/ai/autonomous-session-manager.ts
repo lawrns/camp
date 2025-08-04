@@ -187,12 +187,12 @@ export class AutonomousSessionManager {
 
   async getUserSessions(userId: string): Promise<AutonomousSession[]> {
     return Array.from(this.sessions.values())
-      .filter((session: unknown) => (session as any).userId === userId)
-      .sort((a, b) => (b as any).lastActivity.getTime() - (a as any).lastActivity.getTime());
+      .filter((session: unknown) => (session as unknown).userId === userId)
+      .sort((a, b) => (b as unknown).lastActivity.getTime() - (a as unknown).lastActivity.getTime());
   }
 
   async getActiveSessions(): Promise<AutonomousSession[]> {
-    return Array.from(this.sessions.values()).filter((session: unknown) => (session as any).status === "active");
+    return Array.from(this.sessions.values()).filter((session: unknown) => (session as unknown).status === "active");
   }
 
   async cleanupExpiredSessions(): Promise<number> {
@@ -232,11 +232,11 @@ export class AutonomousSessionManager {
 
     // Calculate dynamic metrics
     const messages = session.context.conversationHistory;
-    const responseTimes = messages.filter((msg: unknown) => (msg as any).role === "assistant").map(() => 200 + Math.random() * 300); // Stub response times
+    const responseTimes = messages.filter((msg: unknown) => (msg as unknown).role === "assistant").map(() => 200 + Math.random() * 300); // Stub response times
 
     const averageResponseTime =
       responseTimes.length > 0
-        ? responseTimes.reduce((sum: any, time: unknown) => sum + (time as number), 0) / responseTimes.length
+        ? responseTimes.reduce((sum: unknown, time: unknown) => sum + (time as number), 0) / responseTimes.length
         : 0;
 
     return {
@@ -286,7 +286,7 @@ export class AutonomousSessionManager {
   }
 
   getActiveSessionCount(): number {
-    return Array.from(this.sessions.values()).filter((session: unknown) => (session as any).status === "active").length;
+    return Array.from(this.sessions.values()).filter((session: unknown) => (session as unknown).status === "active").length;
   }
 }
 

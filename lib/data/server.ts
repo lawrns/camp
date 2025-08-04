@@ -167,9 +167,9 @@ export async function getDashboardStats(organizationId: string) {
   // Process status counts
   const stats = {
     totalConversations: statusCounts.length,
-    openConversations: statusCounts.filter((c: any) => c.status === "open").length,
-    closedConversations: statusCounts.filter((c: any) => c.status === "closed").length,
-    spamConversations: statusCounts.filter((c: any) => c.status === "spam").length,
+    openConversations: statusCounts.filter((c: unknown) => c.status === "open").length,
+    closedConversations: statusCounts.filter((c: unknown) => c.status === "closed").length,
+    spamConversations: statusCounts.filter((c: unknown) => c.status === "spam").length,
     totalMessages: messageCount || 0,
   };
 

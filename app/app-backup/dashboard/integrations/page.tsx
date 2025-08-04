@@ -31,7 +31,7 @@ interface Integration {
   description: string;
   category: "communication" | "productivity" | "analytics" | "crm" | "security";
   status: "connected" | "available" | "coming-soon";
-  icon: any;
+  icon: unknown;
   features: string[];
   setupUrl?: string;
 }
@@ -143,7 +143,7 @@ export default function DashboardIntegrationsPage() {
     return integration;
   });
 
-  const filteredIntegrations = updatedIntegrations.filter((integration: any) => {
+  const filteredIntegrations = updatedIntegrations.filter((integration: unknown) => {
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     const matchesSearch =
       integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -174,8 +174,8 @@ export default function DashboardIntegrationsPage() {
     }
   };
 
-  const connectedIntegrations = updatedIntegrations.filter((i: any) => i.status === "connected");
-  const availableIntegrations = updatedIntegrations.filter((i: any) => i.status === "available");
+  const connectedIntegrations = updatedIntegrations.filter((i: unknown) => i.status === "connected");
+  const availableIntegrations = updatedIntegrations.filter((i: unknown) => i.status === "available");
 
   return (
     <div className="container mx-auto space-y-6 spacing-6">

@@ -125,7 +125,7 @@ export function AIAssistantPanel({
         </CardHeader>
 
         <CardContent className="flex-1 p-0">
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="h-full">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as unknown)} className="h-full">
             <TabsList className="mx-4 mb-4 grid w-full grid-cols-3">
               <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
               <TabsTrigger value="insights">Insights</TabsTrigger>

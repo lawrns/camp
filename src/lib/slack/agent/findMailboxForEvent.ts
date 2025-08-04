@@ -245,11 +245,11 @@ export class MailboxFinder {
   }
 
   async getMappingsByOrganization(organizationId: string): Promise<MailboxMapping[]> {
-    return Array.from(this.mappings.values()).filter((mapping: any) => mapping.organizationId === organizationId);
+    return Array.from(this.mappings.values()).filter((mapping: unknown) => mapping.organizationId === organizationId);
   }
 
   async getMappingsByMailbox(mailboxId: string): Promise<MailboxMapping[]> {
-    return Array.from(this.mappings.values()).filter((mapping: any) => mapping.mailboxId === mailboxId);
+    return Array.from(this.mappings.values()).filter((mapping: unknown) => mapping.mailboxId === mailboxId);
   }
 
   async getMailbox(mailboxId: string): Promise<Mailbox | null> {

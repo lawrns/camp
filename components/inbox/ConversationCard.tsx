@@ -1,19 +1,11 @@
 "use client";
 
-import { AIActivityIndicator, AIStatusBadge, type AIStatusData } from "@/components/ai/AIStatusIndicators";
-import { Button } from "@/components/ui/Button-unified";
-import { AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card } from "@/components/unified-ui/components/Card";
-import { SlaTimerChip } from "@/components/unified-ui/components/SlaTimerChip";
-import { Icon } from "@/lib/ui/Icon";
-import { cn } from "@/lib/utils";
-import { getCustomerDisplayFromConversation } from "@/lib/utils/unified-customer-display";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Archive,
   CheckCircle,
-  CheckCircle2,
-  ChevronRight,
   Clock,
   Flag,
   Frown,
@@ -23,10 +15,10 @@ import {
   Star,
   TrendingUp,
   User,
-  Zap,
+  ChevronRight,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState, useMemo } from "react";
 
 // Local type that extends the entity Conversation type with UI-specific fields
 interface ConversationCardData {
@@ -52,11 +44,6 @@ interface ConversationCardData {
   sentiment?: "positive" | "neutral" | "negative";
   responseTime?: number;
   escalationRisk?: "high" | "medium" | "low";
-
-  // Improved AI status data
-  aiStatus?: AIStatusData;
-  isAITyping?: boolean;
-  aiTypingMessage?: string;
 }
 
 interface ConversationCardProps {
@@ -67,35 +54,49 @@ interface ConversationCardProps {
   isBulkSelectMode?: boolean;
 }
 
-// Status indicator colors based on urgency and priority
-const getStatusColor = (conversation: ConversationCardData) => {
-  if (conversation.urgency === "critical" || conversation.priority === "high") {
-    return "bg-fl-destructive";
-  }
-  if (conversation.escalationRisk === "high") {
-    return "bg-fl-warning";
-  }
-  if (conversation.aiEnabled) {
-    return "bg-fl-info";
-  }
-  if (conversation.status === "open" || conversation.status === "assigned") {
-    return "bg-fl-success";
-  }
-  return "bg-fl-muted";
+// Simple class name utility function
+const cn = (...classes: (string | undefined | null | false)[]) => {
+  return classes.filter(Boolean).join(' ');
 };
 
-// Sentiment icon component
-const SentimentIcon = ({ sentiment }: { sentiment?: string }) => {
-  switch (sentiment) {
-    case "positive":
-      return <Icon icon={Smile} className="h-3.5 w-3.5 text-fl-success" />;
-    case "negative":
-      return <Icon icon={Frown} className="text-fl-destructive h-3.5 w-3.5" />;
-    case "neutral":
-    case undefined:
+// Memoized status color function for performance
+const getStatusColor = (conversation: ConversationCardData) => {
+  switch (conversation.status) {
+    case "open":
+      return "bg-green-500";
+    case "assigned":
+      return "bg-blue-500";
+    case "escalated":
+      return "bg-red-500";
+    case "waiting":
+      return "bg-yellow-500";
+    case "closed":
+      return "bg-gray-500";
     default:
-      return <Icon icon={Meh} className="h-3.5 w-3.5 text-fl-text-subtle" />;
+      return "bg-gray-500";
   }
+};
+
+// Memoized sentiment icon component
+const SentimentIcon = memo(({ sentiment }: { sentiment?: string }) => {
+  if (sentiment === "positive") {
+    return <Smile className="h-3.5 w-3.5 text-green-600" aria-label="Positive sentiment" />;
+  } else if (sentiment === "negative") {
+    return <Frown className="h-3.5 w-3.5 text-red-600" aria-label="Negative sentiment" />;
+  } else {
+    return <Meh className="h-3.5 w-3.5 text-gray-600" aria-label="Neutral sentiment" />;
+  }
+});
+
+SentimentIcon.displayName = "SentimentIcon";
+
+// Helper function to get customer display name
+const getCustomerDisplay = (email: string) => {
+  const name = email.split('@')[0];
+  return {
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    initials: name.substring(0, 2).toUpperCase(),
+  };
 };
 
 export const ConversationCard = memo(function ConversationCard({
@@ -108,19 +109,12 @@ export const ConversationCard = memo(function ConversationCard({
   const [isHovered, setIsHovered] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  // Convert ConversationCardData to the format expected by getCustomerDisplayFromConversation
-  const customerDisplay = getCustomerDisplayFromConversation({
-    id: conversation.id.toString(),
-    organizationId: "", // Required but not used in the function
-    customerId: "", // Required but not used in the function
-    customerEmail: conversation.email_from,
-    customerName: null,
-    subject: conversation.subject,
-    status: conversation.status as any,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  } as any);
+  // Memoized customer display data
+  const customerDisplay = useMemo(() => {
+    return getCustomerDisplay(conversation.email_from);
+  }, [conversation.email_from]);
 
+  // Memoized event handlers for performance
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (isBulkSelectMode) {
@@ -143,29 +137,40 @@ export const ConversationCard = memo(function ConversationCard({
     [conversation.id, onBulkSelect]
   );
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleClick(e as unknown);
+      }
+    },
+    [handleClick]
+  );
+
   const handleQuickAction = useCallback(
     (action: string, e: React.MouseEvent) => {
       e.stopPropagation();
-      // TODO: Implement quick actions
+      console.log(`Quick action ${action} for conversation ${conversation.id}`);
+      // Quick actions will be implemented when action system is ready
     },
     [conversation.id]
   );
 
-  // Priority badge variant
-  const getPriorityVariant = () => {
+  // Memoized priority badge variant
+  const priorityVariant = useMemo(() => {
     switch (conversation.priority) {
       case "high":
-        return "error";
+        return "destructive";
       case "medium":
-        return "warning";
+        return "default";
       case "low":
       default:
         return "secondary";
     }
-  };
+  }, [conversation.priority]);
 
-  // Calculate response time display
-  const getResponseTimeDisplay = () => {
+  // Memoized response time display
+  const responseTimeDisplay = useMemo(() => {
     if (!conversation.responseTime) return null;
     const hours = Math.floor(conversation.responseTime / 60);
     const minutes = conversation.responseTime % 60;
@@ -173,10 +178,23 @@ export const ConversationCard = memo(function ConversationCard({
       return `${hours}h ${minutes}m`;
     }
     return `${minutes}m`;
-  };
+  }, [conversation.responseTime]);
+
+  // Memoized time ago display
+  const timeAgoDisplay = useMemo(() => {
+    try {
+      return formatDistanceToNow(new Date(conversation.lastMessageAt), { addSuffix: true });
+    } catch {
+      return "Unknown time";
+    }
+  }, [conversation.lastMessageAt]);
 
   return (
-    <div className="group relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <div 
+      className="group relative" 
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Status border indicator */}
       <div
         className={cn(
@@ -184,210 +202,182 @@ export const ConversationCard = memo(function ConversationCard({
           getStatusColor(conversation),
           isHovered && "w-1.5"
         )}
+        aria-hidden="true"
       />
 
-      <Card
+      <div
         className={cn(
           "relative ml-1 cursor-pointer overflow-hidden p-0 transition-all duration-200 ease-out",
-          "border border-fl-border hover:border-fl-border-strong",
-          "hover:shadow-fl-shadow/5 hover:shadow-lg",
+          "border border-gray-200 rounded-lg bg-white hover:border-gray-300",
+          "hover:shadow-md",
           "hover:translate-x-0.5",
-          "min-h-[80px]",
-          isSelected && ["border-fl-brand bg-fl-brand-subtle/50", "shadow-md shadow-fl-brand/10"],
-          conversation.unread && "bg-fl-background-subtle/30"
+          isSelected && "border-blue-500 bg-blue-50 shadow-md",
+          conversation.unread && "bg-gray-50"
         )}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-label={`Conversation with ${customerDisplay.name} - ${conversation.subject}`}
+        aria-pressed={isSelected}
         data-testid={`conversation-card-${conversation.id}`}
       >
-        <div className="spacing-3">
+        <div className="p-3">
           {/* Header Section */}
           <div className="flex items-start gap-3">
-            {/* Checkbox for bulk selection */}
+            {/* Bulk selection checkbox */}
             {isBulkSelectMode && (
-              <div className="flex items-center pt-1">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  className="h-4 w-4 rounded border-fl-border text-fl-brand focus:ring-fl-brand"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                aria-label={`Select conversation with ${customerDisplay.name}`}
+              />
             )}
 
-            {/* Avatar with presence indicator */}
-            <div className="relative flex-shrink-0">
-              <div className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-ds-full ring-2 ring-fl-background">
-                {customerDisplay.avatar && (
-                  <AvatarImage src={customerDisplay.avatar} alt={customerDisplay.displayName} />
+            {/* Avatar */}
+            <div className="flex-shrink-0">
+              <div className="relative">
+                <Avatar className="h-10 w-10">
+                  {conversation.avatar ? (
+                    <AvatarImage src={conversation.avatar} alt={customerDisplay.name} />
+                  ) : (
+                    <AvatarFallback className="bg-gray-200 text-gray-700">
+                      {customerDisplay.initials}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                
+                {/* Online status indicator */}
+                {conversation.isOnline && (
+                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-green-500" />
                 )}
-                <AvatarFallback className="bg-gradient-to-br from-fl-brand to-fl-brand-hover font-semibold text-white">
-                  {customerDisplay.displayName
-                    .split(" ")
-                    .map((n: string) => n[0])
-                    .join("")
-                    .substring(0, 2)
-                    .toUpperCase()}
-                </AvatarFallback>
               </div>
-
-              {/* Online indicator with pulse animation */}
-              {conversation.isOnline && (
-                <div className="absolute -bottom-1 -right-1">
-                  <div className="relative">
-                    <div className="absolute inset-0 h-3.5 w-3.5 animate-ping rounded-ds-full bg-fl-success opacity-75" />
-                    <div className="relative h-3.5 w-3.5 rounded-ds-full border-2 border-fl-background bg-fl-success" />
-                  </div>
-                </div>
-              )}
             </div>
 
-            {/* Main content */}
-            <div className="min-w-0 flex-1">
-              {/* Top row: Name, badges, time */}
-              <div className="mb-1 flex items-start justify-between gap-ds-2">
-                <div className="flex min-w-0 items-center gap-ds-2">
-                  <h3 className="truncate font-semibold text-fl-text min-w-0">{customerDisplay.displayName}</h3>
-
-                  {/* Customer badges */}
-                  <div className="flex flex-shrink-0 items-center gap-1">
-                    {conversation.isVerified && <Icon icon={CheckCircle2} className="h-3.5 w-3.5 text-fl-info" />}
-                    {conversation.tags.includes("VIP") && (
-                      <Icon icon={Star} className="h-3.5 w-3.5 fill-fl-warning text-fl-warning" />
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              {/* Top row: Name, time, actions */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="truncate text-sm font-medium text-gray-900">
+                      {customerDisplay.name}
+                    </h4>
+                    {conversation.isVerified && (
+                      <CheckCircle className="h-3.5 w-3.5 text-blue-600" aria-label="Verified customer" />
                     )}
                   </div>
+                  <p className="truncate text-xs text-gray-500">
+                    {timeAgoDisplay}
+                  </p>
                 </div>
 
-                {/* Time and quick actions */}
-                <div className="flex flex-shrink-0 items-center gap-ds-2">
-                  <span className="text-tiny text-fl-text-muted">
-                    {conversation.lastMessageAt && !isNaN(new Date(conversation.lastMessageAt).getTime())
-                      ? formatDistanceToNow(new Date(conversation.lastMessageAt), { addSuffix: true })
-                      : "Unknown"}
-                  </span>
-
-                  {/* Quick actions on hover */}
-                  {isHovered && !isBulkSelectMode && (
-                    <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0"
-                        onClick={(e) => handleQuickAction("star", e)}
-                      >
-                        <Icon icon={Star} className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0"
-                        onClick={(e) => handleQuickAction("archive", e)}
-                      >
-                        <Icon icon={Archive} className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0"
-                        onClick={(e) => handleQuickAction("more", e)}
-                      >
-                        <Icon icon={MoreHorizontal} className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                {/* Quick actions */}
+                {isHovered && !isBulkSelectMode && (
+                  <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => handleQuickAction("star", e)}
+                      aria-label="Star conversation"
+                      className="h-6 w-6 p-0"
+                    >
+                      <Star className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => handleQuickAction("flag", e)}
+                      aria-label="Flag conversation"
+                      className="h-6 w-6 p-0"
+                    >
+                      <Flag className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={(e) => handleQuickAction("more", e)}
+                      aria-label="More options"
+                      className="h-6 w-6 p-0"
+                    >
+                      <MoreHorizontal className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
               </div>
 
-              {/* Subject line */}
-              {conversation.subject && (
-                <h4 className="text-fl-text-primary mb-1 truncate text-sm font-medium min-w-0">{conversation.subject}</h4>
-              )}
+              {/* Subject */}
+              <h5 className="mt-1 truncate text-sm font-medium text-gray-900">
+                {conversation.subject}
+              </h5>
 
-              {/* Message preview */}
-              <p
-                className={cn(
-                  "text-typography-sm mb-2 line-clamp-2 min-w-0",
-                  conversation.unread ? "font-medium text-fl-text" : "text-fl-text-muted"
-                )}
-              >
-                {conversation.preview || <span className="italic text-fl-text-subtle">No preview available</span>}
+              {/* Preview */}
+              <p className="mt-1 line-clamp-2 text-xs text-gray-600">
+                {conversation.preview}
               </p>
 
-              {/* AI typing indicator */}
-              {conversation.isAITyping && (
-                <AIActivityIndicator
-                  isActive={true}
-                  message={conversation.aiTypingMessage || "AI is responding..."}
-                  className="mb-2"
-                />
-              )}
+              {/* Bottom row: Badges and metadata */}
+              <div className="mt-2 flex items-center justify-between gap-2">
+                {/* Left side: Badges */}
+                <div className="flex flex-wrap items-center gap-1">
+                  {/* Priority badge */}
+                  <Badge variant={priorityVariant} className="text-xs">
+                    {conversation.priority}
+                  </Badge>
 
-              {/* Bottom section: Tags, status, metadata */}
-              <div className="flex items-center justify-between">
-                {/* Left side: Status badges and tags */}
-                <div className="flex min-w-0 items-center gap-ds-2">
-                  {/* Priority indicator */}
-                  {conversation.priority !== "low" && (
-                    <Badge variant={getPriorityVariant()} size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
-                      <Icon icon={Flag} className="h-2.5 w-2.5" />
-                      <span className="truncate">{conversation.priority}</span>
-                    </Badge>
-                  )}
-
-                  {/* Improved AI status */}
-                  {conversation.aiStatus ? (
-                    <AIStatusBadge aiData={conversation.aiStatus} variant="compact" showConfidence={true} />
-                  ) : conversation.aiEnabled ? (
-                    <Badge variant="info" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
-                      <Icon icon={Zap} className="h-2.5 w-2.5" />
-                      <span className="truncate">AI</span>
-                    </Badge>
-                  ) : conversation.assignedTo ? (
-                    <Badge variant="success" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
-                      <Icon icon={User} className="h-2.5 w-2.5" />
-                      <span className="truncate">Human</span>
+                  {/* Status badge */}
+                  {conversation.status === "assigned" ? (
+                    <Badge variant="default" className="bg-blue-500 text-white text-xs">
+                      Human
                     </Badge>
                   ) : (
-                    <Badge variant="info" size="sm" className="bg-brand-blue-500 text-white max-w-[70px] overflow-hidden text-ellipsis">
-                      <span className="truncate">Open</span>
+                    <Badge variant="default" className="bg-green-500 text-white text-xs">
+                      Open
                     </Badge>
                   )}
 
                   {/* Escalation risk */}
                   {conversation.escalationRisk === "high" && (
-                    <Badge variant="warning" size="sm" className="flex items-center gap-1 max-w-[70px] overflow-hidden text-ellipsis">
-                      <Icon icon={TrendingUp} className="h-2.5 w-2.5" />
-                      <span className="truncate">Risk</span>
+                    <Badge variant="destructive" className="flex items-center gap-1 text-xs">
+                      <TrendingUp className="h-2.5 w-2.5" aria-hidden="true" />
+                      Risk
                     </Badge>
                   )}
 
                   {/* Tags (limited to 2) */}
                   {conversation.tags.slice(0, 2).map((tag: string) => (
-                    <Badge key={tag} variant="outline" size="sm" className="text-fl-text-subtle max-w-[70px] overflow-hidden text-ellipsis">
-                      <span className="truncate">{tag}</span>
+                    <Badge key={tag} variant="outline" className="text-xs">
+                      {tag}
                     </Badge>
                   ))}
 
                   {conversation.tags.length > 2 && (
-                    <span className="text-tiny text-fl-text-subtle">+{conversation.tags.length - 2}</span>
+                    <span className="text-xs text-gray-500">+{conversation.tags.length - 2}</span>
                   )}
                 </div>
 
                 {/* Right side: Metadata */}
                 <div className="flex flex-shrink-0 items-center gap-3">
                   {/* Sentiment indicator */}
-                  <SentimentIcon {...(conversation.sentiment && { sentiment: conversation.sentiment })} />
+                  <SentimentIcon sentiment={conversation.sentiment} />
 
                   {/* Response time */}
                   {conversation.responseTime && (
-                    <div className="flex items-center gap-1 text-tiny text-fl-text-subtle">
-                      <Icon icon={Clock} className="h-3 w-3" />
-                      {getResponseTimeDisplay()}
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <Clock className="h-3 w-3" aria-hidden="true" />
+                      <span>{responseTimeDisplay}</span>
                     </div>
                   )}
 
                   {/* Unread indicator */}
-                  {conversation.unread && <div className="h-2 w-2 rounded-ds-full bg-fl-brand" />}
+                  {conversation.unread && (
+                    <div 
+                      className="h-2 w-2 rounded-full bg-blue-600" 
+                      aria-label="Unread messages"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -397,11 +387,11 @@ export const ConversationCard = memo(function ConversationCard({
           {isHovered && !isBulkSelectMode && (
             <div
               className={cn(
-                "mt-3 border-t border-fl-border/50 pt-3",
+                "mt-3 border-t border-gray-200 pt-3",
                 "opacity-0 transition-opacity duration-200 group-hover:opacity-100"
               )}
             >
-              <div className="flex items-center justify-between text-tiny text-fl-text-muted">
+              <div className="flex items-center justify-between text-xs text-gray-500">
                 {/* Customer location and time */}
                 {conversation.customer && (
                   <div className="flex items-center gap-3">
@@ -413,32 +403,13 @@ export const ConversationCard = memo(function ConversationCard({
                 {/* View conversation hint */}
                 <div className="flex items-center gap-1">
                   <span>View conversation</span>
-                  <Icon icon={ChevronRight} className="h-3 w-3" />
+                  <ChevronRight className="h-3 w-3" aria-hidden="true" />
                 </div>
               </div>
             </div>
           )}
         </div>
-
-        {/* SLA timer for critical conversations */}
-        {conversation.urgency === "critical" && (
-          <div className="absolute right-2 top-2">
-            <SlaTimerChip
-              conversationId={conversation.id.toString()}
-              conversationStatus={
-                conversation.status === "escalated"
-                  ? "pending"
-                  : conversation.status === "assigned"
-                    ? "active"
-                    : conversation.status === "waiting"
-                      ? "pending"
-                      : conversation.status
-              }
-              lastMessageAt={conversation.lastMessageAt}
-            />
-          </div>
-        )}
-      </Card>
+      </div>
     </div>
   );
 });

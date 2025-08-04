@@ -150,7 +150,7 @@ export function AuditLogsDashboard({ organizationId }: { organizationId: string 
         log.action.toLowerCase().includes(term) ||
         log.user_email?.toLowerCase().includes(term) ||
         log.resource_type.toLowerCase().includes(term) ||
-        log.ip_address?.includes(term)
+        log.ipAddress?.includes(term)
     );
   }, [auditLogs, searchTerm]);
 
@@ -348,7 +348,7 @@ export function AuditLogsDashboard({ organizationId }: { organizationId: string 
 
                       <div className="text-foreground-muted mt-1 flex items-center space-x-3 text-sm">
                         <span>{log.user_email || log.actor_id || "System"}</span>
-                        <span>{log.ip_address}</span>
+                        <span>{log.ipAddress}</span>
                         <span>{new Date(log.created_at).toLocaleString()}</span>
                         {log.duration_ms && <span>{log.duration_ms}ms</span>}
                       </div>
@@ -397,7 +397,7 @@ export function AuditLogsDashboard({ organizationId }: { organizationId: string 
 
                       <div className="text-foreground-muted mt-1 flex items-center space-x-3 text-sm">
                         <span>{event.user_email || "Unknown"}</span>
-                        <span>{event.ip_address}</span>
+                        <span>{event.ipAddress}</span>
                         <span>{new Date(event.created_at).toLocaleString()}</span>
                       </div>
 
@@ -430,7 +430,7 @@ export function AuditLogsDashboard({ organizationId }: { organizationId: string 
                         <span className="font-medium">{activity.user_email || "Unknown User"}</span>
                         <Badge className={getRiskColor(activity.risk_score)}>Risk Score: {activity.risk_score}</Badge>
                       </div>
-                      <span className="text-foreground-muted text-sm">{activity.ip_address}</span>
+                      <span className="text-foreground-muted text-sm">{activity.ipAddress}</span>
                     </div>
 
                     <div className="mb-3 grid grid-cols-2 gap-3 md:grid-cols-4">

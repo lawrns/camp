@@ -61,7 +61,7 @@ export function RTE({
             ctrlKey: event.ctrlKey,
             metaKey: event.metaKey,
           });
-          onKeyDown(keyboardEvent as any);
+          onKeyDown(keyboardEvent as unknown);
           return true; // Prevent default
         }
         return false;

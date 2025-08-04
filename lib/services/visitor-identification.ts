@@ -135,9 +135,9 @@ export async function identifyVisitor(
       const { data: updatedVisitor, error: updateError } = await supabaseClient
         .from('widget_visitors')
         .update({
-          last_seen_at: new Date().toISOString(),
-          ip_address: ipAddress,
-          user_agent: browserInfo.userAgent,
+          lastSeenAt: new Date().toISOString(),
+          ipAddress: ipAddress,
+          userAgent: browserInfo.userAgent,
           browser_info: browserInfo,
           is_returning: true,
           updated_at: new Date().toISOString()
@@ -159,8 +159,8 @@ export async function identifyVisitor(
         .insert({
           organization_id: organizationId,
           visitor_id: visitorId,
-          ip_address: ipAddress,
-          user_agent: browserInfo.userAgent,
+          ipAddress: ipAddress,
+          userAgent: browserInfo.userAgent,
           browser_info: browserInfo,
           is_returning: false,
           metadata: {}
@@ -187,7 +187,7 @@ export async function identifyVisitor(
         organization_id: organizationId,
         visitor_id: visitor.id,
         session_token: sessionToken,
-        is_active: true,
+        isActive: true,
         metadata: {
           browserInfo,
           ipAddress,
@@ -213,7 +213,7 @@ export async function identifyVisitor(
         browserInfo,
         ipAddress,
         firstSeen: visitor.first_seen_at,
-        lastSeen: visitor.last_seen_at
+        lastSeen: visitor.lastSeenAt
       }
     };
     
@@ -239,7 +239,7 @@ export async function identifyVisitor(
 export async function validateSession(
   sessionToken: string,
   organizationId: string
-): Promise<{ valid: boolean; session?: any; visitor?: any }> {
+): Promise<{ valid: boolean; session?: unknown; visitor?: unknown }> {
   try {
     const supabaseClient = supabase.admin();
     
@@ -289,7 +289,7 @@ export async function endSession(sessionToken: string): Promise<boolean> {
     const { error } = await supabaseClient
       .from('widget_sessions')
       .update({
-        is_active: false,
+        isActive: false,
         ended_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })

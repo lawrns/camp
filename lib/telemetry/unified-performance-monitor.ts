@@ -346,7 +346,7 @@ export class UnifiedPerformanceMonitor {
       const input = entry as PerformanceEventTiming;
       value = input.processingStart - input.startTime;
     } else if (entry.entryType === "layout-shift") {
-      const shift = entry as any;
+      const shift = entry as unknown;
       value = shift.value;
     }
 

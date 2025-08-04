@@ -117,7 +117,7 @@ export class ApiResponseBuilder {
 
     // Add error details in development
     if (process.env.NODE_ENV === "development" && (errorCode || errorDetails)) {
-      (response as any).debug = {
+      (response as unknown).debug = {
         code: errorCode,
         details: errorDetails,
         stack: error instanceof Error ? error.stack : undefined,
@@ -142,7 +142,7 @@ export class ApiResponseBuilder {
 
     if (errors instanceof z.ZodError) {
       // Format Zod errors
-      errors.errors.forEach((err: any) => {
+      errors.errors.forEach((err: unknown) => {
         const path = err.path.join(".");
         if (!formattedErrors[path]) {
           formattedErrors[path] = [];

@@ -11,7 +11,7 @@ import { aiService } from "../services/aiService";
 interface Message {
   id: string;
   content: string;
-  sender_type: 'customer' | 'agent' | 'ai' | 'system';
+  senderType: 'customer' | 'agent' | 'ai' | 'system';
   sender_name?: string;
   timestamp: Date;
   status: 'sending' | 'sent' | 'delivered' | 'read';
@@ -45,7 +45,7 @@ export default function ChatPage() {
       }
     };
 
-    const loadOrCreateConversation = async (supabase: any, userId: string) => {
+    const loadOrCreateConversation = async (supabase: unknown, userId: string) => {
       try {
         // First, get the user's organization
         const { data: profile } = await supabase
@@ -81,8 +81,8 @@ export default function ChatPage() {
           {
             id: '1',
             content: 'Welcome to Campfire! This is a demo conversation.',
-            sender_type: 'system',
-            sender_name: 'System',
+            senderType: 'system',
+            senderName: 'System',
             timestamp: new Date(),
             status: 'read',
           },
@@ -90,10 +90,10 @@ export default function ChatPage() {
       }
     };
 
-    const loadMessages = async (supabase: any, conversationId: string) => {
+    const loadMessages = async (supabase: unknown, conversationId: string) => {
       const { data: messageData, error } = await supabase
         .from('messages')
-        .select('id, content, sender_type, sender_name, created_at')
+        .select('id, content, senderType, senderName, created_at')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
         .limit(50);
@@ -106,8 +106,8 @@ export default function ChatPage() {
       const formattedMessages: Message[] = messageData?.map(msg => ({
         id: msg.id,
         content: msg.content,
-        sender_type: msg.sender_type,
-        sender_name: msg.sender_name,
+        senderType: msg.senderType,
+        senderName: msg.senderName,
         timestamp: new Date(msg.created_at),
         status: 'read' as const,
       })) || [];
@@ -115,14 +115,14 @@ export default function ChatPage() {
       setMessages(formattedMessages);
     };
 
-    const createDemoConversation = async (supabase: any, orgId: string) => {
+    const createDemoConversation = async (supabase: unknown, orgId: string) => {
       // This would create a demo conversation - for now just show demo messages
       setMessages([
         {
           id: 'demo-1',
           content: 'Hello! This is a demo conversation. Start typing to test the real-time features!',
-          sender_type: 'agent',
-          sender_name: 'Demo Agent',
+          senderType: 'agent',
+          senderName: 'Demo Agent',
           timestamp: new Date(Date.now() - 2 * 60 * 1000),
           status: 'read',
         },
@@ -143,8 +143,8 @@ export default function ChatPage() {
     const message: Message = {
       id: tempId,
       content: newMessage,
-      sender_type: 'customer',
-      sender_name: user?.email || 'Demo User',
+      senderType: 'customer',
+      senderName: user?.email || 'Demo User',
       timestamp: new Date(),
       status: 'sending',
     };
@@ -163,9 +163,9 @@ export default function ChatPage() {
           conversation_id: conversationId,
           organization_id: organizationId,
           content: messageContent,
-          sender_type: 'customer',
-          sender_name: user?.email || 'Demo User',
-          sender_id: user?.id || 'demo-user',
+          senderType: 'customer',
+          senderName: user?.email || 'Demo User',
+          senderId: user?.id || 'demo-user',
         })
         .select()
         .single();
@@ -198,7 +198,7 @@ export default function ChatPage() {
           const conversationContext = {
             messages: messages.map(m => ({
               content: m.content,
-              sender_type: m.sender_type,
+              senderType: m.senderType,
               timestamp: m.timestamp,
             })),
             customerInfo: {
@@ -216,9 +216,9 @@ export default function ChatPage() {
               conversation_id: conversationId,
               organization_id: organizationId,
               content: aiResponse.content,
-              sender_type: aiResponse.escalate ? 'agent' : 'ai',
-              sender_name: aiResponse.escalate ? 'Human Agent' : 'AI Assistant',
-              sender_id: aiResponse.escalate ? 'human-agent' : 'ai-agent',
+              senderType: aiResponse.escalate ? 'agent' : 'ai',
+              senderName: aiResponse.escalate ? 'Human Agent' : 'AI Assistant',
+              senderId: aiResponse.escalate ? 'human-agent' : 'ai-agent',
             })
             .select()
             .single();
@@ -227,8 +227,8 @@ export default function ChatPage() {
             const newAgentMessage: Message = {
               id: agentMessage.id,
               content: aiResponse.content,
-              sender_type: aiResponse.escalate ? 'agent' : 'ai',
-              sender_name: aiResponse.escalate ? 'Human Agent' : 'AI Assistant',
+              senderType: aiResponse.escalate ? 'agent' : 'ai',
+              senderName: aiResponse.escalate ? 'Human Agent' : 'AI Assistant',
               timestamp: new Date(agentMessage.created_at),
               status: 'sent',
             };
@@ -319,14 +319,14 @@ export default function ChatPage() {
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.sender_type === 'customer' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${message.senderType === 'customer' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className={`flex items-start gap-2 max-w-xs lg:max-w-md`}>
-                    {message.sender_type !== 'customer' && (
+                    {message.senderType !== 'customer' && (
                       <div className="flex-shrink-0">
-                        {message.sender_type === 'agent' ? (
+                        {message.senderType === 'agent' ? (
                           <User className="h-8 w-8 p-1 bg-blue-100 text-blue-600 rounded-full" />
-                        ) : message.sender_type === 'ai' ? (
+                        ) : message.senderType === 'ai' ? (
                           <Robot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
                         ) : (
                           <ChatCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
@@ -335,18 +335,18 @@ export default function ChatPage() {
                     )}
 
                     <div
-                      className={`px-4 py-2 rounded-lg ${message.sender_type === 'customer'
+                      className={`px-4 py-2 rounded-lg ${message.senderType === 'customer'
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-900'
                         }`}
                     >
                       <p className="text-sm">{message.content}</p>
                       <div className="flex items-center justify-between mt-1">
-                        <span className={`text-xs ${message.sender_type === 'customer' ? 'text-blue-100' : 'text-gray-500'
+                        <span className={`text-xs ${message.senderType === 'customer' ? 'text-blue-100' : 'text-gray-500'
                           }`}>
                           {formatTime(message.timestamp)}
                         </span>
-                        {message.sender_type === 'customer' && (
+                        {message.senderType === 'customer' && (
                           <span className={`text-xs ${message.status === 'sending' ? 'text-blue-200' :
                             message.status === 'sent' ? 'text-blue-100' :
                               message.status === 'delivered' ? 'text-blue-100' :
@@ -361,7 +361,7 @@ export default function ChatPage() {
                       </div>
                     </div>
 
-                    {message.sender_type === 'customer' && (
+                    {message.senderType === 'customer' && (
                       <div className="flex-shrink-0">
                         <User className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
                       </div>

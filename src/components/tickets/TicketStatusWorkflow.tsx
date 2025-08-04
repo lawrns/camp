@@ -208,7 +208,7 @@ export function TicketStatusWorkflow({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Unassigned</SelectItem>
-                {availableAgents.map((agent: any) => (
+                {availableAgents.map((agent: unknown) => (
                   <SelectItem key={agent.id} value={agent.id} disabled={!agent.available}>
                     <div className="flex items-center gap-ds-2">
                       <div
@@ -256,7 +256,7 @@ export function TicketStatusWorkflow({
                     {currentConfig.label} (Current)
                   </div>
                 </SelectItem>
-                {nextStates.map((state: any) => {
+                {nextStates.map((state: unknown) => {
                   const config = statusConfig[state as keyof typeof statusConfig];
                   const StateIcon = config.icon;
                   return (
@@ -307,7 +307,7 @@ export function TicketStatusWorkflow({
           <div className="rounded-ds-md bg-[var(--fl-color-info-subtle)] spacing-3 text-tiny text-[var(--fl-color-text-muted)]">
             <div className="mb-1 font-medium">Possible next steps:</div>
             <div className="space-y-1">
-              {nextStates.map((state: any) => (
+              {nextStates.map((state: unknown) => (
                 <div key={state} className="flex items-center gap-ds-2">
                   <Icon icon={ArrowRight} className="h-3 w-3" />
                   {statusConfig[state as keyof typeof statusConfig].label}:{" "}

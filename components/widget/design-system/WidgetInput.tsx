@@ -1,9 +1,11 @@
 /**
  * PIXEL-PERFECT WIDGET INPUT COMPONENT
- * 
+ *
  * Meticulously designed input area with perfect alignment,
  * auto-resize, and Intercom-quality interactions
  */
+
+"use client";
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';

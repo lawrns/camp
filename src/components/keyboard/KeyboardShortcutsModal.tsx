@@ -102,7 +102,7 @@ export function KeyboardShortcutsModal({ open: controlledOpen, onClose }: Keyboa
         {/* Content */}
         <div className="overflow-y-auto px-6 py-4">
           <div className="space-y-6">
-            {categoryOrder.map((category: any) => {
+            {categoryOrder.map((category: unknown) => {
               const categoryShortcuts = groupedShortcuts[category];
               if (!categoryShortcuts || categoryShortcuts.length === 0) return null;
 
@@ -112,7 +112,7 @@ export function KeyboardShortcutsModal({ open: controlledOpen, onClose }: Keyboa
                     {categoryTitles[category]}
                   </h3>
                   <div className="space-y-spacing-sm">
-                    {categoryShortcuts.map((shortcut: any) => (
+                    {categoryShortcuts.map((shortcut: unknown) => (
                       <div
                         key={shortcut.id}
                         className="flex items-center justify-between rounded-ds-lg px-3 py-2 transition-colors hover:bg-[var(--color-background-subtle)] dark:hover:bg-neutral-800"

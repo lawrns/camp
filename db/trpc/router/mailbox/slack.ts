@@ -11,7 +11,7 @@ const updateSlackChannel = async (mailboxId: string, channelId: string) => {
 
 export const slackRouter = {
   channels: mailboxProcedure.query(async ({ ctx }) => {
-    const slackBotToken = (ctx.mailbox as any).slackBotToken;
+    const slackBotToken = (ctx.mailbox as unknown).slackBotToken;
     if (!slackBotToken) {
       throw new TRPCError({
         code: "PRECONDITION_FAILED",
@@ -20,7 +20,7 @@ export const slackRouter = {
     }
 
     const channels = await listSlackChannels(slackBotToken);
-    return channels.flatMap((channel: any) =>
+    return channels.flatMap((channel: unknown) =>
       channel.id && channel.name ? [{ id: channel.id, name: channel.name }] : []
     );
   }),

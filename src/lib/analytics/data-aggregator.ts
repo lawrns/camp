@@ -150,10 +150,10 @@ class DataAggregator {
         conversations.forEach((conv) => {
           const convMessages = messages.filter((m) => m.conversation_id === conv.id);
           if (convMessages.length >= 2) {
-            const firstCustomer = convMessages.find((m) => m.sender_type === "customer");
+            const firstCustomer = convMessages.find((m) => m.senderType === "customer");
             const firstAgent = convMessages.find(
               (m) =>
-                m.sender_type === "agent" &&
+                m.senderType === "agent" &&
                 firstCustomer &&
                 new Date(m.created_at) > new Date(firstCustomer.created_at)
             );

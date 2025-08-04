@@ -27,8 +27,8 @@ export interface IAuthService {
 export interface IRealtimeChannel {
   subscribe(): void;
   unsubscribe(): void;
-  send(event: string, payload: any): void;
-  on(event: string, callback: (payload: any) => void): void;
+  send(event: string, payload: unknown): void;
+  on(event: string, callback: (payload: unknown) => void): void;
 }
 
 export interface IRealtimeService {
@@ -38,7 +38,7 @@ export interface IRealtimeService {
 }
 
 export interface RealtimeCallbacks {
-  onMessage?: (message: any) => void;
+  onMessage?: (message: unknown) => void;
   onTyping?: (data: { userId: string; isTyping: boolean }) => void;
   onPresence?: (users: string[]) => void;
   onError?: (error: Error) => void;
@@ -182,8 +182,8 @@ export interface Document {
 export interface ISupabaseService {
   // Auth operations
   auth: {
-    getUser(): Promise<{ data: { user: User | null }; error: any }>;
-    signOut(): Promise<{ error: any }>;
+    getUser(): Promise<{ data: { user: User | null }; error: unknown }>;
+    signOut(): Promise<{ error: unknown }>;
   };
 
   // Database operations
@@ -195,16 +195,16 @@ export interface ISupabaseService {
 
 export interface SupabaseQueryBuilder {
   select(columns?: string): SupabaseQueryBuilder;
-  insert(data: any): SupabaseQueryBuilder;
-  update(data: any): SupabaseQueryBuilder;
+  insert(data: unknown): SupabaseQueryBuilder;
+  update(data: unknown): SupabaseQueryBuilder;
   delete(): SupabaseQueryBuilder;
-  eq(column: string, value: any): SupabaseQueryBuilder;
-  neq(column: string, value: any): SupabaseQueryBuilder;
-  in(column: string, values: any[]): SupabaseQueryBuilder;
+  eq(column: string, value: unknown): SupabaseQueryBuilder;
+  neq(column: string, value: unknown): SupabaseQueryBuilder;
+  in(column: string, values: unknown[]): SupabaseQueryBuilder;
   order(column: string, options?: { ascending?: boolean }): SupabaseQueryBuilder;
   limit(count: number): SupabaseQueryBuilder;
-  single(): Promise<{ data: any; error: any }>;
-  then(callback: (result: { data: any; error: any }) => any): Promise<any>;
+  single(): Promise<{ data: unknown; error: unknown }>;
+  then(callback: (result: { data: unknown; error: unknown }) => any): Promise<any>;
 }
 
 // ============================================================================

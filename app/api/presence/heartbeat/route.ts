@@ -5,7 +5,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel
 import { supabase } from '@/lib/supabase/consolidated-exports';
 
 // Authentication wrapper for heartbeat endpoints
-async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
@@ -48,7 +48,7 @@ async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextRe
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const body = await request.json();
     const { 
@@ -74,10 +74,10 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
       user_id: user.userId,
       organization_id: user.organizationId,
       status,
-      last_seen_at: new Date().toISOString(),
+      lastSeenAt: new Date().toISOString(),
       metadata: {
         ...metadata,
-        user_name: user.name,
+        userName: user.name,
         user_email: user.email,
         activity,
         heartbeat_source: 'api',
@@ -147,7 +147,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
         userId: user.userId,
         status,
         activity,
-        lastSeen: presence.last_seen_at,
+        lastSeen: presence.lastSeenAt,
         organizationId: user.organizationId,
         timestamp: new Date().toISOString(),
         broadcastSent: shouldBroadcast
@@ -163,7 +163,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     // Get current user's presence status
     const supabaseClient = supabase.admin();
@@ -189,11 +189,11 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
         user_id: user.userId,
         organization_id: user.organizationId,
         status: 'online',
-        last_seen_at: new Date().toISOString(),
+        lastSeenAt: new Date().toISOString(),
         metadata: {
-          user_name: user.name,
+          userName: user.name,
           user_email: user.email,
-          created_by: 'heartbeat_api'
+          createdBy: 'heartbeat_api'
         }
       };
 
@@ -216,7 +216,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
           userId: user.userId,
           userName: user.name,
           status: 'online',
-          lastSeen: newPresence.last_seen_at,
+          lastSeen: newPresence.lastSeenAt,
           organizationId: user.organizationId,
           metadata: newPresence.metadata,
           isNew: true
@@ -226,7 +226,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
     }
 
     // Calculate if user should be considered away (no heartbeat in last 10 minutes)
-    const lastSeen = new Date(presence.last_seen_at);
+    const lastSeen = new Date(presence.lastSeenAt);
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
     const shouldBeAway = lastSeen < tenMinutesAgo && presence.status === 'online';
 
@@ -253,10 +253,10 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
     return NextResponse.json({
       presence: {
         userId: user.userId,
-        userName: presence.metadata?.user_name || user.name,
+        userName: presence.metadata?.userName || user.name,
         status: presence.status,
         customStatus: presence.custom_status,
-        lastSeen: presence.last_seen_at,
+        lastSeen: presence.lastSeenAt,
         organizationId: user.organizationId,
         metadata: presence.metadata,
         autoAway: shouldBeAway

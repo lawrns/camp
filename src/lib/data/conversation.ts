@@ -266,9 +266,9 @@ export const serializeConversationWithMessages = async (
       })
     : null;
 
-  const mergedInto = (conversation as any).mergedIntoId
+  const mergedInto = (conversation as unknown).mergedIntoId
     ? await db.query.conversations.findFirst({
-        where: eq(conversations.id, (conversation as any).mergedIntoId),
+        where: eq(conversations.id, (conversation as unknown).mergedIntoId),
         columns: { uid: true },
       })
     : null;
@@ -331,12 +331,12 @@ export const getNonSupportParticipants = async (conversation: Conversation): Pro
   for (const message of messages) {
     // Extract email addresses from sourceData for email messages
     if (message.source === "email" && message.sourceData) {
-      const sourceData = message.sourceData as any;
+      const sourceData = message.sourceData as unknown;
       if (sourceData.emailCc && Array.isArray(sourceData.emailCc)) {
         sourceData.emailCc.forEach((cc: string) => participants.add(cc.toLowerCase()));
       }
       if (sourceData.emailTo) {
-        // extractEmailAddresses(sourceData.emailTo).forEach((addr: any) => participants.add(addr.toLowerCase()));
+        // extractEmailAddresses(sourceData.emailTo).forEach((addr: unknown) => participants.add(addr.toLowerCase()));
         // Fallback: simple email extraction
         if (typeof sourceData.emailTo === "string") {
           const emails = sourceData.emailTo
@@ -414,7 +414,7 @@ export const generateConversationSubject = async (
           system:
             "Generate a brief, clear subject line (max 50 chars) that summarizes the main point of these messages. Respond with only the subject line, no other text.",
           prompt: messages
-            .filter((m: Message) => (m as any).role === "user")
+            .filter((m: Message) => (m as unknown).role === "user")
             .map((m: Message) => m.content)
             .join("\n"),
         });

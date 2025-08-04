@@ -77,16 +77,16 @@ describe("retryable", () => {
 
     // First retry should be after ~100ms (with jitter)
     expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect((setTimeout as any).mock.calls[0][1]).toBeGreaterThanOrEqual(0);
-    expect((setTimeout as any).mock.calls[0][1]).toBeLessThanOrEqual(100);
+    expect((setTimeout as unknown).mock.calls[0][1]).toBeGreaterThanOrEqual(0);
+    expect((setTimeout as unknown).mock.calls[0][1]).toBeLessThanOrEqual(100);
 
     // Fast-forward past first delay
     vi.advanceTimersByTime(100);
 
     // Second retry should be after ~200ms (100 * 2^1 with jitter)
     expect(setTimeout).toHaveBeenCalledTimes(2);
-    expect((setTimeout as any).mock.calls[1][1]).toBeGreaterThanOrEqual(100);
-    expect((setTimeout as any).mock.calls[1][1]).toBeLessThanOrEqual(300);
+    expect((setTimeout as unknown).mock.calls[1][1]).toBeGreaterThanOrEqual(100);
+    expect((setTimeout as unknown).mock.calls[1][1]).toBeLessThanOrEqual(300);
 
     // Fast-forward past second delay
     vi.advanceTimersByTime(300);

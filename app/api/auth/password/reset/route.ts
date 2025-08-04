@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         metadata: {
           password_reset: {
             token: hashedToken,
-            expires_at: expiresAt.toISOString(),
+            expiresAt: expiresAt.toISOString(),
           },
         },
       })
@@ -134,13 +134,13 @@ export async function PUT(req: NextRequest) {
       .not("metadata", "is", null);
 
     // Find profile with matching token
-    const resetProfile = profiles?.find((profile: any) => {
-      const resetData = (profile.metadata as any)?.password_reset;
+    const resetProfile = profiles?.find((profile: unknown) => {
+      const resetData = (profile.metadata as unknown)?.password_reset;
       return (
         resetData &&
         resetData.token === hashedToken &&
-        new Date(resetData.expires_at) > new Date() &&
-        !resetData.used_at
+        new Date(resetData.expiresAt) > new Date() &&
+        !resetData.usedAt
       );
     });
 
@@ -175,12 +175,12 @@ export async function PUT(req: NextRequest) {
     }
 
     // Mark token as used in profile metadata
-    const currentMetadata = (resetProfile?.metadata as any) || {};
+    const currentMetadata = (resetProfile?.metadata as unknown) || {};
     const updatedMetadata = {
       ...currentMetadata,
       password_reset: {
         ...currentMetadata.password_reset,
-        used_at: new Date().toISOString(),
+        usedAt: new Date().toISOString(),
       },
     };
     const { error: markUsedError } = await supabaseClient
@@ -192,11 +192,11 @@ export async function PUT(req: NextRequest) {
     }
 
     // Log the password reset
-    await (supabaseClient as any).from("login_attempts").insert({
+    await (supabaseClient as unknown).from("login_attempts").insert({
       email: resetToken.profiles.email,
       success: true,
-      ip_address: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
-      user_agent: req.headers.get("user-agent"),
+      ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
+      userAgent: req.headers.get("user-agent"),
     });
 
     return NextResponse.json({
@@ -229,20 +229,20 @@ export async function GET(req: NextRequest) {
       .not("metadata", "is", null);
 
     // Find profile with matching token
-    const resetProfile = profiles?.find((profile: any) => {
-      const resetData = (profile.metadata as any)?.password_reset;
+    const resetProfile = profiles?.find((profile: unknown) => {
+      const resetData = (profile.metadata as unknown)?.password_reset;
       return (
         resetData &&
         resetData.token === hashedToken &&
-        new Date(resetData.expires_at) > new Date() &&
-        !resetData.used_at
+        new Date(resetData.expiresAt) > new Date() &&
+        !resetData.usedAt
       );
     });
 
     const resetToken = resetProfile
       ? {
           id: resetProfile.user_id,
-          expires_at: (resetProfile.metadata as any).password_reset.expires_at,
+          expiresAt: (resetProfile.metadata as unknown).password_reset.expiresAt,
         }
       : null;
 
@@ -258,7 +258,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       valid: true,
-      expires_at: resetToken.expires_at,
+      expiresAt: resetToken.expiresAt,
     });
   } catch (error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

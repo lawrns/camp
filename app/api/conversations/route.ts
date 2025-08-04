@@ -86,11 +86,11 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
       .from('conversations')
       .insert({
         organization_id: user.organizationId,
-        customer_email: customerEmail,
-        customer_name: customerName,
+        customerEmail: customerEmail,
+        customerName: customerName,
         subject,
         status: 'open',
-        created_by: user.userId
+        createdBy: user.userId
       })
       .select()
       .single();
@@ -111,9 +111,9 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
           conversation_id: conversation.id,
           organization_id: user.organizationId,
           content: initialMessage,
-          sender_type: 'customer',
-          sender_email: customerEmail,
-          sender_name: customerName
+          senderType: 'customer',
+          senderEmail: customerEmail,
+          senderName: customerName
         });
 
       if (messageError) {

@@ -94,7 +94,7 @@ export function initializeEventBusIntegration() {
       const campfireStore = useCampfireStore.getState();
 
       // Update conversation status
-      await campfireStore.updateConversationStatus(event.conversationId, event.newStatus as any);
+      await campfireStore.updateConversationStatus(event.conversationId, event.newStatus as unknown);
 
       // Track metrics
       if (event.newStatus === "resolved") {
@@ -121,7 +121,7 @@ export function initializeEventBusIntegration() {
             ? {
                 ...c,
                 last_message: event.content,
-                last_message_at: new Date().toISOString(),
+                lastMessageAt: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
               }
             : c

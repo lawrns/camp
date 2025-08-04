@@ -53,7 +53,7 @@ const generalSettingsSchema = z.object({
 type GeneralSettingsFormData = z.infer<typeof generalSettingsSchema>;
 
 interface GeneralSettingsFormProps {
-  settings: any;
+  settings: unknown;
   isLoading: boolean;
   error: Error | null;
   organizationId: string;

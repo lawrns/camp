@@ -17,7 +17,7 @@ interface MessageEvent {
   conversation_id: string;
   organization_id: string;
   user_id: string;
-  data: any;
+  data: unknown;
   timestamp: string;
   event_id: string;
 }
@@ -27,7 +27,7 @@ interface WebSocketV2Event {
   conversation_id: string;
   organization_id: string;
   user_id: string;
-  data: any;
+  data: unknown;
   timestamp: string;
   event_id: string;
 }
@@ -118,8 +118,8 @@ export class AgentHandoffFlow {
         id: message.id || `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         conversation_id: message.conversationId,
         organization_id: message.organizationId,
-        sender_id: message.agentId,
-        sender_type: "agent",
+        senderId: message.agentId,
+        senderType: "agent",
         content: message.content,
         metadata: {
           ...message.metadata,
@@ -154,7 +154,7 @@ export class AgentHandoffFlow {
       user_id: message.agentId,
       data: {
         content: message.content,
-        sender_type: "agent",
+        senderType: "agent",
         metadata: message.metadata,
       },
       timestamp: message.timestamp,
@@ -195,7 +195,7 @@ export class AgentHandoffFlow {
     status: "accepted" | "completed" | "failed",
     agentId?: string
   ): Promise<void> {
-    const updateData: any = {
+    const updateData: unknown = {
       status,
       updated_at: new Date().toISOString(),
     };
@@ -257,13 +257,13 @@ export class AgentHandoffFlow {
         .browser()
         .from("conversation_messages")
         .select("id, created_at, metadata")
-        .eq("sender_type", "agent")
+        .eq("senderType", "agent")
         .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()) // Last 24 hours
         .order("created_at", { ascending: false });
 
       if (repliesError) throw repliesError;
 
-      const bypassedAICount = agentReplies?.filter((msg: any) => msg.metadata?.skipAI === true).length || 0;
+      const bypassedAICount = agentReplies?.filter((msg: unknown) => msg.metadata?.skipAI === true).length || 0;
 
       const { data: handoffs, error: handoffsError } = await supabase
         .browser()
@@ -278,12 +278,12 @@ export class AgentHandoffFlow {
       // Calculate average processing time
       const processingTimes =
         handoffs
-          ?.map((h: any) => (h.accepted_at ? new Date(h.accepted_at).getTime() - new Date(h.created_at).getTime() : 0))
-          .filter((time: any) => time > 0) || [];
+          ?.map((h: unknown) => (h.accepted_at ? new Date(h.accepted_at).getTime() - new Date(h.created_at).getTime() : 0))
+          .filter((time: unknown) => time > 0) || [];
 
       const averageProcessingTime =
         processingTimes.length > 0
-          ? processingTimes.reduce((sum: any, time: any) => sum + time, 0) / processingTimes.length
+          ? processingTimes.reduce((sum: unknown, time: unknown) => sum + time, 0) / processingTimes.length
           : 0;
 
       return {

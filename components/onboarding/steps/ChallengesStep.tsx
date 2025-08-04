@@ -34,7 +34,7 @@ interface ChallengesData {
 
 interface ChallengesStepProps {
   organizationId: string;
-  onComplete: (data?: any) => void;
+  onComplete: (data?: unknown) => void;
   onSkip: () => void;
   onBack?: () => void;
   isLoading?: boolean;
@@ -113,7 +113,7 @@ export function ChallengesStep({ organizationId, onComplete, onSkip, onBack, isL
     setChallenges((prev) => ({
       ...prev,
       primaryChallenges: prev.primaryChallenges.includes(challengeId)
-        ? prev.primaryChallenges.filter((id: any) => id !== challengeId)
+        ? prev.primaryChallenges.filter((id: unknown) => id !== challengeId)
         : [...prev.primaryChallenges, challengeId],
     }));
   };
@@ -153,7 +153,7 @@ export function ChallengesStep({ organizationId, onComplete, onSkip, onBack, isL
       <div>
         <h3 className="mb-4 text-base font-semibold text-gray-900">What are your biggest support challenges?</h3>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {challengeOptions.map((challenge: any) => {
+          {challengeOptions.map((challenge: unknown) => {
             const Icon = challenge.icon;
             const isSelected = challenges.primaryChallenges.includes(challenge.id);
 
@@ -189,7 +189,7 @@ export function ChallengesStep({ organizationId, onComplete, onSkip, onBack, isL
               <SelectValue placeholder="Select current response time" />
             </SelectTrigger>
             <SelectContent>
-              {responseTimeOptions.map((option: any) => (
+              {responseTimeOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -208,7 +208,7 @@ export function ChallengesStep({ organizationId, onComplete, onSkip, onBack, isL
               <SelectValue placeholder="Select satisfaction level" />
             </SelectTrigger>
             <SelectContent>
-              {satisfactionOptions.map((option: any) => (
+              {satisfactionOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -227,7 +227,7 @@ export function ChallengesStep({ organizationId, onComplete, onSkip, onBack, isL
               <SelectValue placeholder="Select burnout level" />
             </SelectTrigger>
             <SelectContent>
-              {burnoutOptions.map((option: any) => (
+              {burnoutOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

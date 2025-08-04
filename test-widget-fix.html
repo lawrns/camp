@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Context Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .log-output {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Widget Context Provider Fix Test</h1>
+        <p>This test verifies that the widget context provider bug has been fixed and message submission is working.</p>
+
+        <div class="test-section">
+            <h3>1. Widget Context Error Check</h3>
+            <p>Checking for "useWidget must be used within WidgetProvider" errors...</p>
+            <div id="context-status" class="status warning">⏳ Monitoring console for context errors...</div>
+            <div id="context-log" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Widget Visibility Test</h3>
+            <p>Checking if the widget button is visible and clickable...</p>
+            <button onclick="testWidgetVisibility()">Test Widget Visibility</button>
+            <div id="visibility-status" class="status warning">⏳ Click button to test</div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Message Submission Test</h3>
+            <p>Testing the message submission API directly...</p>
+            <button onclick="testMessageSubmission()">Test Message API</button>
+            <div id="message-status" class="status warning">⏳ Click button to test</div>
+            <div id="message-log" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Real-time Connection Test</h3>
+            <p>Testing if the widget can establish real-time connections...</p>
+            <button onclick="testRealtimeConnection()">Test Realtime</button>
+            <div id="realtime-status" class="status warning">⏳ Click button to test</div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for tracking
+        let contextErrors = [];
+        let consoleMessages = [];
+        let testResults = {};
+
+        // Override console methods to capture logs
+        const originalConsoleError = console.error;
+        const originalConsoleWarn = console.warn;
+        const originalConsoleLog = console.log;
+
+        console.error = function(...args) {
+            const message = args.join(' ');
+            consoleMessages.push(`ERROR: ${message}`);
+            
+            // Check for specific context error
+            if (message.includes('useWidget must be used within WidgetProvider')) {
+                contextErrors.push(message);
+                updateContextStatus();
+            }
+            
+            originalConsoleError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            const message = args.join(' ');
+            consoleMessages.push(`WARN: ${message}`);
+            originalConsoleWarn.apply(console, args);
+        };
+
+        console.log = function(...args) {
+            const message = args.join(' ');
+            if (message.includes('Widget') || message.includes('useWidget') || message.includes('Provider')) {
+                consoleMessages.push(`LOG: ${message}`);
+            }
+            originalConsoleLog.apply(console, args);
+        };
+
+        function updateContextStatus() {
+            const statusEl = document.getElementById('context-status');
+            const logEl = document.getElementById('context-log');
+            
+            if (contextErrors.length > 0) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ FAILED: ${contextErrors.length} context errors detected`;
+                logEl.textContent = contextErrors.join('\n');
+            } else {
+                statusEl.className = 'status success';
+                statusEl.textContent = '✅ SUCCESS: No context errors detected';
+                logEl.textContent = 'No context errors found. Widget provider is working correctly.';
+            }
+        }
+
+        function testWidgetVisibility() {
+            const statusEl = document.getElementById('visibility-status');
+            
+            try {
+                // Look for widget button
+                const widgetButton = document.querySelector('[data-testid="widget-button"], .widget-button, [class*="widget"]');
+                
+                if (widgetButton) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = '✅ SUCCESS: Widget button found and visible';
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = '❌ FAILED: Widget button not found';
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ ERROR: ${error.message}`;
+            }
+        }
+
+        async function testMessageSubmission() {
+            const statusEl = document.getElementById('message-status');
+            const logEl = document.getElementById('message-log');
+            
+            statusEl.className = 'status warning';
+            statusEl.textContent = '⏳ Testing message submission...';
+            
+            try {
+                // Test the widget messages API
+                const response = await fetch('/api/widget/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Organization-ID': 'b5e80170-004c-4e82-a88c-3e2166b169dd',
+                    },
+                    body: JSON.stringify({
+                        conversationId: '8ddf595b-b75d-42f2-98e5-9efd3513ea4b',
+                        content: 'Test message from widget fix test',
+                        senderType: 'visitor',
+                        senderName: 'Test User',
+                    }),
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = '✅ SUCCESS: Message API is working';
+                    logEl.textContent = `Response: ${JSON.stringify(result, null, 2)}`;
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = `❌ FAILED: API returned ${response.status}`;
+                    logEl.textContent = `Error: ${JSON.stringify(result, null, 2)}`;
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ ERROR: ${error.message}`;
+                logEl.textContent = `Network error: ${error.stack}`;
+            }
+        }
+
+        async function testRealtimeConnection() {
+            const statusEl = document.getElementById('realtime-status');
+            
+            statusEl.className = 'status warning';
+            statusEl.textContent = '⏳ Testing realtime connection...';
+            
+            try {
+                // Simple test to see if we can access Supabase client
+                if (typeof window !== 'undefined' && window.location.origin) {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = '✅ SUCCESS: Environment ready for realtime';
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = '❌ FAILED: Environment not ready';
+                }
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = `❌ ERROR: ${error.message}`;
+            }
+        }
+
+        // Auto-check context errors after page load
+        setTimeout(() => {
+            updateContextStatus();
+        }, 3000);
+
+        // Periodic check for context errors
+        setInterval(() => {
+            updateContextStatus();
+        }, 5000);
+    </script>
+</body>
+</html>

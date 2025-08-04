@@ -185,9 +185,9 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
         console.log(`✅ Dashboard API working - found ${dashboardMessages.length || 0} messages`);
 
         // Look for our test messages
-        const hasWidgetMessage = dashboardMessages.some((msg: any) =>
+        const hasWidgetMessage = dashboardMessages.some((msg: unknown) =>
           msg.content && msg.content.includes('Widget to dashboard sync test'));
-        const hasApiMessage = dashboardMessages.some((msg: any) =>
+        const hasApiMessage = dashboardMessages.some((msg: unknown) =>
           msg.content && msg.content.includes('API sync test'));
 
         console.log(`Dashboard API contains widget message: ${hasWidgetMessage ? '✅' : '❌'}`);
@@ -211,17 +211,17 @@ test.describe('Widget-Dashboard Message Synchronization', () => {
       // Check if both pages are connected to the same channel
       const widgetChannelInfo = await widgetPage.evaluate(() => {
         return {
-          hasSupabase: typeof (window as any).supabase !== 'undefined',
-          hasRealtime: typeof (window as any).supabaseRealtime !== 'undefined',
-          channels: (window as any).realtimeChannels || []
+          hasSupabase: typeof (window as unknown).supabase !== 'undefined',
+          hasRealtime: typeof (window as unknown).supabaseRealtime !== 'undefined',
+          channels: (window as unknown).realtimeChannels || []
         };
       });
       
       const dashboardChannelInfo = await dashboardPage.evaluate(() => {
         return {
-          hasSupabase: typeof (window as any).supabase !== 'undefined',
-          hasRealtime: typeof (window as any).supabaseRealtime !== 'undefined',
-          channels: (window as any).realtimeChannels || []
+          hasSupabase: typeof (window as unknown).supabase !== 'undefined',
+          hasRealtime: typeof (window as unknown).supabaseRealtime !== 'undefined',
+          channels: (window as unknown).realtimeChannels || []
         };
       });
       

@@ -53,9 +53,9 @@ export class AuthErrorBoundary extends Component<Props, State> {
     if (typeof window !== "undefined") {
       try {
         const authKeys = Object.keys(localStorage).filter(
-          (key: any) => key.includes("supabase") || key.includes("auth")
+          (key: unknown) => key.includes("supabase") || key.includes("auth")
         );
-        authKeys.forEach((key: any) => localStorage.removeItem(key));
+        authKeys.forEach((key: unknown) => localStorage.removeItem(key));
       } catch (e) {}
     }
 

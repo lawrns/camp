@@ -47,7 +47,7 @@ const matchesTransactionalEmailAddress = (email: string): boolean => {
   return transactionalPatterns.some((pattern) => pattern.test(email));
 };
 
-const getGmailService = (auth: any) => {
+const getGmailService = (auth: unknown) => {
   // Fallback implementation - return a mock service
   return {
     users: {
@@ -61,12 +61,12 @@ const getGmailService = (auth: any) => {
   };
 };
 
-const getMessagesFromHistoryId = async (service: any, historyId: string): Promise<any[]> => {
+const getMessagesFromHistoryId = async (service: unknown, historyId: string): Promise<any[]> => {
   // Fallback implementation - return empty array
   return [];
 };
 
-const getMessageById = async (service: any, messageId: string): Promise<any> => {
+const getMessageById = async (service: unknown, messageId: string): Promise<any> => {
   // Fallback implementation - return null
   return null;
 };
@@ -225,7 +225,7 @@ export const getParsedEmailInfo = (parsedEmail: ParsedMail) => {
   return { parsedEmail, parsedEmailFrom, parsedEmailBody };
 };
 
-export const handleGmailWebhookEvent = async (body: any, headers: any) => {
+export const handleGmailWebhookEvent = async (body: unknown, headers: unknown) => {
   // Next.js API route handlers will lowercase header keys (e.g. "Authorization" -> "authorization"), but not Inngest.
   // For consistency across all potential invocations of this function, we can lowercase everything here.
   const normalizedHeaders = Object.fromEntries(
@@ -262,17 +262,17 @@ export const handleGmailWebhookEvent = async (body: any, headers: any) => {
   // Refs: https://developers.google.com/gmail/api/reference/rest/v1/users.history/list#query-parameters
   //     https://developers.google.com/gmail/api/guides/sync#full_synchronization
   const historyId = gmailSupportEmail.historyId ?? data.historyId;
-  const response = (await getMessagesFromHistoryId(client, historyId.toString())) as any;
+  const response = (await getMessagesFromHistoryId(client, historyId.toString())) as unknown;
   if (response.status !== 404) {
     assertSuccessResponseOrThrow(response as GaxiosResponse<any>);
     histories = response.data.history ?? [];
   } else {
     captureExceptionAndLogIfDevelopment(new Error("Cached historyId expired"));
     histories =
-      (await getMessagesFromHistoryId(client, data.historyId.toString()).then((res: any) => res)).data.history ?? [];
+      (await getMessagesFromHistoryId(client, data.historyId.toString()).then((res: unknown) => res)).data.history ?? [];
   }
 
-  const messagesAdded = histories.flatMap((h: any) => h.messagesAdded ?? []);
+  const messagesAdded = histories.flatMap((h: unknown) => h.messagesAdded ?? []);
   const results: {
     message: string;
     responded?: boolean;
@@ -339,12 +339,12 @@ export const handleGmailWebhookEvent = async (body: any, headers: any) => {
 
       let shouldIgnore =
         (!!authenticatedStaffUser && !isFirstMessage) ||
-        labelIds.some((id: any) => IGNORED_GMAIL_CATEGORIES.includes(id)) ||
+        labelIds.some((id: unknown) => IGNORED_GMAIL_CATEGORIES.includes(id)) ||
         matchesTransactionalEmailAddress(parsedEmailFrom.address);
 
       let isAutomatedResponseOrThankYou: boolean | undefined;
       if (!shouldIgnore) {
-        isAutomatedResponseOrThankYou = await isThankYouOrAutoResponse(mailbox as any, cleanedUpText);
+        isAutomatedResponseOrThankYou = await isThankYouOrAutoResponse(mailbox as unknown, cleanedUpText);
         shouldIgnore = isAutomatedResponseOrThankYou;
       }
 
@@ -388,7 +388,7 @@ export const handleGmailWebhookEvent = async (body: any, headers: any) => {
         });
         // If a conversation doesn't already exist for this email, create one anyway
         // (since we likely dropped the initial email).
-        conversation = (previousEmail?.conversation as any) ?? (await createNewConversation());
+        conversation = (previousEmail?.conversation as unknown) ?? (await createNewConversation());
       }
 
       const newEmail = await createMessageAndProcessAttachments(
@@ -442,7 +442,7 @@ export const handleGmailWebhookEvent = async (body: any, headers: any) => {
 };
 
 const addressesToString = (value: AddressObject | AddressObject[]) => {
-  return Array.isArray(value) ? value.map((to: any) => to.text).join(", ") : value.text;
+  return Array.isArray(value) ? value.map((to: unknown) => to.text).join(", ") : value.text;
 };
 
 export const GmailWebhookBodySchema = z.object({

@@ -382,12 +382,12 @@ class BidirectionalTestHelper {
     try {
       // Check agent page console for errors
       const agentErrors = await this.agentPage.evaluate(() => {
-        return (window as any).consoleErrors || [];
+        return (window as unknown).consoleErrors || [];
       });
       
       // Check visitor page console for errors
       const visitorErrors = await this.visitorPage.evaluate(() => {
-        return (window as any).consoleErrors || [];
+        return (window as unknown).consoleErrors || [];
       });
       
       const allErrors = [...agentErrors, ...visitorErrors];
@@ -432,19 +432,19 @@ test.describe('Comprehensive Bidirectional Communication E2E Test', () => {
     
     // Setup error logging
     await agentPage.addInitScript(() => {
-      (window as any).consoleErrors = [];
+      (window as unknown).consoleErrors = [];
       const originalError = console.error;
       console.error = (...args) => {
-        (window as any).consoleErrors.push(args.join(' '));
+        (window as unknown).consoleErrors.push(args.join(' '));
         originalError.apply(console, args);
       };
     });
     
     await visitorPage.addInitScript(() => {
-      (window as any).consoleErrors = [];
+      (window as unknown).consoleErrors = [];
       const originalError = console.error;
       console.error = (...args) => {
-        (window as any).consoleErrors.push(args.join(' '));
+        (window as unknown).consoleErrors.push(args.join(' '));
         originalError.apply(console, args);
       };
     });

@@ -12,7 +12,7 @@ export interface OrganizationMember {
   created_at: string | null;
   profile: {
     user_id: string;
-    full_name: string | null;
+    fullName: string | null;
     email: string;
     avatar_url: string | null;
     last_seen?: string | null;
@@ -74,7 +74,7 @@ export function useOrganizationMembers(organizationId: string) {
         const profileMap = new Map(profiles?.map((profile) => [profile.user_id, profile]) || []);
 
         // Enhance with real-time data (simplified for now)
-        const enhancedMembers = members.map((member: any) => {
+        const enhancedMembers = members.map((member: unknown) => {
           const profile = profileMap.get(member.user_id);
 
           // Generate mock workload data (replace with real data later)
@@ -85,7 +85,7 @@ export function useOrganizationMembers(organizationId: string) {
             ...member,
             profile: profile || {
               user_id: member.user_id,
-              full_name: null,
+              fullName: null,
               email: `user-${member.user_id}@example.com`,
               avatar_url: null,
             },

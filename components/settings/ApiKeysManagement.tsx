@@ -392,7 +392,7 @@ export function ApiKeysManagement({ organizationId }: ApiKeysManagementProps) {
                 {apiKeys.map((key) => {
                   const statusConfig = getStatusConfig(key.status);
                   const StatusIcon = statusConfig.icon;
-                  const expired = isExpired(key.expires_at);
+                  const expired = isExpired(key.expiresAt);
 
                   return (
                     <TableRow key={key.id}>
@@ -443,7 +443,7 @@ export function ApiKeysManagement({ organizationId }: ApiKeysManagementProps) {
                       </TableCell>
                       <TableCell>
                         <div className="text-foreground text-sm">
-                          {key.expires_at ? formatDate(key.expires_at) : "Never"}
+                          {key.expiresAt ? formatDate(key.expiresAt) : "Never"}
                         </div>
                       </TableCell>
                       <TableCell>

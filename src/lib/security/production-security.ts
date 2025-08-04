@@ -138,7 +138,7 @@ export class ProductionSecurity {
   private disableDevFeatures(): void {
     // Disable React DevTools
     if (typeof window !== 'undefined') {
-      (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      (window as unknown).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
         isDisabled: true,
         supportsFiber: true,
         inject: () => {},
@@ -149,8 +149,8 @@ export class ProductionSecurity {
 
     // Disable debug flags
     if (typeof window !== 'undefined') {
-      (window as any).DEBUG = false;
-      (window as any).__DEV__ = false;
+      (window as unknown).DEBUG = false;
+      (window as unknown).__DEV__ = false;
     }
   }
 
@@ -174,14 +174,14 @@ export class ProductionSecurity {
       console.debug = () => {}; // Silence all debug
 
       // Filter warnings and errors
-      console.warn = (...args: any[]) => {
+      console.warn = (...args: unknown[]) => {
         const message = args.join(' ');
         if (this.isCriticalMessage(message)) {
           originalMethods.warn(...args);
         }
       };
 
-      console.error = (...args: any[]) => {
+      console.error = (...args: unknown[]) => {
         const message = args.join(' ');
         if (this.isCriticalMessage(message)) {
           originalMethods.error(...args);

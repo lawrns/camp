@@ -101,7 +101,7 @@ test.describe('Final Widget-Dashboard Integration', () => {
       if (widgetMessagesResponse.ok()) {
         const widgetMessages = await widgetMessagesResponse.json();
         widgetApiSuccess = true;
-        widgetApiHasMessage = widgetMessages.some((msg: any) => 
+        widgetApiHasMessage = widgetMessages.some((msg: unknown) => 
           msg.content && msg.content.includes('Final integration test'));
         console.log(`✅ Widget API working - found ${widgetMessages.length} messages`);
         console.log(`Widget API has test message: ${widgetApiHasMessage ? '✅' : '❌'}`);
@@ -122,7 +122,7 @@ test.describe('Final Widget-Dashboard Integration', () => {
         const dashboardResponse = await dashboardMessagesResponse.json();
         dashboardApiSuccess = true;
         const dashboardMessages = dashboardResponse.messages || [];
-        dashboardApiHasMessage = dashboardMessages.some((msg: any) =>
+        dashboardApiHasMessage = dashboardMessages.some((msg: unknown) =>
           msg.content && msg.content.includes('Final integration test'));
         console.log(`✅ Dashboard API working - found ${dashboardMessages.length} messages`);
         console.log(`Dashboard API has test message: ${dashboardApiHasMessage ? '✅' : '❌'}`);

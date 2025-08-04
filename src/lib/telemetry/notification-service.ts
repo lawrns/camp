@@ -76,7 +76,7 @@ export class NotificationService {
       },
     ];
 
-    defaultChannels.forEach((channel: any) => {
+    defaultChannels.forEach((channel: unknown) => {
       this.channels.set(channel.id, channel);
     });
   }

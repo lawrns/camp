@@ -31,21 +31,21 @@ interface UserSession {
   created_at: string;
 }
 
-interface TwoFactorCode {
-  id: string;
-  user_id: string;
-  code: string;
-  expiresAt: string;
-  usedAt: string | null;
-}
+// interface _TwoFactorCode {
+//   id: string;
+//   user_id: string;
+//   code: string;
+//   expiresAt: string;
+//   usedAt: string | null;
+// }
 
-interface LoginAttempt {
-  email: string;
-  success: boolean;
-  failureReason?: string;
-  ipAddress?: string | null;
-  userAgent?: string | null;
-}
+// interface LoginAttempt {
+//   email: string;
+//   success: boolean;
+//   failureReason?: string;
+//   ipAddress?: string | null;
+//   userAgent?: string | null;
+// }
 
 type TypedSupabaseClient = SupabaseClient;
 
@@ -55,7 +55,7 @@ const verifySchema = z.object({
   sessionId: z.string().uuid(),
 });
 
-export const POST = withTenantGuard(async (req: NextRequest, { user, organizationId, scopedClient }: TenantContext) => {
+export const POST = withTenantGuard(async (req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
   try {
     const supabaseClient = supabase.admin();
     if (!supabaseClient) {
@@ -141,25 +141,25 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
           verified = true;
 
           // Mark recovery code as used
-          await (supabase as any)
+          await supabaseClient
             .from("two_factor_codes")
             .update({ usedAt: new Date().toISOString() })
             .eq("id", recoveryCode.id);
         }
-      } catch (error) {}
+      } catch (_error) {}
     }
 
     if (!verified) {
       // Log failed attempt - table may not exist yet
       try {
-        await (supabase as any).from("login_attempts").insert({
+        await (supabase as unknown).from("login_attempts").insert({
           email: profile.email,
           success: false,
           failureReason: "2FA verification failed",
           ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
           userAgent: req.headers.get("user-agent"),
         });
-      } catch (error) {}
+      } catch (_error) {}
 
       return NextResponse.json(
         {
@@ -171,10 +171,10 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
 
     // Create authenticated session
     const sessionToken = crypto.randomUUID();
-    const { error: createSessionError } = await (supabase as any).from("user_sessions").insert({
+    const { error: createSessionError } = await (supabase as unknown).from("user_sessions").insert({
       user_id: pendingSession.user_id,
       token: sessionToken,
-      deviceInfo: (pendingSession as any).deviceInfo?.deviceInfo || {},
+      deviceInfo: (pendingSession as unknown).deviceInfo?.deviceInfo || {},
       ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
       userAgent: req.headers.get("user-agent"),
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
@@ -190,7 +190,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
     }
 
     // Delete pending 2FA session
-    await (supabaseClient as any).from("user_sessions").delete().eq("id", sessionId);
+    await (supabaseClient as unknown).from("user_sessions").delete().eq("id", sessionId);
 
     // Update last login (using metadata since column may not exist)
     try {
@@ -200,17 +200,17 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
           metadata: {
             ...((
               (await supabaseClient.from("profiles").select("metadata").eq("id", pendingSession.user_id).single())
-                .data as any
+                .data as unknown
             )?.metadata || {}),
             last_login_at: new Date().toISOString(),
           },
-        } as any)
+        } as unknown)
         .eq("id", pendingSession.user_id);
     } catch (error) {}
 
     // Log successful login - table may not exist yet
     try {
-      await (supabase as any).from("login_attempts").insert({
+      await (supabase as unknown).from("login_attempts").insert({
         email: profile.email,
         success: true,
         ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
@@ -241,7 +241,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
 });
 
 // Resend 2FA code (for future implementation of SMS/Email 2FA)
-export const PUT = withTenantGuard(async (req: NextRequest, { user, organizationId, scopedClient }: TenantContext) => {
+export const PUT = withTenantGuard(async (req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
   try {
     const supabaseClient = supabase.admin();
     const { sessionId } = await req.json();
@@ -251,7 +251,7 @@ export const PUT = withTenantGuard(async (req: NextRequest, { user, organization
     }
 
     // Get pending session
-    const { data: pendingSession, error: sessionError } = await (supabase as any)
+    const { data: pendingSession, error: sessionError } = await (supabase as unknown)
       .from("user_sessions")
       .select("user_id, created_at")
       .eq("id", sessionId)

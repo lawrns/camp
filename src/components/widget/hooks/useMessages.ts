@@ -11,7 +11,7 @@ export interface Message {
     conversation_id?: string;
     organization_id?: string;
     read_status?: "sending" | "sent" | "delivered" | "read";
-    attachments?: any[];
+    attachments?: unknown[];
     metadata?: Record<string, any>;
     isTyping?: boolean; // For AI typing animation
     confidence?: number; // For AI confidence display
@@ -19,7 +19,7 @@ export interface Message {
 
 export interface UseMessagesReturn {
     messages: Message[];
-    sendMessage: (content: string, attachments?: any[]) => Promise<Message | null>;
+    sendMessage: (content: string, attachments?: unknown[]) => Promise<Message | null>;
     isLoading: boolean;
     error: string | null;
     reload: () => Promise<void>;
@@ -77,12 +77,12 @@ export function useMessages(
             console.log("[useMessages] Messages array:", messagesArray);
             console.log("[useMessages] Messages count:", messagesArray.length);
 
-            const transformedMessages = messagesArray.map((message: any) => ({
+            const transformedMessages = messagesArray.map((message: unknown) => ({
                 id: message.id,
                 content: message.content,
-                senderType: message.senderType || (message.sender_type === "visitor" ? "visitor" :
-                    message.sender_type === "ai_assistant" ? "ai" : "agent"), // Handle both formats
-                senderName: message.senderName || message.sender_name,
+                senderType: message.senderType || (message.senderType === "visitor" ? "visitor" :
+                    message.senderType === "ai_assistant" ? "ai" : "agent"), // Handle both formats
+                senderName: message.senderName || message.senderName,
                 timestamp: message.timestamp || message.created_at,
                 read_status: message.read_status || "sent",
                 attachments: message.attachments || [],
@@ -113,7 +113,7 @@ export function useMessages(
 
     // Send a new message using API endpoint with optimistic UI updates
     const sendMessage = useCallback(
-        async (content: string, attachments?: any[]): Promise<Message | null> => {
+        async (content: string, attachments?: unknown[]): Promise<Message | null> => {
             console.log("[useMessages] sendMessage called with:", { content, conversationId, organizationId });
             if (!conversationId || !organizationId || !content.trim()) {
                 console.log("[useMessages] Missing required params:", { conversationId, organizationId, content: content.trim() });
@@ -283,9 +283,9 @@ export function useMessages(
                         const newMessage: Message = {
                             id: payload.new.id,
                             content: payload.new.content,
-                            senderType: payload.new.sender_type === "visitor" ? "visitor" :
-                                payload.new.sender_type === "ai_assistant" ? "ai" : "agent",
-                            senderName: payload.new.sender_name,
+                            senderType: payload.new.senderType === "visitor" ? "visitor" :
+                                payload.new.senderType === "ai_assistant" ? "ai" : "agent",
+                            senderName: payload.new.senderName,
                             timestamp: payload.new.created_at,
                             read_status: "sent",
                             attachments: payload.new.attachments || [],
@@ -293,7 +293,7 @@ export function useMessages(
                             organization_id: payload.new.organization_id,
                             // AI-specific properties
                             confidence: payload.new.metadata?.confidence,
-                            isTyping: payload.new.sender_type === "ai_assistant" ? true : false, // Start with typing for AI
+                            isTyping: payload.new.senderType === "ai_assistant" ? true : false, // Start with typing for AI
                         };
 
                         // Add message to state with deduplication
@@ -333,8 +333,8 @@ export function useMessages(
                             const newMessage: Message = {
                                 id: dashboardMessage.id,
                                 content: dashboardMessage.content,
-                                senderType: dashboardMessage.sender_type === "operator" ? "agent" : "visitor",
-                                senderName: dashboardMessage.sender_name || "Agent",
+                                senderType: dashboardMessage.senderType === "operator" ? "agent" : "visitor",
+                                senderName: dashboardMessage.senderName || "Agent",
                                 timestamp: dashboardMessage.created_at,
                                 read_status: "sent",
                                 attachments: dashboardMessage.attachments || [],

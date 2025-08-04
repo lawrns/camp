@@ -29,7 +29,7 @@ interface GuideSessionRecord {
   current_step: number | null;
   steps: GuideStep[] | null;
   created_at: string;
-  completed_at: string | null;
+  completedAt: string | null;
   organization_id: string;
 }
 
@@ -65,7 +65,7 @@ export function useGuideSession(sessionId: string, conversationId?: string) {
         completedSteps: session.steps?.filter((s) => s.completed).map((_, index) => index) || [],
         steps: session.steps || [],
         startedAt: session.created_at ? new Date(session.created_at) : undefined,
-        completedAt: session.completed_at ? new Date(session.completed_at) : undefined,
+        completedAt: session.completedAt ? new Date(session.completedAt) : undefined,
       });
     }
   }, [session]);
@@ -112,7 +112,7 @@ export function useGuideSession(sessionId: string, conversationId?: string) {
           status: updates.status,
           current_step: updates.currentStep !== undefined ? updates.currentStep : undefined,
           steps: updates.steps,
-          completed_at: updates.completedAt?.toISOString(),
+          completedAt: updates.completedAt?.toISOString(),
         })
         .eq("id", sessionId)
         .select()
@@ -128,7 +128,7 @@ export function useGuideSession(sessionId: string, conversationId?: string) {
 
   // Track guide events
   const trackGuideEvent = useCallback(
-    async (event: string, metadata: any) => {
+    async (event: string, metadata: unknown) => {
       try {
         // Note: analytics_events table doesn't exist in current Supabase types
         // Using activity_events as fallback
@@ -199,7 +199,7 @@ export function useGuideSession(sessionId: string, conversationId?: string) {
         updatedSteps[stepIndex].completedAt = new Date().toISOString();
       }
 
-      const completedSteps = updatedSteps.filter((s: any) => s.completed).map((_, index) => index);
+      const completedSteps = updatedSteps.filter((s: unknown) => s.completed).map((_, index) => index);
 
       setLocalState({
         ...localState,

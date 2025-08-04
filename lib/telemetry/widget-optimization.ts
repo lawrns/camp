@@ -26,7 +26,7 @@ export class WidgetOptimizer {
   private config: WidgetPerformanceConfig;
   private metrics: WidgetMetrics;
   private connectionPool = new Map<string, any>();
-  private messageQueue: any[] = [];
+  private messageQueue: unknown[] = [];
   private isProcessing = false;
 
   constructor(config: Partial<WidgetPerformanceConfig> = {}) {
@@ -101,7 +101,7 @@ export class WidgetOptimizer {
     });
   }
 
-  private async initializeWidget(config: any): Promise<void> {
+  private async initializeWidget(config: unknown): Promise<void> {
     // Simulate widget initialization
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -111,7 +111,7 @@ export class WidgetOptimizer {
   }
 
   // Optimize message processing
-  async optimizeMessageProcessing(message: any): Promise<void> {
+  async optimizeMessageProcessing(message: unknown): Promise<void> {
     this.messageQueue.push(message);
 
     if (!this.isProcessing) {
@@ -131,7 +131,7 @@ export class WidgetOptimizer {
     this.isProcessing = false;
   }
 
-  private async processMessage(message: any): Promise<void> {
+  private async processMessage(message: unknown): Promise<void> {
     const startTime = performance.now();
 
     try {
@@ -145,7 +145,7 @@ export class WidgetOptimizer {
   }
 
   // Optimize connection management
-  optimizeConnection(connectionId: string, connection: any): void {
+  optimizeConnection(connectionId: string, connection: unknown): void {
     if (this.connectionPool.size >= this.config.maxConcurrentConnections) {
       // Close oldest connection
       const oldestConnection = this.connectionPool.entries().next().value;
@@ -259,12 +259,12 @@ export function preloadWidgetAssets(): void {
   // This would implement asset preloading
 }
 
-export function compressWidgetData(data: any): any {
+export function compressWidgetData(data: unknown): unknown {
   // This would implement data compression
   return data;
 }
 
-export function decompressWidgetData(data: any): any {
+export function decompressWidgetData(data: unknown): unknown {
   // This would implement data decompression
   return data;
 }

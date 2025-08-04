@@ -25,7 +25,7 @@ export function useKeyboardShortcuts(options: UseKeyboardShortcutsOptions = {}) 
     // Subscribe to shortcut changes
     const unsubscribe = keyboardShortcutManager.subscribe((updatedShortcuts) => {
       if (category) {
-        setShortcuts(updatedShortcuts.filter((s: any) => s.category === category));
+        setShortcuts(updatedShortcuts.filter((s: unknown) => s.category === category));
       } else {
         setShortcuts(updatedShortcuts);
       }
@@ -45,13 +45,13 @@ export function useKeyboardShortcuts(options: UseKeyboardShortcutsOptions = {}) 
 
   useEffect(() => {
     // Register custom shortcuts
-    customShortcuts.forEach((shortcut: any) => {
+    customShortcuts.forEach((shortcut: unknown) => {
       keyboardShortcutManager.register(shortcut);
     });
 
     // Cleanup
     return () => {
-      customShortcuts.forEach((shortcut: any) => {
+      customShortcuts.forEach((shortcut: unknown) => {
         keyboardShortcutManager.unregister(shortcut.id);
       });
     };

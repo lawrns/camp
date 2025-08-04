@@ -55,10 +55,20 @@ export function useAIHandover(conversationId: string, organizationId?: string, u
   const getAuthHeaders = async () => {
     try {
       const accessToken = useAuthStore.getState().session?.access_token;
-      const currentOrgId = organizationId || useAuthStore.getState().organizationId;
+      const authStoreOrgId = useAuthStore.getState().organizationId;
+      const currentOrgId = organizationId || authStoreOrgId;
 
-      if (!currentOrgId) {
-        throw new Error("Organization ID is required");
+      console.log("[useAIHandover] Auth debug:", {
+        passedOrgId: organizationId,
+        authStoreOrgId,
+        finalOrgId: currentOrgId,
+        hasAccessToken: !!accessToken
+      });
+
+      if (!currentOrgId || currentOrgId.trim() === "") {
+        const error = `Organization ID is required for AI handover. Passed: "${organizationId}", Store: "${authStoreOrgId}"`;
+        console.error("[useAIHandover]", error);
+        throw new Error(error);
       }
 
       return {
@@ -67,8 +77,8 @@ export function useAIHandover(conversationId: string, organizationId?: string, u
         "X-Organization-ID": currentOrgId,
       };
     } catch (error) {
-      console.error("Failed to get auth headers:", error);
-      throw new Error("Organization ID is required");
+      console.error("[useAIHandover] Failed to get auth headers:", error);
+      throw error instanceof Error ? error : new Error("Organization ID is required");
     }
   };
 
@@ -109,8 +119,16 @@ export function useAIHandover(conversationId: string, organizationId?: string, u
 
   const startHandover = useCallback(
     async (persona: string = "friendly") => {
-      if (!organizationId) {
-        const error = "Organization ID is required";
+      console.log("[useAIHandover] startHandover called with:", {
+        conversationId,
+        organizationId,
+        userId,
+        persona
+      });
+
+      if (!organizationId || organizationId.trim() === "") {
+        const error = `Organization ID is required for AI handover. Received: "${organizationId}"`;
+        console.error("[useAIHandover]", error);
         setState((prev) => ({
           ...prev,
           error,
@@ -127,7 +145,7 @@ export function useAIHandover(conversationId: string, organizationId?: string, u
         setState((prev) => ({ ...prev, processingProgress: 30 }));
 
         // Try the main AI handover endpoint first
-        let response = await fetch("/api/ai?action=handover", {
+        let response = await fetch("/api/ai/handover", {
           method: "POST",
           headers,
           credentials: "include", // Include cookies for authentication
@@ -219,7 +237,7 @@ export function useAIHandover(conversationId: string, organizationId?: string, u
     try {
       const headers = await getAuthHeaders();
 
-      const response = await fetch("/api/ai?action=handover", {
+      const response = await fetch("/api/ai/handover", {
         method: "POST",
         headers,
         credentials: "include",

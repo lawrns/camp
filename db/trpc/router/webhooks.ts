@@ -109,8 +109,8 @@ export const webhooksRouter = createTRPCRouter({
         events: input.events,
         description: input.description,
         secret: webhookSecret,
-        is_active: input.isActive,
-        created_by: ctx.user.id,
+        isActive: input.isActive,
+        createdBy: ctx.user.id,
         success_count: 0,
         failure_count: 0,
       })
@@ -156,7 +156,7 @@ export const webhooksRouter = createTRPCRouter({
         ...(input.events && { events: input.events }),
         ...(input.description !== undefined && { description: input.description }),
         ...(input.secret && { secret: input.secret }),
-        ...(input.isActive !== undefined && { is_active: input.isActive }),
+        ...(input.isActive !== undefined && { isActive: input.isActive }),
         updated_at: new Date().toISOString(),
       })
       .eq("id", input.id)
@@ -356,7 +356,7 @@ function generateWebhookSecret(): string {
   return result;
 }
 
-function generateWebhookSignature(payload: any, secret: string): string {
+function generateWebhookSignature(payload: unknown, secret: string): string {
   // In a real implementation, use HMAC-SHA256
   // For now, using a simple signature
   const payloadString = JSON.stringify(payload);

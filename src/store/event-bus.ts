@@ -64,7 +64,7 @@ export interface EventTypes {
   "auth:login": BaseEvent & {
     userId: string;
     organizationId: string;
-    session: any;
+    session: unknown;
   };
   "auth:logout": BaseEvent & {
     userId: string;
@@ -119,7 +119,7 @@ export interface EventTypes {
   };
   "message:added": BaseEvent & {
     conversationId: string;
-    message: any;
+    message: unknown;
   };
   "message:updated": BaseEvent & {
     messageId: string;
@@ -411,16 +411,16 @@ class EventBus {
 
     if (filter) {
       if (filter.eventType) {
-        history = history.filter((e: any) => this.getEventType(e) === filter.eventType);
+        history = history.filter((e: unknown) => this.getEventType(e) === filter.eventType);
       }
       if (filter.source) {
-        history = history.filter((e: any) => e.source === filter.source);
+        history = history.filter((e: unknown) => e.source === filter.source);
       }
       if (filter.startTime) {
-        history = history.filter((e: any) => e.timestamp >= filter.startTime!);
+        history = history.filter((e: unknown) => e.timestamp >= filter.startTime!);
       }
       if (filter.endTime) {
-        history = history.filter((e: any) => e.timestamp <= filter.endTime!);
+        history = history.filter((e: unknown) => e.timestamp <= filter.endTime!);
       }
     }
 
@@ -518,9 +518,9 @@ export const createEventEmitterMiddleware =
       [K in keyof T]?: keyof EventTypes;
     }
   ) =>
-  (config: any) =>
-  (set: any, get: any, api: any) => {
-    const wrappedSet = (updater: any, replace?: boolean) => {
+  (config: unknown) =>
+  (set: unknown, get: unknown, api: unknown) => {
+    const wrappedSet = (updater: unknown, replace?: boolean) => {
       const prevState = get();
 
       set(updater, replace);
@@ -577,6 +577,6 @@ export function useEventEmitter() {
 
 // Expose event bus to window in development
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-  (window as any).__eventBus = eventBus;
+  (window as unknown).__eventBus = eventBus;
   console.log("[EventBus] Development mode - eventBus available at window.__eventBus");
 }

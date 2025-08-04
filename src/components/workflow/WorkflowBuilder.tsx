@@ -23,7 +23,7 @@ interface WorkflowTrigger {
   conditions: Array<{
     field: string;
     operator: "equals" | "contains" | "greater_than" | "less_than" | "regex";
-    value: any;
+    value: unknown;
   }>;
 }
 
@@ -97,7 +97,7 @@ export function WorkflowBuilder() {
     }));
   };
 
-  const updateCondition = (index: number, field: string, value: any) => {
+  const updateCondition = (index: number, field: string, value: unknown) => {
     setWorkflowData((prev) => ({
       ...prev,
       trigger: {
@@ -133,7 +133,7 @@ export function WorkflowBuilder() {
     }));
   };
 
-  const updateAction = (index: number, field: string, value: any) => {
+  const updateAction = (index: number, field: string, value: unknown) => {
     setWorkflowData((prev) => ({
       ...prev,
       actions: prev.actions.map((action, i) => (i === index ? { ...action, [field]: value } : action)),
@@ -161,7 +161,7 @@ export function WorkflowBuilder() {
         {/* Workflow List */}
         <div className="space-y-3">
           <h3 className="text-base font-semibold">Workflows</h3>
-          {workflows?.map((workflow: any) => (
+          {workflows?.map((workflow: unknown) => (
             <Card
               key={workflow.id}
               className={cn(
@@ -236,7 +236,7 @@ export function WorkflowBuilder() {
                       onValueChange={(type) =>
                         setWorkflowData((prev) => ({
                           ...prev,
-                          trigger: { ...prev.trigger, type: type as any },
+                          trigger: { ...prev.trigger, type: type as unknown },
                         }))
                       }
                     >

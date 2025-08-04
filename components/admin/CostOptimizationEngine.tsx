@@ -192,7 +192,7 @@ export default function CostOptimizationEngine() {
   ];
 
   const updateRule = async (ruleId: string, updates: Partial<OptimizationRule>) => {
-    const updatedRules = rules.map((rule: any) => (rule.id === ruleId ? { ...rule, ...updates } : rule));
+    const updatedRules = rules.map((rule: unknown) => (rule.id === ruleId ? { ...rule, ...updates } : rule));
     setRules(updatedRules);
 
     // Save to backend
@@ -254,9 +254,9 @@ export default function CostOptimizationEngine() {
   };
 
   const calculateTotalSavings = () => {
-    const enabledRules = rules.filter((rule: any) => rule.enabled);
+    const enabledRules = rules.filter((rule: unknown) => rule.enabled);
     const averageSavings =
-      enabledRules.reduce((sum: any, rule: any) => sum + rule.potentialSavingsPercentage, 0) /
+      enabledRules.reduce((sum: unknown, rule: unknown) => sum + rule.potentialSavingsPercentage, 0) /
       Math.max(enabledRules.length, 1);
 
     return {
@@ -337,7 +337,7 @@ export default function CostOptimizationEngine() {
         <TabsContent value="rules" className="space-y-3">
           {/* Optimization Rules */}
           <div className="space-y-3">
-            {rules.map((rule: any) => (
+            {rules.map((rule: unknown) => (
               <Card key={rule.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">

@@ -26,7 +26,7 @@ async function testRealtimeFlow() {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
   let conversationId: string | null = null;
-  let testResults: any[] = [];
+  let testResults: unknown[] = [];
 
   try {
     // ========================================
@@ -67,7 +67,7 @@ async function testRealtimeFlow() {
     // ========================================
     console.log('\n2️⃣ Setting up real-time monitoring...');
 
-    const receivedEvents: any[] = [];
+    const receivedEvents: unknown[] = [];
     
     // Monitor organization channel for new conversations
     const orgChannel = supabase.channel(`org:${TEST_ORG_ID}`);

@@ -21,7 +21,7 @@ interface MobileOptimizedWidgetProps {
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
-  messages: any[];
+  messages: unknown[];
   onSendMessage: (content: string) => void;
   isTyping?: boolean;
   unreadCount?: number;

@@ -110,7 +110,7 @@ export const TEST_CONFIG = {
 // Helper functions for common test operations
 export const TestHelpers = {
   // Wait for element with multiple fallback selectors
-  async waitForElement(page: any, selectors: string[], timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
+  async waitForElement(page: unknown, selectors: string[], timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
     for (const selector of selectors) {
       try {
         await page.waitForSelector(selector, { timeout: 5000 });
@@ -123,19 +123,19 @@ export const TestHelpers = {
   },
   
   // Click element with fallback selectors
-  async clickElement(page: any, selectors: string[], options = {}) {
+  async clickElement(page: unknown, selectors: string[], options = {}) {
     const selector = await this.waitForElement(page, selectors);
     await page.click(selector, options);
   },
   
   // Fill input with fallback selectors
-  async fillInput(page: any, selectors: string[], value: string) {
+  async fillInput(page: unknown, selectors: string[], value: string) {
     const selector = await this.waitForElement(page, selectors);
     await page.fill(selector, value);
   },
   
   // Wait for navigation
-  async waitForNavigation(page: any, urlPattern: string) {
+  async waitForNavigation(page: unknown, urlPattern: string) {
     await page.waitForURL(urlPattern, { timeout: TEST_CONFIG.NAVIGATION_TIMEOUT });
   },
   
@@ -145,9 +145,9 @@ export const TestHelpers = {
   },
   
   // Wait for API response
-  async waitForAPIResponse(page: any, urlPattern: string, timeout = TEST_CONFIG.API_TIMEOUT) {
+  async waitForAPIResponse(page: unknown, urlPattern: string, timeout = TEST_CONFIG.API_TIMEOUT) {
     return page.waitForResponse(
-      (response: any) => response.url().includes(urlPattern),
+      (response: unknown) => response.url().includes(urlPattern),
       { timeout }
     );
   },

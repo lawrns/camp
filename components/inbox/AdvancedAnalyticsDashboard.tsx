@@ -420,7 +420,7 @@ export function AdvancedAnalyticsDashboard({
 
         <TabsContent value="agents" className="space-y-3">
           <div className="grid grid-cols-1 gap-3">
-            {agentPerformance.map((agent: any) => (
+            {agentPerformance.map((agent: unknown) => (
               <Card key={agent.id}>
                 <CardContent className="spacing-3">
                   <div className="flex items-center justify-between">
@@ -442,7 +442,7 @@ export function AdvancedAnalyticsDashboard({
                           <Badge variant="secondary" className={getWorkloadColor(agent.workload)}>
                             {agent.workload}
                           </Badge>
-                          {agent.expertise.map((skill: any) => (
+                          {agent.expertise.map((skill: unknown) => (
                             <Badge key={skill} variant="outline" className="text-tiny">
                               {skill}
                             </Badge>
@@ -477,7 +477,7 @@ export function AdvancedAnalyticsDashboard({
 
         <TabsContent value="insights" className="space-y-3">
           <div className="space-y-3">
-            {conversationInsights.map((insight: any) => (
+            {conversationInsights.map((insight: unknown) => (
               <Card key={insight.id} className={cn("border-l-4", getSeverityColor(insight.severity))}>
                 <CardContent className="spacing-3">
                   <div className="flex items-start justify-between">

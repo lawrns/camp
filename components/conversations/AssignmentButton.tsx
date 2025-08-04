@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 interface Agent {
   id: string;
   user_id: string;
-  full_name: string;
+  fullName: string;
   email: string;
   avatar_url: string | null;
   workload: number;
@@ -92,7 +92,7 @@ export function AssignmentButton({
 
       const data = await response.json();
 
-      toast.success(`Assigned to ${agents.find((a) => a.user_id === agentId)?.full_name || "agent"}`);
+      toast.success(`Assigned to ${agents.find((a) => a.user_id === agentId)?.fullName || "agent"}`);
       setIsOpen(false);
       onAssigned?.(agentId);
     } catch (error) {
@@ -181,7 +181,7 @@ export function AssignmentButton({
         ) : (
           <>
             <div className="max-h-80 overflow-y-auto">
-              {agents.map((agent: any) => (
+              {agents.map((agent: unknown) => (
                 <button
                   key={agent.user_id}
                   onClick={() => handleAssign(agent.user_id)}
@@ -195,10 +195,10 @@ export function AssignmentButton({
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       {agent.avatar_url && <AvatarImage src={agent.avatar_url} />}
-                      <AvatarFallback>{agent.full_name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>{agent.fullName.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div className="text-left">
-                      <p className="text-sm font-medium text-gray-900">{agent.full_name}</p>
+                      <p className="text-sm font-medium text-gray-900">{agent.fullName}</p>
                       <p className="text-tiny text-[var(--fl-color-text-muted)]">
                         {agent.workload}/{agent.capacity} conversations
                       </p>

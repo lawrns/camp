@@ -98,8 +98,8 @@ export async function createOrGetSharedConversation(
     return {
       id: existingConversation.id,
       organizationId: existingConversation.organization_id,
-      customerEmail: existingConversation.customer_email,
-      customerName: existingConversation.customer_name,
+      customerEmail: existingConversation.customer_email, // Fixed: use snake_case
+      customerName: existingConversation.customer_name, // Fixed: use snake_case
       status: existingConversation.status,
       priority: existingConversation.priority || 'medium',
       metadata: existingConversation.metadata || {},
@@ -111,8 +111,8 @@ export async function createOrGetSharedConversation(
   // Create new conversation
   const conversationData = {
     organization_id: organizationId,
-    customer_email: customerEmail || null,
-    customer_name: customerName || 'Anonymous User',
+    customer_email: customerEmail || null, // Fixed: use snake_case
+    customer_name: customerName || 'Anonymous User', // Fixed: use snake_case
     visitor_id: visitorId || null,
     status: 'open',
     priority: 'medium',
@@ -138,8 +138,8 @@ export async function createOrGetSharedConversation(
   return {
     id: newConversation.id,
     organizationId: newConversation.organization_id,
-    customerEmail: newConversation.customer_email,
-    customerName: newConversation.customer_name,
+    customerEmail: newConversation.customer_email, // Fixed: use snake_case
+    customerName: newConversation.customer_name, // Fixed: use snake_case
     status: newConversation.status,
     priority: newConversation.priority,
     metadata: newConversation.metadata,
@@ -171,8 +171,8 @@ export async function getSharedConversation(
   return {
     id: conversation.id,
     organizationId: conversation.organization_id,
-    customerEmail: conversation.customer_email,
-    customerName: conversation.customer_name,
+    customerEmail: conversation.customer_email, // Fixed: use snake_case
+    customerName: conversation.customer_name, // Fixed: use snake_case
     status: conversation.status,
     priority: conversation.priority || 'medium',
     metadata: conversation.metadata || {},

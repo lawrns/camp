@@ -71,7 +71,7 @@ export class NotificationService {
         .select("user_id")
         .eq("organization_id", options.organizationId);
 
-      userIds = members?.map((m: any) => m.user_id) || [];
+      userIds = members?.map((m: unknown) => m.user_id) || [];
     }
 
     // Create notifications for all users
@@ -117,23 +117,23 @@ export class NotificationService {
     // Get assigner's name
     const { data: assigner } = await this.supabase
       .from("profiles")
-      .select("full_name")
+      .select("fullName")
       .eq("user_id", assignedByUserId)
       .single();
 
-    const assignerName = assigner?.full_name || "Someone";
+    const assignerName = assigner?.fullName || "Someone";
 
     await this.createNotification({
       userId: assignedUserId,
       organizationId: conversation.organization_id,
       type: "assignment",
       title: "New conversation assigned",
-      message: `${assignerName} assigned you a conversation with ${conversation.customer_name || "a customer"}`,
+      message: `${assignerName} assigned you a conversation with ${conversation.customerName || "a customer"}`,
       conversationId,
       priority: "high",
       metadata: {
         assignedBy: assignedByUserId,
-        customerName: conversation.customer_name,
+        customerName: conversation.customerName,
       },
     });
   }
@@ -155,7 +155,7 @@ export class NotificationService {
         .select("id, customer_name, organization_id")
         .eq("id", conversationId)
         .single(),
-      this.supabase.from("profiles").select("full_name").eq("user_id", mentionedByUserId).single(),
+      this.supabase.from("profiles").select("fullName").eq("user_id", mentionedByUserId).single(),
     ]);
 
     const conversation = conversationResult.data;
@@ -163,7 +163,7 @@ export class NotificationService {
 
     if (!conversation) return;
 
-    const mentionerName = mentioner?.full_name || "Someone";
+    const mentionerName = mentioner?.fullName || "Someone";
 
     await this.createNotification({
       userId: mentionedUserId,
@@ -176,7 +176,7 @@ export class NotificationService {
       metadata: {
         messageId,
         mentionedBy: mentionedByUserId,
-        customerName: conversation.customer_name,
+        customerName: conversation.customerName,
       },
     });
   }
@@ -192,12 +192,12 @@ export class NotificationService {
       .eq("organization_id", organizationId)
       .eq("role", "agent");
 
-    const userIds = availableAgents?.map((a: any) => a.user_id) || [];
+    const userIds = availableAgents?.map((a: unknown) => a.user_id) || [];
 
     // Get conversation details
     const { data: conversation } = await this.supabase
       .from("conversations")
-      .select("customer_name")
+      .select("customerName")
       .eq("id", conversationId)
       .single();
 
@@ -206,13 +206,13 @@ export class NotificationService {
       targetUserIds: userIds,
       type: "ai_handover",
       title: "AI needs human assistance",
-      message: `AI confidence dropped to ${Math.round(confidence * 100)}% for ${conversation?.customer_name || "a customer"}. Reason: ${reason}`,
+      message: `AI confidence dropped to ${Math.round(confidence * 100)}% for ${conversation?.customerName || "a customer"}. Reason: ${reason}`,
       conversationId,
       priority: "high",
       metadata: {
         reason,
         confidence,
-        customerName: conversation?.customer_name,
+        customerName: conversation?.customerName,
       },
     });
   }
@@ -249,7 +249,7 @@ export class NotificationService {
   /**
    * Broadcast notification to user via realtime
    */
-  private async broadcastToUser(userId: string, organizationId: string, notification: any) {
+  private async broadcastToUser(userId: string, organizationId: string, notification: unknown) {
     const channel = `org:${organizationId}:user:${userId}:notifications`;
     await this.supabase.channel(channel).send({
       type: "broadcast",

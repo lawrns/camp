@@ -19,7 +19,7 @@ export interface ToneContext {
 export interface ToneAdaptationInput {
   userMessage: string;
   organizationPersona?: string;
-  conversationHistory?: Array<{ content: string; sender_type: string }>;
+  conversationHistory?: Array<{ content: string; senderType: string }>;
   customerInfo?: {
     tier?: string;
     previousInteractions?: number;
@@ -139,7 +139,7 @@ const TONE_TEMPLATES = {
 export function buildToneContext(
   userMessage: string,
   organizationPersona: string = "friendly",
-  conversationHistory: Array<{ content: string; sender_type: string }> = []
+  conversationHistory: Array<{ content: string; senderType: string }> = []
 ): ToneContext {
   // Analyze sentiment of the current message
   const sentimentAnalysis = analyzeSentiment(userMessage);
@@ -279,7 +279,7 @@ function selectOptimalTone(
 function adaptSystemPrompt(
   basePrompt: string,
   analysis: SentimentAnalysis,
-  history: Array<{ content: string; sender_type: string }>
+  history: Array<{ content: string; senderType: string }>
 ): string {
   let adaptedPrompt = basePrompt;
 
@@ -312,7 +312,7 @@ function adaptSystemPrompt(
 function adaptSystemPromptAdvanced(
   basePrompt: string,
   analysis: SentimentAnalysis,
-  history: Array<{ content: string; sender_type: string }>,
+  history: Array<{ content: string; senderType: string }>,
   customerInfo?: ToneAdaptationInput["customerInfo"],
   contextualInfo?: ToneAdaptationInput["contextualInfo"]
 ): string {

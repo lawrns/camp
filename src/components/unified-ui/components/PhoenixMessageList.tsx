@@ -31,7 +31,7 @@ export function MessageList({ messages, currentUserId }: MessageListProps) {
 
   return (
     <div className="phoenix-message-list">
-      {messages.map((message: any) => (
+      {messages.map((message: unknown) => (
         <div
           key={message.id}
           className={`phoenix-message ${message.isAI ? "phoenix-message-ai" : ""} ${message.isCurrentUser ? "phoenix-message-own" : ""}`}

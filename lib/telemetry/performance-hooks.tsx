@@ -56,7 +56,7 @@ export const useWebVitals = () => {
       // First Input Delay (FID)
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.processingStart && entry.startTime) {
             const fid = entry.processingStart - entry.startTime;
             setMetrics((prev) => ({ ...prev, fid }));
@@ -72,7 +72,7 @@ export const useWebVitals = () => {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
             setMetrics((prev) => ({ ...prev, cls: clsValue }));
@@ -121,7 +121,7 @@ export const useRenderPerformance = (componentName: string) => {
     if (renderStartRef.current > 0) {
       renderTimesRef.current.push(renderTime);
 
-      const average = renderTimesRef.current.reduce((a: any, b: any) => a + b, 0) / renderTimesRef.current.length;
+      const average = renderTimesRef.current.reduce((a: unknown, b: unknown) => a + b, 0) / renderTimesRef.current.length;
 
       setMetrics((prev) => ({
         ...prev,
@@ -149,7 +149,7 @@ export const useMemoryMonitoring = () => {
   useEffect(() => {
     const updateMemoryInfo = () => {
       if ("memory" in performance) {
-        const memory = (performance as any).memory;
+        const memory = (performance as unknown).memory;
         setMemoryInfo({
           usedJSHeapSize: memory.usedJSHeapSize,
           totalJSHeapSize: memory.totalJSHeapSize,
@@ -175,7 +175,7 @@ export const useNetworkMonitoring = () => {
   useEffect(() => {
     const updateNetworkInfo = () => {
       if ("connection" in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as unknown).connection;
         setNetworkInfo({
           effectiveType: connection.effectiveType,
           downlink: connection.downlink,
@@ -188,7 +188,7 @@ export const useNetworkMonitoring = () => {
     updateNetworkInfo();
 
     if ("connection" in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as unknown).connection;
       connection.addEventListener("change", updateNetworkInfo);
 
       return () => {
@@ -221,7 +221,7 @@ export const useResourceTiming = () => {
 
   const getResourcesByType = useCallback(
     (type: string) => {
-      return resources.filter((resource: any) => {
+      return resources.filter((resource: unknown) => {
         const url = new URL(resource.name);
         const extension = url.pathname.split(".").pop();
 
@@ -245,7 +245,7 @@ export const useResourceTiming = () => {
   const getTotalSize = useCallback(
     (type?: string) => {
       const targetResources = type ? getResourcesByType(type) : resources;
-      return targetResources.reduce((total: any, resource: any) => {
+      return targetResources.reduce((total: unknown, resource: unknown) => {
         return total + (resource.transferSize || resource.encodedBodySize || 0);
       }, 0);
     },
@@ -303,7 +303,7 @@ export const usePerformanceBudget = (budgets: {
     setViolations(newViolations);
 
     // Log violations
-    newViolations.forEach((violation: any) => {});
+    newViolations.forEach((violation: unknown) => {});
   }, [webVitals, budgets, getTotalSize]);
 
   return {
@@ -319,7 +319,7 @@ export const usePerformanceMonitoring = (config?: {
   enableWebVitals?: boolean;
   enableMemoryMonitoring?: boolean;
   enableNetworkMonitoring?: boolean;
-  budget?: any;
+  budget?: unknown;
 }) => {
   const webVitals = config?.enableWebVitals !== false ? useWebVitals() : null;
   const renderMetrics = config?.componentName ? useRenderPerformance(config.componentName) : null;

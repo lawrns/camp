@@ -43,7 +43,7 @@ interface DocumentData {
   contentType: string;
   isPublic: boolean;
   isActive: boolean;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 export default function DocumentEditorPage() {
@@ -99,14 +99,14 @@ export default function DocumentEditorPage() {
         tags: existingDocument.document.tags || [],
         contentType: existingDocument.document.content_type || 'article',
         isPublic: existingDocument.document.is_public || false,
-        isActive: existingDocument.document.is_active || false,
+        isActive: existingDocument.document.isActive || false,
         metadata: existingDocument.document.metadata,
       });
     }
   }, [existingDocument]);
 
   // Handle document changes
-  const handleDocumentChange = useCallback((field: keyof DocumentData, value: any) => {
+  const handleDocumentChange = useCallback((field: keyof DocumentData, value: unknown) => {
     setDocument(prev => ({ ...prev, [field]: value }));
     setIsDirty(true);
   }, []);
@@ -121,7 +121,7 @@ export default function DocumentEditorPage() {
           documentId,
           title: document.title,
           content: document.content,
-          type: document.contentType as any,
+          type: document.contentType as unknown,
           tags: document.tags,
         });
       } else {
@@ -129,7 +129,7 @@ export default function DocumentEditorPage() {
           mailboxSlug: "test-mailbox-dev",
           title: document.title,
           content: document.content,
-          type: document.contentType as any,
+          type: document.contentType as unknown,
           tags: document.tags,
         });
         

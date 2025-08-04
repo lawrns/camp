@@ -6,7 +6,7 @@ declare module "@campfire/react" {
 
 // Global type declarations for Campfire/Helper SDK compatibility
 interface CampfireWidgetSDK {
-  init: (config: any) => void;
+  init: (config: unknown) => void;
   show: () => void;
   hide: () => void;
   toggle: () => void;
@@ -17,7 +17,7 @@ interface CampfireWidgetSDK {
 declare global {
   interface Window {
     // Original helper widget (for backwards compatibility)
-    CampfireWidget?: any;
+    CampfireWidget?: unknown;
 
     // Widget accessed via window.Helper
     Helper?: CampfireWidgetSDK;

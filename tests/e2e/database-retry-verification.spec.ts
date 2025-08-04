@@ -51,7 +51,7 @@ async function verifyMessageInDatabase(page: Page, messageText: string): Promise
       const data = await res.json();
       
       if (data.success && data.messages) {
-        const foundMessage = data.messages.find((msg: any) => 
+        const foundMessage = data.messages.find((msg: unknown) => 
           msg.content && msg.content.includes(messageText)
         );
         return { found: !!foundMessage, messageData: foundMessage };

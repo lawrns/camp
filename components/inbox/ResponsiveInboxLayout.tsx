@@ -13,6 +13,7 @@ import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/Opti
 import { Button } from "@/components/ui/Button-unified";
 import { useCollapsiblePanels } from "@/hooks/useCollapsiblePanels";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useResponsiveLayout } from "@/hooks/useIsMobile";
 import { cn } from "@/lib/utils";
 import { MobileInboxLayout } from "./MobileInboxLayout";
 
@@ -50,38 +51,21 @@ export function ResponsiveInboxLayout({
   sidebarWidth = 320,
   className,
 }: ResponsiveInboxLayoutProps) {
-  const [windowWidth, setWindowWidth] = useState(() => {
-    // Set initial width to avoid loading state on client
-    if (typeof window !== "undefined") {
-      return window.innerWidth;
-    }
-    return 1200; // Default to desktop size during SSR
-  });
   const [isConversationListCollapsed, setIsConversationListCollapsed] = useState(false);
   const [isDetailsPanelCollapsed, setIsDetailsPanelCollapsed] = useState(false);
 
-  // Single source of truth for screen size
-  useEffect(() => {
-    const updateWidth = () => setWindowWidth(window.innerWidth);
-    updateWidth(); // Set initial value
+  // Use SSR-safe responsive layout hook
+  const layoutType = useResponsiveLayout();
 
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
-  // Determine layout based on window width with improved mobile detection
-  const layoutType = useMemo(() => {
-    if (windowWidth <= 768) return "mobile";
-    if (windowWidth <= 1024) return "tablet";
-    return "desktop";
-  }, [windowWidth]);
+  // Default to desktop during SSR/initial render
+  const safeLayoutType = layoutType || "desktop";
 
   // Enhanced mobile detection for better touch support
-  const isMobile = layoutType === "mobile";
-  const isTablet = layoutType === "tablet";
+  const isMobile = safeLayoutType === "mobile";
+  const isTablet = safeLayoutType === "tablet";
 
   // Mobile layout with enhanced touch support
-  if (layoutType === "mobile") {
+  if (safeLayoutType === "mobile") {
     return (
       <div className="h-full w-full overflow-hidden">
         <MobileInboxLayout

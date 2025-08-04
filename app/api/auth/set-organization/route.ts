@@ -45,8 +45,22 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (membershipError || !membership) {
+      console.warn('Organization membership check failed:', {
+        userId: user.id,
+        organizationId,
+        membershipError: membershipError?.message,
+        hasMembership: !!membership
+      });
+
       return NextResponse.json(
-        { error: 'User is not a member of this organization' },
+        {
+          error: 'User is not a member of this organization',
+          details: {
+            userId: user.id,
+            organizationId,
+            reason: membershipError?.message || 'No active membership found'
+          }
+        },
         { status: 403 }
       );
     }

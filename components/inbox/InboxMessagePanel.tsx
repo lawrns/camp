@@ -137,7 +137,7 @@ export function InboxMessagePanel({
     const groups: Array<{
       id: string;
       messages: typeof messages;
-      sender_type: string;
+      senderType: string;
       timestamp: Date;
     }> = [];
 
@@ -145,8 +145,8 @@ export function InboxMessagePanel({
       const prevMessage = messages[index - 1];
       const createdAt = message.createdAt || message.created_at;
       const prevCreatedAt = prevMessage?.createdAt || prevMessage?.created_at;
-      const senderType = message.senderType || message.sender_type;
-      const prevSenderType = prevMessage?.senderType || prevMessage?.sender_type;
+      const senderType = message.senderType || message.senderType;
+      const prevSenderType = prevMessage?.senderType || prevMessage?.senderType;
 
       const timeDiff =
         prevMessage && createdAt && prevCreatedAt
@@ -160,7 +160,7 @@ export function InboxMessagePanel({
         groups.push({
           id: `group-${message.id}`,
           messages: [message],
-          sender_type: senderType || "unknown",
+          senderType: senderType || "unknown",
           timestamp: new Date(createdAt || new Date()),
         });
       }
@@ -190,7 +190,7 @@ export function InboxMessagePanel({
           <div className="flex items-center gap-ds-2">
             <span className="text-tiny font-medium text-[var(--fl-color-text-muted)]">AI Assistant is typing</span>
             <div className="flex gap-1">
-              {[0, 1, 2].map((i: any) => (
+              {[0, 1, 2].map((i: unknown) => (
                 <OptimizedMotion.div
                   key={i}
                   className="h-1.5 w-1.5 rounded-ds-full bg-neutral-400"
@@ -388,7 +388,7 @@ export function InboxMessagePanel({
               exit={{ opacity: 0 }}
               className="space-y-3 py-4"
             >
-              {[0, 1, 2, 3].map((i: any) => (
+              {[0, 1, 2, 3].map((i: unknown) => (
                 <MessageSkeleton key={i} index={i} />
               ))}
             </OptimizedMotion.div>
@@ -421,9 +421,9 @@ export function InboxMessagePanel({
           ) : (
             <div className="space-y-6 py-4">
               {groupedMessages.map((group, groupIndex) => {
-                const isCustomerGroup = group.sender_type === "customer" || group.sender_type === "visitor";
-                const isAgentGroup = group.sender_type === "agent";
-                const isSystemGroup = group.sender_type === "internal_note";
+                const isCustomerGroup = group.senderType === "customer" || group.senderType === "visitor";
+                const isAgentGroup = group.senderType === "agent";
+                const isSystemGroup = group.senderType === "internal_note";
 
                 // Show date separator for first group or if significant time passed
                 const showDateSeparator =
@@ -478,13 +478,13 @@ export function InboxMessagePanel({
                               src={
                                 group.messages[0]?.sender_avatar_url ||
                                 getAvatarUrl(
-                                  group.messages[0]?.sender_email || group.messages[0]?.sender_name || "Customer"
+                                  group.messages[0]?.senderEmail || group.messages[0]?.senderName || "Customer"
                                 )
                               }
-                              name={group.messages[0]?.sender_name || "Customer"}
+                              name={group.messages[0]?.senderName || "Customer"}
                             >
                               <AvatarFallback>
-                                {(group.messages[0]?.sender_name || "C").charAt(0).toUpperCase()}
+                                {(group.messages[0]?.senderName || "C").charAt(0).toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
                           </OptimizedMotion.div>

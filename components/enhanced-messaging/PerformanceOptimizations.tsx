@@ -19,7 +19,7 @@ export const MemoizedMessage = memo(function MemoizedMessage({
   isOwn,
   onAction
 }: {
-  message: any;
+  message: unknown;
   isOwn: boolean;
   onAction: (action: string, messageId: string) => void;
 }) {
@@ -50,7 +50,7 @@ export function VirtualizedMessageList({
   hasMore = false,
   className
 }: {
-  messages: any[];
+  messages: unknown[];
   height?: number;
   itemHeight?: number | ((index: number) => number);
   overscan?: number;
@@ -63,7 +63,7 @@ export function VirtualizedMessageList({
 
   // Throttled scroll handler for load more
   const handleScroll = useCallback(
-    throttle(({ scrollOffset, scrollUpdateWasRequested }: any) => {
+    throttle(({ scrollOffset, scrollUpdateWasRequested }: unknown) => {
       if (!scrollUpdateWasRequested && hasMore && !isLoadingMore && scrollOffset < 100) {
         setIsLoadingMore(true);
         onLoadMore?.();
@@ -101,7 +101,7 @@ export function VirtualizedMessageList({
   if (typeof itemHeight === 'function') {
     return (
       <VariableSizeList
-        ref={listRef as any}
+        ref={listRef as unknown}
         height={height}
         itemCount={messages.length}
         itemSize={itemHeight}
@@ -273,7 +273,7 @@ const LazyEmojiPicker = lazy(() =>
   }))
 );
 
-export function LazyEmojiPickerWrapper(props: any) {
+export function LazyEmojiPickerWrapper(props: unknown) {
   return (
     <Suspense fallback={<div className="h-96 w-80 bg-gray-100 animate-pulse rounded-lg" />}>
       <LazyEmojiPicker {...props} />
@@ -372,7 +372,7 @@ export function useMessageCache(maxSize = 1000) {
     return value;
   }, []);
 
-  const set = useCallback((key: string, value: any) => {
+  const set = useCallback((key: string, value: unknown) => {
     // Remove if already exists
     if (cache.current.has(key)) {
       const index = accessOrder.current.indexOf(key);

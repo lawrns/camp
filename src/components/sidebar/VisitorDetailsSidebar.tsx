@@ -133,7 +133,7 @@ function MapPreview({ location }: { location: VisitorData["location"] }) {
       ) : (
         <div className="flex h-full items-center justify-center">
           <div className="text-center">
-            <Icon icon={Icons.mapPin as any} className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+            <Icon icon={Icons.mapPin as unknown} className="mx-auto mb-2 h-8 w-8 text-gray-400" />
             <p className="text-sm text-[var(--fl-color-text-muted)] dark:text-gray-400">
               {location.city}, {location.country}
             </p>
@@ -191,7 +191,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
               <AvatarFallback className="text-status-info-dark bg-[var(--fl-color-info-subtle)] text-lg font-semibold">
                 {visitor.name
                   .split(" ")
-                  .map((n: any) => n[0])
+                  .map((n: unknown) => n[0])
                   .join("")
                   .substring(0, 2)
                   .toUpperCase()}
@@ -202,11 +202,11 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
             <div className="absolute -bottom-1 -right-1">
               {visitor.isOnline ? (
                 <div className="bg-semantic-success flex h-5 w-5 items-center justify-center rounded-ds-full border-2 border-white dark:border-neutral-900">
-                  <Icon icon={Icons.wifi as any} className="h-2.5 w-2.5 text-white" />
+                  <Icon icon={Icons.wifi as unknown} className="h-2.5 w-2.5 text-white" />
                 </div>
               ) : (
                 <div className="flex h-5 w-5 items-center justify-center rounded-ds-full border-2 border-white bg-neutral-400 dark:border-neutral-900">
-                  <Icon icon={Icons.wifiOff as any} className="h-2.5 w-2.5 text-white" />
+                  <Icon icon={Icons.wifiOff as unknown} className="h-2.5 w-2.5 text-white" />
                 </div>
               )}
             </div>
@@ -217,7 +217,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
           {/* Location and Local Time */}
           <div className="mb-3 flex items-center gap-ds-2 text-sm text-muted-foreground">
-            <Icon icon={Icons.mapPin as any} className="h-4 w-4" />
+            <Icon icon={Icons.mapPin as unknown} className="h-4 w-4" />
             <span>
               {visitor.location.city}, {visitor.location.country}
             </span>
@@ -225,7 +225,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
           {visitor.localTime && (
             <Badge variant="secondary" className="text-tiny">
-              <Icon icon={Icons.clock as any} className="mr-1 h-3 w-3" />
+              <Icon icon={Icons.clock as unknown} className="mr-1 h-3 w-3" />
               {visitor.localTime}
             </Badge>
           )}
@@ -264,7 +264,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
               {visitor.company && (
                 <div className="flex items-center gap-ds-2">
-                  <Icon icon={Icons.monitor as any} className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <Icon icon={Icons.monitor as unknown} className="mr-2 h-4 w-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium text-primary">{visitor.company}</p>
                     {visitor.role && <p className="text-tiny text-muted-foreground">{visitor.role}</p>}
@@ -274,7 +274,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
               {visitor.phone && (
                 <div className="flex items-center gap-ds-2">
-                  <Icon icon={Icons.smartphone as any} className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <Icon icon={Icons.smartphone as unknown} className="mr-2 h-4 w-4 text-muted-foreground" />
                   <p className="text-sm text-primary">{visitor.phone}</p>
                 </div>
               )}
@@ -295,7 +295,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Customer Value Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Customer Value" icon={Icons.building as any}>
+          <AccordionSection title="Customer Value" icon={Icons.building as unknown}>
             <div className="space-y-3">
               {visitor.sessions && (
                 <div>
@@ -319,7 +319,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Technical Information Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Technical Information" icon={Icons.globe as any}>
+          <AccordionSection title="Technical Information" icon={Icons.globe as unknown}>
             <div className="space-y-3">
               <div className="flex items-center gap-ds-2">
                 <Icon name={DeviceIcon} className="h-4 w-4 text-muted-foreground" />
@@ -347,7 +347,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Conversation Insights Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Recent Activity" icon={Icons.messageSquare as any}>
+          <AccordionSection title="Recent Activity" icon={Icons.messageSquare as unknown}>
             <div className="space-y-spacing-sm">
               {/* Visited Pages */}
               <div className="mb-4">
@@ -378,7 +378,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
                   Previous Conversations
                 </h4>
                 {visitor.previousConversations && visitor.previousConversations.length > 0 ? (
-                  visitor.previousConversations.slice(0, 3).map((conversation: any) => (
+                  visitor.previousConversations.slice(0, 3).map((conversation: unknown) => (
                     <div key={conversation.id} className="mb-2 rounded-ds-md bg-background p-spacing-sm">
                       <p className="truncate text-sm font-medium text-primary">{conversation.subject}</p>
                       <div className="mt-1 flex items-center justify-between">

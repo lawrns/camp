@@ -9,15 +9,15 @@ import { mailboxProcedure } from "@/trpc/router/mailbox/procedure";
 // } from "@/lib/infrastructure/email"; // Module not found
 
 // Simple fallbacks for Gmail support email functions
-const getGmailSupportEmailInfo = async (mailbox: any) => {
+const getGmailSupportEmailInfo = async (mailbox: unknown) => {
   return { mailbox, info: null };
 };
 
-const createGmailSupportEmailEntry = async (mailbox: any, input: any) => {
+const createGmailSupportEmailEntry = async (mailbox: unknown, input: unknown) => {
   return { mailbox, input, created: true };
 };
 
-const deleteGmailSupportEmailEntry = async (mailbox: any) => {
+const deleteGmailSupportEmailEntry = async (mailbox: unknown) => {
   return { mailbox, deleted: true };
 };
 

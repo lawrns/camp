@@ -11,7 +11,7 @@ interface Notification {
   read: boolean;
   priority: "low" | "medium" | "high" | "urgent";
   actionUrl?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface NotificationSettings {
@@ -71,7 +71,7 @@ export function useNotifications(): UseNotificationsReturn {
         const response = await fetch("/api/notifications", {
           ...(signal !== undefined && { signal }),
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
         });
@@ -105,7 +105,7 @@ export function useNotifications(): UseNotificationsReturn {
         const response = await fetch("/api/notifications/settings", {
           ...(signal !== undefined && { signal }),
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
         });
@@ -232,7 +232,7 @@ export function useNotifications(): UseNotificationsReturn {
         const response = await fetch(`/api/notifications/${notificationId}/read`, {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
         });
@@ -241,7 +241,7 @@ export function useNotifications(): UseNotificationsReturn {
           throw new Error("Failed to mark notification as read");
         }
 
-        setNotifications((prev) => prev.map((n: any) => (n.id === notificationId ? { ...n, read: true } : n)));
+        setNotifications((prev) => prev.map((n: unknown) => (n.id === notificationId ? { ...n, read: true } : n)));
       } catch (err) {
         toast({
           title: "Error",
@@ -262,7 +262,7 @@ export function useNotifications(): UseNotificationsReturn {
       const response = await fetch("/api/notifications/read-all", {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+          Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
           "Content-Type": "application/json",
         },
       });
@@ -271,7 +271,7 @@ export function useNotifications(): UseNotificationsReturn {
         throw new Error("Failed to mark all notifications as read");
       }
 
-      setNotifications((prev) => prev.map((n: any) => ({ ...n, read: true })));
+      setNotifications((prev) => prev.map((n: unknown) => ({ ...n, read: true })));
 
       toast({
         title: "Success",
@@ -296,7 +296,7 @@ export function useNotifications(): UseNotificationsReturn {
         const response = await fetch(`/api/notifications/${notificationId}`, {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
         });
@@ -305,7 +305,7 @@ export function useNotifications(): UseNotificationsReturn {
           throw new Error("Failed to delete notification");
         }
 
-        setNotifications((prev) => prev.filter((n: any) => n.id !== notificationId));
+        setNotifications((prev) => prev.filter((n: unknown) => n.id !== notificationId));
 
         toast({
           title: "Success",
@@ -332,7 +332,7 @@ export function useNotifications(): UseNotificationsReturn {
         const response = await fetch("/api/notifications/settings", {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newSettings),

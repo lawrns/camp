@@ -120,7 +120,7 @@ export async function testTypingIndicatorSubscription() {
         schema: "public",
         table: "typing_indicators",
         filter: `conversation_id=eq.${testData.conversationId}`,
-      }, (payload: any) => {
+      }, (payload: unknown) => {
         console.log('✅ REAL-TIME: Received typing indicator INSERT:', payload);
       })
       .on("postgres_changes", {
@@ -128,7 +128,7 @@ export async function testTypingIndicatorSubscription() {
         schema: "public",
         table: "typing_indicators",
         filter: `conversation_id=eq.${testData.conversationId}`,
-      }, (payload: any) => {
+      }, (payload: unknown) => {
         console.log('✅ REAL-TIME: Received typing indicator UPDATE:', payload);
       })
       .on("postgres_changes", {
@@ -136,7 +136,7 @@ export async function testTypingIndicatorSubscription() {
         schema: "public",
         table: "typing_indicators",
         filter: `conversation_id=eq.${testData.conversationId}`,
-      }, (payload: any) => {
+      }, (payload: unknown) => {
         console.log('✅ REAL-TIME: Received typing indicator DELETE:', payload);
       });
 
@@ -196,9 +196,9 @@ export async function runTypingIndicatorTests() {
  * Make test available globally for browser console testing
  */
 if (typeof window !== 'undefined') {
-  (window as any).testTypingIndicators = runTypingIndicatorTests;
-  (window as any).testWidgetTypingAPI = testWidgetTypingAPI;
-  (window as any).testTypingSubscription = testTypingIndicatorSubscription;
+  (window as unknown).testTypingIndicators = runTypingIndicatorTests;
+  (window as unknown).testWidgetTypingAPI = testWidgetTypingAPI;
+  (window as unknown).testTypingSubscription = testTypingIndicatorSubscription;
   console.log('🧪 Typing indicator tests available:');
   console.log('  - window.testTypingIndicators() - Run all tests');
   console.log('  - window.testWidgetTypingAPI() - Test API only');

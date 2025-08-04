@@ -20,7 +20,7 @@ interface MessageNotificationOptions {
   organizationId: string;
   enabled?: boolean;
   soundUrl?: string | undefined;
-  onNewMessage?: (message: any) => void;
+  onNewMessage?: (message: unknown) => void;
 }
 
 export function useMessageNotifications({
@@ -67,7 +67,7 @@ export function useMessageNotifications({
         table: "messages",
         filter: conversationId ? `conversation_id=eq.${conversationId}` : `organization_id=eq.${organizationId}`,
       },
-      async (payload: any) => {
+      async (payload: unknown) => {
         const newMessage = payload.new;
 
         // Skip if this is the initial load
@@ -83,12 +83,12 @@ export function useMessageNotifications({
         }
 
         // Skip if the message is from the current user (agent)
-        if (newMessage.sender_id === userId) {
+        if (newMessage.senderId === userId) {
           return;
         }
 
         // Skip if the message is from another agent
-        if (newMessage.sender_type === "agent" || newMessage.sender_type === "bot") {
+        if (newMessage.senderType === "agent" || newMessage.senderType === "bot") {
           return;
         }
 

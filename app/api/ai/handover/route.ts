@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
 import { aiHandoverService } from '@/lib/ai/handover';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
-import { validateOrganizationAccess } from '@/lib/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
       handoverType = 'agent_to_ai', // New: handover type
       confidenceThreshold = 0.8 // New: confidence threshold
     } = body;
-    
+
     if (!conversationId || !organizationId) {
       return NextResponse.json(
         { error: 'Conversation ID and Organization ID are required' },
@@ -33,11 +32,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createServiceRoleClient();
+    // Create authenticated Supabase client
+    const supabase = await createClient();
 
-    // Validate organization access
-    const hasAccess = await validateOrganizationAccess(supabase, organizationId);
-    if (!hasAccess) {
+    // Get current user and validate authentication
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    // Validate user has access to the organization
+    const { data: membership, error: membershipError } = await supabase
+      .from('organization_members')
+      .select('id, role, status')
+      .eq('user_id', user.id)
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .single();
+
+    if (membershipError || !membership) {
+      console.warn('AI Handover: User not member of organization:', {
+        userId: user.id,
+        organizationId,
+        membershipError: membershipError?.message
+      });
       return NextResponse.json(
         { error: 'Unauthorized access to organization' },
         { status: 403 }
@@ -85,8 +107,8 @@ export async function POST(request: NextRequest) {
         organizationId,
         customerId: context?.customerId,
         customerName: context?.customerName,
-        customerEmail: context?.customerEmail || conversation.customer_email,
-        aiPersonality: AI_PERSONALITIES.HELPFUL,
+        customerEmail: context?.customerEmail || conversation.customerEmail,
+        aiPersonality: AI_PERSONALITIES.alex || AI_PERSONALITIES.jordan,
         messageHistory,
         currentIssue: {
           category: context?.category || 'general',
@@ -196,7 +218,34 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const supabase = createServiceRoleClient();
+    // Create authenticated Supabase client
+    const supabase = await createClient();
+
+    // Get current user and validate authentication
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    // Validate user has access to the organization
+    const { data: membership, error: membershipError } = await supabase
+      .from('organization_members')
+      .select('id, role, status')
+      .eq('user_id', user.id)
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .single();
+
+    if (membershipError || !membership) {
+      return NextResponse.json(
+        { error: 'Unauthorized access to organization' },
+        { status: 403 }
+      );
+    }
 
     // Get handover status
     const { data: handovers, error: handoverError } = await supabase

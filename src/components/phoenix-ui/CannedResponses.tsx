@@ -22,8 +22,8 @@ export function CannedResponses({ responses, onSelect, visible = true }: CannedR
   const handleSelect = (response: CannedResponse) => {
     onSelect(response.text);
     // Track usage for metrics
-    if ((window as any).analytics) {
-      (window as any).analytics.track("canned_response:button", {
+    if ((window as unknown).analytics) {
+      (window as unknown).analytics.track("canned_response:button", {
         responseId: response.id,
         shortcut: response.shortcut,
       });

@@ -70,7 +70,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
           const data = await response.json();
           if (data.success && data.activities) {
             // ACTIVATED: Handle real activities from enhanced API
-            const formattedActivities = data.activities.map((activity: any) => ({
+            const formattedActivities = data.activities.map((activity: unknown) => ({
               id: activity.id,
               type: activity.type,
               action: activity.action,
@@ -199,7 +199,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
         <ScrollArea className="h-40">
           <div className="space-y-spacing-sm">
             <OptimizedAnimatePresence>
-              {activities.slice(0, 5).map((activity: any) => {
+              {activities.slice(0, 5).map((activity: unknown) => {
                 const Icon = getActivityIcon(activity.type);
 
                 return (
@@ -267,7 +267,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                   description="Activity will appear here as your team interacts with customers."
                 />
               ) : (
-                activities.map((activity: any) => {
+                activities.map((activity: unknown) => {
                   const Icon = getActivityIcon(activity.type);
                   const colorClass = getActivityColor(activity.type, activity.metadata?.priority);
 
@@ -285,7 +285,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                           <AvatarFallback className="bg-brand-50 text-tiny text-brand-700">
                             {activity.user.name
                               .split(" ")
-                              .map((n: any) => n[0])
+                              .map((n: unknown) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>

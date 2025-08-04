@@ -18,8 +18,8 @@ export interface WidgetAuthContext {
     visitorId?: string;
     conversationId?: string;
   } | null;
-  session: any;
-  supabaseClient: any;
+  session: unknown;
+  supabaseClient: unknown;
 }
 
 /**
@@ -64,7 +64,7 @@ async function extractSessionFromHeader(request: NextRequest): Promise<any> {
       return {
         access_token: token,
         user,
-        expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
+        expiresAt: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
       };
     }
 

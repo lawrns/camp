@@ -70,7 +70,7 @@ export async function createTicket(params: TicketCreationParams): Promise<Ticket
           description: validated.description,
           priority: validated.priority,
           category: validated.category,
-          customer_email: validated.customerEmail,
+          customerEmail: validated.customerEmail,
           status: "open",
           source: "ai_automatic",
           metadata: {

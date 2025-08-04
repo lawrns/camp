@@ -325,7 +325,7 @@ class AIHandoverService {
 
   private async generateConversationSummary(messages: unknown[]): Promise<string> {
     // Simple summary generation
-    const userMessages = messages.filter((m) => (m as any).role === "user");
+    const userMessages = messages.filter((m) => (m as unknown).role === "user");
     const lastFewMessages = userMessages.slice(-3);
 
     if (lastFewMessages.length === 0) {
@@ -333,7 +333,7 @@ class AIHandoverService {
     }
 
     const topics = lastFewMessages
-      .map((m) => (m as any).content)
+      .map((m) => (m as unknown).content)
       .join(" ")
       .split(/\s+/)
       .filter((word) => word.length > 5)
@@ -364,7 +364,7 @@ class AIHandoverService {
     if (reason === HandoverReason.SENTIMENT_NEGATIVE) {
       actions.push("Acknowledge customer frustration");
       actions.push("Offer immediate assistance");
-      if ((sentiment as any).urgency === "high") {
+      if ((sentiment as unknown).urgency === "high") {
         actions.push("Expedite resolution");
       }
     }
@@ -395,7 +395,7 @@ class AIHandoverService {
   }
 
   private calculateDuration(conversation: unknown): number {
-    const typedConversation = conversation as any;
+    const typedConversation = conversation as unknown;
     if (!typedConversation.messages || typedConversation.messages.length < 2) {
       return 0;
     }

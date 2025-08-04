@@ -69,7 +69,7 @@ export function useReadReceipts({
       // Transform data into read receipt format
       const receiptData: ReadReceiptData = {};
 
-      receipts?.forEach((receipt: any) => {
+      receipts?.forEach((receipt: unknown) => {
         const messageId = receipt.message_id.toString();
         if (!receiptData[messageId]) {
           receiptData[messageId] = {
@@ -282,7 +282,7 @@ export function useReadReceipts({
     channelRef.current = supabaseClient.channel(channelName);
 
     // Subscribe to read receipt events
-    channelRef.current.on("broadcast", { event: "read_receipt" }, (payload: any) => {
+    channelRef.current.on("broadcast", { event: "read_receipt" }, (payload: unknown) => {
       const { messageId, readBy, readAt } = payload.payload;
 
       setReadReceipts((prev) => ({

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCampfireClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
 import { aiHandoverService } from '@/lib/ai/handover';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 
@@ -11,18 +11,47 @@ export async function POST(
     const conversationId = params.id;
     const body = await request.json();
     const { organizationId, reason, context } = body;
-    
+
     if (!conversationId) {
       return NextResponse.json(
         { error: 'Conversation ID is required' },
         { status: 400 }
       );
     }
-    
+
     if (!organizationId) {
       return NextResponse.json(
         { error: 'Organization ID is required' },
         { status: 400 }
+      );
+    }
+
+    // Create authenticated Supabase client
+    const supabase = await createClient();
+
+    // Get current user and validate authentication
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    // Validate user has access to the organization
+    const { data: membership, error: membershipError } = await supabase
+      .from('organization_members')
+      .select('id, role, status')
+      .eq('user_id', user.id)
+      .eq('organization_id', organizationId)
+      .eq('status', 'active')
+      .single();
+
+    if (membershipError || !membership) {
+      return NextResponse.json(
+        { error: 'Unauthorized access to organization' },
+        { status: 403 }
       );
     }
     
@@ -33,7 +62,7 @@ export async function POST(
       customerId: context?.customerId,
       customerName: context?.customerName,
       customerEmail: context?.customerEmail,
-      aiPersonality: AI_PERSONALITIES.HELPFUL,
+      aiPersonality: AI_PERSONALITIES.alex || AI_PERSONALITIES.jordan,
       messageHistory: context?.messageHistory || [],
       currentIssue: {
         category: context?.category || 'general',

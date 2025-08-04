@@ -232,7 +232,7 @@ const characterLength = ({
   return (
     (system?.length ?? 0) +
     (prompt?.length ?? 0) +
-    (messages?.reduce((total: any, message: unknown) => total + message.content.length, 0) ?? 0)
+    (messages?.reduce((total: unknown, message: unknown) => total + message.content.length, 0) ?? 0)
   );
 };
 

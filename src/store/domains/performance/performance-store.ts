@@ -243,7 +243,7 @@ export const usePerformanceStore = create<PerformanceStore>()(
 
             if (times.length === 0) return 0;
 
-            const sum = times.reduce((acc: any, time: any) => acc + time, 0);
+            const sum = times.reduce((acc: unknown, time: unknown) => acc + time, 0);
             return Math.round(sum / times.length);
           },
 

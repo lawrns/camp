@@ -34,7 +34,7 @@ export interface HumanLikePipelineInput {
   senderId?: string;
 
   // Context
-  conversationHistory?: Array<{ content: string; sender_type: string; created_at?: string }>;
+  conversationHistory?: Array<{ content: string; senderType: string; created_at?: string }>;
   organizationPersona?: string;
   conversationSubject?: string;
 
@@ -105,12 +105,12 @@ export class HumanLikeAIPipeline {
     const startTime = Date.now();
     const processingDetails = {
       enabled: false,
-      sentimentAnalysis: null as any,
-      toneAdaptation: null as any,
-      contentFiltering: null as any,
-      personalization: null as any,
-      typingSimulation: null as any,
-      typoInjection: null as any,
+      sentimentAnalysis: null as unknown,
+      toneAdaptation: null as unknown,
+      contentFiltering: null as unknown,
+      personalization: null as unknown,
+      typingSimulation: null as unknown,
+      typoInjection: null as unknown,
     };
 
     try {
@@ -345,14 +345,14 @@ export class HumanLikeAIPipeline {
    */
   private async generateAIResponse(
     input: HumanLikePipelineInput,
-    toneContext: any
+    toneContext: unknown
   ): Promise<{ success: boolean; content: string; confidence: number; tokensUsed: number; error?: string }> {
     try {
       // Build conversation history
       const conversationHistory = (input.conversationHistory || [])
         .slice(-8) // Last 8 messages for context
         .map((msg: unknown) => ({
-          role: msg.sender_type === "visitor" || msg.sender_type === "customer" ? "user" : "assistant",
+          role: msg.senderType === "visitor" || msg.senderType === "customer" ? "user" : "assistant",
           content: msg.content,
         }));
 
@@ -392,7 +392,7 @@ export class HumanLikeAIPipeline {
    */
   private async processStandardAI(
     input: HumanLikePipelineInput,
-    processingDetails: any,
+    processingDetails: unknown,
     startTime: number
   ): Promise<HumanLikePipelineResult> {
     // This would implement the standard AI processing logic
@@ -416,7 +416,7 @@ export class HumanLikeAIPipeline {
     content: string,
     confidence: number,
     tokensUsed: number,
-    processingDetails: any,
+    processingDetails: unknown,
     startTime: number
   ): Promise<HumanLikePipelineResult> {
     // Implementation would save message and broadcast
@@ -521,7 +521,7 @@ export class HumanLikeAIPipeline {
         payload: {
           ...progress,
           timestamp: new Date().toISOString(),
-          sender_type: "ai_assistant",
+          senderType: "ai_assistant",
         },
       });
     } catch (error) {

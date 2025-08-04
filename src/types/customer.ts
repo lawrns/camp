@@ -143,7 +143,7 @@ export interface SegmentFilter {
     | "between"
     | "in"
     | "not_in";
-  value: any;
+  value: unknown;
   data_type: "string" | "number" | "boolean" | "date" | "array";
 }
 

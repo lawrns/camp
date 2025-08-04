@@ -5,12 +5,12 @@ import { mailboxProcedure } from "./procedure";
 // import { acceptFaqEdit, createFaq, deleteFaq, getFaq, listFaqs, rejectFaqEdit, updateFaq } from "@/lib/core/knowledge"; // Module not found
 
 // Simple fallbacks for knowledge functions
-const acceptFaqEdit = async (mailbox: any, id: number, content?: string) => ({ mailbox, id, content, accepted: true });
+const acceptFaqEdit = async (mailbox: unknown, id: number, content?: string) => ({ mailbox, id, content, accepted: true });
 const createFaq = async (mailboxId: number, content: string) => ({ mailboxId, content, created: true });
 const deleteFaq = async (mailboxId: number, id: number) => ({ mailboxId, id, deleted: true });
 const getFaq = async (mailboxId: number, id: number) => ({ mailboxId, id, faq: null });
 const listFaqs = async (mailboxId: number) => ({ mailboxId, faqs: [] });
-const rejectFaqEdit = async (mailbox: any, id: number) => ({ mailbox, id, rejected: true });
+const rejectFaqEdit = async (mailbox: unknown, id: number) => ({ mailbox, id, rejected: true });
 const updateFaq = async (mailboxId: number, id: number, content?: string, enabled?: boolean) => ({
   mailboxId,
   id,

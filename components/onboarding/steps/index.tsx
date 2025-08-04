@@ -7,7 +7,7 @@ import { Icon } from "@/lib/ui/Icon";
 
 interface StepProps {
   organizationId: string;
-  onComplete: (data?: any) => void;
+  onComplete: (data?: unknown) => void;
   onSkip: () => void;
   onBack?: () => void;
   isLoading?: boolean;

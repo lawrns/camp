@@ -433,13 +433,13 @@ export default function TicketsPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={statusConfig.badge as any} className="capitalize">
+                        <Badge variant={statusConfig.badge as unknown} className="capitalize">
                           <Icon icon={StatusIcon} className="mr-1 h-3 w-3" />
                           {ticket.status.replace('_', ' ')}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={priorityConfig.badge as any} className="capitalize">
+                        <Badge variant={priorityConfig.badge as unknown} className="capitalize">
                           {ticket.priority}
                         </Badge>
                       </TableCell>

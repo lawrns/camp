@@ -4,15 +4,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { useState, useEffect } from 'react';
 
 interface AuthDebugInfo {
-  user: any;
-  session: any;
+  user: unknown;
+  session: unknown;
   isAuthenticated: boolean;
   isLoading: boolean;
-  error: any;
+  error: unknown;
   localStorage: Record<string, any>;
   sessionStorage: Record<string, any>;
   cookies: string;
-  suppressedLogs: any[];
+  suppressedLogs: unknown[];
 }
 
 export function AuthDebugPanel() {
@@ -51,7 +51,7 @@ export function AuthDebugPanel() {
       }
 
       // Get suppressed logs if available
-      const suppressedLogs = (window as any).__SUPPRESSED_LOGS__ || [];
+      const suppressedLogs = (window as unknown).__SUPPRESSED_LOGS__ || [];
 
       setDebugInfo({
         user: auth.user,
@@ -178,8 +178,8 @@ export function AuthDebugPanel() {
                 </button>
                 <button
                   onClick={() => {
-                    if ((window as any).__CONSOLE_DEBUG__) {
-                      (window as any).__CONSOLE_DEBUG__.showSuppressed();
+                    if ((window as unknown).__CONSOLE_DEBUG__) {
+                      (window as unknown).__CONSOLE_DEBUG__.showSuppressed();
                     }
                   }}
                   className="w-full bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700"

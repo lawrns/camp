@@ -33,7 +33,7 @@ export class TrialExpiredEmailService {
       const emailHtml = this.generateTrialExpiredEmailHtml(data);
       const emailText = this.generateTrialExpiredEmailText(data);
 
-      const emailOptions: any = {
+      const emailOptions: unknown = {
         from: this.config.from,
         to: data.adminEmail,
         subject: `${data.organizationName} - Trial Expired`,

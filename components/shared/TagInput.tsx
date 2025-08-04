@@ -60,7 +60,7 @@ export function TagInput({
       {/* Tag Pills */}
       <div className="mb-2 flex flex-wrap gap-1.5">
         <OptimizedAnimatePresence>
-          {tags.map((tag: any) => (
+          {tags.map((tag: unknown) => (
             <OptimizedMotion.span
               key={tag.id}
               initial={{ scale: 0, opacity: 0 }}
@@ -137,7 +137,7 @@ export function TagInput({
                 className="bg-background absolute left-0 top-full z-50 mt-1 w-48 overflow-hidden rounded-ds-lg border border-[var(--fl-color-border)] shadow-card-deep"
               >
                 <div className="max-h-48 overflow-y-auto py-1">
-                  {filteredSuggestions.map((suggestion: any) => (
+                  {filteredSuggestions.map((suggestion: unknown) => (
                     <button
                       key={suggestion.id}
                       onClick={() => {
@@ -194,7 +194,7 @@ export function MessageComposerTags({ className }: { className?: string }) {
             setTags([...tags, newTag]);
           }}
           onRemoveTag={(tagId) => {
-            setTags(tags.filter((t: any) => t.id !== tagId));
+            setTags(tags.filter((t: unknown) => t.id !== tagId));
           }}
           suggestions={tagSuggestions}
           className="ml-2 flex-1"

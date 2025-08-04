@@ -9,7 +9,7 @@ import { assertDefinedOrRaiseNonRetriableError } from "../utils";
 import { createGmailClient, LightweightGmailClient } from "@/lib/gmail/lightweight-client";
 
 // Simple fallback functions for missing modules
-const getGmailService = async (gmailSupportEmail: any): Promise<LightweightGmailClient> => {
+const getGmailService = async (gmailSupportEmail: unknown): Promise<LightweightGmailClient> => {
   // Extract access token from gmailSupportEmail object
   const accessToken = gmailSupportEmail?.accessToken || gmailSupportEmail?.access_token;
 
@@ -20,7 +20,7 @@ const getGmailService = async (gmailSupportEmail: any): Promise<LightweightGmail
   return createGmailClient(accessToken);
 };
 
-const convertConversationMessageToRaw = async (message: any, gmailSupportEmailAddress: string): Promise<string> => {
+const convertConversationMessageToRaw = async (message: unknown, gmailSupportEmailAddress: string): Promise<string> => {
   // Fallback implementation - return a basic email format
   return `To: ${message.emailTo}\nSubject: ${message.conversation.subject}\n\n${message.body}`;
 };
@@ -96,10 +96,10 @@ export const postEmailToGmail = async (emailId: number) => {
   }
 
   try {
-    if (!(email as any).conversation?.email_from) {
+    if (!(email as unknown).conversation?.email_from) {
       return await markFailed(emailId, email.conversationId, "The conversation email_from is missing.");
     }
-    if (!(email as any).conversation?.mailbox?.gmailSupportEmail) {
+    if (!(email as unknown).conversation?.mailbox?.gmailSupportEmail) {
       return await markFailed(emailId, email.conversationId, "The mailbox does not have a connected Gmail account.");
     }
 
@@ -112,37 +112,37 @@ export const postEmailToGmail = async (emailId: number) => {
       orderBy: desc(conversationMessages.createdAt),
     });
 
-    const gmailService = await getGmailService((email as any).conversation.mailbox.gmailSupportEmail);
-    const gmailSupportEmailAddress = (email as any).conversation.mailbox.gmailSupportEmail.email;
+    const gmailService = await getGmailService((email as unknown).conversation.mailbox.gmailSupportEmail);
+    const gmailSupportEmailAddress = (email as unknown).conversation.mailbox.gmailSupportEmail.email;
 
     const rawEmail = await convertConversationMessageToRaw(
       {
         ...email,
-        conversation: { ...(email as any).conversation, email_from: (email as any).conversation.email_from },
+        conversation: { ...(email as unknown).conversation, email_from: (email as unknown).conversation.email_from },
       },
       gmailSupportEmailAddress
     );
     const response = await sendGmailEmail(gmailService, rawEmail, pastThreadEmail?.gmailThreadId ?? null);
-    if ((response as any).status < 200 || (response as any).status >= 300) {
+    if ((response as unknown).status < 200 || (response as unknown).status >= 300) {
       return await markFailed(
         emailId,
         email.conversationId,
-        `Failed to post to Gmail: ${(response as any).statusText}`
+        `Failed to post to Gmail: ${(response as unknown).statusText}`
       );
     }
     const sentEmail = await getMessageMetadataById(
       gmailService,
-      assertDefinedOrRaiseNonRetriableError((response as any).data.id)
+      assertDefinedOrRaiseNonRetriableError((response as unknown).data.id)
     );
     const sentEmailHeaders = sentEmail?.data?.payload?.headers ?? [];
 
     await db
       .update(conversationMessages)
       .set({
-        gmailMessageId: (response as any).data.id,
-        gmailThreadId: (response as any).data.threadId,
-        messageId: sentEmailHeaders.find((header: any) => header.name?.toLowerCase() === "message-id")?.value ?? null,
-        references: sentEmailHeaders.find((header: any) => header.name?.toLowerCase() === "references")?.value ?? null,
+        gmailMessageId: (response as unknown).data.id,
+        gmailThreadId: (response as unknown).data.threadId,
+        messageId: sentEmailHeaders.find((header: unknown) => header.name?.toLowerCase() === "message-id")?.value ?? null,
+        references: sentEmailHeaders.find((header: unknown) => header.name?.toLowerCase() === "references")?.value ?? null,
       })
       .where(eq(conversationMessages.id, emailId));
 

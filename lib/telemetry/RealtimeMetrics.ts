@@ -141,26 +141,26 @@ export class RealtimeMetrics extends EventEmitter {
     const windowStart = now - this.metricsWindow;
 
     // Filter recent messages
-    const recentMessages = Array.from(this.metrics.messages.values()).filter((m: any) => m.timestamp > windowStart);
+    const recentMessages = Array.from(this.metrics.messages.values()).filter((m: unknown) => m.timestamp > windowStart);
 
-    const successfulMessages = recentMessages.filter((m: any) => m.success);
-    const failedMessages = recentMessages.filter((m: any) => !m.success);
+    const successfulMessages = recentMessages.filter((m: unknown) => m.success);
+    const failedMessages = recentMessages.filter((m: unknown) => !m.success);
 
     // Calculate latency statistics
     const sortedLatencies = [...this.metrics.latencies].sort((a, b) => a - b);
     const averageLatency =
-      sortedLatencies.length > 0 ? sortedLatencies.reduce((a: any, b: any) => a + b, 0) / sortedLatencies.length : 0;
+      sortedLatencies.length > 0 ? sortedLatencies.reduce((a: unknown, b: unknown) => a + b, 0) / sortedLatencies.length : 0;
     const p95Latency = sortedLatencies.length > 0 ? sortedLatencies[Math.floor(sortedLatencies.length * 0.95)] || 0 : 0;
     const maxLatency = sortedLatencies.length > 0 ? Math.max(...sortedLatencies) : 0;
 
     // Connection statistics
     const connections = Array.from(this.metrics.connections.values());
-    const activeConnections = connections.filter((c: any) => c.state === "connected").length;
-    const totalReconnections = connections.reduce((sum: any, c: any) => sum + c.reconnections, 0);
+    const activeConnections = connections.filter((c: unknown) => c.state === "connected").length;
+    const totalReconnections = connections.reduce((sum: unknown, c: unknown) => sum + c.reconnections, 0);
     const reconnectionRate = connections.length > 0 ? totalReconnections / connections.length : 0;
 
     // Error rate
-    const recentErrors = this.metrics.errors.filter((e: any) => e.timestamp > windowStart);
+    const recentErrors = this.metrics.errors.filter((e: unknown) => e.timestamp > windowStart);
     const errorRate = recentMessages.length > 0 ? (failedMessages.length / recentMessages.length) * 100 : 0;
 
     // Throughput (messages per second)
@@ -211,7 +211,7 @@ export class RealtimeMetrics extends EventEmitter {
       histogram[label] = 0;
     });
 
-    this.metrics.latencies.forEach((latency: any) => {
+    this.metrics.latencies.forEach((latency: unknown) => {
       for (let i = 0; i < buckets.length; i++) {
         const bucket = buckets[i];
         if (bucket === undefined) continue;
@@ -238,7 +238,7 @@ export class RealtimeMetrics extends EventEmitter {
       error: 0,
     };
 
-    this.metrics.connections.forEach((conn: any) => {
+    this.metrics.connections.forEach((conn: unknown) => {
       if (states[conn.state] !== undefined) states[conn.state]!++;
     });
 

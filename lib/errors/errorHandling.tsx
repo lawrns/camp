@@ -63,7 +63,7 @@ export enum ErrorCode {
 export interface ErrorContext {
   code: ErrorCode;
   message: string;
-  details?: any;
+  details?: unknown;
   timestamp: Date;
   userId?: string;
   organizationId?: string;
@@ -76,7 +76,7 @@ export class CampfireError extends Error {
   public readonly context: ErrorContext;
   public readonly statusCode: number;
 
-  constructor(code: ErrorCode, message: string, statusCode: number = 500, details?: any) {
+  constructor(code: ErrorCode, message: string, statusCode: number = 500, details?: unknown) {
     super(message);
     this.name = "CampfireError";
     this.code = code;
@@ -110,7 +110,7 @@ export class CampfireError extends Error {
   /**
    * Convert to JSON for API responses
    */
-  toJSON(): any {
+  toJSON(): unknown {
     return {
       error: {
         code: this.code,
@@ -185,7 +185,7 @@ export function handleError(error: Error): CampfireError {
   return createError(ErrorCode.UNKNOWN_ERROR, error.message, 500, { originalError: error });
 }
 
-export function createError(code: ErrorCode, message: string, statusCode?: number, details?: any): CampfireError {
+export function createError(code: ErrorCode, message: string, statusCode?: number, details?: unknown): CampfireError {
   return new CampfireError(code, message, statusCode, details);
 }
 
@@ -257,7 +257,7 @@ export function createErrorBoundary(fallbackComponent: React.ComponentType<{ err
 /**
  * Log error to external service
  */
-export function logError(error: Error, context?: any): void {
+export function logError(error: Error, context?: unknown): void {
   const errorData = {
     message: error.message,
     stack: error.stack,
@@ -323,7 +323,7 @@ export async function withRetry<T>(
 /**
  * Validation error helpers
  */
-export function createValidationError(field: string, message: string, value?: any): CampfireError {
+export function createValidationError(field: string, message: string, value?: unknown): CampfireError {
   return createError(ErrorCode.VALIDATION_ERROR, `Validation failed for field '${field}': ${message}`, 400, {
     field,
     value,

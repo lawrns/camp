@@ -33,7 +33,7 @@ export function WidgetSetupStep({ data, onUpdate, onNext, onBack, isLoading }: W
   })();
 </script>`;
 
-  const updateSetting = (key: keyof typeof settings, value: any) => {
+  const updateSetting = (key: keyof typeof settings, value: unknown) => {
     const updated = { ...settings, [key]: value };
     setSettings(updated);
   };

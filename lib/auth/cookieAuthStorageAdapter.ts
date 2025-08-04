@@ -129,6 +129,6 @@ export function createCookieAuthStorageAdapter(): CookieAuthStorageAdapter {
 /**
  * Safe cookie parsing utility function
  */
-export function parseSupabaseCookieValue(cookieValue: string): any {
+export function parseSupabaseCookieValue(cookieValue: string): unknown {
   return parseSupabaseCookie(cookieValue);
 }

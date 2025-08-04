@@ -17,7 +17,7 @@ const TrainingDataBatchSchema = z.object({
 });
 
 class TrainingDataService {
-  static async createTrainingData(input: any, userId: string) {
+  static async createTrainingData(input: unknown, userId: string) {
     return { trainingDataId: "fallback-data", userId };
   }
   static async getTrainingData(mailboxId: number) {
@@ -26,7 +26,7 @@ class TrainingDataService {
   static async searchTrainingData(mailboxId: number, query: string, category?: string) {
     return { mailboxId, query, category, results: [] };
   }
-  static async updateTrainingData(id: number, data: any) {
+  static async updateTrainingData(id: number, data: unknown) {
     return { id, data, updated: true };
   }
   static async deleteTrainingData(id: number) {
@@ -35,7 +35,7 @@ class TrainingDataService {
   static async validateTrainingData(id: number, userId: string, qualityScore: number) {
     return { id, userId, qualityScore, validated: true };
   }
-  static async createBatch(input: any, userId: string) {
+  static async createBatch(input: unknown, userId: string) {
     return { batchId: "batch-123", userId, created: true };
   }
   static async getBatches(mailboxId: number) {
@@ -127,7 +127,7 @@ export const trainingDataRouter = createTRPCRouter({
     }),
 
   bulkDelete: protectedProcedure.input(z.object({ ids: z.array(z.number()) })).mutation(async ({ input }) => {
-    await Promise.all(input.ids.map((id: any) => TrainingDataService.deleteTrainingData(id)));
+    await Promise.all(input.ids.map((id: unknown) => TrainingDataService.deleteTrainingData(id)));
     return { success: true };
   }),
 
@@ -140,7 +140,7 @@ export const trainingDataRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const results = await Promise.all(
-        input.ids.map((id: any) => TrainingDataService.validateTrainingData(id, ctx.user.id, input.qualityScore))
+        input.ids.map((id: unknown) => TrainingDataService.validateTrainingData(id, ctx.user.id, input.qualityScore))
       );
       return results;
     }),

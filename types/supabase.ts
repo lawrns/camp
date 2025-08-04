@@ -235,7 +235,7 @@ export type Database = {
         Row: {
           context_hash: string | null
           created_at: string
-          expires_at: string
+          expiresAt: string
           id: string
           message_hash: string
           organization_id: string
@@ -244,7 +244,7 @@ export type Database = {
         Insert: {
           context_hash?: string | null
           created_at?: string
-          expires_at: string
+          expiresAt: string
           id?: string
           message_hash: string
           organization_id: string
@@ -281,7 +281,7 @@ export type Database = {
           ended_at: string | null
           id: string
           organization_id: string
-          session_metadata: Json | null
+          sessionMetadata: Json | null
           session_type: string
           status: string | null
           updated_at: string | null
@@ -472,20 +472,20 @@ export type Database = {
           assigned_at: string | null
           assigned_to_user_id: string | null
           assignment_metadata: Json | null
-          closed_at: string | null
+          closedAt: string | null
           created_at: string | null
           customer: Json | null
           customer_browser: string | null
           customer_device_type: string | null
-          customer_email: string | null
+          customerEmail: string | null
           customer_id: string | null
           customer_ip: unknown | null
-          customer_name: string | null
+          customerName: string | null
           customer_online: boolean | null
           customer_os: string | null
           customer_verified: boolean | null
           id: string
-          last_message_at: string | null
+          lastMessageAt: string | null
           mailbox_id: number | null
           metadata: Json | null
           organization_id: string
@@ -802,7 +802,7 @@ export type Database = {
           content_type: string | null
           created_at: string | null
           id: string
-          is_active: boolean | null
+          isActive: boolean | null
           is_public: boolean | null
           metadata: Json | null
           organization_id: string
@@ -961,10 +961,10 @@ export type Database = {
           message_type: string | null
           metadata: Json | null
           organization_id: string
-          sender_email: string | null
-          sender_id: string | null
-          sender_name: string | null
-          sender_type: string
+          senderEmail: string | null
+          senderId: string | null
+          senderName: string | null
+          senderType: string
           status: string | null
           updated_at: string | null
         }
@@ -989,7 +989,7 @@ export type Database = {
           sender_email?: string | null
           sender_id?: string | null
           sender_name?: string | null
-          sender_type: string
+          senderType: string
           status?: string | null
           updated_at?: string | null
         }
@@ -1072,7 +1072,7 @@ export type Database = {
       }
       onboarding_completion_tracking: {
         Row: {
-          completed_at: string | null
+          completedAt: string | null
           created_at: string | null
           id: string
           organization_id: string
@@ -1158,7 +1158,7 @@ export type Database = {
           slug: string
           status: string | null
           updated_at: string | null
-          widget_api_key: string | null
+          widgetApiKey: string | null
         }
         Insert: {
           agent_id?: string | null
@@ -1235,10 +1235,10 @@ export type Database = {
           created_at: string | null
           current_chat_count: number | null
           email: string
-          full_name: string | null
+          fullName: string | null
           id: string
           is_online: boolean | null
-          last_seen_at: string | null
+          lastSeenAt: string | null
           max_concurrent_chats: number | null
           metadata: Json | null
           organization_id: string | null
@@ -1303,7 +1303,7 @@ export type Database = {
           organization_id: string
           read_at: string | null
           user_id: string
-          user_type: string
+          userType: string
         }
         Insert: {
           conversation_id: string
@@ -1313,7 +1313,7 @@ export type Database = {
           organization_id: string
           read_at?: string | null
           user_id: string
-          user_type: string
+          userType: string
         }
         Update: {
           conversation_id?: string
@@ -1425,7 +1425,7 @@ export type Database = {
       tickets: {
         Row: {
           assignee_id: string | null
-          closed_at: string | null
+          closedAt: string | null
           conversation_id: string | null
           created_at: string
           customer_id: string | null
@@ -1493,12 +1493,12 @@ export type Database = {
           conversation_id: string
           created_at: string | null
           id: string
-          is_typing: boolean | null
-          last_activity: string | null
+          isTyping: boolean | null
+          lastActivity: string | null
           organization_id: string
           user_id: string
-          user_name: string
-          user_type: string
+          userName: string
+          userType: string
         }
         Insert: {
           conversation_id: string
@@ -1508,8 +1508,8 @@ export type Database = {
           last_activity?: string | null
           organization_id: string
           user_id: string
-          user_name: string
-          user_type: string
+          userName: string
+          userType: string
         }
         Update: {
           conversation_id?: string
@@ -1599,7 +1599,7 @@ export type Database = {
           events: string[]
           headers: Json | null
           id: string
-          is_active: boolean | null
+          isActive: boolean | null
           name: string
           organization_id: string
           retry_count: number | null
@@ -1852,9 +1852,9 @@ export type Database = {
         Returns: {
           id: string
           content: string
-          sender_type: string
-          sender_name: string
-          sender_email: string
+          senderType: string
+          senderName: string
+          senderEmail: string
           message_type: string
           attachments: Json
           created_at: string
@@ -1882,10 +1882,10 @@ export type Database = {
           subject: string
           status: string
           priority: string
-          customer_email: string
-          customer_name: string
+          customerEmail: string
+          customerName: string
           assigned_to_user_id: string
-          last_message_at: string
+          lastMessageAt: string
           created_at: string
           unread_count: number
         }[]

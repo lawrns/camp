@@ -12,12 +12,12 @@ const getPlatformCustomer = async (mailboxId: number, email: string): Promise<an
   return null;
 };
 
-const postVipMessageToSlack = async (params: any): Promise<any> => {
+const postVipMessageToSlack = async (params: unknown): Promise<any> => {
   console.log("postVipMessageToSlack called with:", params);
   return { ts: "123", success: true };
 };
 
-const updateVipMessageInSlack = async (params: any): Promise<void> => {
+const updateVipMessageInSlack = async (params: unknown): Promise<void> => {
   console.log("updateVipMessageInSlack called with:", params);
 };
 

@@ -4,7 +4,7 @@
 import { supabase } from "../supabase";
 
 // Create a singleton lightweight client
-let widgetClient: any = null;
+let widgetClient: unknown = null;
 
 export function createWidgetClient() {
   if (!widgetClient) {

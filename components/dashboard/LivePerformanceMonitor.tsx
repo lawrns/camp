@@ -325,9 +325,9 @@ export function LivePerformanceMonitor({
   // Calculate summary stats
   const summaryStats = useMemo(() => {
     const totalMetrics = metrics.length;
-    const excellentCount = metrics.filter((m: any) => m.status === "excellent").length;
-    const criticalCount = metrics.filter((m: any) => m.status === "critical").length;
-    const warningCount = metrics.filter((m: any) => m.status === "warning").length;
+    const excellentCount = metrics.filter((m: unknown) => m.status === "excellent").length;
+    const criticalCount = metrics.filter((m: unknown) => m.status === "critical").length;
+    const warningCount = metrics.filter((m: unknown) => m.status === "warning").length;
 
     return {
       total: totalMetrics,
@@ -339,7 +339,7 @@ export function LivePerformanceMonitor({
   }, [metrics]);
 
   const handleAlertDismiss = (alertId: string) => {
-    setVisibleAlerts((prev) => prev.filter((a: any) => a.id !== alertId));
+    setVisibleAlerts((prev) => prev.filter((a: unknown) => a.id !== alertId));
     if (onAlertDismiss) {
       onAlertDismiss(alertId);
     }
@@ -433,7 +433,7 @@ export function LivePerformanceMonitor({
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         <OptimizedAnimatePresence mode="popLayout">
-          {metrics.map((metric: any) => (
+          {metrics.map((metric: unknown) => (
             <MetricCard key={metric.id} metric={metric} onClick={() => onMetricClick?.(metric)} />
           ))}
         </OptimizedAnimatePresence>
@@ -461,7 +461,7 @@ export function LivePerformanceMonitor({
 
           <div className="space-y-3">
             <OptimizedAnimatePresence mode="popLayout">
-              {visibleAlerts.map((alert: any) => (
+              {visibleAlerts.map((alert: unknown) => (
                 <AlertCard key={alert.id} alert={alert} onDismiss={() => handleAlertDismiss(alert.id)} />
               ))}
             </OptimizedAnimatePresence>

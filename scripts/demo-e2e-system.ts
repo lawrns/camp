@@ -66,7 +66,7 @@ async function demonstrateE2ESystem() {
   globalE2EMonitor.onTestStart({
     title: 'Demo Bidirectional Communication Test',
     timeout: 30000,
-  } as any);
+  } as unknown);
 
   // Simulate customer to agent message flow
   const messageFlowId = recordFlow(
@@ -193,13 +193,13 @@ async function demonstrateE2ESystem() {
 
   // Complete the test
   globalE2EMonitor.onTestEnd(
-    { title: 'Demo Bidirectional Communication Test' } as any,
+    { title: 'Demo Bidirectional Communication Test' } as unknown,
     {
       status: 'passed',
       duration: 2000,
       error: undefined,
       attachments: [],
-    } as any
+    } as unknown
   );
 
   // Wait for all flows to complete

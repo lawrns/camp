@@ -19,7 +19,7 @@ export interface UseAIHandoverQueueReturn {
   error: string | null;
 
   // Actions
-  triggerHandover: (aiConfidence: number, context?: any, reason?: string) => Promise<void>;
+  triggerHandover: (aiConfidence: number, context?: unknown, reason?: string) => Promise<void>;
   cancelHandover: () => Promise<void>;
 
   // UI helpers
@@ -48,7 +48,7 @@ export function useAIHandoverQueue({
 
   // Handle real-time handover events
   const handleHandoverEvent = useCallback(
-    (payload: any) => {
+    (payload: unknown) => {
 
       if (payload.conversation_id !== conversationId) return;
 
@@ -114,7 +114,7 @@ export function useAIHandoverQueue({
 
   // Trigger handover
   const triggerHandover = useCallback(
-    async (aiConfidence: number, context: any = {}, reason: string = "Low AI confidence") => {
+    async (aiConfidence: number, context: unknown = {}, reason: string = "Low AI confidence") => {
       if (isLoading || handoverStatus?.status === "assigned") {
 
         return;

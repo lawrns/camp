@@ -143,7 +143,7 @@ export const MessageRow: React.FC<MessageRowProps> = ({
             <div className="mt-2 p-2 bg-gray-50 rounded-md">
               <div className="text-xs font-medium text-gray-700 mb-1">AI Sources:</div>
               <div className="space-y-1">
-                {message.aiSources.map((source: any, index: number) => (
+                {message.aiSources.map((source: unknown, index: number) => (
                   <div key={index} className="text-xs text-gray-600">
                     • {source.title || source.url || 'Unknown source'}
                   </div>

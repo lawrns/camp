@@ -71,8 +71,8 @@ function AnimationErrorFallback({ error, resetErrorBoundary, componentName }: An
               <button
                 onClick={() => {
                   // Clear module cache and retry
-                  if (typeof window !== "undefined" && (window as any).__webpack_require__) {
-                    const webpackRequire = (window as any).__webpack_require__;
+                  if (typeof window !== "undefined" && (window as unknown).__webpack_require__) {
+                    const webpackRequire = (window as unknown).__webpack_require__;
                     if (webpackRequire.cache) {
                       Object.keys(webpackRequire.cache).forEach((key) => {
                         if (key.includes("framer-motion") || key.includes("animation")) {
@@ -158,8 +158,8 @@ export function AnimationErrorBoundary({
       onError={handleError}
       onReset={() => {
         // Clear any cached modules on reset
-        if (typeof window !== "undefined" && (window as any).__webpack_require__) {
-          const webpackRequire = (window as any).__webpack_require__;
+        if (typeof window !== "undefined" && (window as unknown).__webpack_require__) {
+          const webpackRequire = (window as unknown).__webpack_require__;
           if (webpackRequire.cache) {
             Object.keys(webpackRequire.cache).forEach((key) => {
               if (key.includes("framer-motion") || key.includes("animation") || key.includes("motion")) {

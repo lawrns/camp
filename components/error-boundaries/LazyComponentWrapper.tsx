@@ -93,10 +93,10 @@ export function createSafeLazyComponent<P extends object>(
         if (retryCount < maxRetries) {
           retryCount++;
           // Clear module cache before retry
-          if (typeof window !== "undefined" && (window as any).__webpack_require__?.cache) {
-            Object.keys((window as any).__webpack_require__.cache).forEach((key) => {
+          if (typeof window !== "undefined" && (window as unknown).__webpack_require__?.cache) {
+            Object.keys((window as unknown).__webpack_require__.cache).forEach((key) => {
               if (key.includes("chunk") || key.includes("lazy")) {
-                delete (window as any).__webpack_require__.cache[key];
+                delete (window as unknown).__webpack_require__.cache[key];
               }
             });
           }

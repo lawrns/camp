@@ -42,11 +42,11 @@ export const GET = withAuth(async (request: NextRequest, context, { user, organi
         user_metadata: user.user_metadata,
         firstName: user.user_metadata?.first_name,
         lastName: user.user_metadata?.last_name,
-        fullName: user.user_metadata?.full_name,
+        fullName: user.user_metadata?.fullName,
       },
       session: {
         isValid: true,
-        expiresAt: user.app_metadata?.expires_at,
+        expiresAt: user.app_metadata?.expiresAt,
       },
     });
 

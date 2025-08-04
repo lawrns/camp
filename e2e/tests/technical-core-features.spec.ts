@@ -114,7 +114,7 @@ test.describe('Technical Core Features', () => {
     console.log(`✅ Found ${await realtimeElements.count()} real-time elements`);
     console.log(`✅ Found ${await scripts.count()} real-time scripts`);
     
-    // Test if the page has any real-time connection indicators
+    // Test if the page has unknown real-time connection indicators
     const connectionIndicators = page.locator('[class*="connection"], [class*="status"], [class*="online"], [class*="offline"]');
     
     console.log('✅ Real-time infrastructure verified');

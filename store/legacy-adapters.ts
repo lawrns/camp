@@ -21,7 +21,7 @@ import { useCampfireStore } from "./unified-campfire-store";
 /**
  * @deprecated Use useCampfireStore with dashboard selectors instead
  */
-export const useDashboardStore = (selector?: any) => {
+export const useDashboardStore = (selector?: unknown) => {
   if (selector) {
     return useCampfireStore((state) => selector(state.dashboard));
   }
@@ -37,9 +37,9 @@ export const useDashboardStore = (selector?: any) => {
 /**
  * Dashboard selectors for backward compatibility
  */
-export const selectDashboardMetrics = (state: any) => state.dashboard.metrics;
-export const selectDashboardLoading = (state: any) => state.dashboard.isLoading;
-export const selectDashboardError = (state: any) => state.dashboard.error;
+export const selectDashboardMetrics = (state: unknown) => state.dashboard.metrics;
+export const selectDashboardLoading = (state: unknown) => state.dashboard.isLoading;
+export const selectDashboardError = (state: unknown) => state.dashboard.error;
 
 // ============================================================================
 // INBOX STORE ADAPTERS (from useInboxStore.ts)
@@ -48,7 +48,7 @@ export const selectDashboardError = (state: any) => state.dashboard.error;
 /**
  * @deprecated Use useCampfireStore with inbox selectors instead
  */
-export const useInboxStore = (selector?: any) => {
+export const useInboxStore = (selector?: unknown) => {
   if (selector) {
     return useCampfireStore((state) => selector(state.inbox));
   }
@@ -103,7 +103,7 @@ export const useStore = useCampfireStore;
 /**
  * @deprecated Use useCampfireStore with UI selectors instead
  */
-export const useUIStore = (selector?: any) => {
+export const useUIStore = (selector?: unknown) => {
   if (selector) {
     return useCampfireStore((state) => selector(state.ui));
   }

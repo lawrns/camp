@@ -10,12 +10,12 @@ import { postSlackMessage } from "@/lib/slack/client";
 import { takeUniqueOrThrow } from "@/lib/utils/arrays";
 
 // Simple fallback functions for missing modules
-const findEnabledKnowledgeBankEntries = async (mailbox: any): Promise<any[]> => {
+const findEnabledKnowledgeBankEntries = async (mailbox: unknown): Promise<any[]> => {
   // Fallback implementation - return empty array
   return [];
 };
 
-const getSuggestedEditButtons = (suggestion: any, messageId: number) => {
+const getSuggestedEditButtons = (suggestion: unknown, messageId: number) => {
   return [
     {
       type: "button",
@@ -113,7 +113,7 @@ export const suggestKnowledgeBankChanges = async (messageId: number, reason: str
     schema: suggestionResponseSchema,
   });
 
-  const typedSuggestion = suggestion as any;
+  const typedSuggestion = suggestion as unknown;
   if (typedSuggestion.action === "create_entry") {
     const newFaq = await db
       .insert(faqs)

@@ -25,7 +25,7 @@ test.describe('Debug Login Page', () => {
     const url = page.url();
     console.log(`Current URL: ${url}`);
 
-    // Check if page has any content
+    // Check if page has unknown content
     const bodyText = await page.locator('body').textContent();
     console.log(`Body text length: ${bodyText?.length || 0}`);
 

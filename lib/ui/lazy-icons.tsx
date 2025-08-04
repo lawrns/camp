@@ -50,9 +50,9 @@ export const LazyIcons = {
 export function createIconBundle<T extends Record<string, () => Promise<any>>>(
   icons: T
 ): { [K in keyof T]: ReturnType<typeof lazyPhosphorIcon> } {
-  const bundle = {} as any;
+  const bundle = {} as unknown;
   for (const [key, importFn] of Object.entries(icons)) {
-    bundle[key] = lazyPhosphorIcon(importFn as any);
+    bundle[key] = lazyPhosphorIcon(importFn as unknown);
   }
   return bundle;
 }

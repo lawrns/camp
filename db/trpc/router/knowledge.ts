@@ -90,7 +90,7 @@ class KnowledgeService {
     };
   }
 
-  async createDocument(mailboxId: string, documentData: any) {
+  async createDocument(mailboxId: string, documentData: unknown) {
     const newDocument = await db
       .insert(knowledgeDocuments)
       .values({
@@ -125,7 +125,7 @@ class KnowledgeService {
     };
   }
 
-  async updateDocument(mailboxId: string, documentId: number, updates: any) {
+  async updateDocument(mailboxId: string, documentId: number, updates: unknown) {
     // Verify document exists and belongs to mailbox
     const existingDocument = await db
       .select()
@@ -221,7 +221,7 @@ class KnowledgeService {
     };
   }
 
-  async createCategory(mailboxId: string, categoryData: any) {
+  async createCategory(mailboxId: string, categoryData: unknown) {
     const newCategory = await db
       .insert(knowledgeCategories)
       .values({
@@ -238,7 +238,7 @@ class KnowledgeService {
     };
   }
 
-  async updateCategory(mailboxId: string, categoryId: number, updates: any) {
+  async updateCategory(mailboxId: string, categoryId: number, updates: unknown) {
     // Verify category exists and belongs to mailbox
     const existingCategory = await db
       .select()
@@ -382,7 +382,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.getDocuments"))
     .query(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as string;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as string;
 
       try {
         return await knowledgeService.listDocuments(validatedMailboxId, {
@@ -407,7 +407,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.getDocument"))
     .query(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as string;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as string;
 
       try {
         return await knowledgeService.getDocument(validatedMailboxId, input.documentId);
@@ -426,7 +426,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent"] }))
     .use(createAuditMiddleware("knowledge.createDocument"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as string;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as string;
       const { user } = ctx;
 
       try {
@@ -455,7 +455,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent"] }))
     .use(createAuditMiddleware("knowledge.updateDocument"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.updateDocument(validatedMailboxId || 1, input.documentId, input.document);
@@ -474,7 +474,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin"] }))
     .use(createAuditMiddleware("knowledge.deleteDocument"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.deleteDocument(validatedMailboxId || 1, input.documentId);
@@ -493,7 +493,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.getCategories"))
     .query(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.listCategories(validatedMailboxId || 1);
@@ -517,7 +517,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent"] }))
     .use(createAuditMiddleware("knowledge.createCategory"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.createCategory(validatedMailboxId || 1, input.category);
@@ -542,7 +542,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent"] }))
     .use(createAuditMiddleware("knowledge.updateCategory"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.updateCategory(validatedMailboxId || 1, input.categoryId, input.category);
@@ -566,7 +566,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin"] }))
     .use(createAuditMiddleware("knowledge.deleteCategory"))
     .mutation(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as number;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as number;
 
       try {
         return await knowledgeService.deleteCategory(validatedMailboxId || 1, input.categoryId);
@@ -593,7 +593,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.searchDocuments"))
     .query(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as string;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as string;
 
       try {
         return await knowledgeService.searchDocuments(validatedMailboxId, input.query, {
@@ -626,7 +626,7 @@ export const knowledgeRouter = createTRPCRouter({
     .use(createMailboxMiddleware({ requiredRoles: ["owner", "admin", "agent", "viewer"] }))
     .use(createAuditMiddleware("knowledge.getAnalytics"))
     .query(async ({ ctx, input }) => {
-      const validatedMailboxId = (ctx as any).validatedMailboxId as string;
+      const validatedMailboxId = (ctx as unknown).validatedMailboxId as string;
 
       try {
         // Get basic analytics

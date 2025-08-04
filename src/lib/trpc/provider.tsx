@@ -29,7 +29,7 @@ function AuthStoreInitializer() {
 
 // CRITICAL FIX: Completely disable DevTools for now to prevent crashes
 // TODO: Properly configure DevTools later
-// let ReactQueryDevtools: any = null;
+// let ReactQueryDevtools: unknown = null;
 // if (process.env.NODE_ENV === 'development') {
 //   try {
 //     ReactQueryDevtools = require('@tanstack/react-query-devtools').ReactQueryDevtools;
@@ -80,7 +80,7 @@ function TokenRefreshHandler({ queryClient }: { queryClient: QueryClient }) {
         if (!currentError && currentSession?.access_token) {
           // Check if current token is valid (not expired)
           const now = Math.floor(Date.now() / 1000);
-          const expiresAt = currentSession.expires_at || 0;
+          const expiresAt = currentSession.expiresAt || 0;
 
           if (expiresAt > now + 60) { // Token valid for at least 1 more minute
             console.log('[tRPC] Current session is valid, using it');

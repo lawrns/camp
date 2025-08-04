@@ -68,7 +68,7 @@ class DatabasePerformanceOptimizer {
   async monitorQuery<T>(
     queryName: string,
     queryFn: () => Promise<T>,
-    context?: { endpoint?: string; params?: any }
+    context?: { endpoint?: string; params?: unknown }
   ): Promise<T> {
     const startTime = performance.now();
     const timestamp = Date.now();
@@ -412,7 +412,7 @@ class DatabasePerformanceOptimizer {
     monitor.recordCounter('db.slow_queries', 1, { query: queryName });
   }
 
-  private extractRowCount(result: any): number | undefined {
+  private extractRowCount(result: unknown): number | undefined {
     if (Array.isArray(result)) {
       return result.length;
     }

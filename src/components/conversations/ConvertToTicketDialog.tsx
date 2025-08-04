@@ -46,7 +46,7 @@ interface ConvertToTicketDialogProps {
     priority?: string;
     category?: string;
   };
-  onConvert: (ticketData: any) => Promise<void>;
+  onConvert: (ticketData: unknown) => Promise<void>;
 }
 
 interface TicketCreationData {
@@ -136,7 +136,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
       setAgents(availableAgents);
     } catch (error) {
       // Retry once if it's an authentication error and we haven't retried yet
-      if (retryCount === 0 && (error as any)?.message?.includes("401")) {
+      if (retryCount === 0 && (error as unknown)?.message?.includes("401")) {
         setTimeout(() => fetchAvailableAgents(1), 500);
         return;
       }
@@ -155,7 +155,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag: any) => tag !== tagToRemove));
+    setTags(tags.filter((tag: unknown) => tag !== tagToRemove));
   };
 
   const handleNext = () => {
@@ -177,7 +177,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
 
     setLoading(true);
     try {
-      const ticketData: any = {
+      const ticketData: unknown = {
         title,
         description,
         priority,
@@ -259,12 +259,12 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-spacing-sm">
                   <Label>Priority *</Label>
-                  <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
+                  <Select value={priority} onValueChange={(value: unknown) => setPriority(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {priorityOptions.map((option: any) => (
+                      {priorityOptions.map((option: unknown) => (
                         <SelectItem key={option.value} value={option.value}>
                           <div className="flex items-center gap-ds-2">
                             <Badge className={option.color}>{option.label}</Badge>
@@ -282,7 +282,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
                       <SelectValue placeholder="Select category..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoryOptions.map((cat: any) => (
+                      {categoryOptions.map((cat: unknown) => (
                         <SelectItem key={cat} value={cat}>
                           {cat}
                         </SelectItem>
@@ -311,8 +311,8 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
                         </div>
                       ) : (
                         agents
-                          .filter((agent: any) => agent.available)
-                          .map((agent: any) => (
+                          .filter((agent: unknown) => agent.available)
+                          .map((agent: unknown) => (
                             <SelectItem key={agent.userId} value={agent.userId}>
                               <div className="flex items-center gap-ds-2">
                                 <div
@@ -373,7 +373,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
                 </div>
                 {tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
-                    {tags.map((tag: any) => (
+                    {tags.map((tag: unknown) => (
                       <Badge
                         key={tag}
                         variant="secondary"
@@ -462,7 +462,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
                   <div>
                     <span className="text-sm font-medium">Tags:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
-                      {tags.map((tag: any) => (
+                      {tags.map((tag: unknown) => (
                         <Badge key={tag} variant="secondary" className="text-tiny">
                           {tag}
                         </Badge>

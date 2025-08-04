@@ -371,7 +371,7 @@ export function BrowserCompatibilityAlert({
                     <h5 className="mb-2 text-sm font-medium">Detected Extensions</h5>
                     <div className="space-y-spacing-sm">
                       {report.detectedExtensions
-                        .filter((ext: any) => ext.detected)
+                        .filter((ext: unknown) => ext.detected)
                         .map((ext, index) => (
                           <div key={index} className="flex items-start gap-ds-2 text-sm">
                             <div

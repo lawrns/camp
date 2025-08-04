@@ -10,7 +10,7 @@ export interface TokenInfo {
   expiresAt: number;
   timeUntilExpiry: number;
   shouldRefresh: boolean;
-  payload?: { [key: string]: any };
+  payload?: { [key: string]: unknown };
 }
 
 /**
@@ -30,7 +30,7 @@ export function checkTokenExpiration(token: string, refreshThresholdSeconds: num
     }
 
     // Browser-compatible base64 decoding
-    let payload: { exp: number; [key: string]: any };
+    let payload: { exp: number; [key: string]: unknown };
     try {
       const base64Payload = tokenParts[1];
       // Handle URL-safe base64

@@ -7,8 +7,7 @@ import { config } from "./config/env";
 import { UltimateWidget } from "./design-system";
 import { useAuth } from "./hooks/useAuth";
 import { WidgetErrorBoundary } from "./WidgetErrorBoundary";
-import { DefinitiveButton } from "./DefinitiveButton";
-import { DefinitiveWidget } from "./DefinitiveWidget";
+// Deprecated components removed - using UltimateWidget instead
 
 // Extend window interface for widget configuration
 declare global {
@@ -136,6 +135,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
           {/* ULTIMATE WIDGET - Single Source of Truth */}
           <UltimateWidget
             organizationId={organizationId}
+            conversationId={conversationId} // Pass conversationId as prop to avoid context dependency
             config={{
               organizationName: "Campfire",
               primaryColor: "#6366F1",
@@ -166,8 +166,8 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
   );
 };
 
-// Export the definitive components
-export { DefinitiveButton as Button, DefinitiveWidget as Panel };
+// Export UltimateWidget components
+export { UltimateWidget as Panel };
 
 // Export Widget as an alias for WidgetProvider for convenience
 export { WidgetProvider as Widget };

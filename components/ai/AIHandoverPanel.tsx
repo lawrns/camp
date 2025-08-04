@@ -78,7 +78,7 @@ export function AIHandoverPanel({ conversationId, organizationId, onStatusChange
     setError(null);
 
     try {
-      const response = await fetch("/api/ai?action=handover", {
+      const response = await fetch("/api/ai/handover", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,6 +86,8 @@ export function AIHandoverPanel({ conversationId, organizationId, onStatusChange
         body: JSON.stringify({
           conversationId,
           organizationId,
+          action: "start",
+          reason: "manual_ai_handover",
         }),
       });
 

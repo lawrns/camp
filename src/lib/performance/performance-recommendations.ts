@@ -121,7 +121,7 @@ export class PerformanceRecommendationEngine {
     }
 
     // Frequent updates
-    const frequentUpdaters = metrics.renderPatterns.filter((p: any) => p.pattern === "frequent-updates").slice(0, 3);
+    const frequentUpdaters = metrics.renderPatterns.filter((p: unknown) => p.pattern === "frequent-updates").slice(0, 3);
 
     if (frequentUpdaters.length > 0) {
       recommendations.push({
@@ -131,13 +131,13 @@ export class PerformanceRecommendationEngine {
         title: "Components updating too frequently",
         description: `${frequentUpdaters.length} components are re-rendering excessively.`,
         impact: "Unnecessary re-renders waste CPU and can cause performance degradation.",
-        solution: `Review state management in: ${frequentUpdaters.map((p: any) => p.componentId).join(", ")}. Consider debouncing state updates.`,
-        metrics: Object.fromEntries(frequentUpdaters.map((p: any) => [p.componentId, p.count])),
+        solution: `Review state management in: ${frequentUpdaters.map((p: unknown) => p.componentId).join(", ")}. Consider debouncing state updates.`,
+        metrics: Object.fromEntries(frequentUpdaters.map((p: unknown) => [p.componentId, p.count])),
       });
     }
 
     // Cascading updates
-    const cascadingUpdates = metrics.renderPatterns.filter((p: any) => p.pattern === "cascading-updates");
+    const cascadingUpdates = metrics.renderPatterns.filter((p: unknown) => p.pattern === "cascading-updates");
 
     if (cascadingUpdates.length > 0) {
       recommendations.push({
@@ -158,7 +158,7 @@ export class PerformanceRecommendationEngine {
   /**
    * Generate recommendations based on inbox performance
    */
-  static fromInboxMetrics(summary: any): PerformanceRecommendation[] {
+  static fromInboxMetrics(summary: unknown): PerformanceRecommendation[] {
     const recommendations: PerformanceRecommendation[] = [];
 
     // Message render time
@@ -218,17 +218,17 @@ export class PerformanceRecommendationEngine {
     }
 
     // Budget failures
-    const failedBudgets = summary.budgetStatus?.filter((b: any) => b.status === "fail") || [];
+    const failedBudgets = summary.budgetStatus?.filter((b: unknown) => b.status === "fail") || [];
     if (failedBudgets.length > 0) {
       recommendations.push({
         id: "inbox-budget-failures",
         severity: "critical",
         category: "rendering",
         title: `${failedBudgets.length} performance budgets exceeded`,
-        description: `The following metrics exceed their budgets: ${failedBudgets.map((b: any) => b.metric).join(", ")}`,
+        description: `The following metrics exceed their budgets: ${failedBudgets.map((b: unknown) => b.metric).join(", ")}`,
         impact: "Multiple performance targets are being missed.",
         solution: "Focus on optimizing the metrics that exceed budgets by the largest margin.",
-        metrics: Object.fromEntries(failedBudgets.map((b: any) => [b.metric, b.actual])),
+        metrics: Object.fromEntries(failedBudgets.map((b: unknown) => [b.metric, b.actual])),
       });
     }
 

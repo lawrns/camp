@@ -45,7 +45,7 @@ export default function TestDesignPage() {
                 button: document.querySelector('.test-button') as HTMLElement,
             };
 
-            const results: any = {};
+            const results: unknown = {};
 
             Object.entries(elements).forEach(([key, el]) => {
                 if (el) {

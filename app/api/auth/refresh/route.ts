@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       session: {
         access_token: newSession.access_token,
         refresh_token: newSession.refresh_token,
-        expires_at: newSession.expires_at,
+        expiresAt: newSession.expiresAt,
         token_type: "bearer",
       },
     });

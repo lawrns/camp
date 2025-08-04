@@ -7,7 +7,7 @@ import { captureExceptionAndLogIfDevelopment } from "@/lib/shared/sentry";
 import { conversationProcedure } from "./procedure";
 
 // Import callToolApi from the correct location
-const callToolApi = (conversation: any, tool: any, params: any) => {
+const callToolApi = (conversation: unknown, tool: unknown, params: unknown) => {
   return { conversation, tool, params, result: "fallback" };
 };
 
@@ -66,7 +66,7 @@ export const toolsRouter = {
       where: and(eq(tools.mailboxId, mailbox.id), eq(tools.enabled, true)),
     });
 
-    const suggested = ((conversation as any).suggestedActions ?? []).map(
+    const suggested = ((conversation as unknown).suggestedActions ?? []).map(
       (action: SuggestedAction): ProcessedSuggestedAction => {
         switch (action.type) {
           case "close":

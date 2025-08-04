@@ -198,8 +198,8 @@ export const escalationRuleExecutions = pgTable("escalation_rule_executions", {
     .$type<{
       [conditionName: string]: {
         met: boolean;
-        value: any;
-        threshold: any;
+        value: unknown;
+        threshold: unknown;
         score: number;
       };
     }>()

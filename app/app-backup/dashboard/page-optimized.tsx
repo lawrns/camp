@@ -54,7 +54,7 @@ interface QuickAction {
   title: string;
   description: string;
   href: string;
-  icon: any;
+  icon: unknown;
   badge?: string;
 }
 
@@ -68,7 +68,7 @@ const MetricCard = React.memo(
     label,
   }: {
     gradient: string;
-    icon: any;
+    icon: unknown;
     badge: string;
     value: string | number;
     label: string;
@@ -391,7 +391,7 @@ const DashboardPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {quickActions.map((action: any) => (
+              {quickActions.map((action: unknown) => (
                 <QuickActionButton key={action.id} action={action} onClick={handleNavigation} />
               ))}
             </CardContent>

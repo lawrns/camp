@@ -44,7 +44,7 @@ export interface ChannelValidationConfig {
 /**
  * Message event payload validator
  */
-export function validateMessagePayload(payload: any): ValidationResult {
+export function validateMessagePayload(payload: unknown): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -91,7 +91,7 @@ export function validateMessagePayload(payload: any): ValidationResult {
 /**
  * Typing event payload validator
  */
-export function validateTypingPayload(payload: any): ValidationResult {
+export function validateTypingPayload(payload: unknown): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -132,7 +132,7 @@ export function validateTypingPayload(payload: any): ValidationResult {
 /**
  * Presence event payload validator
  */
-export function validatePresencePayload(payload: any): ValidationResult {
+export function validatePresencePayload(payload: unknown): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -239,7 +239,7 @@ export class ChannelEventValidator {
   /**
    * Validate complete channel event
    */
-  validateChannelEvent(channelName: string, eventName: string, payload: any): ValidationResult {
+  validateChannelEvent(channelName: string, eventName: string, payload: unknown): ValidationResult {
     const channelValidation = this.validateChannelName(channelName);
     const eventValidation = this.validateEventName(eventName);
     
@@ -288,11 +288,11 @@ export class ChannelEventValidator {
   /**
    * Sanitize and validate before sending
    */
-  validateAndSanitize(channelName: string, eventName: string, payload: any): {
+  validateAndSanitize(channelName: string, eventName: string, payload: unknown): {
     isValid: boolean;
     sanitizedChannelName?: string;
     sanitizedEventName?: string;
-    sanitizedPayload?: any;
+    sanitizedPayload?: unknown;
     errors: string[];
     warnings: string[];
   } {
@@ -321,7 +321,7 @@ export const defaultValidator = new ChannelEventValidator();
 /**
  * Quick validation function
  */
-export function validateChannelEvent(channelName: string, eventName: string, payload: any): ValidationResult {
+export function validateChannelEvent(channelName: string, eventName: string, payload: unknown): ValidationResult {
   return defaultValidator.validateChannelEvent(channelName, eventName, payload);
 }
 
@@ -332,7 +332,7 @@ export async function safeSendChannelEvent(
   supabase: SupabaseClient,
   channelName: string,
   eventName: string,
-  payload: any,
+  payload: unknown,
   validator: ChannelEventValidator = defaultValidator
 ): Promise<{ success: boolean; errors: string[]; warnings: string[] }> {
   const validation = validator.validateAndSanitize(channelName, eventName, payload);

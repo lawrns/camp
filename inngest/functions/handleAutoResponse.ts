@@ -10,13 +10,13 @@ import { fetchMetadata } from "@/lib/data/retrieval";
 import { assertDefined } from "@/lib/utils/assert";
 
 // Simple fallback functions for missing modules
-const createMessageNotification = async (params: any) => {
+const createMessageNotification = async (params: unknown) => {
   // Fallback implementation - log and return
   console.log("createMessageNotification called with params:", params);
   return { id: 1, created: true };
 };
 
-const upsertPlatformCustomer = async (params: any) => {
+const upsertPlatformCustomer = async (params: unknown) => {
   // Fallback implementation - log and return
   console.log("upsertPlatformCustomer called with params:", params);
   return { id: 1, upserted: true };
@@ -55,7 +55,7 @@ export const handleAutoResponse = async (messageId: number) => {
       await upsertPlatformCustomer({
         email: message.senderEmail,
         mailboxId: message.conversation.mailboxId,
-        customerMetadata: (customerMetadata as any)?.metadata || customerMetadata,
+        customerMetadata: (customerMetadata as unknown)?.metadata || customerMetadata,
       });
     }
   }

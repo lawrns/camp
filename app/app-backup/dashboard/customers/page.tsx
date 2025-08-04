@@ -114,7 +114,7 @@ export default function CustomersPage() {
         `
         )
         .eq("organization_id", member.organization_id)
-        .not("customer_email", "is", null);
+        .not("customerEmail", "is", null);
 
       if (error) throw error;
 
@@ -122,7 +122,7 @@ export default function CustomersPage() {
       const customerMap = new Map<string, Customer>();
 
       customerData?.forEach((conv) => {
-        const email = conv.customer_email;
+        const email = conv.customerEmail;
         if (!email) return;
 
         if (customerMap.has(email)) {
@@ -134,7 +134,7 @@ export default function CustomersPage() {
         } else {
           customerMap.set(email, {
             id: email, // Using email as ID for now
-            name: conv.customer_name || email.split("@")[0],
+            name: conv.customerName || email.split("@")[0],
             email: email,
             phone: conv.customer_phone,
             status: "active",
@@ -175,12 +175,12 @@ export default function CustomersPage() {
       // Get conversation stats
       const { data: convStats } = await supabase
         .from("conversations")
-        .select("customer_email, created_at")
+        .select("customerEmail, created_at")
         .eq("organization_id", member.organization_id)
-        .not("customer_email", "is", null);
+        .not("customerEmail", "is", null);
 
       if (convStats) {
-        const uniqueCustomers = new Set(convStats.map((c) => c.customer_email));
+        const uniqueCustomers = new Set(convStats.map((c) => c.customerEmail));
         const thisMonth = new Date();
         thisMonth.setMonth(thisMonth.getMonth() - 1);
 

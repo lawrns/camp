@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
             },
             session: {
               isValid: true,
-              expiresAt: user.app_metadata?.expires_at,
+              expiresAt: user.app_metadata?.expiresAt,
             },
           });
 
@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
             },
             session: {
               isValid: true,
-              expiresAt: user.app_metadata?.expires_at,
+              expiresAt: user.app_metadata?.expiresAt,
             },
           });
 

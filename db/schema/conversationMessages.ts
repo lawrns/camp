@@ -43,7 +43,7 @@ export const conversationMessages = pgTable(
       threadId?: string;
       references?: string[];
       inReplyTo?: string;
-      [key: string]: any;
+      [key: string]: unknown;
     }>(),
     inReplyToId: bigint({ mode: "number" }),
     responseToId: bigint({ mode: "number" }),
@@ -71,7 +71,7 @@ export const conversationMessages = pgTable(
       attempts?: number;
       lastAttempt?: string;
       error?: string;
-      [key: string]: any;
+      [key: string]: unknown;
     }>(),
     // Additional properties needed by the codebase
     status: text().$type<"pending" | "sent" | "delivered" | "failed">(),

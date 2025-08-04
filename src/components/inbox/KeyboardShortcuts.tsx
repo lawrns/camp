@@ -241,7 +241,7 @@ export function CommandPalette({ isOpen, onClose, onExecute, className }: Comman
 
     // Filter by category
     if (selectedCategory !== "all") {
-      filtered = filtered.filter((s: any) => s.category === selectedCategory);
+      filtered = filtered.filter((s: unknown) => s.category === selectedCategory);
     }
 
     // Filter by search query
@@ -255,7 +255,7 @@ export function CommandPalette({ isOpen, onClose, onExecute, className }: Comman
       );
     }
 
-    return filtered.filter((s: any) => s.enabled);
+    return filtered.filter((s: unknown) => s.enabled);
   }, [shortcuts, searchQuery, selectedCategory]);
 
   // Reset selection when filtered shortcuts change
@@ -340,7 +340,7 @@ export function CommandPalette({ isOpen, onClose, onExecute, className }: Comman
 
         {/* Categories */}
         <div className="flex gap-1 overflow-x-auto border-b border-[var(--fl-color-border-subtle)] spacing-3">
-          {CATEGORIES.map((category: any) => {
+          {CATEGORIES.map((category: unknown) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.id;
             return (
@@ -507,7 +507,7 @@ export function useKeyboardShortcuts() {
 
   const getShortcutsByCategory = useCallback(
     (category: string) => {
-      return shortcuts.filter((s: any) => s.category === category && s.enabled);
+      return shortcuts.filter((s: unknown) => s.category === category && s.enabled);
     },
     [shortcuts]
   );
@@ -517,7 +517,7 @@ export function useKeyboardShortcuts() {
   }, []);
 
   return {
-    shortcuts: shortcuts.filter((s: any) => s.enabled),
+    shortcuts: shortcuts.filter((s: unknown) => s.enabled),
     getShortcutByAction,
     getShortcutsByCategory,
     formatShortcut,

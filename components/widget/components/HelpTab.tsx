@@ -328,7 +328,7 @@ export const HelpTab: React.FC<HelpTabProps> = ({
 };
 
 // Simple debounce utility
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

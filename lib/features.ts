@@ -222,7 +222,7 @@ export function applyFeatureOverrides(): void {
   const overrides = getFeatureOverrides();
   Object.entries(overrides).forEach(([feature, enabled]) => {
     if (feature in FEATURES) {
-      (FEATURES as any)[feature].enabled = enabled;
+      (FEATURES as unknown)[feature].enabled = enabled;
     }
   });
 }

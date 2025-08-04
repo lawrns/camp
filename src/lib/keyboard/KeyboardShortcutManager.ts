@@ -513,7 +513,7 @@ export class KeyboardShortcutManager {
 
   private notifyListeners() {
     const shortcuts = Array.from(this.shortcuts.values());
-    this.listeners.forEach((listener: any) => listener(shortcuts));
+    this.listeners.forEach((listener: unknown) => listener(shortcuts));
   }
 
   private saveCustomShortcuts() {
@@ -537,7 +537,7 @@ export class KeyboardShortcutManager {
 
     try {
       const customData = JSON.parse(saved);
-      customData.forEach((data: any) => {
+      customData.forEach((data: unknown) => {
         const existing = this.findShortcutById(data.id);
         if (existing) {
           this.customize(data.id, {
@@ -555,14 +555,14 @@ export class KeyboardShortcutManager {
   }
 
   getShortcutsByCategory(category: KeyboardShortcut["category"]): KeyboardShortcut[] {
-    return this.getShortcuts().filter((s: any) => s.category === category);
+    return this.getShortcuts().filter((s: unknown) => s.category === category);
   }
 
   getShortcutDisplay(shortcut: KeyboardShortcut): string {
     const parts: string[] = [];
 
     if (shortcut.sequence) {
-      parts.push(shortcut.sequence.map((k: any) => k.toUpperCase()).join(" then "));
+      parts.push(shortcut.sequence.map((k: unknown) => k.toUpperCase()).join(" then "));
       parts.push("then");
     }
 

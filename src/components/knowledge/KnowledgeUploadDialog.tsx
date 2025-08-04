@@ -109,11 +109,11 @@ export default function KnowledgeUploadDialog({ open, onOpenChange }: KnowledgeU
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags((prev) => prev.filter((tag: any) => tag !== tagToRemove));
+    setTags((prev) => prev.filter((tag: unknown) => tag !== tagToRemove));
   };
 
   const handleRemoveFile = (fileToRemove: File) => {
-    setSelectedFiles((prev) => prev.filter((file: any) => file !== fileToRemove));
+    setSelectedFiles((prev) => prev.filter((file: unknown) => file !== fileToRemove));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -194,7 +194,7 @@ export default function KnowledgeUploadDialog({ open, onOpenChange }: KnowledgeU
           <div className="space-y-3">
             <Label className="text-base font-medium">Upload Method</Label>
             <div className="grid grid-cols-3 gap-3">
-              {uploadMethods.map((method: any) => (
+              {uploadMethods.map((method: unknown) => (
                 <div
                   key={method.id}
                   className={`cursor-pointer rounded-ds-lg border-2 spacing-4 transition-all hover:scale-[1.02] active:scale-[0.98] ${
@@ -317,7 +317,7 @@ export default function KnowledgeUploadDialog({ open, onOpenChange }: KnowledgeU
                   <SelectValue placeholder="Select category..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((cat: any) => (
+                  {categories.map((cat: unknown) => (
                     <SelectItem key={cat} value={cat}>
                       {cat}
                     </SelectItem>
@@ -353,7 +353,7 @@ export default function KnowledgeUploadDialog({ open, onOpenChange }: KnowledgeU
             </div>
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-ds-2">
-                {tags.map((tag: any) => (
+                {tags.map((tag: unknown) => (
                   <Badge
                     key={tag}
                     variant="secondary"

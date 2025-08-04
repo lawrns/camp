@@ -93,8 +93,8 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
         onThresholdExceeded?.(metric, value, threshold);
 
         // Auto-report critical performance issues
-        if (typeof window !== "undefined" && (window as any).gtag) {
-          (window as any).gtag("event", "performance_issue", {
+        if (typeof window !== "undefined" && (window as unknown).gtag) {
+          (window as unknown).gtag("event", "performance_issue", {
             metric_name: metric,
             metric_value: value,
             threshold: threshold,
@@ -153,7 +153,7 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
     // First Input Delay
     const fidObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
-      entries.forEach((entry: any) => {
+      entries.forEach((entry: unknown) => {
         if (entry.processingStart && entry.startTime) {
           const fid = entry.processingStart - entry.startTime;
           updateMetric("fid", fid);
@@ -167,7 +167,7 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
     let clsScore = 0;
     const clsObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
-      entries.forEach((entry: any) => {
+      entries.forEach((entry: unknown) => {
         if (!entry.hadRecentInput) {
           clsScore += entry.value;
           updateMetric("cls", clsScore);
@@ -295,11 +295,11 @@ export const usePerformanceMonitor = (config: PerformanceConfig = {}) => {
 
     return () => {
       // Cleanup observers
-      observers.current.forEach((observer: any) => observer.disconnect());
+      observers.current.forEach((observer: unknown) => observer.disconnect());
       observers.current.clear();
 
       // Cleanup other listeners
-      cleanupFunctions.forEach((cleanup: any) => cleanup());
+      cleanupFunctions.forEach((cleanup: unknown) => cleanup());
 
       if (reportingInterval.current) {
         clearInterval(reportingInterval.current);

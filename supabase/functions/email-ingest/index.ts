@@ -81,7 +81,7 @@ function parseEmail(payload: EmailPayload): ProcessedEmail {
   const sentAt = headers.date ? new Date(headers.date).toISOString() : undefined;
 
   // Process attachments (exclude content to save space)
-  const attachments = payload.attachments?.map((att: any) => ({
+  const attachments = payload.attachments?.map((att: unknown) => ({
     filename: att.filename,
     contentType: att.contentType,
     size: att.size,
@@ -107,7 +107,7 @@ function parseEmail(payload: EmailPayload): ProcessedEmail {
 }
 
 async function findOrCreateConversation(
-  supabase: any,
+  supabase: unknown,
   email: ProcessedEmail,
   mailboxId: number
 ): Promise<number | null> {
@@ -152,7 +152,7 @@ async function findOrCreateConversation(
 }
 
 async function storeEmailThread(
-  supabase: any,
+  supabase: unknown,
   email: ProcessedEmail,
   mailboxId: number,
   conversationId: string | null

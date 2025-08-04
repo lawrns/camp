@@ -184,7 +184,7 @@ export function InboxDetailsPanel({ conversation, customerData }: InboxDetailsPa
                       </CardHeader>
                       <CardContent>
                         <div className="flex flex-wrap gap-ds-2">
-                          {customerData.tags.map((tag: any) => (
+                          {customerData.tags.map((tag: unknown) => (
                             <Badge key={tag} variant="secondary" className="text-tiny">
                               {tag}
                             </Badge>

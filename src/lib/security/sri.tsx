@@ -152,7 +152,7 @@ export function SRIScript({
   crossOrigin?: 'anonymous' | 'use-credentials';
   fallbackSrc?: string;
   onError?: (error: Event) => void;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   const handleError = (error: React.SyntheticEvent<HTMLScriptElement, Event>) => {
 
@@ -192,7 +192,7 @@ export function SRIStylesheet({
   crossOrigin?: 'anonymous' | 'use-credentials';
   fallbackHref?: string;
   onError?: (error: Event) => void;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   const handleError = (error: React.SyntheticEvent<HTMLLinkElement, Event>) => {
 
@@ -288,8 +288,8 @@ export function createSRIWebpackPlugin(options: {
   } = options;
 
   return {
-    apply(compiler: any) {
-      compiler.hooks.emit.tapAsync('SRIPlugin', (compilation: any, callback: any) => {
+    apply(compiler: unknown) {
+      compiler.hooks.emit.tapAsync('SRIPlugin', (compilation: unknown, callback: unknown) => {
         const manifest: SRIManifest = {};
 
         // Process all assets

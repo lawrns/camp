@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from 'react';
 import { useMessages } from './useMessages';
 
@@ -12,7 +14,7 @@ interface WidgetState {
 interface UseWidgetStateReturn {
   // State
   state: WidgetState;
-  messages: any[];
+  messages: unknown[];
   isLoading: boolean;
   agentIsTyping: boolean;
 
@@ -23,7 +25,7 @@ interface UseWidgetStateReturn {
   initializeConversation: () => Promise<void>;
 
   // Debug
-  debugInfo: any;
+  debugInfo: unknown;
   setDebugMode: (enabled: boolean) => void;
 }
 
@@ -65,10 +67,10 @@ export function useWidgetState(
   }, [state.conversationId, messages.length]);
 
   // Debug logging
-  const logDebug = useCallback((event: string, data: any) => {
+  const logDebug = useCallback((event: string, data: unknown) => {
     if (state.debugMode) {
       console.log(`[WidgetState] ${event}:`, data);
-      setDebugInfo((prev: any) => ({
+      setDebugInfo((prev: unknown) => ({
         ...prev,
         stateChanges: [...prev.stateChanges.slice(-9), {
           event,
@@ -134,7 +136,7 @@ export function useWidgetState(
       }));
 
       logDebug('Conversation creation failed', { error: errorMessage });
-      setDebugInfo((prev: any) => ({
+      setDebugInfo((prev: unknown) => ({
         ...prev,
         errors: [...prev.errors.slice(-4), {
           error: errorMessage,

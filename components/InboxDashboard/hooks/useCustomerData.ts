@@ -82,9 +82,9 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
       // First, let's try to get the customer from conversations table since that's more reliable
       const { data: conversationData, error: conversationError } = await client
         .from("conversations")
-        .select("customer_email, customer_display_name, phone_number, tags, created_at")
+        .select("customerEmail, customerDisplayName, phoneNumber, tags, created_at")
         .eq("organization_id", organizationId)
-        .eq("customer_email", customerEmail)
+        .eq("customerEmail", customerEmail)
         .limit(1)
         .single();
 
@@ -113,9 +113,9 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
       // Fetch all conversation statistics for this customer
       const { data: conversationStats, error: statsError } = await client
         .from("conversations")
-        .select("id, satisfaction_rating, status, subject, created_at, tags, phone_number, customer_display_name")
+        .select("id, satisfactionRating, status, subject, created_at, tags, phoneNumber, customerDisplayName")
         .eq("organization_id", organizationId)
-        .eq("customer_email", customerEmail)
+        .eq("customerEmail", customerEmail)
         .order("created_at", { ascending: false });
 
       if (statsError) {
@@ -132,10 +132,10 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
       try {
         const { data: notesData, error: notesError } = await client
           .from("notes")
-          .select("id, content, created_at, created_by")
+          .select("id, content, created_at, createdBy")
           .eq("organization_id", organizationId)
-          .eq("entity_type", "customer")
-          .eq("entity_id", customerEmail)
+          .eq("entityType", "customer")
+          .eq("entityId", customerEmail)
           .order("created_at", { ascending: false });
 
         if (!notesError) {
@@ -186,12 +186,12 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
             id: note.id,
             content: note.content,
             createdAt: note.created_at,
-            createdBy: note.created_by,
+            createdBy: note.createdBy,
           })) || [],
         previousIssues,
         avatar: customerProfile?.avatar_url,
         lifetimeValue: customerProfile?.value ? `$${customerProfile.value}` : undefined,
-        lastSeenAt: customerProfile?.last_seen_at,
+        lastSeenAt: customerProfile?.lastSeenAt,
         tags: latestConversation?.tags || conversationData?.tags || [],
       };
 
@@ -248,10 +248,10 @@ export const useAddCustomerNote = () => {
           .from("notes")
           .insert({
             organization_id: organizationId,
-            entity_type: "customer",
-            entity_id: customerEmail,
+            entityType: "customer",
+            entityId: customerEmail,
             content,
-            created_by: createdBy,
+            createdBy: createdBy,
           })
           .select()
           .single();

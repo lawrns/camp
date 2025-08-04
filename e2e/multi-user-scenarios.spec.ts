@@ -42,7 +42,7 @@ test.describe('Multi-User Scenarios E2E', () => {
       pages: [],
       users: [],
       organizationId: testMetadata.testOrgId,
-      conversationIds: testMetadata.testConversations.map((c: any) => c.id),
+      conversationIds: testMetadata.testConversations.map((c: unknown) => c.id),
     };
 
     // Create additional browsers for multi-user testing

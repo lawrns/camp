@@ -344,7 +344,7 @@ export class UnifiedAuthCore {
     return null;
   }
 
-  private decodeJwtPayload(token: string): any {
+  private decodeJwtPayload(token: string): unknown {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) return null;

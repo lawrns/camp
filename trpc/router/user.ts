@@ -31,7 +31,7 @@ export const userRouter = {
       return {
         id: user.id,
         email: user.email,
-        displayName: profile?.full_name || user.email?.split('@')[0],
+        displayName: profile?.fullName || user.email?.split('@')[0],
         organizationId: profile?.organization_id,
         role: profile?.role || 'agent',
         createdAt: user.created_at,
@@ -70,7 +70,7 @@ export const userRouter = {
         // Update user metadata
         const { error: updateError } = await supabaseClient.auth.updateUser({
           data: {
-            full_name: input.fullName,
+            fullName: input.fullName,
             display_name: input.displayName,
             avatar_url: input.avatar,
           },
@@ -89,7 +89,7 @@ export const userRouter = {
           .upsert({
             user_id: user.id,
             email: user.email,
-            full_name: input.fullName,
+            fullName: input.fullName,
             avatar_url: input.avatar,
             updated_at: new Date().toISOString(),
           });

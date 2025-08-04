@@ -138,8 +138,8 @@ export class AIHandoverService {
         conversation_id: conversationId,
         organization_id: organizationId,
         content: handoverResult.handoverMessage,
-        sender_type: "system",
-        sender_name: "Campfire AI",
+        senderType: "system",
+        senderName: "Campfire AI",
         metadata: {
           type: "handover_notification",
           handover_id: handover.id,

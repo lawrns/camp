@@ -24,25 +24,25 @@ declare namespace NodeJS {
 // Extend Window interface for widgets
 declare global {
   interface Window {
-    CampfireWidget?: any;
-    CampfireConfig?: any;
-    __campfire_widget__?: any;
-    supabase?: any;
+    CampfireWidget?: unknown;
+    CampfireConfig?: unknown;
+    __campfire_widget__?: unknown;
+    supabase?: unknown;
   }
 }
 
 // Common missing types
 declare module "@/lib/ai/conversation-state-analyzer" {
   export class ConversationStateAnalyzer {
-    analyzeState(conversation: any, messages: any[]): Promise<any>;
+    analyzeState(conversation: unknown, messages: unknown[]): Promise<any>;
   }
 }
 
 declare module "@/lib/ai/resolution-detector" {
   export class ResolutionDetector {
     isResolved(
-      conversation: any,
-      messages: any[]
+      conversation: unknown,
+      messages: unknown[]
     ): Promise<{
       isResolved: boolean;
       confidence: number;
@@ -60,7 +60,7 @@ declare module "@/lib/simple-require-auth" {
   export function authenticateRequest(request: NextRequest): Promise<{
     success: boolean;
     context?: {
-      user: any;
+      user: unknown;
       organizationId?: string;
     };
     error?: string;

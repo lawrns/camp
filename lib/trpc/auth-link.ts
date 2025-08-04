@@ -15,7 +15,7 @@ const isUnauthorizedError = (error: unknown): boolean => {
   }
   
   if (error && typeof error === 'object' && 'message' in error) {
-    const message = (error as any).message?.toLowerCase() || ''
+    const message = (error as unknown).message?.toLowerCase() || ''
     return message.includes('unauthorized') || message.includes('401')
   }
   
@@ -60,7 +60,7 @@ export const authLink: TRPCLink<AppRouter> = () => {
             console.log('[AuthLink] Added authorization header')
           } else {
             // Remove authorization header if no token
-            const { authorization, ...headers } = (op.context.headers || {}) as any
+            const { authorization, ...headers } = (op.context.headers || {}) as unknown
             op.context = {
               ...op.context,
               headers

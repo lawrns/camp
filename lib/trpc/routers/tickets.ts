@@ -67,7 +67,7 @@ export const ticketsRouter = createTRPCRouter({
             category: input.category,
             tags: input.tags,
             conversation_id: input.conversationId,
-            created_by: ctx.user.id,
+            createdBy: ctx.user.id,
             metadata: input.metadata || {},
           })
           .select(`

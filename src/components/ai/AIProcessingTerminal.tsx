@@ -26,12 +26,12 @@ interface AIProcessingLog {
   id: string;
   timestamp: string;
   event: string;
-  data: any;
+  data: unknown;
   source: string;
   type?: "info" | "warning" | "error" | "success" | "processing";
   title?: string;
   message?: string;
-  metadata?: any;
+  metadata?: unknown;
   duration?: number;
 }
 
@@ -112,7 +112,7 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
         {
           event: "ai_processing_update",
         },
-        (payload: { payload: any }) => {
+        (payload: { payload: unknown }) => {
           const eventData = payload.payload;
 
           // Only process events for this conversation
@@ -334,7 +334,7 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
             </div>
           ) : (
             <div className="space-y-spacing-sm">
-              {logs.map((log: any) => (
+              {logs.map((log: unknown) => (
                 <div
                   key={log.id}
                   className={cn(

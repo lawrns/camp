@@ -51,10 +51,10 @@ export const finishFileUpload = async (
 
   const fileIdsForPreview: number[] = [];
 
-  await tx.transaction(async (tx: any) => {
+  await tx.transaction(async (tx: unknown) => {
     for (const slug of fileSlugs) {
       const file = await tx.query.files.findFirst({
-        where: (files: any, { eq, isNull }: any) =>
+        where: (files: unknown, { eq, isNull }: unknown) =>
           eq(files.slug, slug) && isNull(files.messageId) && isNull(files.noteId),
       });
 
@@ -73,7 +73,7 @@ export const finishFileUpload = async (
   if (fileIdsForPreview.length > 0) {
     const inngest = getInngest();
     await inngest.send(
-      fileIdsForPreview.map((fileId: any) => ({
+      fileIdsForPreview.map((fileId: unknown) => ({
         name: "files/preview.generate",
         data: { fileId },
       }))

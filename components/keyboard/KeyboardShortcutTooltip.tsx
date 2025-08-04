@@ -47,7 +47,7 @@ export function KeyboardShortcutTooltip({
   }
 
   const display = shortcutId
-    ? keyboardShortcutManager.getShortcutDisplay(shortcut as any)
+    ? keyboardShortcutManager.getShortcutDisplay(shortcut as unknown)
     : formatShortcut(shortcutKey!, shortcutModifiers);
 
   return (

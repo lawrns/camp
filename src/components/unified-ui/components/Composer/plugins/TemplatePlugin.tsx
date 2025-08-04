@@ -75,7 +75,7 @@ export function TemplatePlugin({ pluginId, content, onContentChange, onAction, d
           </div>
 
           <div className="flex flex-wrap gap-ds-2">
-            {SAMPLE_TEMPLATES.map((template: any) => (
+            {SAMPLE_TEMPLATES.map((template: unknown) => (
               <button
                 key={template.id}
                 onClick={() => handleTemplateSelect(template)}

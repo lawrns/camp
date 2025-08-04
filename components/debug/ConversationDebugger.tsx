@@ -75,7 +75,7 @@ export function ConversationDebugger({ organizationId }: ConversationDebuggerPro
         <div className="text-sm space-y-1">
           <div>Conversations Loaded: {conversations.length}</div>
           <div>Is Loading: {isLoading ? '✅' : '❌'}</div>
-          <div>Error: {error ? `❌ ${typeof error === 'string' ? error : (error as any)?.message}` : '✅ None'}</div>
+          <div>Error: {error ? `❌ ${typeof error === 'string' ? error : (error as unknown)?.message}` : '✅ None'}</div>
           <div>Global Selected ID: {selectedConversationId || 'None'}</div>
           <div>Hook Selected ID: {selectedConversation?.id || 'None'}</div>
         </div>
@@ -87,7 +87,7 @@ export function ConversationDebugger({ organizationId }: ConversationDebuggerPro
         <div className="text-sm space-y-1">
           <div>Messages Count: {conversationMessages.length}</div>
           <div>Is Loading Messages: {isLoadingMessages ? '✅' : '❌'}</div>
-          <div>Selected Conversation: {(selectedConversation as any)?.customer_name || selectedConversation?.customer?.name || (selectedConversation as any)?.customer_email || selectedConversation?.customer?.email || 'None'}</div>
+          <div>Selected Conversation: {(selectedConversation as unknown)?.customerName || selectedConversation?.customer?.name || (selectedConversation as unknown)?.customerEmail || selectedConversation?.customer?.email || 'None'}</div>
         </div>
       </div>
 
@@ -110,7 +110,7 @@ export function ConversationDebugger({ organizationId }: ConversationDebuggerPro
         <div>
           <h4 className="font-medium text-yellow-600-dark mb-2">Available Conversations:</h4>
           <div className="space-y-spacing-sm">
-            {conversations.slice(0, 5).map((conversation: any) => (
+            {conversations.slice(0, 5).map((conversation: unknown) => (
               <div
                 key={conversation.id}
                 className={`spacing-2 rounded border cursor-pointer text-sm ${
@@ -121,7 +121,7 @@ export function ConversationDebugger({ organizationId }: ConversationDebuggerPro
                 onClick={() => handleConversationSelect(conversation.id)}
               >
                 <div className="font-medium">
-                  {conversation.customer_name || conversation.customer_email || 'Unknown Customer'}
+                  {conversation.customerName || conversation.customerEmail || 'Unknown Customer'}
                 </div>
                 <div className="text-foreground">ID: {conversation.id}</div>
                 <div className="text-foreground">Status: {conversation.status}</div>
@@ -135,7 +135,7 @@ export function ConversationDebugger({ organizationId }: ConversationDebuggerPro
       {error && (
         <div className="mt-4 spacing-3 bg-[var(--fl-color-danger-subtle)] border border-status-error-light rounded">
           <h4 className="font-medium text-red-600-dark mb-2">Error:</h4>
-          <div className="text-sm text-red-600">{typeof error === 'string' ? error : (error as any)?.message}</div>
+          <div className="text-sm text-red-600">{typeof error === 'string' ? error : (error as unknown)?.message}</div>
         </div>
       )}
     </div>

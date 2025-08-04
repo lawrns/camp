@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 // Widget file upload API - handles file attachments for messages
 
-export const POST = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export const POST = optionalWidgetAuth(async (request: NextRequest, context: unknown, auth) => {
   try {
     const organizationId = getOrganizationId(request, auth);
 
@@ -145,7 +145,7 @@ export const POST = optionalWidgetAuth(async (request: NextRequest, context: any
   }
 });
 
-export const GET = optionalWidgetAuth(async (request: NextRequest, context: any, auth) => {
+export const GET = optionalWidgetAuth(async (request: NextRequest, context: unknown, auth) => {
   try {
     const { searchParams } = new URL(request.url);
     const attachmentId = searchParams.get('attachmentId');

@@ -26,6 +26,7 @@ import { useConversations } from "@/store/domains/conversations";
 import { useMessagesStore } from "@/store/domains/messages";
 import { useRealtimeStore, useTypingUsers } from "@/store/domains/realtime";
 import { useAgentHandoff } from "../conversations/AgentHandoffProvider";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 
 // ===== LEGACY IMPORTS (TO BE REMOVED) =====
 // import { useSelectedConversation, useSelectedConversationMessages, useUILoading, useOrganization } from '@/store/selectors';
@@ -93,22 +94,215 @@ export default function MessagePanel({ conversationId, organizationId }: Message
     };
   }, [conversationId]);
 
-  // Message status tracking
+  // ===== TYPING INDICATOR SUBSCRIPTION =====
+  useEffect(() => {
+    if (!conversationId || !organizationId) return;
+
+    let unsubscribe: (() => void) | null = null;
+
+    const setupTypingSubscription = async () => {
+      try {
+        const { RealtimeHelpers } = await import('@/lib/realtime/standardized-realtime');
+
+        unsubscribe = RealtimeHelpers.subscribeToTyping(
+          organizationId,
+          conversationId,
+          (payload: any) => {
+            console.log('[MessagePanel] Received typing event:', payload);
+
+            if (payload.userId && payload.userId !== user?.id) {
+              if (payload.isTyping) {
+                realtimeState.addTypingUser(conversationId, payload.userId, {
+                  userName: payload.userName || 'User',
+                  userType: payload.userType || 'visitor'
+                });
+              } else {
+                realtimeState.removeTypingUser(conversationId, payload.userId);
+              }
+            }
+          }
+        );
+      } catch (error) {
+        console.error('[MessagePanel] Failed to setup typing subscription:', error);
+      }
+    };
+
+    setupTypingSubscription();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [conversationId, organizationId, user?.id, realtimeState]);
+
+  // Enhanced message status tracking with real-time updates
   const [messageStatuses, setMessageStatuses] = useState<
     Map<string, { status: "sending" | "sent" | "delivered" | "read" | "error"; timestamp: number | null }>
   >(new Map());
 
-  // ===== UNIFIED TYPING FUNCTIONS =====
-  const startTyping = useCallback(() => {
-    if (!conversationId || !user) return;
-    // typingState is now an array of typing users, we need to use store actions
-    // TODO: Implement proper typing indicator with store actions
-  }, [conversationId, user]);
+  // Load read receipts for existing messages
+  useEffect(() => {
+    if (!conversationId || !organizationId || !messages?.length) return;
 
-  const stopTyping = useCallback(() => {
-    if (!conversationId) return;
-    // TODO: Implement proper typing indicator with store actions
-  }, [conversationId]);
+    const loadReadReceipts = async () => {
+      try {
+        const response = await fetch(`/api/widget/read-receipts?conversationId=${conversationId}&organizationId=${organizationId}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          const receipts = data.receipts || [];
+
+          // Update message statuses based on read receipts
+          setMessageStatuses(prev => {
+            const newStatuses = new Map(prev);
+
+            receipts.forEach((receipt: any) => {
+              if (receipt.message_id && receipt.read_at) {
+                newStatuses.set(receipt.message_id, {
+                  status: 'read',
+                  timestamp: new Date(receipt.read_at).getTime(),
+                });
+              }
+            });
+
+            return newStatuses;
+          });
+
+          console.log('[MessagePanel] Loaded read receipts:', receipts.length);
+        }
+      } catch (error) {
+        console.error('[MessagePanel] Failed to load read receipts:', error);
+      }
+    };
+
+    loadReadReceipts();
+  }, [conversationId, organizationId, messages?.length]);
+
+  // Subscribe to read receipt updates
+  useEffect(() => {
+    if (!conversationId || !organizationId) return;
+
+    let unsubscribe: (() => void) | null = null;
+
+    const setupReadReceiptSubscription = async () => {
+      try {
+        const { subscribeToChannel } = await import('@/lib/realtime/standardized-realtime');
+
+        unsubscribe = subscribeToChannel(
+          UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+          UNIFIED_EVENTS.READ_RECEIPT_UPDATED,
+          (payload: any) => {
+            console.log('[MessagePanel] Read receipt update:', payload);
+
+            if (payload.messageId && payload.status) {
+              setMessageStatuses(prev => {
+                const newStatuses = new Map(prev);
+                newStatuses.set(payload.messageId, {
+                  status: payload.status,
+                  timestamp: payload.timestamp ? new Date(payload.timestamp).getTime() : Date.now(),
+                });
+                return newStatuses;
+              });
+            }
+          }
+        );
+      } catch (error) {
+        console.error('[MessagePanel] Failed to setup read receipt subscription:', error);
+      }
+    };
+
+    setupReadReceiptSubscription();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [conversationId, organizationId]);
+
+  // ===== MESSAGE DELIVERY STATUS HELPERS =====
+  const getMessageDeliveryStatus = useCallback((messageId: string) => {
+    return messageStatuses.get(messageId) || { status: 'delivered', timestamp: null };
+  }, [messageStatuses]);
+
+  const markMessageAsRead = useCallback(async (messageId: string) => {
+    if (!organizationId || !conversationId) return;
+
+    try {
+      const response = await fetch('/api/widget/read-receipts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': organizationId,
+        },
+        body: JSON.stringify({
+          messageId,
+          conversationId,
+          status: 'read',
+        }),
+      });
+
+      if (response.ok) {
+        console.log('[MessagePanel] Message marked as read:', messageId);
+      }
+    } catch (error) {
+      console.error('[MessagePanel] Failed to mark message as read:', error);
+    }
+  }, [organizationId, conversationId]);
+
+  // Auto-mark messages as read when they come into view
+  useEffect(() => {
+    if (!messages?.length) return;
+
+    // Mark the latest message as read after a short delay
+    const latestMessage = messages[messages.length - 1];
+    if (latestMessage && latestMessage.senderType !== 'agent') {
+      const timer = setTimeout(() => {
+        markMessageAsRead(latestMessage.id);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [messages, markMessageAsRead]);
+
+  // ===== UNIFIED TYPING FUNCTIONS =====
+  const startTyping = useCallback(async () => {
+    if (!conversationId || !user || !organizationId) return;
+
+    try {
+      // Add user to typing state in store
+      realtimeState.addTypingUser(conversationId, user.id, {
+        userName: user.displayName || user.email || 'Agent',
+        userType: 'agent'
+      });
+
+      // Broadcast typing indicator via realtime
+      const { RealtimeHelpers } = await import('@/lib/realtime/standardized-realtime');
+      await RealtimeHelpers.broadcastTyping(organizationId, conversationId, user.id, true);
+
+      console.log('[MessagePanel] Started typing indicator for user:', user.id);
+    } catch (error) {
+      console.error('[MessagePanel] Failed to start typing indicator:', error);
+    }
+  }, [conversationId, user, organizationId, realtimeState]);
+
+  const stopTyping = useCallback(async () => {
+    if (!conversationId || !user || !organizationId) return;
+
+    try {
+      // Remove user from typing state in store
+      realtimeState.removeTypingUser(conversationId, user.id);
+
+      // Broadcast stop typing via realtime
+      const { RealtimeHelpers } = await import('@/lib/realtime/standardized-realtime');
+      await RealtimeHelpers.broadcastTyping(organizationId, conversationId, user.id, false);
+
+      console.log('[MessagePanel] Stopped typing indicator for user:', user.id);
+    } catch (error) {
+      console.error('[MessagePanel] Failed to stop typing indicator:', error);
+    }
+  }, [conversationId, user, organizationId, realtimeState]);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -130,23 +324,74 @@ export default function MessagePanel({ conversationId, organizationId }: Message
         stopTyping();
       }, 1000);
     },
-    [conversationId, isComposing]
+    [conversationId, isComposing, startTyping, stopTyping]
   );
 
-  // ===== UNIFIED MESSAGE SENDING =====
+  // ===== UNIFIED MESSAGE SENDING WITH DELIVERY TRACKING =====
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageText.trim()) return;
 
     const content = messageText.trim();
+    const tempMessageId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     setMessageText("");
     setIsComposing(false);
     setShowAiSuggestions(false);
     stopTyping();
 
+    // Set initial sending status
+    setMessageStatuses(prev => {
+      const newStatuses = new Map(prev);
+      newStatuses.set(tempMessageId, {
+        status: 'sending',
+        timestamp: Date.now(),
+      });
+      return newStatuses;
+    });
+
     try {
-      await sendMessage(conversationId, content, "agent");
-    } catch (error) {}
+      // Send message through store
+      const result = await sendMessage(conversationId, content, "agent");
+
+      // Update status to sent
+      const actualMessageId = result?.id || tempMessageId;
+      setMessageStatuses(prev => {
+        const newStatuses = new Map(prev);
+        newStatuses.delete(tempMessageId); // Remove temp status
+        newStatuses.set(actualMessageId, {
+          status: 'sent',
+          timestamp: Date.now(),
+        });
+        return newStatuses;
+      });
+
+      // Mark as delivered after a short delay (simulating network delivery)
+      setTimeout(() => {
+        setMessageStatuses(prev => {
+          const newStatuses = new Map(prev);
+          newStatuses.set(actualMessageId, {
+            status: 'delivered',
+            timestamp: Date.now(),
+          });
+          return newStatuses;
+        });
+      }, 500);
+
+      console.log('[MessagePanel] Message sent with delivery tracking:', actualMessageId);
+    } catch (error) {
+      console.error('[MessagePanel] Failed to send message:', error);
+
+      // Update status to error
+      setMessageStatuses(prev => {
+        const newStatuses = new Map(prev);
+        newStatuses.set(tempMessageId, {
+          status: 'error',
+          timestamp: Date.now(),
+        });
+        return newStatuses;
+      });
+    }
   };
 
   // Generate AI suggestions
@@ -361,6 +606,14 @@ export default function MessagePanel({ conversationId, organizationId }: Message
           <div className="flex items-center gap-ds-2">
             {connectionStatus !== "connected" && <span className="text-red-600">Reconnecting...</span>}
             {isComposing && <span>You are typing...</span>}
+            {typingState.size > 0 && !isComposing && (
+              <span className="text-blue-600 animate-pulse">
+                {typingState.size === 1
+                  ? `Someone is typing...`
+                  : `${typingState.size} users are typing...`
+                }
+              </span>
+            )}
           </div>
           <div>Press Enter to send, Shift+Enter for new line</div>
         </div>

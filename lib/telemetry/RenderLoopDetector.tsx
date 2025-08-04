@@ -54,7 +54,7 @@ class PerformanceMonitor {
     }
 
     // Calculate average render time
-    const recentRenderTimes = existing.renderTimes.filter((time: any) => now - time < this.timeWindow);
+    const recentRenderTimes = existing.renderTimes.filter((time: unknown) => now - time < this.timeWindow);
     existing.avgRenderTime =
       recentRenderTimes.length > 1 ? (now - (recentRenderTimes[0] || 0)) / (recentRenderTimes.length - 1) : 0;
 
@@ -117,19 +117,19 @@ class PerformanceMonitor {
 
   generateReport() {
     const allMetrics = Array.from(this.metrics.values());
-    const loopingComponents = allMetrics.filter((m: any) => m.isLooping);
-    const heavyComponents = allMetrics.filter((m: any) => m.renderCount > 50);
+    const loopingComponents = allMetrics.filter((m: unknown) => m.isLooping);
+    const heavyComponents = allMetrics.filter((m: unknown) => m.renderCount > 50);
 
     console.group("📊 PERFORMANCE REPORT");
     if (loopingComponents.length > 0) {
       console.group("🔄 Render Loop Components:");
-      loopingComponents.forEach((metrics: any) => {});
+      loopingComponents.forEach((metrics: unknown) => {});
       console.groupEnd();
     }
 
     if (heavyComponents.length > 0) {
       console.group("🔥 Heavy Rendering Components:");
-      heavyComponents.forEach((metrics: any) => {});
+      heavyComponents.forEach((metrics: unknown) => {});
       console.groupEnd();
     }
 

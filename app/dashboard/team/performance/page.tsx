@@ -178,7 +178,7 @@ export default function TeamPerformancePage() {
               <Icon icon={Calendar} className="h-4 w-4 text-gray-500" />
               <select
                 value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value as any)}
+                onChange={(e) => setSelectedPeriod(e.target.value as unknown)}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="24h">Last 24 Hours</option>

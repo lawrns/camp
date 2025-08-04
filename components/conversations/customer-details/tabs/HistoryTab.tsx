@@ -56,7 +56,7 @@ export function HistoryTab({ customer, conversationHistory, isLoadingHistory, er
 
         {!isLoadingHistory && conversationHistory.length > 0 && (
           <div className="space-y-3">
-            {conversationHistory.map((conversation: any) => (
+            {conversationHistory.map((conversation: unknown) => (
               <Card
                 key={conversation.id}
                 className="cursor-pointer border-[var(--color-border)] transition-shadow hover:shadow-card-hover"

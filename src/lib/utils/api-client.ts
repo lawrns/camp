@@ -81,7 +81,7 @@ export async function apiGet(url: string, options: RequestInit = {}): Promise<Re
 /**
  * Authenticated POST request
  */
-export async function apiPost(url: string, data?: any, options: RequestInit = {}): Promise<Response> {
+export async function apiPost(url: string, data?: unknown, options: RequestInit = {}): Promise<Response> {
   const headers = await getAuthHeaders();
 
   return fetch(url, {
@@ -99,7 +99,7 @@ export async function apiPost(url: string, data?: any, options: RequestInit = {}
 /**
  * Authenticated PUT request
  */
-export async function apiPut(url: string, data?: any, options: RequestInit = {}): Promise<Response> {
+export async function apiPut(url: string, data?: unknown, options: RequestInit = {}): Promise<Response> {
   const headers = await getAuthHeaders();
 
   return fetch(url, {
@@ -117,7 +117,7 @@ export async function apiPut(url: string, data?: any, options: RequestInit = {})
 /**
  * Authenticated PATCH request
  */
-export async function apiPatch(url: string, data?: any, options: RequestInit = {}): Promise<Response> {
+export async function apiPatch(url: string, data?: unknown, options: RequestInit = {}): Promise<Response> {
   const headers = await getAuthHeaders();
 
   return fetch(url, {

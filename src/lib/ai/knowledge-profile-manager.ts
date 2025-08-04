@@ -171,7 +171,7 @@ export class KnowledgeProfileManager {
 
       // Calculate average confidence
       const confidence =
-        profile.expertise.reduce((sum: any, e: unknown) => sum + e.confidence, 0) / profile.expertise.length;
+        profile.expertise.reduce((sum: unknown, e: unknown) => sum + e.confidence, 0) / profile.expertise.length;
 
       results.push({
         profile,
@@ -248,7 +248,7 @@ export class KnowledgeProfileManager {
     const activeProfiles = allProfiles.filter((p: unknown) => p.isActive);
 
     const totalConfidence = activeProfiles.reduce(
-      (sum, p) => sum + p.expertise.reduce((eSum: any, e: unknown) => eSum + e.confidence, 0) / p.expertise.length,
+      (sum, p) => sum + p.expertise.reduce((eSum: unknown, e: unknown) => eSum + e.confidence, 0) / p.expertise.length,
       0
     );
 
@@ -314,7 +314,7 @@ export class KnowledgeProfileManager {
     const activeProfiles = profiles.filter((p: unknown) => p.confidence > 0.5);
     const averageConfidence =
       activeProfiles.length > 0
-        ? activeProfiles.reduce((sum: any, p: unknown) => sum + p.confidence, 0) / activeProfiles.length
+        ? activeProfiles.reduce((sum: unknown, p: unknown) => sum + p.confidence, 0) / activeProfiles.length
         : 0;
 
     // Domain coverage analysis

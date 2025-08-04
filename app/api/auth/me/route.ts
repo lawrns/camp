@@ -25,10 +25,10 @@ export async function GET() {
     return NextResponse.json({
       id: user.id,
       email: user.email,
-      fullName: profile?.full_name || "Agent",
+      fullName: profile?.fullName || "Agent",
       avatarUrl: profile?.avatar_url,
       organizationId: profile?.organization_id,
-      role: ((profile?.metadata as Record<string, any>)?.role as string) || "agent",
+      role: ((profile?.metadata as Record<string, unknown>)?.role as string) || "agent",
     });
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });

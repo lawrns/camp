@@ -178,7 +178,7 @@ export const LazyComponents = {
   MessageList: createLazyComponent("MessageList", () => import("@/components/inbox/MessagePanel/MessageList")),
   ConversationList: createLazyComponent(
     "ConversationList",
-    () => import("@/components/InboxDashboard/sub-components/ConversationList")
+    () => import("@/src/components/InboxDashboard/sub-components/ConversationList")
   ),
   UserProfile: createLazyComponent("UserProfile", () => import("@/components/user/UserProfile")),
 };

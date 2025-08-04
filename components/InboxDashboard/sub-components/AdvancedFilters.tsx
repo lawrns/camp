@@ -91,7 +91,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     }
   };
 
-  const handleFilterChange = (key: keyof FilterOptions, value: any) => {
+  const handleFilterChange = (key: keyof FilterOptions, value: unknown) => {
     setFilters(prev => ({
       ...prev,
       [key]: value

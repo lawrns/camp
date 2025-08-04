@@ -51,9 +51,9 @@ interface Automation {
   status: "active" | "inactive" | "draft";
   trigger: {
     event: string;
-    conditions: any[];
+    conditions: unknown[];
   };
-  actions: any[];
+  actions: unknown[];
   created_at: string;
   updated_at: string;
   runs_count: number;
@@ -498,7 +498,7 @@ export default function AutomationsPage() {
               <Label htmlFor="type">Type</Label>
               <Select
                 value={createForm.type}
-                onValueChange={(value: any) => setCreateForm((prev) => ({ ...prev, type: value }))}
+                onValueChange={(value: unknown) => setCreateForm((prev) => ({ ...prev, type: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select automation type" />

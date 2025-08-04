@@ -168,7 +168,7 @@ function RegisterFormInner() {
       // Registration successful
       setRegistrationSuccess(true);
       setIsLoading(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setLocalError("Registration failed. Please check your connection and try again.");
       setIsLoading(false);
     }

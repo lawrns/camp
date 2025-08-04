@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { DEFAULT_REASONS, HandoffConfig, HandoffData, HandoffReason } from "./types";
 
 interface UseHandoffProps {
-  availableAgents: any[];
+  availableAgents: unknown[];
   conversationId: string;
   currentContext: string;
   config: HandoffConfig;
@@ -27,7 +27,7 @@ export function useHandoff({ availableAgents, conversationId, currentContext, co
   });
 
   const filteredAgents = useMemo(() => {
-    return availableAgents.filter((agent: any) => {
+    return availableAgents.filter((agent: unknown) => {
       // Filter based on urgency
       if (handoffData.urgency === "critical") {
         return agent.status === "online";

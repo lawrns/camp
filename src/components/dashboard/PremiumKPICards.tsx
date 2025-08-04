@@ -339,7 +339,7 @@ export function useKPIMetrics(organizationId: string, timeRange: string = "24h")
         if (isMounted) {
           setError(err instanceof Error ? err.message : "Failed to load metrics");
           // Keep showing loading state with default metrics
-          setMetrics(defaultKPIMetrics.map((m: any) => ({ ...m, loading: false })));
+          setMetrics(defaultKPIMetrics.map((m: unknown) => ({ ...m, loading: false })));
         }
       } finally {
         if (isMounted) {

@@ -7,7 +7,7 @@ interface RobustTestResult {
   testName: string;
   passed: boolean;
   duration: number;
-  details: any;
+  details: unknown;
   error?: string;
 }
 
@@ -254,7 +254,7 @@ class RobustRealtimeConnectionTester {
 
       // Test 2: Null channel cleanup
       try {
-        await client.removeChannel(null as any);
+        await client.removeChannel(null as unknown);
       } catch (error) {
         errorsCaught++;
       }
@@ -362,7 +362,7 @@ class RobustRealtimeConnectionTester {
   /**
    * Log test suite results
    */
-  private logTestSuiteResults(testSuite: any): void {
+  private logTestSuiteResults(testSuite: unknown): void {
     console.log('\n🧪 Robust Real-time Connection Test Results');
     console.log('='.repeat(60));
     

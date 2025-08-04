@@ -207,7 +207,7 @@ export type Database = {
           created_at: string | null;
           current_usage: number | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           monthly_limit: number;
           organization_id: string;
           reset_at: string;
@@ -257,7 +257,7 @@ export type Database = {
           comment: string | null;
           conversation_id: string | null;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           feedback_type: string;
           id: string;
           message_id: string | null;
@@ -338,7 +338,7 @@ export type Database = {
         Row: {
           ai_confidence: number | null;
           assigned_agent: string | null;
-          completed_at: string | null;
+          completedAt: string | null;
           context: Json | null;
           conversation_id: string;
           created_at: string | null;
@@ -381,7 +381,7 @@ export type Database = {
           created_at: string | null;
           id: string;
           insight_type: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           metadata: Json | null;
           title: string | null;
         };
@@ -928,11 +928,11 @@ export type Database = {
       api_keys: {
         Row: {
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           description: string | null;
-          expires_at: string | null;
+          expiresAt: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           key_hash: string;
           key_prefix: string;
           last_used_at: string | null;
@@ -1032,7 +1032,7 @@ export type Database = {
         Row: {
           action: string;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           details: Json | null;
           handoff_id: string | null;
           id: string;
@@ -1065,7 +1065,7 @@ export type Database = {
       };
       campfire_handoffs: {
         Row: {
-          completed_at: string | null;
+          completedAt: string | null;
           conversation_id: string | null;
           created_at: string | null;
           from_agent_id: string | null;
@@ -1346,7 +1346,7 @@ export type Database = {
           content: string;
           conversation_id: string;
           created_at: string | null;
-          created_by: string;
+          createdBy: string;
           id: string;
           is_private: boolean | null;
           organization_id: string;
@@ -1357,7 +1357,7 @@ export type Database = {
           content: string;
           conversation_id: string;
           created_at?: string | null;
-          created_by: string;
+          createdBy: string;
           id?: string;
           is_private?: boolean | null;
           organization_id: string;
@@ -1478,7 +1478,7 @@ export type Database = {
         Row: {
           color: string | null;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           description: string | null;
           id: string;
           is_system: boolean | null;
@@ -1549,11 +1549,11 @@ export type Database = {
           customer_attributes: Json | null;
           customer_browser: string | null;
           customer_device_type: string | null;
-          customer_email: string | null;
+          customerEmail: string | null;
           customer_id: string | null;
           customer_ip: string | null;
           customer_location: Json | null;
-          customer_name: string | null;
+          customerName: string | null;
           customer_os: string | null;
           customer_timezone: string | null;
           email_from: string | null;
@@ -1562,7 +1562,7 @@ export type Database = {
           first_response_at: string | null;
           id: string;
           internal_notes: string | null;
-          last_message_at: string | null;
+          lastMessageAt: string | null;
           last_message_preview: string | null;
           mailbox_id: number | null;
           metadata: Json | null;
@@ -1723,7 +1723,7 @@ export type Database = {
         Row: {
           conversation_id: string;
           created_at: string;
-          created_by: string | null;
+          createdBy: string | null;
           feedback: string | null;
           id: string;
           organization_id: string;
@@ -1795,7 +1795,7 @@ export type Database = {
       customer_verifications: {
         Row: {
           created_at: string;
-          customer_email: string;
+          customerEmail: string;
           email_score: number | null;
           email_verified: boolean | null;
           id: string;
@@ -1813,7 +1813,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          customer_email: string;
+          customerEmail: string;
           email_score?: number | null;
           email_verified?: boolean | null;
           id?: string;
@@ -1853,9 +1853,9 @@ export type Database = {
         Row: {
           body: string;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           is_default: boolean | null;
           name: string;
           organization_id: string;
@@ -1922,7 +1922,7 @@ export type Database = {
           conditions: Json;
           created_at: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           name: string;
           organization_id: string;
           updated_at: string | null;
@@ -1969,7 +1969,7 @@ export type Database = {
           assigned_to: string | null;
           conversation_id: string | null;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           description: string | null;
           escalation_type: string;
           id: string;
@@ -2048,7 +2048,7 @@ export type Database = {
           category: string | null;
           created_at: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           organization_id: string;
           question: string;
           updated_at: string | null;
@@ -2224,7 +2224,7 @@ export type Database = {
           ai_confidence: number | null;
           assigned_agent_id: string | null;
           assigned_at: string | null;
-          completed_at: string | null;
+          completedAt: string | null;
           conversation_id: string;
           created_at: string;
           escalation_path: string[] | null;
@@ -2463,7 +2463,7 @@ export type Database = {
           category_id: string | null;
           content: string;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           helpful_count: number | null;
           id: string;
           is_featured: boolean | null;
@@ -2566,10 +2566,10 @@ export type Database = {
       knowledge_base_categories: {
         Row: {
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           description: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           name: string;
           organization_id: string;
           parent_id: string | null;
@@ -2639,7 +2639,7 @@ export type Database = {
           created_at: string | null;
           description: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           name: string;
           organization_id: string;
           parent_id: string | null;
@@ -2745,9 +2745,9 @@ export type Database = {
         Row: {
           content: string;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           metadata: Json | null;
           organization_id: string;
           source: string | null;
@@ -3182,10 +3182,10 @@ export type Database = {
           read_status: string | null;
           reply_to_id: string | null;
           sender_avatar: string | null;
-          sender_email: string | null;
-          sender_id: string | null;
-          sender_name: string | null;
-          sender_type: string;
+          senderEmail: string | null;
+          senderId: string | null;
+          senderName: string | null;
+          senderType: string;
           status: string | null;
           thread_id: string | null;
           typing_duration_ms: number | null;
@@ -3223,7 +3223,7 @@ export type Database = {
           sender_email?: string | null;
           sender_id?: string | null;
           sender_name?: string | null;
-          sender_type: string;
+          senderType: string;
           status?: string | null;
           thread_id?: string | null;
           typing_duration_ms?: number | null;
@@ -3331,7 +3331,7 @@ export type Database = {
           configuration: Json | null;
           created_at: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           model_type: string;
           name: string;
           organization_id: string;
@@ -3379,7 +3379,7 @@ export type Database = {
           content: string;
           conversation_id: string | null;
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           id: string;
           organization_id: string;
           updated_at: string | null;
@@ -3689,7 +3689,7 @@ export type Database = {
       };
       onboarding_completion_tracking: {
         Row: {
-          completed_at: string | null;
+          completedAt: string | null;
           completed_steps: string[] | null;
           completion_percentage: number | null;
           created_at: string | null;
@@ -3886,7 +3886,7 @@ export type Database = {
           id: string;
           internal_classification: string | null;
           is_online: boolean | null;
-          last_seen_at: string | null;
+          lastSeenAt: string | null;
           name: string;
           organization_id: string | null;
           typing_accuracy: number | null;
@@ -4062,7 +4062,7 @@ export type Database = {
           settings: Json | null;
           slug: string;
           updated_at: string | null;
-          widget_api_key: string | null;
+          widgetApiKey: string | null;
         };
         Insert: {
           business_hours?: Json | null;
@@ -4100,7 +4100,7 @@ export type Database = {
           created_at: string | null;
           current_conversations: number | null;
           email: string;
-          full_name: string | null;
+          fullName: string | null;
           id: string;
           max_conversations: number | null;
           metadata: Json | null;
@@ -4225,7 +4225,7 @@ export type Database = {
           created_at: string | null;
           description: string | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           knowledge_sources: Json | null;
           max_tokens: number | null;
           name: string;
@@ -4283,7 +4283,7 @@ export type Database = {
           channel_type: string;
           created_at: string | null;
           id: string;
-          last_activity: string | null;
+          lastActivity: string | null;
           last_activity_at: string | null;
           metadata: Json | null;
           organization_id: string;
@@ -4638,7 +4638,7 @@ export type Database = {
           category: string | null;
           color: string | null;
           created_at: string;
-          created_by: string | null;
+          createdBy: string | null;
           description: string | null;
           id: string;
           last_used_at: string | null;
@@ -4703,7 +4703,7 @@ export type Database = {
           id: string;
           invited_at: string | null;
           invited_by: string | null;
-          is_active: boolean | null;
+          isActive: boolean | null;
           joined_at: string | null;
           organization_id: string;
           permissions: Json | null;
@@ -4885,13 +4885,13 @@ export type Database = {
         Row: {
           assigned_agent_id: string | null;
           category: string | null;
-          closed_at: string | null;
+          closedAt: string | null;
           conversation_id: string | null;
           created_at: string | null;
-          created_by: string | null;
-          customer_email: string | null;
+          createdBy: string | null;
+          customerEmail: string | null;
           customer_id: string | null;
-          customer_name: string | null;
+          customerName: string | null;
           description: string | null;
           due_date: string | null;
           id: string;
@@ -5088,7 +5088,7 @@ export type Database = {
           created_at: string | null;
           current_position: number | null;
           id: string;
-          is_typing: boolean | null;
+          isTyping: boolean | null;
           last_character_at: string | null;
           last_typing_at: string | null;
           operator_id: string;
@@ -5099,8 +5099,8 @@ export type Database = {
           started_typing_at: string | null;
           updated_at: string | null;
           user_id: string | null;
-          user_name: string | null;
-          user_type: string | null;
+          userName: string | null;
+          userType: string | null;
         };
         Insert: {
           conversation_id: string;
@@ -5231,13 +5231,13 @@ export type Database = {
         Row: {
           created_at: string | null;
           id: string;
-          last_seen_at: string | null;
+          lastSeenAt: string | null;
           metadata: Json | null;
           organization_id: string;
           status: string;
           updated_at: string | null;
           user_id: string | null;
-          user_type: string | null;
+          userType: string | null;
           visitor_id: string | null;
         };
         Insert: {
@@ -5326,12 +5326,12 @@ export type Database = {
       webhooks: {
         Row: {
           created_at: string | null;
-          created_by: string | null;
+          createdBy: string | null;
           events: string[];
           failure_count: number | null;
           headers: Json | null;
           id: string;
-          is_active: boolean | null;
+          isActive: boolean | null;
           last_failure_at: string | null;
           last_success_at: string | null;
           last_triggered_at: string | null;
@@ -5714,7 +5714,7 @@ export type Database = {
         Row: {
           created_at: string | null;
           id: string;
-          last_seen_at: string | null;
+          lastSeenAt: string | null;
           metadata: Json | null;
           session_id: string;
           updated_at: string | null;
@@ -5763,10 +5763,10 @@ export type Database = {
           ai_messages: number | null;
           assigned_to: string | null;
           created_at: string | null;
-          customer_email: string | null;
-          customer_name: string | null;
+          customerEmail: string | null;
+          customerName: string | null;
           id: string | null;
-          last_message_at: string | null;
+          lastMessageAt: string | null;
           latest_message_at: string | null;
           organization_id: string | null;
           priority: string | null;
@@ -5847,12 +5847,12 @@ export type Database = {
           customer_attributes: Json | null;
           customer_browser: string | null;
           customer_device_type: string | null;
-          customer_email: string | null;
+          customerEmail: string | null;
           customer_id: string | null;
           customer_ip: string | null;
           customer_location: Json | null;
           customer_message_count: number | null;
-          customer_name: string | null;
+          customerName: string | null;
           customer_os: string | null;
           customer_timezone: string | null;
           email_from: string | null;
@@ -5862,7 +5862,7 @@ export type Database = {
           has_attachments: boolean | null;
           id: string | null;
           internal_notes: string | null;
-          last_message_at: string | null;
+          lastMessageAt: string | null;
           last_message_preview: string | null;
           mailbox_id: number | null;
           metadata: Json | null;
@@ -6034,7 +6034,7 @@ export type Database = {
       user_organization_info: {
         Row: {
           email: string | null;
-          full_name: string | null;
+          fullName: string | null;
           membership_created_at: string | null;
           organization_id: string | null;
           organization_name: string | null;
@@ -6199,7 +6199,7 @@ export type Database = {
           channel_name: string;
           channel_type: string;
           subscriber_count: number;
-          last_activity: string;
+          lastActivity: string;
         }[];
       };
       get_conversation_timeline: {
@@ -6223,8 +6223,8 @@ export type Database = {
         };
         Returns: {
           conversation_id: string;
-          customer_name: string;
-          customer_email: string;
+          customerName: string;
+          customerEmail: string;
           customer_avatar: string;
           status: string;
           priority: string;
@@ -6232,7 +6232,7 @@ export type Database = {
           assigned_agent_name: string;
           created_at: string;
           updated_at: string;
-          last_message_at: string;
+          lastMessageAt: string;
           unread_count: number;
           last_message_preview: string;
           last_message_sender_type: string;

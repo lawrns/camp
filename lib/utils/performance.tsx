@@ -82,9 +82,9 @@ export function generatePreloadTags(
 }
 
 // Web Vitals reporting utility
-export const reportWebVitals = (metric: any): void => {
+export const reportWebVitals = (metric: unknown): void => {
   if (typeof window !== "undefined" && "gtag" in window) {
-    const gtag = (window as any).gtag;
+    const gtag = (window as unknown).gtag;
     gtag("event", metric.name, {
       event_category: "Web Vitals",
       event_label: metric.id,

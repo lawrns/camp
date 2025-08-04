@@ -203,11 +203,11 @@ export class ResolutionDetector {
     const behavioralWeight = 0.1;
 
     const explicitScore =
-      explicitSignals.reduce((sum: any, s: unknown) => sum + s.confidence, 0) / Math.max(explicitSignals.length, 1);
+      explicitSignals.reduce((sum: unknown, s: unknown) => sum + s.confidence, 0) / Math.max(explicitSignals.length, 1);
     const implicitScore =
-      implicitSignals.reduce((sum: any, s: unknown) => sum + s.confidence, 0) / Math.max(implicitSignals.length, 1);
+      implicitSignals.reduce((sum: unknown, s: unknown) => sum + s.confidence, 0) / Math.max(implicitSignals.length, 1);
     const behavioralScore =
-      behavioralSignals.reduce((sum: any, s: unknown) => sum + s.confidence, 0) / Math.max(behavioralSignals.length, 1);
+      behavioralSignals.reduce((sum: unknown, s: unknown) => sum + s.confidence, 0) / Math.max(behavioralSignals.length, 1);
 
     const weightedScore =
       explicitScore * explicitWeight + implicitScore * implicitWeight + behavioralScore * behavioralWeight;
@@ -305,7 +305,7 @@ export class ResolutionDetector {
     const totalAnalyzed = analyses.length;
     const resolvedCount = analyses.filter((a: unknown) => a.isResolved).length;
     const resolutionRate = totalAnalyzed > 0 ? resolvedCount / totalAnalyzed : 0;
-    const averageConfidence = analyses.reduce((sum: any, a: unknown) => sum + a.confidence, 0) / Math.max(totalAnalyzed, 1);
+    const averageConfidence = analyses.reduce((sum: unknown, a: unknown) => sum + a.confidence, 0) / Math.max(totalAnalyzed, 1);
 
     return {
       totalAnalyzed,

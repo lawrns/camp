@@ -78,7 +78,7 @@ export function MessageReactions({
     <TooltipProvider>
       <div className={cn("flex items-center gap-1", className)}>
         {/* Existing Reactions */}
-        {reactions.map((reaction: any) => (
+        {reactions.map((reaction: unknown) => (
           <Tooltip key={reaction.emoji}>
             <TooltipTrigger asChild>
               <Button
@@ -146,7 +146,7 @@ export function MessageReactions({
                 }}
               >
                 <div className="flex items-center gap-1">
-                  {QUICK_REACTIONS.map((reaction: any) => (
+                  {QUICK_REACTIONS.map((reaction: unknown) => (
                     <Tooltip key={reaction.emoji}>
                       <TooltipTrigger asChild>
                         <Button

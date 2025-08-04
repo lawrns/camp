@@ -180,7 +180,7 @@ const TeamMetricCard = React.memo(
     label,
   }: {
     gradient: string;
-    icon: any;
+    icon: unknown;
     badge: string;
     value: string | number;
     label: string;
@@ -330,13 +330,13 @@ const TeamManagementPage = () => {
 
   const handleAgentStatusChange = useCallback((agentId: string, newStatus: Agent["status"]) => {
     setTeamMembers((prev) =>
-      prev.map((agent: any) => (agent.id === agentId ? { ...agent, status: newStatus } : agent))
+      prev.map((agent: unknown) => (agent.id === agentId ? { ...agent, status: newStatus } : agent))
     );
   }, []);
 
   const handleAvailabilityToggle = useCallback((agentId: string, available: boolean) => {
     setTeamMembers((prev) =>
-      prev.map((agent: any) =>
+      prev.map((agent: unknown) =>
         agent.id === agentId ? { ...agent, availability: available, status: available ? "online" : "offline" } : agent
       )
     );
@@ -350,7 +350,7 @@ const TeamManagementPage = () => {
   const currentTime = useMemo(() => new Date().toLocaleTimeString(), [metrics]);
 
   // Memoized online agents list
-  const onlineAgents = useMemo(() => teamMembers.filter((agent: any) => agent.status === "online"), [teamMembers]);
+  const onlineAgents = useMemo(() => teamMembers.filter((agent: unknown) => agent.status === "online"), [teamMembers]);
 
   useEffect(() => {
     loadTimerRef.current = setTimeout(() => {
@@ -467,7 +467,7 @@ const TeamManagementPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {teamMembers.map((member: any) => (
+                {teamMembers.map((member: unknown) => (
                   <TeamMemberRow
                     key={member.id}
                     member={member}

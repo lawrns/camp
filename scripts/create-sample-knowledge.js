@@ -19,7 +19,7 @@ const sampleDocuments = [
     category: 'Support Basics',
     tags: ['onboarding', 'support', 'basics', 'customer service'],
     is_public: true,
-    is_active: true,
+    isActive: true,
     metadata: { 
       priority: 'high',
       difficulty: 'beginner',
@@ -34,7 +34,7 @@ const sampleDocuments = [
     category: 'General',
     tags: ['faq', 'common', 'questions', 'billing', 'technical'],
     is_public: true,
-    is_active: true,
+    isActive: true,
     metadata: { 
       priority: 'medium',
       difficulty: 'beginner',
@@ -49,7 +49,7 @@ const sampleDocuments = [
     category: 'Policies',
     tags: ['escalation', 'procedures', 'policy', 'management'],
     is_public: true,
-    is_active: true,
+    isActive: true,
     metadata: { 
       priority: 'high',
       difficulty: 'intermediate',
@@ -64,7 +64,7 @@ const sampleDocuments = [
     category: 'Product',
     tags: ['product', 'features', 'documentation', 'manual'],
     is_public: false,
-    is_active: false,
+    isActive: false,
     metadata: { 
       priority: 'medium',
       difficulty: 'advanced',
@@ -79,7 +79,7 @@ const sampleDocuments = [
     category: 'Advanced Support',
     tags: ['difficult customers', 'de-escalation', 'communication', 'psychology'],
     is_public: true,
-    is_active: true,
+    isActive: true,
     metadata: { 
       priority: 'high',
       difficulty: 'advanced',
@@ -123,7 +123,7 @@ async function createSampleDocuments() {
         console.error(`❌ Error creating "${doc.title}":`, error.message);
       } else {
         const created = data[0];
-        console.log(`✅ Created: ${created.title} (${created.content_type}, ${created.is_active ? 'active' : 'draft'})`);
+        console.log(`✅ Created: ${created.title} (${created.content_type}, ${created.isActive ? 'active' : 'draft'})`);
       }
     }
 
@@ -139,8 +139,8 @@ async function createSampleDocuments() {
       console.error('❌ Error verifying documents:', finalError);
     } else {
       console.log(`\n📊 Total documents in database: ${finalDocs.length}`);
-      console.log('   Active:', finalDocs.filter(d => d.is_active).length);
-      console.log('   Draft:', finalDocs.filter(d => !d.is_active).length);
+      console.log('   Active:', finalDocs.filter(d => d.isActive).length);
+      console.log('   Draft:', finalDocs.filter(d => !d.isActive).length);
     }
 
   } catch (error) {

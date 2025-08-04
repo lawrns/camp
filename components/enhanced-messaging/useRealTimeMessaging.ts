@@ -166,17 +166,17 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
       const formattedMessages: MessageData[] = data.map(msg => ({
         id: msg.id,
         content: msg.content,
-        senderType: msg.sender_type || 'user',
-        senderName: msg.sender?.full_name || 'Unknown',
+        senderType: msg.senderType || 'user',
+        senderName: msg.sender?.fullName || 'Unknown',
         senderAvatar: msg.sender?.avatar_url,
         timestamp: msg.created_at,
         status: msg.status || 'sent',
         attachments: msg.attachments || [],
-        reactions: msg.reactions?.reduce((acc: any[], reaction: any) => {
+        reactions: msg.reactions?.reduce((acc: unknown[], reaction: unknown) => {
           const existing = acc.find(r => r.emoji === reaction.emoji);
           if (existing) {
             existing.count++;
-            existing.users.push(reaction.profiles.full_name);
+            existing.users.push(reaction.profiles.fullName);
             if (reaction.user_id === config.userId) {
               existing.hasReacted = true;
             }
@@ -184,7 +184,7 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
             acc.push({
               emoji: reaction.emoji,
               count: 1,
-              users: [reaction.profiles.full_name],
+              users: [reaction.profiles.fullName],
               hasReacted: reaction.user_id === config.userId,
             });
           }
@@ -212,7 +212,7 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
   }, [config.conversationId, config.userId]);
 
   // Handle message database changes
-  const handleMessageChange = useCallback((payload: any) => {
+  const handleMessageChange = useCallback((payload: unknown) => {
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     setState(prev => {
@@ -225,8 +225,8 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
             const newMessage: MessageData = {
               id: newRecord.id,
               content: newRecord.content,
-              senderType: newRecord.sender_type || 'user',
-              senderName: newRecord.sender_name || 'Unknown',
+              senderType: newRecord.senderType || 'user',
+              senderName: newRecord.senderName || 'Unknown',
               senderAvatar: newRecord.sender_avatar,
               timestamp: newRecord.created_at,
               status: newRecord.status || 'sent',
@@ -262,7 +262,7 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
   }, []);
 
   // Handle typing broadcasts
-  const handleTypingBroadcast = useCallback((payload: any) => {
+  const handleTypingBroadcast = useCallback((payload: unknown) => {
     if (!config.enableTypingIndicators) return;
 
     const { user_id, user_name, is_typing } = payload.payload;
@@ -301,9 +301,9 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
     if (!config.enablePresence || !channelRef.current) return;
 
     const presenceState = channelRef.current.presenceState();
-    const users: PresenceUser[] = Object.values(presenceState).flat().map((presence: any) => ({
+    const users: PresenceUser[] = Object.values(presenceState).flat().map((presence: unknown) => ({
       id: presence.user_id,
-      name: presence.user_name || 'Unknown',
+      name: presence.userName || 'Unknown',
       avatar: presence.avatar_url,
       status: presence.status || 'online',
       lastSeen: presence.last_seen,
@@ -313,11 +313,11 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
   }, [config.enablePresence]);
 
   // Handle presence join/leave
-  const handlePresenceJoin = useCallback((payload: any) => {
+  const handlePresenceJoin = useCallback((payload: unknown) => {
     console.log('User joined:', payload);
   }, []);
 
-  const handlePresenceLeave = useCallback((payload: any) => {
+  const handlePresenceLeave = useCallback((payload: unknown) => {
     console.log('User left:', payload);
   }, []);
 
@@ -348,7 +348,7 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
           conversation_id: config.conversationId,
           user_id: config.userId,
           content,
-          sender_type: 'user',
+          senderType: 'user',
           status: 'sent',
         })
         .select()
@@ -384,8 +384,8 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
       event: UNIFIED_EVENTS.TYPING_START,
       payload: {
         user_id: config.userId,
-        user_name: 'Current User', // Should be actual user name
-        is_typing: true,
+        userName: 'Current User', // Should be actual user name
+        isTyping: true,
         conversationId: config.conversationId,
         organizationId: config.organizationId,
       },
@@ -412,8 +412,8 @@ export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
       event: UNIFIED_EVENTS.TYPING_STOP,
       payload: {
         user_id: config.userId,
-        user_name: 'Current User',
-        is_typing: false,
+        userName: 'Current User',
+        isTyping: false,
         conversationId: config.conversationId,
         organizationId: config.organizationId,
       },

@@ -20,7 +20,7 @@ export const cleanupDanglingFiles = async () => {
     .where(and(lte(files.createdAt, oneDayAgo), isNull(files.messageId), isNull(files.noteId)));
 
   const s3UrlsToDelete = danglingFiles.flatMap((file) =>
-    [file.url, file.previewUrl].filter((url: any): url is string => !!url)
+    [file.url, file.previewUrl].filter((url: unknown): url is string => !!url)
   );
 
   await deleteFiles(s3UrlsToDelete);
@@ -30,7 +30,7 @@ export const cleanupDanglingFiles = async () => {
     .where(
       inArray(
         files.id,
-        danglingFiles.map((file: any) => file.id)
+        danglingFiles.map((file: unknown) => file.id)
       )
     )
     .returning({ id: files.id });

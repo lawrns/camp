@@ -305,7 +305,7 @@ export function AIResponsePreviewGrid({
 
   return (
     <div className={cn("grid gap-4", className)}>
-      {responses.map((response: any) => (
+      {responses.map((response: unknown) => (
         <AIResponsePreviewCard
           key={response.id}
           {...response}

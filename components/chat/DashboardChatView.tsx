@@ -23,14 +23,14 @@ import { SmartRepliesHeaderIcon } from './SmartRepliesHeaderIcon';
 interface Message {
   id: string;
   content: string;
-  sender_type: 'visitor' | 'operator' | 'ai_assistant';
-  sender_name: string;
+  senderType: 'visitor' | 'operator' | 'ai_assistant';
+  senderName: string;
   sender_email?: string;
   created_at: string;
   conversation_id: string;
   organization_id: string;
   read_status?: string;
-  attachments?: any[];
+  attachments?: unknown[];
 }
 
 interface DashboardChatViewProps {
@@ -161,9 +161,9 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
             const newMessage: Message = {
               id: payload.new.id,
               content: payload.new.content,
-              sender_type: payload.new.sender_type,
-              sender_name: payload.new.sender_name,
-              sender_email: payload.new.sender_email,
+              senderType: payload.new.senderType,
+              senderName: payload.new.senderName,
+              senderEmail: payload.new.senderEmail,
               created_at: payload.new.created_at,
               conversation_id: payload.new.conversation_id,
               organization_id: payload.new.organization_id,
@@ -283,7 +283,7 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
 
   // Get last customer message for smart replies context
   const lastCustomerMessage = messages
-    .filter(msg => msg.sender_type === 'visitor')
+    .filter(msg => msg.senderType === 'visitor')
     .slice(-1)[0]?.content || '';
 
   return (
@@ -316,20 +316,20 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
             <div key={message.id} className="flex gap-4 p-4 rounded-lg bg-background shadow-sm hover:shadow-md transition-shadow duration-200">
               <Avatar className="h-8 w-8 flex-shrink-0">
                 <AvatarFallback className="text-xs font-sans">
-                  {getSenderIcon(message.sender_type)}
+                  {getSenderIcon(message.senderType)}
                 </AvatarFallback>
               </Avatar>
 
               <div className="flex-1 space-y-2 max-w-[80%]">
                 <div className="flex items-center gap-2">
                   <span className="font-sans font-medium text-sm">
-                    {message.sender_name || 'Unknown'}
+                    {message.senderName || 'Unknown'}
                   </span>
                   <Badge
                     variant="secondary"
-                    className={`text-xs font-sans ${getSenderBadgeColor(message.sender_type)}`}
+                    className={`text-xs font-sans ${getSenderBadgeColor(message.senderType)}`}
                   >
-                    {message.sender_type.replace('_', ' ')}
+                    {message.senderType.replace('_', ' ')}
                   </Badge>
                   <span className="text-xs font-sans text-gray-500">
                     {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}

@@ -189,7 +189,7 @@ export function useBreakpoint(): BreakpointState {
     // Media query change listeners
     const listeners: Array<() => void> = [];
 
-    Object.values(matchers).forEach((matcher: any) => {
+    Object.values(matchers).forEach((matcher: unknown) => {
       if (!matcher) return;
 
       const listener = () => updateState();
@@ -215,7 +215,7 @@ export function useBreakpoint(): BreakpointState {
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
-      listeners.forEach((cleanup: any) => cleanup());
+      listeners.forEach((cleanup: unknown) => cleanup());
     };
   }, [matchers, updateState]);
 

@@ -10,7 +10,7 @@ import type { Conversation, Message } from "@/types/entities";
 export type { Message, Conversation, TypingIndicator } from "@/types/entities";
 
 export interface VisitorTypingEvent {
-  is_typing: boolean;
+  isTyping: boolean;
   content?: string;
   user_id?: string;
   user_name?: string;
@@ -30,11 +30,11 @@ export interface RealtimeMessagePayload {
   eventType: string;
   new: Message;
   old?: Message;
-  errors?: any[];
+  errors?: unknown[];
 }
 
 export interface TypingPayload {
-  is_typing: boolean;
+  isTyping: boolean;
   content?: string;
   user_id?: string;
   user_name?: string;

@@ -218,7 +218,7 @@ export class ConversationSummarizationService {
   /**
    * Generate AI summary using OpenAI
    */
-  private async generateAISummary(conversationData: any, request: SummarizationRequest): Promise<string> {
+  private async generateAISummary(conversationData: unknown, request: SummarizationRequest): Promise<string> {
     try {
       const { messages } = conversationData;
       const purpose = request.purpose;
@@ -230,7 +230,7 @@ export class ConversationSummarizationService {
       const conversationHistory = messages
         .map(
           (msg: unknown) =>
-            `${msg.sender_type === "visitor" ? "Customer" : msg.sender_type === "ai" ? "AI Assistant" : "Agent"}: ${msg.content}`
+            `${msg.senderType === "visitor" ? "Customer" : msg.senderType === "ai" ? "AI Assistant" : "Agent"}: ${msg.content}`
         )
         .join("\n");
 
@@ -278,7 +278,7 @@ export class ConversationSummarizationService {
   private async analyzeSentimentAndUrgency(messages: unknown[]): Promise<{ sentiment: string; urgency: string }> {
     try {
       const recentMessages = messages.slice(-5); // Analyze last 5 messages
-      const customerMessages = recentMessages.filter((msg: unknown) => msg.sender_type === "visitor");
+      const customerMessages = recentMessages.filter((msg: unknown) => msg.senderType === "visitor");
 
       if (customerMessages.length === 0) {
         return { sentiment: "neutral", urgency: "medium" };
@@ -360,9 +360,9 @@ export class ConversationSummarizationService {
    * Generate ticket recommendation
    */
   private async generateTicketRecommendation(
-    conversationData: any,
+    conversationData: unknown,
     summary: string,
-    sentimentAnalysis: any
+    sentimentAnalysis: unknown
   ): Promise<any> {
     try {
       const { messages } = conversationData;
@@ -466,7 +466,7 @@ export class ConversationSummarizationService {
    * Calculate participant count
    */
   private calculateParticipantCount(messages: unknown[]): number {
-    const uniqueSenders = new Set(messages.map((msg: unknown) => msg.sender_type));
+    const uniqueSenders = new Set(messages.map((msg: unknown) => msg.senderType));
     return uniqueSenders.size;
   }
 
@@ -475,7 +475,7 @@ export class ConversationSummarizationService {
    */
   private async saveSummary(summary: ConversationSummary): Promise<void> {
     try {
-      await (supabase as any).from("conversation_summaries").insert([
+      await (supabase as unknown).from("conversation_summaries").insert([
         {
           id: summary.id,
           conversation_id: summary.conversationId,
@@ -502,7 +502,7 @@ export class ConversationSummarizationService {
    */
   async getSummary(conversationId: string, organizationId: string): Promise<ConversationSummary | null> {
     try {
-      const { data } = await (supabase as any)
+      const { data } = await (supabase as unknown)
         .from("conversation_summaries")
         .select("*")
         .eq("conversation_id", conversationId)

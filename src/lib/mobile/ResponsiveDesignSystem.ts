@@ -209,7 +209,7 @@ export class TouchGestureUtils {
  * Performance optimization utilities for mobile
  */
 export class MobilePerformanceUtils {
-  static debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+  static debounce<T extends (...args: unknown[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<T>) => {
       clearTimeout(timeout);
@@ -217,7 +217,7 @@ export class MobilePerformanceUtils {
     };
   }
 
-  static throttle<T extends (...args: any[]) => any>(func: T, limit: number): (...args: Parameters<T>) => void {
+  static throttle<T extends (...args: unknown[]) => any>(func: T, limit: number): (...args: Parameters<T>) => void {
     let inThrottle: boolean;
     return (...args: Parameters<T>) => {
       if (!inThrottle) {
@@ -230,7 +230,7 @@ export class MobilePerformanceUtils {
 
   static requestIdleCallback(callback: () => void): void {
     if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(callback);
+      (window as unknown).requestIdleCallback(callback);
     } else {
       setTimeout(callback, 1);
     }

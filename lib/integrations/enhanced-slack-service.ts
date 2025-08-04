@@ -99,7 +99,7 @@ export class EnhancedSlackService {
       organizationId: 'current-org', // Would be passed in
       title: '📋 New Conversation Assignment',
       message: `A conversation has been assigned to <@${assignedTo}> by <@${assignedBy}>`,
-      priority: priority as any,
+      priority: priority as unknown,
       metadata: { reason },
       actionButtons: [
         { text: 'View Conversation', value: `view_${conversationId}`, style: 'primary' },
@@ -127,7 +127,7 @@ export class EnhancedSlackService {
       organizationId: 'current-org',
       title: '🤖➡️👤 AI Handover Required',
       message: `AI confidence is low (${Math.round(confidence * 100)}%). Human intervention needed.`,
-      priority: urgency as any,
+      priority: urgency as unknown,
       metadata: { confidence, reason, customerSentiment },
       actionButtons: [
         { text: 'Take Over', value: `takeover_${conversationId}`, style: 'primary' },
@@ -155,7 +155,7 @@ export class EnhancedSlackService {
       organizationId: 'current-org',
       title: '🚨 Conversation Escalated',
       message: `Conversation escalated by <@${escalatedBy}>: ${reason}`,
-      priority: priority as any,
+      priority: priority as unknown,
       metadata: { reason, customerInfo },
       actionButtons: [
         { text: 'Handle Escalation', value: `escalate_${conversationId}`, style: 'danger' },
@@ -184,7 +184,7 @@ export class EnhancedSlackService {
         return [];
       }
 
-      return response.members.map((member: any) => ({
+      return response.members.map((member: unknown) => ({
         id: member.id,
         name: member.real_name || member.name,
         email: member.profile?.email,
@@ -300,7 +300,7 @@ export class EnhancedSlackService {
     }
   }
 
-  private buildMessageBlocks(notification: SlackNotification): any[] {
+  private buildMessageBlocks(notification: SlackNotification): unknown[] {
     const blocks = [
       {
         type: 'header',
@@ -348,7 +348,7 @@ export class EnhancedSlackService {
     return blocks;
   }
 
-  private async mockSlackAPI(method: string, params: any): Promise<any> {
+  private async mockSlackAPI(method: string, params: unknown): Promise<any> {
     // Mock implementation for development
     console.log(`[Slack API] ${method}:`, params);
     

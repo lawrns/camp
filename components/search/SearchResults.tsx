@@ -149,7 +149,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
               <Icon icon={BookOpen} className="h-5 w-5" />
               Knowledge Base
             </h3>
-            {results.knowledge.map((item: any) => (
+            {results.knowledge.map((item: unknown) => (
               <KnowledgeResultCard key={item.id} item={item} />
             ))}
           </div>
@@ -162,7 +162,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
               <Icon icon={MessageSquare} className="h-5 w-5" />
               Conversations
             </h3>
-            {results.conversations.map((item: any) => (
+            {results.conversations.map((item: unknown) => (
               <ConversationResultCard
                 key={item.id}
                 item={item}
@@ -180,7 +180,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
               <Icon icon={Users} className="h-5 w-5" />
               Users
             </h3>
-            {results.users.map((item: any) => (
+            {results.users.map((item: unknown) => (
               <UserResultCard key={item.id} item={item} />
             ))}
           </div>
@@ -189,7 +189,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
 
       <TabsContent value="knowledge">
         <div className="space-y-3">
-          {results.knowledge.map((item: any) => (
+          {results.knowledge.map((item: unknown) => (
             <KnowledgeResultCard key={item.id} item={item} />
           ))}
         </div>
@@ -197,7 +197,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
 
       <TabsContent value="conversations">
         <div className="space-y-3">
-          {results.conversations.map((item: any) => (
+          {results.conversations.map((item: unknown) => (
             <ConversationResultCard
               key={item.id}
               item={item}
@@ -210,7 +210,7 @@ export function SearchResults({ results, query, activeTab, onTabChange }: Search
 
       <TabsContent value="users">
         <div className="space-y-3">
-          {results.users.map((item: any) => (
+          {results.users.map((item: unknown) => (
             <UserResultCard key={item.id} item={item} />
           ))}
         </div>
@@ -247,7 +247,7 @@ function KnowledgeResultCard({ item }: { item: KnowledgeResult }) {
           </div>
         </div>
         <div className="mt-3 flex flex-wrap gap-1">
-          {item.tags.map((tag: any) => (
+          {item.tags.map((tag: unknown) => (
             <Badge key={tag} variant="secondary" className="text-tiny">
               {tag}
             </Badge>
@@ -308,7 +308,7 @@ function UserResultCard({ item }: { item: UserResult }) {
             <div className="flex h-10 w-10 items-center justify-center rounded-ds-full bg-gray-200">
               {item.name
                 .split(" ")
-                .map((n: any) => n[0])
+                .map((n: unknown) => n[0])
                 .join("")}
             </div>
             <div>

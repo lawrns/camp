@@ -119,7 +119,7 @@ export async function getTeamPerformanceMetrics(
 
       return {
         userId: member.user_id,
-        name: member.users?.full_name || member.users?.email || 'Unknown User',
+        name: member.users?.fullName || member.users?.email || 'Unknown User',
         email: member.users?.email || '',
         role: member.role,
         avatar: member.users?.avatar_url,

@@ -75,10 +75,10 @@ function calculateDelay(attempt: number, options: Required<RetryOptions>): numbe
 /**
  * Creates a retryable version of an async function
  */
-export function retryable<T extends (...args: any[]) => Promise<any>>(fn: T, options: RetryOptions = {}): T {
+export function retryable<T extends (...args: unknown[]) => Promise<any>>(fn: T, options: RetryOptions = {}): T {
   const mergedOptions: Required<RetryOptions> = { ...DEFAULT_OPTIONS, ...options };
 
-  return (async (...args: any[]) => {
+  return (async (...args: unknown[]) => {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= mergedOptions.maxRetries; attempt++) {

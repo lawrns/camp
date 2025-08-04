@@ -3,7 +3,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
 // Simplified auth wrapper for API endpoints
-async function withAuth(handler: (req: NextRequest, user: any, params: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: unknown, params: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
       const cookieStore = cookies();
@@ -37,7 +37,7 @@ async function withAuth(handler: (req: NextRequest, user: any, params: any) => P
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any, params: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
   try {
     const { id } = params;
 
@@ -87,7 +87,7 @@ export const GET = withAuth(async (request: NextRequest, user: any, params: any)
   }
 });
 
-export const PUT = withAuth(async (request: NextRequest, user: any, params: any) => {
+export const PUT = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
   try {
     const { id } = params;
     const body = await request.json();
@@ -185,7 +185,7 @@ export const PUT = withAuth(async (request: NextRequest, user: any, params: any)
   }
 });
 
-export const DELETE = withAuth(async (request: NextRequest, user: any, params: any) => {
+export const DELETE = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
   try {
     const { id } = params;
 

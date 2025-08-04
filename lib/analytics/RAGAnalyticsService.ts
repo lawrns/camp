@@ -165,7 +165,7 @@ export class RAGAnalyticsService {
         )
         .gte("created_at", startDate.toISOString())
         .lte("created_at", endDate.toISOString())
-        .eq("messages.sender_type", "ai");
+        .eq("messages.senderType", "ai");
 
       if (organizationId) {
         conversationsQuery.eq("organization_id", organizationId);
@@ -441,7 +441,7 @@ export class RAGAnalyticsService {
       .select("content")
       .gte("created_at", startDate.toISOString())
       .lte("created_at", endDate.toISOString())
-      .eq("sender_type", "customer")
+      .eq("senderType", "customer")
       .not("content", "is", null);
 
     if (organizationId) {

@@ -50,7 +50,7 @@ export function useTeams() {
 
       const response = await fetch("/api/teams", {
         headers: {
-          Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+          Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
           "Content-Type": "application/json",
         },
       });
@@ -85,7 +85,7 @@ export function useTeams() {
         const response = await fetch("/api/teams", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(teamData),
@@ -124,7 +124,7 @@ export function useTeams() {
         const response = await fetch(`/api/teams/${teamId}/members`, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(memberData),
@@ -141,7 +141,7 @@ export function useTeams() {
 
           // Update the team in the local state
           setTeams((prev) =>
-            prev.map((team: any) =>
+            prev.map((team: unknown) =>
               team.id === teamId
                 ? {
                     ...team,
@@ -175,7 +175,7 @@ export function useTeams() {
 
         const response = await fetch(`/api/teams/${teamId}/members`, {
           headers: {
-            Authorization: `Bearer ${(user as any).accessToken || (user as any).access_token || ""}`,
+            Authorization: `Bearer ${(user as unknown).accessToken || (user as unknown).access_token || ""}`,
             "Content-Type": "application/json",
           },
         });

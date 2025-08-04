@@ -6,7 +6,7 @@ interface UseAuthReturn {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  user: any;
+  user: unknown;
   token?: string | null;
   conversationId?: string | null;
 }

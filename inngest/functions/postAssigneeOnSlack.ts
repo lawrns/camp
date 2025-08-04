@@ -9,7 +9,7 @@ import { postSlackDM, postSlackMessage } from "@/lib/slack/client";
 import { assertDefinedOrRaiseNonRetriableError } from "../utils";
 
 export const notifySlackAssignment = async (conversationId: string, assignEvent: AssignEvent) => {
-  if (!(assignEvent as any).assignedToId) return "Not posted, no assignee";
+  if (!(assignEvent as unknown).assignedToId) return "Not posted, no assignee";
 
   const conversation = assertDefinedOrRaiseNonRetriableError(
     await db.query.conversations.findFirst({
@@ -19,7 +19,7 @@ export const notifySlackAssignment = async (conversationId: string, assignEvent:
       },
     })
   );
-  const assignedBy = (assignEvent as any).assignedById ? await getClerkUser((assignEvent as any).assignedById) : null;
+  const assignedBy = (assignEvent as unknown).assignedById ? await getClerkUser((assignEvent as unknown).assignedById) : null;
 
   // Check for Slack configuration using adapter
   const slackConfig = SlackIntegrationAdapter.getSlackConfig(conversation.mailbox);
@@ -60,7 +60,7 @@ export const notifySlackAssignment = async (conversationId: string, assignEvent:
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `<${getBaseUrl()}/mailboxes/${(conversation.mailbox as any).slug}/conversations?id=${
+            text: `<${getBaseUrl()}/mailboxes/${(conversation.mailbox as unknown).slug}/conversations?id=${
               conversation.uid
             }|View in Helper>`,
           },

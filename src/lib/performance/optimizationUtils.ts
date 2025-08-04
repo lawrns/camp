@@ -49,7 +49,7 @@ export const DEFAULT_OPTIMIZATION_CONFIG: OptimizationConfig = {
 /**
  * Debounce utility for search and input operations
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   delay: number = OPTIMIZATION_CONSTANTS.DEBOUNCE_DELAY
 ): (...args: Parameters<T>) => void {
@@ -63,7 +63,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle utility for frequent operations
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => any>(
   func: T,
   delay: number = OPTIMIZATION_CONSTANTS.THROTTLE_DELAY
 ): (...args: Parameters<T>) => void {
@@ -206,8 +206,8 @@ export class PerformanceMonitor {
 export function getMemoryUsage(): { used: number; total: number } | null {
   if ("memory" in performance) {
     return {
-      used: (performance as any).memory.usedJSHeapSize,
-      total: (performance as any).memory.totalJSHeapSize,
+      used: (performance as unknown).memory.usedJSHeapSize,
+      total: (performance as unknown).memory.totalJSHeapSize,
     };
   }
   return null;
@@ -216,7 +216,7 @@ export function getMemoryUsage(): { used: number; total: number } | null {
 /**
  * Optimize React component re-renders
  */
-export function shallowEqual(obj1: any, obj2: any): boolean {
+export function shallowEqual(obj1: unknown, obj2: unknown): boolean {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 

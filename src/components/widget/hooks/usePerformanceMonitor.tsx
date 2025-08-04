@@ -74,7 +74,7 @@ const getDeviceType = (): string => {
 
 const getNetworkType = (): string => {
   const connection =
-    (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    (navigator as unknown).connection || (navigator as unknown).mozConnection || (navigator as unknown).webkitConnection;
   return connection?.effectiveType || "unknown";
 };
 
@@ -320,7 +320,7 @@ export const usePerformanceMonitor = (): UsePerformanceMonitorReturn => {
     return {
       ...metrics,
       p75LoadTime: calculateP75(metricsBuffer.loadTimes),
-      memoryUsage: (performance as any).memory?.usedJSHeapSize || 0,
+      memoryUsage: (performance as unknown).memory?.usedJSHeapSize || 0,
     };
   }, [metrics]);
 
@@ -388,6 +388,6 @@ export const globalWidgetPerformanceMonitor = {
 // Extend window interface for Sentry
 declare global {
   interface Window {
-    Sentry?: any;
+    Sentry?: unknown;
   }
 }

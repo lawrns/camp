@@ -64,15 +64,15 @@ export class WebVitalsMonitor {
     this.isInitialized = true;
 
     // Core Web Vitals
-    onLCP((metric: any) => this.handleMetric("lcp", metric));
+    onLCP((metric: unknown) => this.handleMetric("lcp", metric));
     // onFID is deprecated in web-vitals v5.x - FID has been replaced by INP
     // Keeping fid property for backward compatibility but it won't be updated
-    onCLS((metric: any) => this.handleMetric("cls", metric));
-    onINP((metric: any) => this.handleMetric("inp", metric));
+    onCLS((metric: unknown) => this.handleMetric("cls", metric));
+    onINP((metric: unknown) => this.handleMetric("inp", metric));
 
     // Other metrics
-    onFCP((metric: any) => this.handleMetric("fcp", metric));
-    onTTFB((metric: any) => this.handleMetric("ttfb", metric));
+    onFCP((metric: unknown) => this.handleMetric("fcp", metric));
+    onTTFB((metric: unknown) => this.handleMetric("ttfb", metric));
 
     // Long Tasks monitoring
     this.observeLongTasks();
@@ -110,7 +110,7 @@ export class WebVitalsMonitor {
         this.metrics.longTasks = longTaskCount;
 
         // Calculate Total Blocking Time (simplified)
-        const tbt = entries.reduce((total: any, entry: any) => {
+        const tbt = entries.reduce((total: unknown, entry: unknown) => {
           const blockingTime = Math.max(0, entry.duration - 50);
           return total + blockingTime;
         }, this.metrics.tbt || 0);
@@ -170,7 +170,7 @@ export class WebVitalsMonitor {
     }
 
     return () => {
-      this.callbacks = this.callbacks.filter((cb: any) => cb !== callback);
+      this.callbacks = this.callbacks.filter((cb: unknown) => cb !== callback);
     };
   }
 
@@ -213,7 +213,7 @@ export class WebVitalsMonitor {
    * Notify all callbacks
    */
   private notifyCallbacks(): void {
-    this.callbacks.forEach((callback: any) => callback(this.metrics));
+    this.callbacks.forEach((callback: unknown) => callback(this.metrics));
   }
 
   /**

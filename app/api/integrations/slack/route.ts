@@ -161,14 +161,14 @@ export async function PUT(request: NextRequest) {
         .from('organization_integrations')
         .upsert({
           organization_id: organizationId,
-          integration_type: 'slack',
+          integrationType: 'slack',
           config: {
             ...config,
             // Don't store sensitive tokens in plain text in production
             botToken: '***ENCRYPTED***',
             signingSecret: '***ENCRYPTED***',
           },
-          is_active: true,
+          isActive: true,
           updated_at: new Date().toISOString(),
         });
 

@@ -369,7 +369,7 @@ export const widgetRouter = createTRPCRouter({
         timestamp: new Date(),
         metadata: input.attachments
           ? {
-              fileAttachments: input.attachments.map((att: any) => ({
+              fileAttachments: input.attachments.map((att: unknown) => ({
                 name: att.name,
                 url: `/uploads/${att.name}`, // Would be actual upload URL
                 type: att.type,

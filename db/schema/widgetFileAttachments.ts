@@ -68,7 +68,7 @@ export const widgetFileAttachments = pgTable(
         height?: number;
         duration?: number; // for videos/audio
         pages?: number; // for PDFs
-        [key: string]: any;
+        [key: string]: unknown;
       }>()
       .default({}),
     isDeleted: boolean("is_deleted").default(false),

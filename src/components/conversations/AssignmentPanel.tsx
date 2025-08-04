@@ -70,11 +70,11 @@ export function AssignmentPanel({
         setLoading(true);
         setAgentsError(false);
 
-        const response = await fetch("/api/agents/availability", {
+        // CRITICAL-003 FIX: Use enhanced authentication
+        const { fetchWithAuth } = await import('@/hooks/useRealtimeAuth');
+        const response = await fetchWithAuth("/api/agents/availability", {
           method: "GET",
-          credentials: "include", // Include cookies for authentication
           headers: {
-            "Content-Type": "application/json",
             "X-Organization-ID": organizationId,
           },
         });
@@ -268,7 +268,7 @@ export function AssignmentPanel({
                 <SelectValue placeholder="Select another agent" />
               </SelectTrigger>
               <SelectContent>
-                {agents.map((agent: any) => {
+                {agents.map((agent: unknown) => {
                   const workload = getWorkloadIndicator(agent);
                   return (
                     <SelectItem key={agent.id} value={agent.id}>
@@ -358,7 +358,7 @@ export function AssignmentPanel({
             <h4 className="text-sm font-medium text-gray-900">Assignment History</h4>
             <ScrollArea className="h-32 rounded-lg border border-gray-200">
               <div className="space-y-2 p-3">
-                {assignmentHistory.map((history: any) => (
+                {assignmentHistory.map((history: unknown) => (
                   <div key={history.id} className="space-y-1 rounded p-2 text-xs hover:bg-gray-100">
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-900">{history.agentName}</span>

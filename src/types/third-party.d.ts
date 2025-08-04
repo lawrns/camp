@@ -85,7 +85,7 @@ declare module "*.styl" {
 }
 
 declare module "*.json" {
-  const content: any;
+  const content: unknown;
   export default content;
 }
 
@@ -110,9 +110,9 @@ declare module "@/lib/supabase/server-client" {
 
 declare module "@/lib/auth/service" {
   export interface AuthService {
-    validateToken(token: string): Promise<{ valid: boolean; user?: any }>;
+    validateToken(token: string): Promise<{ valid: boolean; user?: unknown }>;
     getUser(token: string): Promise<any>;
-    createSession(user: any): Promise<string>;
+    createSession(user: unknown): Promise<string>;
     destroySession(token: string): Promise<void>;
   }
 
@@ -122,8 +122,8 @@ declare module "@/lib/auth/service" {
 
 declare module "@/lib/db" {
   export interface DatabaseConnection {
-    query(sql: string, params?: any[]): Promise<any>;
-    transaction(fn: (trx: any) => Promise<any>): Promise<any>;
+    query(sql: string, params?: unknown[]): Promise<any>;
+    transaction(fn: (trx: unknown) => Promise<any>): Promise<any>;
   }
 
   export const db: DatabaseConnection;
@@ -149,7 +149,7 @@ declare module "@/lib/realtime" {
     createChannel(name: string): RealtimeChannel;
     getChannel(name: string): RealtimeChannel | null;
     removeChannel(name: string): void;
-    broadcast(channel: string, event: string, payload: any): void;
+    broadcast(channel: string, event: string, payload: unknown): void;
   }
 
   export const realtime: RealtimeService;
@@ -158,7 +158,7 @@ declare module "@/lib/realtime" {
 
 declare module "@/lib/feature-flags" {
   export function isFeatureEnabled(flag: string): boolean;
-  export function getFeatureValue(flag: string): any;
+  export function getFeatureValue(flag: string): unknown;
   export function getAllFeatures(): Record<string, any>;
 }
 
@@ -195,16 +195,16 @@ declare global {
 
   // Auth service globals
   const authService: {
-    validateToken(token: string): Promise<{ valid: boolean; user?: any }>;
+    validateToken(token: string): Promise<{ valid: boolean; user?: unknown }>;
     getUser(token: string): Promise<any>;
-    createSession(user: any): Promise<string>;
+    createSession(user: unknown): Promise<string>;
     destroySession(token: string): Promise<void>;
   };
 
   // Database globals
   const db: {
-    query(sql: string, params?: any[]): Promise<any>;
-    transaction(fn: (trx: any) => Promise<any>): Promise<any>;
+    query(sql: string, params?: unknown[]): Promise<any>;
+    transaction(fn: (trx: unknown) => Promise<any>): Promise<any>;
   };
 
   // Storage globals
@@ -220,7 +220,7 @@ declare global {
     createChannel(name: string): import("@supabase/supabase-js").RealtimeChannel;
     getChannel(name: string): import("@supabase/supabase-js").RealtimeChannel | null;
     removeChannel(name: string): void;
-    broadcast(channel: string, event: string, payload: any): void;
+    broadcast(channel: string, event: string, payload: unknown): void;
   };
 
   // Feature flags globals
@@ -252,11 +252,11 @@ declare module "react-use-websocket" {
     getWebSocket: () => WebSocket | null;
   }
 
-  export default function useWebSocket(socketUrl: string | null, options?: any): WebSocketHook;
+  export default function useWebSocket(socketUrl: string | null, options?: unknown): WebSocketHook;
 }
 
 declare module "react-hotkeys-hook" {
-  export function useHotkeys(keys: string, callback: (event: KeyboardEvent) => void, options?: any): void;
+  export function useHotkeys(keys: string, callback: (event: KeyboardEvent) => void, options?: unknown): void;
 }
 
 declare module "react-infinite-scroll-component" {
@@ -351,16 +351,16 @@ declare module "react-spring" {
     reset(): void;
   }
 
-  export function useSpring(config: any): any;
-  export function useTransition(data: any, config: any): any;
-  export function animated(element: any): any;
+  export function useSpring(config: unknown): unknown;
+  export function useTransition(data: unknown, config: unknown): unknown;
+  export function animated(element: unknown): unknown;
 }
 
 // Speech Recognition API
 declare global {
   interface Window {
-    SpeechRecognition: any;
-    webkitSpeechRecognition: any;
+    SpeechRecognition: unknown;
+    webkitSpeechRecognition: unknown;
   }
 }
 
@@ -428,8 +428,8 @@ declare module "react-dropzone" {
     isFocused: boolean;
     acceptedFiles: File[];
     rejectedFiles: File[];
-    getRootProps: (props?: any) => any;
-    getInputProps: (props?: any) => any;
+    getRootProps: (props?: unknown) => any;
+    getInputProps: (props?: unknown) => any;
     open: () => void;
   }
 
@@ -440,7 +440,7 @@ declare module "react-dropzone" {
 declare module "timeago.js" {
   export function timeAgo(date: Date | string | number, locale?: string): string;
   export function format(date: Date | string | number, locale?: string): string;
-  export function register(locale: string, localeFunc: any): void;
+  export function register(locale: string, localeFunc: unknown): void;
 }
 
 declare module "react-timeago" {
@@ -454,7 +454,7 @@ declare module "react-timeago" {
     title?: string;
     now?: () => number;
     locale?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 
   export default function ReactTimeago(props: ReactTimeagoProps): JSX.Element;
@@ -462,13 +462,13 @@ declare module "react-timeago" {
 
 // Utility libraries
 declare module "classnames" {
-  export type ClassValue = string | number | boolean | undefined | null | { [key: string]: any } | ClassValue[];
+  export type ClassValue = string | number | boolean | undefined | null | { [key: string]: unknown } | ClassValue[];
 
   export default function classNames(...args: ClassValue[]): string;
 }
 
 declare module "clsx" {
-  export type ClassValue = string | number | boolean | undefined | null | { [key: string]: any } | ClassValue[];
+  export type ClassValue = string | number | boolean | undefined | null | { [key: string]: unknown } | ClassValue[];
 
   export default function clsx(...args: ClassValue[]): string;
 }
@@ -502,12 +502,12 @@ declare module "react-window" {
 
 declare module "react-sortablejs" {
   export interface SortableProps {
-    list: any[];
-    setList: (list: any[]) => void;
+    list: unknown[];
+    setList: (list: unknown[]) => void;
     children: React.ReactNode;
     tag?: string;
     className?: string;
-    options?: any;
+    options?: unknown;
   }
 
   export const ReactSortable: React.ComponentType<SortableProps>;

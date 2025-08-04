@@ -217,7 +217,7 @@ export function KnowledgeAnalytics({ data = mockAnalytics, className }: Knowledg
     title: string;
     value: number;
     change?: number;
-    icon: any;
+    icon: unknown;
     suffix?: string;
   }) => (
     <Card>
@@ -376,7 +376,7 @@ export function KnowledgeAnalytics({ data = mockAnalytics, className }: Knowledg
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {data.categories.map((category: any) => (
+                {data.categories.map((category: unknown) => (
                   <div key={category.name} className="rounded-ds-lg border spacing-3">
                     <div className="mb-2 flex items-center justify-between">
                       <h4 className="font-medium">{category.name}</h4>

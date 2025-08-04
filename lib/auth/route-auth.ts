@@ -10,7 +10,7 @@ export interface AuthenticatedUser {
 export function withAuth(handler: (req: NextRequest, user: AuthenticatedUser) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
-      let session: any = null;
+      let session: unknown = null;
 
       // Try to get session from Authorization header first
       const authHeader = request.headers.get('authorization');
@@ -38,7 +38,7 @@ export function withAuth(handler: (req: NextRequest, user: AuthenticatedUser) =>
             user,
             access_token: token,
             refresh_token: '',
-            expires_at: 0,
+            expiresAt: 0,
             token_type: 'bearer'
           };
         }

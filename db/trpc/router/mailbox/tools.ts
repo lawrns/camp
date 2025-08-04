@@ -16,7 +16,7 @@ const fetchOpenApiSpec = async (url: string) => {
   return { url, spec: {} };
 };
 
-const importToolsFromSpec = async (spec: any, mailboxId: number) => {
+const importToolsFromSpec = async (spec: unknown, mailboxId: number) => {
   return { spec, mailboxId, imported: [] };
 };
 
@@ -52,12 +52,12 @@ export const toolsRouter = {
         where: eq(toolApis.mailboxId, mailbox.id),
       });
 
-      return apis.map((api: any) => ({
+      return apis.map((api: unknown) => ({
         id: api.id,
         name: api.name,
         baseUrl: api.baseUrl,
         tools: api.tools.map(
-          (tool: any) =>
+          (tool: unknown) =>
             ({
               ...tool,
               path: tool.url

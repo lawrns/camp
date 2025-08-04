@@ -140,7 +140,7 @@ export async function DELETE(request: NextRequest) {
 }
 
 // Helper functions
-function calculateHealthScore(stats: any): number {
+function calculateHealthScore(stats: unknown): number {
   if (stats.totalRequests === 0) return 100;
 
   let score = 100;
@@ -157,7 +157,7 @@ function calculateHealthScore(stats: any): number {
   return Math.max(0, Math.min(100, score));
 }
 
-function generateRecommendations(stats: any): string[] {
+function generateRecommendations(stats: unknown): string[] {
   const recommendations: string[] = [];
 
   if (stats.successRate < 95) {
@@ -183,7 +183,7 @@ function generateRecommendations(stats: any): string[] {
   return recommendations;
 }
 
-function generateAlerts(stats: any): Array<{ level: 'info' | 'warning' | 'error'; message: string }> {
+function generateAlerts(stats: unknown): Array<{ level: 'info' | 'warning' | 'error'; message: string }> {
   const alerts: Array<{ level: 'info' | 'warning' | 'error'; message: string }> = [];
 
   if (stats.successRate < 90) {

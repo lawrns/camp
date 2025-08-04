@@ -17,7 +17,7 @@ interface Message {
   id: string;
   conversation_id: string;
   content: string;
-  sender_type: string;
+  senderType: string;
   created_at: string;
   metadata: Record<string, any>;
 }
@@ -42,7 +42,7 @@ interface CampfireState {
 
   // CONSOLIDATED: Dashboard metrics from dashboard-store.ts
   dashboard: {
-    metrics: any | null;
+    metrics: unknown | null;
     isLoading: boolean;
     error: string | null;
     lastRefresh: string | null;
@@ -258,7 +258,7 @@ export const useCampfireStore = create<CampfireState>((set, get) => ({
   },
 
   // CONSOLIDATED: Dashboard actions from dashboard-store.ts
-  setDashboardMetrics: (metrics: any) => {
+  setDashboardMetrics: (metrics: unknown) => {
     set((state) => ({
       dashboard: {
         ...state.dashboard,

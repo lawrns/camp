@@ -35,9 +35,9 @@ export class AICostManagementService {
       .lte("created_at", periodEnd.toISOString());
 
     const totalTokens =
-      aiUsage?.reduce((sum: any, log: unknown) => sum + (log.input_tokens || 0) + (log.output_tokens || 0), 0) || 0;
+      aiUsage?.reduce((sum: unknown, log: unknown) => sum + (log.input_tokens || 0) + (log.output_tokens || 0), 0) || 0;
 
-    const totalCost = aiUsage?.reduce((sum: any, log: unknown) => sum + (log.processing_cost || 0), 0) || 0;
+    const totalCost = aiUsage?.reduce((sum: unknown, log: unknown) => sum + (log.processing_cost || 0), 0) || 0;
 
     const overageTokens = Math.max(0, totalTokens - includedTokens);
     const usageCostCents = Math.round(totalCost * 100); // Convert to cents
@@ -182,7 +182,7 @@ export class AICostManagementService {
     // Add caching recommendation if high request volume
     const totalRequests = aiUsage.length;
     if (totalRequests > 1000) {
-      const avgCost = aiUsage.reduce((sum: any, log: unknown) => sum + (log.processing_cost || 0), 0) / totalRequests;
+      const avgCost = aiUsage.reduce((sum: unknown, log: unknown) => sum + (log.processing_cost || 0), 0) / totalRequests;
       const potentialSavings = Math.round(totalRequests * avgCost * 0.4 * 100); // 40% cache hit rate
       recommendations.push({
         id: `opt-${Date.now()}-3`,
@@ -211,7 +211,7 @@ export class AICostManagementService {
 }
 
 // Helper function to generate invoice numbers
-export async function generateInvoiceNumber(supabase: any, organizationId: string): Promise<string> {
+export async function generateInvoiceNumber(supabase: unknown, organizationId: string): Promise<string> {
   const year = new Date().getFullYear();
   const month = String(new Date().getMonth() + 1).padStart(2, "0");
 

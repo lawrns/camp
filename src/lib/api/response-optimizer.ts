@@ -165,7 +165,7 @@ class APIResponseOptimizer {
   /**
    * Create optimized response with compression and headers
    */
-  private createOptimizedResponse(data: any, options: { cached: boolean; compressed: boolean }) {
+  private createOptimizedResponse(data: unknown, options: { cached: boolean; compressed: boolean }) {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       "X-Response-Time": Date.now().toString(),
@@ -330,10 +330,10 @@ export function withOptimization<T>(handler: () => Promise<T>, options?: Optimiz
 }
 
 // Performance monitoring decorator
-export function withPerformanceMonitoring(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+export function withPerformanceMonitoring(target: unknown, propertyName: string, descriptor: PropertyDescriptor) {
   const method = descriptor.value;
 
-  descriptor.value = async function (...args: any[]) {
+  descriptor.value = async function (...args: unknown[]) {
     const startTime = performance.now();
 
     try {

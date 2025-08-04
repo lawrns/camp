@@ -15,7 +15,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 export interface FeatureFlag {
   key: string;
   enabled: boolean;
-  value?: any;
+  value?: unknown;
   rolloutPercentage?: number;
   targeting?: {
     userId?: string;
@@ -135,8 +135,8 @@ class LocalFeatureFlagProvider implements IFeatureFlagProvider {
   }
 
   track(flagKey: string, event: string, properties?: Record<string, any>): void {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'feature_flag_interaction', {
+    if (typeof window !== 'undefined' && (window as unknown).gtag) {
+      (window as unknown).gtag('event', 'feature_flag_interaction', {
         flag_key: flagKey,
         event_type: event,
         ...properties,
@@ -172,7 +172,7 @@ class LocalFeatureFlagProvider implements IFeatureFlagProvider {
 
 // LaunchDarkly provider (placeholder for actual implementation)
 class LaunchDarklyProvider implements IFeatureFlagProvider {
-  private client: any = null;
+  private client: unknown = null;
   private flags: Record<string, FeatureFlag> = {};
 
   async initialize(config: FeatureFlagConfig): Promise<void> {
@@ -268,8 +268,8 @@ export function FeatureFlagProvider({
         }
 
         // Add flags to Sentry context
-        if (typeof window !== 'undefined' && (window as any).Sentry) {
-          (window as any).Sentry.setContext('feature_flags', {
+        if (typeof window !== 'undefined' && (window as unknown).Sentry) {
+          (window as unknown).Sentry.setContext('feature_flags', {
             enabled_flags: Object.entries(initialFlags)
               .filter(([_, flag]) => flag.enabled)
               .map(([key]) => key),

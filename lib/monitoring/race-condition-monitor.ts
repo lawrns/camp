@@ -207,14 +207,14 @@ export class RaceConditionMonitor extends EventEmitter {
    * Get events by type
    */
   getEventsByType(type: RaceConditionEvent["type"]): RaceConditionEvent[] {
-    return this.events.filter((e: any) => e.type === type);
+    return this.events.filter((e: unknown) => e.type === type);
   }
 
   /**
    * Get critical events
    */
   getCriticalEvents(): RaceConditionEvent[] {
-    return this.events.filter((e: any) => e.severity === "critical");
+    return this.events.filter((e: unknown) => e.severity === "critical");
   }
 
   /**
@@ -350,7 +350,7 @@ export class RaceConditionMonitor extends EventEmitter {
 
       // Clean up old events (older than 1 hour)
       const oneHourAgo = Date.now() - 3600000;
-      this.events = this.events.filter((e: any) => e.timestamp > oneHourAgo);
+      this.events = this.events.filter((e: unknown) => e.timestamp > oneHourAgo);
     }, 30000); // Every 30 seconds
   }
 

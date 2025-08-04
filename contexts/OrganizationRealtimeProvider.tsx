@@ -6,17 +6,17 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRealtime } from "@/hooks/useRealtime";
 
 interface RealtimeCallbacks {
-  onNewMessage?: (message: any) => void;
-  onMessageStatusUpdate?: (statusUpdate: any) => void;
-  onConversationUpdate?: (update: any) => void;
-  onNewConversation?: (conversation: any) => void;
+  onNewMessage?: (message: unknown) => void;
+  onMessageStatusUpdate?: (statusUpdate: unknown) => void;
+  onConversationUpdate?: (update: unknown) => void;
+  onNewConversation?: (conversation: unknown) => void;
   onTypingStart?: (data: { userId: string; userName: string; conversationId: string }) => void;
   onTypingStop?: (data: { userId: string; conversationId: string }) => void;
   onPresenceUpdate?: (data: { userId: string; isOnline: boolean; lastSeen: string }) => void;
 }
 
 interface OrganizationRealtimeContextType {
-  events: any[];
+  events: unknown[];
   connectionStatus: "connecting" | "connected" | "disconnected" | "error";
   subscribe: (callbacks: RealtimeCallbacks) => () => void;
 }
@@ -45,7 +45,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
   }, [subscribers]);
 
   // Memoized broadcast functions to prevent re-creating realtime hooks
-  const handleNewMessage = React.useCallback((message: any) => {
+  const handleNewMessage = React.useCallback((message: unknown) => {
     console.log("🔥 [Provider] Broadcasting new message to subscribers");
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "new_message", data: message, timestamp: Date.now() }]);
@@ -56,7 +56,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
   }, []);
 
   // NEW: Handle message status updates (delivery, read receipts)
-  const handleMessageStatusUpdate = React.useCallback((statusUpdate: any) => {
+  const handleMessageStatusUpdate = React.useCallback((statusUpdate: unknown) => {
     console.log("📊 [Provider] Broadcasting message status update to subscribers:", statusUpdate);
     // Add to events log
     setEvents((prev) => [
@@ -69,7 +69,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
     });
   }, []);
 
-  const handleConversationUpdate = React.useCallback((update: any) => {
+  const handleConversationUpdate = React.useCallback((update: unknown) => {
     console.log("🔥 [Provider] Broadcasting conversation update to subscribers");
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "conversation_update", data: update, timestamp: Date.now() }]);
@@ -79,7 +79,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
     });
   }, []);
 
-  const handleNewConversation = React.useCallback((conversation: any) => {
+  const handleNewConversation = React.useCallback((conversation: unknown) => {
     console.log("🔥 [Provider] Broadcasting new conversation to subscribers");
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "new_conversation", data: conversation, timestamp: Date.now() }]);
@@ -89,7 +89,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
     });
   }, []);
   // NEW: Handle typing start events
-  const handleTypingStart = React.useCallback((data: any) => {
+  const handleTypingStart = React.useCallback((data: unknown) => {
     console.log("⌨️ [Provider] Broadcasting typing start to subscribers:", data);
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "typing_start", data, timestamp: Date.now() }]);
@@ -100,7 +100,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
   }, []);
 
   // NEW: Handle typing stop events
-  const handleTypingStop = React.useCallback((data: any) => {
+  const handleTypingStop = React.useCallback((data: unknown) => {
     console.log("⌨️ [Provider] Broadcasting typing stop to subscribers:", data);
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "typing_stop", data, timestamp: Date.now() }]);
@@ -111,7 +111,7 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
   }, []);
 
   // NEW: Handle presence update events
-  const handlePresenceUpdate = React.useCallback((data: any) => {
+  const handlePresenceUpdate = React.useCallback((data: unknown) => {
     console.log("👤 [Provider] Broadcasting presence update to subscribers:", data);
     // Add to events log
     setEvents((prev) => [...prev.slice(-49), { type: "presence_update", data, timestamp: Date.now() }]);
@@ -158,13 +158,13 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
 
   const subscribe = React.useCallback(
     (callbacks: {
-      onNewMessage?: (message: any) => void;
-      onMessageStatusUpdate?: (statusUpdate: any) => void;
-      onConversationUpdate?: (update: any) => void;
-      onNewConversation?: (conversation: any) => void;
-      onTypingStart?: (data: any) => void;
-      onTypingStop?: (data: any) => void;
-      onPresenceUpdate?: (data: any) => void;
+      onNewMessage?: (message: unknown) => void;
+      onMessageStatusUpdate?: (statusUpdate: unknown) => void;
+      onConversationUpdate?: (update: unknown) => void;
+      onNewConversation?: (conversation: unknown) => void;
+      onTypingStart?: (data: unknown) => void;
+      onTypingStop?: (data: unknown) => void;
+      onPresenceUpdate?: (data: unknown) => void;
     }) => {
       const id = `subscriber-${++subscriberIdRef.current}`;
 
@@ -213,10 +213,10 @@ export function useOrganizationRealtimeContext() {
  * Automatically subscribes/unsubscribes on mount/unmount
  */
 export function useOrganizationRealtimeSubscription(callbacks: {
-  onNewMessage?: (message: any) => void;
-  onMessageStatusUpdate?: (statusUpdate: any) => void;
-  onConversationUpdate?: (update: any) => void;
-  onNewConversation?: (conversation: any) => void;
+  onNewMessage?: (message: unknown) => void;
+  onMessageStatusUpdate?: (statusUpdate: unknown) => void;
+  onConversationUpdate?: (update: unknown) => void;
+  onNewConversation?: (conversation: unknown) => void;
 }) {
   const { subscribe, events, connectionStatus } = useOrganizationRealtimeContext();
 

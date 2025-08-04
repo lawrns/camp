@@ -45,9 +45,9 @@ export class WidgetSupabaseClient {
   subscribeToConversation(
     conversationId: string,
     callbacks: {
-      onMessage?: (payload: any) => void;
-      onTyping?: (payload: any) => void;
-      onPresence?: (payload: any) => void;
+      onMessage?: (payload: unknown) => void;
+      onTyping?: (payload: unknown) => void;
+      onPresence?: (payload: unknown) => void;
       onStatusChange?: (status: string) => void;
     }
   ): RealtimeChannel | null {
@@ -91,7 +91,7 @@ export class WidgetSupabaseClient {
 
     // Handle connection status
     if (callbacks.onStatusChange) {
-      channel.subscribe((status: any) => {
+      channel.subscribe((status: unknown) => {
         callbacks.onStatusChange!(status);
       });
     } else {
@@ -108,8 +108,8 @@ export class WidgetSupabaseClient {
   subscribeToGlobal(
     workspaceId: string,
     callbacks: {
-      onAnnouncement?: (payload: any) => void;
-      onStatusUpdate?: (payload: any) => void;
+      onAnnouncement?: (payload: unknown) => void;
+      onStatusUpdate?: (payload: unknown) => void;
     }
   ): RealtimeChannel | null {
     if (!this.client || !this.config) {

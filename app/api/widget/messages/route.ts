@@ -106,9 +106,9 @@ export async function POST(request: NextRequest) {
     const messageData = mapApiMessageToDbInsert({
       conversation_id: body.conversationId,
       content: body.content,
-      sender_type: body.senderType || 'visitor',
-      sender_id: body.senderId,
-      sender_name: body.senderName || null,
+      senderType: body.senderType || 'visitor',
+      senderId: body.senderId,
+      senderName: body.senderName || null,
       message_type: body.messageType || 'text',
       metadata: body.metadata || {},
     }, organizationId);
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('conversations')
       .update({
-        last_message_at: new Date().toISOString(), // FIXED: snake_case to match dashboard query
+        lastMessageAt: new Date().toISOString(), // FIXED: snake_case to match dashboard query
         updated_at: new Date().toISOString(),
       })
       .eq('id', body.conversationId);

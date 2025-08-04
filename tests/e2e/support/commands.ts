@@ -69,7 +69,7 @@ Cypress.Commands.add('createTestConversation', (data = {}) => {
 });
 
 Cypress.Commands.add('sendTestMessage', (content: string) => {
-  cy.get('@testConversation').then((conversation: any) => {
+  cy.get('@testConversation').then((conversation: unknown) => {
     cy.request({
       method: 'POST',
       url: '/api/messages',
@@ -90,7 +90,7 @@ Cypress.Commands.add('sendTestMessage', (content: string) => {
 });
 
 Cypress.Commands.add('triggerTestHandoff', (reason = 'Need human assistance') => {
-  cy.get('@testConversation').then((conversation: any) => {
+  cy.get('@testConversation').then((conversation: unknown) => {
     cy.request({
       method: 'POST',
       url: '/api/handoff/trigger',
@@ -140,7 +140,7 @@ Cypress.Commands.add('submitForm', (formSelector = 'form') => {
 });
 
 // API Helpers
-Cypress.Commands.add('apiRequest', (method: string, url: string, body?: any) => {
+Cypress.Commands.add('apiRequest', (method: string, url: string, body?: unknown) => {
   return cy.request({
     method,
     url,
@@ -268,7 +268,7 @@ declare global {
       dragAndDrop(sourceSelector: string, targetSelector: string): Chainable<void>;
       fillForm(formData: Record<string, string>): Chainable<void>;
       submitForm(formSelector?: string): Chainable<void>;
-      apiRequest(method: string, url: string, body?: any): Chainable<any>;
+      apiRequest(method: string, url: string, body?: unknown): Chainable<any>;
       uploadFile(selector: string, fileName: string, fileType?: string): Chainable<void>;
       screenshotWithTimestamp(name: string): Chainable<void>;
       waitForLoading(): Chainable<void>;
@@ -276,7 +276,7 @@ declare global {
       measurePerformance(actionName: string): Chainable<number>;
       setLocalStorage(key: string, value: string): Chainable<void>;
       getLocalStorage(key: string): Chainable<string | null>;
-      setCookieWithOptions(name: string, value: string, options?: any): Chainable<void>;
+      setCookieWithOptions(name: string, value: string, options?: unknown): Chainable<void>;
       simulateSlowNetwork(): Chainable<void>;
       simulateNetworkError(statusCode?: number): Chainable<void>;
     }

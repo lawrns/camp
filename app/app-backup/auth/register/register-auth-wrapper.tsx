@@ -17,12 +17,12 @@ export function RegisterAuthWrapper({ children }: RegisterAuthWrapperProps) {
 
     // Expose auth to window for legacy compatibility
     if (auth && typeof window !== "undefined") {
-      (window as any).__CAMPFIRE_AUTH__ = auth;
+      (window as unknown).__CAMPFIRE_AUTH__ = auth;
     }
 
     return () => {
       if (typeof window !== "undefined") {
-        delete (window as any).__CAMPFIRE_AUTH__;
+        delete (window as unknown).__CAMPFIRE_AUTH__;
       }
     };
   }, [auth, auth?.loading]);

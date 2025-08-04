@@ -53,7 +53,7 @@ interface TeamMember {
   role: string;
   status: string;
   lastActive: string;
-  permissions?: any[];
+  permissions?: unknown[];
 }
 
 export default function RolesManagementPage() {

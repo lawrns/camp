@@ -33,7 +33,7 @@ interface SearchFiltersProps {
 export function SearchFiltersPanel({ filters, onFiltersChange, show }: SearchFiltersProps) {
   if (!show) return null;
 
-  const updateFilter = (key: keyof SearchFilters, value: any) => {
+  const updateFilter = (key: keyof SearchFilters, value: unknown) => {
     onFiltersChange({
       ...filters,
       [key]: value,
@@ -46,7 +46,7 @@ export function SearchFiltersPanel({ filters, onFiltersChange, show }: SearchFil
     } else {
       updateFilter(
         "contentType",
-        filters.contentType.filter((t: any) => t !== type)
+        filters.contentType.filter((t: unknown) => t !== type)
       );
     }
   };
@@ -64,7 +64,7 @@ export function SearchFiltersPanel({ filters, onFiltersChange, show }: SearchFil
           <div>
             <Label>Content Type</Label>
             <div className="mt-2 space-y-spacing-sm">
-              {["knowledge", "conversations", "users"].map((type: any) => (
+              {["knowledge", "conversations", "users"].map((type: unknown) => (
                 <div key={type} className="flex items-center space-x-spacing-sm">
                   <Checkbox
                     id={type}

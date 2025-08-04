@@ -64,7 +64,7 @@ export const widgetReadReceipts = pgTable(
         deviceType?: "mobile" | "tablet" | "desktop";
         browser?: string;
         os?: string;
-        [key: string]: any;
+        [key: string]: unknown;
       }>()
       .default({}),
 

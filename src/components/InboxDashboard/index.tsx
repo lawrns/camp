@@ -14,7 +14,7 @@ import { fallbackAISuggestions } from "./constants/messageTemplates";
 // Import all the extracted components
 import ChatHeader from "./sub-components/ChatHeader";
 import Composer from "./sub-components/Composer";
-import ConversationList from "./sub-components/ConversationList";
+import { ConversationList } from "./sub-components/ConversationList";
 import CustomerSidebar from "./sub-components/CustomerSidebar";
 import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
@@ -38,17 +38,10 @@ interface InboxDashboardProps {
  * Main InboxDashboard component - now much smaller and focused on orchestration
  */
 export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }) => {
-  console.log('🚨🚨🚨 [SRC/COMPONENTS/INBOXDASHBOARD] This component is being used!');
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
   const userId = user?.id;
-
-  // Debug logging
-  React.useEffect(() => {
-    console.log("[InboxDashboard] Auth state:", { user, authLoading, organizationId, userId });
-    console.log("[InboxDashboard] Using organizationId:", organizationId);
-  }, [user, authLoading, organizationId, userId]);
 
   // Early return if auth is loading or missing required data
   if (authLoading) {
@@ -140,13 +133,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     organizationId
   );
 
-  React.useEffect(() => {
-    console.log("[InboxDashboard] Conversations:", conversations);
-    console.log("[InboxDashboard] Selected Conversation:", selectedConversation);
-    console.log("[InboxDashboard] Messages:", messages);
-    console.log("[InboxDashboard] Messages Loading:", messagesLoading);
-  }, [conversations, selectedConversation, messages, messagesLoading]);
-  const onlineUsers: any[] = []; // TODO: Implement presence  const loadConversations = () => { }; // TODO: Implement
+
+  const onlineUsers: unknown[] = []; // TODO: Implement presence  const loadConversations = () => { }; // TODO: Implement
   const loadMessages = () => { }; // TODO: Implement
   const reconnect = () => { }; // TODO: Implement
 
@@ -170,8 +158,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           conversation_id: convId,
           organization_id: organizationId,
           content: content.trim(),
-          sender_type: senderType,
-          sender_name: senderType === "agent" ? "Support Agent" : "Customer",
+          senderType: senderType,
+          senderName: senderType === "agent" ? "Support Agent" : "Customer",
           created_at: new Date().toISOString(),
           metadata: {
             source: "dashboard",
@@ -184,15 +172,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         // Add optimistic message to UI immediately
         setMessages(prev => [...prev, optimisticMessage]);
 
-        // CRITICAL FIX: Use proper API endpoint for bidirectional communication
-        console.log('🚨🚨🚨 [DASHBOARD API] Starting API call for bidirectional communication');
-        console.log('🚨 [DASHBOARD API] Request details:', {
-          url: `/api/dashboard/conversations/${convId}/messages`,
-          method: 'POST',
-          convId,
-          content: content.trim(),
-          senderType
-        });
+        // Use proper API endpoint for bidirectional communication
 
         const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
           method: 'POST',
@@ -207,21 +187,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           }),
         });
 
-        console.log('🚨 [DASHBOARD API] Response status:', response.status);
-        console.log('🚨 [DASHBOARD API] Response ok:', response.ok);
-
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('🚨 [DASHBOARD API] ❌ API Error:', {
-            status: response.status,
-            statusText: response.statusText,
-            errorText
-          });
           throw new Error(`API Error: ${response.status} - ${errorText}`);
         }
 
         const result = await response.json();
-        console.log('🚨 [DASHBOARD API] ✅ API Success:', result);
 
         // Response already parsed above, use existing result variable
         const data = result.message;
@@ -246,7 +217,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
         return data;
       } catch (error) {
-        console.error("Failed to send message:", error);
         throw error;
       }
     },
@@ -476,7 +446,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
       <div className="flex h-full w-full flex-col">
         {/* Header */}
         <Header
-          conversations={conversations as any}
+          conversations={conversations as unknown}
           searchQuery={searchQuery}
           setSearchQuery={debouncedSetSearchQuery}
           statusFilter={statusFilter}
@@ -493,7 +463,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         <div className="flex flex-1 overflow-hidden">
           {/* Conversation list */}
           <ConversationList
-            conversations={conversations as any}
+            conversations={conversations as unknown}
             selectedConversationId={selectedConversation?.id}
             onSelectConversation={handleSelectConversation}
             searchQuery={searchQuery}

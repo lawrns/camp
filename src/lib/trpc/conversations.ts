@@ -21,7 +21,7 @@ export const conversationsRouter = createTRPCRouter({
         priority: z.enum(["low", "normal", "high", "urgent"]).optional(),
       })
     )
-    .query(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .query(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       let query = ctx.supabase
         .from("conversations")
         .select(
@@ -48,7 +48,7 @@ export const conversationsRouter = createTRPCRouter({
         `
         )
         .eq("organization_id", ctx.organizationId)
-        .order("last_message_at", { ascending: false })
+        .order("lastMessageAt", { ascending: false })
         .range(input.offset, input.offset + input.limit - 1);
 
       if (input.status) {
@@ -85,7 +85,7 @@ export const conversationsRouter = createTRPCRouter({
         id: z.string().uuid(),
       })
     )
-    .query(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .query(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       const { data: conversation, error: convError } = await ctx.supabase
         .from("conversations")
         .select(
@@ -140,7 +140,7 @@ export const conversationsRouter = createTRPCRouter({
         metadata: z.record(z.any()).optional(),
       })
     )
-    .mutation(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .mutation(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       const { data, error } = await ctx.supabase
         .from("conversations")
         .insert({
@@ -180,12 +180,12 @@ export const conversationsRouter = createTRPCRouter({
         metadata: z.record(z.any()).optional(),
       })
     )
-    .mutation(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .mutation(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       const { id, ...updates } = input;
 
       // Add resolved_at timestamp if status is being set to resolved
       if (updates.status === "resolved") {
-        (updates as any).resolved_at = new Date().toISOString();
+        (updates as unknown).resolved_at = new Date().toISOString();
       }
 
       const { data, error } = await ctx.supabase
@@ -222,7 +222,7 @@ export const conversationsRouter = createTRPCRouter({
         offset: z.number().min(0).default(0),
       })
     )
-    .query(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .query(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       // First verify conversation belongs to organization
       const { data: conversation } = await ctx.supabase
         .from("conversations")
@@ -279,11 +279,11 @@ export const conversationsRouter = createTRPCRouter({
       z.object({
         conversationId: z.string().uuid(),
         content: z.string().min(1),
-        sender_type: z.enum(["agent", "visitor", "ai"]),
+        senderType: z.enum(["agent", "visitor", "ai"]),
         metadata: z.record(z.any()).optional(),
       })
     )
-    .mutation(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .mutation(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       // Verify conversation exists and belongs to organization
       const { data: conversation } = await ctx.supabase
         .from("conversations")
@@ -305,8 +305,8 @@ export const conversationsRouter = createTRPCRouter({
         .insert({
           conversation_id: input.conversationId,
           content: input.content,
-          sender_type: input.sender_type,
-          sender_id: ctx.user.id,
+          senderType: input.senderType,
+          senderId: ctx.user.id,
           created_at: new Date().toISOString(),
           metadata: input.metadata,
         })
@@ -325,7 +325,7 @@ export const conversationsRouter = createTRPCRouter({
       await ctx.supabase
         .from("conversations")
         .update({
-          last_message_at: new Date().toISOString(),
+          lastMessageAt: new Date().toISOString(),
           message_count: conversation.status === "open" ? 1 : undefined, // Increment would need a function
           updated_at: new Date().toISOString(),
         })

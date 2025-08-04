@@ -459,7 +459,7 @@ test.describe('WebSocket Real-time Connection Tests', () => {
     expect(ws.url()).toContain('supabase.co'); // Should connect to Supabase Realtime
 
     // Monitor WebSocket messages
-    const messages: any[] = [];
+    const messages: unknown[] = [];
     ws.on('framereceived', event => {
       try {
         const data = JSON.parse(event.payload.toString());
@@ -523,6 +523,6 @@ test.describe('WebSocket Real-time Connection Tests', () => {
     }, conversationId);
 
     expect(messages.success).toBe(true);
-    expect(messages.data.some((msg: any) => msg.content.includes('after reconnection'))).toBe(true);
+    expect(messages.data.some((msg: unknown) => msg.content.includes('after reconnection'))).toBe(true);
   });
 });

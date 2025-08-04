@@ -17,7 +17,7 @@ const optimizedQueryConfig: QueryClientConfig = {
       gcTime: 10 * 60 * 1000, // 10 minutes - garbage collection
 
       // Retry configuration
-      retry: (failureCount: any, error: any) => {
+      retry: (failureCount: unknown, error: unknown) => {
         // Don't retry on 4xx errors except 408, 429
         if (error?.status >= 400 && error?.status < 500) {
           return error?.status === 408 || error?.status === 429;
@@ -25,7 +25,7 @@ const optimizedQueryConfig: QueryClientConfig = {
         // Retry up to 3 times for other errors
         return failureCount < 3;
       },
-      retryDelay: (attemptIndex: any) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: unknown) => Math.min(1000 * 2 ** attemptIndex, 30000),
 
       // Network mode
       networkMode: 'online',
@@ -40,14 +40,14 @@ const optimizedQueryConfig: QueryClientConfig = {
     },
     mutations: {
       // Retry configuration for mutations
-      retry: (failureCount: any, error: any) => {
+      retry: (failureCount: unknown, error: unknown) => {
         // Don't retry client errors
         if (error?.status >= 400 && error?.status < 500) {
           return false;
         }
         return failureCount < 2;
       },
-      retryDelay: (attemptIndex: any) => Math.min(1000 * 2 ** attemptIndex, 10000),
+      retryDelay: (attemptIndex: unknown) => Math.min(1000 * 2 ** attemptIndex, 10000),
       networkMode: 'online',
     },
   },
@@ -237,7 +237,7 @@ export class CacheInvalidator {
   }
 
   // Smart invalidation after mutations
-  invalidateAfterMutation(mutationType: string, data: any): void {
+  invalidateAfterMutation(mutationType: string, data: unknown): void {
     switch (mutationType) {
       case 'updateUserProfile':
         this.invalidateUserData(data.userId);

@@ -26,7 +26,7 @@ interface BusinessProfileData {
 
 interface BusinessProfileStepProps {
   organizationId: string;
-  onComplete: (data?: any) => void;
+  onComplete: (data?: unknown) => void;
   onSkip: () => void;
   onBack?: () => void;
   isLoading?: boolean;
@@ -198,7 +198,7 @@ export function BusinessProfileStep({
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
             <SelectContent>
-              {industryOptions.map((option: any) => (
+              {industryOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -219,7 +219,7 @@ export function BusinessProfileStep({
               <SelectValue placeholder="Select company size" />
             </SelectTrigger>
             <SelectContent>
-              {companySizeOptions.map((option: any) => (
+              {companySizeOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -243,7 +243,7 @@ export function BusinessProfileStep({
               <SelectValue placeholder="Select support volume" />
             </SelectTrigger>
             <SelectContent>
-              {supportVolumeOptions.map((option: any) => (
+              {supportVolumeOptions.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

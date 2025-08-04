@@ -90,7 +90,7 @@ export function ChatView({ className }: ChatViewProps) {
     }, 500);
   };
 
-  const conversationMessages = messages.filter((msg: any) => msg.conversationId === selectedConversationId);
+  const conversationMessages = messages.filter((msg: unknown) => msg.conversationId === selectedConversationId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -123,7 +123,7 @@ export function ChatView({ className }: ChatViewProps) {
 
     setState((prev) => ({
       ...prev,
-      conversations: prev.conversations.map((conv: any) =>
+      conversations: prev.conversations.map((conv: unknown) =>
         conv.id === selectedConversationId ? { ...conv, assigned_to: "op_002", assignedOperatorId: "op_002" } : conv
       ),
     }));
@@ -224,7 +224,7 @@ export function ChatView({ className }: ChatViewProps) {
           )}
         </OptimizedAnimatePresence>
 
-        {conversationMessages.map((msg: any) => {
+        {conversationMessages.map((msg: unknown) => {
           const isCustomer = msg.author === "customer";
           const isSystem = msg.author === "system";
           const isRAG = !isCustomer && !isSystem && isRAGAgent(msg.author);

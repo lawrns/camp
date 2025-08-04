@@ -270,7 +270,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             {placeholder}
           </option>
         )}
-        {options.map((option: any) => (
+        {options.map((option: unknown) => (
           <option key={option.value} value={option.value} disabled={option.disabled}>
             {option.label}
           </option>
@@ -396,7 +396,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           aria-required={required}
           aria-invalid={!!error}
         >
-          {options.map((option: any) => {
+          {options.map((option: unknown) => {
             const optionId = `${groupId}-${option.value}`;
             const helperId = `${optionId}-helper`;
 

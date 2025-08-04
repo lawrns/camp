@@ -67,21 +67,21 @@ export const getCustomerData = (conversation?: Conversation | null) => {
   // Extract name from email or metadata using modern and legacy fields
   const customerName =
     conversation.customerName ||
-    conversation.customer_name ||
+    conversation.customerName ||
     conversation.metadata?.name ||
     (conversation.customerEmail && conversation.customerEmail.split("@")[0]) ||
-    (conversation.customer_email && conversation.customer_email.split("@")[0]) ||
+    (conversation.customerEmail && conversation.customerEmail.split("@")[0]) ||
     null; // Use null to trigger visitor name generation
 
   const visitorDisplay = getVisitorDisplay({
     id: conversation.customerId || conversation.customer_id || conversation.id,
     name: customerName,
-    email: conversation.customerEmail || conversation.customer_email,
+    email: conversation.customerEmail || conversation.customerEmail,
     metadata: conversation.metadata,
   });
 
   const avatarUrl = getUserAvatar({
-    email: conversation.customerEmail || conversation.customer_email,
+    email: conversation.customerEmail || conversation.customerEmail,
     name: customerName || visitorDisplay.displayName,
     id: conversation.customerId || conversation.customer_id || conversation.id,
   });

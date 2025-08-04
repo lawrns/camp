@@ -53,7 +53,7 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for dashboard endpoints
-function withAuth(handler: (req: NextRequest, user: any, conversationId: string) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: unknown, conversationId: string) => Promise<NextResponse>) {
   return async (request: NextRequest, { params }: { params: { conversationId: string } }) => {
     try {
       console.log('[Dashboard Messages API] Starting authentication for conversation:', params.conversationId);
@@ -121,7 +121,7 @@ function withAuth(handler: (req: NextRequest, user: any, conversationId: string)
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown, conversationId: string) => {
   try {
     console.log('[Dashboard Messages API] Fetching messages for conversation:', conversationId);
     
@@ -207,7 +207,7 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
   }
 });
 
-export const POST = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown, conversationId: string) => {
   try {
     console.log('[Dashboard Messages API] Creating message for conversation:', conversationId);
     
@@ -246,8 +246,8 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
     const messageData = {
       content: content.trim(),
       sender_type,
-      sender_name: sender_name || user.name || 'Agent',
-      sender_email: user.email,
+      senderName: sender_name || user.name || 'Agent',
+      senderEmail: user.email,
       conversation_id: conversationId,
       organization_id: user.organizationId,
       read_status: 'sent'
@@ -276,7 +276,7 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       .from('conversations')
       .update({ 
         updated_at: new Date().toISOString(),
-        last_message_at: new Date().toISOString()
+        lastMessageAt: new Date().toISOString()
       })
       .eq('id', conversationId);
 

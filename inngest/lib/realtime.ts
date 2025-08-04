@@ -10,7 +10,7 @@ interface RealtimePublishOptions {
   resourceId: string;
   organizationId: string;
   event: string;
-  payload: any;
+  payload: unknown;
   retries?: number;
   timeout?: number;
   priority?: "low" | "normal" | "high" | "critical";
@@ -21,7 +21,7 @@ interface BatchedEvent {
   resourceId: string;
   organizationId: string;
   event: string;
-  payload: any;
+  payload: unknown;
   priority?: "low" | "normal" | "high" | "critical";
 }
 
@@ -82,7 +82,7 @@ export async function publishBatchedRealtimeEvents(events: BatchedEvent[]): Prom
   // Group events by organization and resource type to optimize connections
   const eventsByOrg = new Map<
     string,
-    Map<string, { resourceId: string; event: string; payload: any; priority: string }[]>
+    Map<string, { resourceId: string; event: string; payload: unknown; priority: string }[]>
   >();
 
   for (const { channelType, resourceId, organizationId, event, payload, priority = "normal" } of events) {
@@ -164,7 +164,7 @@ class RealtimePublisher {
     while (this.eventQueue.length > 0) {
       const batch = this.eventQueue.splice(0, this.maxConcurrent);
 
-      await Promise.allSettled(batch.map((fn: any) => fn()));
+      await Promise.allSettled(batch.map((fn: unknown) => fn()));
 
       if (this.eventQueue.length > 0) {
         await new Promise((resolve) => setTimeout(resolve, this.delayBetweenEvents));

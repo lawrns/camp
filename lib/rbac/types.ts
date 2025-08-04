@@ -52,7 +52,7 @@ export interface Permission {
 export interface PermissionCondition {
   field: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than';
-  value: any;
+  value: unknown;
 }
 
 // Predefined system roles
@@ -94,7 +94,7 @@ export interface UserRole {
 export interface PermissionContext {
   userId: string;
   organizationId: string;
-  resource?: any;
+  resource?: unknown;
   metadata?: Record<string, any>;
 }
 

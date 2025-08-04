@@ -90,7 +90,7 @@ export function InboxHeader({
 
           {/* Quick Filters */}
           <div className="hidden items-center gap-1 md:flex">
-            {inboxFilters.map((filter: any) => {
+            {inboxFilters.map((filter: unknown) => {
               const Icon = filter.icon;
               const isActive = activeFilter === filter.id;
 

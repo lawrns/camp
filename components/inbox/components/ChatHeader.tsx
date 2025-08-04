@@ -50,7 +50,7 @@ export function ChatHeader({
     email:
       conversation.emailFrom ||
       conversation.customerEmail ||
-      conversation.customer_email ||
+      conversation.customerEmail ||
       conversation.visitor_email ||
       "",
     ...(conversation.avatar || conversation.customerAvatar || conversation.customer_avatar

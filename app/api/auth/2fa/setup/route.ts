@@ -15,7 +15,7 @@ interface TwoFactorProfile {
     two_fa_setup?: {
       secret: string;
       token: string;
-      expires_at: string;
+      expiresAt: string;
     };
     [key: string]: unknown;
   };
@@ -24,7 +24,7 @@ interface TwoFactorProfile {
 interface TwoFactorCode {
   user_id: string;
   code: string;
-  expires_at: string;
+  expiresAt: string;
 }
 
 type ProfileRow = Tables<'profiles'>;
@@ -35,7 +35,7 @@ const enable2FASchema = z.object({
 });
 
 // Generate 2FA secret and QR code
-export const GET = withTenantGuard(async (req: NextRequest, { user, organizationId, scopedClient }: TenantContext) => {
+export const GET = withTenantGuard(async (_req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
   try {
     const supabaseClient = supabase.admin();
     if (!supabaseClient) {
@@ -82,7 +82,7 @@ export const GET = withTenantGuard(async (req: NextRequest, { user, organization
           two_fa_setup: {
             secret: secret.base32,
             token: sessionToken,
-            expires_at: new Date(Date.now() + 600000).toISOString(),
+            expiresAt: new Date(Date.now() + 600000).toISOString(),
           },
         },
       })
@@ -102,13 +102,13 @@ export const GET = withTenantGuard(async (req: NextRequest, { user, organization
       manualEntryKey: secret.base32,
       expiresAt: new Date(Date.now() + 600000),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });
 
 // Enable 2FA with verification
-export const POST = withTenantGuard(async (req: NextRequest, { user, organizationId, scopedClient }: TenantContext) => {
+export const POST = withTenantGuard(async (req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
   try {
     const supabaseClient = supabase.admin();
     if (!supabaseClient) {
@@ -154,7 +154,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
 
     const typedProfile = profile as TwoFactorProfile;
     const setupData = typedProfile?.metadata?.two_fa_setup;
-    if (!setupData || setupData.token !== sessionToken || new Date(setupData.expires_at) < new Date()) {
+    if (!setupData || setupData.token !== sessionToken || new Date(setupData.expiresAt) < new Date()) {
       return NextResponse.json({ error: "Invalid or expired session token" }, { status: 400 });
     }
 
@@ -222,23 +222,23 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
         recoveryCodes.map((code: string): TwoFactorCode => ({
           user_id: user.id,
           code: crypto.createHash("sha256").update(code).digest("hex"),
-          expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+          expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
         }))
       );
-    } catch (error) {}
+    } catch (_error) {}
 
     return NextResponse.json({
       message: "Two-factor authentication enabled successfully",
       recoveryCodes,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 });
 
 // Disable 2FA
 export const DELETE = withTenantGuard(
-  async (req: NextRequest, { user, organizationId, scopedClient }: TenantContext) => {
+  async (req: NextRequest, { user: _user, organizationId: _organizationId, scopedClient: _scopedClient }: TenantContext) => {
     try {
       const supabaseClient = supabase.admin();
       if (!supabaseClient) {
@@ -326,12 +326,12 @@ export const DELETE = withTenantGuard(
       try {
         const supabaseAdmin = supabase.admin();
         await supabaseAdmin.from("two_factor_codes").delete().eq("user_id", user.id);
-      } catch (error) {}
+      } catch (_error) {}
 
       return NextResponse.json({
         message: "Two-factor authentication disabled successfully",
       });
-    } catch (error) {
+    } catch (_error) {
       return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
   }

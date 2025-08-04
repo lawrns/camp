@@ -15,10 +15,10 @@ export const organizationRouter = {
   ),
   getOnboardingStatus: publicProcedure
     .use(tenantMiddleware)
-    .query(({ ctx }) => getOnboardingStatus((ctx as any).activeOrganizationId)),
+    .query(({ ctx }) => getOnboardingStatus((ctx as unknown).activeOrganizationId)),
   getMembers: publicProcedure
     .use(tenantMiddleware)
-    .query(({ ctx }) => getOrganizationMembers((ctx as any).activeOrganizationId)),
+    .query(({ ctx }) => getOrganizationMembers((ctx as unknown).activeOrganizationId)),
   inviteMember: publicProcedure
     .use(tenantMiddleware)
     .input(z.object({ email: z.string().email() }))

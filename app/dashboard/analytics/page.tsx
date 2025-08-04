@@ -88,7 +88,7 @@ export default function AnalyticsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
           <p className="text-muted-foreground">
-            Track your team's performance and customer satisfaction metrics
+            Track your team&apos;s performance and customer satisfaction metrics
           </p>
         </div>
         <div className="flex items-center space-x-2">

@@ -58,7 +58,7 @@ export function MessageItem({
   onCopy,
 }: MessageItemProps) {
   // Handle both camelCase and snake_case sender types for compatibility
-  const senderType = message.senderType || message.sender_type;
+  const senderType = message.senderType || message.senderType;
   const isAgent = senderType === "agent" || senderType === "operator";
   const isCustomer = senderType === "customer" || senderType === "visitor";
   const isSystem = senderType === "system";
@@ -76,7 +76,7 @@ export function MessageItem({
 
   // Build agent user object conditionally
   const agentUser = {
-    name: message.senderName || message.sender_name || "Agent",
+    name: message.senderName || message.senderName || "Agent",
     role: "agent",
     avatar: message.senderAvatarUrl || message.sender_avatar_url,
   };

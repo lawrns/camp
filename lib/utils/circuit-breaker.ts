@@ -192,7 +192,7 @@ export const circuitBreakers = {
 };
 
 // Decorator function for wrapping functions with circuit breaker
-export function withCircuitBreaker<T extends (...args: any[]) => Promise<any>>(
+export function withCircuitBreaker<T extends (...args: unknown[]) => Promise<any>>(
   fn: T,
   circuitBreaker: CircuitBreaker
 ): T {

@@ -15,7 +15,7 @@ export interface OrganizationSettings {
   aiEnabled: boolean;
   ragEnabled: boolean;
   autoHandoff: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Organization {

@@ -51,7 +51,7 @@ export function PerformanceMonitor({
       const ttfb = navigation?.responseStart - navigation?.requestStart || 0;
 
       // Estimate memory usage (if available)
-      const memoryInfo = (performance as any).memory;
+      const memoryInfo = (performance as unknown).memory;
       const memoryUsage = memoryInfo ? memoryInfo.usedJSHeapSize / 1024 / 1024 : 0; // MB
 
       // Estimate render time
@@ -86,11 +86,11 @@ export function PerformanceMonitor({
                 updated.lcp = entry.startTime;
                 break;
               case "first-input":
-                updated.fid = (entry as any).processingStart - entry.startTime;
+                updated.fid = (entry as unknown).processingStart - entry.startTime;
                 break;
               case "layout-shift":
-                if (!(entry as any).hadRecentInput) {
-                  updated.cls += (entry as any).value;
+                if (!(entry as unknown).hadRecentInput) {
+                  updated.cls += (entry as unknown).value;
                 }
                 break;
             }
@@ -238,7 +238,7 @@ export function PerformanceMonitor({
                     transition={{ duration: 0.2 }}
                   >
                     <CardContent className="space-y-spacing-sm pt-0">
-                      {coreWebVitals.map((metric: any) => {
+                      {coreWebVitals.map((metric: unknown) => {
                         const status = getStatusStatus(metric.value, metric.thresholds);
                         const StatusIcon = getStatusIcon(status);
 
@@ -281,7 +281,7 @@ export function PerformanceMonitor({
         <div>
           <h3 className="mb-3 text-sm font-semibold">Core Web Vitals</h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            {coreWebVitals.map((metric: any) => {
+            {coreWebVitals.map((metric: unknown) => {
               const status = getMetricStatus(metric.value, metric.thresholds);
               const StatusIcon = getStatusIcon(status);
               const percentage = Math.min((metric.value / metric.thresholds.poor) * 100, 100);
@@ -310,7 +310,7 @@ export function PerformanceMonitor({
         <div>
           <h3 className="mb-3 text-sm font-semibold">Additional Metrics</h3>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-            {additionalMetrics.map((metric: any) => (
+            {additionalMetrics.map((metric: unknown) => (
               <div key={metric.name} className="rounded-ds-lg bg-[var(--fl-color-background-subtle)] spacing-3">
                 <div className="text-tiny text-muted-foreground">{metric.label}</div>
                 <div className="text-base font-semibold">

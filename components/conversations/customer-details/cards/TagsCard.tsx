@@ -24,7 +24,7 @@ export function TagsCard({ tags }: TagsCardProps) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-ds-2">
-          {tags.map((tag: any) => (
+          {tags.map((tag: unknown) => (
             <Badge
               key={tag}
               variant="secondary"

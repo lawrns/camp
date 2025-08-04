@@ -64,7 +64,7 @@ export class EnhancedAIService {
   /**
    * Convert SentimentAnalysis object to string representation
    */
-  private sentimentToString(sentimentAnalysis: any): string {
+  private sentimentToString(sentimentAnalysis: unknown): string {
     if (typeof sentimentAnalysis === 'string') {
       return sentimentAnalysis;
     }
@@ -167,7 +167,7 @@ export class EnhancedAIService {
         suggestedActions: handoverContext.aiAnalysis.suggestedActions,
         sentiment,
         responseTime: Date.now() - startTime,
-        sources: ragResponse.knowledgeUsed?.map((source: any) => ({
+        sources: ragResponse.knowledgeUsed?.map((source: unknown) => ({
           title: source.title || 'Knowledge Base',
           content: source.content || '',
           relevance: source.relevance || 0.8,
@@ -204,7 +204,7 @@ export class EnhancedAIService {
     }
   }
 
-  private analyzeComplexity(message: string, history: any[]): 'simple' | 'moderate' | 'complex' {
+  private analyzeComplexity(message: string, history: unknown[]): 'simple' | 'moderate' | 'complex' {
     const indicators = {
       simple: ['hello', 'hi', 'thanks', 'yes', 'no', 'ok'],
       complex: ['technical', 'integration', 'api', 'error', 'bug', 'issue', 'problem', 'refund', 'cancel'],
@@ -317,8 +317,8 @@ export class EnhancedAIService {
         .single();
 
       return {
-        persona: (organization as any)?.ai_persona || 'helpful',
-        settings: (organization as any)?.settings || {},
+        persona: (organization as unknown)?.ai_persona || 'helpful',
+        settings: (organization as unknown)?.settings || {},
       };
     } catch (error) {
       console.error('Error fetching organization context:', error);

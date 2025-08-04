@@ -21,19 +21,19 @@ class TrainingDataProcessor {
   static async processTrainingData(mailboxId: number, trainingDataIds?: number[], systemPrompt?: string) {
     return [];
   }
-  static generateStatistics(data: any[]) {
+  static generateStatistics(data: unknown[]) {
     return { count: data.length };
   }
-  static estimateTokenCount(data: any[]) {
+  static estimateTokenCount(data: unknown[]) {
     return { totalTokens: data.length * 100, breakdown: {} };
   }
-  static validateTrainingFormat(data: any[]) {
+  static validateTrainingFormat(data: unknown[]) {
     return { valid: true, errors: [] };
   }
 }
 
 class FineTuningJobManager {
-  async listJobs(filter: any, pagination: any) {
+  async listJobs(filter: unknown, pagination: unknown) {
     return { jobs: [], total: 0 };
   }
   async getJobMetrics(mailboxId?: number) {
@@ -45,13 +45,13 @@ class FineTuningJobManager {
   async bulkCancel(jobIds: string[]) {
     return { cancelled: jobIds };
   }
-  async exportJobs(filter: any, format: string) {
+  async exportJobs(filter: unknown, format: string) {
     return { data: [], format };
   }
 }
 
 class FineTuningPipeline {
-  async createFineTuningJob(input: any, userId: string) {
+  async createFineTuningJob(input: unknown, userId: string) {
     return { jobId: "fallback-job", userId };
   }
   async getJob(jobId: string) {

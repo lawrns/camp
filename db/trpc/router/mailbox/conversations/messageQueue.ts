@@ -220,7 +220,7 @@ export const messageQueueRouter = {
 
       // Filter for this mailbox's messages
       const mailboxMessages = messagesToRetry.filter(
-        (m) => (m as any).message?.conversation?.mailboxId === ctx.mailbox.id
+        (m) => (m as unknown).message?.conversation?.mailboxId === ctx.mailbox.id
       );
 
       return mailboxMessages.map(
@@ -266,7 +266,7 @@ export const messageQueueRouter = {
       }
 
       // Verify the message belongs to this mailbox
-      if ((queueRecord.message as any)?.conversation?.mailboxId !== ctx.mailbox.id) {
+      if ((queueRecord.message as unknown)?.conversation?.mailboxId !== ctx.mailbox.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Message does not belong to this mailbox",

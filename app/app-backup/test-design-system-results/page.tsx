@@ -56,7 +56,7 @@ export default function TestDesignSystemResultsPage() {
             };
 
             // Test each element
-            const testResults: any = {};
+            const testResults: unknown = {};
             let totalTests = 0;
             let passedTests = 0;
 

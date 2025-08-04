@@ -8,15 +8,15 @@ import { UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 interface Message {
   id: string;
   content: string;
-  sender_type: "visitor" | "operator" | "ai";
-  sender_id: string;
+  senderType: "visitor" | "operator" | "ai";
+  senderId: string;
   created_at: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface TypingUser {
   user_id: string;
-  user_type: "visitor" | "operator";
+  userType: "visitor" | "operator";
   user_name?: string;
 }
 
@@ -113,7 +113,7 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           const { error } = await supabase.from("typing_indicators").upsert({
             conversation_id: conversationIdStr,
             operator_id: currentUserId,
-            is_typing: true,
+            isTyping: true,
             last_character_at: new Date().toISOString(),
           });
 
@@ -151,10 +151,10 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
 
         const { error } = await supabase.from("user_presence").upsert({
           user_id: currentUserId,
-          user_type: currentUserType,
+          userType: currentUserType,
           organization_id: "default-org", // TODO: Get from auth context
           status,
-          last_seen_at: new Date().toISOString(),
+          lastSeenAt: new Date().toISOString(),
         });
 
         if (error) {
@@ -196,11 +196,11 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           table: "messages",
           filter: `conversation_id=eq.${conversationIdStr}`,
         },
-        (payload: any) => {
+        (payload: unknown) => {
           handleNewMessage(payload.new as Message);
         }
       )
-      .subscribe((status: any) => {
+      .subscribe((status: unknown) => {
         if (status === "SUBSCRIBED") {
           setConnectionStatus("connected");
         }
@@ -222,18 +222,18 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           table: "typing_indicators",
           filter: `conversation_id=eq.${conversationIdStr}`,
         },
-        (payload: any) => {
+        (payload: unknown) => {
           const typing = payload.new;
           if (typing.user_id !== currentUserId) {
             // Don't show own typing
             setTypingUsers((prev) => {
-              const filtered = prev.filter((u: any) => u.user_id !== typing.user_id);
+              const filtered = prev.filter((u: unknown) => u.user_id !== typing.user_id);
               return [
                 ...filtered,
                 {
                   user_id: typing.user_id,
-                  user_type: typing.user_type,
-                  user_name: typing.user_type === "visitor" ? "Customer" : "Agent",
+                  userType: typing.userType,
+                  userName: typing.userType === "visitor" ? "Customer" : "Agent",
                 },
               ];
             });
@@ -253,12 +253,12 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           table: "typing_indicators",
           filter: `conversation_id=eq.${conversationIdStr}`,
         },
-        (payload: any) => {
+        (payload: unknown) => {
           const typing = payload.old;
-          setTypingUsers((prev) => prev.filter((u: any) => u.user_id !== typing.user_id));
+          setTypingUsers((prev) => prev.filter((u: unknown) => u.user_id !== typing.user_id));
         }
       )
-      .on("broadcast", { event: "typing" }, (payload: any) => {
+      .on("broadcast", { event: "typing" }, (payload: unknown) => {
         const { conversationId: typingConversationId, isTyping, content, sender_id, sender_type } = payload.payload;
 
         // Only process if it's for this conversation and not from current user
@@ -266,13 +266,13 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           if (isTyping && content) {
             // Show typing preview with content
             setTypingUsers((prev) => {
-              const filtered = prev.filter((u: any) => u.user_id !== sender_id);
+              const filtered = prev.filter((u: unknown) => u.user_id !== sender_id);
               return [
                 ...filtered,
                 {
                   user_id: sender_id,
-                  user_type: sender_type || "visitor",
-                  user_name: sender_type === "visitor" ? "Customer" : "Agent",
+                  userType: sender_type || "visitor",
+                  userName: sender_type === "visitor" ? "Customer" : "Agent",
                   content: content, // Real-time typing preview content
                   timestamp: Date.now(),
                 },
@@ -280,7 +280,7 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
             });
           } else if (!isTyping) {
             // Remove typing indicator
-            setTypingUsers((prev) => prev.filter((u: any) => u.user_id !== sender_id));
+            setTypingUsers((prev) => prev.filter((u: unknown) => u.user_id !== sender_id));
           }
         }
       })
@@ -457,16 +457,16 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           </div>
         ) : (
           <>
-            {messages.map((message: any) => (
+            {messages.map((message: unknown) => (
               <div
                 key={message.id}
-                className={`flex ${message.sender_type === "operator" ? "justify-end" : "justify-start"}`}
+                className={`flex ${message.senderType === "operator" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-xs rounded-ds-lg px-4 py-3 shadow-sm lg:max-w-md ${
-                    message.sender_type === "operator"
+                    message.senderType === "operator"
                       ? "bg-blue-600 text-white"
-                      : message.sender_type === "ai"
+                      : message.senderType === "ai"
                         ? "border border-purple-200 bg-purple-100 text-purple-900"
                         : "bg-gray-100 text-gray-900"
                   }`}
@@ -474,11 +474,11 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
                   <p className="leading-relaxed text-sm">{message.content}</p>
                   <div className="mt-2 flex items-center justify-between">
                     <p
-                      className={`text-xs ${message.sender_type === "operator" ? "text-blue-100" : "text-[var(--fl-color-text-muted)]"}`}
+                      className={`text-xs ${message.senderType === "operator" ? "text-blue-100" : "text-[var(--fl-color-text-muted)]"}`}
                     >
                       {formatMessageTime(message.created_at)}
                     </p>
-                    {message.sender_type === "ai" && (
+                    {message.senderType === "ai" && (
                       <span className="rounded-ds-full bg-purple-200 px-2 py-1 text-tiny text-purple-700">AI</span>
                     )}
                   </div>
@@ -489,12 +489,12 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
             {/* Typing Indicators with Real-time Preview */}
             {typingUsers.length > 0 && (
               <div className="space-y-spacing-sm">
-                {typingUsers.map((user: any) => (
+                {typingUsers.map((user: unknown) => (
                   <div key={user.user_id} className="flex justify-start">
                     <div className="bg-background max-w-xs rounded-ds-lg border-l-2 border-[var(--fl-color-border-interactive)] px-4 py-3 lg:max-w-md">
                       <div className="mb-1 flex items-center gap-ds-2">
                         <div className="h-2 w-2 rounded-ds-full bg-brand-blue-500"></div>
-                        <span className="text-foreground text-tiny font-medium">{user.user_name} is typing...</span>
+                        <span className="text-foreground text-tiny font-medium">{user.userName} is typing...</span>
                       </div>
                       {user.content && user.content.trim() ? (
                         <div className="text-sm italic text-gray-800">

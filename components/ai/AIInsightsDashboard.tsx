@@ -417,7 +417,7 @@ export function AIInsightsDashboard({ organizationId, className }: AIInsightsDas
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {insights.recentActivity.map((activity: any) => (
+                {insights.recentActivity.map((activity: unknown) => (
                   <div key={activity.id} className="flex items-start space-x-3 rounded-ds-lg border spacing-3">
                     <div className="flex-shrink-0">
                       {activity.type === "conversation_started" && (

@@ -34,7 +34,7 @@ interface DeduplicationResult {
 
 interface DeduplicationConfig {
   dryRun?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface VectorDeduplicationService {
@@ -95,9 +95,9 @@ interface LogEvent {
 }
 
 const ragLogger = {
-  info: (message: string, data?: any) => console.log("RAG INFO:", message, data),
-  warn: (message: string, data?: any) => console.warn("RAG WARN:", message, data),
-  error: (message: string, error?: any) => console.error("RAG ERROR:", message, error),
+  info: (message: string, data?: unknown) => console.log("RAG INFO:", message, data),
+  warn: (message: string, data?: unknown) => console.warn("RAG WARN:", message, data),
+  error: (message: string, error?: unknown) => console.error("RAG ERROR:", message, error),
   logEvent: async (event: LogEvent) => {
     const { level, operation, ...data } = event;
     if (level === "error") {

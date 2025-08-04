@@ -219,8 +219,8 @@ export class PerformanceMonitor {
       };
 
       // Calculate overall health score
-      const componentScores = Object.values(components).map((c: any) => c.score);
-      const overallScore = componentScores.reduce((sum: any, score: any) => sum + score, 0) / componentScores.length;
+      const componentScores = Object.values(components).map((c: unknown) => c.score);
+      const overallScore = componentScores.reduce((sum: unknown, score: unknown) => sum + score, 0) / componentScores.length;
 
       // Determine overall status
       let overallStatus: "healthy" | "degraded" | "unhealthy";
@@ -233,7 +233,7 @@ export class PerformanceMonitor {
       }
 
       // Get critical issues
-      const criticalIssues = this.alerts.filter((alert: any) => alert.severity === "critical" && !alert.resolved);
+      const criticalIssues = this.alerts.filter((alert: unknown) => alert.severity === "critical" && !alert.resolved);
 
       // Generate recommendations
       const recommendations = this.generateHealthRecommendations(components, overallScore);
@@ -346,7 +346,7 @@ export class PerformanceMonitor {
    * Get active alerts
    */
   getActiveAlerts(): Alert[] {
-    return this.alerts.filter((alert: any) => !alert.resolved);
+    return this.alerts.filter((alert: unknown) => !alert.resolved);
   }
 
   /**
@@ -513,9 +513,9 @@ export class PerformanceMonitor {
     const recent = metricHistory.slice(-5);
     const historical = metricHistory.slice(-20, -5);
 
-    const recentAvg = recent.reduce((sum: any, m: any) => sum + m.value, 0) / recent.length;
-    const historicalAvg = historical.reduce((sum: any, m: any) => sum + m.value, 0) / historical.length;
-    const historicalStd = this.calculateStandardDeviation(historical.map((m: any) => m.value));
+    const recentAvg = recent.reduce((sum: unknown, m: unknown) => sum + m.value, 0) / recent.length;
+    const historicalAvg = historical.reduce((sum: unknown, m: unknown) => sum + m.value, 0) / historical.length;
+    const historicalStd = this.calculateStandardDeviation(historical.map((m: unknown) => m.value));
 
     // Check if recent values are significantly different from historical
     const zScore = Math.abs(recentAvg - historicalAvg) / historicalStd;
@@ -674,7 +674,7 @@ export class PerformanceMonitor {
 
     // For simplicity, return average of recent metrics
     const recentMetrics = metrics.slice(-10);
-    return recentMetrics.reduce((sum: any, m: any) => sum + m.value, 0) / recentMetrics.length;
+    return recentMetrics.reduce((sum: unknown, m: unknown) => sum + m.value, 0) / recentMetrics.length;
   }
 
   private analyzeTrend(
@@ -684,12 +684,12 @@ export class PerformanceMonitor {
   ): PerformanceTrend | null {
     if (metricHistory.length < 5) return null;
 
-    const values = metricHistory.slice(-10).map((m: any) => m.value);
+    const values = metricHistory.slice(-10).map((m: unknown) => m.value);
     const n = values.length;
 
     // Calculate linear regression to determine trend
     const sumX = (n * (n - 1)) / 2;
-    const sumY = values.reduce((sum: any, val: any) => sum + val, 0);
+    const sumY = values.reduce((sum: unknown, val: unknown) => sum + val, 0);
     const sumXY = values.reduce((sum, val, index) => sum + index * val, 0);
     const sumX2 = (n * (n - 1) * (2 * n - 1)) / 6;
 
@@ -707,7 +707,7 @@ export class PerformanceMonitor {
 
     // Calculate R-squared for confidence
     const yMean = sumY / n;
-    const ssTotal = values.reduce((sum: any, val: any) => sum + Math.pow(val - yMean, 2), 0);
+    const ssTotal = values.reduce((sum: unknown, val: unknown) => sum + Math.pow(val - yMean, 2), 0);
     const ssRes = values.reduce((sum, val, index) => {
       const predicted = yMean + slope * (index - (n - 1) / 2);
       return sum + Math.pow(val - predicted, 2);
@@ -728,8 +728,8 @@ export class PerformanceMonitor {
   }
 
   private calculateStandardDeviation(values: number[]): number {
-    const mean = values.reduce((sum: any, val: any) => sum + val, 0) / values.length;
-    const variance = values.reduce((sum: any, val: any) => sum + Math.pow(val - mean, 2), 0) / values.length;
+    const mean = values.reduce((sum: unknown, val: unknown) => sum + val, 0) / values.length;
+    const variance = values.reduce((sum: unknown, val: unknown) => sum + Math.pow(val - mean, 2), 0) / values.length;
     return Math.sqrt(variance);
   }
 
@@ -890,12 +890,12 @@ export class PerformanceMonitor {
     const cutoffTime = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
 
     for (const [metricName, metricHistory] of this.metrics.entries()) {
-      const filteredHistory = metricHistory.filter((m: any) => m.timestamp.getTime() > cutoffTime);
+      const filteredHistory = metricHistory.filter((m: unknown) => m.timestamp.getTime() > cutoffTime);
       this.metrics.set(metricName, filteredHistory);
     }
 
     // Cleanup old alerts
-    this.alerts = this.alerts.filter((alert: any) => alert.timestamp.getTime() > cutoffTime || !alert.resolved);
+    this.alerts = this.alerts.filter((alert: unknown) => alert.timestamp.getTime() > cutoffTime || !alert.resolved);
   }
 
   /**

@@ -32,8 +32,8 @@ filesToCheck.forEach(file => {
       '🚨🚨🚨 [INBOX PAGE]',
       '🚨🚨🚨 [BIDIRECTIONAL FIX',
       'CACHE BUSTER: Expose function globally',
-      '(window as any).broadcastToChannel',
-      '(window as any).REALTIME_VERSION'
+      '(window as unknown).broadcastToChannel',
+      '(window as unknown).REALTIME_VERSION'
     ];
     
     debugPatterns.forEach(pattern => {

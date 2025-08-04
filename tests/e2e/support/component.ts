@@ -66,7 +66,7 @@ Cypress.Commands.add('testComponent', (component: React.ReactElement) => {
     const errors: string[] = [];
     const originalError = win.console.error;
     
-    win.console.error = (...args: any[]) => {
+    win.console.error = (...args: unknown[]) => {
       errors.push(args.join(' '));
       originalError.apply(win.console, args);
     };
@@ -158,7 +158,7 @@ Cypress.Commands.add('testComponentPerformance', (component: React.ReactElement)
 declare global {
   namespace Cypress {
     interface Chainable {
-      mountWithProviders(component: React.ReactElement, options?: any): Chainable<void>;
+      mountWithProviders(component: React.ReactElement, options?: unknown): Chainable<void>;
       testComponent(component: React.ReactElement): Chainable<void>;
       testWithTheme(component: React.ReactElement, theme?: 'light' | 'dark'): Chainable<void>;
       testResponsive(component: React.ReactElement): Chainable<void>;

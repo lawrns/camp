@@ -12,7 +12,7 @@ import { useUIStore } from "@/store/domains/ui/ui-store";
 interface OfflineAction {
   id: string;
   type: "send_message" | "update_conversation" | "update_profile";
-  payload: any;
+  payload: unknown;
   timestamp: number;
 }
 
@@ -52,7 +52,7 @@ function addOfflineAction(action: Omit<OfflineAction, "id" | "timestamp">) {
 // Remove an offline action
 function removeOfflineAction(actionId: string) {
   const actions = getOfflineActions();
-  const filtered = actions.filter((a: any) => a.id !== actionId);
+  const filtered = actions.filter((a: unknown) => a.id !== actionId);
   saveOfflineActions(filtered);
 }
 
@@ -151,7 +151,7 @@ export function useOfflineSync() {
 
   // Helper to queue an action when offline
   const queueOfflineAction = useCallback(
-    (type: OfflineAction["type"], payload: any) => {
+    (type: OfflineAction["type"], payload: unknown) => {
       if (!isOnline) {
         const action = addOfflineAction({ type, payload });
 

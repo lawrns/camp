@@ -295,7 +295,7 @@ export function usePanelPreferences(storagePrefix: string = "campfire-panels") {
   }, [storagePrefix]);
 
   const savePreference = useCallback(
-    (key: string, value: any) => {
+    (key: string, value: unknown) => {
       const newPreferences = { ...preferences, [key]: value };
       setPreferences(newPreferences);
 
@@ -307,7 +307,7 @@ export function usePanelPreferences(storagePrefix: string = "campfire-panels") {
   );
 
   const getPreference = useCallback(
-    (key: string, defaultValue?: any) => {
+    (key: string, defaultValue?: unknown) => {
       return preferences[key] ?? defaultValue;
     },
     [preferences]

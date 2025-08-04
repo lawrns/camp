@@ -146,7 +146,7 @@ export async function getUserOrganizations(organizationId: string, userId: strin
       return [];
     }
 
-    return memberships.map((membership: any) => ({
+    return memberships.map((membership: unknown) => ({
       organizationId: membership.organization_id,
       mailboxId: membership.mailbox_id,
       role: membership.role as "owner" | "admin" | "agent" | "viewer",

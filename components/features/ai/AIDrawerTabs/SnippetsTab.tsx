@@ -140,7 +140,7 @@ export const SnippetsTab: React.FC<SnippetsTabProps> = ({ conversation }) => {
               </div>
             </div>
           ) : filteredSnippets.length > 0 ? (
-            filteredSnippets.map((snippet: any) => (
+            filteredSnippets.map((snippet: unknown) => (
               <Card key={snippet.id} className="spacing-3 transition-shadow hover:shadow-card-hover">
                 <div className="space-y-3">
                   {/* Header */}

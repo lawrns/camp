@@ -92,7 +92,7 @@ class MockRealtimeChannel {
     return this;
   }
 
-  send(payload: any) {
+  send(payload: unknown) {
     // Simulate real-time message
     setTimeout(() => {
       // Trigger the appropriate event based on payload type
@@ -106,14 +106,14 @@ class MockRealtimeChannel {
     }, 10);
   }
 
-  private trigger(event: string, payload: any) {
+  private trigger(event: string, payload: unknown) {
     if (this.subscriptions[event]) {
       this.subscriptions[event].forEach(callback => callback(payload));
     }
   }
 
   // Simulate receiving messages from other clients
-  simulateMessage(event: string, payload: any) {
+  simulateMessage(event: string, payload: unknown) {
     this.trigger(event, payload);
   }
 }
@@ -145,7 +145,7 @@ class RealtimeCommunicationManager {
     return channel;
   }
 
-  sendMessage(conversationId: string, message: any) {
+  sendMessage(conversationId: string, message: unknown) {
     const channelName = `conversation:${conversationId}`;
     const channel = this.getChannel(channelName);
     
@@ -182,7 +182,7 @@ describe('Bidirectional Real-time Communication', () => {
   beforeEach(() => {
     rtManager = new RealtimeCommunicationManager();
     // Mock global WebSocket
-    (global as any).WebSocket = MockWebSocket;
+    (global as unknown).WebSocket = MockWebSocket;
   });
 
   afterEach(() => {
@@ -218,10 +218,10 @@ describe('Bidirectional Real-time Communication', () => {
   describe('Message Flow', () => {
     test('should handle bidirectional message exchange', async () => {
       const conversationId = 'bidirectional-test';
-      const receivedMessages: any[] = [];
+      const receivedMessages: unknown[] = [];
       
       // Set up message handler
-      const onMessage = (payload: any) => {
+      const onMessage = (payload: unknown) => {
         receivedMessages.push(payload);
       };
       
@@ -249,10 +249,10 @@ describe('Bidirectional Real-time Communication', () => {
 
     test('should handle typing indicators bidirectionally', async () => {
       const conversationId = 'typing-test';
-      const typingEvents: any[] = [];
+      const typingEvents: unknown[] = [];
       
       const onMessage = jest.fn();
-      const onTyping = (payload: any) => {
+      const onTyping = (payload: unknown) => {
         typingEvents.push(payload);
       };
       
@@ -280,9 +280,9 @@ describe('Bidirectional Real-time Communication', () => {
 
     test('should handle rapid message sequences', async () => {
       const conversationId = 'rapid-test';
-      const receivedMessages: any[] = [];
+      const receivedMessages: unknown[] = [];
       
-      const onMessage = (payload: any) => {
+      const onMessage = (payload: unknown) => {
         receivedMessages.push(payload);
       };
       
@@ -404,10 +404,10 @@ describe('Bidirectional Real-time Communication', () => {
 
     test('should handle malformed message data', async () => {
       const conversationId = 'malformed-test';
-      const receivedMessages: any[] = [];
-      const errors: any[] = [];
+      const receivedMessages: unknown[] = [];
+      const errors: unknown[] = [];
       
-      const onMessage = (payload: any) => {
+      const onMessage = (payload: unknown) => {
         try {
           receivedMessages.push(payload);
         } catch (error) {
@@ -431,9 +431,9 @@ describe('Bidirectional Real-time Communication', () => {
 
     test('should handle concurrent operations safely', async () => {
       const conversationId = 'concurrent-test';
-      const receivedMessages: any[] = [];
+      const receivedMessages: unknown[] = [];
       
-      const onMessage = (payload: any) => {
+      const onMessage = (payload: unknown) => {
         receivedMessages.push(payload);
       };
       
@@ -466,13 +466,13 @@ describe('Bidirectional Real-time Communication', () => {
   describe('Performance and Scalability', () => {
     test('should handle high-frequency events efficiently', async () => {
       const conversationId = 'performance-test';
-      const receivedEvents: any[] = [];
+      const receivedEvents: unknown[] = [];
       
-      const onMessage = (payload: any) => {
+      const onMessage = (payload: unknown) => {
         receivedEvents.push(payload);
       };
       
-      const onTyping = (payload: any) => {
+      const onTyping = (payload: unknown) => {
         receivedEvents.push(payload);
       };
       

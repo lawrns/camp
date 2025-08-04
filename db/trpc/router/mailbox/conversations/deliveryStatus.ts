@@ -358,19 +358,19 @@ export const deliveryStatusRouter = {
       where: and(
         inArray(
           messageReadStatus.messageId,
-          messages.map((m: any) => m.id)
+          messages.map((m: unknown) => m.id)
         ),
         eq(messageReadStatus.userId, user.id)
       ),
     });
 
     // Create a set of read message IDs
-    const readMessageIds = new Set(readReceipts.map((r: any) => r.messageId));
+    const readMessageIds = new Set(readReceipts.map((r: unknown) => r.messageId));
 
     // Filter for unread messages
-    const unreadMessages = messages.filter((message: any) => !readMessageIds.has(message.id));
+    const unreadMessages = messages.filter((message: unknown) => !readMessageIds.has(message.id));
 
-    return unreadMessages.map((message: any) => ({
+    return unreadMessages.map((message: unknown) => ({
       id: message.id,
       conversationId: message.conversationId,
       role: message.role,

@@ -41,7 +41,7 @@ export function getChannelName(config: ChannelConfig): string {
 /**
  * Safe channel cleanup function that handles both off() and unsubscribe() methods
  */
-export function safeChannelCleanup(channel: any): void {
+export function safeChannelCleanup(channel: unknown): void {
     if (!channel) return;
 
     try {

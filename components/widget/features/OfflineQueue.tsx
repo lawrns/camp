@@ -9,7 +9,7 @@ interface QueuedMessage {
   content: string;
   senderType: 'visitor';
   attachments?: File[];
-  metadata?: any;
+  metadata?: unknown;
   timestamp: number;
   retryCount: number;
   maxRetries: number;

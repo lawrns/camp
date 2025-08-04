@@ -98,12 +98,12 @@ export interface PhoenixStore {
 
   // Analytics
   analytics: {
-    track: (event: string, data?: any) => ValidatedTrackingResult;
+    track: (event: string, data?: unknown) => ValidatedTrackingResult;
     trackTyped: (event: CampfireEvents, data?: CampfireEventData) => ValidatedTrackingResult;
-    trackConversation: (action: string, conversationId: string, data?: any) => ValidatedTrackingResult;
-    trackMessage: (action: string, messageId: string, conversationId: string, data?: any) => ValidatedTrackingResult;
-    trackWidget: (action: string, data?: any) => ValidatedTrackingResult;
-    trackHandover: (action: string, handoverId: string, data?: any) => ValidatedTrackingResult;
+    trackConversation: (action: string, conversationId: string, data?: unknown) => ValidatedTrackingResult;
+    trackMessage: (action: string, messageId: string, conversationId: string, data?: unknown) => ValidatedTrackingResult;
+    trackWidget: (action: string, data?: unknown) => ValidatedTrackingResult;
+    trackHandover: (action: string, handoverId: string, data?: unknown) => ValidatedTrackingResult;
   };
 }
 
@@ -230,7 +230,7 @@ export const useStore = create<PhoenixStore>((set) => ({
 
   // Analytics
   analytics: {
-    track: (event: string, data?: any) => {
+    track: (event: string, data?: unknown) => {
       return analytics.track(event, data);
     },
 
@@ -238,7 +238,7 @@ export const useStore = create<PhoenixStore>((set) => ({
       return analytics.trackTyped(event, data);
     },
 
-    trackConversation: (action: string, conversationId: string, data?: any) => {
+    trackConversation: (action: string, conversationId: string, data?: unknown) => {
       // Helper for conversation-related events with standardized naming
       const eventName = `campfire_conversation_${action}`;
       return analytics.track(eventName, {
@@ -247,7 +247,7 @@ export const useStore = create<PhoenixStore>((set) => ({
       });
     },
 
-    trackMessage: (action: string, messageId: string, conversationId: string, data?: any) => {
+    trackMessage: (action: string, messageId: string, conversationId: string, data?: unknown) => {
       // Helper for message-related events with standardized naming
       const eventName = `campfire_message_${action}`;
       return analytics.track(eventName, {
@@ -257,13 +257,13 @@ export const useStore = create<PhoenixStore>((set) => ({
       });
     },
 
-    trackWidget: (action: string, data?: any) => {
+    trackWidget: (action: string, data?: unknown) => {
       // Helper for widget-related events with standardized naming
       const eventName = `campfire_widget_${action}`;
       return analytics.track(eventName, data);
     },
 
-    trackHandover: (action: string, handoverId: string, data?: any) => {
+    trackHandover: (action: string, handoverId: string, data?: unknown) => {
       // Helper for handover-related events with standardized naming
       const eventName = `campfire_handover_${action}`;
       return analytics.track(eventName, {

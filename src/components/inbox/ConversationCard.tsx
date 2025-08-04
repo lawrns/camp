@@ -36,13 +36,15 @@ interface ConversationCardData {
   status: "open" | "assigned" | "escalated" | "waiting" | "closed";
   lastMessageAt: string;
   unread: boolean;
-  priority: "high" | "medium" | "low";
+  unreadCount?: number; // Enhanced unread count
+  priority: "high" | "medium" | "low" | "urgent";
   tags: string[];
   avatar?: string;
   isOnline?: boolean;
   isVerified?: boolean;
   assignedTo?: string;
   aiEnabled?: boolean;
+  assigned_to_ai?: boolean; // Enhanced AI assignment
   customer?: {
     location?: string;
     localTime?: string;
@@ -51,6 +53,11 @@ interface ConversationCardData {
   sentiment?: "positive" | "neutral" | "negative";
   responseTime?: number;
   escalationRisk?: "high" | "medium" | "low";
+  customerName?: string; // Enhanced customer name
+  customerEmail?: string; // Enhanced customer email
+  customerAvatar?: string; // Enhanced customer avatar
+  lastMessageSender?: "ai" | "agent" | "customer"; // Enhanced message sender
+  lastMessagePreview?: string; // Enhanced message preview
 
   // Improved AI status data
   aiStatus?: AIStatusData;
@@ -107,18 +114,20 @@ export const ConversationCard = memo(function ConversationCard({
   const [isHovered, setIsHovered] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  // Convert ConversationCardData to the format expected by getCustomerDisplayFromConversation
-  const customerDisplay = getCustomerDisplayFromConversation({
-    id: conversation.id.toString(),
-    organizationId: "", // Required but not used in the function
-    customerId: "", // Required but not used in the function
-    customerEmail: conversation.email_from,
-    customerName: null,
-    subject: conversation.subject,
-    status: conversation.status as any,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  } as any);
+  // Enhanced customer display with fallback logic
+  const customerDisplay = useMemo(() => {
+    // Use enhanced customer data if available, otherwise fall back to email parsing
+    const name = conversation.customerName || conversation.email_from.split('@')[0];
+    const email = conversation.customerEmail || conversation.email_from;
+    const avatar = conversation.customerAvatar || conversation.avatar;
+    
+    return {
+      displayName: name.charAt(0).toUpperCase() + name.slice(1),
+      initials: name.split(" ").map((n: string) => n[0]).join("").substring(0, 2).toUpperCase(),
+      email: email,
+      avatar: avatar,
+    };
+  }, [conversation.customerName, conversation.customerEmail, conversation.customerAvatar, conversation.avatar, conversation.email_from]);
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -150,9 +159,10 @@ export const ConversationCard = memo(function ConversationCard({
     [conversation.id]
   );
 
-  // Priority badge variant
+  // Enhanced priority badge variant
   const getPriorityVariant = () => {
     switch (conversation.priority) {
+      case "urgent":
       case "high":
         return "error";
       case "medium":
@@ -213,32 +223,41 @@ export const ConversationCard = memo(function ConversationCard({
               </div>
             )}
 
-            {/* Avatar with presence indicator */}
-            <div className="relative flex-shrink-0">
-              <div className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-ds-full ring-2 ring-fl-background">
-                {customerDisplay.avatar && (
-                  <AvatarImage src={customerDisplay.avatar} alt={customerDisplay.displayName} />
-                )}
-                <AvatarFallback className="bg-gradient-to-br from-fl-brand to-fl-brand-hover font-semibold text-white">
-                  {customerDisplay.displayName
-                    .split(" ")
-                    .map((n: string) => n[0])
-                    .join("")
-                    .substring(0, 2)
-                    .toUpperCase()}
-                </AvatarFallback>
-              </div>
-
-              {/* Online indicator with pulse animation */}
-              {conversation.isOnline && (
-                <div className="absolute -bottom-1 -right-1">
-                  <div className="relative">
-                    <div className="absolute inset-0 h-3.5 w-3.5 animate-ping rounded-ds-full bg-fl-success opacity-75" />
-                    <div className="relative h-3.5 w-3.5 rounded-ds-full border-2 border-fl-background bg-fl-success" />
-                  </div>
+                          {/* Enhanced Avatar with presence indicator */}
+              <div className="relative flex-shrink-0">
+                <div className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-ds-full ring-2 ring-fl-background">
+                  {customerDisplay.avatar && (
+                    <AvatarImage src={customerDisplay.avatar} alt={customerDisplay.displayName} />
+                  )}
+                  <AvatarFallback className="bg-gradient-to-br from-fl-brand to-fl-brand-hover font-semibold text-white">
+                    {customerDisplay.initials}
+                  </AvatarFallback>
                 </div>
-              )}
-            </div>
+
+                {/* Online indicator with pulse animation */}
+                {conversation.isOnline && (
+                  <div className="absolute -bottom-1 -right-1">
+                    <div className="relative">
+                      <div className="absolute inset-0 h-3.5 w-3.5 animate-ping rounded-ds-full bg-fl-success opacity-75" />
+                      <div className="relative h-3.5 w-3.5 rounded-ds-full border-2 border-fl-background bg-fl-success" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Enhanced verified badge */}
+                {conversation.isVerified && (
+                  <div className="absolute -top-1 -right-1">
+                    <Icon icon={CheckCircle2} className="h-4 w-4 text-fl-info bg-white rounded-full" />
+                  </div>
+                )}
+
+                {/* VIP indicator */}
+                {conversation.tags.includes("VIP") && (
+                  <div className="absolute -top-1 -left-1">
+                    <Icon icon={Star} className="h-4 w-4 fill-fl-warning text-fl-warning bg-white rounded-full" />
+                  </div>
+                )}
+              </div>
 
             {/* Main content */}
             <div className="min-w-0 flex-1">
@@ -320,6 +339,25 @@ export const ConversationCard = memo(function ConversationCard({
                 />
               )}
 
+              {/* Enhanced message sender info */}
+              {conversation.lastMessageSender && (
+                <div className="flex items-center gap-2 text-xs text-fl-text-muted mb-1">
+                  <span>
+                    {conversation.lastMessageSender === "ai" ? "AI Assistant" :
+                     conversation.lastMessageSender === "agent" ? "Support Agent" :
+                     "Customer"}
+                  </span>
+                  {conversation.lastMessageAt && (
+                    <>
+                      <span>•</span>
+                      <span>
+                        {formatDistanceToNow(new Date(conversation.lastMessageAt), { addSuffix: true })}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
+
               {/* Bottom section: Tags, status, metadata */}
               <div className="flex items-center justify-between">
                 {/* Left side: Status badges and tags */}
@@ -332,10 +370,10 @@ export const ConversationCard = memo(function ConversationCard({
                     </Badge>
                   )}
 
-                  {/* Improved AI status */}
+                  {/* Enhanced AI/Human status */}
                   {conversation.aiStatus ? (
                     <AIStatusBadge aiData={conversation.aiStatus} variant="compact" showConfidence={true} />
-                  ) : conversation.aiEnabled ? (
+                  ) : conversation.assigned_to_ai || conversation.aiEnabled ? (
                     <Badge variant="info" size="sm" className="flex items-center gap-1">
                       <Icon icon={Zap} className="h-2.5 w-2.5" />
                       AI
@@ -384,8 +422,18 @@ export const ConversationCard = memo(function ConversationCard({
                     </div>
                   )}
 
-                  {/* Unread indicator */}
-                  {conversation.unread && <div className="h-2 w-2 rounded-ds-full bg-fl-brand" />}
+                  {/* Enhanced unread indicator */}
+                  {conversation.unread && (
+                    <div className="flex items-center gap-1">
+                      {conversation.unreadCount && conversation.unreadCount > 1 ? (
+                        <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-fl-brand px-2 py-1 text-xs font-bold text-white">
+                          {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
+                        </span>
+                      ) : (
+                        <div className="h-2 w-2 rounded-ds-full bg-fl-brand" />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

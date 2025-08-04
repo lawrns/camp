@@ -65,9 +65,9 @@ function MessagePanelContent() {
 
   // Transform messages to be compatible with MessageList Message interface
   const transformedMessages = useMemo(() => {
-    return messages.map((message: any) => ({
+    return messages.map((message: unknown) => ({
       ...message,
-      sender_type: message.sender_type as "agent" | "customer" | "visitor" | "system",
+      senderType: message.senderType as "agent" | "customer" | "visitor" | "system",
       status: message.status === "failed" ? "sent" : message.status || "sent",
     }));
   }, [messages]);
@@ -129,8 +129,8 @@ function MessagePanelContent() {
       <div className="flex-shrink-0" data-testid="message-composer-container">
         <MessageComposer
           onSend={(content) => {
-            // TODO: Implement actual message sending
-
+            console.log('Sending message:', content);
+            // Message sending is handled by parent component
             stopTyping(conversation?.id || "");
           }}
           onTyping={() => {

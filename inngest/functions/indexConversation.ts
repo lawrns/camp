@@ -22,7 +22,7 @@ export default inngest.createFunction(
   },
   { event: "conversations/message.created" },
   async ({ events, step }) => {
-    const messageIds = events.map((event: any) => event.data.messageId);
+    const messageIds = events.map((event: unknown) => event.data.messageId);
 
     await step.run("index-messages", async (): Promise<void> => {
       const messagesToIndex = await db.query.conversationMessages.findMany({
@@ -33,7 +33,7 @@ export default inngest.createFunction(
       });
       const results = await Promise.allSettled(messagesToIndex.map(({ id }) => indexMessage(id)));
       const failedIds: number[] = [];
-      results.forEach((result: any, index: any) => {
+      results.forEach((result: unknown, index: unknown) => {
         if (result.status === "rejected" && messagesToIndex[index]?.id) {
           captureExceptionAndLogIfDevelopment(result.reason);
           failedIds.push(messagesToIndex[index].id);

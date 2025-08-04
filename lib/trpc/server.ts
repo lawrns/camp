@@ -13,7 +13,7 @@ import { supabase } from "@/lib/supabase";
  * Create context for tRPC requests
  * Includes authenticated Supabase client and user info
  */
-export async function createTRPCContext(opts: { req: any; res: any }) {
+export async function createTRPCContext(opts: { req: unknown; res: unknown }) {
   const { req, res } = opts;
 
   // Extract authentication from request
@@ -39,7 +39,7 @@ export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
  */
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
-  errorFormatter({ shape, error }: any) {
+  errorFormatter({ shape, error }: unknown) {
     return {
       ...shape,
       data: {
@@ -59,7 +59,7 @@ export const publicProcedure = t.procedure;
 /**
  * Protected procedure that requires authentication
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }: any) => {
+export const protectedProcedure = t.procedure.use(({ ctx, next }: unknown) => {
   if (!ctx.session || !ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
@@ -75,7 +75,7 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }: any) => {
 /**
  * Organization-scoped procedure that requires org membership
  */
-export const orgProcedure = protectedProcedure.use(async ({ ctx, next }: any) => {
+export const orgProcedure = protectedProcedure.use(async ({ ctx, next }: unknown) => {
   if (!ctx.organizationId) {
     throw new TRPCError({
       code: "FORBIDDEN",
@@ -110,7 +110,7 @@ export const orgProcedure = protectedProcedure.use(async ({ ctx, next }: any) =>
 /**
  * Admin procedure that requires admin role
  */
-export const adminProcedure = orgProcedure.use(({ ctx, next }: any) => {
+export const adminProcedure = orgProcedure.use(({ ctx, next }: unknown) => {
   if (ctx.userRole !== "admin" && ctx.userRole !== "owner") {
     throw new TRPCError({
       code: "FORBIDDEN",

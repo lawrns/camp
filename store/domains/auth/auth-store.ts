@@ -18,7 +18,7 @@ export interface OrganizationSettings {
   aiEnabled: boolean;
   ragEnabled: boolean;
   autoHandoff: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Organization {
@@ -95,7 +95,7 @@ export const useAuthStore = create<AuthStore>()(
               draft.lastAuthCheck = new Date().toISOString();
 
               // Set organization from user metadata if available
-              if ((user as any)?.user_metadata?.organization_id && !draft.organization) {
+              if ((user as unknown)?.user_metadata?.organization_id && !draft.organization) {
                 // Organization will be loaded separately
               }
             });
@@ -110,7 +110,7 @@ export const useAuthStore = create<AuthStore>()(
               eventBus.emit("auth:login", {
                 source: "AuthStore",
                 userId: user.id,
-                organizationId: (user as any).user_metadata?.organization_id || "",
+                organizationId: (user as unknown).user_metadata?.organization_id || "",
                 session,
               });
             }

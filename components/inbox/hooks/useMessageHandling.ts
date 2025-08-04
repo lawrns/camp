@@ -42,7 +42,7 @@ export function useMessageHandling({
         organizationId || ""
       );
 
-      addOptimisticMessage(selectedConversationId, optimisticMessage as any);
+      addOptimisticMessage(selectedConversationId, optimisticMessage as unknown);
 
       try {
         const result = await sendMessage(selectedConversationId, content);

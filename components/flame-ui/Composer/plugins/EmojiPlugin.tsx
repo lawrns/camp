@@ -95,7 +95,7 @@ export function EmojiPlugin({ pluginId, content, onContentChange, onAction, disa
         >
           {/* Category Tabs */}
           <div className="flex border-b border-[--border-subtle] p-spacing-sm">
-            {Object.keys(EMOJI_CATEGORIES).map((category: any) => (
+            {Object.keys(EMOJI_CATEGORIES).map((category: unknown) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category as keyof typeof EMOJI_CATEGORIES)}
@@ -113,7 +113,7 @@ export function EmojiPlugin({ pluginId, content, onContentChange, onAction, disa
 
           {/* Emoji Grid */}
           <div className="grid max-h-48 grid-cols-8 gap-1 overflow-y-auto spacing-3">
-            {EMOJI_CATEGORIES[selectedCategory].map((emoji: any) => (
+            {EMOJI_CATEGORIES[selectedCategory].map((emoji: unknown) => (
               <button
                 key={emoji.id}
                 onClick={() => handleEmojiSelect(emoji)}

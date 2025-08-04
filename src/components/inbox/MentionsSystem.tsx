@@ -67,7 +67,7 @@ export function MentionsSystem({
     (query: string): MentionSuggestion[] => {
       if (!query) {
         return teamMembers
-          .map((member: any) => ({
+          .map((member: unknown) => ({
             ...member,
             relevanceScore: member.isAvailable ? 1.0 : 0.7,
           }))
@@ -83,7 +83,7 @@ export function MentionsSystem({
 
       const lowerQuery = query.toLowerCase();
       return teamMembers
-        .map((member: any) => {
+        .map((member: unknown) => {
           let score = 0;
 
           // Name match (highest priority)
@@ -112,7 +112,7 @@ export function MentionsSystem({
 
           return { ...member, relevanceScore: score };
         })
-        .filter((member: any) => member.relevanceScore > 0)
+        .filter((member: unknown) => member.relevanceScore > 0)
         .sort((a, b) => b.relevanceScore - a.relevanceScore)
         .slice(0, 8); // Limit to 8 suggestions
     },
@@ -285,7 +285,7 @@ export function MentionsSystem({
                 <AvatarFallback className="text-tiny">
                   {member.name
                     .split(" ")
-                    .map((n: any) => n[0])
+                    .map((n: unknown) => n[0])
                     .join("")}
                 </AvatarFallback>
               </Avatar>
@@ -351,7 +351,7 @@ export function useMentions() {
   }, []);
 
   const removeMention = useCallback((memberId: string) => {
-    setMentions((prev) => prev.filter((m: any) => m.id !== memberId));
+    setMentions((prev) => prev.filter((m: unknown) => m.id !== memberId));
   }, []);
 
   const clearMentions = useCallback(() => {

@@ -264,11 +264,11 @@ export class StorageManager {
   }
 
   async getFilesByOrganization(organizationId: string): Promise<FileMetadata[]> {
-    return Array.from(this.files.values()).filter((file: any) => file.organizationId === organizationId);
+    return Array.from(this.files.values()).filter((file: unknown) => file.organizationId === organizationId);
   }
 
   async getFilesByUser(userId: string): Promise<FileMetadata[]> {
-    return Array.from(this.files.values()).filter((file: any) => file.uploadedBy === userId);
+    return Array.from(this.files.values()).filter((file: unknown) => file.uploadedBy === userId);
   }
 
   async searchFiles(query: {
@@ -283,19 +283,19 @@ export class StorageManager {
     let results = Array.from(this.files.values());
 
     if (query.organizationId) {
-      results = results.filter((file: any) => file.organizationId === query.organizationId);
+      results = results.filter((file: unknown) => file.organizationId === query.organizationId);
     }
 
     if (query.userId) {
-      results = results.filter((file: any) => file.uploadedBy === query.userId);
+      results = results.filter((file: unknown) => file.uploadedBy === query.userId);
     }
 
     if (query.mimeType) {
-      results = results.filter((file: any) => file.mimeType === query.mimeType);
+      results = results.filter((file: unknown) => file.mimeType === query.mimeType);
     }
 
     if (query.tags && query.tags.length > 0) {
-      results = results.filter((file: any) => query.tags!.some((tag) => file.tags?.includes(tag)));
+      results = results.filter((file: unknown) => query.tags!.some((tag) => file.tags?.includes(tag)));
     }
 
     if (query.filename) {
@@ -307,11 +307,11 @@ export class StorageManager {
     }
 
     if (query.uploadedAfter) {
-      results = results.filter((file: any) => file.uploadedAt >= query.uploadedAfter!);
+      results = results.filter((file: unknown) => file.uploadedAt >= query.uploadedAfter!);
     }
 
     if (query.uploadedBefore) {
-      results = results.filter((file: any) => file.uploadedAt <= query.uploadedBefore!);
+      results = results.filter((file: unknown) => file.uploadedAt <= query.uploadedBefore!);
     }
 
     return results.sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
@@ -321,10 +321,10 @@ export class StorageManager {
     let relevantFiles = Array.from(this.files.values());
 
     if (organizationId) {
-      relevantFiles = relevantFiles.filter((file: any) => file.organizationId === organizationId);
+      relevantFiles = relevantFiles.filter((file: unknown) => file.organizationId === organizationId);
     }
 
-    const used = relevantFiles.reduce((sum: any, file: any) => sum + file.size, 0);
+    const used = relevantFiles.reduce((sum: unknown, file: unknown) => sum + file.size, 0);
     const files = relevantFiles.length;
     const limit = 1024 * 1024 * 1024; // 1GB default limit
     const percentage = (used / limit) * 100;

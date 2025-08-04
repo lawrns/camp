@@ -48,12 +48,12 @@ async function validateApiKey(apiKey: string): Promise<ApiKeyValidationResult> {
     const { createServerClient } = await import("@/lib/supabase");
     const supabase = createServerClient();
 
-    // For widget API keys, check organizations.widget_api_key
+    // For widget API keys, check organizations.widgetApiKey
     if (apiKey.startsWith("wapi_")) {
       const { data, error } = await supabase
         .from("organizations")
         .select("id, widget_enabled")
-        .eq("widget_api_key", apiKey)
+        .eq("widgetApiKey", apiKey)
         .eq("widget_enabled", true)
         .single();
 
@@ -92,8 +92,8 @@ async function validateApiKey(apiKey: string): Promise<ApiKeyValidationResult> {
     }
 
     // Check if API key has expired
-    if (apiKeyData.expires_at) {
-      const expiresAt = new Date(apiKeyData.expires_at);
+    if (apiKeyData.expiresAt) {
+      const expiresAt = new Date(apiKeyData.expiresAt);
       if (expiresAt < new Date()) {
         return { isValid: false, error: "API key has expired" };
       }

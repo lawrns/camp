@@ -18,7 +18,7 @@ test.describe('Authentication Debug', () => {
     
     // Listen for all network requests to catch 401 errors
     const networkRequests: Array<{ url: string; status: number; method: string }> = [];
-    const authErrors: Array<{ url: string; status: number; response?: any }> = [];
+    const authErrors: Array<{ url: string; status: number; response?: unknown }> = [];
     
     page.on('response', async (response) => {
       const url = response.url();

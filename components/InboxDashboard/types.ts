@@ -23,6 +23,14 @@ export interface Conversation {
   ai_handover_session_id?: string;
   priority?: "low" | "medium" | "high" | "urgent";
   tags?: string[];
+
+  // UI-specific properties for enhanced display
+  customerAvatar?: string;
+  isOnline?: boolean;
+  isVerified?: boolean;
+  lastMessageSender?: "customer" | "agent" | "ai" | "system";
+  assigneeId?: string;
+  assigneeName?: string;
 }
 
 export interface Message {
@@ -30,10 +38,10 @@ export interface Message {
   conversation_id: string;
   organization_id: string;
   content: string;
-  sender_id: string | null;
-  sender_type: "agent" | "visitor" | "system" | "ai_assistant" | "tool";
-  sender_name: string | null;
-  sender_email: string | null;
+  senderId: string | null;
+  senderType: "agent" | "visitor" | "system" | "ai_assistant" | "tool";
+  senderName: string | null;
+  senderEmail: string | null;
   message_type: string | null;
   content_type: string | null;
   status: string | null;

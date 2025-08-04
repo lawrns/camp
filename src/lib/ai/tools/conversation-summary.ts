@@ -163,7 +163,7 @@ function isRecentSummary(generatedAt: string): boolean {
 /**
  * Calculate confidence based on summary quality
  */
-function calculateSummaryConfidence(summary: any, messageCount: number): number {
+function calculateSummaryConfidence(summary: unknown, messageCount: number): number {
   let confidence = 0.7; // Base confidence
 
   // Adjust based on message count
@@ -226,7 +226,7 @@ export async function getQuickInsights(
     };
   }
 
-  const participants = [...new Set(messages.map((m: unknown) => m.sender_name).filter(Boolean))];
+  const participants = [...new Set(messages.map((m: unknown) => m.senderName).filter(Boolean))];
   const firstMessage = messages[0];
   const lastMessage = messages[messages.length - 1];
 

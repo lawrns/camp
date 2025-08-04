@@ -27,7 +27,7 @@ export interface RealtimeEvent {
   type: "connection" | "message" | "broadcast" | "error" | "heartbeat";
   channelName: string;
   eventName?: string;
-  payload?: any;
+  payload?: unknown;
   success: boolean;
   latency?: number;
   error?: string;
@@ -327,7 +327,7 @@ export const RealtimeLogger = {
   /**
    * Log connection events
    */
-  connection: (channelName: string, status: string, details?: any) => {
+  connection: (channelName: string, status: string, details?: unknown) => {
     if (process.env.NODE_ENV === "development") {
       console.log(`🔌 [Realtime] Connection ${status} for ${channelName}`, details);
     }
@@ -355,14 +355,14 @@ export const RealtimeLogger = {
   /**
    * Log errors
    */
-  error: (context: string, error: any) => {
+  error: (context: string, error: unknown) => {
     console.error(`💥 [Realtime] Error in ${context}:`, error);
   },
 
   /**
    * Log performance metrics
    */
-  performance: (operation: string, duration: number, details?: any) => {
+  performance: (operation: string, duration: number, details?: unknown) => {
     if (process.env.NODE_ENV === "development") {
       console.log(`⚡ [Realtime] ${operation} took ${duration.toFixed(1)}ms`, details);
     }

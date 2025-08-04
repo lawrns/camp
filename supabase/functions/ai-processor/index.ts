@@ -43,7 +43,7 @@ serve(async (req: Request) => {
       .from("messages")
       .insert({
         conversation_id,
-        sender_type: "ai",
+        senderType: "ai",
         content: ragResult.text || ragResult.response,
         citations: ragResult.citations || [],
         confidence: ragResult.confidence || 0.8,

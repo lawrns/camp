@@ -19,7 +19,7 @@ const ModelVersionSchema = z.object({
 });
 
 class DeploymentManager {
-  static async deployModel(input: any, userId: string) {
+  static async deployModel(input: unknown, userId: string) {
     return { deploymentId: "fallback-deployment", userId };
   }
   static async listDeployments(environment?: string, status?: string) {
@@ -48,7 +48,7 @@ class DeploymentManager {
 }
 
 class ModelRegistry {
-  static async registerModel(input: any, userId: string) {
+  static async registerModel(input: unknown, userId: string) {
     return { modelId: "fallback-model", userId };
   }
   static async listAllModels() {
@@ -69,7 +69,7 @@ class ModelRegistry {
   static async getModelMetrics(modelName: string, days: number) {
     return { modelName, days, metrics: {} };
   }
-  static async updateModelMetrics(modelVersionId: number, metrics: any) {
+  static async updateModelMetrics(modelVersionId: number, metrics: unknown) {
     return { modelVersionId, metrics, updated: true };
   }
   static async deleteModelVersion(modelVersionId: number) {
@@ -81,7 +81,7 @@ class ModelRegistry {
   static async rollback(currentDeploymentId: string, rollbackToVersionId: number, userId: string) {
     return { currentDeploymentId, rollbackToVersionId, userId, success: true };
   }
-  static async createABTest(input: any) {
+  static async createABTest(input: unknown) {
     return { testId: "fallback-test", input };
   }
   static async startABTest(testId: string) {

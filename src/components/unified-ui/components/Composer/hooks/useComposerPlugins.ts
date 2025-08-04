@@ -24,7 +24,7 @@ export function useComposerPlugins(enabledPluginIds: string[]): UseComposerPlugi
   }, []);
 
   const executePlugin = useCallback(
-    (pluginId: string, action: string, data?: any) => {
+    (pluginId: string, action: string, data?: unknown) => {
       const plugin = plugins.get(pluginId);
       if (plugin) {
         // Plugin execution logic - this can be extended based on plugin needs
@@ -40,7 +40,7 @@ export function useComposerPlugins(enabledPluginIds: string[]): UseComposerPlugi
     [plugins]
   );
 
-  const enabledPlugins = Array.from(plugins.values()).filter((plugin: any) => plugin.enabled);
+  const enabledPlugins = Array.from(plugins.values()).filter((plugin: unknown) => plugin.enabled);
 
   return {
     enabledPlugins,

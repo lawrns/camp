@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       password,
       options: {
         data: {
-          full_name: fullName,
+          fullName: fullName,
           organization_name: organizationName,
         }
       }
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         .insert({
           user_id: authData.user.id,
           email: email,
-          full_name: fullName,
+          fullName: fullName,
           organization_id: organization.id,
           role: 'admin',
           status: 'active'

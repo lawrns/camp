@@ -144,7 +144,7 @@ export interface ContactInfo {
 
 // Utility types for form handling
 export type SettingsSection = keyof OrganizationData;
-export type SettingsUpdateHandler = (section: SettingsSection, key: string, value: any) => void;
+export type SettingsUpdateHandler = (section: SettingsSection, key: string, value: unknown) => void;
 
 // Constants
 export const ORGANIZATION_SIZES = [

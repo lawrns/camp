@@ -70,7 +70,7 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
   // Transform members data to include status and metrics
   const teamMembers: TeamMemberStatus[] = members.map((member, index) => ({
     id: member.id,
-    name: member.profile.full_name || member.profile.email,
+    name: member.profile.fullName || member.profile.email,
     email: member.profile.email,
     avatar: member.profile.avatar_url,
     status: index === 0 ? 'online' : index === 1 ? 'busy' : 'offline' as const,

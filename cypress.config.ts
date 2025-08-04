@@ -51,7 +51,7 @@ export default defineConfig({
           return null;
         },
         
-        async createTestUser(userData: any) {
+        async createTestUser(userData: unknown) {
           // Create test user logic
           console.log('Creating test user:', userData.email);
           return { id: 'test-user-id', email: userData.email };

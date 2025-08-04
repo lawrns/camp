@@ -134,7 +134,7 @@ export interface NetworkInfo {
 
 export function getNetworkInfo(): NetworkInfo {
   const connection =
-    (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    (navigator as unknown).connection || (navigator as unknown).mozConnection || (navigator as unknown).webkitConnection;
 
   const effectiveType = connection?.effectiveType || "unknown";
   const downlink = connection?.downlink || 0;
@@ -348,20 +348,20 @@ export async function initializeBrowserCompatibility(): Promise<BrowserInfo> {
   const optimizations = getMobileOptimizations(browserInfo, networkInfo);
 
   // Store browser info globally for other components
-  (window as any).__BROWSER_INFO__ = browserInfo;
-  (window as any).__NETWORK_INFO__ = networkInfo;
-  (window as any).__OPTIMIZATIONS__ = optimizations;
+  (window as unknown).__BROWSER_INFO__ = browserInfo;
+  (window as unknown).__NETWORK_INFO__ = networkInfo;
+  (window as unknown).__OPTIMIZATIONS__ = optimizations;
 
   return browserInfo;
 }
 
 // Utility to check if a feature is supported
 export function isFeatureSupported(feature: keyof BrowserInfo): boolean {
-  const browserInfo = (window as any).__BROWSER_INFO__ || detectBrowser();
+  const browserInfo = (window as unknown).__BROWSER_INFO__ || detectBrowser();
   return browserInfo[feature] as boolean;
 }
 
 // Utility to get current optimizations
 export function getCurrentOptimizations() {
-  return (window as any).__OPTIMIZATIONS__ || {};
+  return (window as unknown).__OPTIMIZATIONS__ || {};
 }

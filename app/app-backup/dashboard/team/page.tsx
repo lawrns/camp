@@ -112,7 +112,7 @@ export default function TeamManagementPage() {
   // Convert organization members to Agent format
   const teamMembers: Agent[] = members.map((member) => ({
     id: member.id,
-    name: member.full_name || member.email,
+    name: member.fullName || member.email,
     email: member.email,
     role: member.role || "Team Member",
     status: "online" as const, // Default status - in real app, this would come from presence data

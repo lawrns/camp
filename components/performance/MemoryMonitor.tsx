@@ -67,8 +67,8 @@ export const useMemoryMonitor = (options?: {
 
   // Get current memory info
   const getMemoryInfo = useCallback((): MemoryInfo | null => {
-    if ("memory" in performance && (performance as any).memory) {
-      return (performance as any).memory;
+    if ("memory" in performance && (performance as unknown).memory) {
+      return (performance as unknown).memory;
     }
     return null;
   }, []);
@@ -87,7 +87,7 @@ export const useMemoryMonitor = (options?: {
       // Count common event types
       const events = ["click", "mousedown", "mouseup", "keydown", "keyup", "scroll", "resize"];
       events.forEach((event) => {
-        if ((el as any)[`on${event}`]) count++;
+        if ((el as unknown)[`on${event}`]) count++;
       });
     });
     return count;
@@ -223,8 +223,8 @@ export const useMemoryMonitor = (options?: {
       }
 
       // Send to Sentry if available
-      if (typeof window !== "undefined" && (window as any).Sentry) {
-        (window as any).Sentry.addBreadcrumb({
+      if (typeof window !== "undefined" && (window as unknown).Sentry) {
+        (window as unknown).Sentry.addBreadcrumb({
           category: "memory",
           message: "Memory monitoring data",
           level: "info",
@@ -242,8 +242,8 @@ export const useMemoryMonitor = (options?: {
 
   // Force garbage collection (if available)
   const triggerGarbageCollection = useCallback(() => {
-    if ("gc" in window && typeof (window as any).gc === "function") {
-      (window as any).gc();
+    if ("gc" in window && typeof (window as unknown).gc === "function") {
+      (window as unknown).gc();
     }
 
     // Manual cleanup strategies

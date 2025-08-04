@@ -226,7 +226,7 @@ Return JSON array of suggestions:
 
       const suggestions = JSON.parse(response.choices[0].message.content || "[]");
 
-      return suggestions.map((suggestion: any, index: number) => ({
+      return suggestions.map((suggestion: unknown, index: number) => ({
         id: `smart_reply_${Date.now()}_${index}`,
         content: suggestion.content || "",
         confidence: suggestion.confidence || 0.7,

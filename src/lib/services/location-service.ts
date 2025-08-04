@@ -132,7 +132,7 @@ export class LocationService {
     const batchSize = 5;
     for (let i = 0; i < ips.length; i += batchSize) {
       const batch = ips.slice(i, i + batchSize);
-      const batchResults = await Promise.all(batch.map((ip: any) => this.detectLocation(ip)));
+      const batchResults = await Promise.all(batch.map((ip: unknown) => this.detectLocation(ip)));
 
       batch.forEach((ip, index) => {
         const result = batchResults[index];

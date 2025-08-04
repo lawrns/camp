@@ -181,7 +181,7 @@ export default function TeamManagementPage() {
     .filter((member) => member && member.id) // Filter out invalid members
     .map((member, index) => ({
       id: member.id || `member-${index}`,
-      name: member.full_name || member.email || member.profile?.full_name || member.profile?.email || "Unknown User",
+      name: member.fullName || member.email || member.profile?.fullName || member.profile?.email || "Unknown User",
       email: member.email || member.profile?.email || "no-email@example.com",
       role: member.role || "Team Member",
       status: "online" as const, // Default status - in real app, this would come from presence data
@@ -426,7 +426,7 @@ export default function TeamManagementPage() {
                 {getGreeting()}, {userName}
               </h1>
               <p className="mt-2 text-gray-600">
-                Manage your team's performance and workload distribution
+                Manage your team&apos;s performance and workload distribution
               </p>
             </div>
             <div className="flex gap-3">
@@ -795,7 +795,7 @@ export default function TeamManagementPage() {
                 </label>
                 <select
                   value={inviteRole}
-                  onChange={(e) => setInviteRole(e.target.value as any)}
+                  onChange={(e) => setInviteRole(e.target.value as unknown)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="agent">Agent</option>

@@ -67,7 +67,7 @@ export const ReadReceiptIndicator: React.FC<ReadReceiptProps> = ({
 
   return (
     <div className={`flex items-center gap-1 ${className}`} title={title}>
-      <Icon name={icon as any} className={`${sizeClasses[size]} ${color}`} />
+      <Icon name={icon as unknown} className={`${sizeClasses[size]} ${color}`} />
       {showTimestamp && timestamp && (
         <span className="text-foreground-muted text-tiny">
           {new Date(timestamp).toLocaleTimeString([], {

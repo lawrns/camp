@@ -98,7 +98,7 @@ export function ArticleEditor({ article, isOpen, onClose, onSave, categories }: 
   const [activeTab, setActiveTab] = useState("edit");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleInputChange = (field: keyof Article, value: any) => {
+  const handleInputChange = (field: keyof Article, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -118,7 +118,7 @@ export function ArticleEditor({ article, isOpen, onClose, onSave, categories }: 
   const handleRemoveTag = (tagToRemove: string) => {
     setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter((tag: any) => tag !== tagToRemove),
+      tags: prev.tags.filter((tag: unknown) => tag !== tagToRemove),
     }));
   };
 
@@ -298,7 +298,7 @@ This concludes the overview of ${formData.title.toLowerCase()}.`;
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((category: any) => (
+                        {categories.map((category: unknown) => (
                           <SelectItem key={category} value={category}>
                             {category}
                           </SelectItem>
@@ -343,7 +343,7 @@ This concludes the overview of ${formData.title.toLowerCase()}.`;
                       </Button>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1">
-                      {formData.tags.map((tag: any) => (
+                      {formData.tags.map((tag: unknown) => (
                         <Badge
                           key={tag}
                           variant="secondary"

@@ -200,7 +200,7 @@ export function useLiveTimestamps(
   }, [updateInterval, enableLiveUpdates]);
 
   // Format all timestamps
-  return timestamps.map((timestamp: any) => {
+  return timestamps.map((timestamp: unknown) => {
     if (!timestamp) return "Unknown time";
 
     try {
@@ -221,7 +221,7 @@ export function useConversationTimestamps(
   conversations: Array<{ id: string; lastMessageAt: string | Date }>,
   options: UseLiveTimestampOptions = {}
 ) {
-  const timestamps = conversations.map((conv: any) => conv.lastMessageAt);
+  const timestamps = conversations.map((conv: unknown) => conv.lastMessageAt);
   const formattedTimestamps = useLiveTimestamps(timestamps, options);
 
   return conversations.reduce(

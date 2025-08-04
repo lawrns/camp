@@ -12,7 +12,7 @@ export const webhooks = pgTable("webhooks", {
     events: jsonb("events").$type<string[]>().notNull(),
     description: text("description"),
     secret: text("secret"),
-    is_active: boolean("is_active").default(true).notNull(),
+    isActive: boolean("is_active").default(true).notNull(),
     last_triggered_at: timestamp("last_triggered_at", { withTimezone: true }),
     success_count: integer("success_count").default(0).notNull(),
     failure_count: integer("failure_count").default(0).notNull(),

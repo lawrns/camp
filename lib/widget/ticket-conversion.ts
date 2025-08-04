@@ -28,7 +28,7 @@ export interface TicketConversionResult {
     createdAt: string;
   };
   error?: string;
-  details?: any;
+  details?: unknown;
 }
 
 export interface ConversionCheckResult {
@@ -137,7 +137,7 @@ export function generateTicketTitle(
 export function generateTicketDescription(
   conversationMessages: Array<{
     content: string;
-    sender_type: string;
+    senderType: string;
     sender_name?: string;
     created_at: string;
   }>,
@@ -150,7 +150,7 @@ export function generateTicketDescription(
   if (!includeHistory) {
     // Just use the first customer message
     const firstCustomerMessage = conversationMessages.find(
-      (msg) => msg.sender_type === "customer" || msg.sender_type === "visitor"
+      (msg) => msg.senderType === "customer" || msg.senderType === "visitor"
     );
     return firstCustomerMessage?.content || conversationMessages[0].content;
   }
@@ -163,7 +163,7 @@ export function generateTicketDescription(
   const history = sortedMessages
     .map((msg) => {
       const timestamp = new Date(msg.created_at).toLocaleString();
-      const sender = msg.sender_name || msg.sender_type;
+      const sender = msg.senderName || msg.senderType;
       return `[${timestamp}] ${sender}: ${msg.content}`;
     })
     .join("\n");

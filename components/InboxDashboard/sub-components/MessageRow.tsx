@@ -9,7 +9,7 @@ import type { Message } from "../types";
 
 interface MessageRowProps {
   message: Message;
-  selectedConversation?: any;
+  selectedConversation?: unknown;
   hoveredMessage?: string | null;
   setHoveredMessage: (id: string | null) => void;
   style?: React.CSSProperties;
@@ -36,9 +36,9 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   const [showMessageMenu, setShowMessageMenu] = useState(false);
 
   // Determine message positioning based on sender_type
-  const isFromAgent = message.sender_type === 'agent' || message.sender_type === 'operator';
-  const isFromCustomer = message.sender_type === 'customer' || message.sender_type === 'visitor';
-  const isFromAI = message.sender_type === 'ai';
+  const isFromAgent = message.senderType === 'agent' || message.senderType === 'operator';
+  const isFromCustomer = message.senderType === 'customer' || message.senderType === 'visitor';
+  const isFromAI = message.senderType === 'ai';
   const isHovered = hoveredMessage === message.id;
 
   // Format timestamp
@@ -56,7 +56,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   };
 
   // Handle file download
-  const handleFileDownload = (attachment: any) => {
+  const handleFileDownload = (attachment: unknown) => {
     if (attachment.url) {
       const link = document.createElement("a");
       link.href = attachment.url;
@@ -68,7 +68,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   };
 
   // Render attachment
-  const renderAttachment = (attachment: any) => (
+  const renderAttachment = (attachment: unknown) => (
     <div key={attachment.id} className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-3" data-testid="message-attachment">
       <div className="flex items-center gap-2" data-testid="attachment-header">
         <div className="flex-shrink-0">
@@ -117,8 +117,8 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
       {!isFromAgent && (
         <div className="flex-shrink-0" data-testid="message-avatar">
           <img
-            src={getAvatarPath(message.sender_name, "customer")}
-            alt={message.sender_name}
+            src={getAvatarPath(message.senderName, "customer")}
+            alt={message.senderName}
             className="h-8 w-8 rounded-ds-full object-cover"
           />
         </div>
@@ -128,7 +128,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
       <div className={`flex-1 min-w-0 ${isFromAgent ? "text-right" : "text-left"}`} data-testid="message-content">
         {/* Message header */}
         <div className={`flex items-center gap-2 text-xs text-gray-500 mb-2 ${isFromAgent ? "justify-end" : "justify-start"}`} data-testid="message-header">
-          <span className="font-sans font-medium" data-testid="message-sender">{message.sender_name}</span>
+          <span className="font-sans font-medium" data-testid="message-sender">{message.senderName}</span>
           <span className="font-sans" data-testid="message-timestamp">{formatTimestamp(message.created_at)}</span>
         </div>
 
@@ -139,7 +139,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
               ? "bg-blue-600 text-white border border-blue-700 ml-auto" // Agent: Blue bubble, right-aligned
               : isFromCustomer
               ? "bg-background border border-[var(--fl-color-border)] text-gray-900" // Customer: Gray bubble, left-aligned
-              : "bg-purple-100 border border-purple-200 text-purple-900" // AI: Purple bubble
+              : "bg-blue-50 border border-blue-200 text-blue-900" // AI: Light blue bubble
           }`}
           data-testid="message-bubble"
         >
@@ -150,18 +150,18 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
         {isFromAgent && (
           <div className="flex items-center justify-end mt-1">
             <span className="typography-metadata flex items-center gap-1 text-xs text-gray-500">
-              {(message as any).read_status === 'sending' && <span className="animate-pulse">Sending...</span>}
-              {(message as any).read_status === 'sent' && <span>✓</span>}
-              {(message as any).read_status === 'delivered' && <span>✓✓</span>}
+              {(message as unknown).read_status === 'sending' && <span className="animate-pulse">Sending...</span>}
+              {(message as unknown).read_status === 'sent' && <span>✓</span>}
+              {(message as unknown).read_status === 'delivered' && <span>✓✓</span>}
               {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
         )}
 
         {/* Message reactions display */}
-        {(message as any).reactions && (message as any).reactions.length > 0 && (
+        {(message as unknown).reactions && (message as unknown).reactions.length > 0 && (
           <div className={`flex items-center gap-1 mt-1 ${isFromAgent ? "justify-end" : "justify-start"}`}>
-            {(message as any).reactions.map((reaction: any, index: number) => (
+            {(message as unknown).reactions.map((reaction: unknown, index: number) => (
               <button
                 key={index}
                 className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-xs transition-colors"

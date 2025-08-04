@@ -81,7 +81,7 @@ export const messagesRouter = {
           content: (await sanitizeBody(reply.content ?? "")) || "",
           cleanedUpText: reply.content ?? "",
           timestamp: reply.createdAt.toISOString(),
-          conversationSubject: (reply.conversation as any)?.subject ?? null,
+          conversationSubject: (reply.conversation as unknown)?.subject ?? null,
           similarity: similarConversations.find((c) => c.id === reply.conversationId)?.similarity ?? 0,
         })
       )

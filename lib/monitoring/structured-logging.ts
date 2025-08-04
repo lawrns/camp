@@ -20,7 +20,7 @@ export enum LogLevel {
 // ============================================================================
 
 export interface LogContext {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface LogEntry {
@@ -148,8 +148,8 @@ export class StructuredLogger {
    */
   private sendToMonitoring(logEntry: LogEntry): void {
     // In production, send to monitoring service like DataDog, New Relic, etc.
-    if (typeof window !== 'undefined' && (window as any).analytics) {
-      (window as any).analytics.track('log_entry', logEntry);
+    if (typeof window !== 'undefined' && (window as unknown).analytics) {
+      (window as unknown).analytics.track('log_entry', logEntry);
     }
   }
 }
@@ -238,8 +238,8 @@ export class PerformanceMonitor {
    * Report metrics to monitoring service
    */
   reportMetrics(): void {
-    if (typeof window !== 'undefined' && (window as any).analytics) {
-      (window as any).analytics.track('widget_metrics', this.metrics);
+    if (typeof window !== 'undefined' && (window as unknown).analytics) {
+      (window as unknown).analytics.track('widget_metrics', this.metrics);
     }
   }
 
@@ -284,7 +284,7 @@ export class ErrorTracker {
   /**
    * Track API error
    */
-  trackAPIError(endpoint: string, status: number, response?: any): void {
+  trackAPIError(endpoint: string, status: number, response?: unknown): void {
     this.logger.error('API error', undefined, {
       endpoint,
       status,

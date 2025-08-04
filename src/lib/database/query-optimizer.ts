@@ -22,7 +22,7 @@ interface QueryMetrics {
 }
 
 class DatabaseQueryOptimizer {
-  private queryCache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private queryCache = new Map<string, { data: unknown; timestamp: number; ttl: number }>();
   private performanceMetrics = new Map<string, QueryMetrics[]>();
 
   private readonly DEFAULT_TIMEOUT = 5000; // 5 seconds
@@ -197,7 +197,7 @@ class DatabaseQueryOptimizer {
   /**
    * Cache management
    */
-  private getCachedResult(key: string): any | null {
+  private getCachedResult(key: string): unknown | null {
     const cached = this.queryCache.get(key);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
       return cached.data;
@@ -208,7 +208,7 @@ class DatabaseQueryOptimizer {
     return null;
   }
 
-  private setCachedResult(key: string, data: any, ttl: number): void {
+  private setCachedResult(key: string, data: unknown, ttl: number): void {
     this.queryCache.set(key, {
       data,
       timestamp: Date.now(),

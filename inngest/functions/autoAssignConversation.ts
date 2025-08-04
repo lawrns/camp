@@ -136,8 +136,8 @@ const getConversationContent = (conversationData: {
   }
 
   const userMessages = conversationData.messages
-    .filter((msg: any) => msg.role === "user")
-    .map((msg: any) => msg.cleanedUpText || "")
+    .filter((msg: unknown) => msg.role === "user")
+    .map((msg: unknown) => msg.cleanedUpText || "")
     .filter(Boolean);
 
   const contentParts = [];

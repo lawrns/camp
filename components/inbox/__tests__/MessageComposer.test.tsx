@@ -4,8 +4,8 @@ import { MessageComposer } from "../phoenix-ui/MessageComposer";
 // Mock types since the actual types file doesn't exist
 interface UltimateMessageComposerProps {
   conversationId: string;
-  features: any;
-  onMessageSent?: (message: any) => void;
+  features: unknown;
+  onMessageSent?: (message: unknown) => void;
   maxLength?: number;
   disabled?: boolean;
 }

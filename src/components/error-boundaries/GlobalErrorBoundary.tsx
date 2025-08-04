@@ -108,9 +108,9 @@ function GlobalErrorFallback({ error, resetErrorBoundary }: GlobalErrorFallbackP
                   // Clear caches and retry
                   if (typeof window !== "undefined") {
                     // Clear webpack module cache
-                    if ((window as any).__webpack_require__?.cache) {
-                      Object.keys((window as any).__webpack_require__.cache).forEach((key) => {
-                        delete (window as any).__webpack_require__.cache[key];
+                    if ((window as unknown).__webpack_require__?.cache) {
+                      Object.keys((window as unknown).__webpack_require__.cache).forEach((key) => {
+                        delete (window as unknown).__webpack_require__.cache[key];
                       });
                     }
 
@@ -204,9 +204,9 @@ export function GlobalErrorBoundary({ children, onError }: GlobalErrorBoundaryPr
         // Clear all caches on reset
         if (typeof window !== "undefined") {
           // Clear webpack module cache
-          if ((window as any).__webpack_require__?.cache) {
-            Object.keys((window as any).__webpack_require__.cache).forEach((key) => {
-              delete (window as any).__webpack_require__.cache[key];
+          if ((window as unknown).__webpack_require__?.cache) {
+            Object.keys((window as unknown).__webpack_require__.cache).forEach((key) => {
+              delete (window as unknown).__webpack_require__.cache[key];
             });
           }
 

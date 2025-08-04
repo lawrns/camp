@@ -9,7 +9,7 @@ interface TestResult {
   testName: string;
   passed: boolean;
   duration: number;
-  details: any;
+  details: unknown;
   error?: string;
 }
 
@@ -171,7 +171,7 @@ class RealtimeConnectionTester {
 
       const connectionPromise = new Promise<boolean>((resolve, reject) => {
         let isResolved = false;
-        let testChannel: any = null;
+        let testChannel: unknown = null;
 
         const cleanup = () => {
           if (testChannel && !isResolved) {

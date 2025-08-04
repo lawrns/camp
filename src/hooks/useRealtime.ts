@@ -39,7 +39,7 @@ interface RealtimeState {
 }
 
 interface RealtimeActions {
-  sendMessage: (message: any) => Promise<boolean>;
+  sendMessage: (message: unknown) => Promise<boolean>;
   broadcastTyping: (isTyping: boolean) => Promise<boolean>;
   broadcastAssignment: (assigneeId: string) => Promise<boolean>;
   disconnect: () => void;
@@ -202,7 +202,7 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
 
   // Actions
   const actions: RealtimeActions = {
-    sendMessage: useCallback(async (message: any) => {
+    sendMessage: useCallback(async (message: unknown) => {
       if (!config.conversationId || !config.organizationId) return false;
       return RealtimeHelpers.broadcastMessage(config.organizationId, config.conversationId, message);
     }, [config.organizationId, config.conversationId]),

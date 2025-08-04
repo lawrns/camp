@@ -23,7 +23,7 @@ interface CleanupResult {
 const getVectorTTLService = () => ({
   runFullCleanup: async (_orgId?: string): Promise<CleanupResult[]> => [],
   getConfig: () => ({}),
-  updateConfig: (_config: any) => {},
+  updateConfig: (_config: unknown) => {},
   getStorageStats: async () => ({
     totalEstimatedSize: 0,
     knowledgeChunks: { total: 0, expired: 0 },
@@ -34,7 +34,7 @@ const getVectorTTLService = () => ({
 });
 
 const ragLogger = {
-  logEvent: async (_event: any) => {},
+  logEvent: async (_event: unknown) => {},
 };
 
 /**

@@ -70,7 +70,7 @@ export const signInWithPassword = async (email: string, password: string) => {
 /**
  * Sign up with email and password
  */
-export const signUpWithPassword = async (email: string, password: string, metadata?: any) => {
+export const signUpWithPassword = async (email: string, password: string, metadata?: unknown) => {
   const client = createAuthClient();
   return await client.auth.signUp({ 
     email, 
@@ -92,7 +92,7 @@ export const signOut = async () => {
 /**
  * Listen for auth state changes
  */
-export const onAuthStateChange = (callback: (event: string, session: any) => void) => {
+export const onAuthStateChange = (callback: (event: string, session: unknown) => void) => {
   const client = createAuthClient();
   return client.auth.onAuthStateChange(callback);
 };
@@ -103,7 +103,7 @@ export const onAuthStateChange = (callback: (event: string, session: any) => voi
 export const hasValidSupabaseSession = async (): Promise<boolean> => {
   try {
     const session = await getCurrentSession();
-    return session !== null && session.expires_at ? new Date(session.expires_at) > new Date() : false;
+    return session !== null && session.expiresAt ? new Date(session.expiresAt) > new Date() : false;
   } catch (error) {
     console.error('[Supabase Auth] Session check error:', error);
     return false;

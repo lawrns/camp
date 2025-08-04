@@ -192,7 +192,7 @@ export function useIntegrationFeatures() {
  */
 export function setFeatureFlag<K extends keyof FeatureFlags>(flag: K, value: FeatureFlags[K]): void {
   if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
-    (featureFlags as any)[flag] = value;
+    (featureFlags as unknown)[flag] = value;
   } else {
   }
 }

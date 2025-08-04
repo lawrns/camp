@@ -52,7 +52,7 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for onboarding endpoints
-function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       console.log('[Onboarding Complete API] Starting authentication...');
@@ -94,7 +94,7 @@ function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const body = await request.json();
     const { userId, organizationId, data } = body;
@@ -107,7 +107,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
     const { error: updateError } = await supabaseClient
       .from('onboarding_completion_tracking')
       .update({ 
-        completed_at: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
         updated_at: new Date().toISOString()
       })
       .eq('user_id', userId)

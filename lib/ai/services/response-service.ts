@@ -57,9 +57,9 @@ export interface ConfidenceResult {
 }
 
 // Error handling utilities
-const captureExceptionAndLogIfDevelopment = (error: any, extra?: unknown) => {};
+const captureExceptionAndLogIfDevelopment = (error: unknown, extra?: unknown) => {};
 
-const captureExceptionAndThrowIfDevelopment = (error: any, extra?: unknown) => {
+const captureExceptionAndThrowIfDevelopment = (error: unknown, extra?: unknown) => {
   throw error;
 };
 

@@ -92,9 +92,9 @@ export class HumanLikeTypingSimulator {
     // Start typing indicator
     await this.broadcastTypingEvent(conversationId, organizationId, {
       user_id: `agent_${agentName.toLowerCase()}`,
-      user_name: agentName,
-      user_type: "agent",
-      is_typing: true,
+      userName: agentName,
+      userType: "agent",
+      isTyping: true,
       conversation_id: conversationId,
       organization_id: organizationId,
     });
@@ -144,9 +144,9 @@ export class HumanLikeTypingSimulator {
           // Update every 5 characters
           await this.broadcastTypingEvent(conversationId, organizationId, {
             user_id: `agent_${agentName.toLowerCase()}`,
-            user_name: agentName,
-            user_type: "agent",
-            is_typing: true,
+            userName: agentName,
+            userType: "agent",
+            isTyping: true,
             preview_text: previewText,
             conversation_id: conversationId,
             organization_id: organizationId,
@@ -197,9 +197,9 @@ export class HumanLikeTypingSimulator {
   private async completeTyping(conversationId: string, organizationId: string, agentName: string): Promise<void> {
     await this.broadcastTypingEvent(conversationId, organizationId, {
       user_id: `agent_${agentName.toLowerCase()}`,
-      user_name: agentName,
-      user_type: "agent",
-      is_typing: false,
+      userName: agentName,
+      userType: "agent",
+      isTyping: false,
       conversation_id: conversationId,
       organization_id: organizationId,
     });
@@ -212,7 +212,7 @@ export class HumanLikeTypingSimulator {
   /**
    * Broadcast typing event via Supabase Realtime
    */
-  private async broadcastTypingEvent(conversationId: string, organizationId: string, eventData: any): Promise<void> {
+  private async broadcastTypingEvent(conversationId: string, organizationId: string, eventData: unknown): Promise<void> {
     const channel = supabase.channel(`org:${organizationId}:conv:${conversationId}`);
 
     await channel.send({

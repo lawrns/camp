@@ -180,8 +180,8 @@ export async function setAuthCookies(session: { access_token: string; refresh_to
     refresh_token: session.refresh_token,
   };
 
-  if (session.expires_at !== undefined) {
-    sessionData.expires_at = session.expires_at;
+  if (session.expiresAt !== undefined) {
+    sessionData.expiresAt = session.expiresAt;
   }
 
   const sessionValue = createSessionCookieValue(sessionData);
@@ -202,7 +202,7 @@ export async function clearAuthCookies() {
 
   // Also clear any legacy Supabase cookies
   const allCookies = cookieStore.getAll();
-  allCookies.forEach((cookie: any) => {
+  allCookies.forEach((cookie: unknown) => {
     if (cookie.name.includes("sb-") && cookie.name.includes("-auth-token")) {
       cookieStore.delete(cookie.name);
     }
@@ -215,7 +215,7 @@ export async function clearAuthCookies() {
 export async function refreshAuth(refreshToken: string): Promise<{
   access_token: string;
   refresh_token: string;
-  expires_at: number;
+  expiresAt: number;
 } | null> {
   try {
     const cookieStore = await cookies();
@@ -232,7 +232,7 @@ export async function refreshAuth(refreshToken: string): Promise<{
     return {
       access_token: data.session.access_token,
       refresh_token: data.session.refresh_token,
-      expires_at: Math.floor(Date.now() / 1000) + (data.session.expires_in || 3600),
+      expiresAt: Math.floor(Date.now() / 1000) + (data.session.expires_in || 3600),
     };
   } catch (error) {
 

@@ -61,8 +61,8 @@ export const authService = {
   requireAuth,
 };
 
-export const withAuth = (handler: any) => {
-  return async (request: NextRequest, context?: any) => {
+export const withAuth = (handler: unknown) => {
+  return async (request: NextRequest, context?: unknown) => {
     const user = await requireAuth(request);
     return handler(request, { ...context, user });
   };

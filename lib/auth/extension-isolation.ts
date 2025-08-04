@@ -16,7 +16,7 @@ export interface ExtensionDetection {
 /**
  * Safe cookie parsing function that handles malformed cookies
  */
-export function parseSupabaseCookie(cookieValue: string): any {
+export function parseSupabaseCookie(cookieValue: string): unknown {
   if (!cookieValue) return null;
 
   try {
@@ -306,7 +306,7 @@ export function initializeExtensionIsolation(config: Partial<ExtensionIsolationC
   // Enhanced error suppression for cookie parsing
   if (fullConfig.suppressErrors) {
     const originalConsoleWarn = console.warn;
-    console.warn = (...args: any[]) => {
+    console.warn = (...args: unknown[]) => {
       const message = args.join(' ');
 
       // Suppress specific cookie parsing errors
@@ -333,13 +333,13 @@ export function initializeExtensionIsolation(config: Partial<ExtensionIsolationC
   }
 
   // Store detection results globally for other components
-  (window as any).__EXTENSION_DETECTIONS__ = detections;
-  (window as any).__EXTENSION_ISOLATION_ACTIVE__ = true;
+  (window as unknown).__EXTENSION_DETECTIONS__ = detections;
+  (window as unknown).__EXTENSION_ISOLATION_ACTIVE__ = true;
 
   // Return cleanup function
   return () => {
     cleanupFunctions.forEach(cleanup => cleanup());
-    delete (window as any).__EXTENSION_DETECTIONS__;
-    delete (window as any).__EXTENSION_ISOLATION_ACTIVE__;
+    delete (window as unknown).__EXTENSION_DETECTIONS__;
+    delete (window as unknown).__EXTENSION_ISOLATION_ACTIVE__;
   };
 }

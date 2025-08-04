@@ -35,7 +35,7 @@ class ContextAnalyzer {
 }
 
 class ModelRouter {
-  static async selectModel(input: any) {
+  static async selectModel(input: unknown) {
     return {
       modelName: "fallback-model",
       confidence: 0.8,
@@ -52,13 +52,13 @@ class ModelRouter {
   static async getModelUsageAnalytics(mailboxId: number, days: number) {
     return { analytics: {} };
   }
-  static async testModelSelection(input: any) {
+  static async testModelSelection(input: unknown) {
     return { selection: "test-model" };
   }
-  static async createRule(input: any) {
+  static async createRule(input: unknown) {
     return { id: "rule-1", ...input };
   }
-  static async updateRule(ruleId: string, updates: any) {
+  static async updateRule(ruleId: string, updates: unknown) {
     return { id: ruleId, ...updates };
   }
   static async deleteRule(ruleId: string) {
@@ -229,7 +229,7 @@ Respond in a ${analysis.recommendations.responseStrategy.tone} tone with a ${ana
       const { generateCompletion } = await import("@/lib/ai/core");
 
       const response = await generateCompletion({
-        model: selection.baseModel as any,
+        model: selection.baseModel as unknown,
         system: systemPrompt,
         prompt: input.messageContent,
         maxTokens: input.maxTokens || selection.configuration?.maxTokens || 2048,
@@ -243,7 +243,7 @@ Respond in a ${analysis.recommendations.responseStrategy.tone} tone with a ${ana
       });
 
       return {
-        response: (response as any).text,
+        response: (response as unknown).text,
         modelUsed: {
           modelVersionId: selection.modelVersionId,
           modelName: selection.modelName,
@@ -252,7 +252,7 @@ Respond in a ${analysis.recommendations.responseStrategy.tone} tone with a ${ana
         },
         analysis,
         metadata: {
-          tokensUsed: (response as any).usage?.totalTokens || 0,
+          tokensUsed: (response as unknown).usage?.totalTokens || 0,
           processingTime: Date.now(),
           ruleUsed: selection.rule,
         },

@@ -295,7 +295,7 @@ export function AIInsightsPanel({
           <div>
             <h4 className="mb-2 text-tiny font-medium">Top Intents</h4>
             <div className="flex flex-wrap gap-1">
-              {detectedIntents.slice(0, 3).map((intent: any) => (
+              {detectedIntents.slice(0, 3).map((intent: unknown) => (
                 <Badge key={intent.intent} variant="secondary" className="text-tiny">
                   {intent.intent.replace(/_/g, " ")}
                 </Badge>

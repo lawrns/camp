@@ -134,9 +134,9 @@ export class AIStreamingService {
         await this.supabase.from("typing_indicators").upsert({
           conversation_id: conversationId,
           organization_id: organizationId,
-          user_name: agentName,
-          user_type: "ai",
-          is_typing: true,
+          userName: agentName,
+          userType: "ai",
+          isTyping: true,
           updated_at: new Date().toISOString(),
         });
       } else {
@@ -145,8 +145,8 @@ export class AIStreamingService {
           .from("typing_indicators")
           .delete()
           .eq("conversation_id", conversationId)
-          .eq("user_name", agentName)
-          .eq("user_type", "ai");
+          .eq("userName", agentName)
+          .eq("userType", "ai");
       }
 
       // Broadcast typing status via real-time

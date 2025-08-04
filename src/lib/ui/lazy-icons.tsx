@@ -51,9 +51,9 @@ export const LazyIcons = {
 export function createIconBundle<T extends Record<string, () => Promise<any>>>(
   icons: T
 ): { [K in keyof T]: ReturnType<typeof lazyLucideIcon> } {
-  const bundle = {} as any;
+  const bundle = {} as unknown;
   for (const [key, importFn] of Object.entries(icons)) {
-    bundle[key] = lazyLucideIcon(importFn as any);
+    bundle[key] = lazyLucideIcon(importFn as unknown);
   }
   return bundle;
 }

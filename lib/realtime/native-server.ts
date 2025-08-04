@@ -31,7 +31,7 @@ function getServerClient() {
 /**
  * Server-side broadcasting to organization channel
  */
-export async function nativeServerBroadcastToOrganization(organizationId: string, event: string, payload: any) {
+export async function nativeServerBroadcastToOrganization(organizationId: string, event: string, payload: unknown) {
   try {
     const client = getServerClient();
     const channelName = `org:${organizationId}`;
@@ -55,7 +55,7 @@ export async function nativeServerBroadcastToConversation(
   organizationId: string,
   conversationId: string,
   event: string,
-  payload: any
+  payload: unknown
 ) {
   try {
     const client = getServerClient();
@@ -76,7 +76,7 @@ export async function nativeServerBroadcastToConversation(
 /**
  * Server-side broadcasting to dashboard channel
  */
-export async function nativeServerBroadcastToDashboard(organizationId: string, event: string, payload: any) {
+export async function nativeServerBroadcastToDashboard(organizationId: string, event: string, payload: unknown) {
   try {
     const client = getServerClient();
     const channelName = `org:${organizationId}:dashboard`;
@@ -96,7 +96,7 @@ export async function nativeServerBroadcastToDashboard(organizationId: string, e
 /**
  * Generic server-side broadcasting function
  */
-export async function nativeServerPublishToRealtime(options: { channel: string; event: string; data: any }) {
+export async function nativeServerPublishToRealtime(options: { channel: string; event: string; data: unknown }) {
   try {
     const client = getServerClient();
 

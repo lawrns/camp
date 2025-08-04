@@ -52,7 +52,7 @@ export const TEST_DATA = {
 } as const;
 
 export class E2ETestDataSetup {
-  private supabase: any;
+  private supabase: unknown;
 
   constructor() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -144,14 +144,14 @@ export class E2ETestDataSetup {
         if (!userId) {
           // Try to find existing user
           const { data: existingUsers } = await this.supabase.auth.admin.listUsers();
-          const existingUser = existingUsers.users?.find((u: any) => u.email === userData.email);
+          const existingUser = existingUsers.users?.find((u: unknown) => u.email === userData.email);
           if (!existingUser) {
             console.error(`Could not create or find user: ${userData.email}`);
             continue;
           }
         }
 
-        const finalUserId = userId || existingUsers?.users?.find((u: any) => u.email === userData.email)?.id;
+        const finalUserId = userId || existingUsers?.users?.find((u: unknown) => u.email === userData.email)?.id;
 
         // Create profile
         const { error: profileError } = await this.supabase
@@ -177,9 +177,9 @@ export class E2ETestDataSetup {
             user_id: finalUserId,
             organization_id: TEST_DATA.ORGANIZATION.id,
             status: 'offline',
-            last_seen_at: new Date().toISOString(),
+            lastSeenAt: new Date().toISOString(),
             metadata: {
-              user_name: userData.name,
+              userName: userData.name,
               user_email: userData.email,
               setup_by: 'e2e_test_setup'
             }
@@ -211,11 +211,11 @@ export class E2ETestDataSetup {
             organization_id: TEST_DATA.ORGANIZATION.id,
             title: convData.title,
             status: convData.status,
-            customer_email: TEST_DATA.USERS.CUSTOMER.email,
-            customer_name: TEST_DATA.USERS.CUSTOMER.name,
+            customerEmail: TEST_DATA.USERS.CUSTOMER.email,
+            customerName: TEST_DATA.USERS.CUSTOMER.name,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
-            last_message_at: new Date().toISOString(),
+            lastMessageAt: new Date().toISOString(),
           });
 
         if (error && !error.message.includes('duplicate key')) {
@@ -240,27 +240,27 @@ export class E2ETestDataSetup {
         conversation_id: TEST_DATA.CONVERSATIONS.ACTIVE.id,
         organization_id: TEST_DATA.ORGANIZATION.id,
         content: 'Hello, I need help with my account',
-        sender_email: TEST_DATA.USERS.CUSTOMER.email,
-        sender_name: TEST_DATA.USERS.CUSTOMER.name,
-        sender_type: 'visitor',
+        senderEmail: TEST_DATA.USERS.CUSTOMER.email,
+        senderName: TEST_DATA.USERS.CUSTOMER.name,
+        senderType: 'visitor',
         created_at: new Date(Date.now() - 10 * 60 * 1000).toISOString(), // 10 minutes ago
       },
       {
         conversation_id: TEST_DATA.CONVERSATIONS.ACTIVE.id,
         organization_id: TEST_DATA.ORGANIZATION.id,
         content: 'Hi! I\'d be happy to help you with your account. What specific issue are you experiencing?',
-        sender_email: TEST_DATA.USERS.AGENT.email,
-        sender_name: TEST_DATA.USERS.AGENT.name,
-        sender_type: 'operator',
+        senderEmail: TEST_DATA.USERS.AGENT.email,
+        senderName: TEST_DATA.USERS.AGENT.name,
+        senderType: 'operator',
         created_at: new Date(Date.now() - 8 * 60 * 1000).toISOString(), // 8 minutes ago
       },
       {
         conversation_id: TEST_DATA.CONVERSATIONS.ACTIVE.id,
         organization_id: TEST_DATA.ORGANIZATION.id,
         content: 'I can\'t log into my dashboard',
-        sender_email: TEST_DATA.USERS.CUSTOMER.email,
-        sender_name: TEST_DATA.USERS.CUSTOMER.name,
-        sender_type: 'visitor',
+        senderEmail: TEST_DATA.USERS.CUSTOMER.email,
+        senderName: TEST_DATA.USERS.CUSTOMER.name,
+        senderType: 'visitor',
         created_at: new Date(Date.now() - 5 * 60 * 1000).toISOString(), // 5 minutes ago
       }
     ];

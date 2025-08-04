@@ -75,7 +75,7 @@ export class LazyLoader {
         const componentId = entry.target.getAttribute("data-lazy-id");
         if (componentId && !this.loadedComponents.has(componentId)) {
           this.loadedComponents.add(componentId);
-          const loadFn = (entry.target as any).__lazyLoadFn;
+          const loadFn = (entry.target as unknown).__lazyLoadFn;
           if (loadFn) {
             loadFn();
           }
@@ -88,7 +88,7 @@ export class LazyLoader {
   observe(element: Element, componentId: string, loadFn: () => void) {
     if (this.observer) {
       element.setAttribute("data-lazy-id", componentId);
-      (element as any).__lazyLoadFn = loadFn;
+      (element as unknown).__lazyLoadFn = loadFn;
       this.observer.observe(element);
     }
   }

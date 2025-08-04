@@ -59,11 +59,11 @@ export async function POST(request: NextRequest) {
           .upsert({
             conversation_id: conversationId,
             user_id: userId,
-            user_name: userName || 'Customer',
-            user_type: 'visitor',
-            is_typing: true,
+            userName: userName || 'Customer',
+            userType: 'visitor',
+            isTyping: true,
             organization_id: organizationId,
-            last_activity: new Date().toISOString(),
+            lastActivity: new Date().toISOString(),
             created_at: new Date().toISOString()
           }, {
             onConflict: 'conversation_id,user_id'
@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
       .select('*')
       .eq('conversation_id', conversationId)
       .eq('organization_id', organizationId)
-      .eq('is_typing', true);
+      .eq('isTyping', true);
 
     if (error) {
       console.error('Database error:', error);
@@ -156,9 +156,9 @@ export async function GET(request: NextRequest) {
       id: indicator.id,
       conversationId: indicator.conversation_id,
       userId: indicator.user_id,
-      userName: indicator.user_name,
-      isTyping: indicator.is_typing,
-      lastActivity: indicator.last_activity,
+      userName: indicator.userName,
+      isTyping: indicator.isTyping,
+      lastActivity: indicator.lastActivity,
         createdAt: indicator.created_at,
     }));
 

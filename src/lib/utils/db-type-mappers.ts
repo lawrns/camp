@@ -1,10 +1,11 @@
 // 🔧 UPDATED TYPE MAPPER - CAMPFIRE V2
 // This file maps database snake_case to unified camelCase types
 
-import type { 
-  Conversation, 
-  Message, 
-  User, 
+import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
+import type {
+  Conversation,
+  Message,
+  User,
   Organization,
   ConversationInsert,
   MessageInsert,
@@ -32,20 +33,20 @@ export function mapDbConversationToApi(dbConversation: DbConversation): Conversa
     id: dbConversation.id,
     organizationId: dbConversation.organization_id,
     customerId: dbConversation.customer_id || undefined,
-    customerEmail: dbConversation.customer_email,
-    customerName: dbConversation.customer_name || 'Anonymous User',
+    customerEmail: dbConversation.customerEmail,
+    customerName: dbConversation.customerName || generateUniqueVisitorName(dbConversation.id || 'anonymous'),
     customerAvatar: dbConversation.customer_avatar || undefined,
     subject: dbConversation.subject || undefined,
     status: dbConversation.status || 'open',
     priority: dbConversation.priority || 'medium',
-    channel: (dbConversation.channel as any) || 'widget',
+    channel: (dbConversation.channel as unknown) || 'widget',
     assignedOperatorId: dbConversation.assigned_to_user_id || undefined,
     assignedOperatorName: undefined, // Not in DB schema
     assignedToAi: dbConversation.ai_handover_active || false,
     aiHandoverSessionId: dbConversation.ai_handover_session_id || undefined,
     createdAt: dbConversation.created_at,
     updatedAt: dbConversation.updated_at,
-    lastMessageAt: dbConversation.last_message_at || undefined,
+    lastMessageAt: dbConversation.lastMessageAt || undefined,
     lastMessageBy: undefined, // Not in DB schema
     lastMessagePreview: undefined, // Not in DB schema
     unreadCount: 0, // Calculated field
@@ -60,9 +61,9 @@ export function mapDbConversationToApi(dbConversation: DbConversation): Conversa
  * Maps API conversation insert (camelCase) to database format (snake_case)
  */
 export function mapApiConversationToDbInsert(apiConversation: Partial<ConversationInsert>): DbConversation {
-  const dbData: any = {
+  const dbData: unknown = {
     organization_id: apiConversation.organization_id,
-    customer_email: apiConversation.customer_email,
+    customerEmail: apiConversation.customerEmail,
     subject: apiConversation.subject,
     status: apiConversation.status || 'open',
     priority: apiConversation.priority || 'medium',
@@ -73,8 +74,8 @@ export function mapApiConversationToDbInsert(apiConversation: Partial<Conversati
   if (apiConversation.customer_id) {
     dbData.customer_id = apiConversation.customer_id;
   }
-  if (apiConversation.customer_name) {
-    dbData.customer_name = apiConversation.customer_name;
+  if (apiConversation.customerName) {
+    dbData.customerName = apiConversation.customerName;
   }
   if (apiConversation.assigned_to_user_id) {
     dbData.assigned_to_user_id = apiConversation.assigned_to_user_id;
@@ -87,7 +88,7 @@ export function mapApiConversationToDbInsert(apiConversation: Partial<Conversati
  * Maps API conversation update (camelCase) to database format (snake_case)
  */
 export function mapApiConversationToDbUpdate(apiUpdate: Partial<ConversationUpdate>): DbConversation {
-  const dbUpdate: any = {};
+  const dbUpdate: unknown = {};
 
   if (apiUpdate.subject !== undefined) dbUpdate.subject = apiUpdate.subject;
   if (apiUpdate.status !== undefined) dbUpdate.status = apiUpdate.status;
@@ -96,8 +97,8 @@ export function mapApiConversationToDbUpdate(apiUpdate: Partial<ConversationUpda
     dbUpdate.assigned_to_user_id = apiUpdate.assigned_to_user_id;
   }
   if (apiUpdate.metadata !== undefined) dbUpdate.metadata = apiUpdate.metadata;
-  if (apiUpdate.last_message_at !== undefined) {
-    dbUpdate.last_message_at = apiUpdate.last_message_at;
+  if (apiUpdate.lastMessageAt !== undefined) {
+    dbUpdate.lastMessageAt = apiUpdate.lastMessageAt;
   }
 
   dbUpdate.updated_at = new Date().toISOString();
@@ -118,8 +119,8 @@ export function mapDbMessageToApi(dbMessage: DbMessage): Message {
     conversationId: dbMessage.conversation_id,
     organizationId: dbMessage.organization_id,
     content: dbMessage.content,
-    senderType: dbMessage.sender_type,
-    senderId: dbMessage.sender_id || undefined,
+    senderType: dbMessage.senderType,
+    senderId: dbMessage.senderId || undefined,
     senderName: undefined, // Not in DB schema
     senderEmail: undefined, // Not in DB schema
     messageType: dbMessage.message_type || 'text',
@@ -143,8 +144,8 @@ export function mapApiMessageToDbInsert(apiMessage: Partial<MessageInsert>, orga
     conversation_id: apiMessage.conversation_id!,
     organization_id: organizationId,
     content: apiMessage.content!,
-    sender_type: apiMessage.sender_type!,
-    sender_id: apiMessage.sender_id || null,
+    senderType: apiMessage.senderType!,
+    senderId: apiMessage.senderId || null,
     message_type: apiMessage.message_type || 'text',
     metadata: apiMessage.metadata || null,
     ai_confidence: apiMessage.ai_confidence || null,
@@ -157,7 +158,7 @@ export function mapApiMessageToDbInsert(apiMessage: Partial<MessageInsert>, orga
  * Maps API message update (camelCase) to database format (snake_case)
  */
 export function mapApiMessageToDbUpdate(apiUpdate: Partial<MessageUpdate>): DbMessage {
-  const dbUpdate: any = {};
+  const dbUpdate: unknown = {};
 
   if (apiUpdate.content !== undefined) dbUpdate.content = apiUpdate.content;
   if (apiUpdate.metadata !== undefined) dbUpdate.metadata = apiUpdate.metadata;
@@ -179,7 +180,7 @@ export function mapDbUserToApi(dbUser: DbUser): User {
   return {
     id: dbUser.id,
     email: dbUser.email,
-    fullName: dbUser.full_name,
+    fullName: dbUser.fullName,
     avatarUrl: dbUser.avatar_url || undefined,
     organizationId: dbUser.organization_id || undefined,
     role: dbUser.role,
@@ -197,7 +198,7 @@ export function mapApiUserToDbInsert(apiUser: Partial<UserInsert>): DbUser {
   return {
     user_id: apiUser.user_id!,
     email: apiUser.email!,
-    full_name: apiUser.full_name!,
+    fullName: apiUser.fullName!,
     avatar_url: apiUser.avatar_url || null,
     organization_id: apiUser.organization_id || null,
     role: apiUser.role || 'visitor',
@@ -208,10 +209,10 @@ export function mapApiUserToDbInsert(apiUser: Partial<UserInsert>): DbUser {
  * Maps API user update (camelCase) to database format (snake_case)
  */
 export function mapApiUserToDbUpdate(apiUpdate: Partial<UserUpdate>): DbUser {
-  const dbUpdate: any = {};
+  const dbUpdate: unknown = {};
 
   if (apiUpdate.email !== undefined) dbUpdate.email = apiUpdate.email;
-  if (apiUpdate.full_name !== undefined) dbUpdate.full_name = apiUpdate.full_name;
+  if (apiUpdate.fullName !== undefined) dbUpdate.fullName = apiUpdate.fullName;
   if (apiUpdate.avatar_url !== undefined) dbUpdate.avatar_url = apiUpdate.avatar_url;
   if (apiUpdate.organization_id !== undefined) dbUpdate.organization_id = apiUpdate.organization_id;
   if (apiUpdate.role !== undefined) dbUpdate.role = apiUpdate.role;
@@ -255,7 +256,7 @@ export function mapApiOrganizationToDbInsert(apiOrg: Partial<OrganizationInsert>
  * Maps API organization update (camelCase) to database format (snake_case)
  */
 export function mapApiOrganizationToDbUpdate(apiUpdate: Partial<OrganizationUpdate>): DbOrganization {
-  const dbUpdate: any = {};
+  const dbUpdate: unknown = {};
 
   if (apiUpdate.name !== undefined) dbUpdate.name = apiUpdate.name;
   if (apiUpdate.slug !== undefined) dbUpdate.slug = apiUpdate.slug;
@@ -305,8 +306,8 @@ export function mapDbOrganizationsToApi(dbOrgs: DbOrganization[]): Organization[
 /**
  * Normalizes query parameters to handle both camelCase and snake_case
  */
-export function normalizeQueryParams(params: any): any {
-  const normalized: any = {};
+export function normalizeQueryParams(params: unknown): unknown {
+  const normalized: unknown = {};
   
   for (const [key, value] of Object.entries(params)) {
     // Convert camelCase to snake_case for database queries
@@ -320,7 +321,7 @@ export function normalizeQueryParams(params: any): any {
 /**
  * Validates that a conversation object has required fields
  */
-export function validateConversation(conversation: any): conversation is Conversation {
+export function validateConversation(conversation: unknown): conversation is Conversation {
   return (
     conversation &&
     typeof conversation.id === 'string' &&
@@ -332,7 +333,7 @@ export function validateConversation(conversation: any): conversation is Convers
 /**
  * Validates that a message object has required fields
  */
-export function validateMessage(message: any): message is Message {
+export function validateMessage(message: unknown): message is Message {
   return (
     message &&
     typeof message.id === 'string' &&

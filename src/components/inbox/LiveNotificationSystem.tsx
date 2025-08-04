@@ -290,10 +290,10 @@ export function LiveNotificationSystem({
   // Update visible notifications when new notifications arrive - FIXED: No infinite loop
   useEffect(() => {
     const newNotifications = notifications.slice(-maxVisible);
-    const currentIds = new Set(newNotifications.map((n: any) => n.id));
+    const currentIds = new Set(newNotifications.map((n: unknown) => n.id));
 
     // Play sound for truly new notifications (not seen before)
-    newNotifications.forEach((notification: any) => {
+    newNotifications.forEach((notification: unknown) => {
       if (!previousIdsRef.current.has(notification.id)) {
         playNotificationSound(notification.type);
       }
@@ -308,7 +308,7 @@ export function LiveNotificationSystem({
 
   const handleDismiss = useCallback(
     (notificationId: string) => {
-      setVisibleNotifications((prev) => prev.filter((n: any) => n.id !== notificationId));
+      setVisibleNotifications((prev) => prev.filter((n: unknown) => n.id !== notificationId));
       if (onNotificationDismiss) {
         onNotificationDismiss(notificationId);
       }
@@ -353,7 +353,7 @@ export function LiveNotificationSystem({
 
       {/* Notifications */}
       <OptimizedAnimatePresence mode="popLayout">
-        {visibleNotifications.map((notification: any) => (
+        {visibleNotifications.map((notification: unknown) => (
           <NotificationCard
             key={notification.id}
             notification={notification}

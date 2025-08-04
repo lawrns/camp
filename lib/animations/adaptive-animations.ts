@@ -244,7 +244,7 @@ export function detectDevicePerformance(): DevicePerformance {
   const cores = navigator.hardwareConcurrency || 2;
 
   // Check device memory (if available)
-  const memory = (navigator as any).deviceMemory || 4;
+  const memory = (navigator as unknown).deviceMemory || 4;
 
   // Check GPU capabilities
   const canvas = document.createElement("canvas");
@@ -283,7 +283,7 @@ export function detectNetworkCondition(): NetworkCondition {
   if (!navigator.onLine) return NetworkCondition.OFFLINE;
 
   const connection =
-    (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    (navigator as unknown).connection || (navigator as unknown).mozConnection || (navigator as unknown).webkitConnection;
 
   if (!connection) return NetworkCondition.UNKNOWN;
 
@@ -314,9 +314,9 @@ export function detectBatteryStatus(): Promise<{
 }> {
   return new Promise((resolve) => {
     if ("getBattery" in navigator) {
-      (navigator as any)
+      (navigator as unknown)
         .getBattery()
-        .then((battery: any) => {
+        .then((battery: unknown) => {
           resolve({
             charging: battery.charging,
             level: battery.level,

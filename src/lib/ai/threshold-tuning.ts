@@ -101,7 +101,7 @@ export class ThresholdTuner {
     }
 
     const totalPredictions = validSamples.length;
-    const averageConfidence = validSamples.reduce((sum: any, s: unknown) => sum + s.confidence, 0) / totalPredictions;
+    const averageConfidence = validSamples.reduce((sum: unknown, s: unknown) => sum + s.confidence, 0) / totalPredictions;
 
     // Calculate accuracy at threshold
     const predictionsAtThreshold = validSamples.filter((s: unknown) => s.confidence >= activeThreshold);
@@ -308,7 +308,7 @@ export class ThresholdTuner {
       const binSamples = validSamples.filter((s: unknown) => s.confidence >= minConf && s.confidence < maxConf);
 
       if (binSamples.length > 0) {
-        const avgConfidence = binSamples.reduce((sum: any, s: unknown) => sum + s.confidence, 0) / binSamples.length;
+        const avgConfidence = binSamples.reduce((sum: unknown, s: unknown) => sum + s.confidence, 0) / binSamples.length;
         const accuracy = binSamples.filter((s: unknown) => s.actualOutcome === true).length / binSamples.length;
         const calibrationError = Math.abs(avgConfidence - accuracy);
 

@@ -208,10 +208,10 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
           unsubscribers.push(typingUnsubscriber);
         }
 
-        // Subscribe to assignment events
+        // Subscribe to assignment events (using same channel as org events to avoid duplicates)
         const assignmentUnsubscriber = subscribeToChannel(
-          CHANNEL_PATTERNS.conversations(organizationId),
-          EVENT_TYPES.CONVERSATION_ASSIGNED,
+          UNIFIED_CHANNELS.conversations(organizationId),
+          UNIFIED_EVENTS.CONVERSATION_ASSIGNED,
           (payload) => {
             throttledSetState(prev => ({ ...prev, lastActivity: new Date() }));
             // Handle assignment changes

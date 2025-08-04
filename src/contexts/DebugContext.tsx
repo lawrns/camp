@@ -7,12 +7,12 @@ type LogEntry = {
   type: "log" | "info" | "warn" | "error" | "debug";
   message: string;
   timestamp: number;
-  data?: any;
+  data?: unknown;
 };
 
 type DebugContextType = {
   logs: LogEntry[];
-  addLog: (type: LogEntry["type"], message: string, data?: any) => void;
+  addLog: (type: LogEntry["type"], message: string, data?: unknown) => void;
   clearLogs: () => void;
 };
 
@@ -21,7 +21,7 @@ const DebugContext = createContext<DebugContextType | undefined>(undefined);
 export function DebugProvider({ children }: { children: React.ReactNode }) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
-  const addLog = useCallback((type: LogEntry["type"], message: string, data?: any) => {
+  const addLog = useCallback((type: LogEntry["type"], message: string, data?: unknown) => {
     setLogs((prevLogs: LogEntry[]) =>
       [
         ...prevLogs,

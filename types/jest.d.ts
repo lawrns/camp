@@ -8,8 +8,8 @@ declare global {
       toBeInTheDocument(): R;
       toHaveValue(value?: string | number | string[]): R;
       toHaveBeenCalled(): R;
-      toHaveBeenCalledWith(...args: any[]): R;
-      toBe(value: any): R;
+      toHaveBeenCalledWith(...args: unknown[]): R;
+      toBe(value: unknown): R;
     }
   }
 }

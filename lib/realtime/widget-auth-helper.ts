@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 
 export interface WidgetAuthResult {
   isAuthenticated: boolean;
-  session: any;
+  session: unknown;
   error?: string;
 }
 
@@ -76,13 +76,13 @@ export async function ensureWidgetAuthentication(
 /**
  * Validates if a session is still valid for real-time operations
  */
-export function isSessionValid(session: any): boolean {
+export function isSessionValid(session: unknown): boolean {
   if (!session?.access_token) {
     return false;
   }
 
   // Check if token is expired
-  const expiresAt = session.expires_at;
+  const expiresAt = session.expiresAt;
   if (expiresAt && Date.now() / 1000 > expiresAt) {
     return false;
   }
@@ -101,7 +101,7 @@ export async function getAuthDebugInfo(): Promise<any> {
     return {
       hasSession: !!session?.session,
       hasAccessToken: !!session?.session?.access_token,
-      isExpired: session?.session?.expires_at ? Date.now() / 1000 > session.session.expires_at : false,
+      isExpired: session?.session?.expiresAt ? Date.now() / 1000 > session.session.expiresAt : false,
       error: error?.message,
       userId: session?.session?.user?.id,
       role: session?.session?.user?.role,

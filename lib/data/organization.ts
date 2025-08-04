@@ -186,7 +186,7 @@ export const getOrganizationMembers = cache(
       }
 
       return {
-        data: members.map((member: any) => ({
+        data: members.map((member: unknown) => ({
           role: member.role,
           organization: {
             id: organizationId,
@@ -216,8 +216,8 @@ export const getOrganizationAdminUsers = async (
 
     // Filter for admin roles and format response
     const adminUsers = adminUsersQuery
-      .filter((user: any) => user.role === "admin" || user.role === "owner")
-      .map((user: any) => ({
+      .filter((user: unknown) => user.role === "admin" || user.role === "owner")
+      .map((user: unknown) => ({
         email: user.email,
         emailAddresses: [{ emailAddress: user.email }],
       }));
@@ -244,7 +244,7 @@ export const getOrganizationMemberships = async (
       .where(eq(organizationMembers.userId, userId));
 
     return {
-      data: memberships.map((membership: any) => ({
+      data: memberships.map((membership: unknown) => ({
         role: membership.role,
 
         organization: {
@@ -349,7 +349,7 @@ export const isFreeTrial = (organization: {
   id: string;
   name: string;
   slug?: string;
-  privateMetadata?: any;
+  privateMetadata?: unknown;
 }): boolean =>
   !!organization.privateMetadata?.freeTrialEndsAt &&
   new Date(organization.privateMetadata.freeTrialEndsAt) > new Date();

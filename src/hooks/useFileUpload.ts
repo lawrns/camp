@@ -220,7 +220,7 @@ export function useFileUpload(options: UseFileUploadOptions = {}) {
 
   const uploadMultipleFiles = useCallback(
     async (files: File[], customOptions: Partial<UseFileUploadOptions> = {}): Promise<string[]> => {
-      const uploadPromises = files.map((file: any) => uploadFile(file, customOptions));
+      const uploadPromises = files.map((file: unknown) => uploadFile(file, customOptions));
 
       try {
         return await Promise.all(uploadPromises);
@@ -229,8 +229,8 @@ export function useFileUpload(options: UseFileUploadOptions = {}) {
         // Return the URLs of successful uploads
         const results = await Promise.allSettled(uploadPromises);
         return results
-          .filter((result: any): result is PromiseFulfilledResult<string> => result.status === "fulfilled")
-          .map((result: any) => result.value);
+          .filter((result: unknown): result is PromiseFulfilledResult<string> => result.status === "fulfilled")
+          .map((result: unknown) => result.value);
       }
     },
     [uploadFile]
@@ -321,7 +321,7 @@ export function useFileUpload(options: UseFileUploadOptions = {}) {
       const states = Array.from(uploadStates.values());
       if (states.length === 0) return 0;
 
-      const totalProgress = states.reduce((sum: any, state: any) => sum + (state.progress || 0), 0);
+      const totalProgress = states.reduce((sum: unknown, state: unknown) => sum + (state.progress || 0), 0);
       return totalProgress / states.length;
     },
     [uploadStates, getUploadState]
@@ -394,7 +394,7 @@ export function useDragAndDropUpload(
       // Filter files by type if specified
       let filteredFiles = files;
       if (options.acceptedTypes) {
-        filteredFiles = files.filter((file: any) => options.acceptedTypes!.includes(file.type));
+        filteredFiles = files.filter((file: unknown) => options.acceptedTypes!.includes(file.type));
       }
 
       // Limit number of files if specified
@@ -404,7 +404,7 @@ export function useDragAndDropUpload(
 
       // Filter by file size if specified
       if (options.maxFileSize) {
-        filteredFiles = filteredFiles.filter((file: any) => file.size <= options.maxFileSize!);
+        filteredFiles = filteredFiles.filter((file: unknown) => file.size <= options.maxFileSize!);
       }
 
       if (filteredFiles.length > 0) {

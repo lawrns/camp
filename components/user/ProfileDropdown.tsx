@@ -31,7 +31,7 @@ import { useEffect, useState } from "react";
 interface ProfileData {
   id: string;
   email: string;
-  full_name: string;
+  fullName: string;
   avatar_url: string | null;
   two_factor_enabled: boolean;
 }
@@ -129,7 +129,7 @@ export function ProfileDropdown() {
   const getInitials = (name: string) => {
     return name
       .split(" ")
-      .map((word: any) => word[0])
+      .map((word: unknown) => word[0])
       .join("")
       .toUpperCase()
       .slice(0, 2);
@@ -153,10 +153,10 @@ export function ProfileDropdown() {
         <Button variant="ghost" size="sm" className="flex items-center gap-ds-2 px-2" data-testid="user-menu">
           <Avatar className="user-avatar h-8 w-8">
             {profile.avatar_url && <AvatarImage src={profile.avatar_url!} />}
-            <AvatarFallback className="bg-primary/10">{getInitials(profile.full_name || profile.email)}</AvatarFallback>
+            <AvatarFallback className="bg-primary/10">{getInitials(profile.fullName || profile.email)}</AvatarFallback>
           </Avatar>
           <div className="flex max-w-[150px] flex-col items-start text-left">
-            <span className="w-full truncate text-sm font-medium">{profile.full_name || "User"}</span>
+            <span className="w-full truncate text-sm font-medium">{profile.fullName || "User"}</span>
             {organization && (
               <span
                 className="organization-name w-full truncate text-tiny text-muted-foreground"
@@ -173,7 +173,7 @@ export function ProfileDropdown() {
       <DropdownMenuContent className="w-[250px]">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{profile.full_name || "User"}</p>
+            <p className="text-sm font-medium leading-none">{profile.fullName || "User"}</p>
             <p className="text-tiny leading-none text-muted-foreground">{profile.email}</p>
             {role && (
               <Badge variant="secondary" className="mt-1 w-fit">

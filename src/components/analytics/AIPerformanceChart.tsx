@@ -134,7 +134,7 @@ export function AIPerformanceChart({ organizationId, timeRange = "24h", classNam
   const formatTimestampLocal = (timestamp: string) => formatTimestamp(timestamp, timeRange);
 
   const getConfidenceData = () => {
-    return performanceData.map((d: any) => ({
+    return performanceData.map((d: unknown) => ({
       time: formatTimestampLocal(d.timestamp),
       confidence: Math.round(d.confidence * 100),
       successRate: Math.round(d.successRate * 100),
@@ -142,7 +142,7 @@ export function AIPerformanceChart({ organizationId, timeRange = "24h", classNam
   };
 
   const getResponseTimeData = () => {
-    return performanceData.map((d: any) => ({
+    return performanceData.map((d: unknown) => ({
       time: formatTimestampLocal(d.timestamp),
       responseTime: Math.round(d.responseTime),
       messages: d.messageCount,
@@ -150,7 +150,7 @@ export function AIPerformanceChart({ organizationId, timeRange = "24h", classNam
   };
 
   const getEscalationData = () => {
-    return performanceData.map((d: any) => ({
+    return performanceData.map((d: unknown) => ({
       time: formatTimestampLocal(d.timestamp),
       escalationRate: Math.round(d.escalationRate * 100),
       messageCount: d.messageCount,
@@ -160,7 +160,7 @@ export function AIPerformanceChart({ organizationId, timeRange = "24h", classNam
   const getDistributionData = () => {
     if (performanceData.length === 0) return [];
 
-    const totalMessages = performanceData.reduce((sum: any, d: any) => sum + d.messageCount, 0);
+    const totalMessages = performanceData.reduce((sum: unknown, d: unknown) => sum + d.messageCount, 0);
     const escalated = Math.round(totalMessages * currentMetrics.escalationRate);
     const successful = totalMessages - escalated;
 
@@ -181,7 +181,7 @@ export function AIPerformanceChart({ organizationId, timeRange = "24h", classNam
     title: string;
     value: number | string;
     trend?: "up" | "down" | "neutral";
-    icon: any;
+    icon: unknown;
     color: string;
     suffix?: string;
   }) => (

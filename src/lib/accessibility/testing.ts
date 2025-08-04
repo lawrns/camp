@@ -1,5 +1,5 @@
 // Mock jest-axe for TypeScript compatibility
-export const axe = async (element: any) => {
+export const axe = async (element: unknown) => {
 
   return { violations: [] };
 };
@@ -10,6 +10,6 @@ export const toHaveNoViolations = () => ({
 });
 
 // For when jest-axe is actually installed
-export const configureAxe = (config: any) => {
+export const configureAxe = (config: unknown) => {
 
 };

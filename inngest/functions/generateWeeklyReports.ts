@@ -32,7 +32,7 @@ const getSlackUsersByEmail = async (token: string): Promise<Map<string, string>>
   return new Map();
 };
 
-const postSlackMessage = async (token: string, message: any): Promise<void> => {
+const postSlackMessage = async (token: string, message: unknown): Promise<void> => {
   // Fallback implementation - log the message
   console.log("postSlackMessage called with:", message);
 };
@@ -145,7 +145,7 @@ export async function generateMailboxReport({
 
   const peopleText = activeUserCount === 1 ? "person" : "people";
 
-  const blocks: any[] = [
+  const blocks: unknown[] = [
     {
       type: "section",
       text: {

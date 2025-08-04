@@ -296,7 +296,7 @@ export function MultipleFilesMessage({
   };
 
   const getTotalSize = (): string => {
-    const totalBytes = files.reduce((sum: any, file: any) => sum + file.size, 0);
+    const totalBytes = files.reduce((sum: unknown, file: unknown) => sum + file.size, 0);
     const units = ["B", "KB", "MB", "GB"];
     let size = totalBytes;
     let unitIndex = 0;
@@ -348,7 +348,7 @@ export function MultipleFilesMessage({
               variant="outline"
               size="sm"
               onClick={() => {
-                files.forEach((file: any) => onDownload?.(file));
+                files.forEach((file: unknown) => onDownload?.(file));
               }}
               className="text-tiny"
             >

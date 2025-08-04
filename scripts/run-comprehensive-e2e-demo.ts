@@ -14,7 +14,7 @@ async function runComprehensiveE2EDemo() {
   console.log('==========================================\n');
 
   const startTime = Date.now();
-  const results: any[] = [];
+  const results: unknown[] = [];
 
   // Test suites to run
   const testSuites = [

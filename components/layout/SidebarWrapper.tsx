@@ -21,7 +21,7 @@ const SidebarWithMotion = dynamic(() => import("./Sidebar").then((mod) => ({ def
 });
 
 // Export a wrapper component that handles the dynamic loading
-export default function SidebarWrapper(props: any) {
+export default function SidebarWrapper(props: unknown) {
   return (
     <Suspense
       fallback={

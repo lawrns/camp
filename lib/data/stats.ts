@@ -94,7 +94,7 @@ export async function getTeamMemberStats(
       const { data: messages } = await supabase
         .from("messages")
         .select("created_at, conversation_id")
-        .eq("sender_id", member.user_id)
+        .eq("senderId", member.user_id)
         .gte("created_at", startDate.toISOString())
         .order("created_at", { ascending: true });
 
@@ -123,7 +123,7 @@ export async function getTeamMemberStats(
               .select("created_at")
               .eq("conversation_id", firstMessage.conversation_id)
               .lt("created_at", firstMessage.created_at)
-              .neq("sender_id", member.user_id)
+              .neq("senderId", member.user_id)
               .order("created_at", { ascending: false })
               .limit(1)
               .single();
@@ -152,14 +152,14 @@ export async function getTeamMemberStats(
       const { data: lastActivity } = await supabase
         .from("messages")
         .select("created_at")
-        .eq("sender_id", member.user_id)
+        .eq("senderId", member.user_id)
         .order("created_at", { ascending: false })
         .limit(1)
         .single();
 
       return {
         userId: member.user_id,
-        name: member.profiles?.full_name || "Unknown",
+        name: member.profiles?.fullName || "Unknown",
         email: member.profiles?.email || "",
         role: member.role === "admin" || member.role === "owner" ? "CORE" : "NON_CORE",
         conversationsHandled,
@@ -237,12 +237,12 @@ export async function getOrganizationStats(
 
   const { data: activeMembers } = await supabase
     .from("messages")
-    .select("sender_id")
+    .select("senderId")
     .eq("organization_id", organizationId)
     .gte("created_at", oneDayAgo.toISOString())
-    .not("sender_id", "is", null);
+    .not("senderId", "is", null);
 
-  const uniqueActiveMembers = new Set(activeMembers?.map((m) => m.sender_id) || []);
+  const uniqueActiveMembers = new Set(activeMembers?.map((m) => m.senderId) || []);
 
   return {
     totalConversations,

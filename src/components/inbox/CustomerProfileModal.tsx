@@ -90,7 +90,7 @@ export function CustomerProfileModal({ isOpen, onClose, profile, isLoading, erro
                       >
                         {profile.status}
                       </Badge>
-                      {profile.tags.map((tag: any) => (
+                      {profile.tags.map((tag: unknown) => (
                         <Badge key={tag} variant="outline" className="text-tiny">
                           {tag}
                         </Badge>

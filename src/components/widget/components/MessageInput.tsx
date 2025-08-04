@@ -8,7 +8,7 @@ interface MessageInputProps {
   onFileSelect?: (file: File) => void;
   disabled?: boolean;
   placeholder?: string;
-  channel?: any; // Supabase channel for typing indicators
+  channel?: unknown; // Supabase channel for typing indicators
   onStartTyping?: () => void;
   onStopTyping?: () => void;
   showEmojiPicker?: boolean;

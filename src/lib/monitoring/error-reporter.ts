@@ -65,7 +65,7 @@ class ErrorReporter {
       contexts: {
         error_context: {
           url: context.url || (typeof window !== "undefined" ? window.location.href : undefined),
-          user_agent: context.userAgent || (typeof navigator !== "undefined" ? navigator.userAgent : undefined),
+          userAgent: context.userAgent || (typeof navigator !== "undefined" ? navigator.userAgent : undefined),
           timestamp: context.timestamp || new Date(),
           metadata: context.metadata,
         },
@@ -162,7 +162,7 @@ class ErrorReporter {
     role?: string;
     plan?: string;
   }): void {
-    const userContext: any = {};
+    const userContext: unknown = {};
     if (context.id !== undefined) userContext.id = context.id;
     if (context.email !== undefined) userContext.email = context.email;
     if (context.organizationId !== undefined) userContext.organization_id = context.organizationId;
@@ -195,7 +195,7 @@ class ErrorReporter {
     level: "debug" | "info" | "warning" | "error" = "info",
     data?: Record<string, any>
   ): void {
-    const breadcrumb: any = {
+    const breadcrumb: unknown = {
       message,
       category,
       level,
@@ -228,13 +228,13 @@ class ErrorReporter {
       method: string;
       url: string;
       headers?: Record<string, string>;
-      body?: any;
+      body?: unknown;
     },
     response?: {
       status: number;
       statusText: string;
       headers?: Record<string, string>;
-      body?: any;
+      body?: unknown;
     }
   ): string {
     return this.reportError(error, {
@@ -332,7 +332,7 @@ class ErrorReporter {
   /**
    * Sanitize request body to remove sensitive information
    */
-  private sanitizeRequestBody(body: any): any {
+  private sanitizeRequestBody(body: unknown): unknown {
     if (!body) return undefined;
 
     if (typeof body === "string") {
@@ -358,7 +358,7 @@ class ErrorReporter {
   /**
    * Sanitize response body to remove sensitive information
    */
-  private sanitizeResponseBody(body: any): any {
+  private sanitizeResponseBody(body: unknown): unknown {
     if (!body) return undefined;
 
     // Limit response body size to prevent large payloads

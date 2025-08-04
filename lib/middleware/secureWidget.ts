@@ -60,7 +60,7 @@ async function validateWidgetApiKey(apiKey: string): Promise<{
     const { data, error } = await supabase
       .from("organizations")
       .select("id, widget_enabled")
-      .eq("widget_api_key", apiKey)
+      .eq("widgetApiKey", apiKey)
       .eq("widget_enabled", true)
       .single();
 

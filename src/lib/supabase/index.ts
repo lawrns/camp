@@ -147,7 +147,7 @@ function getServiceClient() {
 /**
  * Get server client (server-side only)
  */
-function getServerClient(cookies: any) {
+function getServerClient(cookies: unknown) {
   if (typeof window !== "undefined") {
     throw new Error("Server client cannot be used in browser environment");
   }
@@ -158,9 +158,9 @@ function getServerClient(cookies: any) {
       getAll() {
         return cookies?.getAll?.() || [];
       },
-      setAll(cookiesToSet: any) {
+      setAll(cookiesToSet: unknown) {
         try {
-          cookiesToSet.forEach(({ name, value, options }: any) => {
+          cookiesToSet.forEach(({ name, value, options }: unknown) => {
             cookies?.set?.(name, value, options);
           });
         } catch {
@@ -230,7 +230,7 @@ export function createClient() {
 export interface RealtimeMessage {
   type: string;
   event: string;
-  payload: any;
+  payload: unknown;
   sent_at: string;
 }
 

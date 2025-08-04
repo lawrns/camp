@@ -8,7 +8,7 @@
  * @param value - The value to render
  * @returns A safe string representation
  */
-export function safeRender(value: any): string {
+export function safeRender(value: unknown): string {
   if (value === null || value === undefined) {
     return '';
   }
@@ -39,7 +39,7 @@ export function safeRender(value: any): string {
  * @param metric - The metric object that might have {value, change, trend} structure
  * @returns The extracted value or the original value if it's not an object
  */
-export function extractMetricValue(metric: any): any {
+export function extractMetricValue(metric: unknown): unknown {
   if (metric && typeof metric === 'object' && metric.value !== undefined) {
     return metric.value;
   }
@@ -51,7 +51,7 @@ export function extractMetricValue(metric: any): any {
  * @param metric - The metric object that might have {value, change, trend} structure
  * @returns The extracted change or empty string
  */
-export function extractMetricChange(metric: any): string {
+export function extractMetricChange(metric: unknown): string {
   if (metric && typeof metric === 'object' && metric.change !== undefined) {
     return String(metric.change);
   }
@@ -63,7 +63,7 @@ export function extractMetricChange(metric: any): string {
  * @param metric - The metric object that might have {value, change, trend} structure
  * @returns The extracted trend or 'neutral'
  */
-export function extractMetricTrend(metric: any): 'up' | 'down' | 'neutral' {
+export function extractMetricTrend(metric: unknown): 'up' | 'down' | 'neutral' {
   if (metric && typeof metric === 'object' && metric.trend !== undefined) {
     return metric.trend;
   }
@@ -75,7 +75,7 @@ export function extractMetricTrend(metric: any): 'up' | 'down' | 'neutral' {
  * @param value - The value to validate
  * @returns True if safe to render, false otherwise
  */
-export function isSafeToRender(value: any): boolean {
+export function isSafeToRender(value: unknown): boolean {
   return (
     value === null ||
     value === undefined ||
@@ -90,7 +90,7 @@ export function isSafeToRender(value: any): boolean {
  * @param value - The value to convert
  * @returns A React-safe value
  */
-export function toReactSafe(value: any): string | number | boolean | null {
+export function toReactSafe(value: unknown): string | number | boolean | null {
   if (isSafeToRender(value)) {
     return value;
   }

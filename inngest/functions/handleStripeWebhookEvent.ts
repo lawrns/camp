@@ -7,11 +7,11 @@ import { inngest } from "@/inngest/client";
 import { assertDefined } from "@/lib/utils/assert";
 
 // Simple fallback functions for missing modules
-const createStripeSubscription = async (sessionData: any): Promise<void> => {
+const createStripeSubscription = async (sessionData: unknown): Promise<void> => {
   console.log("createStripeSubscription called with:", sessionData);
 };
 
-const getGmailService = (auth: any) => {
+const getGmailService = (auth: unknown) => {
   return {
     users: {
       watch: async () => ({ data: { historyId: "123" } }),
@@ -19,7 +19,7 @@ const getGmailService = (auth: any) => {
   };
 };
 
-const subscribeToMailbox = async (service: any, email: string): Promise<void> => {
+const subscribeToMailbox = async (service: unknown, email: string): Promise<void> => {
   console.log("subscribeToMailbox called for:", email);
 };
 

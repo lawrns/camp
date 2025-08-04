@@ -7,12 +7,12 @@ import { AIMessageComposer, AISuggestion, TypingStatus } from "../AIMessageCompo
 // Mock framer-motion to avoid animation issues in tests
 jest.mock("framer-motion", () => ({
   motion: {
-    div: (props: any) => {
+    div: (props: unknown) => {
       const { children, ...otherProps } = props;
       return React.createElement("div", otherProps, children);
     },
   },
-  AnimatePresence: (props: any) => props.children,
+  AnimatePresence: (props: unknown) => props.children,
 }));
 
 // Mock feature flags

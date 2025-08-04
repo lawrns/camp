@@ -180,7 +180,7 @@ export function TeamCollaboration() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTeamMembers((prev) =>
-        prev.map((member: any) => {
+        prev.map((member: unknown) => {
           if (Math.random() > 0.8) {
             const statuses: TeamMember["status"][] = ["online", "away", "busy"];
             const activities = [
@@ -309,7 +309,7 @@ export function TeamCollaboration() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-ds-2 text-sm">
               <Icon icon={Users} className="h-4 w-4" />
-              Team ({teamMembers.filter((m: any) => m.status === "online").length} online)
+              Team ({teamMembers.filter((m: unknown) => m.status === "online").length} online)
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => setIsExpanded(true)}>
               <Icon icon={MessageCircle} className="h-4 w-4" />
@@ -320,7 +320,7 @@ export function TeamCollaboration() {
         <CardContent className="space-y-3">
           {/* Team Status Overview */}
           <div className="space-y-spacing-sm">
-            {teamMembers.slice(0, 3).map((member: any) => (
+            {teamMembers.slice(0, 3).map((member: unknown) => (
               <div key={member.id} className="flex items-center gap-ds-2">
                 <div className="relative">
                   <Avatar className="h-6 w-6">
@@ -331,7 +331,7 @@ export function TeamCollaboration() {
                       ) : (
                         member.name
                           .split(" ")
-                          .map((n: any) => n[0])
+                          .map((n: unknown) => n[0])
                           .join("")
                       )}
                     </AvatarFallback>
@@ -357,7 +357,7 @@ export function TeamCollaboration() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-2 gap-ds-2">
-            {quickActions.slice(0, 2).map((action: any) => (
+            {quickActions.slice(0, 2).map((action: unknown) => (
               <Button key={action.id} variant="outline" size="sm" onClick={action.action} className="h-8 text-tiny">
                 <action.icon className="mr-1 h-3 w-3" />
                 {action.label}
@@ -386,7 +386,7 @@ export function TeamCollaboration() {
 
         {/* Quick Actions */}
         <div className="mt-3 flex gap-ds-2">
-          {quickActions.map((action: any) => (
+          {quickActions.map((action: unknown) => (
             <Button
               key={action.id}
               variant="outline"
@@ -407,7 +407,7 @@ export function TeamCollaboration() {
           <h3 className="mb-2 text-sm font-medium">Team Members ({teamMembers.length})</h3>
           <ScrollArea className="h-32">
             <div className="space-y-spacing-sm">
-              {teamMembers.map((member: any) => (
+              {teamMembers.map((member: unknown) => (
                 <OptimizedMotion.div
                   key={member.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -423,7 +423,7 @@ export function TeamCollaboration() {
                         ) : (
                           member.name
                             .split(" ")
-                            .map((n: any) => n[0])
+                            .map((n: unknown) => n[0])
                             .join("")
                         )}
                       </AvatarFallback>
@@ -461,7 +461,7 @@ export function TeamCollaboration() {
           <ScrollArea className="flex-1">
             <div className="space-y-3 pr-2">
               <OptimizedAnimatePresence>
-                {messages.map((message: any) => (
+                {messages.map((message: unknown) => (
                   <OptimizedMotion.div
                     key={message.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -478,7 +478,7 @@ export function TeamCollaboration() {
                         <AvatarFallback className="bg-brand-50 text-tiny text-brand-700">
                           {message.senderName
                             .split(" ")
-                            .map((n: any) => n[0])
+                            .map((n: unknown) => n[0])
                             .join("")}
                         </AvatarFallback>
                       </Avatar>

@@ -66,7 +66,7 @@ export function AIPlugin({ pluginId, content, onContentChange, onAction, disable
           </div>
 
           <div className="space-y-spacing-sm">
-            {SAMPLE_SUGGESTIONS.map((suggestion: any) => (
+            {SAMPLE_SUGGESTIONS.map((suggestion: unknown) => (
               <button
                 key={suggestion.id}
                 onClick={() => handleSuggestionSelect(suggestion)}

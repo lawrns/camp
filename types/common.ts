@@ -371,7 +371,7 @@ export interface ConversationWithRelationsLegacy extends ConversationSummary {
   messages?: Array<{
     id: string;
     content: string;
-    sender_type: "customer" | "agent" | "system";
+    senderType: "customer" | "agent" | "system";
     created_at: Date | string;
     metadata?: Record<string, unknown>;
   }>;

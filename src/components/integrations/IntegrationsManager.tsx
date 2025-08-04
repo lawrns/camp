@@ -74,7 +74,7 @@ export default function IntegrationsManager({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setIntegrations((prev) =>
-        prev.map((integration: any) =>
+        prev.map((integration: unknown) =>
           integration.id === integrationId ? { ...integration, status: "connected", lastSync: new Date() } : integration
         )
       );
@@ -85,7 +85,7 @@ export default function IntegrationsManager({
       }
     } catch (error) {
       setIntegrations((prev) =>
-        prev.map((integration: any) =>
+        prev.map((integration: unknown) =>
           integration.id === integrationId ? { ...integration, status: "error" } : integration
         )
       );
@@ -101,7 +101,7 @@ export default function IntegrationsManager({
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       setIntegrations((prev) =>
-        prev.map((integration: any) => {
+        prev.map((integration: unknown) => {
           if (integration.id === integrationId) {
             const { lastSync, ...rest } = integration;
             return { ...rest, status: "disconnected" as const };
@@ -154,7 +154,7 @@ export default function IntegrationsManager({
       </div>
 
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {integrations.map((integration: any) => (
+        {integrations.map((integration: unknown) => (
           <div
             key={integration.id}
             className="rounded-ds-lg border border-[var(--fl-color-border)] p-spacing-md transition-shadow hover:shadow-card-hover"

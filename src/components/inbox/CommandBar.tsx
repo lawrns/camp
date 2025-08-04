@@ -212,7 +212,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                           Recent Searches
                         </div>
                         <div className="mb-4 flex flex-wrap gap-ds-2 px-2">
-                          {recentSearches.map((search: any) => (
+                          {recentSearches.map((search: unknown) => (
                             <button
                               key={search}
                               onClick={() => setQuery(search)}

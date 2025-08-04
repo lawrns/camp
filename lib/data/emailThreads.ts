@@ -148,38 +148,38 @@ export class EmailThreadsService {
     let threads = Array.from(this.threads.values());
 
     // Filter by organization
-    threads = threads.filter((thread: any) => thread.organizationId === request.organizationId);
+    threads = threads.filter((thread: unknown) => thread.organizationId === request.organizationId);
 
     // Apply filters
     if (request.mailboxId) {
-      threads = threads.filter((thread: any) => thread.mailboxId === request.mailboxId);
+      threads = threads.filter((thread: unknown) => thread.mailboxId === request.mailboxId);
     }
 
     if (request.status) {
-      threads = threads.filter((thread: any) => thread.status === request.status);
+      threads = threads.filter((thread: unknown) => thread.status === request.status);
     }
 
     if (request.priority) {
-      threads = threads.filter((thread: any) => thread.priority === request.priority);
+      threads = threads.filter((thread: unknown) => thread.priority === request.priority);
     }
 
     if (request.participants && request.participants.length > 0) {
-      threads = threads.filter((thread: any) =>
+      threads = threads.filter((thread: unknown) =>
         request.participants!.some((participant) => thread.participants.includes(participant))
       );
     }
 
     if (request.tags && request.tags.length > 0) {
-      threads = threads.filter((thread: any) => request.tags!.some((tag) => thread.tags.includes(tag)));
+      threads = threads.filter((thread: unknown) => request.tags!.some((tag) => thread.tags.includes(tag)));
     }
 
     // Apply date filters
     if (request.dateFrom) {
-      threads = threads.filter((thread: any) => thread.createdAt >= request.dateFrom!);
+      threads = threads.filter((thread: unknown) => thread.createdAt >= request.dateFrom!);
     }
 
     if (request.dateTo) {
-      threads = threads.filter((thread: any) => thread.createdAt <= request.dateTo!);
+      threads = threads.filter((thread: unknown) => thread.createdAt <= request.dateTo!);
     }
 
     // Apply text search
@@ -198,8 +198,8 @@ export class EmailThreadsService {
     const sortOrder = request.sortOrder || "desc";
 
     threads.sort((a, b) => {
-      let aValue: number | string | Date = a[sortBy as keyof EmailThread] as any;
-      let bValue: number | string | Date = b[sortBy as keyof EmailThread] as any;
+      let aValue: number | string | Date = a[sortBy as keyof EmailThread] as unknown;
+      let bValue: number | string | Date = b[sortBy as keyof EmailThread] as unknown;
 
       if (aValue instanceof Date) aValue = aValue.getTime();
       if (bValue instanceof Date) bValue = bValue.getTime();
@@ -271,7 +271,7 @@ export class EmailThreadsService {
 
   async getThreadMessages(threadId: string): Promise<EmailMessage[]> {
     return Array.from(this.messages.values())
-      .filter((message: any) => message.threadId === threadId)
+      .filter((message: unknown) => message.threadId === threadId)
       .sort((a, b) => a.sentAt.getTime() - b.sentAt.getTime());
   }
 
@@ -299,7 +299,7 @@ export class EmailThreadsService {
     const thread = this.threads.get(threadId);
     if (!thread) return false;
 
-    const newTags = thread.tags.filter((tag: any) => !tags.includes(tag));
+    const newTags = thread.tags.filter((tag: unknown) => !tags.includes(tag));
     return this.updateThread(threadId, { tags: newTags }).then((thread) => !!thread);
   }
 
@@ -312,18 +312,18 @@ export class EmailThreadsService {
     topParticipants: { email: string; threadCount: number }[];
     threadsByPriority: { priority: string; count: number }[];
   }> {
-    const threads = Array.from(this.threads.values()).filter((thread: any) => thread.organizationId === organizationId);
+    const threads = Array.from(this.threads.values()).filter((thread: unknown) => thread.organizationId === organizationId);
 
     const totalThreads = threads.length;
-    const activeThreads = threads.filter((t: any) => t.status === "active").length;
-    const archivedThreads = threads.filter((t: any) => t.status === "archived").length;
-    const totalMessages = threads.reduce((sum: any, t: any) => sum + t.messageCount, 0);
+    const activeThreads = threads.filter((t: unknown) => t.status === "active").length;
+    const archivedThreads = threads.filter((t: unknown) => t.status === "archived").length;
+    const totalMessages = threads.reduce((sum: unknown, t: unknown) => sum + t.messageCount, 0);
     const averageMessagesPerThread = totalThreads > 0 ? totalMessages / totalThreads : 0;
 
     // Calculate top participants
     const participantCount = new Map<string, number>();
-    threads.forEach((thread: any) => {
-      thread.participants.forEach((participant: any) => {
+    threads.forEach((thread: unknown) => {
+      thread.participants.forEach((participant: unknown) => {
         participantCount.set(participant, (participantCount.get(participant) || 0) + 1);
       });
     });
@@ -334,7 +334,7 @@ export class EmailThreadsService {
 
     // Calculate threads by priority
     const priorityCount = new Map<string, number>();
-    threads.forEach((thread: any) => {
+    threads.forEach((thread: unknown) => {
       priorityCount.set(thread.priority, (priorityCount.get(thread.priority) || 0) + 1);
     });
     const threadsByPriority = Array.from(priorityCount.entries()).map(([priority, count]) => ({ priority, count }));

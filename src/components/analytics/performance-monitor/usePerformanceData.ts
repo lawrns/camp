@@ -15,7 +15,7 @@ export function usePerformanceData(isMonitoring: boolean, updateInterval = 3000)
       const newMetrics = generatePerformanceData();
 
       // Update metric status
-      Object.keys(newMetrics).forEach((key: any) => {
+      Object.keys(newMetrics).forEach((key: unknown) => {
         const metric = newMetrics[key as keyof SystemMetrics];
         metric.status = getMetricStatus(metric);
       });
@@ -27,7 +27,7 @@ export function usePerformanceData(isMonitoring: boolean, updateInterval = 3000)
       setChartData((prev) => {
         const updated = { ...prev };
 
-        Object.keys(newMetrics).forEach((key: any) => {
+        Object.keys(newMetrics).forEach((key: unknown) => {
           const metric = newMetrics[key as keyof SystemMetrics];
           if (!updated[key]) updated[key] = [];
 

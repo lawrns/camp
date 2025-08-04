@@ -14,7 +14,7 @@ export interface AIResponse {
 export interface ConversationContext {
   messages: Array<{
     content: string;
-    sender_type: string;
+    senderType: string;
     timestamp: Date;
   }>;
   customerInfo?: {

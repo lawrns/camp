@@ -30,7 +30,7 @@ export function AdvancedTypingIndicator({
 
   useEffect(() => {
     // Subscribe to typing events
-    const unsubscribe = subscribe("typing_indicator", (payload: any) => {
+    const unsubscribe = subscribe("typing_indicator", (payload: unknown) => {
       const { user_id, user_name, user_type, is_typing, preview_text } = payload;
 
       // Don't show typing indicator for current user
@@ -176,9 +176,9 @@ export function useTypingIndicator(
       setIsTyping(true);
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: true,
+        userName: userName,
+        userType: userType,
+        isTyping: true,
         preview_text: previewText,
         conversation_id: conversationId,
         organization_id: organizationId,
@@ -204,9 +204,9 @@ export function useTypingIndicator(
       setIsTyping(false);
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: false,
+        userName: userName,
+        userType: userType,
+        isTyping: false,
         conversation_id: conversationId,
         organization_id: organizationId,
         timestamp: new Date().toISOString(),
@@ -223,9 +223,9 @@ export function useTypingIndicator(
     if (isTyping) {
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: true,
+        userName: userName,
+        userType: userType,
+        isTyping: true,
         preview_text: text.slice(0, 50), // Limit preview length
         conversation_id: conversationId,
         organization_id: organizationId,
@@ -243,9 +243,9 @@ export function useTypingIndicator(
       if (isTyping) {
         broadcast("typing_indicator", {
           user_id: userId,
-          user_name: userName,
-          user_type: userType,
-          is_typing: false,
+          userName: userName,
+          userType: userType,
+          isTyping: false,
           conversation_id: conversationId,
           organization_id: organizationId,
           timestamp: new Date().toISOString(),

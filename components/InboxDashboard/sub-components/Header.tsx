@@ -6,6 +6,8 @@ import * as React from "react";
 import { useRef, useState, memo } from "react";
 import { Icon } from "@/lib/ui/Icon";
 import type { Conversation } from "../types";
+import { STATUS_FILTER_OPTIONS, PRIORITY_FILTER_OPTIONS, CONVERSATION_SORT_OPTIONS } from "@/lib/constants/filter-options";
+import { typography, components, padding, colors } from "@/lib/design-system/tokens";
 
 interface HeaderProps {
   conversations: Conversation[];
@@ -48,9 +50,9 @@ export const Header: React.FC<HeaderProps> = memo(({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get unique statuses and priorities for filters
-  const statuses = [...new Set(conversations.map(c => c.status))];
-  const priorities = [...new Set(conversations.map(c => c.priority).filter(Boolean))];
+  // Use enum-based filter options for consistency and type safety
+  const statusOptions = STATUS_FILTER_OPTIONS.filter(option => option.value !== "");
+  const priorityOptions = PRIORITY_FILTER_OPTIONS.filter(option => option.value !== "");
 
   // Handle search with debouncing
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,9 +70,9 @@ export const Header: React.FC<HeaderProps> = memo(({
   const activeFilters = [searchQuery, statusFilter, priorityFilter].filter(Boolean).length;
 
   return (
-    <div className="bg-background border-b border-[var(--fl-color-border-strong)] flex-shrink-0" data-testid="inbox-header">
+    <div className={`${colors["surface-primary"]} ${colors["border-primary"]} border-b flex-shrink-0`} data-testid="inbox-header">
       {/* Desktop Header */}
-      <div className="hidden lg:flex items-center justify-between p-4 bg-background">
+      <div className={`hidden lg:flex items-center justify-between ${padding.header} ${colors["surface-primary"]}`}>
         {/* Left side - Search and filters */}
         <div className="flex items-center gap-4 flex-1 max-w-2xl">
           {/* Search */}
@@ -84,7 +86,7 @@ export const Header: React.FC<HeaderProps> = memo(({
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="typography-input mobile-search-input w-full pl-10 pr-4 py-2 border border-[var(--fl-color-border-strong)] bg-background text-foreground hover:bg-background active:bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 btn-height-lg transition-all duration-200 ease-in-out rounded-ds-lg"
+              className={`${components["input-default"]} ${typography["body-sm"]} w-full pl-10 pr-4 py-2 transition-all duration-200 ease-in-out rounded-lg`}
               aria-label="Search conversations"
             />
           </div>
@@ -145,7 +147,11 @@ export const Header: React.FC<HeaderProps> = memo(({
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 text-gray-400 hover:text-foreground transition-colors">
+          <button
+            className="relative p-2 text-gray-400 hover:text-foreground transition-colors"
+            aria-label="View notifications"
+            title="Notifications"
+          >
             <Bell className="h-5 w-5" />
             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
           </button>
@@ -155,6 +161,7 @@ export const Header: React.FC<HeaderProps> = memo(({
             <button
               onClick={() => setShowAdvancedFilters(true)}
               className="p-2 text-gray-400 hover:text-foreground transition-colors"
+              aria-label="Open advanced filters"
               title="Advanced filters"
             >
               <Funnel className="h-5 w-5" />
@@ -165,6 +172,7 @@ export const Header: React.FC<HeaderProps> = memo(({
           <button
             onClick={() => setShowShortcuts(true)}
             className="p-2 text-gray-400 hover:text-foreground transition-colors"
+            aria-label="View keyboard shortcuts"
             title="Keyboard shortcuts"
           >
             <Icon icon={List} className="h-5 w-5" />
@@ -246,15 +254,15 @@ export const Header: React.FC<HeaderProps> = memo(({
                   >
                     All Statuses
                   </button>
-                  {statuses.map((status) => (
+                  {statusOptions.map((option) => (
                     <button
-                      key={status}
-                      onClick={() => setStatusFilter(status)}
+                      key={option.value}
+                      onClick={() => setStatusFilter(option.value)}
                       className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
-                        statusFilter === status ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                        statusFilter === option.value ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
                       }`}
                     >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                      {option.label}
                     </button>
                   ))}
                 </div>
@@ -272,15 +280,15 @@ export const Header: React.FC<HeaderProps> = memo(({
                   >
                     All Priorities
                   </button>
-                  {priorities.map((priority) => (
+                  {priorityOptions.map((option) => (
                     <button
-                      key={priority}
-                      onClick={() => setPriorityFilter(priority)}
+                      key={option.value}
+                      onClick={() => setPriorityFilter(option.value)}
                       className={`w-full text-left px-3 py-2 rounded-ds-lg text-sm transition-colors ${
-                        priorityFilter === priority ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                        priorityFilter === option.value ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
                       }`}
                     >
-                      {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                      {option.label}
                     </button>
                   ))}
                 </div>
@@ -323,9 +331,9 @@ export const Header: React.FC<HeaderProps> = memo(({
                 className="w-full px-3 py-2 border border-gray-300 rounded-ds-lg text-sm"
               >
                 <option value="">All Statuses</option>
-                {statuses.map((status) => (
-                  <option key={status} value={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -340,9 +348,9 @@ export const Header: React.FC<HeaderProps> = memo(({
                 className="w-full px-3 py-2 border border-gray-300 rounded-ds-lg text-sm"
               >
                 <option value="">All Priorities</option>
-                {priorities.map((priority) => (
-                  <option key={priority} value={priority}>
-                    {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                {priorityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>

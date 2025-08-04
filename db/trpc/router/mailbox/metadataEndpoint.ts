@@ -18,7 +18,7 @@ class DataError extends Error {
 }
 
 // Simple fallbacks for mailbox metadata API functions
-const createMailboxMetadataApi = async (mailboxSlug: string, params: any) => {
+const createMailboxMetadataApi = async (mailboxSlug: string, params: unknown) => {
   return { mailboxSlug, params, created: true };
 };
 

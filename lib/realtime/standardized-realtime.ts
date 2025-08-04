@@ -15,6 +15,9 @@ export const CHANNEL_PATTERNS = UNIFIED_CHANNELS;
 // Re-export unified events for backward compatibility
 export const EVENT_TYPES = UNIFIED_EVENTS;
 
+// Connection attempt tracking to prevent rapid reconnection
+const connectionAttempts = new Map<string, number>();
+
 // Enhanced Channel manager with heartbeat and reconnection
 class ChannelManager {
   private channels = new Map<string, {
@@ -76,7 +79,7 @@ class ChannelManager {
     }
   }
 
-  getChannel(name: string, config?: any): RealtimeChannel {
+  async getChannel(name: string, config?: unknown): Promise<RealtimeChannel> {
     const existing = this.channels.get(name);
     if (existing) {
       existing.lastUsed = Date.now();
@@ -84,30 +87,67 @@ class ChannelManager {
     }
 
     try {
-      // PHASE 1 FIX: Enhanced client with auth validation
+      // STANDARD-002 FIX: Validate auth before creating channel
       const client = typeof window !== 'undefined' ? supabase.browser() : supabase.admin();
 
-      // PHASE 1 FIX: Validate auth before creating channel
+      // STANDARD-002 FIX: Check auth token exists before channel creation
       if (typeof window !== 'undefined') {
-        console.log(`[Realtime] 🔐 Validating auth for channel: ${name}`);
-        // Note: Auth validation happens in getBrowserClient()
+        const { data: { session }, error } = await client.auth.getSession();
+
+        if (error || !session?.access_token) {
+          console.warn(`[Realtime] ⚠️ No valid auth token for channel: ${name}, waiting for auth...`);
+
+          // Wait for auth or throw error
+          return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              reject(new Error(`Auth timeout for channel: ${name}`));
+            }, 10000); // 10 second timeout
+
+            const { data: { subscription } } = client.auth.onAuthStateChange(async (event, session) => {
+              if (event === 'SIGNED_IN' && session?.access_token) {
+                clearTimeout(timeout);
+                subscription.unsubscribe();
+
+                // Set auth for realtime
+                await client.realtime.setAuth(session.access_token);
+                console.log(`[Realtime] ✅ Auth established for channel: ${name}`);
+
+                // Create channel now that auth is ready
+                const channel = await this.createChannelWithAuth(name, config, client);
+                resolve(channel);
+              }
+            });
+          });
+        }
+
+        // Set auth token for realtime if we have a session
+        await client.realtime.setAuth(session.access_token);
+        console.log(`[Realtime] 🔐 Auth token set for channel: ${name}`);
       }
 
-      // STEP 3 TEST: Use broadcast-only channel to prevent mismatch errors
-      const channel = client.channel(`bcast:${name}`, {
-        ...config,
-        config: {
-          ...config?.config,
-          heartbeatIntervalMs: 25000, // Reduced from 30s to prevent timeouts
-          rejoinAfterMs: (tries: number) => Math.min(1000 * Math.pow(2, tries), 10000),
-          broadcast: {
-            self: true,   // CRITICAL: Sender receives own broadcasts for UI updates
-            ack: true     // CRITICAL: Acknowledgment for reliable delivery
-          },
-          presence: { ack: false },
-          postgres_changes: [] // <-- disable automatic CDC
-        }
-      });
+      return this.createChannelWithAuth(name, config, client);
+    } catch (error) {
+      console.error(`[Realtime] ❌ Failed to create channel ${name}:`, error);
+      throw error;
+    }
+  }
+
+  private createChannelWithAuth(name: string, config: unknown, client: any): RealtimeChannel {
+    // STEP 3 TEST: Use broadcast-only channel to prevent mismatch errors
+    const channel = client.channel(`bcast:${name}`, {
+      ...config,
+      config: {
+        ...config?.config,
+        heartbeatIntervalMs: 25000, // Reduced from 30s to prevent timeouts
+        rejoinAfterMs: (tries: number) => Math.min(1000 * Math.pow(2, tries), 10000),
+        broadcast: {
+          self: true,   // CRITICAL: Sender receives own broadcasts for UI updates
+          ack: true     // CRITICAL: Acknowledgment for reliable delivery
+        },
+        presence: { ack: false },
+        postgres_changes: [] // <-- disable automatic CDC
+      }
+    });
 
       console.log(`[Realtime] 🏗️  Created channel: ${name} with config:`, {
         heartbeatIntervalMs: 25000,
@@ -148,19 +188,15 @@ class ChannelManager {
       // Note: Supabase channels use 'system' events for errors and closures
       // The onError/onClose methods don't exist in the current API
 
-      this.channels.set(name, {
-        channel,
-        lastUsed: Date.now(),
-        subscribers: 0,
-        reconnectAttempts: 0,
-      });
+    this.channels.set(name, {
+      channel,
+      lastUsed: Date.now(),
+      subscribers: 0,
+      reconnectAttempts: 0,
+    });
 
-      console.log(`[Realtime] Created new channel: ${name}`);
-      return channel;
-    } catch (error) {
-      console.error(`[Realtime] Failed to create channel ${name}:`, error);
-      throw error;
-    }
+    console.log(`[Realtime] Created new channel: ${name}`);
+    return channel;
   }
 
   addSubscriber(name: string) {
@@ -234,12 +270,19 @@ class ChannelManager {
     const info = this.channels.get(name);
     if (info) {
       try {
+        // Clear heartbeat interval first
+        if (info.heartbeatInterval) {
+          clearInterval(info.heartbeatInterval);
+        }
+        
         const client = getClient();
         if (client && client.removeChannel) {
           client.removeChannel(info.channel);
         }
         this.channels.delete(name);
-        console.log(`[Realtime] Manually removed channel: ${name}`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[Realtime] Manually removed channel: ${name}`);
+        }
       } catch (error) {
         console.warn(`[Realtime] Failed to remove channel ${name}:`, error);
       }
@@ -287,19 +330,24 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Enhanced subscription with exponential backoff and comprehensive monitoring
-async function ensureChannelSubscription(channelName: string, config?: any, attempt: number = 1): Promise<RealtimeChannel> {
-  const maxAttempts = 3;
-  const timeouts = [15000, 30000, 60000]; // Progressive timeouts: 15s → 30s → 60s
+// STANDARD-002 FIX: Enhanced subscription with exponential backoff and comprehensive monitoring
+async function ensureChannelSubscription(channelName: string, config?: unknown, attempt: number = 1): Promise<RealtimeChannel> {
+  const maxAttempts = 5; // Increased max attempts
+  const baseDelay = 1000; // 1 second base delay
+  const maxDelay = 30000; // 30 second max delay
+
+  // STANDARD-002 FIX: True exponential backoff calculation
+  const retryDelay = Math.min(baseDelay * Math.pow(2, attempt - 1), maxDelay);
+  const timeouts = [15000, 30000, 60000, 120000, 180000]; // Progressive timeouts: 15s → 30s → 60s → 2m → 3m
   const currentTimeout = timeouts[attempt - 1] || timeouts[timeouts.length - 1];
 
   console.log(`[Realtime] 🔍 Attempt ${attempt}/${maxAttempts}: Ensuring subscription for: ${channelName}`);
-  console.log(`[Realtime] ⏱️ Using timeout: ${currentTimeout / 1000}s (exponential backoff)`);
+  console.log(`[Realtime] ⏱️ Using timeout: ${currentTimeout / 1000}s, retry delay: ${retryDelay / 1000}s (exponential backoff)`);
 
   // Skip auth validation temporarily as per existing code
   console.log(`[Realtime] 🔐 ⚠️ Skipping auth validation`);
 
-  const channel = channelManager.getChannel(channelName, config);
+  const channel = await channelManager.getChannel(channelName, config);
 
   if (channel.state === 'joined') {
     console.log(`[Realtime] ✅ Already subscribed to ${channelName}`);
@@ -315,12 +363,12 @@ async function ensureChannelSubscription(channelName: string, config?: any, atte
 
       if (attempt < maxAttempts) {
         console.log(`[Realtime] 🔄 Retrying subscription with exponential backoff...`);
-        // Add delay before retry to prevent overwhelming the server
+        // STANDARD-002 FIX: Use proper exponential backoff delay
         setTimeout(() => {
           ensureChannelSubscription(channelName, config, attempt + 1)
             .then(resolve)
             .catch(reject);
-        }, 1000 * attempt); // 1s, 2s delay between retries
+        }, retryDelay); // Use calculated exponential backoff delay
       } else {
         const error = new Error(`Max subscription attempts (${maxAttempts}) reached for ${channelName} after ${elapsed}ms total`);
         console.error(`[Realtime] ❌ ${error.message}`);
@@ -388,8 +436,8 @@ async function ensureChannelSubscription(channelName: string, config?: any, atte
 export async function broadcastToChannel(
   channelName: string,
   eventType: string,
-  payload: any,
-  config?: any
+  payload: unknown,
+  config?: unknown
 ): Promise<boolean> {
   console.log(`[Realtime] 🚀 Starting broadcast to ${channelName} -> ${eventType}`);
 
@@ -436,22 +484,53 @@ export async function broadcastToChannel(
   }
 }
 
-// Standardized subscription function
+// STANDARD-002 FIX: Standardized subscription function with async channel creation
 export function subscribeToChannel(
   channelName: string,
   eventType: string,
-  callback: (payload: any) => void,
-  config?: any
+  callback: (payload: unknown) => void,
+  config?: unknown
 ): () => void {
-  const channel = channelManager.getChannel(channelName, config);
-  channelManager.addSubscriber(channelName);
+  // Connection state guard to prevent rapid reconnection attempts
+  const connectionKey = `${channelName}:${eventType}`;
+  const now = Date.now();
+  const lastAttempt = connectionAttempts.get(connectionKey) || 0;
+  
+  // Prevent reconnection attempts within 2 seconds
+  if (now - lastAttempt < 2000) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Realtime] ⏳ Skipping rapid reconnection attempt for ${connectionKey}`);
+    }
+    return () => {}; // Return no-op unsubscribe function
+  }
+  
+  connectionAttempts.set(connectionKey, now);
+  
+  // STANDARD-002 FIX: Handle synchronous channel creation
+  let channel: any;
+  try {
+    // Use synchronous channel creation to avoid async issues
+    const client = getClient();
+    if (!client) {
+      console.error(`[Realtime] No Supabase client available for ${channelName}`);
+      return () => {}; // Return no-op unsubscribe function
+    }
+
+    channel = client.channel(channelName, config);
+    channelManager.addSubscriber(channelName);
+  } catch (error) {
+    console.error(`[Realtime] Failed to get channel ${channelName}:`, error);
+    return () => {}; // Return no-op unsubscribe function
+  }
 
   // Subscribe to the event
   channel.on('broadcast', { event: eventType }, callback);
 
   // Subscribe to the channel if not already subscribed
   channel.subscribe((status, error) => {
-    console.log(`[Realtime] Channel ${channelName} status: ${status}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Realtime] Channel ${channelName} status: ${status}`);
+    }
 
     if (error) {
       console.error(`[Realtime] Channel ${channelName} error:`, error);
@@ -463,7 +542,9 @@ export function subscribeToChannel(
     }
 
     if (status === 'SUBSCRIBED') {
-      console.log(`[Realtime] ✅ Channel ${channelName} successfully connected`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[Realtime] ✅ Channel ${channelName} successfully connected`);
+      }
     }
   });
 
@@ -476,7 +557,9 @@ export function subscribeToChannel(
         setTimeout(() => {
           try {
             channel.unsubscribe();
-            console.log(`[Realtime] ✅ Channel ${channelName} unsubscribed successfully`);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`[Realtime] ✅ Channel ${channelName} unsubscribed successfully`);
+            }
           } catch (error) {
             console.warn(`[Realtime] Channel cleanup error for ${channelName}:`, error);
           }
@@ -492,7 +575,7 @@ export function subscribeToChannel(
 // Convenience functions for common operations
 export const RealtimeHelpers = {
   // Broadcast message to conversation with connection state guards
-  broadcastMessage: async (orgId: string, convId: string, message: any) => {
+  broadcastMessage: async (orgId: string, convId: string, message: unknown) => {
     try {
       // CRITICAL FIX: Check if we have valid parameters before broadcasting
       if (!orgId || !convId || !message) {
@@ -546,7 +629,7 @@ export const RealtimeHelpers = {
     ),
 
   // Subscribe to conversation messages
-  subscribeToMessages: (orgId: string, convId: string, callback: (message: any) => void) =>
+  subscribeToMessages: (orgId: string, convId: string, callback: (message: unknown) => void) =>
     subscribeToChannel(
       CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
@@ -554,7 +637,7 @@ export const RealtimeHelpers = {
     ),
 
   // Subscribe to typing events
-  subscribeToTyping: (orgId: string, convId: string, callback: (typing: any) => void) => {
+  subscribeToTyping: (orgId: string, convId: string, callback: (typing: unknown) => void) => {
     const startUnsubscriber = subscribeToChannel(
       CHANNEL_PATTERNS.conversationTyping(orgId, convId),
       EVENT_TYPES.TYPING_START,
@@ -567,8 +650,12 @@ export const RealtimeHelpers = {
     );
 
     return () => {
-      startUnsubscriber();
-      stopUnsubscriber();
+      if (typeof startUnsubscriber === 'function') {
+        startUnsubscriber();
+      }
+      if (typeof stopUnsubscriber === 'function') {
+        stopUnsubscriber();
+      }
     };
   },
 };

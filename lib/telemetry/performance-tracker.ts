@@ -177,7 +177,7 @@ export class PerformanceTracker {
 
       span.setStatus({ code: SpanStatusCode.OK });
 
-      return results as any;
+      return results as unknown;
     } catch (error) {
       span.recordException(error as Error);
       span.setStatus({
@@ -300,9 +300,9 @@ export class PerformanceTracker {
       };
     }
 
-    const totalDuration = this.metrics.reduce((sum: any, m: any) => sum + m.duration, 0);
-    const failures = this.metrics.filter((m: any) => !m.success).length;
-    const slowest = this.metrics.reduce((max: any, m: any) => (m.duration > (max?.duration || 0) ? m : max));
+    const totalDuration = this.metrics.reduce((sum: unknown, m: unknown) => sum + m.duration, 0);
+    const failures = this.metrics.filter((m: unknown) => !m.success).length;
+    const slowest = this.metrics.reduce((max: unknown, m: unknown) => (m.duration > (max?.duration || 0) ? m : max));
 
     // Group by operation
     const breakdown = this.metrics.reduce(

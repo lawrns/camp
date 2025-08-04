@@ -41,7 +41,7 @@ export interface AuthenticatedUser {
     lastName?: string;
     organization_id?: string;
     avatar_url?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -442,7 +442,7 @@ export const authService = {
       return false;
     }
 
-    // Check if user has any of the required roles or higher
+    // Check if user has unknown of the required roles or higher
     return requiredRoles.some((role) => {
       const requiredRoleIndex = roleHierarchy.indexOf(role);
       return requiredRoleIndex !== -1 && userRoleIndex >= requiredRoleIndex;

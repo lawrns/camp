@@ -134,7 +134,7 @@ export class AlertRulesService {
       },
     ];
 
-    defaultRules.forEach((rule: any) => {
+    defaultRules.forEach((rule: unknown) => {
       this.rules.set(rule.id, rule);
     });
   }
@@ -142,7 +142,7 @@ export class AlertRulesService {
   private evaluateRulesForMetric(metricName: string, value: number, timestamp: Date) {
     // Find all rules that monitor this metric
     const relevantRules = Array.from(this.rules.values()).filter(
-      (rule: any) => rule.metric === metricName && rule.enabled
+      (rule: unknown) => rule.metric === metricName && rule.enabled
     );
 
     for (const rule of relevantRules) {

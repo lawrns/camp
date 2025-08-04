@@ -12,7 +12,7 @@ import type { Conversation } from "@/components/InboxDashboard/types";
  * @param data - Data to validate
  * @returns True if data is a valid Conversation
  */
-export function validateConversation(data: any): data is Conversation {
+export function validateConversation(data: unknown): data is Conversation {
   if (!data || typeof data !== "object") {
     console.warn("validateConversation: data is not an object", data);
     return false;
@@ -48,7 +48,7 @@ export function validateConversation(data: any): data is Conversation {
  * @param data - Array to validate
  * @returns True if all items are valid conversations
  */
-export function validateConversations(data: any[]): data is Conversation[] {
+export function validateConversations(data: unknown[]): data is Conversation[] {
   if (!Array.isArray(data)) {
     console.warn("validateConversations: data is not an array", data);
     return false;
@@ -68,7 +68,7 @@ export function validateConversations(data: any[]): data is Conversation[] {
  * @param data - Data to validate
  * @returns Validation result with details
  */
-export function safeValidateConversation(data: any): {
+export function safeValidateConversation(data: unknown): {
   isValid: boolean;
   errors: string[];
   warnings: string[];
@@ -127,7 +127,7 @@ export function safeValidateConversation(data: any): {
  * @param data - Data to validate
  * @param context - Context for logging (e.g., component name)
  */
-export function debugValidateConversation(data: any, context: string = "Unknown") {
+export function debugValidateConversation(data: unknown, context: string = "Unknown") {
   const result = safeValidateConversation(data);
   
   if (!result.isValid) {
@@ -149,7 +149,7 @@ export function debugValidateConversation(data: any, context: string = "Unknown"
  * @param data - Array to validate
  * @param context - Context for logging
  */
-export function debugValidateConversations(data: any[], context: string = "Unknown") {
+export function debugValidateConversations(data: unknown[], context: string = "Unknown") {
   if (!Array.isArray(data)) {
     console.error(`[${context}] Data is not an array:`, data);
     return;
@@ -174,12 +174,12 @@ export function debugValidateConversations(data: any[], context: string = "Unkno
  * @param data - Data to check
  * @returns True if data has conversation-like structure
  */
-export function isConversationLike(data: any): boolean {
+export function isConversationLike(data: unknown): boolean {
   return (
     data &&
     typeof data === "object" &&
     typeof data.id === "string" &&
-    (typeof data.customerName === "string" || typeof data.customer_name === "string")
+    (typeof data.customerName === "string" || typeof data.customerName === "string")
   );
 }
 
@@ -188,7 +188,7 @@ export function isConversationLike(data: any): boolean {
  * @param data - Potentially broken conversation data
  * @returns Fixed conversation data or null if unfixable
  */
-export function attemptFixConversation(data: any): Conversation | null {
+export function attemptFixConversation(data: unknown): Conversation | null {
   if (!isConversationLike(data)) {
     return null;
   }
@@ -197,10 +197,10 @@ export function attemptFixConversation(data: any): Conversation | null {
     // Try to map snake_case to camelCase
     const fixed = {
       id: data.id,
-      customerName: data.customerName || data.customer_name || "Unknown Customer",
-      customerEmail: data.customerEmail || data.customer_email || "",
+      customerName: data.customerName || data.customerName || "Unknown Customer",
+      customerEmail: data.customerEmail || data.customerEmail || "",
       status: data.status || "open",
-      lastMessageAt: data.lastMessageAt || data.last_message_at || new Date().toISOString(),
+      lastMessageAt: data.lastMessageAt || data.lastMessageAt || new Date().toISOString(),
       unreadCount: typeof data.unreadCount === "number" ? data.unreadCount : 
                    typeof data.unread_count === "number" ? data.unread_count : 0,
       lastMessagePreview: data.lastMessagePreview || data.last_message_preview || "No messages yet",

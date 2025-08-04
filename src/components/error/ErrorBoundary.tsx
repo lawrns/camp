@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
       domain: "default",
       severity: "medium",
       fallback,
-      onError: onError ? (error: any, errorInfo: any, context: any) => onError(error, errorInfo) : undefined,
+      onError: onError ? (error: unknown, errorInfo: unknown, context: unknown) => onError(error, errorInfo) : undefined,
       resetKeys,
       resetOnPropsChange,
       maxRetries: 3,
@@ -138,7 +138,7 @@ export function withErrorBoundary<P extends object>(
 
 // Hook for manual error reporting
 export function useErrorHandler() {
-  return (error: Error, errorInfo?: { [key: string]: any }) => {
+  return (error: Error, errorInfo?: { [key: string]: unknown }) => {
     const appError = error instanceof AppError ? error : handleError(error);
 
     // Simple error logging for development

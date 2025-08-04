@@ -45,7 +45,7 @@ export function RealtimeDashboard() {
   // Memoize realtime options to prevent infinite re-renders
   const realtimeOptions = useMemo(
     () => ({
-      onNewMessage: (payload: any) => {
+      onNewMessage: (payload: unknown) => {
         // Handle both stats updates and metric updates
         if (payload.metric && payload.value) {
           handleMetricUpdate(payload.metric, payload.value);

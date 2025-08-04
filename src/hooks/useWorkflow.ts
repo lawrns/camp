@@ -13,7 +13,7 @@ interface WorkflowRule {
     conditions: Array<{
       field: string;
       operator: string;
-      value: any;
+      value: unknown;
     }>;
   };
   actions: Array<{

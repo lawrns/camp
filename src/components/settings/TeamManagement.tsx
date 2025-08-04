@@ -143,7 +143,7 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
     },
   });
 
-  const filteredMembers = teamMembers.filter((member: any) => {
+  const filteredMembers = teamMembers.filter((member: unknown) => {
     const matchesSearch =
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.email.toLowerCase().includes(searchQuery.toLowerCase());
@@ -304,8 +304,8 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
                       </SelectTrigger>
                       <SelectContent>
                         {roles
-                          .filter((role: any) => role.value !== "owner")
-                          .map((role: any) => (
+                          .filter((role: unknown) => role.value !== "owner")
+                          .map((role: unknown) => (
                             <SelectItem key={role.value} value={role.value}>
                               <div className="flex flex-col">
                                 <span>{role.label}</span>
@@ -363,7 +363,7 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Roles</SelectItem>
-                {roles.map((role: any) => (
+                {roles.map((role: unknown) => (
                   <SelectItem key={role.value} value={role.value}>
                     {role.label}
                   </SelectItem>
@@ -374,7 +374,7 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
 
           {/* Team Members List */}
           <div className="space-y-3">
-            {filteredMembers.map((member: any) => {
+            {filteredMembers.map((member: unknown) => {
               const roleInfo = getRoleInfo(member.role);
 
               return (
@@ -388,7 +388,7 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
                       <AvatarFallback>
                         {member.name
                           .split(" ")
-                          .map((n: any) => n[0])
+                          .map((n: unknown) => n[0])
                           .join("")
                           .toUpperCase()}
                       </AvatarFallback>
@@ -437,8 +437,8 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
                           </SelectTrigger>
                           <SelectContent>
                             {roles
-                              .filter((role: any) => role.value !== "owner")
-                              .map((role: any) => (
+                              .filter((role: unknown) => role.value !== "owner")
+                              .map((role: unknown) => (
                                 <SelectItem key={role.value} value={role.value}>
                                   {role.label}
                                 </SelectItem>
@@ -490,7 +490,7 @@ export function TeamManagement({ organizationId, isLoading: propsLoading, error:
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
-            {roles.map((role: any) => (
+            {roles.map((role: unknown) => (
               <div key={role.value} className="rounded-ds-lg border spacing-3">
                 <div className="mb-2 flex items-center gap-ds-2">
                   <Badge className={role.color}>{role.label}</Badge>

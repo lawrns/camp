@@ -102,7 +102,7 @@ export function AgentPerformanceMetrics({ agentId, organizationId, className }: 
         });
         if (!response.ok) throw new Error("Failed to fetch agents");
         const data = await response.json();
-        setAgents(data.map((agent: any) => ({ id: agent.id, name: agent.name })));
+        setAgents(data.map((agent: unknown) => ({ id: agent.id, name: agent.name })));
 
         // Select first agent if none selected
         if (!selectedAgentId && data.length > 0) {
@@ -164,7 +164,7 @@ export function AgentPerformanceMetrics({ agentId, organizationId, className }: 
     );
   }
 
-  const radarData = performance.skills.map((skill: any) => ({
+  const radarData = performance.skills.map((skill: unknown) => ({
     subject: skill.name,
     score: skill.score,
     fullMark: 100,
@@ -179,7 +179,7 @@ export function AgentPerformanceMetrics({ agentId, organizationId, className }: 
             <SelectValue placeholder="Select an agent" />
           </SelectTrigger>
           <SelectContent>
-            {agents.map((agent: any) => (
+            {agents.map((agent: unknown) => (
               <SelectItem key={agent.id} value={agent.id}>
                 {agent.name}
               </SelectItem>
@@ -404,7 +404,7 @@ export function AgentPerformanceMetrics({ agentId, organizationId, className }: 
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                {performance.achievements.map((achievement: any) => (
+                {performance.achievements.map((achievement: unknown) => (
                   <div key={achievement.id} className="flex items-start gap-3 rounded-ds-lg border bg-muted/50 spacing-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-ds-full bg-primary/10">
                       <Icon icon={Trophy} className="h-5 w-5 text-primary" />

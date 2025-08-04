@@ -59,7 +59,7 @@ export async function GET(
       `)
       .eq('organization_id', organizationId)
       .in('role', ['admin', 'agent'])
-      .order('full_name');
+      .order('fullName');
 
     if (error) {
       console.error('Error fetching agents:', error);
@@ -72,7 +72,7 @@ export async function GET(
     // Transform agents data with availability info
     const agentsWithAvailability = (agents || []).map(agent => ({
       id: agent.id,
-      name: agent.full_name || agent.email,
+      name: agent.fullName || agent.email,
       email: agent.email,
       avatar: agent.avatar_url,
       role: agent.role,

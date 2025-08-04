@@ -115,7 +115,7 @@ describe("Inbox Store", () => {
       });
 
       expect(result.current.selectedConversations.size).toBe(3);
-      conversationIds.forEach((id: any) => {
+      conversationIds.forEach((id: unknown) => {
         expect(result.current.selectedConversations.has(id)).toBe(true);
       });
     });

@@ -36,7 +36,7 @@ const buildAITools = (tools: unknown[]) => {
   return {}; // Fallback: no AI tools
 };
 
-const callToolApi = async (conversation: any, tool: any, params: unknown) => {
+const callToolApi = async (conversation: unknown, tool: unknown, params: unknown) => {
   return { conversation, tool, params, result: "fallback" };
 };
 
@@ -163,7 +163,7 @@ export const buildTools = async (
       parameters: z.object({
         query: z.string().describe("query to search the knowledge base"),
       }),
-      execute: ({ query }: any, { messages }: unknown) =>
+      execute: ({ query }: unknown, { messages }: unknown) =>
         reasoningMiddleware(searchKnowledgeBase(query, mailbox), messages),
     }),
   };
@@ -187,7 +187,7 @@ export const buildTools = async (
       parameters: z.object({
         email: z.string().email().describe("email address to set for the user"),
       }),
-      execute: ({ email }: any, { messages }: unknown) =>
+      execute: ({ email }: unknown, { messages }: unknown) =>
         reasoningMiddleware(setUserEmail(conversationId, email), messages),
     });
   }
@@ -205,7 +205,7 @@ export const buildTools = async (
           ? z.string().optional()
           : z.string().email().describe("email address to contact you (required for anonymous users)"),
       }),
-      execute: ({ reason, email: newEmail }: any, { messages }: unknown) =>
+      execute: ({ reason, email: newEmail }: unknown, { messages }: unknown) =>
         reasoningMiddleware(requestHumanSupport(conversationId, email, mailbox, reason, newEmail), messages),
     });
   }
@@ -216,7 +216,7 @@ export const buildTools = async (
       parameters: z.object({
         reason: z.string().describe("reason for fetching user information"),
       }),
-      execute: ({ reason }: any, { messages }: unknown) =>
+      execute: ({ reason }: unknown, { messages }: unknown) =>
         reasoningMiddleware(fetchUserInformation(email, mailbox, reason), messages),
     });
   }
@@ -232,7 +232,7 @@ export const buildTools = async (
       tools[slug] = tool({
         description: aiTool.description,
         parameters: aiTool.parameters,
-        execute: async (params: any, { messages }: unknown) => {
+        execute: async (params: unknown, { messages }: unknown) => {
           const conversation = assertDefined(await getConversationById(conversationId));
           if (mailboxTool.customerEmailParameter) {
             params = { ...params, [mailboxTool.customerEmailParameter]: conversation.customerEmail };

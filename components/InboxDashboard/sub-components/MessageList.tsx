@@ -103,7 +103,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         </div>
         <h3 className="mb-2 text-lg font-medium text-neutral-300">Start the conversation</h3>
         <p className="text-sm text-neutral-300">
-          Send a message to {selectedConversation?.customer_name} to begin the conversation.
+          Send a message to {selectedConversation?.customerName} to begin the conversation.
         </p>
       </div>
     </div>
@@ -118,7 +118,7 @@ export const MessageList: React.FC<MessageListProps> = ({
         <div className="flex-shrink-0">
           <img
             src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              selectedConversation?.customer_name || "User"
+              selectedConversation?.customerName || "User"
             )}&size=32&background=e5e7eb&color=374151`}
             alt="Customer"
             className="h-8 w-8 rounded-ds-full"

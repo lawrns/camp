@@ -97,7 +97,7 @@ export function createOptimizedDbClient() {
 /**
  * Execute a query with performance tracking
  */
-export async function executeQuery<T>(queryFn: (client: any) => Promise<T>, queryName?: string): Promise<T> {
+export async function executeQuery<T>(queryFn: (client: unknown) => Promise<T>, queryName?: string): Promise<T> {
   const startTime = Date.now();
   const client = createOptimizedDbClient();
 
@@ -189,7 +189,7 @@ function trackQueryPerformance(queryTime: number, queryName?: string): void {
 /**
  * Get current pool metrics
  */
-export function getPoolMetrics(): PoolMetrics & { pool: any } {
+export function getPoolMetrics(): PoolMetrics & { pool: unknown } {
   const pool = getConnectionPool();
 
   return {
@@ -226,7 +226,7 @@ export async function closeConnectionPool(): Promise<void> {
 /**
  * Health check for the connection pool
  */
-export async function healthCheck(): Promise<{ healthy: boolean; metrics: any; error?: string }> {
+export async function healthCheck(): Promise<{ healthy: boolean; metrics: unknown; error?: string }> {
   try {
     const pool = getConnectionPool();
     const client = await pool.connect();

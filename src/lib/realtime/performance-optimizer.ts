@@ -28,7 +28,7 @@ class RealtimePerformanceOptimizer {
   private static instance: RealtimePerformanceOptimizer;
   private metrics: RealtimeMetrics;
   private config: OptimizationConfig;
-  private messageQueue: any[] = [];
+  private messageQueue: unknown[] = [];
   private batchTimer: NodeJS.Timeout | null = null;
   private heartbeatTimer: NodeJS.Timeout | null = null;
   private connections = new Map<string, any>();
@@ -69,7 +69,7 @@ class RealtimePerformanceOptimizer {
   /**
    * Optimized message sending with batching
    */
-  async sendMessage(channel: string, event: string, payload: any): Promise<void> {
+  async sendMessage(channel: string, event: string, payload: unknown): Promise<void> {
     const startTime = performance.now();
 
     const message = {
@@ -138,7 +138,7 @@ class RealtimePerformanceOptimizer {
   /**
    * Send batch to specific channel
    */
-  private async sendBatchToChannel(channel: string, messages: any[]): Promise<void> {
+  private async sendBatchToChannel(channel: string, messages: unknown[]): Promise<void> {
     const connection = this.getOptimizedConnection(channel);
 
     if (messages.length === 1) {
@@ -170,7 +170,7 @@ class RealtimePerformanceOptimizer {
   /**
    * Get optimized connection for channel
    */
-  private getOptimizedConnection(channel: string): any {
+  private getOptimizedConnection(channel: string): unknown {
     if (!this.connections.has(channel)) {
       const connection = supabase
         .admin()
@@ -196,12 +196,12 @@ class RealtimePerformanceOptimizer {
   /**
    * Handle incoming messages
    */
-  private handleIncomingMessage(payload: any): void {
+  private handleIncomingMessage(payload: unknown): void {
     const receiveTime = performance.now();
 
     if (payload.event === "batch_messages") {
       // Handle batched messages
-      payload.payload.messages.forEach((message: any) => {
+      payload.payload.messages.forEach((message: unknown) => {
         this.processIncomingMessage(message, receiveTime);
       });
     } else {
@@ -212,7 +212,7 @@ class RealtimePerformanceOptimizer {
   /**
    * Process individual incoming message
    */
-  private processIncomingMessage(message: any, receiveTime: number): void {
+  private processIncomingMessage(message: unknown, receiveTime: number): void {
     // Calculate latency if timestamp is available
     if (message.timestamp) {
       const latency = receiveTime - message.timestamp;

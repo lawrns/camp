@@ -19,7 +19,7 @@ export interface SlackMessage {
   user?: string;
   ts: string;
   thread_ts?: string;
-  attachments?: any[];
+  attachments?: unknown[];
 }
 
 export interface SlackModal {
@@ -28,7 +28,7 @@ export interface SlackModal {
     type: "plain_text";
     text: string;
   };
-  blocks: any[];
+  blocks: unknown[];
   submit?: {
     type: "plain_text";
     text: string;
@@ -103,8 +103,8 @@ export async function updateSlackMessage(
   messageTs: string,
   text: string,
   options: {
-    blocks?: any[];
-    attachments?: any[];
+    blocks?: unknown[];
+    attachments?: unknown[];
   } = {}
 ): Promise<{ success: boolean; error?: string }> {
   // Mock implementation - in real app, this would call Slack API
@@ -150,8 +150,8 @@ export async function postSlackDM(
   userId: string,
   message: string,
   options: {
-    blocks?: any[];
-    attachments?: any[];
+    blocks?: unknown[];
+    attachments?: unknown[];
     thread_ts?: string;
   } = {}
 ): Promise<{ success: boolean; ts?: string; error?: string }> {
@@ -177,8 +177,8 @@ export async function postSlackMessage(
   options: {
     channel: string;
     text: string;
-    blocks?: any[];
-    attachments?: any[];
+    blocks?: unknown[];
+    attachments?: unknown[];
     thread_ts?: string;
   }
 ): Promise<{ success: boolean; ts?: string; error?: string }> {
@@ -268,7 +268,7 @@ export async function sendEmail(
     replyTo?: string;
     cc?: string[];
     bcc?: string[];
-    attachments?: any[];
+    attachments?: unknown[];
   } = {}
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
   // Mock implementation - in real app, this would use email service
@@ -344,8 +344,8 @@ export function formatSlackBlocks(
     fields?: Array<{ title: string; value: string; short?: boolean }>;
     actions?: Array<{ type: string; text: string; url?: string; value?: string }>;
   } = {}
-): any[] {
-  const blocks: any[] = [];
+): unknown[] {
+  const blocks: unknown[] = [];
 
   if (options.title) {
     blocks.push({

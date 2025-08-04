@@ -172,7 +172,7 @@ class AIAnalyticsService {
     };
   }
 
-  async configureAlerts(input: any) {
+  async configureAlerts(input: unknown) {
     // In a real implementation, you'd store alert configurations in a database table
     // For now, just return success
     return { input, configured: true };
@@ -325,7 +325,7 @@ export const analyticsRouter = createTRPCRouter({
         }
       }
 
-      let data: any[] = [];
+      let data: unknown[] = [];
 
       switch (input.metric) {
         case "requests":
@@ -421,7 +421,7 @@ export const analyticsRouter = createTRPCRouter({
       })
     )
     .query(async ({ input }) => {
-      let breakdown: any[] = [];
+      let breakdown: unknown[] = [];
 
       if (input.groupBy === "model") {
         // Group by model
@@ -500,7 +500,7 @@ export const analyticsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       // Mock trends data
-      const trends = input.metrics.map((metric: any) => {
+      const trends = input.metrics.map((metric: unknown) => {
         const currentValue = Math.random() * 100;
         const previousValue = Math.random() * 100;
         const change = ((currentValue - previousValue) / previousValue) * 100;
@@ -522,9 +522,9 @@ export const analyticsRouter = createTRPCRouter({
       return {
         trends,
         summary: {
-          improvingMetrics: trends.filter((t: any) => t.isGoodTrend).length,
-          decliningMetrics: trends.filter((t: any) => !t.isGoodTrend && t.change !== 0).length,
-          stableMetrics: trends.filter((t: any) => t.change === 0).length,
+          improvingMetrics: trends.filter((t: unknown) => t.isGoodTrend).length,
+          decliningMetrics: trends.filter((t: unknown) => !t.isGoodTrend && t.change !== 0).length,
+          stableMetrics: trends.filter((t: unknown) => t.change === 0).length,
         },
       };
     }),

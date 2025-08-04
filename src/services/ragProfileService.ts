@@ -10,7 +10,7 @@ import { retryable } from "@/lib/utils";
 
 // Simple fallback for improvedVectorSearchService
 const improvedVectorSearchService = {
-  semanticSearch: async (query: string, mailboxId: string | number, options: any, context: any) => {
+  semanticSearch: async (query: string, mailboxId: string | number, options: unknown, context: unknown) => {
     // Fallback: return empty search results
     return [];
   },
@@ -25,7 +25,7 @@ const _getRagProfile = async (id: string) => {
     .from(ragProfiles)
     .where(eq(ragProfiles.id, id))
     .limit(1)
-    .then((rows: any) => rows[0] || null);
+    .then((rows: unknown) => rows[0] || null);
   return profile;
 };
 
@@ -43,7 +43,7 @@ const _generateRagDraft = async (
   channelId: string,
   profileId: string,
   mailboxId: string | number,
-  customerContext?: any
+  customerContext?: unknown
 ) => {
   try {
     // Load profile settings
@@ -67,8 +67,8 @@ const _generateRagDraft = async (
     }
 
     // Build conversation context
-    const historyText = history.map((m: any) => `${m.sender}: ${m.content}`).join("\n");
-    const userMessages = history.filter((m: any) => m.sender === "user");
+    const historyText = history.map((m: unknown) => `${m.sender}: ${m.content}`).join("\n");
+    const userMessages = history.filter((m: unknown) => m.sender === "user");
     const lastUserMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1]?.content || "" : "";
 
     // Analyze conversation for context
@@ -85,7 +85,7 @@ const _generateRagDraft = async (
         hybridWeight: 0.3, // Balanced hybrid search
       },
       {
-        conversationHistory: history.map((h: any) => h.content),
+        conversationHistory: history.map((h: unknown) => h.content),
         customerProfile: customerContext,
         currentTopic: conversationAnalysis.topic,
         urgencyLevel: conversationAnalysis.urgency,
@@ -93,7 +93,7 @@ const _generateRagDraft = async (
     );
 
     // Build knowledge context from search results
-    const knowledgeContext = searchResults.map((result: any) => ({
+    const knowledgeContext = searchResults.map((result: unknown) => ({
       content: result.content,
       source: result.metadata.documentTitle,
       relevance: result.score,
@@ -114,7 +114,7 @@ const _generateRagDraft = async (
       metadata: {
         profileUsed: profile.name,
         knowledgeSources: knowledgeContext.length,
-        searchResults: searchResults.map((r: any) => ({
+        searchResults: searchResults.map((r: unknown) => ({
           title: r.metadata.documentTitle,
           relevance: r.score,
         })),
@@ -253,12 +253,12 @@ async function generateIntelligentDraft({
   conversationAnalysis,
   customerContext,
 }: {
-  profile: any;
+  profile: unknown;
   conversationHistory: string;
   lastUserMessage: string;
   knowledgeContext: Array<{ content: string; source: string; relevance: number }>;
-  conversationAnalysis: any;
-  customerContext?: any;
+  conversationAnalysis: unknown;
+  customerContext?: unknown;
 }) {
   try {
     // Build knowledge context string
@@ -315,7 +315,7 @@ Generate a helpful response that addresses the customer's question using the rel
     return completion.text;
   } catch (error) {
     // Fallback to simple template
-    const knowledgeText = knowledgeContext.map((k: any) => k.content).join("\n\n");
+    const knowledgeText = knowledgeContext.map((k: unknown) => k.content).join("\n\n");
     return `Based on the available information:
 
 ${knowledgeText}
@@ -329,12 +329,12 @@ If you need further assistance, please let me know!`;
 /**
  * Calculate confidence score for the generated draft
  */
-function calculateDraftConfidence(searchResults: any[], conversationAnalysis: any): number {
+function calculateDraftConfidence(searchResults: unknown[], conversationAnalysis: unknown): number {
   let confidence = 0.5; // Base confidence
 
   // Boost confidence based on search result quality
   if (searchResults.length > 0) {
-    const avgRelevance = searchResults.reduce((sum: any, r: any) => sum + r.score, 0) / searchResults.length;
+    const avgRelevance = searchResults.reduce((sum: unknown, r: unknown) => sum + r.score, 0) / searchResults.length;
     confidence += avgRelevance * 0.3;
   }
 

@@ -12,12 +12,12 @@ const organizationService = {
     success: true,
     data: { id: "fallback", name: "Fallback Org", slug },
   }),
-  createOrganization: async (params: any) => ({ success: true, data: { id: "new-org", ...params } }),
-  updateOrganization: async (id: string, params: any) => ({ success: true, data: { id, ...params } }),
-  listOrganizations: async (params?: any) => ({ success: true, data: { organizations: [] } }),
+  createOrganization: async (params: unknown) => ({ success: true, data: { id: "new-org", ...params } }),
+  updateOrganization: async (id: string, params: unknown) => ({ success: true, data: { id, ...params } }),
+  listOrganizations: async (params?: unknown) => ({ success: true, data: { organizations: [] } }),
   getMembers: async (organizationId: string) => ({ success: true, data: [] }),
-  inviteMember: async (params: any) => ({ success: true, data: { id: "invitation", ...params } }),
-  updateMember: async (organizationId: string, userId: string, params: any) => ({
+  inviteMember: async (params: unknown) => ({ success: true, data: { id: "invitation", ...params } }),
+  updateMember: async (organizationId: string, userId: string, params: unknown) => ({
     success: true,
     data: { organizationId, userId, ...params },
   }),
@@ -35,17 +35,17 @@ export const getOrganizationBySlug = async (slug: string) => {
   return result.success ? result.data : null;
 };
 
-export const createOrganization = async (params: any) => {
+export const createOrganization = async (params: unknown) => {
   const result = await organizationService.createOrganization(params);
   return result.success ? result.data : null;
 };
 
-export const updateOrganization = async (id: string, params: any) => {
+export const updateOrganization = async (id: string, params: unknown) => {
   const result = await organizationService.updateOrganization(id, params);
   return result.success ? result.data : null;
 };
 
-export const listOrganizations = async (params?: any) => {
+export const listOrganizations = async (params?: unknown) => {
   const result = await organizationService.listOrganizations(params);
   return result.success ? result.data.organizations : [];
 };
@@ -55,12 +55,12 @@ export const getOrganizationMembers = async (organizationId: string) => {
   return result.success ? result.data : [];
 };
 
-export const inviteOrganizationMember = async (params: any) => {
+export const inviteOrganizationMember = async (params: unknown) => {
   const result = await organizationService.inviteMember(params);
   return result.success ? result.data : null;
 };
 
-export const updateOrganizationMember = async (organizationId: string, userId: string, params: any) => {
+export const updateOrganizationMember = async (organizationId: string, userId: string, params: unknown) => {
   const result = await organizationService.updateMember(organizationId, userId, params);
   return result.success ? result.data : null;
 };
@@ -71,7 +71,7 @@ export const removeOrganizationMember = async (organizationId: string, userId: s
 };
 
 // Additional missing functions for TRPC compatibility
-export const createDefaultOrganization = async (params: any) => {
+export const createDefaultOrganization = async (params: unknown) => {
   const result = await organizationService.createOrganization(params);
   return result.success ? result.data : null;
 };
@@ -81,7 +81,7 @@ export const getOnboardingStatus = async (organizationId: string) => {
   return { completed: true, steps: [] };
 };
 
-export const inviteMember = async (params: any) => {
+export const inviteMember = async (params: unknown) => {
   const result = await organizationService.inviteMember(params);
   return result.success ? result.data : null;
 };

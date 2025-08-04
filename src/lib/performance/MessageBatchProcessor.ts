@@ -20,14 +20,14 @@ interface BatchProcessorConfig {
 
 interface MessageBatch {
   id: string;
-  messages: any[];
+  messages: unknown[];
   timestamp: number;
   retryCount: number;
 }
 
 export class MessageBatchProcessor {
   private config: BatchProcessorConfig;
-  private pendingMessages: any[] = [];
+  private pendingMessages: unknown[] = [];
   private batchTimer: NodeJS.Timeout | null = null;
   private processingBatch = false;
   private metrics = {
@@ -48,7 +48,7 @@ export class MessageBatchProcessor {
   /**
    * Add message to batch for processing
    */
-  async addMessage(message: any): Promise<any> {
+  async addMessage(message: unknown): Promise<any> {
     return new Promise((resolve, reject) => {
       // Add resolve/reject callbacks to message for later resolution
       const messageWithCallbacks = {
@@ -158,7 +158,7 @@ export class MessageBatchProcessor {
   /**
    * Process individual message (to be overridden by specific implementations)
    */
-  private async processMessage(message: any): Promise<any> {
+  private async processMessage(message: unknown): Promise<any> {
     // Default implementation - just return the message
     // This should be overridden by specific batch processors
     return message;
@@ -220,9 +220,9 @@ export class MessageBatchProcessor {
  * Specialized for database operations
  */
 export class DatabaseMessageBatchProcessor extends MessageBatchProcessor {
-  private supabaseClient: any;
+  private supabaseClient: unknown;
 
-  constructor(config: BatchProcessorConfig, supabaseClient: any) {
+  constructor(config: BatchProcessorConfig, supabaseClient: unknown) {
     super(config);
     this.supabaseClient = supabaseClient;
   }
@@ -230,7 +230,7 @@ export class DatabaseMessageBatchProcessor extends MessageBatchProcessor {
   /**
    * Process message with database operations
    */
-  protected async processMessage(message: any): Promise<any> {
+  protected async processMessage(message: unknown): Promise<any> {
     const startTime = Date.now();
 
     try {
@@ -240,9 +240,9 @@ export class DatabaseMessageBatchProcessor extends MessageBatchProcessor {
         .insert({
           conversation_id: message.conversationId,
           content: message.content,
-          sender_type: message.senderType,
-          sender_name: message.senderName,
-          sender_email: message.senderEmail,
+          senderType: message.senderType,
+          senderName: message.senderName,
+          senderEmail: message.senderEmail,
           organization_id: message.organizationId,
           created_at: new Date().toISOString(),
         })
@@ -283,9 +283,9 @@ export class DatabaseMessageBatchProcessor extends MessageBatchProcessor {
  * Specialized for real-time updates
  */
 export class RealtimeMessageBatchProcessor extends MessageBatchProcessor {
-  private realtimeClient: any;
+  private realtimeClient: unknown;
 
-  constructor(config: BatchProcessorConfig, realtimeClient: any) {
+  constructor(config: BatchProcessorConfig, realtimeClient: unknown) {
     super(config);
     this.realtimeClient = realtimeClient;
   }
@@ -293,7 +293,7 @@ export class RealtimeMessageBatchProcessor extends MessageBatchProcessor {
   /**
    * Process message with real-time broadcasting
    */
-  protected async processMessage(message: any): Promise<any> {
+  protected async processMessage(message: unknown): Promise<any> {
     const startTime = Date.now();
 
     try {

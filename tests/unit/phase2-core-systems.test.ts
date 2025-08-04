@@ -22,9 +22,9 @@ function createMockRequest(options: {
   method?: string;
   url?: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   ip?: string;
-}): any {
+}): unknown {
   const { method = 'POST', url = 'http://localhost:3001/api/widget', headers = {}, ip = '127.0.0.1' } = options;
   
   return {

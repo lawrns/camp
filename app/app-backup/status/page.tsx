@@ -17,13 +17,13 @@ export default function StatusPage() {
   // Memoize the options to prevent infinite re-renders
   const realtimeOptions = useMemo(
     () => ({
-      onNewMessage: (message: any) => {
+      onNewMessage: (message: unknown) => {
 
       },
-      onConversationUpdate: (update: any) => {
+      onConversationUpdate: (update: unknown) => {
 
       },
-      onNewConversation: (conversation: any) => {
+      onNewConversation: (conversation: unknown) => {
 
       },
     }),
@@ -55,21 +55,21 @@ export default function StatusPage() {
       try {
         // Test auth imports - skip for now to avoid server-side imports
         setStatus((prev) => ({ ...prev, auth: "skipped" }));
-      } catch (error: any) {
+      } catch (error: unknown) {
         setStatus((prev) => ({ ...prev, auth: `error: ${(error instanceof Error ? error.message : String(error))}` }));
       }
 
       try {
         // Test data imports - skip for now to avoid server-side imports
         setStatus((prev) => ({ ...prev, data: "skipped" }));
-      } catch (error: any) {
+      } catch (error: unknown) {
         setStatus((prev) => ({ ...prev, data: `error: ${(error instanceof Error ? error.message : String(error))}` }));
       }
 
       try {
         // Test API
         setStatus((prev) => ({ ...prev, api: "ready" }));
-      } catch (error: any) {
+      } catch (error: unknown) {
         setStatus((prev) => ({ ...prev, api: `error: ${(error instanceof Error ? error.message : String(error))}` }));
       }
     };

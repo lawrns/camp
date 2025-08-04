@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 
 interface DebugInfo {
-  widgetState: any;
-  messagesState: any;
-  apiCalls: any[];
-  errors: any[];
-  performance: any;
+  widgetState: unknown;
+  messagesState: unknown;
+  apiCalls: unknown[];
+  errors: unknown[];
+  performance: unknown;
 }
 
 export function WidgetDebugger({ 
@@ -19,7 +19,7 @@ export function WidgetDebugger({
 }: {
   organizationId?: string;
   conversationId?: string;
-  messages?: any[];
+  messages?: unknown[];
   isLoading?: boolean;
   error?: string | null;
 }) {

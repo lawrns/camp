@@ -290,7 +290,7 @@ export class RealTimeMetricsService extends EventEmitter {
 
   // Clean up
   destroy() {
-    this.intervals.forEach((interval: any) => clearInterval(interval));
+    this.intervals.forEach((interval: unknown) => clearInterval(interval));
     this.intervals = [];
     this.removeAllListeners();
   }

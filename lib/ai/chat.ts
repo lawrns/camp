@@ -44,7 +44,7 @@ type PlatformCustomer = {
 // Simple fallback for redis
 const redis = {
   get: async (key: string) => null,
-  set: async (key: string, value: any, options?: unknown) => true,
+  set: async (key: string, value: unknown, options?: unknown) => true,
 };
 
 // import { getPlatformCustomer, PlatformCustomer } from "@/lib/data/platformCustomer"; // Module not found
@@ -64,14 +64,14 @@ const trackAIUsageEvent = async (params: unknown) => {};
 // import { captureExceptionAndLogIfDevelopment, captureExceptionAndThrowIfDevelopment } from "../shared/sentry"; // Module not found
 
 // Simple fallbacks for sentry functions
-const captureExceptionAndLogIfDevelopment = (error: any, extra?: unknown) => {};
+const captureExceptionAndLogIfDevelopment = (error: unknown, extra?: unknown) => {};
 
-const captureExceptionAndThrowIfDevelopment = (error: any, extra?: unknown) => {
+const captureExceptionAndThrowIfDevelopment = (error: unknown, extra?: unknown) => {
   throw error;
 };
 
 // Simple fallback for fetchPromptRetrievalData
-const fetchPromptRetrievalData = async (mailbox: any, query: string, metadata: unknown) => {
+const fetchPromptRetrievalData = async (mailbox: unknown, query: string, metadata: unknown) => {
   return {
     knowledgeBank: null,
     websitePagesPrompt: null,
@@ -178,7 +178,7 @@ export const loadPreviousMessages = async (conversationId: string, latestMessage
 
       return {
         id: message.id.toString(),
-        role: message.senderType === "agent" || (message as any).role === "ai_assistant" ? "assistant" : "user",
+        role: message.senderType === "agent" || (message as unknown).role === "ai_assistant" ? "assistant" : "user",
         content: message.body || "",
         experimental_attachments: attachments.filter(
           (a: { messageId: number | null; name: string; contentType: string; url: string }) =>
@@ -753,7 +753,7 @@ export const respondWithAI = async ({
           // Check if confidence requires escalation
           const confidence = experimental_providerMetadata?.confidence;
           const confidenceBasedEscalation =
-            (confidence as any)?.shouldEscalate || ((confidence as any)?.overall && (confidence as any).overall < 0.6);
+            (confidence as unknown)?.shouldEscalate || ((confidence as unknown)?.overall && (confidence as unknown).overall < 0.6);
 
           if (finishReason !== "stop" && finishReason !== "tool-calls") return;
 

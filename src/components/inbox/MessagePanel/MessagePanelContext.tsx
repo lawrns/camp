@@ -40,12 +40,12 @@ function messagePanelReducer(state: MessagePanelState, action: MessagePanelActio
     case "ADD_TYPING_USER":
       return {
         ...state,
-        typingUsers: [...state.typingUsers.filter((u: any) => u.id !== action.payload.id), action.payload],
+        typingUsers: [...state.typingUsers.filter((u: unknown) => u.id !== action.payload.id), action.payload],
       };
     case "REMOVE_TYPING_USER":
       return {
         ...state,
-        typingUsers: state.typingUsers.filter((u: any) => u.id !== action.payload),
+        typingUsers: state.typingUsers.filter((u: unknown) => u.id !== action.payload),
       };
     case "CLEAR_MESSAGE":
       return { ...state, messageText: "" };

@@ -29,7 +29,7 @@ export class DashboardErrorBoundary extends React.Component<Props, State> {
 
     return (
       <UnifiedDashboardErrorBoundary
-        fallback={fallback ? () => React.createElement(fallback as any) : undefined}
+        fallback={fallback ? () => React.createElement(fallback as unknown) : undefined}
         onError={onError}
         maxRetries={2}
       >

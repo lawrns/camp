@@ -21,7 +21,7 @@ export interface WidgetSupabaseAuthState {
 }
 
 export interface WidgetSupabaseAuthReturn extends WidgetSupabaseAuthState {
-  signInAsVisitor: (organizationId: string, metadata?: any) => Promise<void>;
+  signInAsVisitor: (organizationId: string, metadata?: unknown) => Promise<void>;
   signOut: () => Promise<void>;
   getAuthHeaders: () => Promise<Record<string, string>>;
   refreshSession: () => Promise<void>;
@@ -98,7 +98,7 @@ export function useWidgetSupabaseAuth(organizationId: string): WidgetSupabaseAut
   }, [widgetClient]);
 
   // Sign in as visitor with organization context
-  const signInAsVisitor = useCallback(async (orgId: string, metadata: any = {}) => {
+  const signInAsVisitor = useCallback(async (orgId: string, metadata: unknown = {}) => {
     try {
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
 

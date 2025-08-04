@@ -295,7 +295,7 @@ function CommandPaletteWithAuth() {
 
   const commands = buildAuthenticatedCommands();
 
-  const filteredCommands = commands.filter((cmd: any) => {
+  const filteredCommands = commands.filter((cmd: unknown) => {
     if (!search) return true;
     const searchLower = search.toLowerCase();
     return (
@@ -306,10 +306,10 @@ function CommandPaletteWithAuth() {
   });
 
   const groupedCommands = {
-    navigation: filteredCommands.filter((cmd: any) => cmd.category === "navigation"),
-    actions: filteredCommands.filter((cmd: any) => cmd.category === "actions"),
-    settings: filteredCommands.filter((cmd: any) => cmd.category === "settings"),
-    help: filteredCommands.filter((cmd: any) => cmd.category === "help"),
+    navigation: filteredCommands.filter((cmd: unknown) => cmd.category === "navigation"),
+    actions: filteredCommands.filter((cmd: unknown) => cmd.category === "actions"),
+    settings: filteredCommands.filter((cmd: unknown) => cmd.category === "settings"),
+    help: filteredCommands.filter((cmd: unknown) => cmd.category === "help"),
   };
 
   return (
@@ -326,7 +326,7 @@ function CommandPaletteWithAuth() {
 
           {groupedCommands.navigation.length > 0 && (
             <CommandGroup heading="Navigation">
-              {groupedCommands.navigation.map((cmd: any) => (
+              {groupedCommands.navigation.map((cmd: unknown) => (
                 <CommandItem
                   key={cmd.id}
                   onSelect={() => handleAction(cmd.action)}
@@ -354,7 +354,7 @@ function CommandPaletteWithAuth() {
             <>
               <CommandSeparator />
               <CommandGroup heading="Actions">
-                {groupedCommands.actions.map((cmd: any) => (
+                {groupedCommands.actions.map((cmd: unknown) => (
                   <CommandItem
                     key={cmd.id}
                     onSelect={() => handleAction(cmd.action)}
@@ -384,7 +384,7 @@ function CommandPaletteWithAuth() {
             <>
               <CommandSeparator />
               <CommandGroup heading="Settings">
-                {groupedCommands.settings.map((cmd: any) => (
+                {groupedCommands.settings.map((cmd: unknown) => (
                   <CommandItem
                     key={cmd.id}
                     onSelect={() => handleAction(cmd.action)}
@@ -414,7 +414,7 @@ function CommandPaletteWithAuth() {
             <>
               <CommandSeparator />
               <CommandGroup heading="Help">
-                {groupedCommands.help.map((cmd: any) => (
+                {groupedCommands.help.map((cmd: unknown) => (
                   <CommandItem
                     key={cmd.id}
                     onSelect={() => handleAction(cmd.action)}

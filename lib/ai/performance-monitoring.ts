@@ -183,12 +183,12 @@ export class AIPerformanceMonitoringService {
       // Calculate averages
       const averageConfidence =
         responseEvents.length > 0
-          ? responseEvents.reduce((sum: any, e: unknown) => sum + e.confidence, 0) / responseEvents.length
+          ? responseEvents.reduce((sum: unknown, e: unknown) => sum + e.confidence, 0) / responseEvents.length
           : 0;
 
       const averageResponseTime =
         responseEvents.length > 0
-          ? responseEvents.reduce((sum: any, e: unknown) => sum + e.response_time, 0) / responseEvents.length
+          ? responseEvents.reduce((sum: unknown, e: unknown) => sum + e.response_time, 0) / responseEvents.length
           : 0;
 
       const satisfactionScores = events
@@ -197,7 +197,7 @@ export class AIPerformanceMonitoringService {
 
       const customerSatisfactionScore =
         satisfactionScores.length > 0
-          ? satisfactionScores.reduce((sum: any, score: unknown) => sum + score, 0) / satisfactionScores.length
+          ? satisfactionScores.reduce((sum: unknown, score: unknown) => sum + score, 0) / satisfactionScores.length
           : 0;
 
       // Calculate rates
@@ -208,7 +208,7 @@ export class AIPerformanceMonitoringService {
       const handoverReasons = handoverEvents
         .filter((e: unknown) => e.handover_reason)
         .reduce(
-          (acc: any, e: unknown) => {
+          (acc: unknown, e: unknown) => {
             const reason = e.handover_reason;
             acc[reason] = (acc[reason] || 0) + 1;
             return acc;
@@ -329,7 +329,7 @@ export class AIPerformanceMonitoringService {
         .from("ai_performance_alerts")
         .select("*")
         .eq("organization_id", organizationId)
-        .eq("is_active", true)
+        .eq("isActive", true)
         .order("created_at", { ascending: false })
         .limit(10);
 
@@ -394,7 +394,7 @@ export class AIPerformanceMonitoringService {
           alert_type: alert.type,
           severity: alert.severity,
           message: alert.message,
-          is_active: true,
+          isActive: true,
           metadata: { event_id: event.id },
         });
       }
@@ -451,7 +451,7 @@ export class AIPerformanceMonitoringService {
     try {
       const { error } = await supabase
         .from("ai_performance_alerts")
-        .update({ is_active: false, resolved_at: new Date().toISOString() })
+        .update({ isActive: false, resolved_at: new Date().toISOString() })
         .eq("id", alertId)
         .eq("organization_id", organizationId);
 

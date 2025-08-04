@@ -201,8 +201,8 @@ async function sendTypingIndicator(
       event: "typing_indicator",
       payload: {
         action,
-        sender_type: "ai_assistant",
-        sender_name: "AI Assistant",
+        senderType: "ai_assistant",
+        senderName: "AI Assistant",
         timestamp: new Date().toISOString(),
       },
     });
@@ -213,7 +213,7 @@ async function sendTypingIndicator(
  * Send partial message to database and broadcast
  */
 async function sendPartialMessage(
-  supabase: any,
+  supabase: unknown,
   organizationId: string,
   conversationId: string,
   content: string,
@@ -227,8 +227,8 @@ async function sendPartialMessage(
         organization_id: organizationId,
         conversation_id: conversationId,
         content,
-        sender_type: "ai_assistant",
-        sender_name: "AI Assistant",
+        senderType: "ai_assistant",
+        senderName: "AI Assistant",
         message_type: "text",
         content_type: "text",
         status: "sent",

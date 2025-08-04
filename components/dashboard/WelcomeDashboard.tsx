@@ -27,7 +27,7 @@ interface QuickAction {
   id: string;
   title: string;
   description: string;
-  icon: any;
+  icon: unknown;
   href: string;
   color: string;
   badge?: string | undefined;
@@ -51,13 +51,13 @@ export function WelcomeDashboard() {
   // Memoize realtime options to prevent infinite re-renders
   const realtimeOptions = useMemo(
     () => ({
-      onNewMessage: (message: any) => {
+      onNewMessage: (message: unknown) => {
         // Metrics will auto-refresh via the hook
       },
-      onConversationUpdate: (update: any) => {
+      onConversationUpdate: (update: unknown) => {
         // Metrics will auto-refresh via the hook
       },
-      onNewConversation: (conversation: any) => {
+      onNewConversation: (conversation: unknown) => {
         // Metrics will auto-refresh via the hook
       },
     }),
@@ -115,7 +115,7 @@ export function WelcomeDashboard() {
     return "Good evening";
   };
 
-  const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Agent";
+  const userName = user?.user_metadata?.fullName || user?.email?.split("@")[0] || "Agent";
 
   // Fixed loading animation - no pulsating border
   if (loading) {
@@ -261,7 +261,7 @@ export function WelcomeDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {quickActions.map((action: any) => {
+              {quickActions.map((action: unknown) => {
                 const IconComponent = action.icon;
 
                 return (
@@ -269,7 +269,7 @@ export function WelcomeDashboard() {
                     key={action.id}
                     variant="button"
                     onClick={() => router.push(action.href)}
-                    icon={IconComponent as any}
+                    icon={IconComponent as unknown}
                     title={action.title}
                     description={action.description}
                     badge={

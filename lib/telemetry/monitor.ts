@@ -61,23 +61,23 @@ class PerformanceMonitor {
     const now = Date.now();
     const windowStart = timeWindow ? now - timeWindow : 0;
 
-    let filteredMetrics = this.metrics.filter((m: any) => m.timestamp >= windowStart);
+    let filteredMetrics = this.metrics.filter((m: unknown) => m.timestamp >= windowStart);
 
     if (name) {
-      filteredMetrics = filteredMetrics.filter((m: any) => m.name === name);
+      filteredMetrics = filteredMetrics.filter((m: unknown) => m.name === name);
     }
 
     if (filteredMetrics.length === 0) {
       return null;
     }
 
-    const values = filteredMetrics.map((m: any) => m.value).sort((a, b) => a - b);
+    const values = filteredMetrics.map((m: unknown) => m.value).sort((a, b) => a - b);
 
     return {
       count: values.length,
       min: values[0],
       max: values[values.length - 1],
-      avg: values.reduce((sum: any, val: any) => sum + val, 0) / values.length,
+      avg: values.reduce((sum: unknown, val: unknown) => sum + val, 0) / values.length,
       p50: values[Math.floor(values.length * 0.5)],
       p90: values[Math.floor(values.length * 0.9)],
       p99: values[Math.floor(values.length * 0.99)],
@@ -88,7 +88,7 @@ class PerformanceMonitor {
    * Get all unique metric names
    */
   getMetricNames(): string[] {
-    return [...new Set(this.metrics.map((m: any) => m.name))];
+    return [...new Set(this.metrics.map((m: unknown) => m.name))];
   }
 
   /**

@@ -5,8 +5,8 @@
 interface BatchedRequest<T> {
   id: string;
   data: T;
-  resolve: (result: any) => void;
-  reject: (error: any) => void;
+  resolve: (result: unknown) => void;
+  reject: (error: unknown) => void;
   timestamp: number;
 }
 
@@ -96,7 +96,7 @@ export class RequestBatcher<T, R> {
   }
 
   private async processBatchWithRetry(batch: BatchedRequest<T>[]): Promise<R[]> {
-    let lastError: any;
+    let lastError: unknown;
 
     for (let attempt = 0; attempt <= this.config.maxRetries; attempt++) {
       try {
@@ -214,13 +214,13 @@ export function createEmbeddingBatcher(
 }
 
 // Global batcher instances for common use cases
-export const globalQueryBatcher = createDatabaseBatcher(async (queries: any[]) => {
+export const globalQueryBatcher = createDatabaseBatcher(async (queries: unknown[]) => {
   // This would be implemented with actual database logic
 
   return queries.map(() => ({}));
 });
 
-export const globalAPIBatcher = createAPIBatcher(async (requests: any[]) => {
+export const globalAPIBatcher = createAPIBatcher(async (requests: unknown[]) => {
   // This would be implemented with actual API logic
 
   return requests.map(() => ({}));

@@ -150,9 +150,9 @@ export class CostManagementService {
       (record: unknown) => record.timestamp >= startDate && record.timestamp <= endDate
     );
 
-    const totalCost = filteredRecords.reduce((sum: any, record: unknown) => sum + record.cost, 0);
-    const inputTokens = filteredRecords.reduce((sum: any, record: unknown) => sum + record.inputTokens, 0);
-    const outputTokens = filteredRecords.reduce((sum: any, record: unknown) => sum + record.outputTokens, 0);
+    const totalCost = filteredRecords.reduce((sum: unknown, record: unknown) => sum + record.cost, 0);
+    const inputTokens = filteredRecords.reduce((sum: unknown, record: unknown) => sum + record.inputTokens, 0);
+    const outputTokens = filteredRecords.reduce((sum: unknown, record: unknown) => sum + record.outputTokens, 0);
     const requestCount = filteredRecords.length;
     const averageCostPerRequest = requestCount > 0 ? totalCost / requestCount : 0;
 
@@ -184,9 +184,9 @@ export class CostManagementService {
 
     const result = new Map<string, CostMetrics>();
     modelUsage.forEach((modelRecords, modelId) => {
-      const totalCost = modelRecords.reduce((sum: any, record: unknown) => sum + record.cost, 0);
-      const inputTokens = modelRecords.reduce((sum: any, record: unknown) => sum + record.inputTokens, 0);
-      const outputTokens = modelRecords.reduce((sum: any, record: unknown) => sum + record.outputTokens, 0);
+      const totalCost = modelRecords.reduce((sum: unknown, record: unknown) => sum + record.cost, 0);
+      const inputTokens = modelRecords.reduce((sum: unknown, record: unknown) => sum + record.inputTokens, 0);
+      const outputTokens = modelRecords.reduce((sum: unknown, record: unknown) => sum + record.outputTokens, 0);
       const requestCount = modelRecords.length;
       const averageCostPerRequest = requestCount > 0 ? totalCost / requestCount : 0;
 
@@ -281,7 +281,7 @@ export class CostManagementService {
     });
 
     // Suggest token reduction for high token usage
-    const totalTokens = records.reduce((sum: any, record: unknown) => sum + record.inputTokens + record.outputTokens, 0);
+    const totalTokens = records.reduce((sum: unknown, record: unknown) => sum + record.inputTokens + record.outputTokens, 0);
     if (totalTokens > 1000000) {
       // 1M tokens
       suggestions.push({

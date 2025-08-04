@@ -210,7 +210,7 @@ class RealtimeEdgeCaseTester {
     console.log("---------------------------------");
 
     const payloadSizes = [1024, 5120, 10240, 51200]; // 1KB, 5KB, 10KB, 50KB
-    const results: any[] = [];
+    const results: unknown[] = [];
 
     for (const size of payloadSizes) {
       try {

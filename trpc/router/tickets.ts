@@ -314,7 +314,7 @@ export const ticketsRouter = createTRPCRouter({
       // Log changes in ticket history
       for (const [field, newValue] of Object.entries(updateData)) {
         if (newValue !== undefined) {
-          const oldValue = (currentTicket as any)[field];
+          const oldValue = (currentTicket as unknown)[field];
           if (oldValue !== newValue) {
             await db.insert(ticketHistory).values({
               ticketId: id,

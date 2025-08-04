@@ -181,7 +181,7 @@ export async function searchFAQ(params: FAQSearchParams): Promise<FAQSearchResul
         _rankingScore: calculateRankingScore(chunk, validated.query),
       }))
       // Sort by ranking score (combination of similarity and other factors)
-      .sort((a: any, b: unknown) => b._rankingScore - a._rankingScore)
+      .sort((a: unknown, b: unknown) => b._rankingScore - a._rankingScore)
       // Remove internal ranking score from final results
       .map(({ _rankingScore, ...result }: unknown) => result);
 
@@ -248,7 +248,7 @@ function extractTitle(content: string): string {
 /**
  * Calculate ranking score based on multiple factors
  */
-function calculateRankingScore(chunk: any, query: string): number {
+function calculateRankingScore(chunk: unknown, query: string): number {
   let score = chunk.similarity || 0;
 
   // Boost score for exact keyword matches
@@ -411,7 +411,7 @@ export function getCacheStats(): {
  *   JOIN knowledge_documents kd ON kc.document_id = kd.id
  *   WHERE
  *     kd.organization_id = search_knowledge_chunks.organization_id
- *     AND kd.is_active = true
+ *     AND kd.isActive = true
  *     AND 1 - (kc.embedding <=> query_embedding) >= threshold
  *   ORDER BY kc.embedding <=> query_embedding
  *   LIMIT match_count;

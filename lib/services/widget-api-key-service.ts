@@ -72,8 +72,8 @@ export class WidgetApiKeyService {
 
   async getApiKeysByOrganization(organizationId: string): Promise<WidgetApiKey[]> {
     return Array.from(this.apiKeys.values())
-      .filter((key: any) => key.organizationId === organizationId)
-      .map((key: any) => ({ ...key, key: "***" })); // Hide actual key in list
+      .filter((key: unknown) => key.organizationId === organizationId)
+      .map((key: unknown) => ({ ...key, key: "***" })); // Hide actual key in list
   }
 
   async updateApiKey(keyId: string, request: UpdateApiKeyRequest): Promise<WidgetApiKey | null> {

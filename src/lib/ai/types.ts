@@ -74,7 +74,7 @@ export interface AutonomousProcessingRequest {
   visitorName?: string;
   conversationHistory?: {
     content: string;
-    sender_type: string;
+    senderType: string;
     created_at: string;
   }[];
   metadata?: Record<string, any>;
@@ -105,7 +105,7 @@ export interface ConversationContext {
   organizationId: string;
   messages: Array<{
     content: string;
-    sender_type: "visitor" | "agent" | "ai";
+    senderType: "visitor" | "agent" | "ai";
     created_at: string;
   }>;
   customerProfile?: {

@@ -32,7 +32,7 @@ export interface WidgetConfig {
 
 export type WidgetConfigSection = keyof WidgetConfig;
 
-export type UpdateConfigFunction<T extends WidgetConfigSection> = (section: T, key: string, value: any) => void;
+export type UpdateConfigFunction<T extends WidgetConfigSection> = (section: T, key: string, value: unknown) => void;
 
 export interface BusinessHourUpdate {
   (dayIndex: number, field: keyof BusinessHours["schedule"][keyof BusinessHours["schedule"]], value: string | number | boolean): void;

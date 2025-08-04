@@ -14,7 +14,7 @@ import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
 interface WidgetPreviewProps {
-  config: any;
+  config: unknown;
   embedCode: string;
   previewDevice: "desktop" | "tablet" | "mobile";
   previewFullscreen: boolean;

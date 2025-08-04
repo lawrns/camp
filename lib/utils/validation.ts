@@ -100,7 +100,7 @@ export async function validateOrganizationAccess(
  * Sanitizes error messages for production
  * Prevents information disclosure in error responses
  */
-export function sanitizeErrorMessage(error: any, isDevelopment: boolean = process.env.NODE_ENV === 'development'): string {
+export function sanitizeErrorMessage(error: unknown, isDevelopment: boolean = process.env.NODE_ENV === 'development'): string {
   if (isDevelopment) {
     return error?.message || 'An error occurred';
   }

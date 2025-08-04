@@ -164,7 +164,7 @@ export function KnowledgeSearch({
       const data = await response.json();
 
       // Transform API response to SearchResult format
-      const searchResults: SearchResult[] = (data.articles || []).map((article: any) => ({
+      const searchResults: SearchResult[] = (data.articles || []).map((article: unknown) => ({
         id: article.id,
         title: article.title,
         description: article.content?.substring(0, 200) + "..." || "",
@@ -195,7 +195,7 @@ export function KnowledgeSearch({
     return () => clearTimeout(timer);
   }, [query, filters, performSearch]);
 
-  const updateFilter = (key: keyof SearchFilters, value: any) => {
+  const updateFilter = (key: keyof SearchFilters, value: unknown) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -235,7 +235,7 @@ export function KnowledgeSearch({
     if (!highlights?.length) return text;
 
     let highlightedText = text;
-    highlights.forEach((highlight: any) => {
+    highlights.forEach((highlight: unknown) => {
       const regex = new RegExp(`(${highlight})`, "gi");
       highlightedText = highlightedText.replace(regex, '<mark class="bg-blue-100 text-blue-800">$1</mark>');
     });
@@ -292,7 +292,7 @@ export function KnowledgeSearch({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="">All categories</SelectItem>
-                      {categories.map((category: any) => (
+                      {categories.map((category: unknown) => (
                         <SelectItem key={category} value={category}>
                           {category}
                         </SelectItem>
@@ -374,7 +374,7 @@ export function KnowledgeSearch({
           />
         )}
 
-        {results.map((result: any) => (
+        {results.map((result: unknown) => (
           <Card
             key={result.id}
             className="cursor-pointer transition-shadow hover:shadow-card-hover"
@@ -419,7 +419,7 @@ export function KnowledgeSearch({
 
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
-                  {result.tags.slice(0, 3).map((tag: any) => (
+                  {result.tags.slice(0, 3).map((tag: unknown) => (
                     <Badge key={tag} variant="outline" className="text-tiny">
                       {tag}
                     </Badge>

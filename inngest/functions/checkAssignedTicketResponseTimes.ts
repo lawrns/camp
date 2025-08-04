@@ -70,7 +70,7 @@ export default inngest.createFunction(
 
         const slackUsersByEmail = await getSlackUsersByEmailMap(mailbox.slackBotToken!);
         const clerkUsers = await getClerkUserList(mailbox.organizationId);
-        const clerkUsersById = new Map(clerkUsers.data.map((user: any) => [user.id, user]));
+        const clerkUsersById = new Map(clerkUsers.data.map((user: unknown) => [user.id, user]));
 
         const blocks: KnownBlock[] = [
           {
@@ -79,7 +79,7 @@ export default inngest.createFunction(
               type: "mrkdwn",
               text: [
                 `🚨 *${overdueAssignedConversations.length} assigned tickets have been waiting over 24 hours without a response*\n`,
-                ...overdueAssignedConversations.slice(0, 10).map((conversation: any) => {
+                ...overdueAssignedConversations.slice(0, 10).map((conversation: unknown) => {
                   const subject = conversation.subject;
                   const assignee = clerkUsersById.get(conversation.assignedToId!);
                   const assigneeEmail = assignee?.emailAddresses[0]?.emailAddress;

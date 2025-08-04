@@ -37,7 +37,7 @@ export class AudioNotificationService {
     const handleInteraction = () => {
       this.userInteracted = true;
       // Remove listeners after first interaction
-      interactionEvents.forEach((event: any) => {
+      interactionEvents.forEach((event: unknown) => {
         document.removeEventListener(event, handleInteraction);
       });
     };
@@ -51,7 +51,7 @@ export class AudioNotificationService {
       }, 500);
     }
 
-    interactionEvents.forEach((event: any) => {
+    interactionEvents.forEach((event: unknown) => {
       document.addEventListener(event, handleInteraction, { once: true, passive: true });
     });
   }
@@ -208,7 +208,7 @@ export class AudioNotificationService {
     this.volume = Math.max(0, Math.min(1, volume));
 
     // Update volume for all cached audio elements
-    this.audioCache.forEach((audio: any) => {
+    this.audioCache.forEach((audio: unknown) => {
       audio.volume = this.volume;
     });
 

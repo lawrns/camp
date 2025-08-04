@@ -71,7 +71,7 @@ export async function getRAGMetrics(organizationId?: string, days: number = 7): 
     const performance = {
       averageResponseTime:
         responseTimes.length > 0
-          ? responseTimes.reduce((sum: any, time: unknown) => sum + time, 0) / responseTimes.length
+          ? responseTimes.reduce((sum: unknown, time: unknown) => sum + time, 0) / responseTimes.length
           : 0,
       successRate: ragEvents.length > 0 ? successfulEvents.length / ragEvents.length : 0,
       errorRate: ragEvents.length > 0 ? (ragEvents.length - successfulEvents.length) / ragEvents.length : 0,
@@ -92,7 +92,7 @@ export async function getRAGMetrics(organizationId?: string, days: number = 7): 
     const qualityEvents = ragEvents.filter((e: unknown) => e.relevance_score !== null);
     const avgRelevance =
       qualityEvents.length > 0
-        ? qualityEvents.reduce((sum: any, e: unknown) => sum + (e.relevance_score || 0), 0) / qualityEvents.length
+        ? qualityEvents.reduce((sum: unknown, e: unknown) => sum + (e.relevance_score || 0), 0) / qualityEvents.length
         : 0;
 
     const quality = {
@@ -102,7 +102,7 @@ export async function getRAGMetrics(organizationId?: string, days: number = 7): 
     };
 
     // Calculate cost metrics (simplified)
-    const totalTokens = ragEvents.reduce((sum: any, e: unknown) => sum + (e.tokens_used || 0), 0);
+    const totalTokens = ragEvents.reduce((sum: unknown, e: unknown) => sum + (e.tokens_used || 0), 0);
     const estimatedCost = totalTokens * 0.0001; // Rough estimate
 
     const cost = {
@@ -236,7 +236,7 @@ export async function getOrganizationRAGUsage(
     const successfulEvents = ragEvents.filter((e: unknown) => e.success);
     const responseTimes = ragEvents.filter((e: unknown) => e.response_time).map((e: unknown) => e.response_time);
 
-    const totalTokens = ragEvents.reduce((sum: any, e: unknown) => sum + (e.tokens_used || 0), 0);
+    const totalTokens = ragEvents.reduce((sum: unknown, e: unknown) => sum + (e.tokens_used || 0), 0);
     const totalCost = totalTokens * 0.0001; // Rough estimate
 
     const dailyUsage = aggregateByDay(ragEvents).map((day: unknown) => ({
@@ -250,7 +250,7 @@ export async function getOrganizationRAGUsage(
       successRate: ragEvents.length > 0 ? successfulEvents.length / ragEvents.length : 0,
       averageResponseTime:
         responseTimes.length > 0
-          ? responseTimes.reduce((sum: any, time: unknown) => sum + time, 0) / responseTimes.length
+          ? responseTimes.reduce((sum: unknown, time: unknown) => sum + time, 0) / responseTimes.length
           : 0,
       totalCost,
       dailyUsage,
@@ -295,7 +295,7 @@ export async function getRAGStatus(): Promise<{
     const errorRate = events.length > 0 ? (events.length - successfulEvents.length) / events.length : 0;
     const avgResponseTime =
       responseTimes.length > 0
-        ? responseTimes.reduce((sum: any, time: unknown) => sum + time, 0) / responseTimes.length
+        ? responseTimes.reduce((sum: unknown, time: unknown) => sum + time, 0) / responseTimes.length
         : 0;
 
     let status: "healthy" | "degraded" | "down" = "healthy";

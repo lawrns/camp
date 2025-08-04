@@ -11,7 +11,7 @@ import { HandoffData, HandoffReason, URGENCY_CONFIG } from "./types";
 interface HandoffPreviewProps {
   handoffData: HandoffData;
   selectedReason?: HandoffReason;
-  filteredAgents: any[];
+  filteredAgents: unknown[];
 }
 
 export function HandoffPreview({ handoffData, selectedReason, filteredAgents }: HandoffPreviewProps) {

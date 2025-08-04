@@ -41,8 +41,8 @@ export interface DashboardActions {
   resetDashboard: () => void;
 
   // Realtime update handlers
-  handleStatsUpdate: (payload: any) => void;
-  handleConversationUpdate: (payload: any) => void;
+  handleStatsUpdate: (payload: unknown) => void;
+  handleConversationUpdate: (payload: unknown) => void;
   handleMetricUpdate: (metric: string, value: number) => void;
 }
 

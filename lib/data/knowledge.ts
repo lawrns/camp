@@ -34,7 +34,7 @@ export const approveSuggestedEdit = async (
   user: AuthenticatedUser | null,
   content?: string
 ) => {
-  await db.transaction(async (tx: any) => {
+  await db.transaction(async (tx: unknown) => {
     await tx
       .update(faqs)
       .set({ enabled: true, suggested: false, content: content ?? knowledge.content })
@@ -69,7 +69,7 @@ export const rejectSuggestedEdit = async (
   mailbox: typeof mailboxes.$inferSelect,
   user: AuthenticatedUser | null
 ) => {
-  await db.transaction(async (tx: any) => {
+  await db.transaction(async (tx: unknown) => {
     await tx.delete(faqs).where(eq(faqs.id, knowledge.id));
     await resetMailboxPromptUpdatedAt(tx, knowledge.mailboxId);
   });
@@ -89,7 +89,7 @@ export const rejectSuggestedEdit = async (
 export const handleKnowledgeBankSlackAction = async (
   knowledge: typeof faqs.$inferSelect,
   mailbox: typeof mailboxes.$inferSelect,
-  payload: any
+  payload: unknown
 ) => {
   if (!knowledge.slackMessageTs || !knowledge.slackChannel) return;
 

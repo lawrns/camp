@@ -72,7 +72,7 @@ export async function uploadFile(file: File | Buffer, options: FileUploadOptions
  */
 async function uploadToS3(
   file: File | Buffer,
-  config: any,
+  config: unknown,
   onProgress?: (progress: number) => void
 ): Promise<FileUploadResult> {
   try {
@@ -140,7 +140,7 @@ async function uploadToS3(
  */
 async function uploadToSupabase(
   file: File | Buffer,
-  config: any,
+  config: unknown,
   options: FileUploadOptions
 ): Promise<FileUploadResult> {
   try {

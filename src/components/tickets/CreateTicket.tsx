@@ -27,7 +27,7 @@ import { useCampfireStore } from "@/store";
 
 interface CreateTicketProps {
   conversationId: string;
-  onTicketCreated?: (ticket: any) => void;
+  onTicketCreated?: (ticket: unknown) => void;
   onCancel?: () => void;
 }
 

@@ -40,10 +40,10 @@ test.describe('Bidirectional Communication E2E', () => {
     testContext = {
       agentBrowser: browser,
       customerBrowser: await browser.browserType().launch(),
-      agentContext: null as any,
-      customerContext: null as any,
-      agentPage: null as any,
-      customerPage: null as any,
+      agentContext: null as unknown,
+      customerContext: null as unknown,
+      agentPage: null as unknown,
+      customerPage: null as unknown,
       conversationId: testMetadata.testConversations[0].id,
       organizationId: testMetadata.testOrgId,
     };

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../Avatar";
 import { Badge } from "../Badge";
 
 interface FlameCustomerSidebarProps {
-  conversation: any;
+  conversation: unknown;
   customerId?: string;
   className?: string;
 }
@@ -23,8 +23,8 @@ export function FlameCustomerSidebar({ conversation, customerId, className }: Fl
   // Transform conversation data to customer format
   const customerData = {
     id: actualCustomerId,
-    name: conversation?.customer_name || conversation?.customerName || "Unknown Customer",
-    email: conversation?.customer_email || conversation?.customerEmail || "visitor@local",
+    name: conversation?.customerName || conversation?.customerName || "Unknown Customer",
+    email: conversation?.customerEmail || conversation?.customerEmail || "visitor@local",
     phone: conversation?.customer_phone || conversation?.customerPhone,
     avatar: conversation?.customer_avatar || conversation?.customerAvatar,
     status: conversation?.customer_status || ("offline" as const),
@@ -34,7 +34,7 @@ export function FlameCustomerSidebar({ conversation, customerId, className }: Fl
     title: conversation?.customer_title || conversation?.customerTitle,
     website: conversation?.customer_website || conversation?.customerWebsite,
     createdAt: conversation?.created_at ? new Date(conversation.created_at) : new Date(),
-    lastSeen: conversation?.last_message_at ? new Date(conversation.last_message_at) : undefined,
+    lastSeen: conversation?.lastMessageAt ? new Date(conversation.lastMessageAt) : undefined,
     totalConversations: conversation?.total_conversations || 1,
     averageResponseTime: conversation?.average_response_time || "N/A",
     satisfaction: conversation?.satisfaction_score,
@@ -46,7 +46,7 @@ export function FlameCustomerSidebar({ conversation, customerId, className }: Fl
   const getInitials = (name: string) => {
     return name
       .split(" ")
-      .map((n: any) => n[0])
+      .map((n: unknown) => n[0])
       .join("")
       .toUpperCase()
       .slice(0, 2);
@@ -221,8 +221,8 @@ export function FlameCustomerSidebar({ conversation, customerId, className }: Fl
             (Local Time)
           </div>
 
-          {conversation?.ip_address && (
-            <div className="text-foreground font-mono text-sm">🌐 {conversation.ip_address}</div>
+          {conversation?.ipAddress && (
+            <div className="text-foreground font-mono text-sm">🌐 {conversation.ipAddress}</div>
           )}
         </div>
       </div>

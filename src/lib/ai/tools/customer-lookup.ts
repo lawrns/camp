@@ -100,7 +100,7 @@ export async function lookupCustomer(params: CustomerLookupParams): Promise<Cust
     const conversations = customer.conversations || [];
     const totalConversations = conversations.length;
     const lastConversation = conversations.sort(
-      (a: any, b: unknown) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      (a: unknown, b: unknown) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )[0];
 
     // Get satisfaction score if available
@@ -112,7 +112,7 @@ export async function lookupCustomer(params: CustomerLookupParams): Promise<Cust
 
     const satisfactionScore =
       feedbackData && feedbackData.length > 0
-        ? feedbackData.reduce((sum: any, f: unknown) => sum + (f.rating || 0), 0) / feedbackData.length
+        ? feedbackData.reduce((sum: unknown, f: unknown) => sum + (f.rating || 0), 0) / feedbackData.length
         : undefined;
 
     // Extract tier from metadata if available
@@ -121,7 +121,7 @@ export async function lookupCustomer(params: CustomerLookupParams): Promise<Cust
     const result: unknown = {
       id: customer.id,
       email: customer.email,
-      name: customer.full_name,
+      name: customer.fullName,
       metadata: customer.metadata,
       tier,
       created_at: customer.created_at,
@@ -165,7 +165,7 @@ export function formatCustomerContext(customer: CustomerLookupResult["data"]): s
   if (!customer) return "No customer information available.";
 
   const parts = [
-    `Customer: ${customer.full_name || customer.email}`,
+    `Customer: ${customer.fullName || customer.email}`,
     `Account created: ${new Date(customer.created_at).toLocaleDateString()}`,
     `Tier: ${customer.tier}`,
     `Total conversations: ${customer.total_conversations}`,

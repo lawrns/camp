@@ -46,7 +46,7 @@ interface ConversationMetadataProps {
       sessionId?: string;
     };
   };
-  onMetadataUpdate: (metadata: any) => void;
+  onMetadataUpdate: (metadata: unknown) => void;
   className?: string;
 }
 

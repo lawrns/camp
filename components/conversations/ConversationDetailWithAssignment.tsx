@@ -131,7 +131,7 @@ export function ConversationDetailWithAssignment({
               <div>
                 <p className="mb-2 text-sm font-medium">Tags</p>
                 <div className="flex flex-wrap gap-ds-2">
-                  {conversation.tags.map((tag: any) => (
+                  {conversation.tags.map((tag: unknown) => (
                     <Badge key={tag} variant="outline">
                       <Icon icon={Tag} className="mr-1 h-3 w-3" />
                       {tag}

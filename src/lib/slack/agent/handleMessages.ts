@@ -27,8 +27,8 @@ export interface MessageContext {
 
 export interface MessageResponse {
   text?: string;
-  blocks?: any[];
-  attachments?: any[];
+  blocks?: unknown[];
+  attachments?: unknown[];
   threadTs?: string;
   ephemeral?: boolean;
   responseType: "immediate" | "delayed" | "escalate" | "ignore";
@@ -42,7 +42,7 @@ export interface HandleMessageResult {
   error?: string;
   actions?: Array<{
     type: "send_message" | "create_ticket" | "escalate" | "log";
-    data: any;
+    data: unknown;
   }>;
 }
 
@@ -151,7 +151,7 @@ export class MessageHandler {
 
   private async generateResponse(messageText: string, context: MessageContext): Promise<MessageResponse> {
     // Simple keyword matching
-    const keywords = messageText.split(" ").filter((word: any) => word.length > 2);
+    const keywords = messageText.split(" ").filter((word: unknown) => word.length > 2);
     let bestMatch = "";
     let bestScore = 0;
 

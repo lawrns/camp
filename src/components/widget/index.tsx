@@ -7,8 +7,7 @@ import { config } from "./config/env";
 import { UltimateWidget } from "../../../components/widget/design-system";
 import { useAuth } from "./hooks/useAuth";
 import { WidgetErrorBoundary } from "./WidgetErrorBoundary";
-import { DefinitiveButton } from "./DefinitiveButton";
-import { DefinitiveWidget } from "./DefinitiveWidget";
+// Deprecated components removed - using UltimateWidget instead
 
 interface WidgetContextType {
   isOpen: boolean;
@@ -132,8 +131,8 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
   );
 };
 
-// Export the definitive components
-export { DefinitiveButton as Button, DefinitiveWidget as Panel };
+// Export UltimateWidget components
+export { UltimateWidget as Panel };
 
 // Export Widget as an alias for WidgetProvider for convenience
 export { WidgetProvider as Widget };

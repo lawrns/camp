@@ -5,7 +5,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel
 import { supabase } from '@/lib/supabase/consolidated-exports';
 
 // Authentication wrapper for presence endpoints
-async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
@@ -48,7 +48,7 @@ async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextRe
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const body = await request.json();
     const { 
@@ -83,10 +83,10 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
       organization_id: user.organizationId,
       status,
       custom_status: customStatus,
-      last_seen_at: new Date().toISOString(),
+      lastSeenAt: new Date().toISOString(),
       metadata: {
         ...metadata,
-        user_name: user.name,
+        userName: user.name,
         user_email: user.email,
         updated_by: 'api',
         source: 'presence_api'
@@ -162,7 +162,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
         status,
         customStatus,
         organizationId: user.organizationId,
-        lastSeen: presence.last_seen_at,
+        lastSeen: presence.lastSeenAt,
         metadata: presence.metadata,
         timestamp: new Date().toISOString()
       }
@@ -177,7 +177,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const { searchParams } = new URL(request.url);
     const includeOffline = searchParams.get('includeOffline') === 'true';
@@ -191,7 +191,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
       .from('user_presence')
       .select('*')
       .eq('organization_id', user.organizationId)
-      .order('last_seen_at', { ascending: false })
+      .order('lastSeenAt', { ascending: false })
       .limit(limit);
 
     // Filter out offline users unless explicitly requested
@@ -201,7 +201,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
 
     // Only show recent presence (last 24 hours)
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-    query = query.gte('last_seen_at', twentyFourHoursAgo);
+    query = query.gte('lastSeenAt', twentyFourHoursAgo);
 
     const { data: presenceList, error } = await query;
 
@@ -216,11 +216,11 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
     // Transform data for API response
     const transformedPresence = (presenceList || []).map(p => ({
       userId: p.user_id,
-      userName: p.metadata?.user_name || p.metadata?.name || 'Unknown',
+      userName: p.metadata?.userName || p.metadata?.name || 'Unknown',
       userEmail: p.metadata?.user_email || p.metadata?.email,
       status: p.status,
       customStatus: p.custom_status,
-      lastSeen: p.last_seen_at,
+      lastSeen: p.lastSeenAt,
       metadata: p.metadata,
       organizationId: p.organization_id
     }));
@@ -245,7 +245,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const DELETE = withAuth(async (request: NextRequest, user: any) => {
+export const DELETE = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     // Set user status to offline and remove from active presence
     const supabaseClient = supabase.admin();
@@ -254,9 +254,9 @@ export const DELETE = withAuth(async (request: NextRequest, user: any) => {
       .from('user_presence')
       .update({
         status: 'offline',
-        last_seen_at: new Date().toISOString(),
+        lastSeenAt: new Date().toISOString(),
         metadata: {
-          user_name: user.name,
+          userName: user.name,
           user_email: user.email,
           updated_by: 'api',
           source: 'presence_api_logout'

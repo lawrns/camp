@@ -345,7 +345,7 @@ export function TeamAssignmentSystem({
 
           <div>
             <label className="text-sm font-medium mb-2 block">Priority</label>
-            <Select value={priority} onValueChange={(value: any) => setPriority(value)}>
+            <Select value={priority} onValueChange={(value: unknown) => setPriority(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

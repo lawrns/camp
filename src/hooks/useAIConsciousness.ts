@@ -19,8 +19,8 @@ export interface AIConsciousnessState {
 
 export interface UseAIConsciousnessOptions {
   conversationId: string;
-  onStateChange?: (state: any) => void;
-  onError?: (error: any) => void;
+  onStateChange?: (state: AIConsciousnessState) => void;
+  onError?: (error: Error) => void;
 }
 
 export const useAIConsciousness = ({

@@ -70,7 +70,7 @@ describe("ragProfileService", () => {
 
       // Mock database to fail twice then succeed
       const { db } = await import("@/db/client");
-      const mockThen = db.then as any;
+      const mockThen = db.then as unknown;
 
       mockThen
         .mockRejectedValueOnce(new Error("Database connection failed"))
@@ -96,7 +96,7 @@ describe("ragProfileService", () => {
 
     it("should fail after max retries", async () => {
       const { db } = await import("@/db/client");
-      const mockThen = db.then as any;
+      const mockThen = db.then as unknown;
 
       // Mock database to always fail
       mockThen.mockRejectedValue(new Error("Persistent database error"));
@@ -128,7 +128,7 @@ describe("ragProfileService", () => {
       };
 
       const { db } = await import("@/db/client");
-      const mockThen = db.then as any;
+      const mockThen = db.then as unknown;
 
       // First call (getRagProfile) succeeds
       mockThen
@@ -162,7 +162,7 @@ describe("ragProfileService", () => {
 
     it("should fail if profile not found", async () => {
       const { db } = await import("@/db/client");
-      const mockThen = db.then as any;
+      const mockThen = db.then as unknown;
 
       // Mock getRagProfile to return null (profile not found)
       mockThen.mockResolvedValue([]);

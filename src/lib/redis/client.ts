@@ -112,7 +112,7 @@ export class RedisClient {
 
     // Basic wildcard support
     const regex = new RegExp(pattern.replace(/\*/g, ".*"));
-    return allKeys.filter((key: any) => regex.test(key));
+    return allKeys.filter((key: unknown) => regex.test(key));
   }
 
   async flushall(): Promise<void> {

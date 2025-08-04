@@ -29,13 +29,13 @@ import { Icon } from "@/lib/ui/Icon";
 
 interface WidgetConfigFormProps {
   config: Record<string, any>;
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
   onSave: () => void;
   isSaving: boolean;
 }
 
 export function WidgetConfigForm({ config, onChange, onSave, isSaving }: WidgetConfigFormProps) {
-  const updateConfig = (path: string, value: any) => {
+  const updateConfig = (path: string, value: unknown) => {
     const keys = path.split(".");
     const newConfig = { ...config };
     let current: Record<string, any> = newConfig;

@@ -33,7 +33,7 @@ export interface ConversationContext {
   organizationId: string;
   messages: Array<{
     content: string;
-    sender_type: "visitor" | "agent" | "ai";
+    senderType: "visitor" | "agent" | "ai";
     created_at: string;
   }>;
   customerProfile?: {
@@ -123,7 +123,7 @@ export async function generateAIResponse(context: ConversationContext): Promise<
         If you're unsure about something, say so clearly. Customer name: ${context.customerProfile?.name || "Customer"}`,
       },
       ...context.messages.map((msg: unknown) => ({
-        role: msg.sender_type === "visitor" ? "user" : "assistant",
+        role: msg.senderType === "visitor" ? "user" : "assistant",
         content: msg.content,
       })),
     ];
@@ -209,7 +209,7 @@ export async function getConversationSummary(context: ConversationContext): Prom
       },
       {
         role: "user",
-        content: context.messages.map((msg: unknown) => `${msg.sender_type}: ${msg.content}`).join("\n"),
+        content: context.messages.map((msg: unknown) => `${msg.senderType}: ${msg.content}`).join("\n"),
       },
     ];
 

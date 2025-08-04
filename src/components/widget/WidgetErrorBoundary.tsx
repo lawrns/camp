@@ -110,8 +110,8 @@ export class WidgetErrorBoundary extends Component<Props, State> {
 
   private clearModuleCache = () => {
     // Clear webpack module cache for dynamic imports
-    if (typeof window !== "undefined" && (window as any).__webpack_require__) {
-      const webpackRequire = (window as any).__webpack_require__;
+    if (typeof window !== "undefined" && (window as unknown).__webpack_require__) {
+      const webpackRequire = (window as unknown).__webpack_require__;
       if (webpackRequire.cache) {
         Object.keys(webpackRequire.cache).forEach((key) => {
           if (key.includes("widget") || key.includes("Panel")) {

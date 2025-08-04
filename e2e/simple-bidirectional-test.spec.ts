@@ -188,12 +188,12 @@ test.describe('Simple Bidirectional Communication', () => {
     });
 
     console.log('📊 WebSocket simulation results:');
-    console.log(`   Success: ${(connectionTest as any).success}`);
-    console.log(`   Events processed: ${(connectionTest as any).eventsProcessed}`);
-    console.log(`   Duration: ${(connectionTest as any).duration}ms`);
+    console.log(`   Success: ${(connectionTest as unknown).success}`);
+    console.log(`   Events processed: ${(connectionTest as unknown).eventsProcessed}`);
+    console.log(`   Duration: ${(connectionTest as unknown).duration}ms`);
 
-    expect((connectionTest as any).success).toBe(true);
-    expect((connectionTest as any).eventsProcessed).toBe(6);
+    expect((connectionTest as unknown).success).toBe(true);
+    expect((connectionTest as unknown).eventsProcessed).toBe(6);
   });
 
   test('should test bidirectional data flow', async ({ page }) => {
@@ -270,7 +270,7 @@ test.describe('Simple Bidirectional Communication', () => {
       });
     });
 
-    const result = dataFlowTest as any;
+    const result = dataFlowTest as unknown;
     
     console.log('✅ Bidirectional data flow test completed');
     console.log(`📈 Performance: ${result.avgLatency.toFixed(2)}ms average latency`);

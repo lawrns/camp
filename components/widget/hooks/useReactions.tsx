@@ -34,7 +34,7 @@ export const useReactions = ({ organizationId, userId }: UseReactionsProps) => {
           const data = await response.json();
           setReactions((prev) => ({
             ...prev,
-            [messageId]: data.reactions.map((r: any) => ({
+            [messageId]: data.reactions.map((r: unknown) => ({
               ...r,
               hasReacted: r.users.includes(userId || "anonymous"),
             })),

@@ -116,7 +116,7 @@ export function generateCSSVariables() {
   const cssVars: string[] = [":root {"];
 
   // Flatten the colors object into CSS variables
-  function flatten(obj: any, prefix = "") {
+  function flatten(obj: unknown, prefix = "") {
     Object.entries(obj).forEach(([key, value]) => {
       const varName = prefix ? `${prefix}-${key}` : key;
 

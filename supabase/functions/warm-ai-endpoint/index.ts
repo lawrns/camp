@@ -102,7 +102,7 @@ serve(async (req: Request) => {
     await Promise.allSettled(warmupPromises);
 
     const totalDuration = Date.now() - startTime;
-    const successCount = warmupAttempts.filter((a: any) => a.success).length;
+    const successCount = warmupAttempts.filter((a: unknown) => a.success).length;
     const failureCount = warmupAttempts.length - successCount;
 
     // Log metrics to Supabase (optional)
@@ -136,7 +136,7 @@ serve(async (req: Request) => {
           failure_count: failureCount,
           total_duration: totalDuration,
           average_duration: Math.round(
-            warmupAttempts.reduce((sum: any, a: any) => sum + a.duration, 0) / warmupAttempts.length
+            warmupAttempts.reduce((sum: unknown, a: unknown) => sum + a.duration, 0) / warmupAttempts.length
           ),
         },
         attempts: warmupAttempts,

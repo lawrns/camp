@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const DEBUG_NATIVE_SUPABASE = process.env.NEXT_PUBLIC_ENABLE_NATIVE_SUPABASE_DEBUG === "true";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debugLog(...args: any[]) {
+function debugLog(...args: unknown[]) {
   if (DEBUG_NATIVE_SUPABASE) {
      
   }
@@ -17,15 +17,15 @@ function debugLog(...args: any[]) {
 
 // Simple fallback for useCampfireStore
 const useCampfireStore = () => ({
-  updateConversationFromRealtime: (params?: any) => {
+  updateConversationFromRealtime: (params?: unknown) => {
     // No-op fallback function that accepts parameters
   },
 });
 
 type ConnectionStatus = "connecting" | "connected" | "disconnected" | "error" | "reconnecting";
 type MessagePayload = {
-  new: any;
-  old?: any;
+  new: unknown;
+  old?: unknown;
   eventType: "INSERT" | "UPDATE" | "DELETE";
 };
 
@@ -39,10 +39,10 @@ interface ConnectionHealth {
 }
 
 interface UseNativeRealtimeOptions {
-  onNewMessage?: (message: any) => void;
-  onMessageStatusUpdate?: (statusUpdate: any) => void;
-  onConversationUpdate?: (update: any) => void;
-  onNewConversation?: (conversation: any) => void;
+  onNewMessage?: (message: unknown) => void;
+  onMessageStatusUpdate?: (statusUpdate: unknown) => void;
+  onConversationUpdate?: (update: unknown) => void;
+  onNewConversation?: (conversation: unknown) => void;
   onTypingStart?: (data: { userId: string; userName: string; conversationId: string }) => void;
   onTypingStop?: (data: { userId: string; conversationId: string }) => void;
   onPresenceUpdate?: (data: { userId: string; isOnline: boolean; lastSeen: string }) => void;
@@ -210,7 +210,7 @@ export function useNativeOrganizationRealtime(organizationId: string, options: U
       optionsRef.current.onNewConversation?.(conversation);
     };
 
-    const handleBroadcastEvent = (broadcastData: any) => {
+    const handleBroadcastEvent = (broadcastData: unknown) => {
       const { event, payload } = broadcastData;
       debugLog("🔥 [Native] Broadcast event received:", event, payload);
 
@@ -237,7 +237,7 @@ export function useNativeOrganizationRealtime(organizationId: string, options: U
     channel.on("broadcast", { event: "*" }, handleBroadcastEvent);
 
     // Subscribe to the channel
-    channel.subscribe((status: any) => {
+    channel.subscribe((status: unknown) => {
       debugLog("🔥 [Native] Channel subscription status:", status);
 
       // Only update state if component is still mounted
@@ -371,7 +371,7 @@ export async function broadcastPresenceUpdate(organizationId: string, userId: st
 export function useNativeConversationRealtime(
   organizationId: string,
   conversationId?: string,
-  options: { onNewMessage?: (message: any) => void } = {}
+  options: { onNewMessage?: (message: unknown) => void } = {}
 ) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected");
   const [error, setError] = useState<string | null>(null);
@@ -413,7 +413,7 @@ export function useNativeConversationRealtime(
     );
 
     // Subscribe to the channel
-    channel.subscribe((status: any) => {
+    channel.subscribe((status: unknown) => {
       debugLog("🔥 [Native] Conversation channel status:", status);
 
       switch (status) {
@@ -458,7 +458,7 @@ export function useNativeConversationRealtime(
  * Replace lean-server broadcasting with direct Supabase
  */
 export const nativeBroadcast = {
-  toOrganization: (organizationId: string, event: string, payload: any) => {
+  toOrganization: (organizationId: string, event: string, payload: unknown) => {
     const supabaseClient = supabase.browser();
     const channelName = `org:${organizationId}`;
 
@@ -469,7 +469,7 @@ export const nativeBroadcast = {
     });
   },
 
-  toConversation: (organizationId: string, conversationId: string, event: string, payload: any) => {
+  toConversation: (organizationId: string, conversationId: string, event: string, payload: unknown) => {
     const supabaseClient = supabase.browser();
     const channelName = `org:${organizationId}:conversation:${conversationId}`;
 

@@ -220,7 +220,7 @@ export function ComprehensiveDashboard({ organizationId }: DashboardProps) {
                         fill="#8884d8"
                         dataKey="count"
                       >
-                        {conversations.byChannel.map((entry: any, index: number) => (
+                        {conversations.byChannel.map((entry: unknown, index: number) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
@@ -304,7 +304,7 @@ export function ComprehensiveDashboard({ organizationId }: DashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {messages.byType.map((type: any) => (
+                  {messages.byType.map((type: unknown) => (
                     <div key={type.type} className="flex items-center justify-between">
                       <div className="flex items-center gap-ds-2">
                         <Badge variant="outline">{type.type}</Badge>
@@ -369,7 +369,7 @@ export function ComprehensiveDashboard({ organizationId }: DashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {agents.messagesPerAgent.map((agent: any) => (
+                  {agents.messagesPerAgent.map((agent: unknown) => (
                     <div key={agent.agentId} className="flex items-center justify-between">
                       <span className="font-medium">{agent.name}</span>
                       <div className="flex items-center gap-ds-2">
@@ -389,7 +389,7 @@ export function ComprehensiveDashboard({ organizationId }: DashboardProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {agents.satisfactionByAgent.map((agent: any) => (
+                  {agents.satisfactionByAgent.map((agent: unknown) => (
                     <div key={agent.agentId} className="flex items-center justify-between">
                       <span className="font-medium">{agent.name}</span>
                       <div className="flex items-center gap-ds-2">
@@ -482,7 +482,7 @@ export function ComprehensiveDashboard({ organizationId }: DashboardProps) {
 }
 
 // Helper Components
-function MetricCard({ title, value, change, icon: Icon, trend }: any) {
+function MetricCard({ title, value, change, icon: Icon, trend }: unknown) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -505,7 +505,7 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-6 p-spacing-md" data-testid="comprehensive-dashboard">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i: any) => (
+        {[1, 2, 3, 4].map((i: unknown) => (
           <Card key={i}>
             <CardHeader className="pb-2">
               <Skeleton className="h-4 w-24" />
@@ -526,7 +526,7 @@ function calculateChange(total: number, resolved: number): string {
   return `${percentage.toFixed(1)}% resolved`;
 }
 
-function renderCustomizedLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) {
+function renderCustomizedLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }: unknown) {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
   const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);

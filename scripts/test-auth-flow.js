@@ -35,7 +35,7 @@ async function testAuthFlow() {
       password: testPassword,
       options: {
         data: {
-          full_name: testName,
+          fullName: testName,
           organization_name: testOrg,
         },
       },
@@ -99,7 +99,7 @@ async function testAuthFlow() {
       console.log('✅ User data fetch successful');
       console.log('User ID:', userData.user?.id);
       console.log('Email:', userData.user?.email);
-      console.log('Full name:', userData.user?.user_metadata?.full_name);
+      console.log('Full name:', userData.user?.user_metadata?.fullName);
       console.log('Organization:', userData.user?.user_metadata?.organization_name);
     }
 

@@ -23,7 +23,7 @@ export interface AuthMiddlewareContext {
   user: UnifiedUser;
   organizationId: string;
   authResult: UnifiedAuthResult;
-  client?: any; // Scoped Supabase client
+  client?: unknown; // Scoped Supabase client
 }
 
 // Middleware options

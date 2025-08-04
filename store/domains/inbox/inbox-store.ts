@@ -228,13 +228,13 @@ export const useInboxStore = create<InboxState & InboxActions>()(
       ),
       {
         name: "inbox-store",
-        storage: customStorage as any,
+        storage: customStorage as unknown,
         partialize: (state) =>
           ({
             // Only persist panel sizing preferences
             conversationListWidth: state.conversationListWidth,
             sidebarWidth: state.sidebarWidth,
-          }) as any,
+          }) as unknown,
       }
     ),
     {

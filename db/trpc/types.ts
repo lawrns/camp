@@ -15,7 +15,7 @@ import type { AuthenticatedUser } from "@/lib/core/auth";
  */
 export interface BaseContext {
   user: AuthenticatedUser | null;
-  db: any; // TODO: Type this properly with drizzle db type
+  db: unknown; // TODO: Type this properly with drizzle db type
   headers: Headers;
   supabase: SupabaseClient | null;
   tenantContext: TenantContext | null;
@@ -68,8 +68,8 @@ export interface MailboxContext {
   vipChannelId?: string | null;
 
   // Widget configuration
-  widgetConfig?: any;
-  preferences?: any;
+  widgetConfig?: unknown;
+  preferences?: unknown;
 
   // Timestamps
   createdAt: Date;
@@ -84,7 +84,7 @@ export interface MailboxContext {
  */
 export interface MailboxProcedureContext extends AuthenticatedContext {
   mailbox: MailboxContext;
-  dbMailbox?: any; // Original database mailbox object for serialization
+  dbMailbox?: unknown; // Original database mailbox object for serialization
   validatedMailboxId?: string | null;
 }
 
@@ -143,7 +143,7 @@ export interface ConversationContext {
  */
 export interface ConversationProcedureContext extends MailboxProcedureContext {
   conversation: ConversationContext;
-  dbConversation: any; // Original database conversation object for serialization
+  dbConversation: unknown; // Original database conversation object for serialization
   validatedConversationId?: string | null;
 }
 

@@ -24,7 +24,7 @@ export interface Ticket {
   customerId?: string;
   dueDate?: string;
   tags?: string[];
-  metadata?: any;
+  metadata?: unknown;
   resolvedAt?: string;
   closedAt?: string;
   createdAt: string;
@@ -45,21 +45,21 @@ export interface TicketInsert {
   customer_id?: string;
   due_date?: string;
   tags?: string[];
-  metadata?: any;
+  metadata?: unknown;
   created_by?: string;
 }
 
 /**
  * Maps database conversation record (snake_case) to API conversation type (camelCase)
  */
-export function mapDbConversationToApi(dbConversation: any): any {
+export function mapDbConversationToApi(dbConversation: unknown): unknown {
   return {
     id: dbConversation.id,
     organizationId: dbConversation.organization_id || dbConversation.organizationId,
     customerId: dbConversation.customer_id || dbConversation.customerId || "",
     customerName:
-      dbConversation.customer_name || dbConversation.customerName || dbConversation.customer_display_name || null,
-    customerEmail: dbConversation.customer_email || dbConversation.customerEmail || null,
+      dbConversation.customerName || dbConversation.customerName || dbConversation.customer_display_name || null,
+    customerEmail: dbConversation.customerEmail || dbConversation.customerEmail || null,
     customerAvatar: dbConversation.customer_avatar || dbConversation.customerAvatar || null,
     subject: dbConversation.subject || null,
     status: dbConversation.status || "open",
@@ -71,7 +71,7 @@ export function mapDbConversationToApi(dbConversation: any): any {
     createdAt: dbConversation.created_at || dbConversation.createdAt,
     updatedAt: dbConversation.updated_at || dbConversation.updatedAt,
     lastMessageAt:
-      dbConversation.last_message_at || dbConversation.lastMessageAt || dbConversation.last_reply_at || null,
+      dbConversation.lastMessageAt || dbConversation.lastMessageAt || dbConversation.last_reply_at || null,
     lastMessageBy: dbConversation.last_message_by || dbConversation.lastMessageBy || null,
     lastMessagePreview: dbConversation.last_message_preview || dbConversation.lastMessagePreview || null,
     unreadCount: dbConversation.unread_count || dbConversation.unreadCount || 0,
@@ -82,25 +82,25 @@ export function mapDbConversationToApi(dbConversation: any): any {
     // Include snake_case versions for backward compatibility
     organization_id: dbConversation.organization_id,
     customer_id: dbConversation.customer_id,
-    customer_name: dbConversation.customer_name || dbConversation.customer_display_name,
-    customer_email: dbConversation.customer_email,
+    customerName: dbConversation.customerName || dbConversation.customer_display_name,
+    customerEmail: dbConversation.customerEmail,
     assigned_to: dbConversation.assigned_to_user_id || dbConversation.assigned_operator_id || dbConversation.assigned_to,
     assigned_to_ai: dbConversation.assigned_to_ai,
     assignee_id: dbConversation.assignee_id || dbConversation.assigned_operator_id,
     created_at: dbConversation.created_at,
     updated_at: dbConversation.updated_at,
-    last_message_at: dbConversation.last_message_at || dbConversation.last_reply_at,
+    lastMessageAt: dbConversation.lastMessageAt || dbConversation.last_reply_at,
   };
 }
 
 /**
  * Maps API conversation insert (camelCase) to database format (snake_case)
  */
-export function mapApiConversationToDbInsert(apiConversation: any): any {
+export function mapApiConversationToDbInsert(apiConversation: unknown): unknown {
   // Only include fields that actually exist in the database schema
-  const dbData: any = {
+  const dbData: unknown = {
     organization_id: apiConversation.organization_id,
-    customer_email: apiConversation.customer_email,
+    customerEmail: apiConversation.customerEmail,
     subject: apiConversation.subject,
     status: apiConversation.status || "open",
     priority: apiConversation.priority || "medium",
@@ -111,8 +111,8 @@ export function mapApiConversationToDbInsert(apiConversation: any): any {
   if (apiConversation.customer_id) {
     dbData.customer_id = apiConversation.customer_id;
   }
-  if (apiConversation.customer_name) {
-    dbData.customer_name = apiConversation.customer_name;
+  if (apiConversation.customerName) {
+    dbData.customerName = apiConversation.customerName;
   }
   if (apiConversation.assigned_operator_id) {
     dbData.assigned_operator_id = apiConversation.assigned_operator_id;
@@ -124,8 +124,8 @@ export function mapApiConversationToDbInsert(apiConversation: any): any {
 /**
  * Maps API conversation update (camelCase) to database format (snake_case)
  */
-export function mapApiConversationToDbUpdate(apiUpdate: any): any {
-  const dbUpdate: any = {};
+export function mapApiConversationToDbUpdate(apiUpdate: unknown): unknown {
+  const dbUpdate: unknown = {};
 
   if (apiUpdate.subject !== undefined) dbUpdate.subject = apiUpdate.subject;
   if (apiUpdate.status !== undefined) dbUpdate.status = apiUpdate.status;
@@ -135,9 +135,9 @@ export function mapApiConversationToDbUpdate(apiUpdate: any): any {
     dbUpdate.assigned_to_id = apiUpdate.assigned_operator_id;
   }
   if (apiUpdate.metadata !== undefined) dbUpdate.metadata = apiUpdate.metadata;
-  if (apiUpdate.last_message_at !== undefined) {
-    dbUpdate.last_message_at = apiUpdate.last_message_at;
-    dbUpdate.last_reply_at = apiUpdate.last_message_at;
+  if (apiUpdate.lastMessageAt !== undefined) {
+    dbUpdate.lastMessageAt = apiUpdate.lastMessageAt;
+    dbUpdate.last_reply_at = apiUpdate.lastMessageAt;
   }
   if (apiUpdate.last_message_preview !== undefined) {
     dbUpdate.last_message_preview = apiUpdate.last_message_preview;
@@ -152,44 +152,47 @@ export function mapApiConversationToDbUpdate(apiUpdate: any): any {
  * Maps database message record (snake_case) to API message type (camelCase)
  */
 export function mapDbMessageToApi(dbMessage: any): any {
+  // Add proper type checking to prevent runtime errors
+  if (!dbMessage || typeof dbMessage !== 'object') {
+    console.error('[mapDbMessageToApi] Invalid message object:', dbMessage);
+    return null;
+  }
+
   return {
     id: dbMessage.id,
     conversationId: dbMessage.conversation_id || dbMessage.conversationId,
+    organizationId: dbMessage.organization_id || dbMessage.organizationId,
     content: dbMessage.content || dbMessage.encrypted_content || "",
-    senderType: dbMessage.sender_type || dbMessage.senderType,
-    senderId: dbMessage.sender_id || dbMessage.senderId || dbMessage.sender_email || "",
+    senderType: dbMessage.sender_type || dbMessage.senderType || "visitor",
+    senderId: dbMessage.sender_id || dbMessage.senderId || "",
     senderName: dbMessage.sender_name || dbMessage.senderName || null,
     senderEmail: dbMessage.sender_email || dbMessage.senderEmail || null,
-    createdAt: dbMessage.created_at || dbMessage.createdAt,
+    createdAt: dbMessage.created_at || dbMessage.createdAt || dbMessage.inserted_at,
     updatedAt: dbMessage.updated_at || dbMessage.updatedAt,
     metadata: dbMessage.metadata || {},
     attachments: dbMessage.attachments || [],
     status: dbMessage.status || dbMessage.delivery_status || "delivered",
     inReplyToId: dbMessage.reply_to_id || dbMessage.replyToId || dbMessage.in_reply_to_id || null,
     isDeleted: dbMessage.is_deleted || dbMessage.isDeleted || false,
-    // editedAt field removed - not in Message type
-    // readBy and reactions fields removed - not in Message type
 
-    // Legacy support
+    // Legacy support for backward compatibility
     conversation_id: dbMessage.conversation_id,
-    sender_type: dbMessage.sender_type,
-    // sender_id field removed - not in Message type
-    created_at: dbMessage.created_at,
+    created_at: dbMessage.created_at || dbMessage.inserted_at,
   };
 }
 
 /**
  * Maps API message insert (camelCase) to database format (snake_case)
  */
-export function mapApiMessageToDbInsert(apiMessage: any, organizationId: string): any {
+export function mapApiMessageToDbInsert(apiMessage: unknown, organizationId: string): unknown {
   return {
     organization_id: organizationId,
     conversation_id: apiMessage.conversation_id,
     content: apiMessage.content,
-    sender_type: apiMessage.sender_type || "visitor",
-    sender_id: apiMessage.sender_id || null,
-    sender_name: apiMessage.sender_name || null,
-    sender_email: apiMessage.sender_email || null,
+    sender_type: apiMessage.senderType || "visitor", // Fixed: use snake_case
+    sender_id: apiMessage.senderId || null, // Fixed: use snake_case
+    sender_name: apiMessage.senderName || null, // Fixed: use snake_case
+    sender_email: apiMessage.senderEmail || null, // Fixed: use snake_case
     message_type: apiMessage.message_type || "text",
     content_type: apiMessage.content_type || "text",
     status: apiMessage.status || "sent",
@@ -205,19 +208,19 @@ export function mapApiMessageToDbInsert(apiMessage: any, organizationId: string)
 /**
  * Batch conversion utilities
  */
-export function mapDbConversationsToApi(dbConversations: any[]): any[] {
+export function mapDbConversationsToApi(dbConversations: unknown[]): unknown[] {
   return dbConversations.map(mapDbConversationToApi);
 }
 
-export function mapDbMessagesToApi(dbMessages: any[]): any[] {
+export function mapDbMessagesToApi(dbMessages: unknown[]): unknown[] {
   return dbMessages.map(mapDbMessageToApi);
 }
 
 /**
  * Helper to handle both snake_case and camelCase in query parameters
  */
-export function normalizeQueryParams(params: any): any {
-  const normalized: any = {};
+export function normalizeQueryParams(params: unknown): unknown {
+  const normalized: unknown = {};
 
   // Handle common query parameters
   normalized.organizationId = params.organization_id || params.organizationId;
@@ -238,7 +241,7 @@ export function normalizeQueryParams(params: any): any {
 /**
  * Maps database ticket record (snake_case) to API ticket type (camelCase)
  */
-export function mapDbTicketToApi(dbTicket: any): Ticket {
+export function mapDbTicketToApi(dbTicket: unknown): Ticket {
   return {
     id: dbTicket.id,
     organizationId: dbTicket.organization_id || dbTicket.organizationId,
@@ -256,18 +259,18 @@ export function mapDbTicketToApi(dbTicket: any): Ticket {
     tags: dbTicket.tags || [],
     metadata: dbTicket.metadata || {},
     resolvedAt: dbTicket.resolved_at || dbTicket.resolvedAt,
-    closedAt: dbTicket.closed_at || dbTicket.closedAt,
+    closedAt: dbTicket.closedAt || dbTicket.closedAt,
     createdAt: dbTicket.created_at || dbTicket.createdAt,
     updatedAt: dbTicket.updated_at || dbTicket.updatedAt,
-    createdBy: dbTicket.created_by || dbTicket.createdBy,
+    createdBy: dbTicket.createdBy || dbTicket.createdBy,
   };
 }
 
 /**
  * Maps API ticket insert (camelCase) to database format (snake_case)
  */
-export function mapApiTicketToDbInsert(apiTicket: Partial<TicketInsert>): any {
-  const dbData: any = {
+export function mapApiTicketToDbInsert(apiTicket: Partial<TicketInsert>): unknown {
+  const dbData: unknown = {
     organization_id: apiTicket.organization_id,
     mailbox_id: apiTicket.mailbox_id,
     title: apiTicket.title,
@@ -298,8 +301,8 @@ export function mapApiTicketToDbInsert(apiTicket: Partial<TicketInsert>): any {
   if (apiTicket.tags) {
     dbData.tags = apiTicket.tags;
   }
-  if (apiTicket.created_by) {
-    dbData.created_by = apiTicket.created_by;
+  if (apiTicket.createdBy) {
+    dbData.createdBy = apiTicket.createdBy;
   }
 
   return dbData;
@@ -308,6 +311,6 @@ export function mapApiTicketToDbInsert(apiTicket: Partial<TicketInsert>): any {
 /**
  * Batch conversion utilities for tickets
  */
-export function mapDbTicketsToApi(dbTickets: any[]): Ticket[] {
+export function mapDbTicketsToApi(dbTickets: unknown[]): Ticket[] {
   return dbTickets.map(mapDbTicketToApi);
 }

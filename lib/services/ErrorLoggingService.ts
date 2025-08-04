@@ -63,7 +63,7 @@ class ErrorLoggingService {
       tracesSampleRate: options.tracesSampleRate || 0.1,
       debug: options.debug || false,
 
-      beforeSend(event: any, hint: any) {
+      beforeSend(event: unknown, hint: unknown) {
         // Filter out irrelevant errors
         if (event.exception) {
           const error = hint.originalException;
@@ -82,7 +82,7 @@ class ErrorLoggingService {
         return event;
       },
 
-      beforeBreadcrumb(breadcrumb: any) {
+      beforeBreadcrumb(breadcrumb: unknown) {
         // Filter sensitive data from breadcrumbs
         if (breadcrumb.data?.url && breadcrumb.data.url.includes("/api/")) {
           // Remove sensitive query parameters
@@ -106,7 +106,7 @@ class ErrorLoggingService {
       if (this.initialized) {
         // Set user context
         if (context?.user) {
-          const userContext: any = {
+          const userContext: unknown = {
             id: context.user.id,
           };
 
@@ -129,7 +129,7 @@ class ErrorLoggingService {
 
         // Set level
         const level = context?.level || "error";
-        Sentry.withScope((scope: any) => {
+        Sentry.withScope((scope: unknown) => {
           scope.setLevel(level);
 
           if (context?.request) {
@@ -185,7 +185,7 @@ class ErrorLoggingService {
    */
   addBreadcrumb(message: string, category?: string, data?: Record<string, any>) {
     if (this.initialized) {
-      const breadcrumb: any = {
+      const breadcrumb: unknown = {
         message,
         category: category || "custom",
         timestamp: Date.now() / 1000,
@@ -204,7 +204,7 @@ class ErrorLoggingService {
    */
   setUser(user: { id: string; email?: string; organizationId?: string }) {
     if (this.initialized) {
-      const userContext: any = {
+      const userContext: unknown = {
         id: user.id,
       };
 
@@ -243,7 +243,7 @@ class ErrorLoggingService {
    */
   capturePerformance(name: string, duration: number, tags?: Record<string, string>) {
     if (this.initialized) {
-      Sentry.withScope((scope: any) => {
+      Sentry.withScope((scope: unknown) => {
         if (tags) {
           scope.setTags(tags);
         }
@@ -262,7 +262,7 @@ class ErrorLoggingService {
     request: {
       method?: string;
       url?: string;
-      body?: any;
+      body?: unknown;
       headers?: Record<string, string>;
     },
     user?: { id: string; organizationId?: string }

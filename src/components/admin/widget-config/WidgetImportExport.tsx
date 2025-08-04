@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Icon } from "@/lib/ui/Icon";
 
 interface WidgetImportExportProps {
-  config: any;
-  onImport: (config: any) => void;
+  config: unknown;
+  onImport: (config: unknown) => void;
   onExport: () => void;
 }
 

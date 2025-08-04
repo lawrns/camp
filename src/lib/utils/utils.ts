@@ -53,10 +53,10 @@ export const createEvent = <T>(eventName: string) => {
  * @param func Function to debounce
  * @param wait Wait time in ms
  */
-export function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: unknown[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null;
 
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     const context = this;
 
     if (timeout) clearTimeout(timeout);
@@ -69,10 +69,10 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
  * @param func Function to throttle
  * @param limit Time limit in ms
  */
-export function throttle<T extends (...args: any[]) => any>(func: T, limit: number): (...args: Parameters<T>) => void {
+export function throttle<T extends (...args: unknown[]) => any>(func: T, limit: number): (...args: Parameters<T>) => void {
   let inThrottle = false;
 
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     const context = this;
 
     if (!inThrottle) {

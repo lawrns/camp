@@ -39,7 +39,7 @@ interface PresenceEvent {
 }
 
 export class RealtimeChannelManager {
-  private supabase: any;
+  private supabase: unknown;
   private channels: Map<string, RealtimeChannel> = new Map();
   private heartbeatIntervals: Map<string, NodeJS.Timeout> = new Map();
   private reconnectAttempts: Map<string, number> = new Map();
@@ -72,7 +72,7 @@ export class RealtimeChannelManager {
       onMessage?: (message: MessageEvent) => void;
       onTyping?: (typing: TypingEvent) => void;
       onPresence?: (presence: PresenceEvent) => void;
-      onError?: (error: any) => void;
+      onError?: (error: unknown) => void;
       onConnected?: () => void;
       onDisconnected?: () => void;
     }
@@ -95,7 +95,7 @@ export class RealtimeChannelManager {
 
       // Message events
       if (callbacks.onMessage) {
-        channel.on('broadcast', { event: 'message' }, (payload: any) => {
+        channel.on('broadcast', { event: 'message' }, (payload: unknown) => {
           console.log(`[RealtimeChannelManager] Message received on ${channelName}:`, payload);
           callbacks.onMessage!(payload.payload as MessageEvent);
         });
@@ -103,7 +103,7 @@ export class RealtimeChannelManager {
 
       // Typing events
       if (callbacks.onTyping) {
-        channel.on('broadcast', { event: 'typing' }, (payload: any) => {
+        channel.on('broadcast', { event: 'typing' }, (payload: unknown) => {
           console.log(`[RealtimeChannelManager] Typing event on ${channelName}:`, payload);
           callbacks.onTyping!(payload.payload as TypingEvent);
         });
@@ -116,7 +116,7 @@ export class RealtimeChannelManager {
           console.log(`[RealtimeChannelManager] Presence sync on ${channelName}:`, state);
           
           Object.entries(state).forEach(([key, presences]) => {
-            presences.forEach((presence: any) => {
+            presences.forEach((presence: unknown) => {
               callbacks.onPresence!({
                 conversationId: config.conversationId,
                 organizationId: config.organizationId,
@@ -129,9 +129,9 @@ export class RealtimeChannelManager {
           });
         });
 
-        channel.on('presence', { event: 'join' }, ({ key, newPresences }: any) => {
+        channel.on('presence', { event: 'join' }, ({ key, newPresences }: unknown) => {
           console.log(`[RealtimeChannelManager] User joined ${channelName}:`, key, newPresences);
-          newPresences.forEach((presence: any) => {
+          newPresences.forEach((presence: unknown) => {
             callbacks.onPresence!({
               conversationId: config.conversationId,
               organizationId: config.organizationId,
@@ -143,9 +143,9 @@ export class RealtimeChannelManager {
           });
         });
 
-        channel.on('presence', { event: 'leave' }, ({ key, leftPresences }: any) => {
+        channel.on('presence', { event: 'leave' }, ({ key, leftPresences }: unknown) => {
           console.log(`[RealtimeChannelManager] User left ${channelName}:`, key, leftPresences);
-          leftPresences.forEach((presence: any) => {
+          leftPresences.forEach((presence: unknown) => {
             callbacks.onPresence!({
               conversationId: config.conversationId,
               organizationId: config.organizationId,

@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Clock } from 'lucide-react';
 import type { Conversation } from '@/types/unified';
 
 interface ConversationRowProps {
@@ -34,8 +35,18 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({
     }
   };
 
-  // Get avatar initials
-  const getInitials = (name: string) => {
+  // CONVERSATION-UI FIX: Get avatar with cartoon character fallbacks
+  const getAvatarFallback = (name: string) => {
+    // Use cartoon character emojis as fallbacks for Anonymous Users
+    const cartoonAvatars = ['🦉', '🍊', '🐱', '🐶', '🐸', '🦊', '🐼', '🐨'];
+    const nameHash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const avatarIndex = nameHash % cartoonAvatars.length;
+
+    if (name === "Anonymous User") {
+      return cartoonAvatars[avatarIndex];
+    }
+
+    // For named users, use initials
     return name
       .split(' ')
       .map(word => word.charAt(0))
@@ -85,25 +96,26 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({
     );
   };
 
-  // Get assignment badge
+  // CONVERSATION-UI FIX: Get assignment badge with "Human" tag
   const getAssignmentBadge = () => {
-    if (conversation.assignedToAi) {
+    if (conversation.assigned_to_ai) {
       return (
         <Badge variant="outline" className="text-xs bg-purple-100 text-purple-800">
-          AI
+          🤖 AI
         </Badge>
       );
     }
-    if (conversation.assignedOperatorId) {
+    if (conversation.assigneeId || conversation.assignedOperatorId) {
       return (
         <Badge variant="outline" className="text-xs bg-blue-100 text-blue-800">
-          Assigned
+          👤 Assigned
         </Badge>
       );
     }
+    // CONVERSATION-UI FIX: Show "Human" tag for unassigned conversations
     return (
-      <Badge variant="outline" className="text-xs bg-gray-100 text-gray-800">
-        Unassigned
+      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-200">
+        👤 Human
       </Badge>
     );
   };
@@ -119,14 +131,18 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({
       style={style}
       data-testid={`conversation-row-${conversation.id}`}
     >
-      {/* Avatar */}
-      <div className="flex-shrink-0">
+      {/* CONVERSATION-UI FIX: Avatar with cartoon character fallbacks */}
+      <div className="flex-shrink-0 relative">
         <Avatar className="h-10 w-10">
           <AvatarImage src={conversation.customerAvatar || ''} alt={conversation.customerName} />
-          <AvatarFallback className="bg-blue-500 text-white">
-            {getInitials(conversation.customerName)}
+          <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white text-lg">
+            {getAvatarFallback(conversation.customerName)}
           </AvatarFallback>
         </Avatar>
+        {/* STANDARD-003 FIX: Online status indicator */}
+        {conversation.isOnline && (
+          <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-green-500" />
+        )}
       </div>
 
       {/* Content */}
@@ -148,9 +164,11 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({
               </Badge>
             )}
           </div>
-          <span className="text-xs text-gray-400" data-testid="conversation-timestamp">
-            {formatTime()}
-          </span>
+          {/* CONVERSATION-UI FIX: Add clock icon to timestamp */}
+          <div className="flex items-center space-x-1 text-xs text-gray-400" data-testid="conversation-timestamp">
+            <Clock className="h-3 w-3" />
+            <span>{formatTime()}</span>
+          </div>
         </div>
 
         <div className="flex items-center space-x-2 mb-1">
@@ -185,13 +203,29 @@ export const ConversationRow: React.FC<ConversationRowProps> = ({
           {getStatusBadge()}
           {getPriorityBadge()}
           {getAssignmentBadge()}
-          
+
+          {/* STANDARD-003 FIX: Display tags */}
+          {conversation.tags && conversation.tags.length > 0 && (
+            <div className="flex items-center space-x-1">
+              {conversation.tags.slice(0, 2).map((tag, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+              {conversation.tags.length > 2 && (
+                <Badge variant="outline" className="text-xs">
+                  +{conversation.tags.length - 2}
+                </Badge>
+              )}
+            </div>
+          )}
+
           {conversation.hasAttachments && (
             <Badge variant="outline" className="text-xs">
               📎
             </Badge>
           )}
-          
+
           {conversation.messageCount > 0 && (
             <Badge variant="outline" className="text-xs">
               {conversation.messageCount} messages

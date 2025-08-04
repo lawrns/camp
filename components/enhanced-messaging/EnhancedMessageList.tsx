@@ -32,7 +32,7 @@ interface EnhancedMessageListProps {
   
   // Callbacks
   onLoadMore?: () => void;
-  onMessageAction?: (action: string, messageId: string, data?: any) => void;
+  onMessageAction?: (action: string, messageId: string, data?: unknown) => void;
   onScroll?: (scrollTop: number, scrollHeight: number, clientHeight: number) => void;
   
   // Message actions

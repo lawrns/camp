@@ -107,7 +107,7 @@ export const getStatusColor = (status: PerformanceMetric["status"]) => {
 };
 
 export const getOverallStatus = (metrics: SystemMetrics): PerformanceMetric["status"] => {
-  const statuses = Object.values(metrics).map((m: any) => m.status);
+  const statuses = Object.values(metrics).map((m: unknown) => m.status);
   if (statuses.includes("critical")) return "critical";
   if (statuses.includes("warning")) return "warning";
   if (statuses.includes("good")) return "good";

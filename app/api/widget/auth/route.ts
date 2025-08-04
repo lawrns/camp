@@ -7,7 +7,7 @@ import { mapDbConversationToApi } from '@/lib/utils/db-type-mappers';
 import { createOrGetSharedConversation } from '@/lib/services/shared-conversation-service';
 
 // Simplified optional auth wrapper for widget endpoints
-async function withOptionalAuth(handler: (req: NextRequest, user?: any) => Promise<NextResponse>) {
+async function withOptionalAuth(handler: (req: NextRequest, user?: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const supabase = createRouteHandlerClient({ cookies });
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       organizationId,
       organization: {
         id: organization.id,
-        widgetEnabled: (organization.settings as any)?.widget_enabled ?? true
+        widgetEnabled: (organization.settings as unknown)?.widget_enabled ?? true
       }
     });
 
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const settings = organization.settings as any;
+    const settings = organization.settings as unknown;
     const widgetEnabled = settings?.widget_enabled ?? true; // Default to enabled
     if (!widgetEnabled) {
       return NextResponse.json(
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
         source: 'widget',
         metadata: {
           widget_session: true,
-          user_agent: sessionData?.userAgent,
+          userAgent: sessionData?.userAgent,
           referrer: sessionData?.referrer,
           current_url: sessionData?.currentUrl,
         }

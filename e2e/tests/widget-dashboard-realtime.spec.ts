@@ -134,7 +134,7 @@ test.describe('Widget-Dashboard Real-time Communication', () => {
         console.log(`✅ Widget API working - found ${widgetMessages.length || 0} messages`);
         
         // Look for our test messages
-        const hasApiMessage = widgetMessages.some((msg: any) => msg.content.includes('API test message'));
+        const hasApiMessage = widgetMessages.some((msg: unknown) => msg.content.includes('API test message'));
         console.log(`   Contains API test message: ${hasApiMessage ? '✅' : '❌'}`);
       } else {
         console.log('❌ Widget messages API failed');

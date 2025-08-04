@@ -111,7 +111,7 @@ function ConfidenceBadge({ confidence, level }: ConfidenceBadgeProps) {
 }
 
 interface SourceItemProps {
-  source: any;
+  source: unknown;
   index: number;
 }
 
@@ -199,7 +199,7 @@ export function RAGAnalyticsDashboard({ organizationId }: { organizationId: stri
             averageConfidence: data.metrics?.relevanceScore || 0,
             handoverRate: data.metrics?.usage?.failedRequests / Math.max(data.metrics?.usage?.totalRequests, 1) || 0,
             topSources:
-              data.topDocuments?.slice(0, 3).map((doc: any) => ({
+              data.topDocuments?.slice(0, 3).map((doc: unknown) => ({
                 title: doc.title,
                 usage: doc.hitCount,
               })) || [],

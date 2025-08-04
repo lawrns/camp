@@ -71,7 +71,7 @@ describe('RAG Pipeline Integration Tests', () => {
       category: 'account_management',
       tags: ['password', 'reset', 'account', 'security'],
       is_public: true,
-      is_active: true,
+      isActive: true,
       metadata: {
         source: 'test_suite',
         priority: 'high'
@@ -299,7 +299,7 @@ If you continue to have issues, please contact our support team.`,
       category: 'account_management',
       tags: ['password', 'reset'],
       is_public: true,
-      is_active: true
+      isActive: true
     };
 
     const { data: document, error: docError } = await supabase.admin()

@@ -30,7 +30,7 @@ export function AIHandoverManager({
   // Check confidence on new messages
   useEffect(() => {
     const latestMessage = messages[messages.length - 1];
-    if (latestMessage && latestMessage.sender_type === "ai") {
+    if (latestMessage && latestMessage.senderType === "ai") {
       handover.checkConfidenceAndTriggerHandover(latestMessage);
     }
   }, [messages, handover]);

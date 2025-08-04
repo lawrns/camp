@@ -63,7 +63,7 @@ export function useOptimisticMessages({ conversationId, onError, onSuccess }: Us
         updatedAt: optimisticMessage.updatedAt,
         ...(optimisticMessage.metadata && { metadata: optimisticMessage.metadata }),
       };
-      addOptimisticMessage(conversationId, messageForStore as any);
+      addOptimisticMessage(conversationId, messageForStore as unknown);
 
       try {
         // Send the actual message
@@ -122,7 +122,7 @@ export function useOptimisticMessages({ conversationId, onError, onSuccess }: Us
       // Store original message state for rollback
       const state = useCampfireStore.getState();
       const conversationMessages = state.messages?.[conversationId] || [];
-      const originalMessage = conversationMessages.find((m: any) => m.id === messageId);
+      const originalMessage = conversationMessages.find((m: unknown) => m.id === messageId);
 
       if (!originalMessage) {
         throw new Error("Message not found");

@@ -16,7 +16,7 @@ export interface WidgetSession {
   email?: string;
   isAnonymous: boolean;
   isWhitelabel: boolean;
-  theme?: any;
+  theme?: unknown;
   title?: string;
   domain?: string;
   embedId?: string;
@@ -102,8 +102,8 @@ export interface WidgetMessagePayload {
   conversationId: string; // Standardized to string for consistency
   content: string;
   type?: "text" | "file" | "image";
-  sender_id: string;
-  sender_type: "visitor" | "operator" | "ai"; // "visitor" standardized instead of "customer"
+  senderId: string;
+  senderType: "visitor" | "operator" | "ai"; // "visitor" standardized instead of "customer"
   attachments?: MessageAttachment[] | undefined;
   metadata?: Record<string, any> | undefined;
 }
@@ -187,7 +187,7 @@ export interface WidgetAPIResponse<T = any> {
   error?: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
@@ -213,7 +213,7 @@ export interface WidgetSettingsResponse extends WidgetAPIResponse {
 /**
  * Type guards for widget types
  */
-export function isWidgetMessage(message: any): message is Message & { visitorId?: string; sessionId?: string } {
+export function isWidgetMessage(message: unknown): message is Message & { visitorId?: string; sessionId?: string } {
   return (
     message &&
     typeof message.id === "string" &&
@@ -222,7 +222,7 @@ export function isWidgetMessage(message: any): message is Message & { visitorId?
   );
 }
 
-export function isWidgetTypingIndicator(data: any): data is WidgetTypingIndicator {
+export function isWidgetTypingIndicator(data: unknown): data is WidgetTypingIndicator {
   return (
     data &&
     typeof data.userId === "string" &&
@@ -240,8 +240,8 @@ export function convertToWidgetMessage(message: Message): WidgetMessagePayload {
     conversationId: message.conversationId?.toString() || "",
     content: message.content,
     type: "text",
-    sender_id: message.senderId || "",
-    sender_type: message.senderType === "customer" ? "visitor" : (message.senderType as any),
+    senderId: message.senderId || "",
+    senderType: message.senderType === "customer" ? "visitor" : (message.senderType as unknown),
     attachments: message.attachments,
     metadata: message.metadata,
   };
@@ -255,8 +255,8 @@ export function convertFromWidgetMessage(widgetMessage: WidgetMessagePayload, me
     id: messageId,
     conversationId: parseInt(widgetMessage.conversationId) || 0,
     content: widgetMessage.content,
-    senderId: widgetMessage.sender_id,
-    senderType: widgetMessage.sender_type === "visitor" ? "customer" : (widgetMessage.sender_type as any),
+    senderId: widgetMessage.senderId,
+    senderType: widgetMessage.senderType === "visitor" ? "customer" : widgetMessage.senderType as "agent" | "ai" | "system",
     attachments: widgetMessage.attachments ?? undefined,
     metadata: widgetMessage.metadata ?? undefined,
   };

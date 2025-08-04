@@ -18,7 +18,7 @@ export interface ConversationMetadata {
   sessionId?: string;
   tags?: string[];
   customFields?: Record<string, any>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -112,7 +112,7 @@ export interface ConversationInsert {
   organization_id: string;
   customer_id?: string;
   customer_name?: string | null;
-  customer_email: string;
+  customerEmail: string;
   subject?: string | null;
   status?: ConversationStatus;
   priority?: ConversationPriority;

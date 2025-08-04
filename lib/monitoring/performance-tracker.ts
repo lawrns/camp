@@ -240,10 +240,10 @@ export const trackWidgetOperation = (operation: string, duration: number, succes
 
 // Middleware helper for automatic API tracking
 export const withPerformanceTracking = (operation: string) => {
-  return (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
+  return (target: unknown, propertyName: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       const startTime = Date.now();
       let success = true;
       let error: string | undefined;

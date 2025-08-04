@@ -174,7 +174,7 @@ export function useFormValidation(fields: Record<string, ValidationRule[]>, form
           let totalStrength = 0;
           let maxStrength = 0;
 
-          rules.forEach((rule: any) => {
+          rules.forEach((rule: unknown) => {
             if (rule.strength) {
               maxStrength += rule.strength;
             }
@@ -227,7 +227,7 @@ export function useFormValidation(fields: Record<string, ValidationRule[]>, form
   const validateForm = useCallback((): boolean => {
     let isFormValid = true;
 
-    Object.keys(fields).forEach((fieldId: any) => {
+    Object.keys(fields).forEach((fieldId: unknown) => {
       const validation = validationState[fieldId];
       if (!validation?.isValid) {
         isFormValid = false;
@@ -241,7 +241,7 @@ export function useFormValidation(fields: Record<string, ValidationRule[]>, form
     const totalFields = Object.keys(fields).length;
     if (totalFields === 0) return 100;
 
-    const validFields = Object.values(validationState).filter((v: any) => v.isValid).length;
+    const validFields = Object.values(validationState).filter((v: unknown) => v.isValid).length;
     return Math.round((validFields / totalFields) * 100);
   }, [fields, validationState]);
 
@@ -554,7 +554,7 @@ export function PasswordStrengthMeter({ password, className }: PasswordStrengthM
     let score = 0;
     const newFeedback: string[] = [];
 
-    rules.forEach((rule: any) => {
+    rules.forEach((rule: unknown) => {
       if (rule.test(password)) {
         score += rule.strength || 0;
       } else if (password.length > 0) {

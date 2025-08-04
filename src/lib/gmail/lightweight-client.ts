@@ -121,7 +121,7 @@ export class LightweightGmailClient {
    * Send a message
    */
   async sendMessage(raw: string, threadId?: string): Promise<GmailMessage> {
-    const body: any = { raw };
+    const body: unknown = { raw };
     if (threadId) {
       body.threadId = threadId;
     }
@@ -148,7 +148,7 @@ export class LightweightGmailClient {
    * Watch for changes (for webhooks)
    */
   async watch(topicName: string, labelIds?: string[]): Promise<{ historyId: string; expiration: string }> {
-    const body: any = {
+    const body: unknown = {
       topicName,
       labelIds: labelIds || ["INBOX"],
     };

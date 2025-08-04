@@ -78,8 +78,8 @@ export async function getKnowledgeDocuments(
       query = query.eq("category", filters.category);
     }
 
-    if (filters.is_active !== undefined) {
-      query = query.eq("is_active", filters.is_active);
+    if (filters.isActive !== undefined) {
+      query = query.eq("isActive", filters.isActive);
     }
 
     if (filters.is_public !== undefined) {
@@ -108,7 +108,7 @@ export async function getKnowledgeDocuments(
       helpful: Math.floor(Math.random() * 50) + 5,
       notHelpful: Math.floor(Math.random() * 5),
       embedding: true, // Assume all documents have embeddings
-      searchable: doc.is_active && doc.is_public,
+      searchable: doc.isActive && doc.is_public,
     }));
 
     return {
@@ -154,7 +154,7 @@ export async function getKnowledgeDocument(
       helpful: Math.floor(Math.random() * 50) + 5,
       notHelpful: Math.floor(Math.random() * 5),
       embedding: true,
-      searchable: data.is_active && data.is_public,
+      searchable: data.isActive && data.is_public,
     };
   } catch (error) {
     console.error("[KnowledgeService] Error in getKnowledgeDocument:", error);
@@ -180,7 +180,7 @@ export async function createKnowledgeDocument(
       category: input.category,
       tags: input.tags || [],
       is_public: input.is_public || false,
-      is_active: input.is_active !== undefined ? input.is_active : true,
+      isActive: input.isActive !== undefined ? input.isActive : true,
       metadata: input.metadata || {},
     };
 
@@ -315,8 +315,8 @@ export async function getKnowledgeStats(organizationId: string) {
 
     const stats = {
       total: data.length,
-      published: data.filter((doc) => doc.is_active && doc.is_public).length,
-      draft: data.filter((doc) => !doc.is_active || !doc.is_public).length,
+      published: data.filter((doc) => doc.isActive && doc.is_public).length,
+      draft: data.filter((doc) => !doc.isActive || !doc.is_public).length,
       byType: {
         article: data.filter((doc) => doc.content_type === "article").length,
         faq: data.filter((doc) => doc.content_type === "faq").length,
@@ -367,7 +367,7 @@ export async function uploadKnowledgeDocument(
       category: metadata.category || 'Uncategorized',
       tags: metadata.tags || [],
       is_public: false,
-      is_active: false, // Start as draft
+      isActive: false, // Start as draft
       metadata: {
         originalFileName: file.name,
         fileSize: file.size,
@@ -476,7 +476,7 @@ export async function publishKnowledgeDocument(
     const { data, error } = await supabase
       .from('knowledge_documents')
       .update({
-        is_active: true,
+        isActive: true,
         is_public: true,
         metadata: {
           publishedBy: userId,
@@ -516,7 +516,7 @@ export async function archiveKnowledgeDocument(
     const { data, error } = await supabase
       .from('knowledge_documents')
       .update({
-        is_active: false,
+        isActive: false,
         metadata: {
           archivedBy: userId,
           archivedAt: new Date().toISOString(),
@@ -573,7 +573,7 @@ export async function duplicateKnowledgeDocument(
       category: originalDoc.category,
       tags: originalDoc.tags,
       is_public: false,
-      is_active: false, // Start as draft
+      isActive: false, // Start as draft
       metadata: {
         ...originalDoc.metadata,
         originalDocumentId: documentId,

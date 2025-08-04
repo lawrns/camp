@@ -145,7 +145,7 @@ export function validateRequest(request: NextRequest): { valid: boolean; error?:
   return { valid: true };
 }
 
-export function sanitizeInput(input: any): any {
+export function sanitizeInput(input: unknown): unknown {
   if (typeof input === 'string') {
     // Remove potentially dangerous characters
     return input
@@ -162,7 +162,7 @@ export function sanitizeInput(input: any): any {
   }
 
   if (typeof input === 'object' && input !== null) {
-    const sanitized: any = {};
+    const sanitized: unknown = {};
     for (const [key, value] of Object.entries(input)) {
       sanitized[sanitizeInput(key)] = sanitizeInput(value);
     }
@@ -203,7 +203,7 @@ export function hashSensitiveData(data: string): string {
 }
 
 export function createSecureResponse(
-  data: any,
+  data: unknown,
   status: number = 200,
   config?: Partial<SecurityConfig>
 ): NextResponse {

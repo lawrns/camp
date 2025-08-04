@@ -301,7 +301,7 @@ export class EnhancedAIAnalyticsService {
     };
   }
 
-  private groupDataByTime(data: any[], granularity: 'hour' | 'day' | 'week'): Record<string, any[]> {
+  private groupDataByTime(data: unknown[], granularity: 'hour' | 'day' | 'week'): Record<string, any[]> {
     return data.reduce((acc, item) => {
       const date = new Date(item.createdAt);
       let key: string;

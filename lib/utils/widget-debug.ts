@@ -9,7 +9,7 @@ export interface DebugLogEntry {
   level: 'info' | 'warn' | 'error' | 'debug';
   category: string;
   message: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface WidgetDebugState {
@@ -69,7 +69,7 @@ class WidgetDebugger {
   }
 
   // Generic log method
-  private log(level: DebugLogEntry['level'], category: string, message: string, data?: any) {
+  private log(level: DebugLogEntry['level'], category: string, message: string, data?: unknown) {
     const entry: DebugLogEntry = {
       timestamp: new Date(),
       level,
@@ -112,7 +112,7 @@ class WidgetDebugger {
   }
 
   // Authentication logging
-  logAuth(level: DebugLogEntry['level'], message: string, data?: any) {
+  logAuth(level: DebugLogEntry['level'], message: string, data?: unknown) {
     this.log(level, 'Auth', message, data);
   }
 
@@ -122,7 +122,7 @@ class WidgetDebugger {
   }
 
   // Supabase client logging
-  logSupabase(level: DebugLogEntry['level'], message: string, data?: any) {
+  logSupabase(level: DebugLogEntry['level'], message: string, data?: unknown) {
     this.log(level, 'Supabase', message, data);
   }
 
@@ -132,7 +132,7 @@ class WidgetDebugger {
   }
 
   // WebSocket/Realtime logging
-  logRealtime(level: DebugLogEntry['level'], message: string, data?: any) {
+  logRealtime(level: DebugLogEntry['level'], message: string, data?: unknown) {
     this.log(level, 'Realtime', message, data);
   }
 
@@ -142,7 +142,7 @@ class WidgetDebugger {
   }
 
   // Message logging
-  logMessage(level: DebugLogEntry['level'], message: string, data?: any) {
+  logMessage(level: DebugLogEntry['level'], message: string, data?: unknown) {
     this.log(level, 'Messages', message, data);
   }
 
@@ -157,21 +157,21 @@ class WidgetDebugger {
   }
 
   // Read receipts logging
-  logReadReceipts(level: DebugLogEntry['level'], message: string, data?: any) {
+  logReadReceipts(level: DebugLogEntry['level'], message: string, data?: unknown) {
     this.log(level, 'ReadReceipts', message, data);
   }
 
   // Error logging
-  logError(message: string, error?: any, category: string = 'Error') {
+  logError(message: string, error?: unknown, category: string = 'Error') {
     this.log('error', category, message, error);
   }
 
   // Network request logging
-  logNetworkRequest(url: string, method: string, headers?: Record<string, string>, data?: any) {
+  logNetworkRequest(url: string, method: string, headers?: Record<string, string>, data?: unknown) {
     this.log('debug', 'Network', `${method} ${url}`, { headers, data });
   }
 
-  logNetworkResponse(url: string, status: number, data?: any, error?: any) {
+  logNetworkResponse(url: string, status: number, data?: unknown, error?: unknown) {
     const level = status >= 400 ? 'error' : 'info';
     this.log(level, 'Network', `Response ${status} from ${url}`, { data, error });
   }

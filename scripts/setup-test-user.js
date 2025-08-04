@@ -154,8 +154,8 @@ async function setupTestUser() {
       id: 'test-msg-123',
       conversation_id: convData.id,
       content: 'Hello! This is a test message for E2E testing.',
-      sender_type: 'customer',
-      sender_name: 'Test Customer',
+      senderType: 'customer',
+      senderName: 'Test Customer',
       organization_id: testOrg.id
     };
 

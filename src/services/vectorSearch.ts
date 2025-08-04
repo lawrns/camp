@@ -24,7 +24,7 @@ export type SearchResult = {
   chunkId: number;
   content: string;
   similarity: number;
-  metadata: any;
+  metadata: unknown;
 };
 
 export type KnowledgeSearchResult = {
@@ -32,7 +32,7 @@ export type KnowledgeSearchResult = {
   content: string;
   article_id: string;
   similarity: number;
-  metadata?: any;
+  metadata?: unknown;
   title?: string;
 };
 

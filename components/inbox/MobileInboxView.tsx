@@ -40,7 +40,7 @@ interface ConversationItemProps {
 }
 
 function ConversationItem({ conversation, isUnread, onClick }: ConversationItemProps) {
-  const customerName = conversation.customer_data?.name || conversation.customer_email || "Unknown";
+  const customerName = conversation.customer_data?.name || conversation.customerEmail || "Unknown";
   const lastMessage = conversation.last_message;
   const timeAgo =
     conversation.updated_at && !isNaN(new Date(conversation.updated_at).getTime())
@@ -63,7 +63,7 @@ function ConversationItem({ conversation, isUnread, onClick }: ConversationItemP
   const getInitials = (name: string) => {
     return name
       .split(" ")
-      .map((n: any) => n[0])
+      .map((n: unknown) => n[0])
       .join("")
       .substring(0, 2)
       .toUpperCase();
@@ -116,14 +116,14 @@ export function MobileInboxView({
     if (!searchQuery.trim()) return conversations;
 
     const query = searchQuery.toLowerCase();
-    return conversations.filter((conversation: any) => {
-      const customerName = conversation.customer_data?.name || conversation.customer_email || "";
+    return conversations.filter((conversation: unknown) => {
+      const customerName = conversation.customer_data?.name || conversation.customerEmail || "";
       const lastMessage = conversation.last_message || "";
 
       return (
         customerName.toLowerCase().includes(query) ||
         lastMessage.toLowerCase().includes(query) ||
-        conversation.customer_email?.toLowerCase().includes(query)
+        conversation.customerEmail?.toLowerCase().includes(query)
       );
     });
   }, [conversations, searchQuery]);
@@ -137,7 +137,7 @@ export function MobileInboxView({
   };
 
   const customerName =
-    selectedConversation?.customer_data?.name || selectedConversation?.customer_email || "Unknown Customer";
+    selectedConversation?.customer_data?.name || selectedConversation?.customerEmail || "Unknown Customer";
 
   const customerStatus = selectedConversation?.status === "ai" ? "AI Assistant" : "Online";
 
@@ -169,7 +169,7 @@ export function MobileInboxView({
                 ? {
                     id: selectedConversation.id,
                     name: selectedConversation.customer_data.name || customerName,
-                    email: selectedConversation.customer_email || "",
+                    email: selectedConversation.customerEmail || "",
                     avatar_url: "",
                     created_at: "",
                     updated_at: "",
@@ -205,7 +205,7 @@ export function MobileInboxView({
         showNotifications={true}
         showSearch={true}
         onSearchClick={handleSearchClick}
-        notificationCount={conversations.reduce((total: any, conv: any) => total + (conv.unread_count || 0), 0)}
+        notificationCount={conversations.reduce((total: unknown, conv: unknown) => total + (conv.unread_count || 0), 0)}
       />
 
       {/* Search Bar */}
@@ -235,7 +235,7 @@ export function MobileInboxView({
             </p>
           </div>
         ) : (
-          filteredConversations.map((conversation: any) => (
+          filteredConversations.map((conversation: unknown) => (
             <ConversationItem
               key={conversation.id}
               conversation={conversation}

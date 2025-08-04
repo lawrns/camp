@@ -60,7 +60,7 @@ interface EnhancedAssignmentInterfaceProps {
   currentAssignee?: string;
   requiredSkills?: string[];
   priority?: number;
-  onAssignmentChange?: (assignment: any) => void;
+  onAssignmentChange?: (assignment: unknown) => void;
 }
 
 export function EnhancedAssignmentInterface({

@@ -96,7 +96,7 @@ async function testOrganizationAccess() {
     if (profiles && profiles.length > 0) {
       console.log('   📋 Sample profiles:');
       profiles.forEach(profile => {
-        console.log(`      - ${profile.full_name || profile.email} (org: ${profile.organization_id})`);
+        console.log(`      - ${profile.fullName || profile.email} (org: ${profile.organization_id})`);
       });
     }
 

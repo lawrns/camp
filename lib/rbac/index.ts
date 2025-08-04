@@ -120,7 +120,7 @@ export const RBAC_UTILS = {
   /**
    * Validate permission object
    */
-  validatePermission: (permission: any): boolean => {
+  validatePermission: (permission: unknown): boolean => {
     return (
       permission &&
       typeof permission.action === 'string' &&
@@ -235,7 +235,7 @@ export class RoleNotFoundError extends RBACError {
 }
 
 export class InvalidPermissionError extends RBACError {
-  constructor(permission: any) {
+  constructor(permission: unknown) {
     super(`Invalid permission: ${JSON.stringify(permission)}`);
     this.code = 'INVALID_PERMISSION';
   }

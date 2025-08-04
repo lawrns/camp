@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { logWidgetEvent, logWidgetError } from '@/lib/monitoring/widget-logger';
 import { WidgetMessage, SenderType } from '@/types/entities/message';
+import type { User } from '../design-system/types';
 import { widgetDebugger } from '@/lib/utils/widget-debug';
 import { realtimeConnectionMonitor } from '@/lib/monitoring/realtime-connection-monitor';
 
@@ -34,13 +35,13 @@ interface SupabaseMessage {
   id: string;
   content: string;
   conversation_id: string;
-  sender_type: 'visitor' | 'agent' | 'ai_assistant';
+  senderType: 'visitor' | 'agent' | 'ai_assistant';
   sender_name?: string;
   sender_email?: string;
   created_at: string;
   updated_at?: string;
   status?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 // Enhanced connection status tracking
@@ -61,7 +62,7 @@ interface ConnectionMetrics {
 /**
  * Pre-connection WebSocket test to identify network issues early
  */
-const testWebSocketConnection = (client: any): Promise<boolean> => {
+const testWebSocketConnection = (client: unknown): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
       // Get WebSocket URL from Supabase realtime client
@@ -95,7 +96,7 @@ const testWebSocketConnection = (client: any): Promise<boolean> => {
  * Ensure authentication session is valid before channel subscription
  * CRITICAL FIX: Enhanced authentication with proper error handling and token validation
  */
-const ensureAuthSession = async (client: any, organizationId: string): Promise<string | null> => {
+const ensureAuthSession = async (client: unknown, organizationId: string): Promise<string | null> => {
   try {
     widgetDebugger.logRealtime('info', '🔐 Checking authentication session...');
 
@@ -244,7 +245,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
     // Map database sender types to widget types
     let senderType: SenderType;
-    switch (supabaseMessage.sender_type) {
+    switch (supabaseMessage.senderType) {
       case 'visitor':
         senderType = 'visitor';
         break;
@@ -263,9 +264,9 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       conversationId: String(supabaseMessage.conversation_id || ''),
       content: supabaseMessage.content || '',
       senderType,
-      senderName: supabaseMessage.sender_name || 'Unknown',
+      senderName: supabaseMessage.senderName || 'Unknown',
       createdAt: supabaseMessage.created_at || new Date().toISOString(),
-      status: (supabaseMessage.status as any) || 'sent',
+      status: (supabaseMessage.status as unknown) || 'sent',
     };
   }, []);
 
@@ -393,7 +394,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
       // Set up channel event handlers
       channel
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: any) => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: unknown) => {
           widgetDebugger.logRealtime('info', '📨 Database change received', {
             event: payload.eventType,
             table: payload.table
@@ -404,13 +405,13 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
             config.onMessage?.(message);
           }
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: unknown) => {
           console.log('🚨 [WIDGET BROADCAST] MESSAGE_CREATED event received!', {
             event: UNIFIED_EVENTS.MESSAGE_CREATED,
             payload: payload,
             hasMessage: !!payload.payload?.message,
             messageContent: payload.payload?.message?.content,
-            senderType: payload.payload?.message?.sender_type,
+            senderType: payload.payload?.message?.senderType,
             timestamp: new Date().toISOString()
           });
 
@@ -439,15 +440,15 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
             console.log('🚨 [WIDGET BROADCAST] ❌ No message in payload:', payload);
           }
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: unknown) => {
           config.onTyping?.(true, payload.payload?.userName);
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: unknown) => {
           config.onTyping?.(false, payload.payload?.userName);
         });
 
       // Add global broadcast listener for debugging ALL events
-      channel.on('broadcast', { event: '*' }, (payload: any) => {
+      channel.on('broadcast', { event: '*' }, (payload: unknown) => {
         console.log('🚨 [WIDGET DEBUG] ALL BROADCAST EVENTS received:', {
           event: payload.event,
           type: payload.type,
@@ -458,8 +459,8 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
         // Store logs globally for test access
         if (typeof window !== 'undefined') {
-          (window as any).widgetBroadcastLogs = (window as any).widgetBroadcastLogs || [];
-          (window as any).widgetBroadcastLogs.push({
+          (window as unknown).widgetBroadcastLogs = (window as unknown).widgetBroadcastLogs || [];
+          (window as unknown).widgetBroadcastLogs.push({
             event: payload.event,
             payload: payload.payload,
             timestamp: new Date().toISOString()
@@ -767,13 +768,13 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
       // Set up basic event handlers
       channel
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: any) => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: unknown) => {
           if (payload.eventType === 'INSERT' && payload.new) {
             const message = convertToWidgetMessage(payload.new as SupabaseMessage);
             config.onMessage?.(message);
           }
         })
-        .on('broadcast', { event: '*' }, (payload: any) => {
+        .on('broadcast', { event: '*' }, (payload: unknown) => {
           console.log('🚨 [WIDGET SIMPLE DEBUG] ALL BROADCAST EVENTS received:', {
             event: payload.event,
             type: payload.type,
@@ -782,13 +783,13 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
             timestamp: new Date().toISOString()
           });
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: unknown) => {
           console.log('🚨 [WIDGET BROADCAST ORG] MESSAGE_CREATED event received on org channel!', {
             event: UNIFIED_EVENTS.MESSAGE_CREATED,
             payload: payload,
             hasMessage: !!payload.payload?.message,
             messageContent: payload.payload?.message?.content,
-            senderType: payload.payload?.message?.sender_type,
+            senderType: payload.payload?.message?.senderType,
             timestamp: new Date().toISOString()
           });
 

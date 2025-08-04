@@ -69,7 +69,7 @@ export function SimplifiedOrganizationSettings({ organizationId }: SimplifiedOrg
   const handleFieldChange = <K extends keyof OrganizationSettings>(
     category: K,
     field: keyof OrganizationSettings[K],
-    value: any
+    value: unknown
   ) => {
     if (!formData) return;
 

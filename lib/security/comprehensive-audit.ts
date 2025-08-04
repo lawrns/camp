@@ -43,10 +43,10 @@ interface SecurityEvent {
   details: {
     endpoint?: string;
     method?: string;
-    payload?: any;
+    payload?: unknown;
     headers?: Record<string, string>;
     description: string;
-    evidence?: any;
+    evidence?: unknown;
   };
   risk_score: number; // 0-100
   blocked: boolean;
@@ -57,7 +57,7 @@ interface SecurityRule {
   name: string;
   type: SecurityEventType;
   enabled: boolean;
-  check: (request: NextRequest, context?: any) => Promise<SecurityThreat | null>;
+  check: (request: NextRequest, context?: unknown) => Promise<SecurityThreat | null>;
   severity: 'low' | 'medium' | 'high' | 'critical';
   autoBlock: boolean;
 }
@@ -66,7 +66,7 @@ interface SecurityThreat {
   type: SecurityEventType;
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
-  evidence?: any;
+  evidence?: unknown;
   riskScore: number;
   shouldBlock: boolean;
 }
@@ -86,7 +86,7 @@ class SecurityAuditSystem {
   }
 
   // Main security check function
-  async checkSecurity(request: NextRequest, context?: any): Promise<{
+  async checkSecurity(request: NextRequest, context?: unknown): Promise<{
     allowed: boolean;
     threats: SecurityThreat[];
     events: SecurityEvent[];

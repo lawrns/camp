@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
@@ -13,7 +15,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 interface UseWidgetUXOptions {
   isOpen: boolean;
-  messages: any[];
+  messages: unknown[];
   onOpen?: () => void;
   onClose?: () => void;
   autoScroll?: boolean;

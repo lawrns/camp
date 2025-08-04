@@ -48,7 +48,7 @@ const PATTERNS = {
 interface FormattedSegment {
   type: 'text' | 'url' | 'email' | 'mention' | 'bold' | 'italic' | 'code' | 'codeBlock' | 'strikethrough' | 'underline' | 'blockquote' | 'list' | 'break';
   content: string;
-  data?: any;
+  data?: unknown;
 }
 
 export function MessageFormatter({

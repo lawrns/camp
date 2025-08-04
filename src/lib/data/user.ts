@@ -34,7 +34,7 @@ const clerkClient = {
     },
     getUserList: async (organizationId: string): Promise<User[]> => [],
     getUserOauthAccessToken: async () => null,
-    updateUserMetadata: async (userId: string, metadata: any) => {},
+    updateUserMetadata: async (userId: string, metadata: unknown) => {},
   },
   organizations: {
     createOrganizationInvitation: async () => ({ id: "fallback-invitation" }),
@@ -46,7 +46,7 @@ export const getClerkUser = cache((userId: string | null) =>
   userId ? clerkClient.users.supabase.auth.getUser(userId) : Promise.resolve(null)
 );
 
-export const getClerkUserList = cache((organizationId: string, { limit = 100, ...params }: any = {}) =>
+export const getClerkUserList = cache((organizationId: string, { limit = 100, ...params }: unknown = {}) =>
   clerkClient.users.getUserList(organizationId).then((data) => ({ data }))
 );
 
@@ -93,7 +93,7 @@ export const getUsersWithMailboxAccess = async (
 ): Promise<UserWithMailboxAccessData[]> => {
   const users = await getClerkUserList(organizationId);
 
-  return users.data.map((user: any) => ({
+  return users.data.map((user: unknown) => ({
     id: user.id,
     displayName: user.fullName ?? user.id,
     email: user.email,
@@ -136,7 +136,7 @@ export const getOAuthAccessToken = cache(async (userId: string, provider: "oauth
   return null; // Placeholder
 });
 
-export const setPrivateMetadata = cache(async (user: any, metadata: any) => {
+export const setPrivateMetadata = cache(async (user: unknown, metadata: unknown) => {
   // TODO: Implement private metadata storage with Supabase
   await clerkClient.users.updateUserMetadata(user.id, metadata);
 });

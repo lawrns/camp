@@ -119,7 +119,7 @@ export function ErrorBoundaryProvider({
 
   // Global error handler for all domains
   const unifiedErrorHandler: ErrorHandler = useCallback(
-    async (error: any, errorInfo: any, context: any) => {
+    async (error: unknown, errorInfo: unknown, context: unknown) => {
       const handlers = getErrorHandlers(context.domain);
 
       // Execute all registered handlers for this domain
@@ -165,7 +165,7 @@ export function ErrorBoundaryProvider({
 
       // Execute global handlers
       if (registry.defaultHandler) {
-        registry.defaultHandler(error, {} as any, context);
+        registry.defaultHandler(error, {} as unknown, context);
       }
     };
 
@@ -183,7 +183,7 @@ export function ErrorBoundaryProvider({
 
       // Execute global handlers
       if (registry.defaultHandler) {
-        registry.defaultHandler(event.error || new Error(event.message), {} as any, context);
+        registry.defaultHandler(event.error || new Error(event.message), {} as unknown, context);
       }
     };
 

@@ -296,7 +296,7 @@ class SecurityOptimizer {
   /**
    * Get object depth for DoS protection
    */
-  private getObjectDepth(obj: any, depth = 0): number {
+  private getObjectDepth(obj: unknown, depth = 0): number {
     if (depth > 20) return depth; // Prevent stack overflow
 
     if (typeof obj !== "object" || obj === null) {

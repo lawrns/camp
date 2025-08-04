@@ -148,7 +148,7 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
 
       if (response.ok) {
         setTrainingItems((prev) =>
-          prev.map((item: any) => (item.id === itemId ? { ...item, rating, status: "reviewed" } : item))
+          prev.map((item: unknown) => (item.id === itemId ? { ...item, rating, status: "reviewed" } : item))
         );
       }
     } catch (error) {}
@@ -164,7 +164,7 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
 
       if (response.ok) {
         setTrainingItems((prev) =>
-          prev.map((item: any) => (item.id === itemId ? { ...item, feedback, status: "reviewed" } : item))
+          prev.map((item: unknown) => (item.id === itemId ? { ...item, feedback, status: "reviewed" } : item))
         );
       }
     } catch (error) {}
@@ -180,7 +180,7 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
 
       if (response.ok) {
         setTrainingItems((prev) =>
-          prev.map((item: any) =>
+          prev.map((item: unknown) =>
             item.id === itemId ? { ...item, suggestedImprovement: improvement, status: "improved" } : item
           )
         );
@@ -200,7 +200,7 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
     setEditedResponse("");
   };
 
-  const filteredItems = trainingItems.filter((item: any) => {
+  const filteredItems = trainingItems.filter((item: unknown) => {
     if (filter !== "all" && item.status !== filter) return false;
 
     if (confidenceFilter !== "all") {
@@ -333,7 +333,7 @@ export function AITrainingInterface({ organizationId, className }: AITrainingInt
 
       {/* Training Items */}
       <div className="space-y-3">
-        {filteredItems.map((item: any) => (
+        {filteredItems.map((item: unknown) => (
           <OptimizedMotion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}

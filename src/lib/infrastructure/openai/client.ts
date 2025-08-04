@@ -23,8 +23,8 @@ interface ChatCompletionOptions {
   temperature?: number;
   maxTokens?: number;
   stream?: boolean;
-  functions?: any[];
-  functionCall?: any;
+  functions?: unknown[];
+  functionCall?: unknown;
   presencePenalty?: number;
   frequencyPenalty?: number;
   stop?: string | string[];
@@ -113,7 +113,7 @@ export class OpenAIClient {
         input: texts,
       });
 
-      return response.data.map((item: any) => item.embedding);
+      return response.data.map((item: unknown) => item.embedding);
     } catch (error) {
       throw error;
     }

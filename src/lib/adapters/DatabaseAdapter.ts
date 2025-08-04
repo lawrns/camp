@@ -1,5 +1,5 @@
 /**
- * DatabaseAdapter - Handles snake_case/camelCase conversions and eliminates `as any` casts
+ * DatabaseAdapter - Handles snake_case/camelCase conversions and eliminates `as unknown` casts
  */
 
 export interface DatabaseAdapter<TDatabase, TDomain> {
@@ -10,8 +10,8 @@ export interface DatabaseAdapter<TDatabase, TDomain> {
 /**
  * Generic field converter for snake_case to camelCase
  */
-export function snakeToCamel<T extends Record<string, any>>(obj: T): any {
-  const result: any = {};
+export function snakeToCamel<T extends Record<string, any>>(obj: T): unknown {
+  const result: unknown = {};
   for (const [key, value] of Object.entries(obj)) {
     const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
     result[camelKey] = value;
@@ -22,8 +22,8 @@ export function snakeToCamel<T extends Record<string, any>>(obj: T): any {
 /**
  * Generic field converter for camelCase to snake_case
  */
-export function camelToSnake<T extends Record<string, any>>(obj: T): any {
-  const result: any = {};
+export function camelToSnake<T extends Record<string, any>>(obj: T): unknown {
+  const result: unknown = {};
   for (const [key, value] of Object.entries(obj)) {
     const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
     result[snakeKey] = value;
@@ -35,13 +35,13 @@ export function camelToSnake<T extends Record<string, any>>(obj: T): any {
  * User Factory Result Adapter
  */
 export interface UserFactoryResult {
-  user: any;
-  organization: any;
-  mailbox: any;
+  user: unknown;
+  organization: unknown;
+  mailbox: unknown;
 }
 
 export class UserFactoryAdapter {
-  static toDomain(dbResult: any): UserFactoryResult {
+  static toDomain(dbResult: unknown): UserFactoryResult {
     return {
       user: dbResult.user ?? null,
       organization: dbResult.organization ?? null,
@@ -54,11 +54,11 @@ export class UserFactoryAdapter {
  * Conversation Factory Result Adapter
  */
 export interface ConversationFactoryResult {
-  conversation: any;
+  conversation: unknown;
 }
 
 export class ConversationFactoryAdapter {
-  static toDomain(dbResult: any): ConversationFactoryResult {
+  static toDomain(dbResult: unknown): ConversationFactoryResult {
     return {
       conversation: dbResult.conversation ?? null,
     };
@@ -69,11 +69,11 @@ export class ConversationFactoryAdapter {
  * Mailbox Factory Result Adapter
  */
 export interface MailboxFactoryResult {
-  mailbox: any;
+  mailbox: unknown;
 }
 
 export class MailboxFactoryAdapter {
-  static toDomain(dbResult: any): MailboxFactoryResult {
+  static toDomain(dbResult: unknown): MailboxFactoryResult {
     return {
       mailbox: dbResult.mailbox ?? null,
     };
@@ -90,7 +90,7 @@ export interface OrganizationSettingsAdapter {
 }
 
 export class OrganizationAdapter {
-  static adaptSettings(settings: any): OrganizationSettingsAdapter {
+  static adaptSettings(settings: unknown): OrganizationSettingsAdapter {
     return {
       widget: settings?.widget ?? {},
       security: settings?.security ?? {},

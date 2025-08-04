@@ -97,34 +97,34 @@ export default function WidgetTestPage() {
           <h2 className="mb-4 text-xl font-semibold">Test Data Attributes</h2>
           <div className="space-y-2 text-sm text-gray-600">
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="widget-button"</code> - Widget launcher
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;widget-button&quot;</code> - Widget launcher
               button
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="widget-panel"</code> - Main widget panel
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;widget-panel&quot;</code> - Main widget panel
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="message-input"</code> - Message input field
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;message-input&quot;</code> - Message input field
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="send-button"</code> - Send message button
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;send-button&quot;</code> - Send message button
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="typing-indicator"</code> - Typing indicator
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;typing-indicator&quot;</code> - Typing indicator
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="ai-message"</code> - AI response message
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;ai-message&quot;</code> - AI response message
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="handover-indicator"</code> - Handover to
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;handover-indicator&quot;</code> - Handover to
               human indicator
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="confidence-score"</code> - AI confidence
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;confidence-score&quot;</code> - AI confidence
               score (debug)
             </div>
             <div>
-              <code className="rounded bg-gray-100 px-2 py-1">data-testid="agent-name"</code> - Agent name display
+              <code className="rounded bg-gray-100 px-2 py-1">data-testid=&quot;agent-name&quot;</code> - Agent name display
             </div>
           </div>
         </div>
@@ -144,19 +144,19 @@ export default function WidgetTestPage() {
             <div>
               <h3 className="mb-2 font-medium text-gray-900">High Confidence (Should NOT handover):</h3>
               <ul className="space-y-1 text-sm text-gray-600">
-                <li>"How do I reset my password?"</li>
-                <li>"What are your pricing plans?"</li>
-                <li>"How do I create an account?"</li>
-                <li>"Where can I find the user guide?"</li>
+                <li>&quot;How do I reset my password?&quot;</li>
+                <li>&quot;What are your pricing plans?&quot;</li>
+                <li>&quot;How do I create an account?&quot;</li>
+                <li>&quot;Where can I find the user guide?&quot;</li>
               </ul>
             </div>
             <div>
               <h3 className="mb-2 font-medium text-gray-900">Low Confidence (Should handover):</h3>
               <ul className="space-y-1 text-sm text-gray-600">
-                <li>"I need a custom enterprise solution"</li>
-                <li>"There's a critical bug in production"</li>
-                <li>"I want to discuss a partnership"</li>
-                <li>"Can you help with complex integration?"</li>
+                <li>&quot;I need a custom enterprise solution&quot;</li>
+                <li>&quot;There&apos;s a critical bug in production&quot;</li>
+                <li>&quot;I want to discuss a partnership&quot;</li>
+                <li>&quot;Can you help with complex integration?&quot;</li>
               </ul>
             </div>
           </div>
@@ -195,7 +195,7 @@ function PerformanceMonitor() {
       // Get memory usage if available
       let memoryUsage = 0;
       if ("memory" in performance) {
-        memoryUsage = (performance as any).memory.usedJSHeapSize / 1024 / 1024; // MB
+        memoryUsage = (performance as unknown).memory.usedJSHeapSize / 1024 / 1024; // MB
       }
 
       setMetrics((prev) => ({

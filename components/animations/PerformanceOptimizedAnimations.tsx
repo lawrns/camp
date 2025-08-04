@@ -123,7 +123,7 @@ const GPUMotion = {
       ...rest,
     };
     // Use type assertion to handle exactOptionalPropertyTypes properly
-    return <motion.div {...(motionProps as any)} />;
+    return <motion.div {...(motionProps as unknown)} />;
   }),
 
   span: React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>((props, ref) => {
@@ -139,7 +139,7 @@ const GPUMotion = {
       ...rest,
     };
     // Use type assertion to handle exactOptionalPropertyTypes properly
-    return <motion.span {...(motionProps as any)} />;
+    return <motion.span {...(motionProps as unknown)} />;
   }),
 
   img: React.forwardRef<HTMLImageElement, React.ImgHTMLAttributes<HTMLImageElement>>((props, ref) => {
@@ -156,7 +156,7 @@ const GPUMotion = {
       ...rest,
     };
     // Use type assertion to handle exactOptionalPropertyTypes properly
-    return <motion.img {...(motionProps as any)} />;
+    return <motion.img {...(motionProps as unknown)} />;
   }),
 };
 
@@ -285,7 +285,7 @@ export function OptimizedAnimation({
 
   return (
     // Use type assertion to handle exactOptionalPropertyTypes properly
-    <MotionComponent {...(motionProps as any)}>{children}</MotionComponent>
+    <MotionComponent {...(motionProps as unknown)}>{children}</MotionComponent>
   );
 }
 

@@ -8,7 +8,7 @@ import { getBrowserClient } from "@/lib/supabase";
 interface Message {
   id: string;
   content: string;
-  sender_type: 'customer' | 'agent' | 'ai' | 'system';
+  senderType: 'customer' | 'agent' | 'ai' | 'system';
   sender_name?: string;
   timestamp: Date;
   status: 'sending' | 'sent' | 'delivered' | 'read';
@@ -20,8 +20,8 @@ export default function SimpleChatPage() {
     {
       id: '1',
       content: 'Hello! Welcome to Campfire support. How can I help you today?',
-      sender_type: 'agent',
-      sender_name: 'Support Agent',
+      senderType: 'agent',
+      senderName: 'Support Agent',
       timestamp: new Date(Date.now() - 2 * 60 * 1000),
       status: 'read',
     },
@@ -54,8 +54,8 @@ export default function SimpleChatPage() {
     const message: Message = {
       id: Date.now().toString(),
       content: newMessage,
-      sender_type: 'customer',
-      sender_name: user?.email || 'You',
+      senderType: 'customer',
+      senderName: user?.email || 'You',
       timestamp: new Date(),
       status: 'sending',
     };
@@ -82,8 +82,8 @@ export default function SimpleChatPage() {
       const agentResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: getAgentResponse(newMessage),
-        sender_type: 'agent',
-        sender_name: 'Support Agent',
+        senderType: 'agent',
+        senderName: 'Support Agent',
         timestamp: new Date(),
         status: 'sent',
       };
@@ -150,14 +150,14 @@ export default function SimpleChatPage() {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.sender_type === 'customer' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.senderType === 'customer' ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`flex items-start gap-3 max-w-xs lg:max-w-md`}>
-                {message.sender_type !== 'customer' && (
+                {message.senderType !== 'customer' && (
                   <div className="flex-shrink-0">
-                    {message.sender_type === 'agent' ? (
+                    {message.senderType === 'agent' ? (
                       <User className="h-8 w-8 p-1 bg-blue-100 text-blue-600 rounded-full" />
-                    ) : message.sender_type === 'ai' ? (
+                    ) : message.senderType === 'ai' ? (
                       <Robot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
                     ) : (
                       <ChatCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
@@ -167,7 +167,7 @@ export default function SimpleChatPage() {
                 
                 <div
                   className={`px-4 py-3 rounded-lg shadow-sm ${
-                    message.sender_type === 'customer'
+                    message.senderType === 'customer'
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-900 border border-gray-200'
                   }`}
@@ -175,11 +175,11 @@ export default function SimpleChatPage() {
                   <p className="text-sm">{message.content}</p>
                   <div className="flex items-center justify-between mt-2">
                     <span className={`text-xs ${
-                      message.sender_type === 'customer' ? 'text-blue-100' : 'text-gray-500'
+                      message.senderType === 'customer' ? 'text-blue-100' : 'text-gray-500'
                     }`}>
                       {formatTime(message.timestamp)}
                     </span>
-                    {message.sender_type === 'customer' && (
+                    {message.senderType === 'customer' && (
                       <span className="text-xs text-blue-100">
                         {message.status === 'sending' ? '⏳' : '✓'}
                       </span>
@@ -187,7 +187,7 @@ export default function SimpleChatPage() {
                   </div>
                 </div>
                 
-                {message.sender_type === 'customer' && (
+                {message.senderType === 'customer' && (
                   <div className="flex-shrink-0">
                     <User className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
                   </div>

@@ -227,8 +227,8 @@ export function AssignmentPanel({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80">
-        <div className="space-y-3">
+      <div className="ds-modal w-80">
+        <div className="space-y-3 ds-modal-body">
           <Skeleton className="h-6 w-32" />
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-20 w-full" />
@@ -238,8 +238,8 @@ export function AssignmentPanel({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80">
-      <div className="space-y-4">
+    <div className="ds-modal w-80">
+      <div className="space-y-4 ds-modal-body">
         {/* Header */}
         <div className="border-b border-gray-200 pb-3">
           <h3 className="text-lg font-semibold text-gray-900">Assign Agent</h3>
@@ -251,7 +251,7 @@ export function AssignmentPanel({
           <Button
             onClick={handleAssignToMe}
             disabled={assigning}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full ds-button-primary"
             size="sm"
           >
             <Icon icon={UserPlus} className="mr-2 h-4 w-4" />
@@ -268,7 +268,7 @@ export function AssignmentPanel({
                 <SelectValue placeholder="Select another agent" />
               </SelectTrigger>
               <SelectContent>
-                {agents.map((agent: any) => {
+                {agents.map((agent: unknown) => {
                   const workload = getWorkloadIndicator(agent);
                   return (
                     <SelectItem key={agent.id} value={agent.id}>
@@ -294,7 +294,7 @@ export function AssignmentPanel({
             <Button
               onClick={handleAssignment}
               disabled={!selectedAgentId || assigning || selectedAgentId === "me"}
-              className="w-full"
+              className="w-full ds-button-secondary"
               variant="outline"
             >
               {assigning ? "Assigning..." : "Assign Selected Agent"}
@@ -304,12 +304,12 @@ export function AssignmentPanel({
 
         {/* Show error message if agents failed to load */}
         {agentsError && (
-          <div className="border border-blue-200 rounded-lg bg-blue-50 p-3 text-center text-sm">
+          <div className="ds-warning-message text-center text-sm">
             <div className="mb-2 flex items-center justify-center gap-2">
-              <Icon icon={UserCircle} className="h-4 w-4 text-blue-600" />
-              <span className="font-medium text-blue-800">Single Agent Mode</span>
+              <Icon icon={UserCircle} className="h-4 w-4" />
+              <span className="font-medium">Single Agent Mode</span>
             </div>
-            <p className="text-blue-700">
+            <p>
               Team member data is not available. You can assign conversations to yourself using the button above.
             </p>
           </div>
@@ -317,7 +317,7 @@ export function AssignmentPanel({
 
         {/* Current Agent Info */}
         {currentAgentId && (
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 ds-modal-body">
             <p className="mb-2 text-sm font-medium text-gray-900">Currently Assigned</p>
             {agents.find((a) => a.id === currentAgentId) ? (
               <div className="flex items-center gap-2">
@@ -358,7 +358,7 @@ export function AssignmentPanel({
             <h4 className="text-sm font-medium text-gray-900">Assignment History</h4>
             <ScrollArea className="h-32 rounded-lg border border-gray-200">
               <div className="space-y-2 p-3">
-                {assignmentHistory.map((history: any) => (
+                {assignmentHistory.map((history: unknown) => (
                   <div key={history.id} className="space-y-1 rounded p-2 text-xs hover:bg-gray-100">
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-900">{history.agentName}</span>

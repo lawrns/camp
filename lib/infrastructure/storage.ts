@@ -58,7 +58,7 @@ export class StorageService {
       return [];
     }
 
-    return data.map((file: any) => ({
+    return data.map((file: unknown) => ({
       name: file.name,
       size: file.metadata?.size || 0,
       type: file.metadata?.mimetype || "unknown",

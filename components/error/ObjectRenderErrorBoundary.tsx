@@ -116,7 +116,7 @@ export function useObjectRenderErrorHandler() {
 /**
  * Utility component to safely render potentially problematic values
  */
-export function SafeRender({ value, fallback = '' }: { value: any; fallback?: string }) {
+export function SafeRender({ value, fallback = '' }: { value: unknown; fallback?: string }) {
   try {
     // If it's a safe primitive value, render it directly
     if (value === null || value === undefined || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {

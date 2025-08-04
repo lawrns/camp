@@ -106,7 +106,7 @@ class ChannelManager {
     });
   }
 
-  getChannel(name: string, config?: any): RealtimeChannel {
+  getChannel(name: string, config?: unknown): RealtimeChannel {
     const existing = this.channels.get(name);
     if (existing) {
       existing.lastUsed = Date.now();
@@ -194,7 +194,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Helper function to ensure channel subscription before operations with exponential backoff
-async function ensureChannelSubscription(channelName: string, config?: any, attempt: number = 1): Promise<RealtimeChannel> {
+async function ensureChannelSubscription(channelName: string, config?: unknown, attempt: number = 1): Promise<RealtimeChannel> {
   const maxAttempts = 3;
   const timeouts = [15000, 30000, 60000]; // Progressive timeouts: 15s → 30s → 60s
   const currentTimeout = timeouts[attempt - 1] || timeouts[timeouts.length - 1];
@@ -303,8 +303,8 @@ async function ensureChannelSubscription(channelName: string, config?: any, atte
 export async function broadcastToChannel(
   channelName: string,
   eventType: string,
-  payload: any,
-  config?: any
+  payload: unknown,
+  config?: unknown
 ): Promise<boolean> {
   console.log(`[Realtime] 🚀 Starting broadcast to ${channelName} -> ${eventType}`);
 
@@ -355,8 +355,8 @@ export async function broadcastToChannel(
 export function subscribeToChannel(
   channelName: string,
   eventType: string,
-  callback: (payload: any) => void,
-  config?: any
+  callback: (payload: unknown) => void,
+  config?: unknown
 ): () => void {
   const channel = channelManager.getChannel(channelName, config);
   channelManager.addSubscriber(channelName);
@@ -384,7 +384,7 @@ export function subscribeToChannel(
 // Convenience functions for common operations
 export const RealtimeHelpers = {
   // Broadcast message to conversation
-  broadcastMessage: (orgId: string, convId: string, message: any) =>
+  broadcastMessage: (orgId: string, convId: string, message: unknown) =>
     broadcastToChannel(
       CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
@@ -408,7 +408,7 @@ export const RealtimeHelpers = {
     ),
 
   // Subscribe to conversation messages
-  subscribeToMessages: (orgId: string, convId: string, callback: (message: any) => void) =>
+  subscribeToMessages: (orgId: string, convId: string, callback: (message: unknown) => void) =>
     subscribeToChannel(
       CHANNEL_PATTERNS.conversation(orgId, convId),
       EVENT_TYPES.MESSAGE_CREATED,
@@ -416,7 +416,7 @@ export const RealtimeHelpers = {
     ),
 
   // Subscribe to typing indicators
-  subscribeToTyping: (orgId: string, convId: string, callback: (typing: any) => void) => {
+  subscribeToTyping: (orgId: string, convId: string, callback: (typing: unknown) => void) => {
     const unsubscribeStart = subscribeToChannel(
       CHANNEL_PATTERNS.CONVERSATION_TYPING(orgId, convId),
       EVENT_TYPES.TYPING_START,

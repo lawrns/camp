@@ -25,7 +25,7 @@ test.describe('Comprehensive Real-time Synchronization', () => {
     const dashboardPage = await dashboardContext.newPage();
     
     // Track real-time events
-    const realtimeEvents: Array<{ source: string; event: string; payload?: any }> = [];
+    const realtimeEvents: Array<{ source: string; event: string; payload?: unknown }> = [];
     
     try {
       // Step 1: Set up dashboard with authentication
@@ -70,17 +70,17 @@ test.describe('Comprehensive Real-time Synchronization', () => {
       
       // Monitor Supabase real-time events on both pages
       await widgetPage.evaluate(() => {
-        (window as any).realtimeEvents = [];
+        (window as unknown).realtimeEvents = [];
         // Hook into Supabase realtime if available
-        if ((window as any).supabase) {
+        if ((window as unknown).supabase) {
           console.log('[Widget] Supabase realtime available');
         }
       });
       
       await dashboardPage.evaluate(() => {
-        (window as any).realtimeEvents = [];
+        (window as unknown).realtimeEvents = [];
         // Hook into Supabase realtime if available
-        if ((window as any).supabase) {
+        if ((window as unknown).supabase) {
           console.log('[Dashboard] Supabase realtime available');
         }
       });
@@ -139,7 +139,7 @@ test.describe('Comprehensive Real-time Synchronization', () => {
       let widgetApiHasMessage = false;
       if (widgetMessagesResponse.ok()) {
         const widgetMessages = await widgetMessagesResponse.json();
-        widgetApiHasMessage = widgetMessages.some((msg: any) => 
+        widgetApiHasMessage = widgetMessages.some((msg: unknown) => 
           msg.content && msg.content.includes('Real-time sync test'));
         console.log(`✅ Widget API working - found ${widgetMessages.length} messages`);
         console.log(`Widget API has test message: ${widgetApiHasMessage ? '✅' : '❌'}`);
@@ -155,7 +155,7 @@ test.describe('Comprehensive Real-time Synchronization', () => {
       let dashboardApiHasMessage = false;
       if (dashboardMessagesResponse.ok()) {
         const dashboardMessages = await dashboardMessagesResponse.json();
-        dashboardApiHasMessage = dashboardMessages.some((msg: any) => 
+        dashboardApiHasMessage = dashboardMessages.some((msg: unknown) => 
           msg.content && msg.content.includes('Real-time sync test'));
         console.log(`✅ Dashboard API working - found ${dashboardMessages.length} messages`);
         console.log(`Dashboard API has test message: ${dashboardApiHasMessage ? '✅' : '❌'}`);
@@ -178,19 +178,19 @@ test.describe('Comprehensive Real-time Synchronization', () => {
       // Check real-time setup on both pages
       const widgetRealtimeInfo = await widgetPage.evaluate(() => {
         return {
-          hasSupabase: typeof (window as any).supabase !== 'undefined',
-          hasRealtime: typeof (window as any).supabaseRealtime !== 'undefined',
-          channels: Object.keys((window as any).realtimeChannels || {}),
-          events: (window as any).realtimeEvents || []
+          hasSupabase: typeof (window as unknown).supabase !== 'undefined',
+          hasRealtime: typeof (window as unknown).supabaseRealtime !== 'undefined',
+          channels: Object.keys((window as unknown).realtimeChannels || {}),
+          events: (window as unknown).realtimeEvents || []
         };
       });
       
       const dashboardRealtimeInfo = await dashboardPage.evaluate(() => {
         return {
-          hasSupabase: typeof (window as any).supabase !== 'undefined',
-          hasRealtime: typeof (window as any).supabaseRealtime !== 'undefined',
-          channels: Object.keys((window as any).realtimeChannels || {}),
-          events: (window as any).realtimeEvents || []
+          hasSupabase: typeof (window as unknown).supabase !== 'undefined',
+          hasRealtime: typeof (window as unknown).supabaseRealtime !== 'undefined',
+          channels: Object.keys((window as unknown).realtimeChannels || {}),
+          events: (window as unknown).realtimeEvents || []
         };
       });
       

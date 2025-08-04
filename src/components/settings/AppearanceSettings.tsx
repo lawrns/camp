@@ -42,7 +42,7 @@ const appearanceSettingsSchema = z.object({
 type AppearanceSettingsFormData = z.infer<typeof appearanceSettingsSchema>;
 
 interface AppearanceSettingsProps {
-  settings: any;
+  settings: unknown;
   isLoading: boolean;
   error: Error | null;
   organizationId: string;

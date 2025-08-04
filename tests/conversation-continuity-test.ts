@@ -76,11 +76,11 @@ function setupBrowserMocks() {
   };
 
   // Set up global mocks
-  (global as any).localStorage = localStorageMock;
-  (global as any).navigator = navigatorMock;
-  (global as any).screen = screenMock;
-  (global as any).Intl = IntlMock;
-  (global as any).document = documentMock;
+  (global as unknown).localStorage = localStorageMock;
+  (global as unknown).navigator = navigatorMock;
+  (global as unknown).screen = screenMock;
+  (global as unknown).Intl = IntlMock;
+  (global as unknown).document = documentMock;
 }
 
 async function testVisitorFingerprinting() {

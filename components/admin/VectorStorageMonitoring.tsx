@@ -431,7 +431,7 @@ export default function VectorStorageMonitoring({ organizationId }: { organizati
                     size: stats.orphanedVectors.estimatedSize,
                     count: stats.orphanedVectors.total,
                   },
-                ].map((item: any) => {
+                ].map((item: unknown) => {
                   const percentage = stats.totalEstimatedSize > 0 ? (item.size / stats.totalEstimatedSize) * 100 : 0;
                   return (
                     <div key={item.name} className="space-y-spacing-sm">
@@ -474,7 +474,7 @@ export default function VectorStorageMonitoring({ organizationId }: { organizati
                 </div>
 
                 <div className="space-y-3">
-                  {impact.breakdown.map((item: any) => (
+                  {impact.breakdown.map((item: unknown) => (
                     <div key={item.type} className="flex items-center justify-between rounded-ds-lg border spacing-3">
                       <div>
                         <div className="font-medium capitalize">{item.type.replace("_", " ")}</div>

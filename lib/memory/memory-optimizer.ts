@@ -28,7 +28,7 @@ interface MemoryMetrics {
 class MemoryOptimizer {
   private static instance: MemoryOptimizer;
   private config: MemoryOptimizationConfig;
-  private cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private cache = new Map<string, { data: unknown; timestamp: number; ttl: number }>();
   private weakCache = new WeakMap();
   private cleanupInterval: NodeJS.Timeout | null = null;
   private memoryHistory: MemoryMetrics[] = [];
@@ -80,7 +80,7 @@ class MemoryOptimizer {
   private recordMemoryMetrics() {
     if (typeof window !== "undefined" && "performance" in window) {
       // @ts-ignore - performance.memory is Chrome-specific
-      const memory = (window.performance as any).memory;
+      const memory = (window.performance as unknown).memory;
       if (memory) {
         const metrics: MemoryMetrics = {
           usedHeapSize: memory.usedJSHeapSize,
@@ -149,7 +149,7 @@ class MemoryOptimizer {
   /**
    * Optimized caching with automatic cleanup
    */
-  public cache_set(key: string, data: any, ttl: number = 300000): void {
+  public cache_set(key: string, data: unknown, ttl: number = 300000): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
@@ -157,7 +157,7 @@ class MemoryOptimizer {
     });
   }
 
-  public cache_get(key: string): any | null {
+  public cache_get(key: string): unknown | null {
     const entry = this.cache.get(key);
     if (!entry) return null;
 
@@ -172,13 +172,13 @@ class MemoryOptimizer {
   /**
    * Weak reference caching for objects
    */
-  public weakCache_set(obj: object, key: string, data: any): void {
+  public weakCache_set(obj: object, key: string, data: unknown): void {
     if (this.config.enableWeakReferences) {
       this.weakCache.set(obj, { ...this.weakCache.get(obj), [key]: data });
     }
   }
 
-  public weakCache_get(obj: object, key: string): any | null {
+  public weakCache_get(obj: object, key: string): unknown | null {
     if (this.config.enableWeakReferences) {
       const cache = this.weakCache.get(obj);
       return cache ? cache[key] : null;

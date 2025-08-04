@@ -13,7 +13,7 @@ export interface CustomerMetadata {
   tags?: string[];
   customFields?: Record<string, any>;
   preferences?: CustomerPreferences;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface CustomerPreferences {

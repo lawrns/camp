@@ -5,7 +5,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel
 import { supabase } from '@/lib/supabase/consolidated-exports';
 
 // Authentication wrapper for dashboard endpoints
-async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+async function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
@@ -48,7 +48,7 @@ async function withAuth(handler: (req: NextRequest, user: any) => Promise<NextRe
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const body = await request.json();
     const { 
@@ -95,9 +95,9 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
       conversation_id: conversationId,
       organization_id: user.organizationId,
       user_id: user.userId,
-      user_name: user.name,
-      sender_type: 'operator',
-      is_typing: isTyping,
+      userName: user.name,
+      senderType: 'operator',
+      isTyping: isTyping,
       content: content,
       updated_at: new Date().toISOString(),
     };
@@ -204,7 +204,7 @@ export const POST = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const { searchParams } = new URL(request.url);
     const conversationId = searchParams.get('conversationId');
@@ -240,7 +240,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
       .select('*')
       .eq('conversation_id', conversationId)
       .eq('organization_id', user.organizationId)
-      .eq('is_typing', true)
+      .eq('isTyping', true)
       .gte('updated_at', new Date(Date.now() - 30000).toISOString()) // Only get indicators from last 30 seconds
       .order('updated_at', { ascending: false });
 

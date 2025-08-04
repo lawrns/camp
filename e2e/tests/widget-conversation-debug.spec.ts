@@ -48,11 +48,11 @@ test.describe('Widget Conversation Debug', () => {
       // Try to access widget state from window object
       const state = {
         hasWindow: typeof window !== 'undefined',
-        hasWidgetState: typeof (window as any).widgetState !== 'undefined',
-        widgetState: (window as any).widgetState || null,
-        hasSupabase: typeof (window as any).supabase !== 'undefined',
-        hasRealtimeChannels: typeof (window as any).realtimeChannels !== 'undefined',
-        realtimeChannels: Object.keys((window as any).realtimeChannels || {}),
+        hasWidgetState: typeof (window as unknown).widgetState !== 'undefined',
+        widgetState: (window as unknown).widgetState || null,
+        hasSupabase: typeof (window as unknown).supabase !== 'undefined',
+        hasRealtimeChannels: typeof (window as unknown).realtimeChannels !== 'undefined',
+        realtimeChannels: Object.keys((window as unknown).realtimeChannels || {}),
         localStorage: {
           keys: Object.keys(localStorage),
           widgetData: localStorage.getItem('widget-state') || localStorage.getItem('campfire-widget') || null

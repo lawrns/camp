@@ -18,12 +18,12 @@ export function useSupabaseEvent<T = Record<string, unknown>>(
     channelRef.current = channel;
 
     // Subscribe to broadcast events
-    channel.on("broadcast", { event: eventName }, ({ payload }: any) => {
+    channel.on("broadcast", { event: eventName }, ({ payload }: unknown) => {
       callback(payload as T);
     });
 
     // Subscribe to the channel
-    channel.subscribe((status: any) => {
+    channel.subscribe((status: unknown) => {
       if (status === "SUBSCRIBED") {
         // Successfully subscribed
       }
@@ -57,7 +57,7 @@ export function useSupabaseEventOnce<T = Record<string, unknown>>(
     const channel = getSupabaseLegacy().channel(channelName);
     channelRef.current = channel;
 
-    channel.on("broadcast", { event: eventName }, ({ payload }: any) => {
+    channel.on("broadcast", { event: eventName }, ({ payload }: unknown) => {
       if (!hasTriggered.current) {
         hasTriggered.current = true;
         callback(payload as T);
@@ -80,7 +80,7 @@ export function useSupabaseEventOnce<T = Record<string, unknown>>(
  * Hook to send broadcast events to a Supabase Realtime channel
  */
 export function useSupabaseBroadcast() {
-  const sendEvent = async (channelName: string, eventName: string, payload: any) => {
+  const sendEvent = async (channelName: string, eventName: string, payload: unknown) => {
     const channel = getSupabaseLegacy().channel(channelName);
 
     await channel.subscribe();

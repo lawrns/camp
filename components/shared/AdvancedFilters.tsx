@@ -47,7 +47,7 @@ export interface FilterConfig {
 }
 
 export interface FilterValue {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface AdvancedFiltersProps {
@@ -80,7 +80,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
       (Array.isArray(localValues[key]) ? localValues[key].length > 0 : true)
   ).length;
 
-  const handleFilterChange = (filterId: string, value: any) => {
+  const handleFilterChange = (filterId: string, value: unknown) => {
     const newValues = { ...localValues, [filterId]: value };
     setLocalValues(newValues);
   };
@@ -92,7 +92,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
 
   const handleReset = () => {
     const emptyValues: FilterValue = {};
-    filters.forEach((filter: any) => {
+    filters.forEach((filter: unknown) => {
       emptyValues[filter.id] = filter.type === "multiselect" ? [] : undefined;
     });
     setLocalValues(emptyValues);
@@ -120,7 +120,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
               <SelectValue placeholder={filter.placeholder || `Select ${filter.label}`} />
             </SelectTrigger>
             <SelectContent>
-              {filter.options?.map((option: any) => (
+              {filter.options?.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   <div className="flex items-center gap-ds-2">
                     {option.icon}
@@ -135,7 +135,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
       case "multiselect":
         return (
           <div className="space-y-spacing-sm">
-            {filter.options?.map((option: any) => (
+            {filter.options?.map((option: unknown) => (
               <div key={option.value} className="flex items-center space-x-spacing-sm">
                 <Checkbox
                   id={`${filter.id}-${option.value}`}
@@ -284,7 +284,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
     }
   };
 
-  const filteredFilters = filters.filter((filter: any) =>
+  const filteredFilters = filters.filter((filter: unknown) =>
     filter.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -354,7 +354,7 @@ export function AdvancedFilters({ filters, values, onChange, onReset, className,
           {filteredFilters.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">No filters found</p>
           ) : (
-            filteredFilters.map((filter: any) => (
+            filteredFilters.map((filter: unknown) => (
               <div key={filter.id} className="space-y-spacing-sm">
                 <Label className="flex items-center gap-ds-2">
                   {filter.icon}

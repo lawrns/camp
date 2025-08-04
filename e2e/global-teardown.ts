@@ -19,7 +19,7 @@ async function globalTeardown(config: FullConfig) {
   console.log('🧹 Starting E2E Global Teardown...');
 
   // Load test metadata
-  let testMetadata: any = {};
+  let testMetadata: unknown = {};
   try {
     testMetadata = JSON.parse(fs.readFileSync('e2e/test-metadata.json', 'utf-8'));
   } catch (error) {
@@ -40,7 +40,7 @@ async function globalTeardown(config: FullConfig) {
   try {
     // Clean up test conversations
     if (testMetadata.testConversations) {
-      const conversationIds = testMetadata.testConversations.map((c: any) => c.id);
+      const conversationIds = testMetadata.testConversations.map((c: unknown) => c.id);
       await supabase
         .from('conversations')
         .delete()

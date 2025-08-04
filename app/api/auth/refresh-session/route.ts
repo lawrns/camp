@@ -36,7 +36,7 @@ export const POST = withAuditLogging(
 
       // Check if session is still valid
       const now = new Date();
-      const sessionExpiry = new Date(currentSession.expires_at || 0);
+      const sessionExpiry = new Date(currentSession.expiresAt || 0);
 
       if (sessionExpiry <= now) {
         return createErrorResponse("Session already expired", 401, "SESSION_EXPIRED");
@@ -54,7 +54,7 @@ export const POST = withAuditLogging(
       const { error: updateError } = await scopedClient
         .from("profiles")
         .update({
-          last_activity: now.toISOString(),
+          lastActivity: now.toISOString(),
           updated_at: now.toISOString(),
         })
         .eq("id", user.id);
@@ -65,7 +65,7 @@ export const POST = withAuditLogging(
       }
 
       // Calculate new expiry time
-      const newExpiry = new Date(refreshData.session.expires_at || 0);
+      const newExpiry = new Date(refreshData.session.expiresAt || 0);
       const timeExtended = newExpiry.getTime() - sessionExpiry.getTime();
 
       // Log session refresh for security monitoring
@@ -74,15 +74,15 @@ export const POST = withAuditLogging(
         previous_expiry: sessionExpiry.toISOString(),
         new_expiry: newExpiry.toISOString(),
         time_extended_ms: timeExtended,
-        user_agent: req.headers.get("user-agent"),
-        ip_address: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
+        userAgent: req.headers.get("user-agent"),
+        ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
         session_id: refreshData.session.access_token.slice(-8), // Last 8 chars for identification
       };
 
       return createSuccessResponse({
         message: "Session refreshed successfully",
         session: {
-          expires_at: refreshData.session.expires_at,
+          expiresAt: refreshData.session.expiresAt,
           expires_in: refreshData.session.expires_in,
           access_token: refreshData.session.access_token,
           refresh_token: refreshData.session.refresh_token,
@@ -106,8 +106,8 @@ export const POST = withAuditLogging(
     detailsExtractor: (req, params, body) => ({
       reason: body?.reason || "manual",
       extend_by: body?.extendBy,
-      user_agent: req?.headers.get("user-agent"),
-      ip_address: req?.headers.get("x-forwarded-for") || req?.headers.get("x-real-ip"),
+      userAgent: req?.headers.get("user-agent"),
+      ipAddress: req?.headers.get("x-forwarded-for") || req?.headers.get("x-real-ip"),
     }),
   }
 );
@@ -137,22 +137,22 @@ export const GET = withAuth(async (req: NextRequest, { params }, { user, organiz
     // Get user's last activity
     const { data: profile } = await scopedClient
       .from("profiles")
-      .select("last_activity, created_at")
+      .select("lastActivity, created_at")
       .eq("id", user.id)
       .single();
 
-    const lastActivity = profile?.last_activity ? new Date(profile.last_activity) : new Date(profile?.created_at || 0);
+    const lastActivity = profile?.lastActivity ? new Date(profile.lastActivity) : new Date(profile?.created_at || 0);
     const timeSinceActivity = now.getTime() - lastActivity.getTime();
 
     return createSuccessResponse({
       session_status: {
         is_valid: !isExpired,
-        expires_at: sessionExpiry.toISOString(),
+        expiresAt: sessionExpiry.toISOString(),
         expires_in: Math.max(0, timeRemaining),
         time_remaining_ms: Math.max(0, timeRemaining),
         time_remaining_formatted: formatDuration(timeRemaining),
         is_expired: isExpired,
-        last_activity: lastActivity.toISOString(),
+        lastActivity: lastActivity.toISOString(),
         time_since_activity_ms: timeSinceActivity,
         time_since_activity_formatted: formatDuration(timeSinceActivity),
         should_warn: timeRemaining <= 5 * 60 * 1000 && timeRemaining > 0, // 5 minutes
@@ -162,7 +162,7 @@ export const GET = withAuth(async (req: NextRequest, { params }, { user, organiz
         id: user.id,
         email: user.email,
         role: user.role,
-        last_activity: lastActivity.toISOString(),
+        lastActivity: lastActivity.toISOString(),
       },
     });
   } catch (error) {

@@ -60,7 +60,7 @@ export interface UnifiedConversation {
 export interface UnifiedMessage {
   id: string;
   content: string;
-  sender_type: "agent" | "customer" | "visitor";
+  senderType: "agent" | "customer" | "visitor";
   created_at: string;
   delivery_status?: "sent" | "delivered" | "read";
   status?: string;
@@ -106,10 +106,10 @@ export interface UnifiedCustomerData {
 /**
  * Adapts any conversation object to the unified format
  */
-export function adaptToUnifiedConversation(rawConversation: any): UnifiedConversation {
+export function adaptToUnifiedConversation(rawConversation: unknown): UnifiedConversation {
   const id = String(rawConversation?.id || `conv-${Date.now()}`);
   const email_from =
-    rawConversation?.customer_email ||
+    rawConversation?.customerEmail ||
     rawConversation?.visitor_email ||
     rawConversation?.customerEmail ||
     rawConversation?.email_from ||
@@ -128,7 +128,7 @@ export function adaptToUnifiedConversation(rawConversation: any): UnifiedConvers
   ) as UnifiedConversation["status"];
 
   const lastMessageAt =
-    rawConversation?.last_message_at ||
+    rawConversation?.lastMessageAt ||
     rawConversation?.lastMessageAt ||
     rawConversation?.updated_at ||
     rawConversation?.updatedAt ||
@@ -154,7 +154,7 @@ export function adaptToUnifiedConversation(rawConversation: any): UnifiedConvers
     processedCustomerLocation = rawConversation.customer_location;
   } else if (typeof rawConversation?.customer_location === "object" && rawConversation.customer_location !== null) {
     // Convert geolocation object to string format
-    const loc = rawConversation.customer_location as any;
+    const loc = rawConversation.customer_location as unknown;
     processedCustomerLocation = `${loc?.city || "Unknown"}, ${loc?.country || "Unknown"}`;
   } else {
     processedCustomerLocation = "Unknown";
@@ -183,12 +183,12 @@ export function adaptToUnifiedConversation(rawConversation: any): UnifiedConvers
       localTime: rawConversation?.customer?.localTime || "",
     },
     // Preserve original fields but filter out problematic ones
-    customer_email: rawConversation?.customer_email,
+    customerEmail: rawConversation?.customerEmail,
     visitor_email: rawConversation?.visitor_email,
     customerEmail: rawConversation?.customerEmail,
     last_message_preview: rawConversation?.last_message_preview,
     lastMessagePreview: rawConversation?.lastMessagePreview,
-    last_message_at: rawConversation?.last_message_at,
+    lastMessageAt: rawConversation?.lastMessageAt,
     updated_at: rawConversation?.updated_at,
     updatedAt: rawConversation?.updatedAt,
     unread_count: rawConversation?.unread_count,
@@ -202,7 +202,7 @@ export function adaptToUnifiedConversation(rawConversation: any): UnifiedConvers
     assigned_agent_name: rawConversation?.assigned_agent_name,
     assignedOperatorName: rawConversation?.assignedOperatorName,
     rag_enabled: rawConversation?.rag_enabled,
-    customer_name: rawConversation?.customer_name,
+    customerName: rawConversation?.customerName,
     visitor_name: rawConversation?.visitor_name,
     customer_company: rawConversation?.customer_company,
     customer_role: rawConversation?.customer_role,
@@ -218,15 +218,15 @@ export function adaptToUnifiedConversation(rawConversation: any): UnifiedConvers
  */
 export function adaptToUnifiedCustomerData(conversation: UnifiedConversation): UnifiedCustomerData {
   const customerName =
-    conversation?.customer_name ||
+    conversation?.customerName ||
     conversation?.visitor_name ||
-    conversation?.customer_email ||
+    conversation?.customerEmail ||
     conversation?.visitor_email ||
     conversation?.email_from ||
     "Customer";
 
   const customerEmail =
-    conversation?.customer_email || conversation?.visitor_email || conversation?.email_from || "No email provided";
+    conversation?.customerEmail || conversation?.visitor_email || conversation?.email_from || "No email provided";
 
   return {
     id: String(conversation?.id || "unknown"),
@@ -235,23 +235,23 @@ export function adaptToUnifiedCustomerData(conversation: UnifiedConversation): U
     avatar: conversation?.customer_avatar || conversation?.avatar,
     location: {
       city:
-        (conversation?.customer_location as any)?.city ||
+        (conversation?.customer_location as unknown)?.city ||
         (typeof conversation?.customer?.location === "string"
           ? conversation.customer.location.split(", ")[0] || "Unknown"
           : "Unknown"),
       country:
-        (conversation?.customer_location as any)?.country ||
+        (conversation?.customer_location as unknown)?.country ||
         (typeof conversation?.customer?.location === "string"
           ? conversation.customer.location.split(", ")[1] || "Unknown"
           : "Unknown"),
     },
-    localTime: (conversation?.customer_location as any)?.timezone
-      ? getLocalTime((conversation.customer_location as any).timezone)
+    localTime: (conversation?.customer_location as unknown)?.timezone
+      ? getLocalTime((conversation.customer_location as unknown).timezone)
       : conversation?.customer?.localTime || "",
     company: String(conversation?.customer_company || ""),
     role: String(conversation?.customer_role || ""),
     phone: String(conversation?.customer_phone || ""),
-    lastSeen: String(conversation?.last_message_at || conversation?.lastMessageAt || new Date().toISOString()),
+    lastSeen: String(conversation?.lastMessageAt || conversation?.lastMessageAt || new Date().toISOString()),
     firstSeen: String(conversation?.created_at || new Date().toISOString()),
     sessions: Math.floor(Math.random() * 50) + 1,
     browser: "Chrome",
@@ -281,18 +281,18 @@ export function adaptToUnifiedCustomerData(conversation: UnifiedConversation): U
 /**
  * Adapts message data to unified format
  */
-export function adaptToUnifiedMessage(rawMessage: any): UnifiedMessage {
+export function adaptToUnifiedMessage(rawMessage: unknown): UnifiedMessage {
   return {
     id: rawMessage?.id || `msg-${Date.now()}`,
     content: rawMessage?.content || "",
-    sender_type: rawMessage?.sender_type || "customer",
+    senderType: rawMessage?.senderType || "customer",
     created_at: rawMessage?.created_at || new Date().toISOString(),
     delivery_status: rawMessage?.delivery_status || rawMessage?.status,
     status: rawMessage?.status,
     read_status: rawMessage?.read_status,
     read_at: rawMessage?.read_at,
     sender_avatar_url: rawMessage?.sender_avatar_url,
-    sender_name: rawMessage?.sender_name,
+    senderName: rawMessage?.senderName,
     conversation_id: rawMessage?.conversation_id,
     organization_id: rawMessage?.organization_id,
     metadata: rawMessage?.metadata || {},

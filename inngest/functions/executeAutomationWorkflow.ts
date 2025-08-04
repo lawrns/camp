@@ -43,7 +43,7 @@ export const executeAutomationWorkflow = inngest.createFunction(
         .where(
           and(
             eq(automationWorkflows.organizationId, organizationId),
-            eq(automationWorkflows.triggerType, triggerType as any), // Cast to allow string comparison
+            eq(automationWorkflows.triggerType, triggerType as unknown), // Cast to allow string comparison
             eq(automationWorkflows.isActive, true)
           )
         );

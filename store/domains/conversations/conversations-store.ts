@@ -720,7 +720,7 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
         })),
         {
           name: "conversations-store",
-          storage: customStorage as any,
+          storage: customStorage as unknown,
           // Only persist essential data
           partialize: (state) =>
             ({
@@ -778,8 +778,8 @@ export const conversationSelectors = {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (conv) =>
-          conv.customer_name?.toLowerCase().includes(query) ||
-          conv.customer_email?.toLowerCase().includes(query) ||
+          conv.customerName?.toLowerCase().includes(query) ||
+          conv.customerEmail?.toLowerCase().includes(query) ||
           conv.subject?.toLowerCase().includes(query) ||
           conv.lastMessagePreview?.toLowerCase().includes(query)
       );

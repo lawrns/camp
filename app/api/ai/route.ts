@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
           customerId: context?.customerId,
           customerName: context?.customerName,
           customerEmail: context?.customerEmail,
-          aiPersonality: AI_PERSONALITIES.HELPFUL,
+          aiPersonality: AI_PERSONALITIES.alex || AI_PERSONALITIES.jordan,
           messageHistory: context?.messageHistory || [],
           currentIssue: {
             category: context?.category || 'general',

@@ -7,12 +7,12 @@ import { inngest } from "@/inngest/client";
 // Placeholder types
 type FineTuningConfig = {
   model: string;
-  trainingData: any[];
+  trainingData: unknown[];
 };
 
 type FineTuningPipeline = {
   prepareTrainingData: (config: FineTuningConfig) => Promise<any>;
-  createFineTuningJob: (files: any) => Promise<any>;
+  createFineTuningJob: (files: unknown) => Promise<any>;
 };
 
 // Placeholder class until real implementation is available
@@ -41,7 +41,7 @@ export const handleFineTuningJobCreated = inngest.createFunction(
     // Placeholder implementation - fine-tuning not yet implemented
     const pipeline = {
       prepareTrainingData: async (config: FineTuningConfig) => ({ files: [] }),
-      createFineTuningJob: async (files: any) => ({ jobId: "placeholder" }),
+      createFineTuningJob: async (files: unknown) => ({ jobId: "placeholder" }),
       monitorJob: async (jobId: string) => ({ status: "completed" }),
     };
 

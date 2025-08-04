@@ -236,7 +236,7 @@ export class AutonomousSessionManager {
 
     const averageResponseTime =
       responseTimes.length > 0
-        ? responseTimes.reduce((sum: any, time: unknown) => sum + time, 0) / responseTimes.length
+        ? responseTimes.reduce((sum: unknown, time: unknown) => sum + time, 0) / responseTimes.length
         : 0;
 
     return {

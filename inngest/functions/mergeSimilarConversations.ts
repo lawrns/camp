@@ -77,7 +77,7 @@ Status: ${conversation.status}
 Messages:
 ${conversation.messages
   .map(
-    (msg: { id: any; role: any; cleanedUpText: any }) =>
+    (msg: { id: unknown; role: unknown; cleanedUpText: unknown }) =>
       `- ${msg.role === "user" ? "Customer" : "Assistant"}: ${msg.cleanedUpText ?? ""}`
   )
   .join("\n")
@@ -94,7 +94,7 @@ Status: ${conv.status}
 Messages:
 ${conv.messages
   .map(
-    (msg: { id: any; createdAt: any; senderType: any; embeddingText: any }) =>
+    (msg: { id: unknown; createdAt: unknown; senderType: unknown; embeddingText: unknown }) =>
       `- ${msg.senderType === "customer" ? "Customer" : "Assistant"}: ${msg.embeddingText ?? ""}`
   )
   .join("\n")
@@ -141,7 +141,7 @@ Should the current conversation be merged into any of the others? If so, which o
       functionId: "merge-similar-conversations",
     });
 
-    const typedResult = result as any;
+    const typedResult = result as unknown;
     if (typedResult.shouldMerge && typedResult.mergeIntoId) {
       const { mergeIntoId } = typedResult;
 

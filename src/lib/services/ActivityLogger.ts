@@ -145,7 +145,7 @@ export class ServerActivityLogger {
   /**
    * Log an activity event (server-side)
    */
-  static async log(supabase: any, userId: string, organizationId: string, params: ActivityLogParams): Promise<void> {
+  static async log(supabase: unknown, userId: string, organizationId: string, params: ActivityLogParams): Promise<void> {
     try {
       // Get user profile
       const { data: profile } = await supabase
@@ -171,7 +171,7 @@ export class ServerActivityLogger {
         actor_id: userId,
         data: {
           description: params.description,
-          user_name: profile?.full_name || "Unknown User",
+          userName: profile?.fullName || "Unknown User",
           user_avatar: profile?.avatar_url,
           user_role: member?.role || "member",
           priority: params.priority,

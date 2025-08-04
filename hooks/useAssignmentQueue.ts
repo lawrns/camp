@@ -16,7 +16,7 @@ interface QueueItem {
   targetId: string;
   status: 'pending' | 'assigned' | 'failed' | 'expired';
   createdAt: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface AssignmentSuggestion {
@@ -44,8 +44,8 @@ interface UseAssignmentQueueReturn {
   loading: boolean;
   error: string | null;
   refreshQueue: () => Promise<void>;
-  autoAssign: (itemId: string) => Promise<{ success: boolean; assignment?: any; error?: string }>;
-  manualAssign: (itemId: string, agentId: string, reason?: string) => Promise<{ success: boolean; assignment?: any; error?: string }>;
+  autoAssign: (itemId: string) => Promise<{ success: boolean; assignment?: unknown; error?: string }>;
+  manualAssign: (itemId: string, agentId: string, reason?: string) => Promise<{ success: boolean; assignment?: unknown; error?: string }>;
   getSuggestions: (itemId: string) => Promise<AssignmentSuggestion[]>;
   removeFromQueue: (itemId: string) => Promise<void>;
 }
@@ -97,7 +97,7 @@ export function useAssignmentQueue(organizationId: string): UseAssignmentQueueRe
     const client = supabase.browser();
 
     // Create channel for assignment queue updates
-    const realtimeChannel: any = client.channel(`queue:${organizationId}`)
+    const realtimeChannel: unknown = client.channel(`queue:${organizationId}`)
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -126,7 +126,7 @@ export function useAssignmentQueue(organizationId: string): UseAssignmentQueueRe
   }, [organizationId, fetchQueueData]);
 
   // Handle queue changes from database
-  const handleQueueChange = useCallback((payload: any) => {
+  const handleQueueChange = useCallback((payload: unknown) => {
     const { eventType, new: newRecord, old: oldRecord } = payload;
 
     setQueueItems(prevItems => {
@@ -143,7 +143,7 @@ export function useAssignmentQueue(organizationId: string): UseAssignmentQueueRe
           estimatedComplexity: newRecord.estimated_complexity || 1,
           attempts: newRecord.assignment_attempts || 0,
           waitTime: Date.now() - new Date(newRecord.created_at).getTime(),
-          expiresIn: new Date(newRecord.expires_at).getTime() - Date.now(),
+          expiresIn: new Date(newRecord.expiresAt).getTime() - Date.now(),
           type: newRecord.ticket_id ? 'ticket' : 'conversation',
           targetId: newRecord.ticket_id || newRecord.conversation_id,
           status: newRecord.status,
@@ -171,7 +171,7 @@ export function useAssignmentQueue(organizationId: string): UseAssignmentQueueRe
   }, []);
 
   // Handle queue broadcasts
-  const handleQueueBroadcast = useCallback((payload: any) => {
+  const handleQueueBroadcast = useCallback((payload: unknown) => {
     const { action, itemId, data } = payload.payload;
 
     if (action === 'refresh') {

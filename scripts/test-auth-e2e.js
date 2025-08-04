@@ -62,7 +62,7 @@ async function testAuthE2E() {
       password: testPassword,
       options: {
         data: {
-          full_name: 'E2E Test User',
+          fullName: 'E2E Test User',
           organization_name: 'E2E Test Org',
         },
       },

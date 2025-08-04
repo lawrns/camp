@@ -43,7 +43,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
   };
 
   // Fetch real customer data from Supabase
-  const { customerData, isLoading, error, refetch } = useCustomerData(organizationId, conversation.customer_email);
+  const { customerData, isLoading, error, refetch } = useCustomerData(organizationId, conversation.customerEmail);
 
   // Hook for adding notes
   const { addNote, isAdding } = useAddCustomerNote();
@@ -53,7 +53,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
     if (!newNote.trim() || !organizationId || !user?.email) return;
 
     try {
-      await addNote(organizationId, conversation.customer_email, newNote.trim(), user.email);
+      await addNote(organizationId, conversation.customerEmail, newNote.trim(), user.email);
       setNewNote("");
       setIsAddingNote(false);
       refetch(); // Refresh customer data
@@ -201,17 +201,17 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                       customerData?.avatar ||
                       (() => {
                         const { getAvatarPath } = require("@/lib/utils/avatar");
-                        return getAvatarPath(conversation.customer_email || conversation.customer_name, "customer");
+                        return getAvatarPath(conversation.customerEmail || conversation.customerName, "customer");
                       })()
                     }
-                    alt={customerData?.name || conversation.customer_name}
+                    alt={customerData?.name || conversation.customerName}
                     className="mx-auto mb-3 h-16 w-16 rounded-ds-full"
                     data-testid="customer-avatar"
                   />
                   <h3 className="text-base font-semibold text-gray-900" data-testid="customer-name">
-                    {customerData?.name || conversation.customer_name}
+                    {customerData?.name || conversation.customerName}
                   </h3>
-                  <p className="text-foreground text-sm" data-testid="customer-email">{customerData?.email || conversation.customer_email}</p>
+                  <p className="text-foreground text-sm" data-testid="customer-email">{customerData?.email || conversation.customerEmail}</p>
                 </div>
 
                 {/* Contact Information */}
@@ -219,7 +219,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                   <div className="flex items-center space-x-3" data-testid="customer-email-row">
                     <Envelope className="h-4 w-4 text-gray-400" data-testid="customer-email-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-email-text">
-                      {customerData?.email || conversation.customer_email}
+                      {customerData?.email || conversation.customerEmail}
                     </span>
                   </div>
                   {customerData?.phone && (
@@ -237,7 +237,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                   <div className="flex items-center space-x-3" data-testid="customer-joined-row">
                     <Calendar className="h-4 w-4 text-gray-400" data-testid="customer-joined-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-joined-text">
-                      Joined {formatDate(customerData?.joinDate || conversation.last_message_at)}
+                      Joined {formatDate(customerData?.joinDate || conversation.lastMessageAt)}
                     </span>
                   </div>
                 </div>
@@ -432,7 +432,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 <div className="flex items-center justify-between">
                   <span className="text-foreground text-sm">Last Activity</span>
                   <span className="text-sm font-medium text-gray-900">
-                    {formatDate(conversation.last_message_at)}
+                    {formatDate(conversation.lastMessageAt)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">

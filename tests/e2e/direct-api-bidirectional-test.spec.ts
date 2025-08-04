@@ -49,8 +49,8 @@ test('Direct API bidirectional communication test', async ({ page, context }) =>
 
   // Step 5: Get conversation ID from widget
   const conversationId = await widgetPage.evaluate(() => {
-    return (window as any).widgetConversationId || 
-           (window as any).conversationId ||
+    return (window as unknown).widgetConversationId || 
+           (window as unknown).conversationId ||
            '8ddf595b-b75d-42f2-98e5-9efd3513ea4b'; // fallback to known conversation
   });
   console.log('📋 Using conversation ID:', conversationId);
@@ -113,7 +113,7 @@ test('Direct API bidirectional communication test', async ({ page, context }) =>
       
       // Check widget logs
       const widgetLogs = await widgetPage.evaluate(() => {
-        return (window as any).widgetBroadcastLogs || [];
+        return (window as unknown).widgetBroadcastLogs || [];
       });
       console.log('🔍 Widget broadcast logs:', JSON.stringify(widgetLogs, null, 2));
       

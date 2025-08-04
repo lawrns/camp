@@ -8,7 +8,7 @@ import { FREE_TRIAL_PERIOD_DAYS } from "@/lib/auth/account";
 import { ADDITIONAL_PAID_ORGANIZATION_IDS } from "@/lib/data/organization";
 
 // Simple fallback functions for missing modules
-const getGmailService = async (supportEmail: any) => {
+const getGmailService = async (supportEmail: unknown) => {
   return {
     users: {
       watch: async () => ({ data: { historyId: "123" } }),
@@ -16,7 +16,7 @@ const getGmailService = async (supportEmail: any) => {
   };
 };
 
-const subscribeToMailbox = async (service: any): Promise<void> => {
+const subscribeToMailbox = async (service: unknown): Promise<void> => {
   console.log("subscribeToMailbox called");
 };
 

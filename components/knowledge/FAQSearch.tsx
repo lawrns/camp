@@ -174,7 +174,7 @@ export default function FAQSearch({
 
       // Update local state
       setResults((prev) =>
-        prev.map((result: any) => {
+        prev.map((result: unknown) => {
           if (result.id === articleId) {
             return {
               ...result,
@@ -246,7 +246,7 @@ export default function FAQSearch({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((category: any) => (
+                {categories.map((category: unknown) => (
                   <SelectItem key={category.id} value={category.id}>
                     <div className="flex items-center gap-ds-2">
                       <div className={`h-3 w-3 rounded-ds-full bg-[${category.color}]`} />
@@ -257,7 +257,7 @@ export default function FAQSearch({
               </SelectContent>
             </Select>
 
-            <Select value={searchMethod} onValueChange={(value: any) => setSearchMethod(value)}>
+            <Select value={searchMethod} onValueChange={(value: unknown) => setSearchMethod(value)}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -278,13 +278,13 @@ export default function FAQSearch({
         {/* Tag filters */}
         {allTags.length > 0 && !compact && (
           <div className="flex flex-wrap gap-ds-2">
-            {allTags.map((tag: any) => (
+            {allTags.map((tag: unknown) => (
               <Badge
                 key={tag}
                 variant={selectedTags.includes(tag) ? "default" : "outline"}
                 className="cursor-pointer transition-colors hover:bg-[var(--fl-color-info-subtle)]"
                 onClick={() => {
-                  setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t: any) => t !== tag) : [...prev, tag]));
+                  setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t: unknown) => t !== tag) : [...prev, tag]));
                 }}
               >
                 <Icon icon={Tag} className="mr-1 h-3 w-3" />
@@ -298,7 +298,7 @@ export default function FAQSearch({
       {/* Categories Grid */}
       {!query && selectedCategory === "all" && selectedTags.length === 0 && !compact && (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {categories.map((category: any) => (
+          {categories.map((category: unknown) => (
             <OptimizedMotion.div key={category.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Card
                 className="cursor-pointer border-l-4 transition-shadow hover:shadow-card-deep"
@@ -394,7 +394,7 @@ export default function FAQSearch({
                     {/* Tags */}
                     {result.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1">
-                        {result.tags.slice(0, compact ? 3 : 5).map((tag: any) => (
+                        {result.tags.slice(0, compact ? 3 : 5).map((tag: unknown) => (
                           <Badge key={tag} variant="secondary" className="text-tiny">
                             {tag}
                           </Badge>

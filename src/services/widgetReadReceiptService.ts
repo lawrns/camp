@@ -86,8 +86,8 @@ export class WidgetReadReceiptService {
         reader_type: readerType,
         session_id: sessionId,
         device_id: deviceId,
-        ip_address: ipAddress,
-        user_agent: userAgent,
+        ipAddress: ipAddress,
+        userAgent: userAgent,
         metadata: metadata,
         last_read_at: new Date().toISOString(),
       };
@@ -209,8 +209,8 @@ export class WidgetReadReceiptService {
           readerType: receiptData.reader_type || 'visitor',
           sessionId: receiptData.session_id,
           deviceId: receiptData.device_id,
-          ipAddress: receiptData.ip_address,
-          userAgent: receiptData.user_agent,
+          ipAddress: receiptData.ipAddress,
+          userAgent: receiptData.userAgent,
           metadata: receiptData.metadata || {},
           readAt: receiptData.last_read_at || new Date().toISOString(),
           createdAt: receiptData.last_read_at || new Date().toISOString(),
@@ -237,7 +237,7 @@ export class WidgetReadReceiptService {
     if (!messages) return 0;
 
     // Check which messages have been read by this reader in metadata
-    const unreadCount = messages.filter((message: any) => {
+    const unreadCount = messages.filter((message: unknown) => {
       const metadata = message.metadata || {};
       const readReceipts = metadata.read_receipts || {};
       return !readReceipts[readerId];
@@ -279,7 +279,7 @@ export class WidgetReadReceiptService {
     }
 
     // Calculate analytics from message metadata
-    const analytics = (data || []).reduce((acc: any, message: any) => {
+    const analytics = (data || []).reduce((acc: unknown, message: unknown) => {
       const msgId = message.id.toString();
       const metadata = message.metadata || {};
       const readReceipts = metadata.read_receipts || {};
@@ -293,7 +293,7 @@ export class WidgetReadReceiptService {
         };
       }
 
-      Object.values(readReceipts).forEach((receipt: any) => {
+      Object.values(readReceipts).forEach((receipt: unknown) => {
         acc[msgId].totalReads++;
         if (receipt.timeSpentMs) {
           acc[msgId].avgTimeSpent =

@@ -15,19 +15,19 @@ interface WidgetUser {
   organizationId: string;
   visitorId?: string;
   conversationId?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface WidgetAuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: WidgetUser | null;
-  session: any;
+  session: unknown;
   error: string | null;
 }
 
 interface WidgetAuthActions {
-  signInAsVisitor: (organizationId: string, metadata?: any) => Promise<void>;
+  signInAsVisitor: (organizationId: string, metadata?: unknown) => Promise<void>;
   signOut: () => Promise<void>;
   getAuthHeaders: () => Promise<Record<string, string>>;
   refreshSession: () => Promise<void>;
@@ -214,7 +214,7 @@ export function useWidgetSupabaseAuth(organizationId: string): WidgetAuthState &
   }, [getWidgetClient]); // Remove organizationId dependency to prevent subscription recreation
 
   // Sign in as anonymous visitor
-  const signInAsVisitor = useCallback(async (orgId: string, metadata: any = {}) => {
+  const signInAsVisitor = useCallback(async (orgId: string, metadata: unknown = {}) => {
     try {
       widgetDebugger.logAuth('info', 'Starting visitor sign-in process', { orgId, metadata });
       setState(prev => ({ ...prev, isLoading: true, error: null }));

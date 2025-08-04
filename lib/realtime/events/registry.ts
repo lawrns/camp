@@ -464,7 +464,7 @@ export type EventHandlerMap = {
 
 export class EventDispatcher {
   private handlers: EventHandlerMap = {};
-  private globalHandlers: Array<(type: EventType, event: any) => void | Promise<void>> = [];
+  private globalHandlers: Array<(type: EventType, event: unknown) => void | Promise<void>> = [];
 
   /**
    * Subscribe to a specific event type
@@ -474,13 +474,13 @@ export class EventDispatcher {
       this.handlers[type] = [];
     }
 
-    this.handlers[type]!.push(handler as any);
+    this.handlers[type]!.push(handler as unknown);
 
     // Return unsubscribe function
     return () => {
       const handlers = this.handlers[type];
       if (handlers) {
-        const index = handlers.indexOf(handler as any);
+        const index = handlers.indexOf(handler as unknown);
         if (index > -1) {
           handlers.splice(index, 1);
         }
@@ -491,7 +491,7 @@ export class EventDispatcher {
   /**
    * Subscribe to all events
    */
-  onAny(handler: (type: EventType, event: any) => void | Promise<void>): () => void {
+  onAny(handler: (type: EventType, event: unknown) => void | Promise<void>): () => void {
     this.globalHandlers.push(handler);
 
     return () => {
@@ -511,10 +511,10 @@ export class EventDispatcher {
 
     // Call specific handlers
     const handlers = this.handlers[type] || [];
-    await Promise.all(handlers.map((handler: any) => Promise.resolve(handler(validatedPayload as any))));
+    await Promise.all(handlers.map((handler: unknown) => Promise.resolve(handler(validatedPayload as unknown))));
 
     // Call global handlers
-    await Promise.all(this.globalHandlers.map((handler: any) => Promise.resolve(handler(type, validatedPayload))));
+    await Promise.all(this.globalHandlers.map((handler: unknown) => Promise.resolve(handler(type, validatedPayload))));
   }
 
   /**
@@ -556,7 +556,7 @@ export function getEventCategory(type: EventType): EventCategory {
  * Filters events by category
  */
 export function filterEventsByCategory(types: EventType[], category: EventCategory): EventType[] {
-  return types.filter((type: any) => getEventCategory(type) === category);
+  return types.filter((type: unknown) => getEventCategory(type) === category);
 }
 
 // ============================================================================

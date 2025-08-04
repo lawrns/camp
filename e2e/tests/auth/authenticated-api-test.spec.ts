@@ -124,7 +124,7 @@ test.describe('Authenticated API Communication', () => {
     const realtimeTest = await page.evaluate(async () => {
       try {
         // Check if we can access the global Supabase client
-        const supabaseClient = (window as any).supabase;
+        const supabaseClient = (window as unknown).supabase;
         if (!supabaseClient) {
           return { available: false, reason: 'No global supabase client' };
         }

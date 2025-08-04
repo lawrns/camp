@@ -18,8 +18,8 @@ declare global {
       primaryColor?: string;
       position?: string;
     };
-    CampfireWidget?: any;
-    __campfireWidgetInstance?: any;
+    CampfireWidget?: unknown;
+    __campfireWidgetInstance?: unknown;
     __campfireWidgetInitialized?: boolean;
   }
 }

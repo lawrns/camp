@@ -1,5 +1,5 @@
 /**
- * SlackIntegrationAdapter - Handles Slack type chaos and eliminates `as any` casts
+ * SlackIntegrationAdapter - Handles Slack type chaos and eliminates `as unknown` casts
  */
 
 export interface SlackConfig {
@@ -24,7 +24,7 @@ export class SlackIntegrationAdapter {
   /**
    * Safely extracts Slack configuration from mailbox
    */
-  static getSlackConfig(mailbox: any): SlackConfig {
+  static getSlackConfig(mailbox: unknown): SlackConfig {
     if (!mailbox || typeof mailbox !== "object") {
       return {};
     }
@@ -40,7 +40,7 @@ export class SlackIntegrationAdapter {
   /**
    * Safely extracts Slack user information
    */
-  static getSlackUser(user: any): SlackUser {
+  static getSlackUser(user: unknown): SlackUser {
     if (!user || typeof user !== "object") {
       return {
         id: "",
@@ -49,7 +49,7 @@ export class SlackIntegrationAdapter {
     }
 
     const externalAccounts = Array.isArray(user.externalAccounts) ? user.externalAccounts : [];
-    const slackAccount = externalAccounts.find((account: any) => account?.provider === "oauth_slack");
+    const slackAccount = externalAccounts.find((account: unknown) => account?.provider === "oauth_slack");
 
     return {
       id: user.id ?? "",
@@ -63,7 +63,7 @@ export class SlackIntegrationAdapter {
   /**
    * Checks if Slack integration is properly configured
    */
-  static isSlackConfigured(mailbox: any): boolean {
+  static isSlackConfigured(mailbox: unknown): boolean {
     const config = this.getSlackConfig(mailbox);
     return !!(config.slackBotToken && config.slackAlertChannel);
   }
@@ -99,8 +99,8 @@ export class SlackTypeGuards {
       mailbox !== null &&
       "slackBotToken" in mailbox &&
       "slackAlertChannel" in mailbox &&
-      typeof (mailbox as any).slackBotToken === "string" &&
-      typeof (mailbox as any).slackAlertChannel === "string"
+      typeof (mailbox as unknown).slackBotToken === "string" &&
+      typeof (mailbox as unknown).slackAlertChannel === "string"
     );
   }
 
@@ -109,7 +109,7 @@ export class SlackTypeGuards {
       typeof user === "object" &&
       user !== null &&
       "externalAccounts" in user &&
-      Array.isArray((user as any).externalAccounts)
+      Array.isArray((user as unknown).externalAccounts)
     );
   }
 }

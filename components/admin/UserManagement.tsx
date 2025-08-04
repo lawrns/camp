@@ -211,7 +211,7 @@ export default function UserManagement({
     }
   };
 
-  const filteredUsers = users.filter((user: any) => {
+  const filteredUsers = users.filter((user: unknown) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
@@ -354,21 +354,21 @@ export default function UserManagement({
         <Card>
           <CardContent className="spacing-3 text-center">
             <Icon icon={Activity} className="text-semantic-success-dark mx-auto mb-2 h-8 w-8" />
-            <div className="text-3xl font-bold">{users.filter((u: any) => u.status === "active").length}</div>
+            <div className="text-3xl font-bold">{users.filter((u: unknown) => u.status === "active").length}</div>
             <div className="text-sm text-[var(--fl-color-text-muted)]">Active Users</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="spacing-3 text-center">
             <Icon icon={Shield} className="mx-auto mb-2 h-8 w-8 text-purple-600" />
-            <div className="text-3xl font-bold">{users.filter((u: any) => u.role === "admin").length}</div>
+            <div className="text-3xl font-bold">{users.filter((u: unknown) => u.role === "admin").length}</div>
             <div className="text-sm text-[var(--fl-color-text-muted)]">Administrators</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="spacing-3 text-center">
             <Icon icon={AlertTriangle} className="mx-auto mb-2 h-8 w-8 text-orange-600" />
-            <div className="text-3xl font-bold">{users.filter((u: any) => u.status === "suspended").length}</div>
+            <div className="text-3xl font-bold">{users.filter((u: unknown) => u.status === "suspended").length}</div>
             <div className="text-sm text-[var(--fl-color-text-muted)]">Suspended</div>
           </CardContent>
         </Card>
@@ -393,7 +393,7 @@ export default function UserManagement({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">All Departments</SelectItem>
-                {departments.map((dept: any) => (
+                {departments.map((dept: unknown) => (
                   <SelectItem key={dept} value={dept}>
                     {dept}
                   </SelectItem>
@@ -406,7 +406,7 @@ export default function UserManagement({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">All Roles</SelectItem>
-                {roles.map((role: any) => (
+                {roles.map((role: unknown) => (
                   <SelectItem key={role} value={role}>
                     {role}
                   </SelectItem>
@@ -419,7 +419,7 @@ export default function UserManagement({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">All Status</SelectItem>
-                {statuses.map((status: any) => (
+                {statuses.map((status: unknown) => (
                   <SelectItem key={status} value={status}>
                     {status}
                   </SelectItem>
@@ -432,7 +432,7 @@ export default function UserManagement({
 
       {/* Users Grid */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {filteredUsers.map((user: any) => (
+        {filteredUsers.map((user: unknown) => (
           <UserCard key={user.id} user={user} />
         ))}
       </div>
@@ -478,7 +478,7 @@ export default function UserManagement({
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  {roles.map((role: any) => (
+                  {roles.map((role: unknown) => (
                     <SelectItem key={role} value={role}>
                       {role}
                     </SelectItem>
@@ -496,7 +496,7 @@ export default function UserManagement({
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
                 <SelectContent>
-                  {departments.map((dept: any) => (
+                  {departments.map((dept: unknown) => (
                     <SelectItem key={dept} value={dept}>
                       {dept}
                     </SelectItem>
@@ -556,7 +556,7 @@ export default function UserManagement({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {roles.map((role: any) => (
+                    {roles.map((role: unknown) => (
                       <SelectItem key={role} value={role}>
                         {role}
                       </SelectItem>
@@ -576,7 +576,7 @@ export default function UserManagement({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {departments.map((dept: any) => (
+                    {departments.map((dept: unknown) => (
                       <SelectItem key={dept} value={dept}>
                         {dept}
                       </SelectItem>
@@ -598,7 +598,7 @@ export default function UserManagement({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {statuses.map((status: any) => (
+                    {statuses.map((status: unknown) => (
                       <SelectItem key={status} value={status}>
                         {status}
                       </SelectItem>

@@ -85,7 +85,7 @@ export const preferencesRouter = {
 
     // Extract UI features with defaults if they don't exist
     const preferences = result?.preferences || { confetti: false };
-    const uiFeatures = (preferences as any).uiFeatures || {
+    const uiFeatures = (preferences as unknown).uiFeatures || {
       enhancedLayout: true,
       enhancedAnimations: true,
       enhancedMessageDelivery: true,

@@ -7,8 +7,8 @@ import { supabase } from "@/lib/supabase";
 interface Message {
   id: string;
   content: string;
-  sender_type: "visitor" | "operator" | "ai";
-  sender_id: string | null;
+  senderType: "visitor" | "operator" | "ai";
+  senderId: string | null;
   created_at: string;
   sending?: boolean;
 }
@@ -110,7 +110,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
           table: "messages",
           filter: `conversation_id=eq.${conversationId}`,
         },
-        (payload: any) => {
+        (payload: unknown) => {
 
           const newMessage = payload.new as Message;
           setMessages((prev) => {
@@ -132,13 +132,13 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
           table: "messages",
           filter: `conversation_id=eq.${conversationId}`,
         },
-        (payload: any) => {
+        (payload: unknown) => {
 
           const updatedMessage = payload.new as Message;
           setMessages((prev) => prev.map((msg) => (msg.id === updatedMessage.id ? updatedMessage : msg)));
         }
       )
-      .on("broadcast", { event: "typing" }, ({ payload }: { payload: any }) => {
+      .on("broadcast", { event: "typing" }, ({ payload }: { payload: unknown }) => {
 
         if (payload.user_id !== "current-user") {
           setTypingUsers((prev) => {
@@ -155,13 +155,13 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
         const state = newChannel.presenceState();
 
       })
-      .on("presence", { event: "join" }, ({ key, newPresences }: { key: any; newPresences: any }) => {
+      .on("presence", { event: "join" }, ({ key, newPresences }: { key: unknown; newPresences: unknown }) => {
 
       })
-      .on("presence", { event: "leave" }, ({ key, leftPresences }: { key: any; leftPresences: any }) => {
+      .on("presence", { event: "leave" }, ({ key, leftPresences }: { key: unknown; leftPresences: unknown }) => {
 
       })
-      .subscribe((status: any) => {
+      .subscribe((status: unknown) => {
 
         if (status === "SUBSCRIBED") {
           // Track presence
@@ -186,8 +186,8 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
     const optimisticMessage = {
       id: `temp-${Date.now()}`,
       content: trimmedContent,
-      sender_type: "operator" as const,
-      sender_id: null,
+      senderType: "operator" as const,
+      senderId: null,
       created_at: new Date().toISOString(),
       sending: true,
     };
@@ -213,7 +213,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
         headers: authHeaders,
         body: JSON.stringify({
           content: trimmedContent,
-          sender_type: "operator",
+          senderType: "operator",
         }),
       });
 
@@ -231,8 +231,8 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
             ? {
                 id: newMessage.id,
                 content: newMessage.content,
-                sender_type: newMessage.sender_type,
-                sender_id: newMessage.sender_id,
+                senderType: newMessage.senderType,
+                senderId: newMessage.senderId,
                 created_at: newMessage.created_at,
               }
             : msg
@@ -353,14 +353,14 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
     <div className="flex flex-1 flex-col">
       {/* Messages */}
       <div className="flex-1 space-y-3 overflow-y-auto spacing-3">
-        {messages.map((message: any) => (
+        {messages.map((message: unknown) => (
           <div
             key={message.id}
-            className={`flex ${message.sender_type === "operator" ? "justify-end" : "justify-start"}`}
+            className={`flex ${message.senderType === "operator" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-xs rounded-ds-lg px-4 py-2 lg:max-w-md ${
-                message.sender_type === "operator"
+                message.senderType === "operator"
                   ? message.sending
                     ? "bg-blue-400 text-white opacity-70"
                     : "bg-blue-600 text-white"
@@ -370,7 +370,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
               <p className="text-sm">{message.content}</p>
               <div className="mt-1 flex items-center justify-between">
                 <p
-                  className={`text-xs ${message.sender_type === "operator" ? "text-blue-100" : "text-[var(--fl-color-text-muted)]"}`}
+                  className={`text-xs ${message.senderType === "operator" ? "text-blue-100" : "text-[var(--fl-color-text-muted)]"}`}
                 >
                   {new Date(message.created_at).toLocaleTimeString()}
                 </p>

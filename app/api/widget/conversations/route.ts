@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceClient } from '@/lib/supabase/server';
 import { mapApiConversationToDbInsert, mapDbConversationsToApi } from '@/lib/utils/db-type-mappers';
+import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
 import type { ConversationCreateRequest } from '@/types/unified';
 
 export async function GET(request: NextRequest) {
@@ -79,8 +80,8 @@ export async function POST(request: NextRequest) {
     // Prepare conversation data
     const conversationData = mapApiConversationToDbInsert({
       organization_id: organizationId,
-      customer_email: body.customerEmail,
-      customer_name: body.customerName || 'Anonymous User',
+      customerEmail: body.customerEmail,
+      customerName: body.customerName || generateUniqueVisitorName(conversationId || 'anonymous'),
       subject: body.subject,
       status: 'open',
       priority: 'medium',
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
         conversation_id: conversation.id,
         organization_id: organizationId,
         content: body.initialMessage,
-        sender_type: 'visitor',
+        senderType: 'visitor',
         message_type: 'text',
         metadata: {},
       };

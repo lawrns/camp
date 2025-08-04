@@ -61,8 +61,8 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
 
   // Memoize realtime options to prevent infinite re-renders
   const realtimeOptions = {
-    onNewMessage: (message: any) => {
-      const member = members.find(m => m.user_id === message.sender_id);
+    onNewMessage: (message: unknown) => {
+      const member = members.find(m => m.user_id === message.senderId);
       if (member) {
         addActivity({
           type: 'message_sent',
@@ -77,7 +77,7 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
         });
       }
     },
-    onConversationUpdate: (update: any) => {
+    onConversationUpdate: (update: unknown) => {
       const member = members.find(m => m.user_id === update.agent_id);
       if (member) {
         let type: TeamActivity['type'] = 'conversation_started';
@@ -136,7 +136,7 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
           type: 'conversation_resolved',
           message: 'Resolved customer inquiry about billing',
           memberId: members[0]?.id || '',
-          memberName: members[0]?.profile.full_name || members[0]?.profile.email || 'Team Member',
+          memberName: members[0]?.profile.fullName || members[0]?.profile.email || 'Team Member',
           memberAvatar: members[0]?.profile.avatar_url,
           metadata: {
             conversationId: 'conv-123',
@@ -148,7 +148,7 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
           type: 'message_sent',
           message: 'Responded to technical support request',
           memberId: members[1]?.id || '',
-          memberName: members[1]?.profile.full_name || members[1]?.profile.email || 'Team Member',
+          memberName: members[1]?.profile.fullName || members[1]?.profile.email || 'Team Member',
           memberAvatar: members[1]?.profile.avatar_url,
           metadata: {
             conversationId: 'conv-124',
@@ -159,7 +159,7 @@ export function TeamActivityFeed({ organizationId, maxActivities = 10 }: TeamAct
           type: 'performance_milestone',
           message: 'Achieved 95% customer satisfaction this week',
           memberId: members[0]?.id || '',
-          memberName: members[0]?.profile.full_name || members[0]?.profile.email || 'Team Member',
+          memberName: members[0]?.profile.fullName || members[0]?.profile.email || 'Team Member',
           memberAvatar: members[0]?.profile.avatar_url,
           metadata: {
             satisfaction: 95,

@@ -225,7 +225,7 @@ export class ConversationStateAnalyzer {
 
   async predictNextState(
     currentState: ConversationState,
-    context?: any
+    context?: unknown
   ): Promise<{
     predictedState: string;
     probability: number;

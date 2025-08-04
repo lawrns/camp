@@ -188,13 +188,13 @@ export const LiveCollaboration: React.FC<LiveCollaborationProps> = ({
             <div>
               <h4 className="mb-3 text-sm font-medium text-fl-text">Team Members</h4>
               <div className="space-y-spacing-sm">
-                {users.map((user: any) => (
+                {users.map((user: unknown) => (
                   <div key={user.id} className="flex items-center justify-between">
                     <PresenceIndicator user={user} size="sm" showStatus={true} showLastSeen={true} />
 
                     {user.isCurrentUser && (
                       <div className="flex space-x-1">
-                        {(["online", "away", "busy"] as PresenceStatus[]).map((status: any) => (
+                        {(["online", "away", "busy"] as PresenceStatus[]).map((status: unknown) => (
                           <button
                             key={status}
                             onClick={() => setStatus(status)}
@@ -228,13 +228,13 @@ export const LiveCollaboration: React.FC<LiveCollaborationProps> = ({
             <div>
               <h4 className="mb-3 text-sm font-medium text-fl-text">Recent Activity</h4>
               <div ref={activityFeedRef} className="max-h-48 space-y-spacing-sm overflow-y-auto">
-                {activities.map((activity: any) => (
+                {activities.map((activity: unknown) => (
                   <div
                     key={activity.id}
                     className="hover:bg-fl-bg-subtle flex items-start space-x-3 rounded-ds-lg p-spacing-sm transition-colors"
                   >
                     <div className={`bg-fl-bg-subtle rounded-ds-full spacing-1.5 ${getActivityColor(activity.action)}`}>
-                      <Icon name={getActivityIcon(activity.action) as any} size={12} />
+                      <Icon name={getActivityIcon(activity.action) as unknown} size={12} />
                     </div>
 
                     <div className="min-w-0 flex-1">
@@ -294,7 +294,7 @@ export const LiveCollaboration: React.FC<LiveCollaborationProps> = ({
           <div className="flex items-center justify-between">
             {/* Online Users */}
             <div className="flex -space-x-spacing-sm">
-              {onlineUsers.slice(0, 3).map((user: any) => (
+              {onlineUsers.slice(0, 3).map((user: unknown) => (
                 <PresenceIndicator key={user.id} user={user} size="sm" />
               ))}
               {onlineUsers.length > 3 && (

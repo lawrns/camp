@@ -46,7 +46,7 @@ export interface BidirectionalFlow {
   type: 'message' | 'typing' | 'presence' | 'file' | 'status';
   source: 'customer' | 'agent' | 'ai' | 'system';
   target: 'customer' | 'agent' | 'ai' | 'system';
-  payload: any;
+  payload: unknown;
   sentAt: number;
   receivedAt?: number;
   latency?: number;
@@ -463,7 +463,7 @@ export function recordFlow(
   type: BidirectionalFlow['type'],
   source: BidirectionalFlow['source'],
   target: BidirectionalFlow['target'],
-  payload: any
+  payload: unknown
 ): string {
   return globalE2EMonitor.recordBidirectionalFlow({
     type,

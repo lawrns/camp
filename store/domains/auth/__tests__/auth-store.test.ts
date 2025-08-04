@@ -33,8 +33,8 @@ describe("AuthStore", () => {
 
   describe("setAuth", () => {
     it("should set user and session", () => {
-      const mockUser = { id: "user-123", email: "test@example.com" } as any;
-      const mockSession = { access_token: "token-123" } as any;
+      const mockUser = { id: "user-123", email: "test@example.com" } as unknown;
+      const mockSession = { access_token: "token-123" } as unknown;
 
       useAuthStore.getState().setAuth(mockUser, mockSession);
 
@@ -51,8 +51,8 @@ describe("AuthStore", () => {
         id: "user-123",
         email: "test@example.com",
         user_metadata: { organization_id: "org-123" },
-      } as any;
-      const mockSession = { access_token: "token-123" } as any;
+      } as unknown;
+      const mockSession = { access_token: "token-123" } as unknown;
 
       useAuthStore.getState().setAuth(mockUser, mockSession);
 
@@ -66,7 +66,7 @@ describe("AuthStore", () => {
 
     it("should emit auth:logout event when user is null", () => {
       // First set a user
-      const mockUser = { id: "user-123" } as any;
+      const mockUser = { id: "user-123" } as unknown;
       useAuthStore.setState({ user: mockUser });
 
       // Then clear it
@@ -83,8 +83,8 @@ describe("AuthStore", () => {
     it("should clear all auth state", () => {
       // Set some initial state
       useAuthStore.setState({
-        user: { id: "user-123" } as any,
-        session: { access_token: "token" } as any,
+        user: { id: "user-123" } as unknown,
+        session: { access_token: "token" } as unknown,
         isAuthenticated: true,
         organization: { id: "org-123", name: "Test Org", settings: {} },
       });
@@ -99,7 +99,7 @@ describe("AuthStore", () => {
     });
 
     it("should emit auth:clear event", () => {
-      useAuthStore.setState({ user: { id: "user-123" } as any });
+      useAuthStore.setState({ user: { id: "user-123" } as unknown });
 
       useAuthStore.getState().clearAuth();
 
@@ -154,7 +154,7 @@ describe("AuthStore", () => {
 
   describe("convenience hooks", () => {
     it("should return correct values from selectors", () => {
-      const mockUser = { id: "user-123", email: "test@example.com" } as any;
+      const mockUser = { id: "user-123", email: "test@example.com" } as unknown;
       const mockOrg = { id: "org-123", name: "Test Org", settings: {} };
 
       useAuthStore.setState({

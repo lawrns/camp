@@ -154,14 +154,14 @@ export class HandoverAnalytics {
 
       // Calculate metrics
       const totalHandovers = events.length;
-      const successfulHandovers = events.filter((e: any) => e.success).length;
+      const successfulHandovers = events.filter((e: unknown) => e.success).length;
       const successRate = (successfulHandovers / totalHandovers) * 100;
 
-      const totalDuration = events.reduce((sum: any, e: any) => sum + (e.duration || 0), 0);
+      const totalDuration = events.reduce((sum: unknown, e: unknown) => sum + (e.duration || 0), 0);
       const averageHandoverTime = totalDuration / totalHandovers;
 
       const handoversByType = events.reduce(
-        (acc: any, e: any) => {
+        (acc: unknown, e: unknown) => {
           const type = `${e.from_handler}_to_${e.to_handler}`;
           acc[type] = (acc[type] || 0) + 1;
           return acc;
@@ -170,9 +170,9 @@ export class HandoverAnalytics {
       );
 
       const handoversByPersona = events
-        .filter((e: any) => e.persona)
+        .filter((e: unknown) => e.persona)
         .reduce(
-          (acc: any, e: any) => {
+          (acc: unknown, e: unknown) => {
             acc[e.persona!] = (acc[e.persona!] || 0) + 1;
             return acc;
           },
@@ -180,9 +180,9 @@ export class HandoverAnalytics {
         );
 
       const failureReasons = events
-        .filter((e: any) => !e.success && e.error_reason)
+        .filter((e: unknown) => !e.success && e.error_reason)
         .reduce(
-          (acc: any, e: any) => {
+          (acc: unknown, e: unknown) => {
             acc[e.error_reason!] = (acc[e.error_reason!] || 0) + 1;
             return acc;
           },
@@ -236,7 +236,7 @@ export class HandoverAnalytics {
 
     try {
       const { error } = await this.supabase.from("handover_analytics").insert(
-        events.map((e: any) => ({
+        events.map((e: unknown) => ({
           id: e.id,
           conversation_id: e.conversationId,
           organization_id: e.organizationId,
@@ -280,10 +280,10 @@ export class HandoverAnalytics {
   /**
    * Calculate peak handover hours
    */
-  private calculatePeakHours(events: any[]): number[] {
+  private calculatePeakHours(events: unknown[]): number[] {
     const hourCounts = new Array(24).fill(0);
 
-    events.forEach((event: any) => {
+    events.forEach((event: unknown) => {
       const hour = new Date(event.timestamp).getHours();
       hourCounts[hour]++;
     });
@@ -293,13 +293,13 @@ export class HandoverAnalytics {
       .map((count, hour) => ({ hour, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 3)
-      .map((item: any) => item.hour);
+      .map((item: unknown) => item.hour);
   }
 
   /**
    * Map database event to HandoverEvent
    */
-  private mapDatabaseEventToHandoverEvent(dbEvent: any): HandoverEvent {
+  private mapDatabaseEventToHandoverEvent(dbEvent: unknown): HandoverEvent {
     return {
       id: dbEvent.id,
       conversationId: dbEvent.conversation_id,

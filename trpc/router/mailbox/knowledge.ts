@@ -58,7 +58,7 @@ export const knowledgeRouter = {
         const result = await getKnowledgeDocuments(ctx.mailbox.organizationId, {
           search: input.search,
           content_type: input.type,
-          is_active: input.status === "published" ? true : input.status === "draft" ? false : undefined,
+          isActive: input.status === "published" ? true : input.status === "draft" ? false : undefined,
           limit: input.limit,
           offset: input.offset,
         });
@@ -69,7 +69,7 @@ export const knowledgeRouter = {
           title: doc.title,
           content: doc.content,
           type: doc.content_type as "guide" | "faq" | "policy" | "manual" | "article",
-          status: (doc.is_active && doc.is_public) ? "published" as const : "draft" as const,
+          status: (doc.isActive && doc.is_public) ? "published" as const : "draft" as const,
           tags: doc.tags || [],
           author: "System", // TODO: Get from user context
           createdAt: new Date(doc.created_at),
@@ -169,7 +169,7 @@ export const knowledgeRouter = {
           content: input.content,
           content_type: input.type,
           tags: input.tags,
-          is_active: input.status === "published",
+          isActive: input.status === "published",
           is_public: input.status === "published",
         });
 
@@ -179,7 +179,7 @@ export const knowledgeRouter = {
           title: document.title,
           content: document.content,
           type: document.content_type as "guide" | "faq" | "policy" | "manual" | "article",
-          status: (document.is_active && document.is_public) ? "published" as const : "draft" as const,
+          status: (document.isActive && document.is_public) ? "published" as const : "draft" as const,
           tags: document.tags || [],
           author: "Current User", // TODO: Get from user context
           createdAt: new Date(document.created_at),
@@ -188,7 +188,7 @@ export const knowledgeRouter = {
           helpful: 0,
           notHelpful: 0,
           embedding: false,
-          searchable: document.is_active && document.is_public,
+          searchable: document.isActive && document.is_public,
         };
 
         return {

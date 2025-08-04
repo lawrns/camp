@@ -96,7 +96,7 @@ export const useConversationStore = create<ConversationState & ConversationActio
         const lastMessagePreviews: Record<string, string> = {};
         const unreadCounts: Record<string, number> = {};
 
-        conversations.forEach((conv: any) => {
+        conversations.forEach((conv: unknown) => {
           conversationsMap.set(conv.id, conv);
           conversationIds.push(conv.id);
           lastMessagePreviews[conv.id] = conv.lastMessagePreview || "";
@@ -299,8 +299,8 @@ export const conversationSelectors = {
     const { conversationIds, conversationsMap, activeFilter, searchQuery } = state;
 
     return conversationIds
-      .map((id: any) => conversationsMap.get(id))
-      .filter((conv: any): conv is Conversation => {
+      .map((id: unknown) => conversationsMap.get(id))
+      .filter((conv: unknown): conv is Conversation => {
         if (!conv) return false;
 
         // Apply filter
@@ -323,8 +323,8 @@ export const conversationSelectors = {
         if (searchQuery) {
           const query = searchQuery.toLowerCase();
           return (
-            conv.customer_name?.toLowerCase().includes(query) ||
-            conv.customer_email?.toLowerCase().includes(query) ||
+            conv.customerName?.toLowerCase().includes(query) ||
+            conv.customerEmail?.toLowerCase().includes(query) ||
             conv.subject?.toLowerCase().includes(query) ||
             conv.lastMessagePreview?.toLowerCase().includes(query)
           );

@@ -79,8 +79,8 @@ export function PerformanceMonitor() {
       let clsValue = 0;
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (!(entry as any).hadRecentInput) {
-            clsValue += (entry as any).value;
+          if (!(entry as unknown).hadRecentInput) {
+            clsValue += (entry as unknown).value;
           }
         }
         vitals.cls = clsValue;
@@ -103,17 +103,17 @@ export function PerformanceMonitor() {
 
   // Measure memory usage
   const measureMemoryUsage = useCallback((): number => {
-    if (typeof window === "undefined" || !(performance as any).memory) return 0;
+    if (typeof window === "undefined" || !(performance as unknown).memory) return 0;
 
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown).memory;
     return (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
   }, []);
 
   // Measure connection quality
   const measureConnectionQuality = useCallback((): PerformanceData["connectionQuality"] => {
-    if (typeof navigator === "undefined" || !(navigator as any).connection) return "good";
+    if (typeof navigator === "undefined" || !(navigator as unknown).connection) return "good";
 
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown).connection;
     const effectiveType = connection.effectiveType;
 
     switch (effectiveType) {

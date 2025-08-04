@@ -54,7 +54,7 @@ export function useStreamingResponse(options: UseStreamingResponseOptions) {
    * Handle streaming message updates
    */
   const handleStreamingMessage = useCallback(
-    (payload: any) => {
+    (payload: unknown) => {
       const { messageId, content, isComplete, timestamp, metadata } = payload;
 
       const streamingMessage: StreamingMessage = {
@@ -88,7 +88,7 @@ export function useStreamingResponse(options: UseStreamingResponseOptions) {
    * Handle typing indicator updates
    */
   const handleTypingIndicator = useCallback(
-    (payload: any) => {
+    (payload: unknown) => {
       const { isTyping, senderType } = payload;
 
       // Only handle AI typing indicators
@@ -141,7 +141,7 @@ export function useStreamingResponse(options: UseStreamingResponseOptions) {
       setState((prev) => ({ ...prev, connectionState: "connecting", error: null }));
 
       const callbacks = {
-        onMessage: (message: any) => {
+        onMessage: (message: unknown) => {
           if (message.event === "streaming_message") {
             handleStreamingMessage(message.payload);
           } else if (message.event === "typing_indicator") {

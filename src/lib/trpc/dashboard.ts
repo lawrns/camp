@@ -18,7 +18,7 @@ export const dashboardRouter = createTRPCRouter({
         range: z.enum(["24h", "7d", "30d", "90d"]).default("7d"),
       })
     )
-    .query(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .query(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       const now = new Date();
       let startDate!: Date;
 
@@ -73,25 +73,25 @@ export const dashboardRouter = createTRPCRouter({
 
         // Calculate metrics
         const totalConversations = conversations?.length || 0;
-        const resolvedConversations = conversations?.filter((c: any) => c.status === "resolved").length || 0;
-        const openConversations = conversations?.filter((c: any) => c.status === "open").length || 0;
-        const assignedConversations = conversations?.filter((c: any) => c.status === "assigned").length || 0;
+        const resolvedConversations = conversations?.filter((c: unknown) => c.status === "resolved").length || 0;
+        const openConversations = conversations?.filter((c: unknown) => c.status === "open").length || 0;
+        const assignedConversations = conversations?.filter((c: unknown) => c.status === "assigned").length || 0;
 
         // Calculate response times
-        const conversationsWithResponse = conversations?.filter((c: any) => c.first_response_at) || [];
+        const conversationsWithResponse = conversations?.filter((c: unknown) => c.first_response_at) || [];
         const avgResponseTime =
           conversationsWithResponse.length > 0
-            ? conversationsWithResponse.reduce((acc: any, conv: any) => {
+            ? conversationsWithResponse.reduce((acc: unknown, conv: unknown) => {
                 const responseTime = new Date(conv.first_response_at!).getTime() - new Date(conv.created_at).getTime();
                 return acc + responseTime;
               }, 0) / conversationsWithResponse.length
             : 0;
 
         // Calculate resolution times
-        const resolvedConversationsWithTime = conversations?.filter((c: any) => c.resolved_at) || [];
+        const resolvedConversationsWithTime = conversations?.filter((c: unknown) => c.resolved_at) || [];
         const avgResolutionTime =
           resolvedConversationsWithTime.length > 0
-            ? resolvedConversationsWithTime.reduce((acc: any, conv: any) => {
+            ? resolvedConversationsWithTime.reduce((acc: unknown, conv: unknown) => {
                 const resolutionTime = new Date(conv.resolved_at!).getTime() - new Date(conv.created_at).getTime();
                 return acc + resolutionTime;
               }, 0) / resolvedConversationsWithTime.length
@@ -99,23 +99,23 @@ export const dashboardRouter = createTRPCRouter({
 
         // Get total messages
         const totalMessages =
-          conversations?.reduce((acc: any, conv: any) => acc + (conv.messages?.length || 0), 0) || 0;
+          conversations?.reduce((acc: unknown, conv: unknown) => acc + (conv.messages?.length || 0), 0) || 0;
 
         // Calculate satisfaction rate (placeholder - would need actual satisfaction data)
         const satisfactionRate = resolvedConversations > 0 ? 0.85 : 0; // 85% placeholder
 
         // Priority distribution
         const priorityDistribution = {
-          low: conversations?.filter((c: any) => c.priority === "low").length || 0,
-          normal: conversations?.filter((c: any) => c.priority === "normal").length || 0,
-          high: conversations?.filter((c: any) => c.priority === "high").length || 0,
-          urgent: conversations?.filter((c: any) => c.priority === "urgent").length || 0,
+          low: conversations?.filter((c: unknown) => c.priority === "low").length || 0,
+          normal: conversations?.filter((c: unknown) => c.priority === "normal").length || 0,
+          high: conversations?.filter((c: unknown) => c.priority === "high").length || 0,
+          urgent: conversations?.filter((c: unknown) => c.priority === "urgent").length || 0,
         };
 
         // Agent performance (simplified)
         const agentStats =
           conversations?.reduce(
-            (acc: any, conv: any) => {
+            (acc: unknown, conv: unknown) => {
               if (conv.assigned_agent_id) {
                 if (!acc[conv.assigned_agent_id]) {
                   acc[conv.assigned_agent_id] = {
@@ -156,7 +156,7 @@ export const dashboardRouter = createTRPCRouter({
                 open: openConversations,
                 assigned: assignedConversations,
                 resolved: resolvedConversations,
-                closed: conversations?.filter((c: any) => c.status === "closed").length || 0,
+                closed: conversations?.filter((c: unknown) => c.status === "closed").length || 0,
               },
             },
             agents: agentStats,
@@ -183,7 +183,7 @@ export const dashboardRouter = createTRPCRouter({
         limit: z.number().min(1).max(50).default(20),
       })
     )
-    .query(async ({ ctx, input }: { ctx: any; input: any }) => {
+    .query(async ({ ctx, input }: { ctx: unknown; input: unknown }) => {
       try {
         // Get recent messages as activity
         const { data: recentMessages, error } = await ctx.supabase
@@ -219,10 +219,10 @@ export const dashboardRouter = createTRPCRouter({
         }
 
         const activities =
-          recentMessages?.map((message: any) => ({
+          recentMessages?.map((message: unknown) => ({
             id: message.id,
             type: "message",
-            description: `${message.sender_type === "agent" ? "Agent" : "Visitor"} sent a message`,
+            description: `${message.senderType === "agent" ? "Agent" : "Visitor"} sent a message`,
             content: message.content.substring(0, 100) + (message.content.length > 100 ? "..." : ""),
             timestamp: message.created_at,
             conversationId: message.conversations?.id,

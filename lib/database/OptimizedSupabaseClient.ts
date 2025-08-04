@@ -16,7 +16,7 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 interface CacheEntry {
-  data: any;
+  data: unknown;
   timestamp: number;
   ttl: number; // Time to live in milliseconds
 }
@@ -24,7 +24,7 @@ interface CacheEntry {
 interface BatchOperation {
   table: string;
   operation: "insert" | "update" | "delete";
-  data: any;
+  data: unknown;
   timestamp: number;
 }
 
@@ -96,10 +96,10 @@ export class OptimizedSupabaseClient {
     conversation_id: string;
     organization_id: string;
     content: string;
-    sender_type: string;
-    sender_name: string;
-    metadata?: any;
-  }): Promise<{ data: any; error: any; performance: { queryTime: number; cached: boolean } }> {
+    senderType: string;
+    senderName: string;
+    metadata?: unknown;
+  }): Promise<{ data: unknown; error: unknown; performance: { queryTime: number; cached: boolean } }> {
     const startTime = performance.now();
 
     try {
@@ -158,7 +158,7 @@ export class OptimizedSupabaseClient {
   public async getConversation(
     conversationId: string,
     organizationId: string
-  ): Promise<{ data: any; error: any; performance: { queryTime: number; cached: boolean } }> {
+  ): Promise<{ data: unknown; error: unknown; performance: { queryTime: number; cached: boolean } }> {
     const startTime = performance.now();
     const cacheKey = `conversation:${conversationId}`;
 
@@ -234,7 +234,7 @@ export class OptimizedSupabaseClient {
   public async getMessages(
     conversationId: string,
     limit: number = 50
-  ): Promise<{ data: any[]; error: any; performance: { queryTime: number; cached: boolean } }> {
+  ): Promise<{ data: unknown[]; error: unknown; performance: { queryTime: number; cached: boolean } }> {
     const startTime = performance.now();
     const cacheKey = `messages:${conversationId}:${limit}`;
 
@@ -299,7 +299,7 @@ export class OptimizedSupabaseClient {
   /**
    * Batch insert for improved performance
    */
-  private async batchInsert(table: string, data: any): Promise<any> {
+  private async batchInsert(table: string, data: unknown): Promise<any> {
     return new Promise((resolve, reject) => {
       // Add to batch queue
       this.batchQueue.push({
@@ -380,7 +380,7 @@ export class OptimizedSupabaseClient {
   /**
    * Cache management
    */
-  private setCache(key: string, data: any, ttl: number): void {
+  private setCache(key: string, data: unknown, ttl: number): void {
     // Remove oldest entries if cache is full
     if (this.cache.size >= this.config.cacheSize) {
       const oldestKey = this.cache.keys().next().value;
@@ -394,7 +394,7 @@ export class OptimizedSupabaseClient {
     });
   }
 
-  private getFromCache(key: string): any | null {
+  private getFromCache(key: string): unknown | null {
     const entry = this.cache.get(key);
     if (!entry) return null;
 

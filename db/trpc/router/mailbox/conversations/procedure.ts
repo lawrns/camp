@@ -41,7 +41,7 @@ export const conversationProcedure = mailboxProcedure
       lastActiveAt: conversation.lastActiveAt || conversation.updatedAt,
       tags: conversation.tags || [],
       priority: conversation.priority?.toString() || null,
-      source: (conversation.source as any) || "email",
+      source: (conversation.source as unknown) || "email",
 
       // GitHub integration
       githubIssueNumber: conversation.githubIssueNumber,

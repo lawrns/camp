@@ -37,7 +37,7 @@ export async function createConversationEmbedding(
   // Convert messages to text format for embedding
   const conversationText = messages
     .slice(-10) // Last 10 messages for context
-    .map((msg) => `${(msg as any).senderType || (msg as any).role}: ${(msg as any).content || (msg as any).body}`)
+    .map((msg) => `${(msg as unknown).senderType || (msg as unknown).role}: ${(msg as unknown).content || (msg as unknown).body}`)
     .join("\n");
 
   // Check if content is within token limits
@@ -55,8 +55,8 @@ export async function createConversationEmbedding(
   const embedding = await generateConversationEmbeddingCore(
     conversationId.toString(),
     messages.map((msg) => ({
-      role: (msg as any).senderType || (msg as any).role,
-      content: (msg as any).content || (msg as any).body,
+      role: (msg as unknown).senderType || (msg as unknown).role,
+      content: (msg as unknown).content || (msg as unknown).body,
     })),
     organizationId
   );

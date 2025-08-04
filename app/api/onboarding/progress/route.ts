@@ -52,7 +52,7 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for onboarding endpoints
-function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       console.log('[Onboarding API] Starting authentication...');
@@ -94,7 +94,7 @@ function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId') || user.userId;
@@ -116,10 +116,10 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
       return NextResponse.json({ error: 'Failed to check onboarding status' }, { status: 500 });
     }
 
-    if (tracking && tracking.completed_at) {
+    if (tracking && tracking.completedAt) {
       return NextResponse.json({
         completed: true,
-        completedAt: tracking.completed_at,
+        completedAt: tracking.completedAt,
         progress: null
       });
     }
@@ -142,7 +142,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
   }
 });
 
-export const POST = withAuth(async (request: NextRequest, user: any) => {
+export const POST = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     const body = await request.json();
     const { userId, organizationId, currentStep, data } = body;

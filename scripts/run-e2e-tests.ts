@@ -62,7 +62,7 @@ const DEFAULT_CONFIG: E2EConfig = {
 class E2ETestRunner {
   private config: E2EConfig;
   private startTime: number = 0;
-  private results: any = {};
+  private results: unknown = {};
 
   constructor(config: Partial<E2EConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -304,7 +304,7 @@ class E2ETestRunner {
   /**
    * Generate recommendations based on test results
    */
-  private generateRecommendations(report: any): string[] {
+  private generateRecommendations(report: unknown): string[] {
     const recommendations: string[] = [];
 
     // Performance recommendations
@@ -337,9 +337,9 @@ class E2ETestRunner {
   /**
    * Generate CI/CD compatible report
    */
-  private generateCIReport(summaryReport: any): void {
+  private generateCIReport(summaryReport: unknown): void {
     const ciReport = {
-      success: Object.values(this.results).every((result: any) => result.exitCode === 0),
+      success: Object.values(this.results).every((result: unknown) => result.exitCode === 0),
       totalTests: summaryReport.monitoring.summary.totalTests,
       passedTests: summaryReport.monitoring.summary.passed,
       failedTests: summaryReport.monitoring.summary.failed,
@@ -361,15 +361,15 @@ class E2ETestRunner {
   /**
    * Generate JUnit XML report
    */
-  private generateJUnitReport(summaryReport: any): void {
+  private generateJUnitReport(summaryReport: unknown): void {
     const tests = summaryReport.monitoring.tests;
     const totalTests = tests.length;
-    const failures = tests.filter((t: any) => t.status === 'failed').length;
+    const failures = tests.filter((t: unknown) => t.status === 'failed').length;
     const duration = summaryReport.testRun.duration / 1000;
 
     const junitXml = `<?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="E2E Tests" tests="${totalTests}" failures="${failures}" time="${duration}">
-${tests.map((test: any) => `
+${tests.map((test: unknown) => `
   <testcase name="${test.testName}" time="${test.duration / 1000}">
     ${test.status === 'failed' ? `<failure message="${test.error || 'Test failed'}">${test.error || 'Test failed'}</failure>` : ''}
   </testcase>`).join('')}
@@ -407,7 +407,7 @@ async function main() {
     
     switch (key) {
       case '--env':
-        config.environment = value as any;
+        config.environment = value as unknown;
         break;
       case '--base-url':
         config.baseUrl = value;

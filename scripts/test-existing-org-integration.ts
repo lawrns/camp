@@ -91,9 +91,9 @@ async function testExistingOrgIntegration() {
       conversation_id: testConvId,
       organization_id: EXISTING_ORG_ID,
       content: `Test message from widget at ${new Date().toISOString()}`,
-      sender_type: 'user', // Changed from 'customer' to 'user' based on schema constraint
-      sender_email: 'test@example.com',
-      sender_name: 'Test Customer',
+      senderType: 'user', // Changed from 'customer' to 'user' based on schema constraint
+      senderEmail: 'test@example.com',
+      senderName: 'Test Customer',
       metadata: {
         source: 'widget',
         timestamp: new Date().toISOString(),
@@ -118,7 +118,7 @@ async function testExistingOrgIntegration() {
     // ========================================
     console.log('\n4️⃣ Testing real-time broadcasting...');
 
-    const receivedEvents: any[] = [];
+    const receivedEvents: unknown[] = [];
 
     // Set up monitoring using the unified channel names
     const orgChannelName = `org:${EXISTING_ORG_ID}`;
@@ -232,7 +232,7 @@ async function testExistingOrgIntegration() {
     } else {
       console.log(`✅ Found ${messages.length} messages in test conversation`);
       messages.forEach(msg => {
-        console.log(`   - ${msg.id}: "${msg.content}" (${msg.sender_type})`);
+        console.log(`   - ${msg.id}: "${msg.content}" (${msg.senderType})`);
       });
     }
 

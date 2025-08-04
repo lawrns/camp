@@ -37,10 +37,10 @@ test.describe('Widget-Agent Communication E2E', () => {
     testContext = {
       agentBrowser: browser,
       widgetBrowser: await browser.browserType().launch(),
-      agentContext: null as any,
-      widgetContext: null as any,
-      agentPage: null as any,
-      widgetPage: null as any,
+      agentContext: null as unknown,
+      widgetContext: null as unknown,
+      agentPage: null as unknown,
+      widgetPage: null as unknown,
       organizationId: testMetadata.testOrgId,
       conversationId: testMetadata.testConversations[0].id,
     };

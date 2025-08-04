@@ -4,8 +4,8 @@
  */
 
 // Common utility types
-export type AnyFunction = (...args: any[]) => any;
-export type AsyncFunction<T = any> = (...args: any[]) => Promise<T>;
+export type AnyFunction = (...args: unknown[]) => any;
+export type AsyncFunction<T = any> = (...args: unknown[]) => Promise<T>;
 export type VoidFunction = () => void;
 export type AsyncVoidFunction = () => Promise<void>;
 
@@ -32,7 +32,7 @@ export type ApiResponse<T = any> = {
 export type ApiError = {
   message: string;
   code?: string | number;
-  details?: any;
+  details?: unknown;
 };
 
 // Database types
@@ -40,7 +40,7 @@ export type DatabaseRecord = {
   id: string;
   created_at: string;
   updated_at?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export type PaginatedResponse<T = any> = {
@@ -73,37 +73,37 @@ export type Awaitable<T> = T | Promise<T>;
 // Supabase-related types
 export type SupabaseResponse<T = any> = {
   data: T | null;
-  error: any | null;
+  error: unknown | null;
 };
 
 export type SupabaseQueryBuilder = {
   from: (table: string) => any;
-  select: (...args: any[]) => any;
-  insert: (data: any) => any;
-  update: (data: any) => any;
+  select: (...args: unknown[]) => any;
+  insert: (data: unknown) => any;
+  update: (data: unknown) => any;
   delete: () => any;
-  eq: (column: string, value: any) => any;
-  neq: (column: string, value: any) => any;
-  gt: (column: string, value: any) => any;
-  gte: (column: string, value: any) => any;
-  lt: (column: string, value: any) => any;
-  lte: (column: string, value: any) => any;
+  eq: (column: string, value: unknown) => any;
+  neq: (column: string, value: unknown) => any;
+  gt: (column: string, value: unknown) => any;
+  gte: (column: string, value: unknown) => any;
+  lt: (column: string, value: unknown) => any;
+  lte: (column: string, value: unknown) => any;
   like: (column: string, pattern: string) => any;
   ilike: (column: string, pattern: string) => any;
-  in: (column: string, values: any[]) => any;
-  contains: (column: string, value: any) => any;
-  containedBy: (column: string, value: any) => any;
-  rangeGt: (column: string, value: any) => any;
-  rangeGte: (column: string, value: any) => any;
-  rangeLt: (column: string, value: any) => any;
-  rangeLte: (column: string, value: any) => any;
-  rangeAdjacent: (column: string, value: any) => any;
-  overlaps: (column: string, value: any) => any;
+  in: (column: string, values: unknown[]) => any;
+  contains: (column: string, value: unknown) => any;
+  containedBy: (column: string, value: unknown) => any;
+  rangeGt: (column: string, value: unknown) => any;
+  rangeGte: (column: string, value: unknown) => any;
+  rangeLt: (column: string, value: unknown) => any;
+  rangeLte: (column: string, value: unknown) => any;
+  rangeAdjacent: (column: string, value: unknown) => any;
+  overlaps: (column: string, value: unknown) => any;
   textSearch: (column: string, query: string) => any;
   match: (query: AnyRecord) => any;
-  not: (column: string, operator: string, value: any) => any;
+  not: (column: string, operator: string, value: unknown) => any;
   or: (filters: string) => any;
-  filter: (column: string, operator: string, value: any) => any;
+  filter: (column: string, operator: string, value: unknown) => any;
   order: (column: string, options?: { ascending?: boolean }) => any;
   limit: (count: number) => any;
   range: (from: number, to: number) => any;
@@ -115,7 +115,7 @@ export type SupabaseQueryBuilder = {
 export type WidgetMessage = {
   id: string;
   content: string;
-  sender_type: "visitor" | "agent" | "system" | "ai";
+  senderType: "visitor" | "agent" | "system" | "ai";
   created_at: string;
   sender_id?: string;
   metadata?: AnyRecord;
@@ -224,8 +224,8 @@ export type LowercaseString<T extends string> = string;
 export type CapitalizedString<T extends string> = string;
 
 // Type guards
-export type TypeGuard<T> = (value: any) => value is T;
-export type AsyncTypeGuard<T> = (value: any) => Promise<boolean>;
+export type TypeGuard<T> = (value: unknown) => value is T;
+export type AsyncTypeGuard<T> = (value: unknown) => Promise<boolean>;
 
 // Branding types
 export type Brand<T, B> = T & { __brand: B };

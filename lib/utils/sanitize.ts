@@ -150,7 +150,7 @@ export function sanitizeHtml(
 
   // Remove any script tags that might have been missed
   const scripts = temp.querySelectorAll("script, style, iframe, object, embed, form");
-  scripts.forEach((el: any) => el.remove());
+  scripts.forEach((el: unknown) => el.remove());
 
   return temp.innerHTML;
 }

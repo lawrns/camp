@@ -21,10 +21,9 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Performance optimizations */
+    /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
-    /* Prevent horizontal scroll caused by any overflowing child */
-    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   /* App-specific body styles */
@@ -34,10 +33,9 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* Performance optimizations */
+    /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
-    /* Clip any horizontal overflow strictly (more aggressive than hidden) */
-    overflow-x: clip;
+    overflow-x: hidden; /* Only prevent horizontal scroll, don't clip */
   }
 }
 
@@ -113,12 +111,9 @@
   /* ===== HOMEPAGE SPECIFIC STYLES ===== */
   /* Home page specific styles - scoped to this page only */
   .home-page {
-    /* Performance optimizations for homepage */
+    /* Enable smooth native scrolling */
     -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
-    /* Hardware acceleration for smooth scrolling */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    overflow-x: hidden; /* Only prevent horizontal scroll */
     background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
   }
 
@@ -244,6 +239,98 @@
     /* Ensure proper spacing between grid items on mobile */
     .grid.grid-cols-1 > * + * {
       margin-top: 2rem;
+    }
+  }
+
+  /* Hero section fixes */
+  .hero-content *,
+  .hero-section * {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .hero-title {
+    line-height: 1.2;
+    overflow-wrap: break-word;
+  }
+
+  .hero-description {
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  /* Mobile responsive utilities */
+  @media (max-width: 390px) {
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+    
+    .text-xl {
+      font-size: 1.125rem;
+    }
+  }
+
+  .overflow-wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
+
+  .break-words {
+    word-break: break-word;
+  }
+
+  /* Responsive grid improvements */
+@media (max-width: 768px) {
+  .grid-cols-1 > * {
+    min-width: 0;
+  }
+  
+  .flex-col > * {
+    min-width: 0;
+  }
+}
+
+/* Hero grid layout fixes */
+@media (min-width: 768px) {
+  .grid-cols-2 > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  
+  .grid-cols-2 > *:first-child {
+    padding-right: 2rem;
+  }
+  
+  .grid-cols-2 > *:last-child {
+    padding-left: 2rem;
+  }
+}
+
+/* Prevent overflow in hero section */
+.max-w-7xl .grid-cols-2 {
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+@media (max-width: 1024px) {
+  .max-w-7xl .grid-cols-2 {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .max-w-7xl .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+  /* Mobile button improvements */
+  @media (max-width: 640px) {
+    .min-w-0 {
+      min-width: 0;
+    }
+    
+    .whitespace-normal {
+      white-space: normal;
     }
   }
 

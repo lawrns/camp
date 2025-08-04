@@ -51,7 +51,7 @@ const securitySettingsSchema = z.object({
 type SecuritySettingsFormData = z.infer<typeof securitySettingsSchema>;
 
 interface SecuritySettingsProps {
-  settings: any;
+  settings: unknown;
   isLoading: boolean;
   error: Error | null;
   organizationId: string;

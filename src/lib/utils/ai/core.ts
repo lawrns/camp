@@ -8,7 +8,7 @@ export interface AICore {
   processMessage: (message: string, context?: string[]) => Promise<string>;
   calculateConfidence: (response: string, context?: string[]) => number;
   extractKeywords: (text: string) => string[];
-  validateConfig: (config: any) => boolean;
+  validateConfig: (config: unknown) => boolean;
 }
 
 export interface AIProcessingOptions {
@@ -56,7 +56,7 @@ export class CoreAIProcessor implements AICore {
     return aiUtils.extractKeywords(text);
   }
 
-  validateConfig(config: any): boolean {
+  validateConfig(config: unknown): boolean {
     try {
       const validatedConfig = aiUtils.validateConfig(config);
       return !!validatedConfig;

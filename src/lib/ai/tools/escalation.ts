@@ -97,7 +97,7 @@ export async function escalateToHuman(params: EscalationParams): Promise<Escalat
           ...(agent && {
             assignedAgent: {
               id: agent.id,
-              name: agent.full_name,
+              name: agent.fullName,
               availability: agent.availability_status || "available",
             },
           }),
@@ -195,7 +195,7 @@ export async function escalateToHuman(params: EscalationParams): Promise<Escalat
     if (availableAgent) {
       responseData.assignedAgent = {
         id: availableAgent.id,
-        name: availableAgent.full_name,
+        name: availableAgent.fullName,
         availability: availableAgent.availability_status || "available",
       };
     }
@@ -213,7 +213,7 @@ export async function escalateToHuman(params: EscalationParams): Promise<Escalat
       data: {
         ...responseData,
         message: availableAgent
-          ? `Assigned to ${availableAgent.full_name}`
+          ? `Assigned to ${availableAgent.fullName}`
           : `Added to queue (position ${queuePosition})`,
       },
       confidence: 1.0, // High confidence for successful escalation

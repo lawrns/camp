@@ -79,7 +79,7 @@ export function useOrganizationMembers(organizationId: string) {
 
         // Enhance with real workload data
         const enhancedMembers = await Promise.all(
-          members.map(async (member: any) => {
+          members.map(async (member: unknown) => {
             const profile = profileMap.get(member.user_id);
 
             // Get real workload data for this member
@@ -95,7 +95,7 @@ export function useOrganizationMembers(organizationId: string) {
               .select("created_at, sender_type")
               .eq("organization_id", organizationId)
               .eq("senderId", member.user_id)
-              .in("sender_type", ["agent", "ai_assistant"])
+              .in("senderType", ["agent", "ai_assistant"])
               .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
             const activeConversations = memberConversations?.length || 0;

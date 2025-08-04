@@ -102,21 +102,21 @@ export function useTenantSupabase(): TenantSupabaseClient {
         organization_id: organizationId,
       };
 
-      return (client as any).from(table).insert(dataWithOrgId);
+      return (client as unknown).from(table).insert(dataWithOrgId);
     },
     [client, organizationId]
   );
 
   const updateWithOrgFilter = useCallback(
     async <T>(table: string, data: Partial<T>, filter: Record<string, any>) => {
-      return (client as any).from(table).update(data).eq("organization_id", organizationId).match(filter);
+      return (client as unknown).from(table).update(data).eq("organization_id", organizationId).match(filter);
     },
     [client, organizationId]
   );
 
   const deleteWithOrgFilter = useCallback(
     async (table: string, filter: Record<string, any>) => {
-      return (client as any).from(table).delete().eq("organization_id", organizationId).match(filter);
+      return (client as unknown).from(table).delete().eq("organization_id", organizationId).match(filter);
     },
     [client, organizationId]
   );
@@ -125,7 +125,7 @@ export function useTenantSupabase(): TenantSupabaseClient {
   const from = useCallback(
     (table: string) => {
       // Cast to any to handle dynamic table names since TypeScript can't verify all possible table names
-      return (client as any).from(table).select("*").eq("organization_id", organizationId);
+      return (client as unknown).from(table).select("*").eq("organization_id", organizationId);
     },
     [client, organizationId]
   );
@@ -160,7 +160,7 @@ export function useTenantRealtime() {
   // Lean realtime migration stubs - encourage direct hook usage
   const subscribeToConversations = useCallback(
     async (
-      callback: (payload: any) => void,
+      callback: (payload: unknown) => void,
       options?: {
         conversationId?: string;
         event?: "INSERT" | "UPDATE" | "DELETE" | "*";
@@ -173,7 +173,7 @@ export function useTenantRealtime() {
 
   const subscribeToMessages = useCallback(
     async (
-      callback: (payload: any) => void,
+      callback: (payload: unknown) => void,
       options?: {
         conversationId?: string;
         event?: "INSERT" | "UPDATE" | "DELETE" | "*";

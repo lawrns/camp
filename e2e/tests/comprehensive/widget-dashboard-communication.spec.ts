@@ -29,7 +29,7 @@ interface TestDiagnostics {
     timestamp: number;
     type: string;
     message: string;
-    context?: any;
+    context?: unknown;
   }>;
   timings: Record<string, number>;
   websocketStatus: Record<string, string>;

@@ -11,9 +11,9 @@ import { NextRequest, NextResponse } from "next/server";
 export interface AuditConfig {
   action: string;
   resourceType: AuditLogEntry["resource_type"];
-  resourceIdExtractor?: (req: NextRequest, params: any, body?: any) => string | undefined;
-  detailsExtractor?: (req: NextRequest, params: any, body?: any, response?: any) => Record<string, any>;
-  skipAudit?: (req: NextRequest, params: any, body?: any) => boolean;
+  resourceIdExtractor?: (req: NextRequest, params: unknown, body?: unknown) => string | undefined;
+  detailsExtractor?: (req: NextRequest, params: unknown, body?: unknown, response?: unknown) => Record<string, any>;
+  skipAudit?: (req: NextRequest, params: unknown, body?: unknown) => boolean;
   actorType?: AuditLogEntry["actor_type"];
 }
 
@@ -21,15 +21,15 @@ export interface AuditConfig {
  * Audit middleware wrapper for API endpoints
  */
 export function withAuditLogging<T extends any[]>(
-  handler: (req: NextRequest, context: any, ...args: T) => Promise<NextResponse>,
+  handler: (req: NextRequest, context: unknown, ...args: T) => Promise<NextResponse>,
   config: AuditConfig
 ) {
-  return async (req: NextRequest, context: any, ...args: T): Promise<NextResponse> => {
+  return async (req: NextRequest, context: unknown, ...args: T): Promise<NextResponse> => {
     const startTime = Date.now();
     let success = false;
     let error: string | undefined;
     let response: NextResponse;
-    let body: any;
+    let body: unknown;
 
     try {
       // Parse request body if present
@@ -108,14 +108,14 @@ export function withAuditLogging<T extends any[]>(
  * Audit decorator for class methods
  */
 export function AuditLog(config: AuditConfig) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       const startTime = Date.now();
       let success = false;
       let error: string | undefined;
-      let result: any;
+      let result: unknown;
 
       try {
         result = await originalMethod.apply(this, args);
@@ -200,8 +200,8 @@ export const AuditConfigs = {
       }
     },
     detailsExtractor: (req, params, body) => ({
-      customer_email: body?.customer_email,
-      customer_name: body?.customer_name,
+      customerEmail: body?.customerEmail,
+      customerName: body?.customerName,
       subject: body?.subject,
       source: body?.source || "dashboard",
     }),
@@ -237,7 +237,7 @@ export const AuditConfigs = {
     },
     detailsExtractor: (req, params, body) => ({
       content_length: body?.content?.length || 0,
-      sender_type: body?.sender_type || body?.senderType,
+      senderType: body?.senderType || body?.senderType,
       conversation_id: body?.conversation_id || body?.conversationId,
       has_attachments: !!(body?.attachments && body.attachments.length > 0),
     }),
@@ -284,7 +284,7 @@ export const AuditConfigs = {
       priority: body?.priority,
       category: body?.category,
       conversation_id: body?.conversationId,
-      customer_email: body?.customer_email,
+      customerEmail: body?.customerEmail,
     }),
   },
 
@@ -306,7 +306,7 @@ export const AuditConfigs = {
     detailsExtractor: (req, params, body) => ({
       content_length: body?.content?.length || 0,
       conversation_id: body?.conversationId,
-      sender_type: body?.senderType || "visitor",
+      senderType: body?.senderType || "visitor",
       organization_id: body?.organizationId,
     }),
   },

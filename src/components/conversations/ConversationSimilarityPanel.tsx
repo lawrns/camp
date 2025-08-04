@@ -63,7 +63,7 @@ interface ExtendedConversationMatch extends ConversationMatch {
 
 interface ExtendedConversationCluster extends ConversationCluster {
   clusterId?: string;
-  conversations: any[];
+  conversations: unknown[];
   pattern?: {
     type: string;
   };
@@ -79,7 +79,7 @@ interface ExtendedConversationCluster extends ConversationCluster {
 interface SimilarityPanelState {
   matches: ExtendedConversationMatch[];
   clusters: ExtendedConversationCluster[];
-  insights: any;
+  insights: unknown;
   loading: boolean;
   error: string | null;
   activeTab: "matches" | "clusters" | "insights";
@@ -114,12 +114,12 @@ export function ConversationSimilarityPanel({
       // Note: This needs to be refactored to match the actual API
       // For now, we'll pass empty arrays until the API is properly implemented
       const matches = await conversationSimilarityMatcher.findSimilarConversations(
-        { id: conversationId, organizationId } as any,
-        [] as any
+        { id: conversationId, organizationId } as unknown,
+        [] as unknown
       );
 
       let clusters: ConversationCluster[] = [];
-      let insights: any = null;
+      let insights: unknown = null;
 
       // Load clusters and insights if enabled
       if (showClusters || showInsights) {
@@ -504,7 +504,7 @@ export function ConversationSimilarityPanel({
     <div className={className}>
       <Tabs
         value={state.activeTab}
-        onValueChange={(value) => setState((prev) => ({ ...prev, activeTab: value as any }))}
+        onValueChange={(value) => setState((prev) => ({ ...prev, activeTab: value as unknown }))}
       >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="matches">Similar Conversations</TabsTrigger>

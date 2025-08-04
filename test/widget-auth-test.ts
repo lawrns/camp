@@ -31,7 +31,7 @@ export async function testWidgetAuthentication() {
         hasAccessToken: !!authResult.session?.access_token,
         userId: authResult.session?.user?.id,
         isAnonymous: authResult.session?.user?.is_anonymous,
-        expiresAt: authResult.session?.expires_at
+        expiresAt: authResult.session?.expiresAt
       });
     } else {
       console.error('❌ Authentication failed:', authResult.error);
@@ -79,6 +79,6 @@ export async function testWidgetAuthentication() {
  */
 if (typeof window !== 'undefined') {
   // Make test available globally for browser console testing
-  (window as any).testWidgetAuthentication = testWidgetAuthentication;
+  (window as unknown).testWidgetAuthentication = testWidgetAuthentication;
   console.log('🧪 Widget authentication test available as window.testWidgetAuthentication()');
 }

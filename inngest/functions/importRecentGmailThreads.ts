@@ -19,7 +19,7 @@ import {
 } from "./handleGmailWebhookEvent";
 
 // Simple fallback functions for missing modules
-const parseEmailAddress = (emailString: string): any => {
+const parseEmailAddress = (emailString: string): unknown => {
   const match = emailString.match(/^(.+?)\s*<(.+?)>$/) || emailString.match(/^(.+)$/);
   return {
     address: match ? (match[2] || match[1])?.trim() || emailString : emailString,
@@ -27,7 +27,7 @@ const parseEmailAddress = (emailString: string): any => {
   };
 };
 
-const getGmailService = async (gmailSupportEmail: any): Promise<LightweightGmailClient> => {
+const getGmailService = async (gmailSupportEmail: unknown): Promise<LightweightGmailClient> => {
   // Extract access token from gmailSupportEmail object
   const accessToken = gmailSupportEmail?.accessToken || gmailSupportEmail?.access_token;
 
@@ -94,7 +94,7 @@ export default inngest.createFunction(
     });
 
     const results = await Promise.all(
-      threads.map((thread: any) => {
+      threads.map((thread: unknown) => {
         return step.run("process-thread", async () => {
           return await processGmailThread(gmailSupportEmailId, assertDefinedOrRaiseNonRetriableError(thread.id));
         });
@@ -109,7 +109,7 @@ export const excludeExistingGmailThreads = async (
   gmailSupportEmailId: number,
   gmailThreads: gmail_v1.Schema$Thread[]
 ) => {
-  const gmailThreadIds = gmailThreads.map((thread: any) => assertDefinedOrRaiseNonRetriableError(thread.id));
+  const gmailThreadIds = gmailThreads.map((thread: unknown) => assertDefinedOrRaiseNonRetriableError(thread.id));
   const existingEmails = await db
     .selectDistinct({ gmailThreadId: conversationMessages.gmailThreadId })
     .from(conversationMessages)
@@ -124,7 +124,7 @@ export const excludeExistingGmailThreads = async (
   const existingThreads = new Set(
     existingEmails.flatMap((email) => (email.gmailThreadId ? [email.gmailThreadId] : []))
   );
-  return gmailThreads.filter((thread: any) => !existingThreads.has(assertDefinedOrRaiseNonRetriableError(thread.id)));
+  return gmailThreads.filter((thread: unknown) => !existingThreads.has(assertDefinedOrRaiseNonRetriableError(thread.id)));
 };
 
 export const getNewGmailThreads = async (gmailSupportEmailId: number) => {
@@ -135,7 +135,7 @@ export const getNewGmailThreads = async (gmailSupportEmailId: number) => {
     .then(assertDefinedOrRaiseNonRetriableError);
   const client = await getGmailService(gmailSupportEmail);
   const response = await getLast10GmailThreads(client);
-  assertSuccessResponseOrThrow(response as any);
+  assertSuccessResponseOrThrow(response as unknown);
   const threads = response ?? [];
   return excludeExistingGmailThreads(gmailSupportEmailId, threads);
 };
@@ -171,9 +171,9 @@ export const processGmailThreadWithClient = async (
   }
   const firstMessageHeaders = messages[0].payload?.headers;
   const parsedEmailFrom = assertDefinedOrRaiseNonRetriableError(
-    parseEmailAddress(firstMessageHeaders?.find((h: any) => h.name?.toLowerCase() === "from")?.value ?? "")
+    parseEmailAddress(firstMessageHeaders?.find((h: unknown) => h.name?.toLowerCase() === "from")?.value ?? "")
   );
-  const subject = firstMessageHeaders?.find((h: any) => h.name?.toLowerCase() === "subject")?.value ?? "";
+  const subject = firstMessageHeaders?.find((h: unknown) => h.name?.toLowerCase() === "subject")?.value ?? "";
   const mailbox = await db.query.mailboxes
     .findFirst({
       where: eq(mailboxes.gmailSupportEmailId, gmailSupportEmail.id),
@@ -200,7 +200,7 @@ export const processGmailThreadWithClient = async (
 
   let lastUserEmailCreatedAt: Date | null = null;
   const messageInfos = await Promise.all(
-    messages.map((message: any) => {
+    messages.map((message: unknown) => {
       return getMessageById(client, assertDefinedOrRaiseNonRetriableError(message.id)).then(
         assertSuccessResponseOrThrow
       );

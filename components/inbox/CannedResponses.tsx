@@ -96,7 +96,7 @@ export function CannedResponses({
 
       // Filter by category
       if (category !== "all") {
-        filtered = filtered.filter((r: any) => r.category === category);
+        filtered = filtered.filter((r: unknown) => r.category === category);
       }
 
       // Filter by search query
@@ -181,7 +181,7 @@ export function CannedResponses({
 
       // Update usage count
       setResponses((prev) =>
-        prev.map((r: any) => (r.id === response.id ? { ...r, usage_count: r.usage_count + 1 } : r))
+        prev.map((r: unknown) => (r.id === response.id ? { ...r, usage_count: r.usage_count + 1 } : r))
       );
 
       setIsOpen(false);
@@ -203,7 +203,7 @@ export function CannedResponses({
   // Toggle favorite
   const toggleFavorite = useCallback((responseId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setResponses((prev) => prev.map((r: any) => (r.id === responseId ? { ...r, is_favorite: !r.is_favorite } : r)));
+    setResponses((prev) => prev.map((r: unknown) => (r.id === responseId ? { ...r, is_favorite: !r.is_favorite } : r)));
   }, []);
 
   // Keyboard navigation
@@ -317,7 +317,7 @@ export function CannedResponses({
 
       {/* Categories */}
       <div className="flex gap-1 overflow-x-auto border-b border-[var(--fl-color-border-subtle)] p-spacing-sm">
-        {CATEGORIES.map((category: any) => {
+        {CATEGORIES.map((category: unknown) => {
           const Icon = category.icon;
           const isSelected = selectedCategory === category.id;
           return (
@@ -365,7 +365,7 @@ export function CannedResponses({
                   <p className="text-foreground mb-1 line-clamp-2 text-tiny">{response.content}</p>
                   <div className="flex items-center gap-ds-2 text-tiny text-gray-400">
                     <span>{response.usage_count} uses</span>
-                    {response.tags.slice(0, 2).map((tag: any) => (
+                    {response.tags.slice(0, 2).map((tag: unknown) => (
                       <Badge key={tag} variant="secondary" className="px-1 py-0 text-tiny">
                         {tag}
                       </Badge>
@@ -414,7 +414,7 @@ export function CannedResponses({
 // Hook for managing canned responses
 export function useCannedResponses() {
   const [responses, setResponses] = useState(MOCK_RESPONSES);
-  const [favorites, setFavorites] = useState(MOCK_RESPONSES.filter((r: any) => r.is_favorite));
+  const [favorites, setFavorites] = useState(MOCK_RESPONSES.filter((r: unknown) => r.is_favorite));
 
   const addResponse = useCallback(
     (response: Omit<CannedResponse, "id" | "usage_count" | "created_at" | "updated_at">) => {
@@ -433,20 +433,20 @@ export function useCannedResponses() {
 
   const updateResponse = useCallback((id: string, updates: Partial<CannedResponse>) => {
     setResponses((prev) =>
-      prev.map((r: any) => (r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r))
+      prev.map((r: unknown) => (r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r))
     );
   }, []);
 
   const deleteResponse = useCallback((id: string) => {
-    setResponses((prev) => prev.filter((r: any) => r.id !== id));
+    setResponses((prev) => prev.filter((r: unknown) => r.id !== id));
   }, []);
 
   const toggleFavorite = useCallback((id: string) => {
-    setResponses((prev) => prev.map((r: any) => (r.id === id ? { ...r, is_favorite: !r.is_favorite } : r)));
+    setResponses((prev) => prev.map((r: unknown) => (r.id === id ? { ...r, is_favorite: !r.is_favorite } : r)));
   }, []);
 
   useEffect(() => {
-    setFavorites(responses.filter((r: any) => r.is_favorite));
+    setFavorites(responses.filter((r: unknown) => r.is_favorite));
   }, [responses]);
 
   return {

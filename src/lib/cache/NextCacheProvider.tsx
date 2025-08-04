@@ -128,7 +128,7 @@ class MemoryAwareCache {
     this.updateMemoryUsage();
   }
 
-  private calculateSize(data: any): number {
+  private calculateSize(data: unknown): number {
     return new Blob([JSON.stringify(data)]).size;
   }
 
@@ -456,8 +456,8 @@ export const NextCacheProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const metrics = cache.getMetrics();
 
       // Report to analytics or monitoring service
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'cache_performance', {
+      if (typeof window !== 'undefined' && (window as unknown).gtag) {
+        (window as unknown).gtag('event', 'cache_performance', {
           cache_hits: metrics.hits,
           cache_misses: metrics.misses,
           hit_ratio: metrics.hits / (metrics.hits + metrics.misses) || 0,

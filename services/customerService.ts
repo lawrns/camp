@@ -110,7 +110,7 @@ export async function updateCustomer(
   }
 
   // Prepare the update data
-  const updateData: any = {
+  const updateData: unknown = {
     updatedAt: new Date(),
   };
 

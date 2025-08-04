@@ -23,6 +23,9 @@ interface ChatHeaderProps {
   onAssignConversation?: () => void;
   onConvertToTicket?: () => void;
   onToggleConversationManagement?: () => void;
+  // Auth context
+  organizationId?: string;
+  userId?: string;
 }
 
 /**
@@ -39,6 +42,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onAssignConversation,
   onConvertToTicket,
   onToggleConversationManagement,
+  organizationId,
+  userId,
 }) => {
   // Get auth context to determine if user is an agent (not widget user)
   const { user } = useAuth();
@@ -216,8 +221,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <div data-testid="chat-header-ai-handover">
               <AIHandoverButton
                 conversationId={conversation.id}
-                organizationId={user?.organizationId || ""}
-                userId={user?.id || ""}
+                organizationId={organizationId || user?.organizationId || ""}
+                userId={userId || user?.id || ""}
                 currentConfidence={0.85} // Default confidence since ai_confidence_score doesn't exist
                 variant="button"
                 showDetails={false}
@@ -270,7 +275,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         onOpenChange={setShowAssignmentDialog}
         conversationId={conversation.id}
         currentAgentId={conversation.assigneeId}
-        organizationId={user?.organizationId || ""}
+        organizationId={organizationId || user?.organizationId || ""}
         onAssigned={(agentId) => {
           onAssignConversation?.();
           setShowAssignmentDialog(false);

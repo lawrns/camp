@@ -81,7 +81,7 @@ export async function GET(
       priority: handoff.priority,
       status: handoff.status,
       created_at: handoff.created_at,
-      completed_at: handoff.completed_at,
+      completedAt: handoff.completedAt,
       notes: handoff.notes,
     }));
 

@@ -18,8 +18,8 @@ export async function checkOnboardingStatus(request: NextRequest): Promise<Onboa
     const cookieStore = request.cookies;
     const supabaseClient = supabase.server({
       get: (name: string) => cookieStore.get(name)?.value,
-      set: (name: string, value: string, options?: any) => { },
-      remove: (name: string, options?: any) => { },
+      set: (name: string, value: string, options?: unknown) => { },
+      remove: (name: string, options?: unknown) => { },
     });
 
     // Get authenticated user
@@ -208,7 +208,7 @@ export function getStepCompletionStatus(completedSteps: string[]): Record<string
   const stepOrder = ["business", "challenges", "goals", "team", "integrations", "setup"];
   const status: Record<string, boolean> = {};
 
-  stepOrder.forEach((step: any) => {
+  stepOrder.forEach((step: unknown) => {
     status[step] = completedSteps.includes(step);
   });
 

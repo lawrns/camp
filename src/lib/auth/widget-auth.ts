@@ -25,15 +25,15 @@ const getJWTSecret = (): string => {
 export const createWidgetAuthToken = async (
   organizationId: string,
   visitorId?: string,
-  metadata?: any
+  metadata?: unknown
 ): Promise<{
   token: string;
   userId: string;
   visitorId: string;
   organizationId: string;
   expiresAt: Date;
-  session?: any;
-  user?: any;
+  session?: unknown;
+  user?: unknown;
 }> => {
   const client = createServerClient();
 
@@ -102,7 +102,7 @@ export const createWidgetAuthToken = async (
       userId: data.user?.id || `widget_${finalVisitorId}`,
       visitorId: finalVisitorId,
       organizationId,
-      expiresAt: new Date(data.session.expires_at ? data.session.expires_at * 1000 : Date.now() + 24 * 60 * 60 * 1000),
+      expiresAt: new Date(data.session.expiresAt ? data.session.expiresAt * 1000 : Date.now() + 24 * 60 * 60 * 1000),
       session: data.session,
       user: data.user,
     };
@@ -131,7 +131,7 @@ export const createWidgetAuthToken = async (
 export const verifyWidgetToken = async (token: string) => {
   try {
     const secret = getJWTSecret();
-    const decoded = jwt.verify(token, secret) as any;
+    const decoded = jwt.verify(token, secret) as unknown;
 
     // Validate token structure
     if (!decoded.organization_id || !decoded.user_metadata?.visitor_id) {

@@ -28,7 +28,7 @@ export interface ChannelEvent {
   id: string;
   channelName: string;
   eventName: string;
-  payload: any;
+  payload: unknown;
   timestamp: string;
   latency?: number;
   source: 'incoming' | 'outgoing';
@@ -79,7 +79,7 @@ export class ChannelMonitor {
   recordEvent(
     channelName: string,
     eventName: string,
-    payload: any,
+    payload: unknown,
     source: 'incoming' | 'outgoing',
     latency?: number,
     error?: string
@@ -315,7 +315,7 @@ export class ChannelMonitor {
   /**
    * Sanitize payload for logging
    */
-  private sanitizePayload(payload: any): any {
+  private sanitizePayload(payload: unknown): unknown {
     if (!payload) return payload;
     
     const sanitized = { ...payload };
@@ -361,7 +361,7 @@ export class ChannelDebugger {
     metrics: ChannelMetrics | undefined;
     events: ChannelEvent[];
     health: ReturnType<ChannelMonitor['getChannelHealth']>;
-    testResults: any;
+    testResults: unknown;
   }> {
     console.log(`[ChannelDebugger] Starting debug session for ${channelName} (${duration}ms)`);
     

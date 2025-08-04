@@ -79,7 +79,7 @@ export const getUnifiedRealtimeManager = () => {
       organizationId: string,
       channelType: string,
       resourceId: string,
-      callbacks: any,
+      callbacks: unknown,
       subscriberId: string
     ) => {
       return () => {};

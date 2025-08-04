@@ -161,7 +161,7 @@ async function testDataSetup() {
       console.log(`   ✅ Messages found: ${messages.length} messages`);
       
       messages.forEach((msg, index) => {
-        console.log(`   📄 Message ${index + 1}: ${msg.sender_type} - "${msg.content.substring(0, 50)}..."`);
+        console.log(`   📄 Message ${index + 1}: ${msg.senderType} - "${msg.content.substring(0, 50)}..."`);
       });
     } else {
       console.log('   ⚠️  No messages found');

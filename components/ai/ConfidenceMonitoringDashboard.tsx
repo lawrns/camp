@@ -248,13 +248,13 @@ export function ConfidenceMonitoringDashboard({ organizationId, className }: Con
 
       if (response.ok) {
         // Remove applied recommendation
-        setRecommendations((prev) => prev.filter((r: any) => r !== recommendation));
+        setRecommendations((prev) => prev.filter((r: unknown) => r !== recommendation));
       }
     } catch (error) {}
   };
 
   const formatTrendData = () => {
-    return trends.map((trend: any) => ({
+    return trends.map((trend: unknown) => ({
       time: new Date(trend.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       confidence: Math.round(trend.confidence * 100),
       threshold: Math.round(trend.threshold * 100),

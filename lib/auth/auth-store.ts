@@ -167,7 +167,7 @@ export const useAuthStore = create<AuthStore>()(
         )
 
         // Store subscription for cleanup (if needed)
-        ;(window as any).__supabaseAuthSubscription = subscription
+        ;(window as unknown).__supabaseAuthSubscription = subscription
 
       } catch (error) {
         console.error('[AuthStore] Initialization error:', error)
@@ -205,12 +205,12 @@ export const useAuthStore = create<AuthStore>()(
 
 // Helper to check if current token is expired or about to expire
 export const isTokenExpired = (session: Session | null): boolean => {
-  if (!session?.expires_at) return true
+  if (!session?.expiresAt) return true
   
   const now = Math.floor(Date.now() / 1000)
   const buffer = 60 // 1 minute buffer
   
-  return session.expires_at - buffer <= now
+  return session.expiresAt - buffer <= now
 }
 
 // Helper to get valid token (with automatic refresh if needed)

@@ -20,7 +20,7 @@ export interface HandoffDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onHandoff: (data: HandoffData) => void;
-  availableAgents?: any[];
+  availableAgents?: unknown[];
   conversationId: string;
   currentContext: string;
   uiMode?: UIMode;
@@ -116,7 +116,7 @@ export function HandoffDialog({
           {uiMode === "wizard" && (
             <div className="mb-4 flex items-center justify-between">
               <div className="flex space-x-spacing-sm">
-                {[1, 2, 3].map((step: any) => (
+                {[1, 2, 3].map((step: unknown) => (
                   <div
                     key={step}
                     className={`flex h-8 w-8 items-center justify-center rounded-ds-full text-sm font-medium ${

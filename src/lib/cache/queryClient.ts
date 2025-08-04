@@ -21,7 +21,7 @@ export const queryClient = new QueryClient({
       },
       
       // Retry configuration with timeout awareness
-      retry: (failureCount: any, error: any) => {
+      retry: (failureCount: unknown, error: unknown) => {
         // Don't retry timeout errors
         if (error?.message?.includes('timeout') || error?.name === 'TimeoutError') {
 
@@ -36,7 +36,7 @@ export const queryClient = new QueryClient({
       },
       
       // Retry delay with exponential backoff
-      retryDelay: (attemptIndex: any) => Math.min(1000 * 2 ** attemptIndex, 5000),
+      retryDelay: (attemptIndex: unknown) => Math.min(1000 * 2 ** attemptIndex, 5000),
       
       // Refetch configuration
       refetchOnWindowFocus: false, // Disable automatic refetch on window focus
@@ -62,7 +62,7 @@ export const queryClient = new QueryClient({
       networkMode: 'online',
       
       // Don't retry timeout errors
-      retryFn: (failureCount: number, error: any) => {
+      retryFn: (failureCount: number, error: unknown) => {
         if (error?.message?.includes('timeout') || error?.name === 'TimeoutError') {
 
           return false;

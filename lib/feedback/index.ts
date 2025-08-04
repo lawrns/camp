@@ -85,7 +85,7 @@ export interface FeedbackEntry {
   attachments?: {
     screenshot?: string;
     consoleLog?: string[];
-    networkLog?: any[];
+    networkLog?: unknown[];
   };
   status: "new" | "acknowledged" | "in_progress" | "resolved" | "closed";
   priority: "low" | "medium" | "high" | "critical";
@@ -169,7 +169,7 @@ export class FeedbackCollector {
     const now = performance.now();
 
     // Get performance metrics (would integrate with usePerformanceMonitor)
-    const performanceMetrics = (window as any).__PERFORMANCE_METRICS__ || {};
+    const performanceMetrics = (window as unknown).__PERFORMANCE_METRICS__ || {};
 
     return {
       timestamp: new Date().toISOString(),
@@ -179,7 +179,7 @@ export class FeedbackCollector {
       lcp: performanceMetrics.lcp || 0,
       fid: performanceMetrics.fid || 0,
       cls: performanceMetrics.cls || 0,
-      networkType: (navigator as any).connection?.effectiveType || "unknown",
+      networkType: (navigator as unknown).connection?.effectiveType || "unknown",
       deviceType: window.innerWidth < 768 ? "mobile" : "desktop",
       browserName: this.getBrowserName(),
       browserVersion: this.getBrowserVersion(),
@@ -332,7 +332,7 @@ export class FeedbackCollector {
     const tags = [type, category, sentiment];
 
     // Add performance-related tags
-    const performance = (window as any).__PERFORMANCE_METRICS__ || {};
+    const performance = (window as unknown).__PERFORMANCE_METRICS__ || {};
     if (performance.fps < 30) tags.push("low_fps");
     if (performance.memoryUsage > 100) tags.push("high_memory");
     if (performance.loadTime > 3000) tags.push("slow_loading");
@@ -346,11 +346,11 @@ export class FeedbackCollector {
   }
 
   private getFeatureFlags(): Record<string, boolean> {
-    return (window as any).__FEATURE_FLAGS__ || {};
+    return (window as unknown).__FEATURE_FLAGS__ || {};
   }
 
   private getABTestVariants(): Record<string, string> {
-    return (window as any).__AB_TEST_VARIANTS__ || {};
+    return (window as unknown).__AB_TEST_VARIANTS__ || {};
   }
 
   private async captureScreenshot(): Promise<string> {

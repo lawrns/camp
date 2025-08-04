@@ -72,8 +72,8 @@ export class AuditLogger {
       user_id: entry.user_id || this.context.userId,
       actor_type: entry.actor_type || this.context.actorType || "user",
       actor_id: entry.actor_id || this.context.actorId,
-      ip_address: entry.ip_address || this.context.ipAddress,
-      user_agent: entry.user_agent || this.context.userAgent,
+      ipAddress: entry.ipAddress || this.context.ipAddress,
+      userAgent: entry.userAgent || this.context.userAgent,
       session_id: entry.session_id || this.context.sessionId,
       api_key_id: entry.api_key_id || this.context.apiKeyId,
       created_at: new Date().toISOString(),
@@ -336,7 +336,7 @@ export function withAudit<T extends any[], R>(
   resourceType: AuditLogEntry["resource_type"],
   resourceIdExtractor?: (...args: T) => string
 ) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: T): Promise<R> {

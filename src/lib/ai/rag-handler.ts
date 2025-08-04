@@ -146,7 +146,7 @@ export class RAGHandler {
     }
 
     // Normalize the vector
-    const magnitude = Math.sqrt(embedding.reduce((sum: any, val: unknown) => sum + val * val, 0));
+    const magnitude = Math.sqrt(embedding.reduce((sum: unknown, val: unknown) => sum + val * val, 0));
     return embedding.map((val: unknown) => val / magnitude);
   }
 
@@ -345,8 +345,8 @@ export class RAGHandler {
   }> {
     const documents = Array.from(this.documents.values());
     const totalDocuments = documents.length;
-    const totalChunks = documents.reduce((sum: any, doc: unknown) => sum + (doc.chunks?.length || 0), 0);
-    const totalLength = documents.reduce((sum: any, doc: unknown) => sum + doc.content.length, 0);
+    const totalChunks = documents.reduce((sum: unknown, doc: unknown) => sum + (doc.chunks?.length || 0), 0);
+    const totalLength = documents.reduce((sum: unknown, doc: unknown) => sum + doc.content.length, 0);
 
     return {
       totalDocuments,

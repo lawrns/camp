@@ -156,7 +156,7 @@ export function useWidgetConfiguration(organizationId?: string) {
   }, [organizationId, config]);
 
   // Update config
-  const updateConfig = useCallback((field: string, value: any) => {
+  const updateConfig = useCallback((field: string, value: unknown) => {
     if (field === "config") {
       setConfig(value);
     } else {
@@ -165,7 +165,7 @@ export function useWidgetConfiguration(organizationId?: string) {
   }, []);
 
   // Apply template
-  const applyTemplate = useCallback((template: any) => {
+  const applyTemplate = useCallback((template: unknown) => {
     setConfig({
       ...defaultConfig,
       ...template.config,

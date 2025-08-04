@@ -8,7 +8,7 @@ import { DetailsSidebar } from "@/components/inbox/DetailsSidebar";
 import { InboxHeader } from "@/components/inbox/InboxHeader";
 import { InboxMessagePanel } from "@/components/inbox/InboxMessagePanel";
 import { Button } from "@/components/ui/Button-unified";
-import { ConversationList } from "@/components/InboxDashboard/sub-components/ConversationList";
+import { ConversationList } from "@/src/components/InboxDashboard/sub-components/ConversationList";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { useAuth } from "@/hooks/useAuth";
 import { useHotkeys } from "@/lib/hooks/useHotkeys";
@@ -46,7 +46,7 @@ export function InboxShell({ className }: InboxShellProps) {
   const messages = useMemo(() => {
     const rawMessages = selectedConversationId ? messagesMap[selectedConversationId] || [] : [];
     // Use centralized transformation for consistency
-    return rawMessages.map((msg: any): Message => {
+    return rawMessages.map((msg: unknown): Message => {
       const transformed = transformMessageFromDb(msg);
       return {
         id: Number(transformed.id),
@@ -63,9 +63,9 @@ export function InboxShell({ className }: InboxShellProps) {
         metadata: transformed.metadata,
         attachments: transformed.attachments,
         // Keep snake_case for backward compatibility
-        sender_type: transformed.senderType,
-        sender_name: transformed.senderName,
-        sender_email: transformed.senderEmail,
+        senderType: transformed.senderType,
+        senderName: transformed.senderName,
+        senderEmail: transformed.senderEmail,
         conversation_id: transformed.conversationId || selectedConversationId,
         created_at: transformed.createdAt,
         updated_at: transformed.updatedAt,
@@ -195,7 +195,7 @@ export function InboxShell({ className }: InboxShellProps) {
                   { label: "Waiting", value: 3, color: "text-orange-600" },
                   { label: "Closed", value: 24, color: "text-gray-600" },
                   { label: "Total", value: 39, color: "text-blue-600" },
-                ].map((stat: any) => (
+                ].map((stat: unknown) => (
                   <OptimizedMotion.div
                     key={stat.label}
                     whileHover={{ scale: 1.05 }}
@@ -212,12 +212,12 @@ export function InboxShell({ className }: InboxShellProps) {
             <ScrollArea className="flex-1">
               <OptimizedAnimatePresence mode="popLayout">
                 <ConversationList
-                  conversations={conversations.map((conv: any) => ({
+                  conversations={conversations.map((conv: unknown) => ({
                     id: conv.id,
-                    name: conv.customer_email || "Unknown",
+                    name: conv.customerEmail || "Unknown",
                     lastMessage: conv.last_message_preview || "No preview",
                     unreadCount: conv.unread_count || 0,
-                    updatedAt: conv.last_message_at || conv.updated_at,
+                    updatedAt: conv.lastMessageAt || conv.updated_at,
                   }))}
                   selectedId={selectedConversationId || null}
                   onSelect={(id: string) => {

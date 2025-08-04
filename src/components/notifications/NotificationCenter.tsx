@@ -107,7 +107,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
     console.log("Clear all notifications functionality not implemented");
   }, []);
 
-  const filteredNotifications = notifications.filter((notif: any) => {
+  const filteredNotifications = notifications.filter((notif: unknown) => {
     switch (filter) {
       case "unread":
         return !notif.read;
@@ -120,7 +120,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
     }
   });
 
-  const unreadCount = notifications.filter((n: any) => !n.read).length;
+  const unreadCount = notifications.filter((n: unknown) => !n.read).length;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -209,7 +209,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
               ].map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setFilter(tab.key as any)}
+                  onClick={() => setFilter(tab.key as unknown)}
                   className={`flex-shrink-0 whitespace-nowrap rounded-[var(--rounded-ds-md)] px-[var(--spacing-4)] py-[var(--spacing-2)] text-[var(--font-size-sm)] font-[var(--font-weight-medium)] transition-all duration-[var(--duration-fast)] ${
                     filter === tab.key
                       ? "bg-[var(--color-primary-500)] text-[var(--color-text-inverse)] shadow-[var(--shadow-sm)]"
@@ -269,7 +269,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
                     description={EmptyStateVariantsConfig.notifications.description}
                   />
                 ) : (
-                  filteredNotifications.map((notification: any) => {
+                  filteredNotifications.map((notification: unknown) => {
                     const NotificationIcon = getNotificationIcon(notification.type);
                     const colorClass = getNotificationColor(notification.type, notification.priority);
                     const NotificationMotionDiv = OptimizedMotion.div;
@@ -390,7 +390,7 @@ export function NotificationButton() {
   const [isOpen, setIsOpen] = useState(false);
   const { notifications, loading } = useNotifications();
 
-  const unreadCount = notifications.filter((n: any) => !n.read).length;
+  const unreadCount = notifications.filter((n: unknown) => !n.read).length;
 
   return (
     <div className="relative">

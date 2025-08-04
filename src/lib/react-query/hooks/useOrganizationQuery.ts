@@ -49,7 +49,7 @@ export function useUpdateOrganizationSettings() {
 
       return response.json();
     },
-    onMutate: async (newSettings: any) => {
+    onMutate: async (newSettings: unknown) => {
       // Cancel in-flight queries
       await queryClient.cancelQueries({
         queryKey: queryKeys.organizationData(organizationId || ""),
@@ -71,7 +71,7 @@ export function useUpdateOrganizationSettings() {
 
       return { previousData };
     },
-    onError: (err: any, newSettings: any, context: any) => {
+    onError: (err: unknown, newSettings: unknown, context: unknown) => {
       // Revert on error
       if (context?.previousData && organizationId) {
         queryClient.setQueryData(queryKeys.organizationData(organizationId), context.previousData);

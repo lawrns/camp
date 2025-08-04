@@ -146,7 +146,7 @@ export function OnboardingStatusCard({ className, showDismiss = true }: Onboardi
               <div className="space-y-spacing-sm">
                 <p className="text-foreground text-sm font-medium">Completed Steps</p>
                 <div className="flex flex-wrap gap-ds-2">
-                  {status.completedSteps?.map((stepId: any) => {
+                  {status.completedSteps?.map((stepId: unknown) => {
                     const StepIcon = getStepIcon(stepId);
                     return (
                       <div

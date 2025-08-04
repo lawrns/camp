@@ -32,7 +32,7 @@ interface HandoffFormProps {
   currentStep: number;
   uiMode: UIMode;
   config: HandoffConfig;
-  filteredAgents: any[];
+  filteredAgents: unknown[];
   selectedReason?: HandoffReason;
 }
 
@@ -70,7 +70,7 @@ export function HandoffForm({
           }}
         >
           <div className="grid gap-3">
-            {reasons.map((reason: any) => (
+            {reasons.map((reason: unknown) => (
               <div
                 key={reason.id}
                 className={cn(
@@ -161,7 +161,7 @@ export function HandoffForm({
             }
           >
             <div className="grid gap-3">
-              {filteredAgents.map((agent: any) => (
+              {filteredAgents.map((agent: unknown) => (
                 <div
                   key={agent.id}
                   className={cn(
@@ -238,7 +238,7 @@ export function HandoffForm({
             <SelectValue placeholder="Select a persona" />
           </SelectTrigger>
           <SelectContent>
-            {personas.map((persona: any) => (
+            {personas.map((persona: unknown) => (
               <SelectItem key={persona} value={persona}>
                 <div className="flex items-center gap-ds-2">
                   <Icon icon={Bot} className="h-4 w-4" />

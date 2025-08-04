@@ -44,6 +44,7 @@ export function InboxLayout({
       }
     };
 
+    // Only run after component mounts to prevent hydration mismatch
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);

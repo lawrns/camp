@@ -11,7 +11,7 @@ export type TenantGuardHandler = (
   req: NextRequest,
   params: {
     organizationId: string;
-    user?: any;
+    user?: unknown;
   }
 ) => Promise<NextResponse>;
 

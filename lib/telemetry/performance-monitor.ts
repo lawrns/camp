@@ -27,7 +27,7 @@ class PerformanceMonitor {
     }
   }
 
-  private rateLimitedWarn(key: string, message: string, data?: any, intervalMs = 10000) {
+  private rateLimitedWarn(key: string, message: string, data?: unknown, intervalMs = 10000) {
     const now = Date.now();
     const lastWarning = this.lastWarnings.get(key) || 0;
 
@@ -58,8 +58,8 @@ class PerformanceMonitor {
       const layoutShiftObserver = new PerformanceObserver((list) => {
         let totalShift = 0;
         for (const entry of list.getEntries()) {
-          if (!(entry as any).hadRecentInput) {
-            totalShift += (entry as any).value;
+          if (!(entry as unknown).hadRecentInput) {
+            totalShift += (entry as unknown).value;
           }
         }
         if (totalShift > 0.1) {
@@ -112,12 +112,12 @@ class PerformanceMonitor {
 
   getAverageRenderTime(componentName?: string) {
     const relevantMetrics = componentName
-      ? this.metrics.filter((m: any) => m.componentName === componentName)
+      ? this.metrics.filter((m: unknown) => m.componentName === componentName)
       : this.metrics;
 
     if (relevantMetrics.length === 0) return 0;
 
-    const total = relevantMetrics.reduce((sum: any, m: any) => sum + m.renderTime, 0);
+    const total = relevantMetrics.reduce((sum: unknown, m: unknown) => sum + m.renderTime, 0);
     return total / relevantMetrics.length;
   }
 
@@ -126,8 +126,8 @@ class PerformanceMonitor {
   }
 
   private getMemoryUsage() {
-    if (typeof window !== "undefined" && (performance as any).memory) {
-      const memory = (performance as any).memory;
+    if (typeof window !== "undefined" && (performance as unknown).memory) {
+      const memory = (performance as unknown).memory;
       return {
         usedJSHeapSize: memory.usedJSHeapSize,
         totalJSHeapSize: memory.totalJSHeapSize,
@@ -137,7 +137,7 @@ class PerformanceMonitor {
     return null;
   }
 
-  private checkMemoryThresholds(componentName: string, memoryUsage: any) {
+  private checkMemoryThresholds(componentName: string, memoryUsage: unknown) {
     const { usedJSHeapSize } = memoryUsage;
 
     if (usedJSHeapSize > this.memoryThresholds.critical) {
@@ -175,7 +175,7 @@ class PerformanceMonitor {
   }
 
   destroy() {
-    this.observers.forEach((observer: any) => observer.disconnect());
+    this.observers.forEach((observer: unknown) => observer.disconnect());
     this.observers.clear();
     this.metrics = [];
   }

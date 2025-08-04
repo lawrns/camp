@@ -12,10 +12,10 @@ const tracker = PerformanceTracker.getInstance();
  * Decorator for tracking function performance
  */
 export function trackPerformance(metricName: string) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  return function (target: unknown, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       const trackingId = tracker.startTracking(metricName, {
         function: `${target.constructor.name}.${propertyName}`,
         args: args.length,
@@ -38,13 +38,13 @@ export function trackPerformance(metricName: string) {
 /**
  * Higher-order function for tracking async function performance
  */
-export function withPerformanceTracking<T extends (...args: any[]) => Promise<any>>(
+export function withPerformanceTracking<T extends (...args: unknown[]) => Promise<any>>(
   fn: T,
   metricName: string,
   organizationId?: string,
   userId?: string
 ): T {
-  return (async (...args: any[]) => {
+  return (async (...args: unknown[]) => {
     const trackingId = tracker.startTracking(metricName, {
       function: fn.name,
       args: args.length,
@@ -246,7 +246,7 @@ export function getPerformanceMetrics() {
  * Get category-specific performance metrics
  */
 export function getCategoryMetrics(category: string) {
-  return tracker.getPerformanceSummary(category as any);
+  return tracker.getPerformanceSummary(category as unknown);
 }
 
 /**

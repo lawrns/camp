@@ -112,21 +112,21 @@ export function AgentWorkloadDashboard({ organizationId, teamId }: AgentWorkload
   };
 
   // Prepare chart data
-  const responseTimeData = agentStats.map((agent: any) => ({
+  const responseTimeData = agentStats.map((agent: unknown) => ({
     name: agent.name.split(" ")[0], // First name only for chart
     responseTime: agent.avgResponseTime,
   }));
 
-  const conversationDistribution = agentStats.map((agent: any) => ({
+  const conversationDistribution = agentStats.map((agent: unknown) => ({
     name: agent.name.split(" ")[0],
     active: agent.activeConversations,
     total: agent.totalConversations,
   }));
 
   const statusDistribution = [
-    { name: "Available", value: agentStats.filter((a: any) => a.status === "available").length, color: "#10b981" },
-    { name: "Busy", value: agentStats.filter((a: any) => a.status === "busy").length, color: "#f59e0b" },
-    { name: "Offline", value: agentStats.filter((a: any) => a.status === "offline").length, color: "#6b7280" },
+    { name: "Available", value: agentStats.filter((a: unknown) => a.status === "available").length, color: "#10b981" },
+    { name: "Busy", value: agentStats.filter((a: unknown) => a.status === "busy").length, color: "#f59e0b" },
+    { name: "Offline", value: agentStats.filter((a: unknown) => a.status === "offline").length, color: "#6b7280" },
   ];
 
   if (loading) {
@@ -293,7 +293,7 @@ export function AgentWorkloadDashboard({ organizationId, teamId }: AgentWorkload
                 </PieChart>
               </ResponsiveContainer>
               <div className="mt-4 flex justify-center gap-3">
-                {statusDistribution.map((status: any) => (
+                {statusDistribution.map((status: unknown) => (
                   <div key={status.name} className="flex items-center gap-ds-2">
                     <div className="h-3 w-3 rounded-ds-full" style={{ backgroundColor: status.color }} />
                     <span className="text-sm">
@@ -328,7 +328,7 @@ export function AgentWorkloadDashboard({ organizationId, teamId }: AgentWorkload
                   </tr>
                 </thead>
                 <tbody>
-                  {agentStats.map((agent: any) => (
+                  {agentStats.map((agent: unknown) => (
                     <tr key={agent.id} className="border-b">
                       <td className="px-6 py-4 font-medium">{agent.name}</td>
                       <td className="px-6 py-4">

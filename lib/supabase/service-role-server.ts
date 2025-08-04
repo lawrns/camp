@@ -126,7 +126,7 @@ export async function createAnonymousSession(
     organization_id: organizationId,
     metadata: metadata || {},
     created_at: new Date().toISOString(),
-    last_seen_at: new Date().toISOString(),
+    lastSeenAt: new Date().toISOString(),
   });
 
   // Generate a temporary token for the session
@@ -172,7 +172,7 @@ export async function refreshSession(token: string): Promise<{
     await client
       .from("visitor_sessions")
       .update({
-        last_seen_at: new Date().toISOString(),
+        lastSeenAt: new Date().toISOString(),
       })
       .eq("id", decoded.sessionId);
 

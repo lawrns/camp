@@ -56,7 +56,7 @@ export class SentryErrorBoundary extends Component<Props, State> {
   }
 
   private handleRetry = () => {
-    this.setState({ hasError: false, error: null as any, errorId: "" });
+    this.setState({ hasError: false, error: null as unknown, errorId: "" });
   };
 
   private handleReportProblem = () => {

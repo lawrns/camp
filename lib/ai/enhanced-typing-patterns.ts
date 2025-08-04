@@ -122,7 +122,7 @@ export function calculateReadingTime(messageContent: string, complexity: "simple
  * Apply sentiment-driven timing modifications
  */
 export function applySentimentModifier(
-  baseTimings: any,
+  baseTimings: unknown,
   sentiment: string,
   urgency: "low" | "medium" | "high"
 ): number {

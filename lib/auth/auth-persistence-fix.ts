@@ -16,7 +16,7 @@ interface AuthPersistenceConfig {
 interface SessionData {
   access_token: string;
   refresh_token: string;
-  expires_at: number;
+  expiresAt: number;
   user_id: string;
   organization_id?: string;
 }
@@ -134,10 +134,10 @@ class AuthPersistenceManager {
     const memoryStorage = new Map<string, string>();
 
     // Override Supabase storage adapter if needed
-    if ((window as any).supabase?.auth?.storage) {
-      const originalStorage = (window as any).supabase.auth.storage;
+    if ((window as unknown).supabase?.auth?.storage) {
+      const originalStorage = (window as unknown).supabase.auth.storage;
       
-      (window as any).supabase.auth.storage = {
+      (window as unknown).supabase.auth.storage = {
         getItem: (key: string) => {
           try {
             return originalStorage.getItem(key) || memoryStorage.get(key) || null;
@@ -439,5 +439,5 @@ export async function initializeAuthPersistence(config?: Partial<AuthPersistence
  * Force session recovery
  */
 export async function forceSessionRecovery(): Promise<void> {
-  await (authPersistenceManager as any).attemptSessionRecovery();
+  await (authPersistenceManager as unknown).attemptSessionRecovery();
 }

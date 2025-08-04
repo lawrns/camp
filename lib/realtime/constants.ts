@@ -55,7 +55,7 @@ export interface RealtimeMessagePayload {
   conversation_id: string;
   organization_id: string;
   content: string;
-  sender_type: "customer" | "visitor" | "agent" | "ai" | "system";
+  senderType: "customer" | "visitor" | "agent" | "ai" | "system";
   sender_id?: string;
   sender_name?: string;
   created_at: string;

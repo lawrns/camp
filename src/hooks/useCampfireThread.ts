@@ -88,7 +88,7 @@ export const useCampfireThread = ({ channelId, enabled = true, staleTime = 30000
         await refetch();
       } catch (err) {
         // Revert optimistic update on error
-        setMessages((prev) => prev.filter((msg: any) => msg.id !== optimisticMessage.id));
+        setMessages((prev) => prev.filter((msg: unknown) => msg.id !== optimisticMessage.id));
         throw err; // Re-throw so UI can handle the error
       }
     },
@@ -108,12 +108,12 @@ export const useCampfireThread = ({ channelId, enabled = true, staleTime = 30000
 
   // Update a message (for editing scenarios)
   const updateMessage = useCallback((messageId: string, updates: Partial<Message>) => {
-    setMessages((prev) => prev.map((msg: any) => (msg.id === messageId ? { ...msg, ...updates } : msg)));
+    setMessages((prev) => prev.map((msg: unknown) => (msg.id === messageId ? { ...msg, ...updates } : msg)));
   }, []);
 
   // Remove a message
   const removeMessage = useCallback((messageId: string) => {
-    setMessages((prev) => prev.filter((msg: any) => msg.id !== messageId));
+    setMessages((prev) => prev.filter((msg: unknown) => msg.id !== messageId));
   }, []);
 
   return {

@@ -51,7 +51,7 @@ export const BulkActions: React.FC<BulkActionsProps> = ({
     return null;
   }
 
-  const handleBulkAction = async (action: string, value?: any) => {
+  const handleBulkAction = async (action: string, value?: unknown) => {
     setIsLoading(true);
     try {
       switch (action) {

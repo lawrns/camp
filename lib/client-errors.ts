@@ -117,7 +117,7 @@ export function normalizeError(error: unknown): AppError {
   }
 
   if (typeof error === "object" && error !== null) {
-    const errorObj = error as any;
+    const errorObj = error as unknown;
     return new AppError(
       errorObj.message || "An error occurred",
       errorObj.code || "UNKNOWN_ERROR",
@@ -156,8 +156,8 @@ export function logError(error: Error, context?: Record<string, any>): void {
 
   // In production, you would send this to an error tracking service
   // Example: Sentry, LogRocket, etc.
-  if (typeof window !== "undefined" && (window as any).Sentry) {
-    (window as any).Sentry.captureException(error, {
+  if (typeof window !== "undefined" && (window as unknown).Sentry) {
+    (window as unknown).Sentry.captureException(error, {
       extra: errorInfo,
     });
   }

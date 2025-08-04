@@ -39,7 +39,7 @@ export interface ConversationFilters {
 type ConversationAction =
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_CONVERSATIONS"; payload: { conversations: Conversation[]; pagination: any } }
+  | { type: "SET_CONVERSATIONS"; payload: { conversations: Conversation[]; pagination: unknown } }
   | { type: "SET_CURRENT_CONVERSATION"; payload: Conversation | undefined }
   | { type: "SET_MESSAGES"; payload: Message[] }
   | { type: "ADD_MESSAGE"; payload: Message }
@@ -510,7 +510,7 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({ chil
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            customer_email: customerEmail,
+            customerEmail: customerEmail,
             initial_message: initialMessage,
             organization_id: organizationId,
           }),

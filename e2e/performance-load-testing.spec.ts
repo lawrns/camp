@@ -124,7 +124,7 @@ test.describe('Performance & Load Testing E2E', () => {
 
       // Monitor performance
       await page.addInitScript(() => {
-        (window as any).performanceMetrics = {
+        (window as unknown).performanceMetrics = {
           messagesSent: 0,
           messagesReceived: 0,
           errors: [],
@@ -285,21 +285,21 @@ test.describe('Performance & Load Testing E2E', () => {
     
     // Enable memory monitoring
     await monitoringPage.addInitScript(() => {
-      (window as any).memoryMonitor = {
+      (window as unknown).memoryMonitor = {
         measurements: [],
         startMonitoring() {
           setInterval(() => {
-            if ((performance as any).memory) {
+            if ((performance as unknown).memory) {
               this.measurements.push({
-                used: (performance as any).memory.usedJSHeapSize / 1024 / 1024, // MB
-                total: (performance as any).memory.totalJSHeapSize / 1024 / 1024, // MB
+                used: (performance as unknown).memory.usedJSHeapSize / 1024 / 1024, // MB
+                total: (performance as unknown).memory.totalJSHeapSize / 1024 / 1024, // MB
                 timestamp: Date.now(),
               });
             }
           }, 1000);
         },
       };
-      (window as any).memoryMonitor.startMonitoring();
+      (window as unknown).memoryMonitor.startMonitoring();
     });
 
     // ========================================
@@ -328,11 +328,11 @@ test.describe('Performance & Load Testing E2E', () => {
     // ========================================
 
     const memoryData = await monitoringPage.evaluate(() => {
-      return (window as any).memoryMonitor?.measurements || [];
+      return (window as unknown).memoryMonitor?.measurements || [];
     });
 
     if (memoryData.length > 0) {
-      const memoryUsages = memoryData.map((m: any) => m.used);
+      const memoryUsages = memoryData.map((m: unknown) => m.used);
       testContext.metrics.memoryUsage.push(...memoryUsages);
 
       const maxMemory = Math.max(...memoryUsages);

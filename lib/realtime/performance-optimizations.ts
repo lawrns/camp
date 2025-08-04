@@ -7,7 +7,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "./unified-channel-standards";
 import { realtimeMonitor, RealtimeLogger } from "./enhanced-monitoring";
 
 interface ChannelPool {
-  channel: any;
+  channel: unknown;
   subscribers: Set<string>;
   lastActivity: Date;
   isActive: boolean;
@@ -17,7 +17,7 @@ interface SubscriptionConfig {
   channelName: string;
   subscriberId: string;
   events: string[];
-  callback: (payload: any) => void;
+  callback: (payload: unknown) => void;
   priority: "high" | "medium" | "low";
 }
 
@@ -107,7 +107,7 @@ export class RealtimePerformanceOptimizer {
   async broadcast(
     channelName: string,
     eventName: string,
-    payload: any,
+    payload: unknown,
     options: { 
       priority?: "high" | "medium" | "low";
       retry?: boolean;
@@ -258,9 +258,9 @@ export class RealtimePerformanceOptimizer {
    * Set up optimized event listeners
    */
   private setupEventListeners(
-    channel: any,
+    channel: unknown,
     events: string[],
-    callback: (payload: any) => void,
+    callback: (payload: unknown) => void,
     priority: "high" | "medium" | "low"
   ): void {
     events.forEach(eventName => {
@@ -277,9 +277,9 @@ export class RealtimePerformanceOptimizer {
    * Perform priority-based broadcast
    */
   private async performBroadcast(
-    channel: any,
+    channel: unknown,
     eventName: string,
-    payload: any,
+    payload: unknown,
     priority: "high" | "medium" | "low"
   ): Promise<void> {
     const broadcastPayload = {
@@ -323,7 +323,7 @@ export class RealtimePerformanceOptimizer {
   /**
    * Debounce utility for low priority events
    */
-  private debounce<T extends (...args: any[]) => any>(
+  private debounce<T extends (...args: unknown[]) => any>(
     func: T,
     wait: number
   ): (...args: Parameters<T>) => void {

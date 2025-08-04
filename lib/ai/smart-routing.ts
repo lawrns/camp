@@ -173,7 +173,7 @@ export class SmartRoutingService {
             return {
               id: member.user_id,
               email: member.profiles.email,
-              fullName: member.profiles.full_name || member.profiles.email,
+              fullName: member.profiles.fullName || member.profiles.email,
               role: member.role,
               skills: metrics.skills || [],
               languages: metrics.languages || ["en"],

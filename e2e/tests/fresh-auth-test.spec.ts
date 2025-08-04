@@ -128,7 +128,7 @@ test.describe('Fresh Authentication Test', () => {
       
       if (updatedDashboardResponse.ok()) {
         const updatedMessages = await updatedDashboardResponse.json();
-        const hasTestMessage = updatedMessages.messages?.some((msg: any) => 
+        const hasTestMessage = updatedMessages.messages?.some((msg: unknown) => 
           msg.content && msg.content.includes('Fresh auth test'));
         
         console.log(`✅ Updated dashboard API working - found ${updatedMessages.messages?.length || 0} messages`);
@@ -157,7 +157,7 @@ test.describe('Fresh Authentication Test', () => {
       
       if (widgetMessagesResponse.ok()) {
         const widgetMessages = await widgetMessagesResponse.json();
-        const hasTestMessage = widgetMessages.some((msg: any) => 
+        const hasTestMessage = widgetMessages.some((msg: unknown) => 
           msg.content && msg.content.includes('Fresh auth test'));
         
         console.log(`✅ Widget API working - found ${widgetMessages.length} messages`);

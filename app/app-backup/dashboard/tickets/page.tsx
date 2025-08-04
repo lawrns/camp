@@ -64,7 +64,7 @@ interface Ticket {
     name: string;
     avatar?: string;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface TicketsResponse {
@@ -394,7 +394,7 @@ export default function DashboardTicketsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {getTicketsByStatus(activeTab).map((ticket: any) => {
+                  {getTicketsByStatus(activeTab).map((ticket: unknown) => {
                     const statusConfig = getStatusConfig(ticket.status);
                     const priorityConfig = getPriorityConfig(ticket.priority);
                     const slaConfig = getSlaStatusConfig(ticket.slaStatus);

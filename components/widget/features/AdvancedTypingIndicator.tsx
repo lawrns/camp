@@ -34,7 +34,7 @@ export function AdvancedTypingIndicator({
     const channel = supabase.channel(UNIFIED_CHANNELS.conversationTyping(organizationId, conversationId));
 
     // Subscribe to typing start events
-    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: unknown) => {
       const { user_id, user_name, user_type, is_typing, preview_text } = payload.payload;
 
       // Don't show typing indicator for current user
@@ -62,7 +62,7 @@ export function AdvancedTypingIndicator({
     });
 
     // Subscribe to typing stop events
-    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+    channel.on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: unknown) => {
       const { user_id } = payload.payload;
 
       // Don't process for current user
@@ -188,9 +188,9 @@ export function useTypingIndicator(
       setIsTyping(true);
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: true,
+        userName: userName,
+        userType: userType,
+        isTyping: true,
         preview_text: previewText,
         conversation_id: conversationId,
         organization_id: organizationId,
@@ -216,9 +216,9 @@ export function useTypingIndicator(
       setIsTyping(false);
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: false,
+        userName: userName,
+        userType: userType,
+        isTyping: false,
         conversation_id: conversationId,
         organization_id: organizationId,
         timestamp: new Date().toISOString(),
@@ -235,9 +235,9 @@ export function useTypingIndicator(
     if (isTyping) {
       broadcast("typing_indicator", {
         user_id: userId,
-        user_name: userName,
-        user_type: userType,
-        is_typing: true,
+        userName: userName,
+        userType: userType,
+        isTyping: true,
         preview_text: text.slice(0, 50), // Limit preview length
         conversation_id: conversationId,
         organization_id: organizationId,
@@ -255,9 +255,9 @@ export function useTypingIndicator(
       if (isTyping) {
         broadcast("typing_indicator", {
           user_id: userId,
-          user_name: userName,
-          user_type: userType,
-          is_typing: false,
+          userName: userName,
+          userType: userType,
+          isTyping: false,
           conversation_id: conversationId,
           organization_id: organizationId,
           timestamp: new Date().toISOString(),

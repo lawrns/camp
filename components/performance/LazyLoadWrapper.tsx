@@ -36,7 +36,7 @@ export function LazyLoadWrapper({
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
             setHasBeenVisible(true);
@@ -86,7 +86,7 @@ export function useLazyLoad(options?: { rootMargin?: string; threshold?: number 
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
             setHasBeenVisible(true);

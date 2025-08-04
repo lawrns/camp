@@ -176,7 +176,7 @@ export function EnhancedMessageBubble({
 
     switch (message.senderType) {
       case 'ai':
-        return cn(baseStyles, "bg-purple-100 text-purple-900 border border-purple-200");
+        return cn(baseStyles, "bg-blue-50 text-blue-900 border border-blue-200");
       case 'agent':
         return cn(baseStyles, "bg-green-100 text-green-900 border border-green-200");
       default:

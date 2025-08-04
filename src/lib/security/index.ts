@@ -147,7 +147,7 @@ export function initializeSecurity(): {
     initializeAuditLogger({
       enabled: true,
       destinations: config.auditLogging.destinations,
-      logLevel: config.auditLogging.logLevel as any,
+      logLevel: config.auditLogging.logLevel as unknown,
       retentionDays: config.auditLogging.retentionDays,
       signingKey: process.env.AUDIT_SIGNING_KEY || "default-signing-key",
       batchSize: 10,
@@ -258,7 +258,7 @@ export async function reportSecurityEvent(
 }
 
 // CSP violation report handler
-export async function handleCSPViolation(report: any, request: NextRequest): Promise<NextResponse> {
+export async function handleCSPViolation(report: unknown, request: NextRequest): Promise<NextResponse> {
   await reportSecurityEvent("csp_violation", report, request);
 
   // Send to external monitoring if configured

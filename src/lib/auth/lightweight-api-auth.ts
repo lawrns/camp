@@ -30,7 +30,7 @@ interface LightweightClient {
 }
 
 // Lazy-loaded Supabase client
-let supabaseClient: any = null;
+let supabaseClient: unknown = null;
 let supabasePromise: Promise<any> | null = null;
 
 const getSupabaseClient = async (): Promise<LightweightClient> => {
@@ -152,7 +152,7 @@ export class LightweightAPIAuth {
               get(queryTarget, queryProp) {
                 const method = queryTarget[queryProp];
                 if (typeof method === "function") {
-                  return (...args: any[]) => {
+                  return (...args: unknown[]) => {
                     const result = method.apply(queryTarget, args);
                     // Add organization filter for data operations
                     if (["select", "insert", "update", "delete"].includes(queryProp as string)) {
@@ -206,9 +206,9 @@ export const quickAuthCheck = (request: NextRequest) => lightweightAuth.quickAut
 
 // Lightweight middleware wrapper
 export function withLightweightAuth<T = any>(
-  handler: (request: NextRequest, context: any, auth: { user: LightweightUser; client: any }) => Promise<Response>
+  handler: (request: NextRequest, context: unknown, auth: { user: LightweightUser; client: unknown }) => Promise<Response>
 ) {
-  return async (request: NextRequest, context: any): Promise<Response> => {
+  return async (request: NextRequest, context: unknown): Promise<Response> => {
     try {
       const authResult = await verifyAuth(request);
 
@@ -235,9 +235,9 @@ export function withLightweightAuth<T = any>(
 
 // Widget-specific auth (no organization required)
 export function withWidgetAuth<T = any>(
-  handler: (request: NextRequest, context: any, auth: { organizationId: string; client: any }) => Promise<Response>
+  handler: (request: NextRequest, context: unknown, auth: { organizationId: string; client: unknown }) => Promise<Response>
 ) {
-  return async (request: NextRequest, context: any): Promise<Response> => {
+  return async (request: NextRequest, context: unknown): Promise<Response> => {
     try {
       // Extract organization ID from request (widget context)
       const url = new URL(request.url);

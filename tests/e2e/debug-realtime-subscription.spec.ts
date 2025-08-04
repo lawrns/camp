@@ -135,8 +135,8 @@ test('Debug widget real-time subscription', async ({ page, context }) => {
   // Check widget subscription status
   const subscriptionStatus = await page.evaluate(() => {
     // Try to access widget state
-    const widgetState = (window as any).widgetState;
-    const supabaseClient = (window as any).supabase;
+    const widgetState = (window as unknown).widgetState;
+    const supabaseClient = (window as unknown).supabase;
     
     return {
       widgetState: widgetState ? 'FOUND' : 'NOT_FOUND',

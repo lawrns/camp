@@ -107,9 +107,9 @@ export const apiKeysRouter = createTRPCRouter({
         key_prefix: keyPrefix,
         key_hash: hashedKey,
         permissions: input.permissions,
-        expires_at: input.expiresAt?.toISOString(),
-        created_by: ctx.user.id,
-        is_active: true,
+        expiresAt: input.expiresAt?.toISOString(),
+        createdBy: ctx.user.id,
+        isActive: true,
       })
       .select("*")
       .single();
@@ -156,7 +156,7 @@ export const apiKeysRouter = createTRPCRouter({
         ...(input.name && { name: input.name }),
         ...(input.description !== undefined && { description: input.description }),
         ...(input.permissions && { permissions: input.permissions }),
-        ...(input.isActive !== undefined && { is_active: input.isActive }),
+        ...(input.isActive !== undefined && { isActive: input.isActive }),
         updated_at: new Date().toISOString(),
       })
       .eq("id", input.id)

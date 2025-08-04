@@ -46,7 +46,7 @@ export function getFlagStatus(): Record<string, { enabled: boolean }> {
   const uniqueFlags = [...new Set(allFlags)];
 
   const status: Record<string, { enabled: boolean }> = {};
-  uniqueFlags.forEach((flag: any) => {
+  uniqueFlags.forEach((flag: unknown) => {
     status[flag] = { enabled: false };
   });
 

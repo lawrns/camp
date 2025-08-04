@@ -75,7 +75,7 @@ export const getMessageItemSize = () => 80; // Fixed size for message items
  * @param raw - Raw conversation data from database
  * @returns Typed Conversation object
  */
-export const mapConversation = (raw: any): any => {
+export const mapConversation = (raw: unknown): unknown => {
   // Generate a friendly name if customer_name is missing or is just an email
   let customerName = raw.customerName;
 
@@ -128,7 +128,7 @@ export const mapConversation = (raw: any): any => {
  * @param wait - Wait time in milliseconds
  * @returns Debounced function
  */
-export const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {

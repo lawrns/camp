@@ -24,7 +24,7 @@ async function testRealtimeSimple() {
     // ========================================
     console.log('1️⃣ Setting up real-time monitoring...');
 
-    const receivedEvents: any[] = [];
+    const receivedEvents: unknown[] = [];
     
     // Test organization ID
     const testOrgId = 'test-org-123';

@@ -19,7 +19,7 @@ interface CustomerProfile {
     company?: string;
     location?: string;
     timezone?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   tags?: string[];
   notes?: Array<{
@@ -68,7 +68,7 @@ export function useUpdateCustomerProfile() {
 
       return response.json();
     },
-    onSuccess: (data: any, variables: any) => {
+    onSuccess: (data: unknown, variables: unknown) => {
       // Update cache
       queryClient.setQueryData(queryKeys.customerProfile(variables.email), data);
     },
@@ -93,7 +93,7 @@ export function useAddCustomerNote() {
 
       return response.json();
     },
-    onSuccess: (data: any, variables: any) => {
+    onSuccess: (data: unknown, variables: unknown) => {
       // Invalidate customer profile to refetch with new note
       queryClient.invalidateQueries({
         queryKey: queryKeys.customerProfile(variables.email),

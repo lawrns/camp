@@ -50,7 +50,7 @@ export function useTypingStatus(conversationId: string | null) {
       if (!old) return old;
 
       const now = Date.now();
-      const activeUsers = old.typingUsers.filter((user: any) => now - user.timestamp < TYPING_TIMEOUT);
+      const activeUsers = old.typingUsers.filter((user: unknown) => now - user.timestamp < TYPING_TIMEOUT);
 
       return {
         ...old,
@@ -83,12 +83,12 @@ export function useTypingStatus(conversationId: string | null) {
         const state = channel.presenceState();
         const typingUsers: TypingUser[] = [];
 
-        Object.values(state).forEach((presences: any[]) => {
-          presences.forEach((presence: any) => {
-            if (presence.user_id !== user.id && presence.is_typing) {
+        Object.values(state).forEach((presences: unknown[]) => {
+          presences.forEach((presence: unknown) => {
+            if (presence.user_id !== user.id && presence.isTyping) {
               typingUsers.push({
                 userId: presence.user_id,
-                userName: presence.user_name || "Unknown",
+                userName: presence.userName || "Unknown",
                 timestamp: Date.now(),
               });
             }
@@ -100,13 +100,13 @@ export function useTypingStatus(conversationId: string | null) {
           typingUsers,
         });
       })
-      .subscribe(async (status: any) => {
+      .subscribe(async (status: unknown) => {
         if (status === "SUBSCRIBED") {
           // Track our own presence
           await channel.track({
             user_id: user.id,
-            user_name: user.email?.split("@")[0] || "Agent",
-            is_typing: false,
+            userName: user.email?.split("@")[0] || "Agent",
+            isTyping: false,
           });
         }
       });
@@ -138,8 +138,8 @@ export function useSendTypingStatus(conversationId: string | null) {
       try {
         await channel.track({
           user_id: user.id,
-          user_name: user.email?.split("@")[0] || "Agent",
-          is_typing: isTyping,
+          userName: user.email?.split("@")[0] || "Agent",
+          isTyping: isTyping,
         });
       } catch (error) {}
     },

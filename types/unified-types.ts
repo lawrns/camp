@@ -214,8 +214,8 @@ export function convertDatabaseConversationToApi(dbConv: DatabaseConversation): 
     id: dbConv.id,
     organizationId: dbConv.organization_id,
     customerId: dbConv.customer_id,
-    customerName: dbConv.customer_name,
-    customerEmail: dbConv.customer_email,
+    customerName: dbConv.customerName,
+    customerEmail: dbConv.customerEmail,
     subject: dbConv.subject,
     status: dbConv.status || 'open',
     priority: dbConv.priority,
@@ -235,8 +235,8 @@ export function convertDatabaseConversationToApi(dbConv: DatabaseConversation): 
     // Timestamps
     createdAt: dbConv.created_at || new Date().toISOString(),
     updatedAt: dbConv.updated_at,
-    lastMessageAt: dbConv.last_message_at,
-    closedAt: dbConv.closed_at,
+    lastMessageAt: dbConv.lastMessageAt,
+    closedAt: dbConv.closedAt,
     
     // Metadata
     metadata: dbConv.metadata as Record<string, any> | null,
@@ -254,12 +254,12 @@ export function convertDatabaseConversationToApi(dbConv: DatabaseConversation): 
     // Legacy fields for backward compatibility
     organization_id: dbConv.organization_id,
     customer_id: dbConv.customer_id,
-    customer_name: dbConv.customer_name,
-    customer_email: dbConv.customer_email,
+    customerName: dbConv.customerName,
+    customerEmail: dbConv.customerEmail,
     assigned_to_user_id: dbConv.assigned_to_user_id,
     created_at: dbConv.created_at,
     updated_at: dbConv.updated_at,
-    last_message_at: dbConv.last_message_at,
+    lastMessageAt: dbConv.lastMessageAt,
   };
 }
 
@@ -272,10 +272,10 @@ export function convertDatabaseMessageToApi(dbMsg: DatabaseMessage): Message {
     content: dbMsg.content || '',
     
     // Sender information
-    senderType: dbMsg.sender_type as Message['senderType'],
-    senderId: dbMsg.sender_id,
-    senderName: dbMsg.sender_name,
-    senderEmail: dbMsg.sender_email,
+    senderType: dbMsg.senderType as Message['senderType'],
+    senderId: dbMsg.senderId,
+    senderName: dbMsg.senderName,
+    senderEmail: dbMsg.senderEmail,
     operatorId: dbMsg.agent_id, // Use agent_id instead of operator_id
     
     // Message metadata - using available fields
@@ -296,10 +296,10 @@ export function convertDatabaseMessageToApi(dbMsg: DatabaseMessage): Message {
     // Legacy fields
     conversation_id: dbMsg.conversation_id,
     organization_id: dbMsg.organization_id,
-    sender_type: dbMsg.sender_type as Message['sender_type'],
-    sender_id: dbMsg.sender_id,
-    sender_name: dbMsg.sender_name,
-    sender_email: dbMsg.sender_email,
+    senderType: dbMsg.senderType as Message['sender_type'],
+    senderId: dbMsg.senderId,
+    senderName: dbMsg.senderName,
+    senderEmail: dbMsg.senderEmail,
     operator_id: dbMsg.agent_id, // Use agent_id instead of operator_id
     created_at: dbMsg.created_at,
     updated_at: dbMsg.updated_at,
@@ -317,11 +317,11 @@ export function convertDatabaseMessagesToApi(dbMessages: DatabaseMessage[]): Mes
 }
 
 // Type guards
-export function isDatabaseConversation(obj: any): obj is DatabaseConversation {
+export function isDatabaseConversation(obj: unknown): obj is DatabaseConversation {
   return obj && typeof obj.id === 'string' && typeof obj.organization_id === 'string';
 }
 
-export function isDatabaseMessage(obj: any): obj is DatabaseMessage {
+export function isDatabaseMessage(obj: unknown): obj is DatabaseMessage {
   return obj && typeof obj.id === 'string' && typeof obj.conversation_id === 'string';
 }
 

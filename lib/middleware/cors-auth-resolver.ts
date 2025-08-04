@@ -331,7 +331,7 @@ export class CorsAuthResolver {
    * Create a response with CORS headers
    */
   createResponse(
-    body: any,
+    body: unknown,
     options: {
       status?: number;
       statusText?: string;
@@ -363,12 +363,12 @@ export class CorsAuthResolver {
  * Middleware wrapper for CORS authentication
  */
 export function withCorsAuth(
-  handler: (request: NextRequest, context: any, authContext: AuthContext) => Promise<NextResponse>,
+  handler: (request: NextRequest, context: unknown, authContext: AuthContext) => Promise<NextResponse>,
   options: CorsAuthOptions = {}
 ) {
   const resolver = new CorsAuthResolver(options);
 
-  return async (request: NextRequest, context: any): Promise<NextResponse> => {
+  return async (request: NextRequest, context: unknown): Promise<NextResponse> => {
     try {
       const resolution = await resolver.resolve(request);
 

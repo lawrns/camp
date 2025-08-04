@@ -39,7 +39,7 @@ export async function broadcastConversationEvent<T extends EventType>(
   eventType: T,
   payload: Omit<EventPayloadMap[T], "id" | "timestamp">
 ): Promise<void> {
-  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as any);
+  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as unknown);
 
   if (!event) {
     throw new Error(`No event builder found for type: ${eventType}`);
@@ -56,7 +56,7 @@ export async function broadcastOrganizationEvent<T extends EventType>(
   eventType: T,
   payload: Omit<EventPayloadMap[T], "id" | "timestamp">
 ): Promise<void> {
-  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as any);
+  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as unknown);
 
   if (!event) {
     throw new Error(`No event builder found for type: ${eventType}`);
@@ -73,7 +73,7 @@ export async function broadcastDashboardEvent<T extends EventType>(
   eventType: T,
   payload: Omit<EventPayloadMap[T], "id" | "timestamp">
 ): Promise<void> {
-  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as any);
+  const event = EventBuilders[eventType as keyof typeof EventBuilders]?.(payload as unknown);
 
   if (!event) {
     throw new Error(`No event builder found for type: ${eventType}`);
@@ -98,7 +98,7 @@ export interface TypedRealtimeChannel {
   /**
    * Subscribe to all events
    */
-  onAny(handler: (type: EventType, event: any) => void | Promise<void>): () => void;
+  onAny(handler: (type: EventType, event: unknown) => void | Promise<void>): () => void;
 
   /**
    * Unsubscribe from the channel
@@ -114,7 +114,7 @@ export function createTypedChannel(supabase: SupabaseClient, channelName: string
   const channel = supabase.channel(channelName);
 
   // Set up the channel to listen for all broadcast events
-  channel.on("broadcast", { event: "*" }, (payload: any) => {
+  channel.on("broadcast", { event: "*" }, (payload: unknown) => {
     const eventType = payload.event as EventType;
     const eventData = payload.payload;
 
@@ -141,7 +141,7 @@ export function createTypedChannel(supabase: SupabaseClient, channelName: string
       return dispatcher.on(eventType, handler);
     },
 
-    onAny(handler: (type: EventType, event: any) => void | Promise<void>): () => void {
+    onAny(handler: (type: EventType, event: unknown) => void | Promise<void>): () => void {
       return dispatcher.onAny(handler);
     },
 
@@ -157,14 +157,14 @@ export function createTypedChannel(supabase: SupabaseClient, channelName: string
  */
 export function useTypedRealtimeEvents(channel: TypedRealtimeChannel | null): {
   on<T extends EventType>(eventType: T, handler: (event: EventPayloadMap[T]) => void | Promise<void>): void;
-  onAny(handler: (type: EventType, event: any) => void | Promise<void>): void;
+  onAny(handler: (type: EventType, event: unknown) => void | Promise<void>): void;
 } {
   const unsubscribersRef = useRef<Array<() => void>>([]);
 
   useEffect(() => {
     return () => {
       // Cleanup all subscriptions
-      unsubscribersRef.current.forEach((unsub: any) => unsub());
+      unsubscribersRef.current.forEach((unsub: unknown) => unsub());
       unsubscribersRef.current = [];
     };
   }, []);
@@ -177,7 +177,7 @@ export function useTypedRealtimeEvents(channel: TypedRealtimeChannel | null): {
       unsubscribersRef.current.push(unsubscribe);
     },
 
-    onAny(handler: (type: EventType, event: any) => void | Promise<void>): void {
+    onAny(handler: (type: EventType, event: unknown) => void | Promise<void>): void {
       if (!channel) return;
 
       const unsubscribe = channel.onAny(handler);
@@ -226,7 +226,7 @@ export function useAIHandoverEvents(
     }
 
     return () => {
-      unsubscribers.forEach((unsub: any) => unsub());
+      unsubscribers.forEach((unsub: unknown) => unsub());
     };
   }, [channel, handlers]);
 }
@@ -260,7 +260,7 @@ export function useTypingEvents(
     }
 
     return () => {
-      unsubscribers.forEach((unsub: any) => unsub());
+      unsubscribers.forEach((unsub: unknown) => unsub());
     };
   }, [channel, handlers]);
 }
@@ -304,7 +304,7 @@ export function useMessageEvents(
     }
 
     return () => {
-      unsubscribers.forEach((unsub: any) => unsub());
+      unsubscribers.forEach((unsub: unknown) => unsub());
     };
   }, [channel, handlers]);
 }
@@ -343,7 +343,7 @@ export function useTypedConversationRealtime(
       };
 
       // Set up the typed event handling
-      rawChannel.on("broadcast", { event: "*" }, (payload: { event: string; payload: any }) => {
+      rawChannel.on("broadcast", { event: "*" }, (payload: { event: string; payload: unknown }) => {
         const eventType = payload.event as EventType;
         const eventData = payload.payload;
 
@@ -404,7 +404,7 @@ export function useTypedOrganizationRealtime(
       };
 
       // Set up the typed event handling
-      rawChannel.on("broadcast", { event: "*" }, (payload: { event: string; payload: any }) => {
+      rawChannel.on("broadcast", { event: "*" }, (payload: { event: string; payload: unknown }) => {
         const eventType = payload.event as EventType;
         const eventData = payload.payload;
 

@@ -403,7 +403,7 @@ test.describe('Comprehensive UI/UX Testing', () => {
     console.log('\n📋 FINAL UI/UX STATUS REPORT');
     console.log('==============================');
     
-    const workingPages = Object.values(statusReport.pages).filter((p: any) => p.loads).length;
+    const workingPages = Object.values(statusReport.pages).filter((p: unknown) => p.loads).length;
     const totalPages = Object.keys(statusReport.pages).length;
     
     console.log(`📄 Pages: ${workingPages}/${totalPages} working`);

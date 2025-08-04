@@ -84,7 +84,7 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
         .from("conversations")
         .select("customer_email, customer_display_name, phone_number, tags, created_at")
         .eq("organization_id", organizationId)
-        .eq("customer_email", customerEmail)
+        .eq("customerEmail", customerEmail)
         .limit(1)
         .single();
 
@@ -115,7 +115,7 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
         .from("conversations")
         .select("id, satisfaction_rating, status, subject, created_at, tags, phone_number, customer_display_name")
         .eq("organization_id", organizationId)
-        .eq("customer_email", customerEmail)
+        .eq("customerEmail", customerEmail)
         .order("created_at", { ascending: false });
 
       if (statsError) {
@@ -186,12 +186,12 @@ export const useCustomerData = (organizationId?: string, customerEmail?: string)
             id: note.id,
             content: note.content,
             createdAt: note.created_at,
-            createdBy: note.created_by,
+            createdBy: note.createdBy,
           })) || [],
         previousIssues,
         avatar: customerProfile?.avatar_url,
         lifetimeValue: customerProfile?.value ? `$${customerProfile.value}` : undefined,
-        lastSeenAt: customerProfile?.last_seen_at,
+        lastSeenAt: customerProfile?.lastSeenAt,
         tags: latestConversation?.tags || conversationData?.tags || [],
       };
 
@@ -251,7 +251,7 @@ export const useAddCustomerNote = () => {
             entity_type: "customer",
             entity_id: customerEmail,
             content,
-            created_by: createdBy,
+            createdBy: createdBy,
           })
           .select()
           .single();

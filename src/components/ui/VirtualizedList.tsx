@@ -14,7 +14,7 @@ interface PerformanceMetrics {
 
 interface VirtualizedListItem {
   id: string | number;
-  data: any;
+  data: unknown;
   height?: number;
 }
 
@@ -111,7 +111,7 @@ const usePerformanceMonitor = (onMetrics?: (metrics: PerformanceMetrics) => void
 
       // Memory usage (if available)
       if ("memory" in performance) {
-        metricsRef.current.memoryUsage = (performance as any).memory.usedJSHeapSize;
+        metricsRef.current.memoryUsage = (performance as unknown).memory.usedJSHeapSize;
       }
 
       onMetrics?.(metricsRef.current);

@@ -8,6 +8,7 @@ import { useCollapsiblePanels } from "@/hooks/useCollapsiblePanels";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { MobileInboxLayout } from "./MobileInboxLayout";
+import { useResponsiveLayout } from "@/hooks/useIsMobile";
 
 interface ResponsiveInboxLayoutProps {
   // Desktop layout props
@@ -43,31 +44,14 @@ export function ResponsiveInboxLayout({
   sidebarWidth = 320,
   className,
 }: ResponsiveInboxLayoutProps) {
-  const [windowWidth, setWindowWidth] = useState(() => {
-    // Set initial width to avoid loading state on client
-    if (typeof window !== "undefined") {
-      return window.innerWidth;
-    }
-    return 1200; // Default to desktop size during SSR
-  });
   const [isConversationListCollapsed, setIsConversationListCollapsed] = useState(false);
   const [isDetailsPanelCollapsed, setIsDetailsPanelCollapsed] = useState(false);
 
-  // Single source of truth for screen size
-  useEffect(() => {
-    const updateWidth = () => setWindowWidth(window.innerWidth);
-    updateWidth(); // Set initial value
+  // Use SSR-safe responsive layout hook
+  const layoutType = useResponsiveLayout();
 
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
-  // Determine layout based on window width
-  const layoutType = useMemo(() => {
-    if (windowWidth <= 768) return "mobile";
-    if (windowWidth <= 1024) return "tablet";
-    return "desktop";
-  }, [windowWidth]);
+  // Default to desktop during SSR/initial render
+  const safeLayoutType = layoutType || "desktop";
 
   // Mobile layout
   if (layoutType === "mobile") {

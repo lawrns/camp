@@ -76,7 +76,7 @@ export function AnimatedFileUpload({
     }
 
     const dt = new DataTransfer();
-    newFiles.forEach((file: any) => dt.items.add(file));
+    newFiles.forEach((file: unknown) => dt.items.add(file));
     onChange(dt.files);
   };
 

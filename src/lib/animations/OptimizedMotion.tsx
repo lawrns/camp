@@ -110,7 +110,7 @@ const FRAMER_MOTION_PROPS = [
 ];
 
 // Utility function to filter out Framer Motion props
-const filterMotionProps = (props: any) => {
+const filterMotionProps = (props: unknown) => {
   const filteredProps = { ...props };
   FRAMER_MOTION_PROPS.forEach((prop) => {
     delete filteredProps[prop];
@@ -120,7 +120,7 @@ const filterMotionProps = (props: any) => {
 
 // CSS-only animation fallbacks for immediate rendering
 const CSSMotion = {
-  div: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  div: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <div
@@ -141,7 +141,7 @@ const CSSMotion = {
     );
   },
 
-  button: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  button: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <button
@@ -158,7 +158,7 @@ const CSSMotion = {
     );
   },
 
-  form: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  form: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <form
@@ -175,7 +175,7 @@ const CSSMotion = {
     );
   },
 
-  span: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  span: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <span
@@ -192,7 +192,7 @@ const CSSMotion = {
     );
   },
 
-  section: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  section: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <section
@@ -210,7 +210,7 @@ const CSSMotion = {
     );
   },
 
-  aside: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  aside: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <aside
@@ -229,7 +229,7 @@ const CSSMotion = {
     );
   },
 
-  nav: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  nav: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <nav
@@ -247,7 +247,7 @@ const CSSMotion = {
     );
   },
 
-  header: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  header: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <header
@@ -265,7 +265,7 @@ const CSSMotion = {
     );
   },
 
-  main: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  main: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <main
@@ -283,7 +283,7 @@ const CSSMotion = {
     );
   },
 
-  article: ({ children, className = "", initial, animate, transition, style, ...allProps }: any) => {
+  article: ({ children, className = "", initial, animate, transition, style, ...allProps }: unknown) => {
     const props = filterMotionProps(allProps);
     return (
       <article
@@ -335,7 +335,7 @@ const useOptimizedAnimations = () => {
 
 // Optimized motion components with progressive enhancement
 export const OptimizedMotion = {
-  div: ({ children, ...props }: any) => {
+  div: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -349,7 +349,7 @@ export const OptimizedMotion = {
     );
   },
 
-  button: ({ children, ...props }: any) => {
+  button: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -363,7 +363,7 @@ export const OptimizedMotion = {
     );
   },
 
-  form: ({ children, ...props }: any) => {
+  form: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -377,7 +377,7 @@ export const OptimizedMotion = {
     );
   },
 
-  span: ({ children, ...props }: any) => {
+  span: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -391,7 +391,7 @@ export const OptimizedMotion = {
     );
   },
 
-  section: ({ children, ...props }: any) => {
+  section: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -405,7 +405,7 @@ export const OptimizedMotion = {
     );
   },
 
-  aside: ({ children, ...props }: any) => {
+  aside: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -419,7 +419,7 @@ export const OptimizedMotion = {
     );
   },
 
-  nav: ({ children, ...props }: any) => {
+  nav: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -434,7 +434,7 @@ export const OptimizedMotion = {
   },
 
   // SVG elements
-  circle: ({ children, ...props }: any) => {
+  circle: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -448,7 +448,7 @@ export const OptimizedMotion = {
     );
   },
 
-  path: ({ children, ...props }: any) => {
+  path: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -462,7 +462,7 @@ export const OptimizedMotion = {
     );
   },
 
-  p: ({ children, ...props }: any) => {
+  p: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -476,7 +476,7 @@ export const OptimizedMotion = {
     );
   },
 
-  header: ({ children, ...props }: any) => {
+  header: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -490,7 +490,7 @@ export const OptimizedMotion = {
     );
   },
 
-  main: ({ children, ...props }: any) => {
+  main: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -504,7 +504,7 @@ export const OptimizedMotion = {
     );
   },
 
-  article: ({ children, ...props }: any) => {
+  article: ({ children, ...props }: unknown) => {
     const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
     if (!enableAnimations || !animationsLoaded) {
@@ -520,7 +520,7 @@ export const OptimizedMotion = {
 };
 
 // Optimized AnimatePresence with progressive enhancement
-export const OptimizedAnimatePresence = ({ children, ...props }: any) => {
+export const OptimizedAnimatePresence = ({ children, ...props }: unknown) => {
   const { animationsLoaded, enableAnimations } = useOptimizedAnimations();
 
   if (!enableAnimations || !animationsLoaded) {

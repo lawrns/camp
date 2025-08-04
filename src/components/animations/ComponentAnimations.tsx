@@ -98,7 +98,7 @@ export function AnimatedButton({ children, className, variant = "default", ...pr
 
   return (
     // Use type assertion to handle exactOptionalPropertyTypes properly
-    <motion.button {...(motionProps as any)}>
+    <motion.button {...(motionProps as unknown)}>
       <motion.span className="relative z-10" initial={false} animate={{ y: 0 }} whileTap={{ y: 1 }}>
         {children}
       </motion.span>

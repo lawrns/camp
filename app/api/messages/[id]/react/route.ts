@@ -40,7 +40,7 @@ export async function POST(
       .select("*")
       .eq("message_id", params.id)
       .eq("user_id", user.id)
-      .eq("reaction_type", reaction)
+      .eq("reactionType", reaction)
       .single();
 
     if (existingReaction) {
@@ -69,7 +69,7 @@ export async function POST(
         .insert({
           message_id: params.id,
           user_id: user.id,
-          reaction_type: reaction,
+          reactionType: reaction,
           conversation_id: conversationId,
         })
         .select()
@@ -133,7 +133,7 @@ export async function GET(
 
     // Group reactions by type
     const groupedReactions = reactions.reduce((acc, reaction) => {
-      const type = reaction.reaction_type;
+      const type = reaction.reactionType;
       if (!acc[type]) {
         acc[type] = {
           count: 0,
@@ -147,7 +147,7 @@ export async function GET(
         acc[type].hasReacted = true;
       }
       return acc;
-    }, {} as Record<string, { count: number; users: any[]; hasReacted: boolean }>);
+    }, {} as Record<string, { count: number; users: unknown[]; hasReacted: boolean }>);
 
     return NextResponse.json({ reactions: groupedReactions });
   } catch (error) {

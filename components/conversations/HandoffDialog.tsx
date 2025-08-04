@@ -18,7 +18,7 @@ export default function HandoffDialog(props: HandoffDialogProps) {
     onOpenChange: props.onOpenChange,
     conversationId: props.conversationId.toString(),
     currentContext: "",
-    onHandoff: (data: any) => {
+    onHandoff: (data: unknown) => {
       // Handle handoff logic here
     },
   };

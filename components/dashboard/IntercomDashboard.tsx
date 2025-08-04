@@ -117,7 +117,7 @@ export function IntercomDashboard() {
             id: msg.id,
             type: 'message_sent' as const,
             message: `Sent message: ${msg.content?.substring(0, 50)}...`,
-            memberId: msg.sender_id || 'unknown',
+            memberId: msg.senderId || 'unknown',
             memberName: 'Team Member',
             memberAvatar: undefined,
             timestamp: new Date(msg.created_at || new Date()),
@@ -401,7 +401,7 @@ export function IntercomDashboard() {
   // Transform members to agents format
   const agents = members.map(member => ({
     id: member.id,
-    name: member.profile.full_name || member.profile.email,
+    name: member.profile.fullName || member.profile.email,
     email: member.profile.email,
     avatar: member.profile.avatar_url || undefined,
     status: 'online' as const, // Mock status

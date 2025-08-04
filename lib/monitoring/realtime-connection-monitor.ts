@@ -342,7 +342,7 @@ class RealtimeConnectionMonitor {
   /**
    * Log metric to console and external monitoring
    */
-  private logMetric(event: string, data: any): void {
+  private logMetric(event: string, data: unknown): void {
     const logEntry = {
       event,
       timestamp: Date.now(),

@@ -213,7 +213,7 @@ export function SuggestedReplies({
         {/* Suggestions */}
         {suggestions.length > 0 && (
           <div className="space-y-3">
-            {suggestions.map((reply: any) => (
+            {suggestions.map((reply: unknown) => (
               <div
                 key={reply.id}
                 className="cursor-pointer rounded-ds-lg border spacing-3 transition-colors hover:bg-[var(--fl-color-background-subtle)]"

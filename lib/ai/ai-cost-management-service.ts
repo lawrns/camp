@@ -35,9 +35,9 @@ export class AICostManagementService {
       .lte("created_at", periodEnd.toISOString());
 
     const totalTokens =
-      aiUsage?.reduce((sum: any, log: unknown) => sum + ((log as any).input_tokens || 0) + ((log as any).output_tokens || 0), 0) || 0;
+      aiUsage?.reduce((sum: unknown, log: unknown) => sum + ((log as unknown).input_tokens || 0) + ((log as unknown).output_tokens || 0), 0) || 0;
 
-    const totalCost = aiUsage?.reduce((sum: any, log: unknown) => sum + ((log as any).processing_cost || 0), 0) || 0;
+    const totalCost = aiUsage?.reduce((sum: unknown, log: unknown) => sum + ((log as unknown).processing_cost || 0), 0) || 0;
 
     const overageTokens = Math.max(0, totalTokens - includedTokens);
     const usageCostCents = Math.round(totalCost * 100); // Convert to cents
@@ -61,7 +61,7 @@ export class AICostManagementService {
     const modelBreakdown: Record<string, any> = {};
     if (aiUsage) {
       aiUsage.forEach((log: unknown) => {
-        const typedLog = log as any;
+        const typedLog = log as unknown;
         const model = typedLog.model || "unknown";
         if (!modelBreakdown[model]) {
           modelBreakdown[model] = {
@@ -98,7 +98,7 @@ export class AICostManagementService {
     periodStart.setDate(periodStart.getDate() - daysBack);
 
     // Analyze usage patterns and generate recommendations
-    const recommendations: any[] = [];
+    const recommendations: unknown[] = [];
 
     // Get AI usage data
     const { data: aiUsage } = await this.supabase
@@ -115,7 +115,7 @@ export class AICostManagementService {
     // Analyze model usage
     const modelStats: Record<string, { count: number; cost: number; tokens: number }> = {};
     aiUsage.forEach((log: unknown) => {
-      const typedLog = log as any;
+      const typedLog = log as unknown;
       const model = typedLog.model || "unknown";
       if (!modelStats[model]) {
         modelStats[model] = { count: 0, cost: 0, tokens: 0 };
@@ -184,7 +184,7 @@ export class AICostManagementService {
     // Add caching recommendation if high request volume
     const totalRequests = aiUsage.length;
     if (totalRequests > 1000) {
-      const avgCost = aiUsage.reduce((sum: any, log: unknown) => sum + ((log as any).processing_cost || 0), 0) / totalRequests;
+      const avgCost = aiUsage.reduce((sum: unknown, log: unknown) => sum + ((log as unknown).processing_cost || 0), 0) / totalRequests;
       const potentialSavings = Math.round(totalRequests * avgCost * 0.4 * 100); // 40% cache hit rate
       recommendations.push({
         id: `opt-${Date.now()}-3`,
@@ -213,7 +213,7 @@ export class AICostManagementService {
 }
 
 // Helper function to generate invoice numbers
-export async function generateInvoiceNumber(supabase: any, organizationId: string): Promise<string> {
+export async function generateInvoiceNumber(supabase: unknown, organizationId: string): Promise<string> {
   const year = new Date().getFullYear();
   const month = String(new Date().getMonth() + 1).padStart(2, "0");
 

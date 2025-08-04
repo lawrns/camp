@@ -39,7 +39,7 @@ export async function logActivity({
 
       if (profile) {
         actorMetadata = {
-          user_name: `${profile.firstName || ""} ${profile.lastName || ""}`.trim(),
+          userName: `${profile.firstName || ""} ${profile.lastName || ""}`.trim(),
           user_avatar: profile.avatarUrl,
         };
       }
@@ -80,7 +80,7 @@ export const ActivityEvents = {
     resourceType: "conversation",
     resourceId: conversationId,
     description: `sent a message: "${content.substring(0, 50)}${content.length > 50 ? "..." : ""}"`,
-    metadata: { sender_id: senderId },
+    metadata: { senderId: senderId },
   }),
 
   MESSAGE_RECEIVED: (senderId: string, conversationId: string, content: string) => ({
@@ -89,7 +89,7 @@ export const ActivityEvents = {
     resourceType: "conversation",
     resourceId: conversationId,
     description: `received a message: "${content.substring(0, 50)}${content.length > 50 ? "..." : ""}"`,
-    metadata: { sender_id: senderId },
+    metadata: { senderId: senderId },
   }),
 
   // Conversation events
@@ -126,7 +126,7 @@ export const ActivityEvents = {
     resourceType: "user",
     resourceId: userId,
     description: `${userName} joined the organization`,
-    metadata: { user_name: userName },
+    metadata: { userName: userName },
   }),
 
   USER_LEFT: (userId: string, userName: string) => ({
@@ -135,7 +135,7 @@ export const ActivityEvents = {
     resourceType: "user",
     resourceId: userId,
     description: `${userName} left the organization`,
-    metadata: { user_name: userName },
+    metadata: { userName: userName },
   }),
 
   // AI events
@@ -204,7 +204,7 @@ export const ActivityEvents = {
     eventType: "security.login.failed",
     eventCategory: "security",
     description: `Failed login attempt for ${email}`,
-    metadata: { email, ip_address: ipAddress },
+    metadata: { email, ipAddress: ipAddress },
   }),
 
   SECURITY_PASSWORD_CHANGED: (userId: string) => ({

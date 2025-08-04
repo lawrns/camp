@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <script src="/sw-cleanup.js" async></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* PERFORMANCE: Removed unused Sundry font preloads to fix preload warnings */}
         {/* Application uses Inter fonts which are loaded via Google Fonts in design-system.css */}
       </head>

@@ -35,13 +35,13 @@ interface SupabaseMessage {
   id: string;
   content: string;
   conversation_id: string;
-  sender_type: 'visitor' | 'agent' | 'ai_assistant';
+  senderType: 'visitor' | 'agent' | 'ai_assistant';
   sender_name?: string;
   sender_email?: string;
   created_at: string;
   updated_at?: string;
   status?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 // Enhanced connection status tracking
@@ -62,7 +62,7 @@ interface ConnectionMetrics {
 /**
  * Pre-connection WebSocket test to identify network issues early
  */
-const testWebSocketConnection = (client: any): Promise<boolean> => {
+const testWebSocketConnection = (client: unknown): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
       // Get WebSocket URL from Supabase realtime client
@@ -95,7 +95,7 @@ const testWebSocketConnection = (client: any): Promise<boolean> => {
 /**
  * Ensure authentication session is valid before channel subscription
  */
-const ensureAuthSession = async (client: any): Promise<string | null> => {
+const ensureAuthSession = async (client: unknown): Promise<string | null> => {
   try {
     const { data: { session }, error } = await client.auth.getSession();
     
@@ -174,7 +174,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
     // Map database sender types to widget types
     let senderType: SenderType;
-    switch (supabaseMessage.sender_type) {
+    switch (supabaseMessage.senderType) {
       case 'visitor':
         senderType = 'visitor';
         break;
@@ -193,9 +193,9 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
       conversationId: parseInt(supabaseMessage.conversation_id) || 0,
       content: supabaseMessage.content || '',
       senderType,
-      senderName: supabaseMessage.sender_name || 'Unknown',
+      senderName: supabaseMessage.senderName || 'Unknown',
       createdAt: supabaseMessage.created_at || new Date().toISOString(),
-      status: (supabaseMessage.status as any) || 'sent',
+      status: (supabaseMessage.status as unknown) || 'sent',
     };
   }, []);
 
@@ -296,7 +296,7 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
 
       // Set up channel event handlers
       channel
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: any) => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: unknown) => {
           widgetDebugger.logRealtime('info', '📨 Database change received', {
             event: payload.eventType,
             table: payload.table
@@ -307,17 +307,17 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
             config.onMessage?.(message);
           }
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: unknown) => {
           widgetDebugger.logRealtime('info', '📡 Broadcast message received', payload);
           if (payload.payload?.message) {
             const message = convertToWidgetMessage(payload.payload.message);
             config.onMessage?.(message);
           }
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: unknown) => {
           config.onTyping?.(true, payload.payload?.userName);
         })
-        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+        .on('broadcast', { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: unknown) => {
           config.onTyping?.(false, payload.payload?.userName);
         });
 

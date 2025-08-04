@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { User } from '@supabase/supabase-js';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 export default function OnboardingPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [organizationId, setOrganizationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export default function OnboardingPage() {
     }
   };
 
-  const handleOnboardingComplete = (data: any) => {
+  const handleOnboardingComplete = (data: unknown) => {
     console.log('[Onboarding] Completed with data:', data);
     // The OnboardingFlow component will handle the redirect
   };

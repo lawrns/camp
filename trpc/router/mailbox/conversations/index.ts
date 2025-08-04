@@ -228,7 +228,7 @@ export const conversationsRouter = {
     .mutation(async ({ ctx, input }) => {
       if (input.assignedToId) {
         const members = await getOrganizationMembers(ctx.user.organizationId);
-        if (!members.data.some((m: any) => m.userId === input.assignedToId)) {
+        if (!members.data.some((m: unknown) => m.userId === input.assignedToId)) {
           throw new TRPCError({ code: "BAD_REQUEST" });
         }
       }
@@ -339,13 +339,13 @@ export const conversationsRouter = {
         conversation: true,
       },
     });
-    if (!message || (message.conversation as any)?.mailboxId !== ctx.mailbox.id) {
+    if (!message || (message.conversation as unknown)?.mailboxId !== ctx.mailbox.id) {
       throw new TRPCError({ code: "NOT_FOUND", message: "Message not found" });
     }
     const conversation = await db
       .update(conversations)
       .set({ status: "open" })
-      .where(eq(conversations.id, (message.conversation as any).id))
+      .where(eq(conversations.id, (message.conversation as unknown).id))
       .returning()
       .then(takeUniqueOrThrow);
     // Convert conversation to match expected interface
@@ -368,7 +368,7 @@ export const conversationsRouter = {
       lastRagResponseId: null,
       assignedToUserId: conversation.assignedToId,
     };
-    return serializeConversation(ctx.mailbox as any, serializedConversation as any, null);
+    return serializeConversation(ctx.mailbox as unknown, serializedConversation as unknown, null);
   }),
   messages: messagesRouter,
   files: filesRouter,
@@ -397,7 +397,7 @@ export const conversationsRouter = {
 
     return {
       conversations: await Promise.all(
-        similarConversations.map((conversation) => serializeConversation(ctx.mailbox as any, conversation as any, null))
+        similarConversations.map((conversation) => serializeConversation(ctx.mailbox as unknown, conversation as unknown, null))
       ),
       similarityMap: similarConversations.reduce(
         (acc: Record<string, number>, c) => {

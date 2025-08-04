@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 export class PickleJS {
-  encodeData(data: any): Buffer {
+  encodeData(data: unknown): Buffer {
     const opcodes: Buffer[] = [];
 
     // Protocol header: 0x80 followed by protocol version (e.g., 4)
@@ -26,7 +26,7 @@ export class PickleJS {
     return Buffer.concat(opcodes);
   }
 
-  private encodeValue(value: any, opcodes: Buffer[]): void {
+  private encodeValue(value: unknown, opcodes: Buffer[]): void {
     if (typeof value === "string") {
       this.encodeString(value, opcodes);
     } else if (Buffer.isBuffer(value)) {
@@ -40,7 +40,7 @@ export class PickleJS {
     }
   }
 
-  private encodeList(value: any[], opcodes: Buffer[]): void {
+  private encodeList(value: unknown[], opcodes: Buffer[]): void {
     opcodes.push(Buffer.from([0x95])); // FRAME
     opcodes.push(Buffer.from([0x7d])); // EMPTY_DICT
     opcodes.push(Buffer.from([0x94])); // MEMOIZE (for the empty dict)
@@ -85,9 +85,9 @@ export class PickleJS {
     opcodes.push(Buffer.from([0x75])); // SETITEMS
   }
 
-  decodeData(data: Buffer): any {
+  decodeData(data: Buffer): unknown {
     let offset = 0;
-    const stack: any[] = [];
+    const stack: unknown[] = [];
     let markIndex = -1;
 
     // Read protocol header
@@ -316,7 +316,7 @@ export class DjangoCryptoCompat {
     return this.pickle.decodeData(decrypted);
   }
 
-  unsign(signed: any) {
+  unsign(signed: unknown) {
     if (signed[0] !== 0x80) {
       throw new Error("Invalid version");
     }

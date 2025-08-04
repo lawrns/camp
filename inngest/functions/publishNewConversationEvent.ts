@@ -21,7 +21,7 @@ export default inngest.createFunction(
   { event: "conversations/message.created" },
   async ({ events, step }) => {
     // Process messages serially to ensure consistency on the frontend.
-    const messageIds = events.map((event: any) => event.data.messageId).toSorted((a, b) => a - b);
+    const messageIds = events.map((event: unknown) => event.data.messageId).toSorted((a, b) => a - b);
 
     await step.run("publish", async () => {
       const failedIds: number[] = [];
@@ -57,17 +57,17 @@ const publish = async (messageId: number) => {
     return `Message ${messageId} not found`;
   }
 
-  const events: { resourceType: string; resourceId: string; organizationId: string; event: string; payload: any }[] =
+  const events: { resourceType: string; resourceId: string; organizationId: string; event: string; payload: unknown }[] =
     [];
   const published: string[] = [];
 
   // RILL-compliant: Publish conversation message update (except AI assistant messages)
   if (message.role !== "assistant") {
     const serializedMessage = await serializeMessage(
-      message as any,
+      message as unknown,
       message.conversation.id,
       message.conversation.mailbox,
-      message.clerkUserId ? ((await getClerkUser(message.clerkUserId)) as any) : null
+      message.clerkUserId ? ((await getClerkUser(message.clerkUserId)) as unknown) : null
     );
 
     events.push({
@@ -108,7 +108,7 @@ const publish = async (messageId: number) => {
 
   // Batch publish all events
   if (events.length > 0) {
-    await publishBatchedRealtimeEvents(events as any);
+    await publishBatchedRealtimeEvents(events as unknown);
   }
 
   return `Message ${message.id} published: ${published.join(", ") || "none"}`;

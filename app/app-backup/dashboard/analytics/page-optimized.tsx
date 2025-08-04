@@ -54,7 +54,7 @@ const AnalyticsMetricCard = React.memo(
     subValue,
   }: {
     gradient: string;
-    icon: any;
+    icon: unknown;
     badge: string;
     value: string | number;
     label: string;

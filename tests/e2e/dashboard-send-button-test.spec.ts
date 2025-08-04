@@ -57,8 +57,8 @@ test('Dashboard send button functionality test', async ({ page, context }) => {
     // Inject a test conversation directly into the page
     await page.evaluate((testConversationId) => {
       // Try to access the store and add a test conversation
-      if ((window as any).useCampfireStore) {
-        const store = (window as any).useCampfireStore.getState();
+      if ((window as unknown).useCampfireStore) {
+        const store = (window as unknown).useCampfireStore.getState();
         if (store.addConversation) {
           store.addConversation({
             id: testConversationId,

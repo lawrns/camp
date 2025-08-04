@@ -4,17 +4,17 @@ import { env } from "@/lib/utils/env-config";
 
 // Stub Sentry functions
 const Sentry = {
-  captureException: (error: any, hint?: any) => {
+  captureException: (error: unknown, hint?: unknown) => {
     // eslint-disable-next-line no-console
   },
 };
 
-export const captureExceptionAndThrowIfDevelopment = (error: any, hint?: any) => {
+export const captureExceptionAndThrowIfDevelopment = (error: unknown, hint?: unknown) => {
   Sentry.captureException(error, hint);
   if (env.NODE_ENV === "development" || env.NODE_ENV === "test") throw error;
 };
 
-export const captureExceptionAndLogIfDevelopment = (error: any, hint?: any) => {
+export const captureExceptionAndLogIfDevelopment = (error: unknown, hint?: unknown) => {
   Sentry.captureException(error, hint);
   // eslint-disable-next-line no-console
   if (env.NODE_ENV === "development" || env.NODE_ENV === "test") {
@@ -22,7 +22,7 @@ export const captureExceptionAndLogIfDevelopment = (error: any, hint?: any) => {
   }
 };
 
-export const captureExceptionAndLog = (error: any, hint?: any) => {
+export const captureExceptionAndLog = (error: unknown, hint?: unknown) => {
   Sentry.captureException(error, hint);
   // eslint-disable-next-line no-console
 };

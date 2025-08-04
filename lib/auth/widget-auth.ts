@@ -25,7 +25,7 @@ const getJWTSecret = (): string => {
 export const createWidgetAuthToken = async (
   organizationId: string,
   visitorId?: string,
-  metadata?: any
+  metadata?: unknown
 ): Promise<{
   token: string;
   userId: string;
@@ -84,7 +84,7 @@ export const createWidgetAuthToken = async (
 export const verifyWidgetToken = async (token: string) => {
   try {
     const secret = getJWTSecret();
-    const decoded = jwt.verify(token, secret) as any;
+    const decoded = jwt.verify(token, secret) as unknown;
 
     // Validate token structure
     if (!decoded.organization_id || !decoded.user_metadata?.visitor_id) {

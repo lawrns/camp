@@ -107,9 +107,9 @@ async function cleanupTestData() {
               user_id: authUser.id,
               organization_id: TEST_ORGANIZATION_ID,
               status: 'offline',
-              last_seen_at: new Date().toISOString(),
+              lastSeenAt: new Date().toISOString(),
               metadata: {
-                user_name: authUser.user_metadata?.name || email,
+                userName: authUser.user_metadata?.name || email,
                 user_email: email,
                 reset_by: 'cleanup_script'
               }

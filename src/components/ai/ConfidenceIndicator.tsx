@@ -286,7 +286,7 @@ export function MessageWithConfidence({
   conversationId,
   organizationId,
 }: {
-  message: any;
+  message: unknown;
   conversationId: string;
   organizationId: string;
 }) {

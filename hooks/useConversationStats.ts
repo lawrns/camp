@@ -20,7 +20,7 @@ export function useConversationStats() {
     const isWidgetContext = typeof window !== 'undefined' && (
         window.location.pathname.includes('/widget') ||
         window.location.search.includes('widget=true') ||
-        (window as any).CampfireWidgetConfig ||
+        (window as unknown).CampfireWidgetConfig ||
         user?.isWidget
     );
 

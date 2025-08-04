@@ -5,7 +5,7 @@
  */
 
 interface CacheEntry {
-  data: any;
+  data: unknown;
   timestamp: number;
   ttl: number;
   version: string;
@@ -142,7 +142,7 @@ export class EdgeCacheManager {
   /**
    * Compress data if enabled
    */
-  private async compress(data: any): Promise<string> {
+  private async compress(data: unknown): Promise<string> {
     if (!this.compressionEnabled) {
       return JSON.stringify(data);
     }
@@ -206,7 +206,7 @@ export class EdgeCacheManager {
   /**
    * Set cached data
    */
-  async set(key: CacheKey, data: any): Promise<void> {
+  async set(key: CacheKey, data: unknown): Promise<void> {
     const cacheKey = this.generateKey(key);
 
     try {

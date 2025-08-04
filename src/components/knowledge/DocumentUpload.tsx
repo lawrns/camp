@@ -84,7 +84,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const newFiles: UploadFile[] = acceptedFiles.map((file: any) => ({
+      const newFiles: UploadFile[] = acceptedFiles.map((file: unknown) => ({
         id: `file-${Date.now()}-${Math.random()}`,
         file,
         name: file.name,
@@ -111,11 +111,11 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
   });
 
   const removeFile = (fileId: string) => {
-    setUploadFiles((prev) => prev.filter((f: any) => f.id !== fileId));
+    setUploadFiles((prev) => prev.filter((f: unknown) => f.id !== fileId));
   };
 
   const updateFileMetadata = (fileId: string, updates: Partial<UploadFile>) => {
-    setUploadFiles((prev) => prev.map((f: any) => (f.id === fileId ? { ...f, ...updates } : f)));
+    setUploadFiles((prev) => prev.map((f: unknown) => (f.id === fileId ? { ...f, ...updates } : f)));
   };
 
   const addUrlDocument = () => {
@@ -196,7 +196,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
   };
 
   const handleComplete = () => {
-    const completedFiles = uploadFiles.filter((f: any) => f.status === "completed");
+    const completedFiles = uploadFiles.filter((f: unknown) => f.status === "completed");
     onUploadComplete(completedFiles);
     setUploadFiles([]);
     onClose();
@@ -243,9 +243,9 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
     return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
   };
 
-  const completedCount = uploadFiles.filter((f: any) => f.status === "completed").length;
-  const errorCount = uploadFiles.filter((f: any) => f.status === "error").length;
-  const totalChunks = uploadFiles.reduce((sum: any, f: any) => sum + (f.chunks || 0), 0);
+  const completedCount = uploadFiles.filter((f: unknown) => f.status === "completed").length;
+  const errorCount = uploadFiles.filter((f: unknown) => f.status === "error").length;
+  const totalChunks = uploadFiles.reduce((sum: unknown, f: unknown) => sum + (f.chunks || 0), 0);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -298,7 +298,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
               {uploadFiles.length > 0 && (
                 <div className="space-y-spacing-sm">
                   <h3 className="font-medium">Files to Process ({uploadFiles.length})</h3>
-                  {uploadFiles.map((file: any) => {
+                  {uploadFiles.map((file: unknown) => {
                     const File = getFile(file.type);
                     const StatusIcon = getStatusIcon(file.status);
 
@@ -346,7 +346,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
                                     {file.category}
                                   </Badge>
                                 )}
-                                {file.tags?.map((tag: any) => (
+                                {file.tags?.map((tag: unknown) => (
                                   <Badge key={tag} variant="secondary" className="text-tiny">
                                     {tag}
                                   </Badge>
@@ -390,7 +390,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
                     <SelectValue placeholder="Select default category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((category: any) => (
+                    {categories.map((category: unknown) => (
                       <SelectItem key={category} value={category}>
                         {category}
                       </SelectItem>
@@ -413,8 +413,8 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
                   </SelectTrigger>
                   <SelectContent>
                     {availableTags
-                      .filter((tag: any) => !defaultTags.includes(tag))
-                      .map((tag: any) => (
+                      .filter((tag: unknown) => !defaultTags.includes(tag))
+                      .map((tag: unknown) => (
                         <SelectItem key={tag} value={tag}>
                           {tag}
                         </SelectItem>
@@ -422,12 +422,12 @@ export function DocumentUpload({ isOpen, onClose, onUploadComplete, categories, 
                   </SelectContent>
                 </Select>
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {defaultTags.map((tag: any) => (
+                  {defaultTags.map((tag: unknown) => (
                     <Badge
                       key={tag}
                       variant="secondary"
                       className="cursor-pointer hover:bg-[var(--fl-color-danger-subtle)]"
-                      onClick={() => setDefaultTags((prev) => prev.filter((t: any) => t !== tag))}
+                      onClick={() => setDefaultTags((prev) => prev.filter((t: unknown) => t !== tag))}
                     >
                       {tag}
                       <Icon icon={X} className="ml-1 h-3 w-3" />

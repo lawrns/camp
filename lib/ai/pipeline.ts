@@ -15,7 +15,7 @@ const s3Client = new S3Client({
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         }
       : undefined,
-} as any);
+} as unknown);
 
 /**
  * Ingest and preprocess training data files.
@@ -109,7 +109,7 @@ export async function fineTuneModel(datasetId: string) {
     setTimeout(async () => {
       // Find the model version associated with this dataset
       const dataset = await db.query.trainingDatasets.findFirst({
-        where: (datasets: any, { eq }: unknown) => eq(datasets.id, parseInt(datasetId)),
+        where: (datasets: unknown, { eq }: unknown) => eq(datasets.id, parseInt(datasetId)),
         with: {
           modelVersion: true,
         },
@@ -156,7 +156,7 @@ export async function fineTuneModel(datasetId: string) {
 export async function listModelVersions() {
   try {
     const versions = await db.query.modelVersions.findMany({
-      orderBy: (versions: any, { desc }: unknown) => [desc(versions.createdAt)],
+      orderBy: (versions: unknown, { desc }: unknown) => [desc(versions.createdAt)],
     });
 
     return versions;

@@ -15,8 +15,8 @@ test('Debug conversation IDs and channel alignment', async ({ page, context }) =
   // Capture widget conversation ID
   const widgetConversationId = await widgetPage.evaluate(() => {
     // Try to get conversation ID from widget context
-    const widgetConfig = (window as any).CampfireWidgetConfig;
-    const widgetState = (window as any).widgetState;
+    const widgetConfig = (window as unknown).CampfireWidgetConfig;
+    const widgetState = (window as unknown).widgetState;
     
     return {
       config: widgetConfig,

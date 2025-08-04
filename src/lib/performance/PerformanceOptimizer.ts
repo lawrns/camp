@@ -143,7 +143,7 @@ export class PerformanceOptimizer {
   /**
    * Optimize message delivery performance
    */
-  public async optimizeMessageDelivery(messageData: any, deliveryFn: (data: any) => Promise<any>): Promise<any> {
+  public async optimizeMessageDelivery(messageData: unknown, deliveryFn: (data: unknown) => Promise<any>): Promise<any> {
     const startTime = performance.now();
 
     try {
@@ -176,7 +176,7 @@ export class PerformanceOptimizer {
   /**
    * Optimize component rendering
    */
-  public optimizeComponentRender<T>(componentKey: string, renderFn: () => T, dependencies: any[] = []): T {
+  public optimizeComponentRender<T>(componentKey: string, renderFn: () => T, dependencies: unknown[] = []): T {
     const startTime = performance.now();
 
     if (this.config.enableComponentMemoization) {
@@ -220,7 +220,7 @@ export class PerformanceOptimizer {
   /**
    * Preprocess message for optimal delivery
    */
-  private preprocessMessage(messageData: any): any {
+  private preprocessMessage(messageData: unknown): unknown {
     return {
       ...messageData,
       // Add optimization flags
@@ -245,14 +245,14 @@ export class PerformanceOptimizer {
   /**
    * Hash dependencies for memoization
    */
-  private hashDependencies(dependencies: any[]): string {
+  private hashDependencies(dependencies: unknown[]): string {
     return dependencies.map((dep) => (typeof dep === "object" ? JSON.stringify(dep) : String(dep))).join("|");
   }
 
   /**
    * Intelligent caching with TTL
    */
-  private getCachedResult(key: string): any | null {
+  private getCachedResult(key: string): unknown | null {
     const cached = this.componentCache.get(`cache_${key}`);
     if (cached && cached.expires > Date.now()) {
       return cached.data;
@@ -260,7 +260,7 @@ export class PerformanceOptimizer {
     return null;
   }
 
-  private setCachedResult(key: string, data: any, ttl: number): void {
+  private setCachedResult(key: string, data: unknown, ttl: number): void {
     this.componentCache.set(`cache_${key}`, {
       data,
       expires: Date.now() + ttl,
@@ -304,7 +304,7 @@ export class PerformanceOptimizer {
 
     // Record memory usage
     if (typeof window !== "undefined" && "memory" in performance) {
-      const memInfo = (performance as any).memory;
+      const memInfo = (performance as unknown).memory;
       this.recordMetric("memoryUsage", memInfo.usedJSHeapSize);
     }
 

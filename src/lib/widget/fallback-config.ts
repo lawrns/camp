@@ -201,22 +201,22 @@ export function createFallbackLogger(config: WidgetFallbackConfig = DEFAULT_FALL
   const currentLevel = levels[logLevel];
 
   return {
-    error: (message: string, ...args: any[]) => {
+    error: (message: string, ...args: unknown[]) => {
       if (currentLevel >= 0) {
         // Console logging disabled in production
       }
     },
-    warn: (message: string, ...args: any[]) => {
+    warn: (message: string, ...args: unknown[]) => {
       if (currentLevel >= 1) {
         // Console logging disabled in production
       }
     },
-    info: (message: string, ...args: any[]) => {
+    info: (message: string, ...args: unknown[]) => {
       if (currentLevel >= 2) {
         // Console logging disabled in production
       }
     },
-    debug: (message: string, ...args: any[]) => {
+    debug: (message: string, ...args: unknown[]) => {
       if (debug && currentLevel >= 3) {
         // Console logging disabled in production
       }

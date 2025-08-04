@@ -40,17 +40,26 @@ export function AssignmentDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn("max-w-md", className)}>
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-ds-2 text-base font-semibold">
-            <Icon icon={UserPlus} className="h-5 w-5 text-blue-600" />
+    <Dialog 
+      open={open} 
+      onOpenChange={onOpenChange}
+      aria-labelledby="assignment-modal-title"
+      aria-describedby="assignment-modal-description"
+      role="dialog"
+      tabIndex={-1}
+    >
+      <DialogContent className={cn("max-w-md ds-modal", className)}>
+        <DialogHeader className="ds-modal-header">
+          <DialogTitle id="assignment-modal-title" className="flex items-center gap-ds-2 text-base font-semibold">
+            <Icon icon={UserPlus} className="h-5 w-5" />
             Assign Conversation
           </DialogTitle>
-          <DialogDescription>Assign this conversation to an available operator or agent.</DialogDescription>
+          <DialogDescription id="assignment-modal-description">
+            Assign this conversation to an available operator or agent.
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-2">
+        <div className="mt-2 ds-modal-body">
           <AssignmentPanel
             conversationId={conversationId}
             currentAgentId={currentAgentId || ""}

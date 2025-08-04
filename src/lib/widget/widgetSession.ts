@@ -84,7 +84,7 @@ export function verifyWidgetSession(token: string): WidgetSessionPayload {
 
 // Organization-based session functions (consolidated from lib/widgetSession.ts)
 export function createOrganizationWidgetSession(
-  organization: { id: string; metadata?: any },
+  organization: { id: string; metadata?: unknown },
   options: {
     email?: string;
     showWidget: boolean;
@@ -113,7 +113,7 @@ export function createOrganizationWidgetSession(
 
 export function verifyOrganizationWidgetSession(
   token: string,
-  organization: { id: string; metadata?: any }
+  organization: { id: string; metadata?: unknown }
 ): WidgetSessionPayload {
   const secret = organization.metadata?.widget_secret || env.WIDGET_JWT_SECRET || "default-widget-secret";
 
@@ -188,11 +188,11 @@ export function validateTimestamp(timestamp: number): boolean {
 export interface WidgetAuthResult {
   success: boolean;
   session?: WidgetSessionPayload;
-  organization?: any;
+  organization?: unknown;
   error?: string;
 }
 
-export async function authenticateWidgetRequest(request: Request, supabaseClient: any): Promise<WidgetAuthResult> {
+export async function authenticateWidgetRequest(request: Request, supabaseClient: unknown): Promise<WidgetAuthResult> {
   try {
     const authHeader = request.headers.get("authorization");
     if (!authHeader?.startsWith("Bearer ")) {
@@ -266,7 +266,7 @@ export async function generateWidgetEmbedToken(
     // TEMPORARY FIX: Skip domain validation until widgetHost column is added
     // Validate that the domain is allowed
     // if (mailboxRecord.widgetHost) {
-    //   const allowedDomains = mailboxRecord.widgetHost.split(",").map((d: any) => d.trim().toLowerCase());
+    //   const allowedDomains = mailboxRecord.widgetHost.split(",").map((d: unknown) => d.trim().toLowerCase());
     //   const normalizedDomain = domain.toLowerCase();
 
     //   const isDomainAllowed = allowedDomains.some((allowed) => {

@@ -36,11 +36,11 @@ interface AlertRule {
 
 interface HealthCheck {
   name: string;
-  check: () => Promise<{ healthy: boolean; details?: any; latency?: number }>;
+  check: () => Promise<{ healthy: boolean; details?: unknown; latency?: number }>;
   interval: number;
   timeout: number;
   lastRun?: number;
-  lastResult?: { healthy: boolean; details?: any; latency?: number };
+  lastResult?: { healthy: boolean; details?: unknown; latency?: number };
 }
 
 // In-memory storage for metrics (upgrade to time-series DB for production)
@@ -132,7 +132,7 @@ class ComprehensiveMonitor {
       value,
       timestamp: Date.now(),
       tags,
-      unit: unit as any
+      unit: unit as unknown
     };
     
     this.metricsStore.add(metric);
@@ -219,7 +219,7 @@ class ComprehensiveMonitor {
     this.sendAlert(alert);
   }
 
-  private async sendAlert(alert: any): Promise<void> {
+  private async sendAlert(alert: unknown): Promise<void> {
     // Placeholder for external alerting integration
     // In production, integrate with:
     // - PagerDuty
@@ -260,7 +260,7 @@ class ComprehensiveMonitor {
       const result = await Promise.race([
         check.check(),
         timeoutPromise
-      ]) as { healthy: boolean; details?: any; latency?: number };
+      ]) as { healthy: boolean; details?: unknown; latency?: number };
       
       result.latency = performance.now() - startTime;
       check.lastResult = result;
@@ -403,7 +403,7 @@ class ComprehensiveMonitor {
     return this.metricsStore.getAll(since);
   }
 
-  getHealthStatus(): { name: string; healthy: boolean; lastRun?: number; details?: any }[] {
+  getHealthStatus(): { name: string; healthy: boolean; lastRun?: number; details?: unknown }[] {
     return this.healthChecks.map(check => ({
       name: check.name,
       healthy: check.lastResult?.healthy ?? false,

@@ -90,7 +90,7 @@ export function AICapabilityIndicators({
   if (variant === "compact") {
     return (
       <div className={cn("flex flex-wrap gap-2", className)}>
-        {capabilities.map((capability: any) => {
+        {capabilities.map((capability: unknown) => {
           const StatusIcon = getStatusIcon(capability.status);
           const Icon = capability.icon;
 
@@ -135,7 +135,7 @@ export function AICapabilityIndicators({
   if (variant === "list") {
     return (
       <div className={cn("space-y-2", className)}>
-        {capabilities.map((capability: any) => {
+        {capabilities.map((capability: unknown) => {
           const StatusIcon = getStatusIcon(capability.status);
           const Icon = capability.icon;
 

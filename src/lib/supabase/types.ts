@@ -99,7 +99,7 @@ export interface Database {
           id: string;
           user_id: string;
           email: string;
-          full_name: string;
+          fullName: string;
           avatar_url: string | null;
           organization_id: string | null;
           role: "visitor" | "agent" | "admin" | "owner";
@@ -126,7 +126,7 @@ export interface Database {
           id?: string;
           user_id: string;
           email: string;
-          full_name: string;
+          fullName: string;
           avatar_url?: string | null;
           organization_id?: string | null;
           role?: "visitor" | "agent" | "admin" | "owner";
@@ -191,7 +191,7 @@ export interface Database {
         Row: {
           id: string;
           organization_id: string;
-          customer_email: string;
+          customerEmail: string;
           subject: string | null;
           status: "open" | "closed" | "active" | "escalated";
           priority: "low" | "medium" | "high" | "urgent" | null;
@@ -205,12 +205,12 @@ export interface Database {
           metadata: Json | null;
           created_at: string;
           updated_at: string;
-          last_message_at: string | null;
+          lastMessageAt: string | null;
         };
         Insert: {
           id?: string;
           organization_id: string;
-          customer_email: string;
+          customerEmail: string;
           subject?: string | null;
           status?: "open" | "closed" | "active" | "escalated";
           priority?: "low" | "medium" | "high" | "urgent" | null;
@@ -261,8 +261,8 @@ export interface Database {
           conversation_id: string;
           organization_id: string;
           content: string;
-          sender_type: "user" | "system" | "agent" | "bot" | "visitor" | "customer" | "ai" | "rag";
-          sender_id: string | null;
+          senderType: "user" | "system" | "agent" | "bot" | "visitor" | "customer" | "ai" | "rag";
+          senderId: string | null;
           message_type: "text" | "image" | "file" | "system" | "notification" | "action" | "automated";
           metadata: Json | null;
           ai_confidence: number | null;
@@ -276,7 +276,7 @@ export interface Database {
           conversation_id: string;
           organization_id: string;
           content: string;
-          sender_type: "user" | "system" | "agent" | "bot" | "visitor" | "customer" | "ai" | "rag";
+          senderType: "user" | "system" | "agent" | "bot" | "visitor" | "customer" | "ai" | "rag";
           sender_id?: string | null;
           message_type?: "text" | "image" | "file" | "system" | "notification" | "action" | "automated";
           metadata?: Json | null;
@@ -325,9 +325,9 @@ export interface Database {
           organization_id: string;
           persona: string | null;
           confidence_threshold: number | null;
-          session_metadata: Json | null;
+          sessionMetadata: Json | null;
           status: "active" | "completed" | "expired" | "failed";
-          expires_at: string | null;
+          expiresAt: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -492,9 +492,9 @@ export interface Database {
           id: string;
           conversation_id: string;
           user_id: string;
-          user_name: string | null;
-          is_typing: boolean;
-          last_activity: string | null;
+          userName: string | null;
+          isTyping: boolean;
+          lastActivity: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -660,7 +660,7 @@ export interface Database {
           rating: number;
           feedback_type: string;
           feedback_text: string | null;
-          created_by: string;
+          createdBy: string;
           created_at: string;
         };
         Insert: {
@@ -671,7 +671,7 @@ export interface Database {
           rating: number;
           feedback_type: string;
           feedback_text?: string | null;
-          created_by: string;
+          createdBy: string;
           created_at?: string;
         };
         Update: {
@@ -763,7 +763,7 @@ export interface Database {
           reason: string;
           confidence_score: number;
           created_at: string;
-          completed_at: string | null;
+          completedAt: string | null;
         };
         Insert: {
           id?: string;
@@ -853,7 +853,7 @@ export interface Database {
           organization_id: string;
           profile_id: string;
           status: "available" | "busy" | "away" | "offline";
-          last_seen_at: string | null;
+          lastSeenAt: string | null;
           metadata: Json | null;
           created_at: string;
           updated_at: string;
@@ -1033,7 +1033,7 @@ export interface Database {
           organization_id: string;
           persona: string;
           confidence_threshold: number;
-          session_metadata: Json;
+          sessionMetadata: Json;
           created_at: string;
         }[];
       };
@@ -1054,8 +1054,8 @@ export interface Database {
         Returns: {
           id: string;
           content: string;
-          sender_type: string;
-          sender_id: string;
+          senderType: string;
+          senderId: string;
           created_at: string;
           message_type: string;
           metadata: Json;

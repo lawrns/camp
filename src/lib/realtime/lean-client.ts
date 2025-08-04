@@ -31,7 +31,7 @@ export class LeanRealtimeClient {
 
   // Event callbacks
   public onConnectionChange?: (state: string) => void;
-  public onError?: (error: any) => void;
+  public onError?: (error: unknown) => void;
 
   constructor(config: LeanClientConfig) {
     this.config = {
@@ -61,7 +61,7 @@ export class LeanRealtimeClient {
       this.handleReconnect();
     });
 
-    this.supabase.realtime.onError((error: any) => {
+    this.supabase.realtime.onError((error: unknown) => {
       this.connectionState = "error";
       this.onError?.(error);
       this.onConnectionChange?.("error");
@@ -136,7 +136,7 @@ export class LeanRealtimeClient {
       // Re-add all handlers
       for (const [event, handlers] of subscription.handlers.entries()) {
         handlers.forEach((handler) => {
-          newChannel.on(event as any, handler);
+          newChannel.on(event as unknown, handler);
         });
       }
 
@@ -170,7 +170,7 @@ export class LeanRealtimeClient {
       subscription.handlers.get(event)!.push(handler);
 
       // Add to channel
-      subscription.channel.on(event as any, handler);
+      subscription.channel.on(event as unknown, handler);
 
       // Subscribe if not already subscribed
       if (subscription.isActive) {
@@ -207,7 +207,7 @@ export class LeanRealtimeClient {
     } catch (error) {}
   }
 
-  async send(channelName: string, event: string, payload: any): Promise<void> {
+  async send(channelName: string, event: string, payload: unknown): Promise<void> {
     const subscription = this.subscriptions.get(channelName);
     if (!subscription) {
       throw new Error(`No subscription found for channel: ${channelName}`);
@@ -228,9 +228,9 @@ export class LeanRealtimeClient {
   async subscribeToConversation(
     conversationId: string,
     handlers: {
-      onMessage?: (message: any) => void;
-      onTyping?: (typing: any) => void;
-      onPresence?: (presence: any) => void;
+      onMessage?: (message: unknown) => void;
+      onTyping?: (typing: unknown) => void;
+      onPresence?: (presence: unknown) => void;
     }
   ): Promise<void> {
     const channelName = `org:${this.config.organizationId}:conversation:${conversationId}`;

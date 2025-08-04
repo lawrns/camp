@@ -69,7 +69,7 @@ interface ResponseTemplate {
   description: string;
   actions: {
     type: string;
-    config: any;
+    config: unknown;
   }[];
 }
 
@@ -177,7 +177,7 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
     fetchData();
   }, [incidentId, organizationId, toast]);
 
-  const executeAction = async (actionType: string, params: any) => {
+  const executeAction = async (actionType: string, params: unknown) => {
     try {
       setSubmitting(true);
       const response = await fetch("/api/ai/security/execute-action", {
@@ -238,7 +238,7 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
         description: "Security action has been revoked",
       });
 
-      setActiveActions((prev) => prev.map((a: any) => (a.id === actionId ? { ...a, status: "revoked" } : a)));
+      setActiveActions((prev) => prev.map((a: unknown) => (a.id === actionId ? { ...a, status: "revoked" } : a)));
     } catch (error) {
       toast({
         title: "Error",
@@ -373,7 +373,7 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
                     <SelectValue placeholder="Select a response template" />
                   </SelectTrigger>
                   <SelectContent>
-                    {templates.map((template: any) => (
+                    {templates.map((template: unknown) => (
                       <SelectItem key={template.id} value={template.id}>
                         <div>
                           <div className="font-medium">{template.name}</div>
@@ -418,12 +418,12 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {activeActions.filter((a: any) => a.status === "active").length === 0 ? (
+                {activeActions.filter((a: unknown) => a.status === "active").length === 0 ? (
                   <p className="py-8 text-center text-muted-foreground">No active security measures</p>
                 ) : (
                   activeActions
-                    .filter((a: any) => a.status === "active")
-                    .map((action: any) => {
+                    .filter((a: unknown) => a.status === "active")
+                    .map((action: unknown) => {
                       const config = ACTION_CONFIGS[action.type as keyof typeof ACTION_CONFIGS];
                       const Icon = config?.icon || Shield;
 
@@ -464,8 +464,8 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
             <CardContent>
               <div className="space-y-3">
                 {activeActions
-                  .filter((a: any) => a.status !== "active")
-                  .map((action: any) => {
+                  .filter((a: unknown) => a.status !== "active")
+                  .map((action: unknown) => {
                     const config = ACTION_CONFIGS[action.type as keyof typeof ACTION_CONFIGS];
                     const Icon = config?.icon || History;
 
@@ -511,9 +511,9 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
                   <Input
                     id="ip_address"
                     placeholder="192.168.1.1"
-                    value={actionForm.ip_address || ""}
+                    value={actionForm.ipAddress || ""}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setActionForm({ ...actionForm, ip_address: e.target.value })
+                      setActionForm({ ...actionForm, ipAddress: e.target.value })
                     }
                   />
                 </div>
@@ -563,7 +563,7 @@ export function ThreatResponseInterface({ incidentId, organizationId, className 
 }
 
 // Add missing Input component
-function Input({ id, placeholder, value, onChange, className }: any) {
+function Input({ id, placeholder, value, onChange, className }: unknown) {
   return (
     <input
       id={id}

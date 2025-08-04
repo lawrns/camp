@@ -21,7 +21,7 @@ describe('API Endpoints Integration Tests', () => {
     jest.restoreAllMocks();
   });
 
-  async function testAPI(endpoint: string, options: any = {}) {
+  async function testAPI(endpoint: string, options: unknown = {}) {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',

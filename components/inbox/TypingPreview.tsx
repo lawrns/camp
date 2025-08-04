@@ -16,7 +16,7 @@ interface TypingPreviewProps {
 
 export function TypingPreview({ typingUsers, className, currentUserId }: TypingPreviewProps) {
   // Filter out current user and limit to 3 users
-  const filteredUsers = typingUsers.filter((user: any) => user.userId !== currentUserId).slice(0, 3);
+  const filteredUsers = typingUsers.filter((user: unknown) => user.userId !== currentUserId).slice(0, 3);
 
   if (filteredUsers.length === 0) {
     return null;
@@ -55,7 +55,7 @@ export function TypingPreview({ typingUsers, className, currentUserId }: TypingP
 
 // Widget-specific typing preview (smaller, different styling)
 export function WidgetTypingPreview({ typingUsers, className }: TypingPreviewProps) {
-  const agentUsers = typingUsers.filter((user: any) => user.userType === "agent");
+  const agentUsers = typingUsers.filter((user: unknown) => user.userType === "agent");
 
   if (agentUsers.length === 0) {
     return null;

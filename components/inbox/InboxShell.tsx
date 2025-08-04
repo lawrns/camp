@@ -8,7 +8,7 @@ import { DetailsSidebar } from "@/components/inbox/DetailsSidebar";
 import { InboxHeader } from "@/components/inbox/InboxHeader";
 import { InboxMessagePanel } from "@/components/inbox/InboxMessagePanel";
 import { Button } from "@/components/ui/Button-unified";
-import { ConversationList } from "@/components/InboxDashboard/sub-components/ConversationList";
+import { ConversationList } from "@/src/components/InboxDashboard/sub-components/ConversationList";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { useAuth } from "@/hooks/useAuth";
 import { useHotkeys } from "@/lib/hooks/useHotkeys";

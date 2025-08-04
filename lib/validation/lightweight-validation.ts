@@ -20,13 +20,13 @@ interface ValidationSchema {
   min?: number;
   max?: number;
   pattern?: RegExp;
-  enum?: any[];
+  enum?: unknown[];
   properties?: Record<string, ValidationSchema>;
   items?: ValidationSchema;
 }
 
 // Lazy-loaded Zod for complex validation
-let zodModule: any = null;
+let zodModule: unknown = null;
 let zodPromise: Promise<any> | null = null;
 
 const getZod = async () => {
@@ -56,7 +56,7 @@ export class LightweightValidation {
   /**
    * Lightweight validation for simple cases
    */
-  validateSimple<T = any>(data: any, schema: ValidationSchema): ValidationResult<T> {
+  validateSimple<T = any>(data: unknown, schema: ValidationSchema): ValidationResult<T> {
     try {
       const result = this.validateValue(data, schema);
       return {
@@ -74,7 +74,7 @@ export class LightweightValidation {
   /**
    * Complex validation using lazy-loaded Zod
    */
-  async validateComplex<T = any>(data: any, zodSchema: any): Promise<ValidationResult<T>> {
+  async validateComplex<T = any>(data: unknown, zodSchema: unknown): Promise<ValidationResult<T>> {
     try {
       const z = await getZod();
       const result = zodSchema.parse(data);
@@ -82,12 +82,12 @@ export class LightweightValidation {
         success: true,
         data: result,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         error: "Validation failed",
         errors:
-          error.errors?.reduce((acc: any, err: any) => {
+          error.errors?.reduce((acc: unknown, err: unknown) => {
             const path = err.path.join(".");
             acc[path] = err.message;
             return acc;
@@ -99,7 +99,7 @@ export class LightweightValidation {
   /**
    * Validate request body with lightweight validation
    */
-  validateRequestBody(body: any, schema: ValidationSchema): ValidationResult {
+  validateRequestBody(body: unknown, schema: ValidationSchema): ValidationResult {
     return this.validateSimple(body, schema);
   }
 
@@ -144,7 +144,7 @@ export class LightweightValidation {
   /**
    * Core validation logic
    */
-  private validateValue(value: any, schema: ValidationSchema): any {
+  private validateValue(value: unknown, schema: ValidationSchema): unknown {
     // Handle arrays
     if (Array.isArray(value)) {
       if (schema.type !== "array") {
@@ -272,14 +272,14 @@ export const commonSchemas = {
 };
 
 // Convenience functions
-export const validateId = (id: any) => lightweightValidation.validateSimple(id, commonSchemas.id);
+export const validateId = (id: unknown) => lightweightValidation.validateSimple(id, commonSchemas.id);
 
-export const validateEmail = (email: any) => lightweightValidation.validateSimple(email, commonSchemas.email);
+export const validateEmail = (email: unknown) => lightweightValidation.validateSimple(email, commonSchemas.email);
 
 export const validatePagination = (query: Record<string, any>) =>
   lightweightValidation.validateQuery(query, commonSchemas.pagination);
 
-export const validateMessage = (content: any) =>
+export const validateMessage = (content: unknown) =>
   lightweightValidation.validateSimple(content, commonSchemas.messageContent);
 
 /**

@@ -21,20 +21,20 @@ import { env } from "@/lib/utils/env-config";
 // import AutomatedRepliesLimitExceededEmail from "@/lib/emails/automatedRepliesLimitExceeded"; // Module not found
 
 // Placeholder functions until real implementations are available
-const sendEmail = async (email: any): Promise<void> => {
+const sendEmail = async (email: unknown): Promise<void> => {
   console.log("sendEmail called - not implemented yet", email);
 };
 
 const stripe = {
   subscriptions: {
-    list: async (params: any) => {
+    list: async (params: unknown) => {
       console.log("stripe.subscriptions.list called - not implemented yet", params);
       return { data: [] };
     },
   },
 };
 
-const AutomatedRepliesLimitExceededEmail = (props: any) => {
+const AutomatedRepliesLimitExceededEmail = (props: unknown) => {
   console.log("AutomatedRepliesLimitExceededEmail called - not implemented yet", props);
   return null;
 };

@@ -7,7 +7,7 @@ export interface RAGContext {
   query: string;
   organizationId: string;
   conversationId: string;
-  userContext?: any;
+  userContext?: unknown;
   previousMessages?: Message[];
 }
 
@@ -134,7 +134,7 @@ export class RAGAIService {
         return [];
       }
 
-      return (data || []).map((doc: any) => ({
+      return (data || []).map((doc: unknown) => ({
         id: doc.id,
         title: doc.title || "Knowledge Base Article",
         content: doc.content,
@@ -167,7 +167,7 @@ export class RAGAIService {
           .map((msg) => ({
             id: msg.id,
             content: msg.content,
-            sender: msg.sender_type as "user" | "agent" | "ai",
+            sender: msg.senderType as "user" | "agent" | "ai",
             timestamp: new Date(msg.created_at),
           }))
           .reverse(); // Chronological order

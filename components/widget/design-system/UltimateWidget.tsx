@@ -47,40 +47,20 @@ import {
 } from './index';
 import { type WidgetTab } from './WidgetTabs';
 import { EnhancedMessagesInterface } from '../enhanced-messaging/EnhancedMessagesInterface';
-import { useWidget } from '../../../src/components/widget';
+// Removed useWidget import to prevent circular dependency
 
 // ============================================================================
 // TYPES
 // ============================================================================
-export interface UltimateWidgetConfig {
-  organizationName?: string;
-  organizationLogo?: string;
-  primaryColor?: string;
-  position?: 'bottom-right' | 'bottom-left';
-  welcomeMessage?: string;
-  showWelcomeMessage?: boolean;
-  enableHelp?: boolean;
-  enableNotifications?: boolean;
-  // NEW: Advanced features
-  enableFileUpload?: boolean;
-  enableReactions?: boolean;
-  enableThreading?: boolean;
-  enableSoundNotifications?: boolean;
-  maxFileSize?: number; // in MB
-  maxFiles?: number;
-  acceptedFileTypes?: string[];
-}
-
-export interface UltimateWidgetProps {
-  organizationId: string;
-  config?: UltimateWidgetConfig;
-  onMessage?: (message: string) => void;
-  onClose?: () => void;
-  className?: string;
-}
-
-export type WidgetState = 'closed' | 'minimized' | 'open' | 'expanded';
-export type WidgetTabId = 'chat' | 'help' | 'home';
+import type {
+  UltimateWidgetConfig,
+  UltimateWidgetProps,
+  WidgetState,
+  WidgetTabId,
+  Message,
+  FileAttachment,
+  ConnectionStatus
+} from './types';
 
 // ============================================================================
 // DEFAULT CONFIGURATION
@@ -108,6 +88,7 @@ const defaultConfig: UltimateWidgetConfig = {
 // ============================================================================
 export function UltimateWidget({
   organizationId,
+  conversationId: propConversationId, // Add conversationId prop
   config: userConfig,
   onMessage,
   onClose,
@@ -118,24 +99,18 @@ export function UltimateWidget({
   if (process.env.NODE_ENV === 'development') {
     // Throttle logging to once per second using a global variable
     const now = Date.now();
-    const lastLog = (globalThis as any)._lastWidgetRenderLog || 0;
+    const lastLog = (globalThis as unknown)._lastWidgetRenderLog || 0;
     if (now - lastLog > 1000) {
       console.log('[UltimateWidget] 🚀 COMPONENT RENDERING:', { organizationId, timestamp: new Date().toISOString() });
-      (globalThis as any)._lastWidgetRenderLog = now;
+      (globalThis as unknown)._lastWidgetRenderLog = now;
     }
   }
 
   // PERFORMANCE: Memoize config to prevent unnecessary re-renders
   const config = useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]);
 
-  // Get conversationId from widget context
-  let contextConversationId = null;
-  try {
-    const widgetContext = useWidget();
-    contextConversationId = widgetContext.conversationId;
-  } catch (error) {
-    console.warn('[UltimateWidget] Widget context not available:', error);
-  }
+  // Use conversationId from props instead of context to avoid circular dependency
+  const contextConversationId = propConversationId || null;
 
   // Responsive hooks
   const { getWidgetDimensions, isMobile, isTouch } = useWidgetDimensions();
@@ -148,9 +123,11 @@ export function UltimateWidget({
   const [unreadCount, setUnreadCount] = useState(0);
 
   // Chat state
-  const [messages, setMessages] = useState<MessageBubbleProps[]>([]);
-  const [isConnected, setIsConnected] = useState(true);
-  const [typingUsers, setTypingUsers] = useState<Array<{ id: string; name: string }>>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [typingUsers, setTypingUsers] = useState<User[]>([]);
 
   // NEW: Conversation state for API integration
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -158,7 +135,7 @@ export function UltimateWidget({
   const [error, setError] = useState<string | null>(null);
 
   // PERFORMANCE: Memoize realtime callbacks to prevent connection thrashing
-  const handleRealtimeMessage = useCallback((message: any) => {
+  const handleRealtimeMessage = useCallback((message: unknown) => {
     const messageData: MessageBubbleProps = {
       id: message.id.toString(),
       content: message.content,
@@ -181,6 +158,10 @@ export function UltimateWidget({
 
   const handleConnectionChange = useCallback((connected: boolean) => {
     setIsConnected(connected);
+    setIsConnecting(false);
+    if (connected) {
+      setConnectionError(null);
+    }
   }, []);
 
   // NEW: Real-time integration with memoized callbacks to prevent thrashing
@@ -202,6 +183,7 @@ export function UltimateWidget({
     if (conversationId && realtime && conversationId !== lastConnectedConversationRef.current) {
       console.log('[UltimateWidget] Conversation ID available/changed, connecting realtime:', conversationId);
       lastConnectedConversationRef.current = conversationId;
+      setIsConnecting(true);
       // Trigger connection with new conversation ID
       realtime.connect?.();
     }
@@ -228,12 +210,24 @@ export function UltimateWidget({
   const { playNotification, setEnabled: setSoundEnabled } = useWidgetSound();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  // Initialize with welcome message
+  // Initialize with dynamic welcome message
   useEffect(() => {
-    if (config.showWelcomeMessage && config.welcomeMessage) {
+    if (config.showWelcomeMessage) {
+      const isReturningUser = localStorage.getItem(`widget-visited-${organizationId}`);
+      const hasPreviousMessages = localStorage.getItem(`widget-messages-${organizationId}`);
+      
+      let welcomeContent = config.welcomeMessage;
+      if (!welcomeContent) {
+        if (isReturningUser && hasPreviousMessages) {
+          welcomeContent = `Welcome back! We're here to help you continue where you left off.`;
+        } else {
+          welcomeContent = `Hi! I'm here to help you get the most out of ${config.organizationName}. What can I assist you with today?`;
+        }
+      }
+      
       const welcomeMessage: MessageBubbleProps = {
         id: 'welcome-1',
-        content: config.welcomeMessage,
+        content: welcomeContent,
         senderType: 'agent',
         senderName: config.organizationName,
         timestamp: new Date().toISOString(),
@@ -243,8 +237,11 @@ export function UltimateWidget({
         showStatus: false,
       };
       setMessages([welcomeMessage]);
+      
+      // Mark as visited
+      localStorage.setItem(`widget-visited-${organizationId}`, 'true');
     }
-  }, [config.showWelcomeMessage, config.welcomeMessage, config.organizationName]);
+  }, [config.showWelcomeMessage, config.welcomeMessage, config.organizationName, organizationId]);
 
   // Real-time message handling is now handled by useWidgetRealtime hook
   // No duplicate subscription needed to prevent infinite re-renders

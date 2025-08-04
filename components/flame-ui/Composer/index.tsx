@@ -464,7 +464,7 @@ export const Composer = memo(function Composer({
             </Button>
           </div>
           <div className="space-y-spacing-sm">
-            {aiSuggestions.map((suggestion: any) => (
+            {aiSuggestions.map((suggestion: unknown) => (
               <Button
                 key={suggestion.id}
                 variant="outline"
@@ -650,7 +650,7 @@ export const Composer = memo(function Composer({
                     <div className="text-foreground mb-2 text-sm font-medium">Choose an emoji</div>
                     {/* Category Tabs */}
                     <div className="flex gap-1">
-                      {Object.keys(EMOJI_CATEGORIES).map((category: any) => (
+                      {Object.keys(EMOJI_CATEGORIES).map((category: unknown) => (
                         <Button
                           key={category}
                           variant={selectedEmojiCategory === category ? "default" : "ghost"}

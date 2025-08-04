@@ -281,7 +281,7 @@ export function MessageList({
             const messageWithRequiredProps: Message = {
               ...message,
               conversationId: message.conversationId || message.conversation_id || "0",
-              senderType: message.senderType || message.sender_type || "customer",
+              senderType: message.senderType || message.senderType || "customer",
               createdAt: message.createdAt || message.created_at || new Date().toISOString(),
             };
 
@@ -344,7 +344,7 @@ export function MessageList({
             const optimisticWithRequiredProps: Message = {
               ...optimistic,
               conversationId: optimistic.conversationId || optimistic.conversation_id || "0",
-              senderType: optimistic.senderType || optimistic.sender_type || "customer",
+              senderType: optimistic.senderType || optimistic.senderType || "customer",
               createdAt: optimistic.createdAt || optimistic.created_at || new Date().toISOString(),
             };
 

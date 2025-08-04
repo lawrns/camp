@@ -15,7 +15,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({ users, classNa
 
   const displayNames = users
     .slice(0, 3)
-    .map((u: any) => u.name || "Someone")
+    .map((u: unknown) => u.name || "Someone")
     .join(", ");
 
   const extraCount = users.length - 3;

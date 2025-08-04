@@ -137,7 +137,7 @@ export function VisitorPanel({ visitor, className }: VisitorPanelProps) {
   const displayName = visitor.name || visitor.email?.split("@")[0] || "Anonymous Visitor";
   const initials = displayName
     .split(" ")
-    .map((n: any) => n[0])
+    .map((n: unknown) => n[0])
     .join("")
     .toUpperCase()
     .slice(0, 2);
@@ -323,7 +323,7 @@ export function VisitorPanel({ visitor, className }: VisitorPanelProps) {
         {visitor.previousConversations && visitor.previousConversations.length > 0 && (
           <AccordionSection title="Previous Conversations" icon={MessageSquare}>
             <div className="space-y-spacing-sm">
-              {visitor.previousConversations.slice(0, 5).map((conversation: any) => (
+              {visitor.previousConversations.slice(0, 5).map((conversation: unknown) => (
                 <div key={conversation.id} className="bg-[--bg-subtle]/30 rounded-ds-md p-spacing-sm">
                   <p className="truncate text-sm font-medium text-[--text-primary]">{conversation.subject}</p>
                   <div className="mt-1 flex items-center justify-between">

@@ -28,7 +28,7 @@ export function createSuccessResponse<T>(data: T, message?: string): NextRespons
 /**
  * Create an error API response
  */
-export function createErrorResponse(error: string, status: number = 400, details?: any): NextResponse<ApiResponse> {
+export function createErrorResponse(error: string, status: number = 400, details?: unknown): NextResponse<ApiResponse> {
   return NextResponse.json(
     {
       success: false,

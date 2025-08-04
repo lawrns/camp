@@ -116,7 +116,7 @@ export interface TypingIndicatorRecord {
   operator_id: string;
   preview_text: string;
   current_position: number;
-  is_typing: boolean;
+  isTyping: boolean;
   started_typing_at?: string;
   last_character_at?: string;
   pause_type?: "thinking" | "sentence_end" | "comma" | "word_break";

@@ -362,8 +362,8 @@ export function useBatchLoading<T>(
         const batchResults = await Promise.all(batchPromises);
 
         // Separate successful and failed items
-        const successful = batchResults.filter((result): result is T => !(result as any).error);
-        const failed = batchResults.filter((result): result is { item: T; error: Error } => !!(result as any).error);
+        const successful = batchResults.filter((result): result is T => !(result as unknown).error);
+        const failed = batchResults.filter((result): result is { item: T; error: Error } => !!(result as unknown).error);
 
         setProcessedItems((prev) => [...prev, ...successful]);
         setFailedItems((prev) => [...prev, ...failed]);
@@ -407,8 +407,8 @@ export function useBatchLoading<T>(
 
       const batchResults = await Promise.all(batchPromises);
 
-      const successful = batchResults.filter((result): result is T => !(result as any).error);
-      const failed = batchResults.filter((result): result is { item: T; error: Error } => !!(result as any).error);
+      const successful = batchResults.filter((result): result is T => !(result as unknown).error);
+      const failed = batchResults.filter((result): result is { item: T; error: Error } => !!(result as unknown).error);
 
       setProcessedItems((prev) => [...prev, ...successful]);
       setFailedItems((prev) => [...prev, ...failed]);

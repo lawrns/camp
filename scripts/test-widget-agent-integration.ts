@@ -115,7 +115,7 @@ async function testWidgetAgentIntegration() {
     // ========================================
     console.log('\n4️⃣ Testing real-time broadcasting...');
 
-    const receivedEvents: any[] = [];
+    const receivedEvents: unknown[] = [];
 
     // Set up monitoring
     const orgChannel = supabase.channel(`org:${testOrgId}`);

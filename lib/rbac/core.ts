@@ -199,7 +199,7 @@ export class RBACService {
   /**
    * Parse custom permissions from JSON field
    */
-  private parseCustomPermissions(permissionsJson: any): Permission[] {
+  private parseCustomPermissions(permissionsJson: unknown): Permission[] {
     if (!permissionsJson) return [];
     
     try {

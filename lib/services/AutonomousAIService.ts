@@ -28,7 +28,7 @@ export interface AutonomousProcessingRequest {
   visitorName?: string;
   conversationHistory?: {
     content: string;
-    sender_type: string;
+    senderType: string;
     created_at: string;
   }[];
   metadata?: Record<string, any>;
@@ -48,7 +48,7 @@ export interface AutonomousProcessingResult {
 
 interface ToolResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   confidence: number;
 }
@@ -287,9 +287,9 @@ export async function processAutonomousMessage(
         .insert({
           conversation_id: request.conversationId,
           content: mockResponse,
-          sender_type: "ai",
-          sender_id: "ai-assistant",
-          sender_name: "AI Assistant",
+          senderType: "ai",
+          senderId: "ai-assistant",
+          senderName: "AI Assistant",
           organization_id: request.organizationId,
           metadata: {
             session_id: sessionId,
@@ -306,7 +306,7 @@ export async function processAutonomousMessage(
         await supabaseClient
           .from("conversations")
           .update({
-            last_message_at: new Date().toISOString(),
+            lastMessageAt: new Date().toISOString(),
             last_message_preview: mockResponse.substring(0, 100),
           })
           .eq("id", request.conversationId);
@@ -368,7 +368,7 @@ export async function processAutonomousMessage(
     const shouldEscalate =
       overallConfidence < CONFIDENCE_THRESHOLD ||
       intentAnalysis.requiresHuman ||
-      Object.values(toolResults).some((r: any) => !r.success);
+      Object.values(toolResults).some((r: unknown) => !r.success);
 
     if (shouldEscalate) {
       // Generate a helpful response even during escalation
@@ -380,9 +380,9 @@ export async function processAutonomousMessage(
         .insert({
           conversation_id: request.conversationId,
           content: escalationResponse,
-          sender_type: "ai",
-          sender_id: "ai-assistant",
-          sender_name: "AI Assistant",
+          senderType: "ai",
+          senderId: "ai-assistant",
+          senderName: "AI Assistant",
           organization_id: request.organizationId,
           metadata: {
             session_id: sessionId,
@@ -399,7 +399,7 @@ export async function processAutonomousMessage(
         await supabaseClient
           .from("conversations")
           .update({
-            last_message_at: new Date().toISOString(),
+            lastMessageAt: new Date().toISOString(),
             last_message_preview: escalationResponse.substring(0, 100),
           })
           .eq("id", request.conversationId);
@@ -438,9 +438,9 @@ export async function processAutonomousMessage(
       .insert({
         conversation_id: request.conversationId,
         content: aiResponse,
-        sender_type: "ai",
-        sender_id: "ai-assistant",
-        sender_name: "AI Assistant",
+        senderType: "ai",
+        senderId: "ai-assistant",
+        senderName: "AI Assistant",
         organization_id: request.organizationId,
         metadata: {
           session_id: sessionId,
@@ -459,7 +459,7 @@ export async function processAutonomousMessage(
     await supabaseClient
       .from("conversations")
       .update({
-        last_message_at: new Date().toISOString(),
+        lastMessageAt: new Date().toISOString(),
         last_message_preview: aiResponse.substring(0, 100),
         updated_at: new Date().toISOString(),
       })
@@ -570,7 +570,7 @@ async function executeTools(
   const results: Record<string, ToolResult> = {};
 
   // Execute tools with timeout
-  const toolPromises = toolNames.map(async (toolName: any) => {
+  const toolPromises = toolNames.map(async (toolName: unknown) => {
     try {
       const tool = AVAILABLE_TOOLS[toolName as keyof typeof AVAILABLE_TOOLS];
       if (!tool) {
@@ -604,7 +604,7 @@ async function executeTools(
   const toolResults = await Promise.all(toolPromises);
 
   // Convert array to object
-  toolResults.forEach(({ toolName, result }: any) => {
+  toolResults.forEach(({ toolName, result }: unknown) => {
     results[toolName] = result;
   });
 
@@ -618,8 +618,8 @@ function calculateOverallConfidence(toolResults: Record<string, ToolResult>): nu
   const results = Object.values(toolResults);
   if (results.length === 0) return 0.5; // Default confidence when no tools used
 
-  const successfulResults = results.filter((r: any) => r.success);
-  const totalConfidence = successfulResults.reduce((sum: any, r: any) => sum + r.confidence, 0);
+  const successfulResults = results.filter((r: unknown) => r.success);
+  const totalConfidence = successfulResults.reduce((sum: unknown, r: unknown) => sum + r.confidence, 0);
 
   // Weight by success rate
   const successRate = successfulResults.length / results.length;
@@ -657,7 +657,7 @@ async function handleEscalation(
       details: {
         confidence,
         reason: escalationReason,
-        tool_results: Object.entries(toolResults).map(([name, res]: any) => ({
+        tool_results: Object.entries(toolResults).map(([name, res]: unknown) => ({
           name,
           success: res.success,
           error: res.error,
@@ -675,7 +675,7 @@ async function handleEscalation(
  * Helper functions
  */
 
-function prepareToolParams(toolName: string, request: AutonomousProcessingRequest): any {
+function prepareToolParams(toolName: string, request: AutonomousProcessingRequest): unknown {
   switch (toolName) {
     case "customer_lookup":
       return {
@@ -712,8 +712,8 @@ function prepareToolParams(toolName: string, request: AutonomousProcessingReques
 
 function determineEscalationReason(confidence: number, toolResults: Record<string, ToolResult>): string {
   const failedTools = Object.entries(toolResults)
-    .filter(([_, result]: any) => !result.success)
-    .map(([name]: any) => name);
+    .filter(([_, result]: unknown) => !result.success)
+    .map(([name]: unknown) => name);
 
   if (confidence < 0.3) return "very_low_confidence";
   if (confidence < CONFIDENCE_THRESHOLD) return "low_confidence";
@@ -777,7 +777,7 @@ async function escalateToHuman({
     });
 
     return { success: true, confidence: 1.0 };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       error: `Escalation failed: ${error.message}`,
@@ -804,7 +804,7 @@ function determineIntent(context: Record<string, any>): string {
 async function generateEscalationResponse(
   request: AutonomousProcessingRequest,
   toolResults: Record<string, ToolResult>,
-  intentAnalysis: any
+  intentAnalysis: unknown
 ): Promise<string> {
   // Use personality-driven escalation response
   const baseEscalation = getRandomResponse(PERSONALITY_RESPONSES.escalation);
@@ -829,7 +829,7 @@ async function generateEscalationResponse(
 async function generateAutonomousResponse(
   request: AutonomousProcessingRequest,
   toolResults: Record<string, ToolResult>,
-  intentAnalysis: any
+  intentAnalysis: unknown
 ): Promise<string> {
   try {
     // Prepare context from tool results
@@ -856,7 +856,7 @@ async function generateAutonomousResponse(
  */
 async function generatePersonalityResponse(
   request: AutonomousProcessingRequest,
-  context: any,
+  context: unknown,
   toolResults: Record<string, ToolResult>
 ): Promise<string> {
   const messageContent = request.messageContent.toLowerCase();

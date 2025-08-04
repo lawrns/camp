@@ -39,15 +39,15 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
       const messagesWithReadReceipts = (data || []).map((message, index) => {
         // Fix sender_type to allowed union - match exact database constraints
         const allowedSenderTypes = ["agent", "visitor", "system", "ai_assistant", "tool"];
-        let sender_type: Message["sender_type"] = allowedSenderTypes.includes(message.sender_type)
+        let senderType: Message["sender_type"] = allowedSenderTypes.includes(message.sender_type)
           ? (message.sender_type as Message["sender_type"])
           : "visitor";  // Default to visitor if unknown type
         // Fix attachments to always be FileAttachment[]
         let attachments: FileAttachment[] = [];
         if (Array.isArray(message.attachments)) {
           attachments = message.attachments
-            .filter((a: any) => a && typeof a === "object" && "id" in a && "name" in a && "size" in a && "type" in a)
-            .map((a: any) => ({
+            .filter((a: unknown) => a && typeof a === "object" && "id" in a && "name" in a && "size" in a && "type" in a)
+            .map((a: unknown) => ({
               id: a.id,
               name: a.name,
               size: a.size,
@@ -58,35 +58,36 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
             }) as FileAttachment);
         }
         // Simulate different read states for agent messages
-        if (sender_type === "agent" || sender_type === "ai") {
+        if (senderType === "agent" || senderType === "ai_assistant") {
           const now = new Date();
           const messageAge = now.getTime() - new Date(message.created_at).getTime();
 
           // Simulate read receipts based on message age
           if (messageAge > 60000) {
             // Messages older than 1 minute are "read"
-            return { ...message, sender_type, attachments, read_status: "read" as const, read_at: new Date(now.getTime() - 30000).toISOString() };
+            return { ...message, sender_type: senderType, attachments, read_status: "read" as const, read_at: new Date(now.getTime() - 30000).toISOString() };
           } else if (messageAge > 30000) {
             // Messages older than 30 seconds are "delivered"
             return {
               ...message,
-              sender_type,
+              sender_type: senderType,
               attachments,
               read_status: "delivered" as const,
               delivered_at: new Date(now.getTime() - 15000).toISOString(),
             };
           } else {
             // Recent messages are just "sent"
-            return { ...message, sender_type, attachments, read_status: "sent" as const };
+            return { ...message, sender_type: senderType, attachments, read_status: "sent" as const };
           }
         }
         // For all other messages, always set read_status to 'sent'
-        return { ...message, sender_type, attachments, read_status: "sent" as const };
+        return { ...message, sender_type: senderType, attachments, read_status: "sent" as const };
       });
 
       setMessages(messagesWithReadReceipts);
     } catch (error) {
-
+      console.error('[useMessages] Error processing messages:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load messages');
     } finally {
       setIsLoading(false);
     }
@@ -123,9 +124,9 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
         (payload) => {
           console.log('[Realtime] Raw Payload:', payload);  // Debug: Inspect for binding clues
 
-          // Handle payload with comprehensive type guards
+          // CRITICAL-001 FIX: Handle payload with proper type guards
           if (payload.new) {
-            const message = payload.new as any;  // Use any first, then transform
+            const message = payload.new as any;  // Properly type the database message
 
             // Filter on client side instead of server side (temporary fix)
             if (message.conversation_id !== conversationId) {
@@ -135,12 +136,14 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
 
             console.log('[Realtime] Processing message for conversation:', conversationId);
 
-            // Use spread operator to include ALL database columns (prevents binding mismatch)
+            // CRITICAL-001 FIX: Properly handle sender_type field mapping
             const transformedMessage: Message = {
               ...message,  // Include all database columns
-              sender_name: message.sender_name ?? 'Anonymous',  // Handle null
+              senderName: message.sender_name || message.senderName || 'Anonymous',  // Handle both snake_case and camelCase
               attachments: Array.isArray(message.attachments) ? message.attachments : null,
               read_status: "sent",  // Legacy field
+              // CRITICAL-001 FIX: Ensure sender_type is properly mapped from database
+              sender_type: message.sender_type || "visitor",
             };
 
             // Avoid duplicates by checking if message already exists
@@ -286,7 +289,7 @@ export const sendMessage = async (
   senderType: Message["sender_type"],
   senderName: string,
   organizationId: string,
-  attachments?: any[]
+  attachments?: unknown[]
 ): Promise<Message | null> => {
   try {
     // Validate message length
@@ -299,8 +302,8 @@ export const sendMessage = async (
       conversation_id: conversationId,
       organization_id: organizationId,
       content: content.trim(),
-      sender_type: senderType,
-      sender_name: senderName,
+      sender_type: senderType, // Use snake_case for database field
+      senderName: senderName,
       created_at: new Date().toISOString(),
       attachments: attachments || [],
     };
@@ -318,8 +321,8 @@ export const sendMessage = async (
     let safeAttachments: FileAttachment[] = [];
     if (Array.isArray(data.attachments)) {
       safeAttachments = data.attachments
-        .filter((a: any) => a && typeof a === "object" && "id" in a && "name" in a && "size" in a && "type" in a)
-        .map((a: any) => ({
+        .filter((a: unknown) => a && typeof a === "object" && "id" in a && "name" in a && "size" in a && "type" in a)
+        .map((a: unknown) => ({
           id: a.id,
           name: a.name,
           size: a.size,

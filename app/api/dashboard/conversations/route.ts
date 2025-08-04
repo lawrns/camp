@@ -53,7 +53,7 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for dashboard endpoints (FIXED: removed async from function declaration)
-function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       console.log('[Dashboard Conversations API] Starting authentication...');
@@ -121,7 +121,7 @@ function withAuth(handler: (req: NextRequest, user: any) => Promise<NextResponse
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: any) => {
+export const GET = withAuth(async (request: NextRequest, user: unknown) => {
   try {
     console.log('[Dashboard Conversations API] Starting conversations fetch for organization:', user.organizationId);
     
@@ -166,8 +166,8 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
         tags
       `)
       .eq('organization_id', user.organizationId)
-      .not('last_message_at', 'is', null) // Only conversations with messages
-      .order('last_message_at', { ascending: false });
+      .not('lastMessageAt', 'is', null) // Only conversations with messages
+      .order('lastMessageAt', { ascending: false });
 
     // Apply filters
     if (status !== 'all') {
@@ -198,7 +198,7 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
       (conversations || []).map(async (conv) => {
         const { data: messages } = await supabaseClient
           .from('messages')
-          .select('content, created_at, sender_type, sender_name')
+          .select('content, created_at, senderType, senderName')
           .eq('conversation_id', conv.id)
           .order('created_at', { ascending: false })
           .limit(1);
@@ -208,8 +208,8 @@ export const GET = withAuth(async (request: NextRequest, user: any) => {
         return {
           ...conv,
           lastMessage: lastMessage?.content || 'Message content unavailable',
-          lastMessageAt: lastMessage?.created_at || conv.last_message_at,
-          customerName: conv.customer_name || conv.customer_email?.split('@')[0] || 'Unknown Customer'
+          lastMessageAt: lastMessage?.created_at || conv.lastMessageAt,
+          customerName: conv.customerName || conv.customerEmail?.split('@')[0] || 'Unknown Customer'
         };
       })
     );

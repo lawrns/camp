@@ -23,7 +23,7 @@ import { assert, assertDefined } from "@/lib/utils/assert";
 
 const getRelationsReferencingConversationRecords = () => {
   const allRelations = Object.values(assertDefined(db._.schema)).flatMap((table) => Object.values(table.relations));
-  const relationsReferencingConversationRecords = Object.values(allRelations).filter((r: any) =>
+  const relationsReferencingConversationRecords = Object.values(allRelations).filter((r: unknown) =>
     [getTableName(conversationMessages), getTableName(conversations)].includes(assertDefined(r.referencedTableName))
   );
   return relationsReferencingConversationRecords;
@@ -40,7 +40,7 @@ export const hardDeleteRecordsForNonPayingOrgs = async () => {
   const relations = getRelationsReferencingConversationRecords();
   assert(
     relations.length === EXPECTED_RELATION_COUNT,
-    `Expected exactly ${EXPECTED_RELATION_COUNT} relations in the Drizzle schema referencing conversation records; detected ${relations.length}. Here are the tables referencing these records:\n${relations.map((r: any) => getTableName(r.sourceTable)).join("\n")}`
+    `Expected exactly ${EXPECTED_RELATION_COUNT} relations in the Drizzle schema referencing conversation records; detected ${relations.length}. Here are the tables referencing these records:\n${relations.map((r: unknown) => getTableName(r.sourceTable)).join("\n")}`
   );
 
   const nonPayingMailboxesWithConversations = await db

@@ -95,7 +95,7 @@ export function useConversations() {
         },
         (payload) => {
 
-          queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+          queryClient.setQueryData(["conversations", organizationId], (old: unknown[] | undefined) => {
             if (!old) return payload.new ? [payload.new] : [];
             if (!payload.new) return old;
             return [payload.new, ...old];
@@ -112,7 +112,7 @@ export function useConversations() {
         },
         (payload) => {
 
-          queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+          queryClient.setQueryData(["conversations", organizationId], (old: unknown[] | undefined) => {
             if (!old) return payload.new ? [payload.new] : [];
             if (!payload.new) return old;
             return old.map((conv) => (conv.id === payload.new.id ? payload.new : conv));
@@ -128,7 +128,7 @@ export function useConversations() {
           filter: `organization_id=eq.${organizationId}`,
         },
         (payload) => {
-          queryClient.setQueryData(["conversations", organizationId], (old: any[] | undefined) => {
+          queryClient.setQueryData(["conversations", organizationId], (old: unknown[] | undefined) => {
             if (!old) return [];
             return old.filter((conv) => conv.id !== payload.old.id);
           });
@@ -145,7 +145,7 @@ export function useConversations() {
     };
   }, [organizationId, queryClient, shouldSkipQuery]);
 
-  const createConversation = useCallback(async (data: any) => {
+  const createConversation = useCallback(async (data: unknown) => {
     const { data: newConversation, error } = await supabase
       .browser()
       .from("conversations")
@@ -157,7 +157,7 @@ export function useConversations() {
     return newConversation;
   }, []);
 
-  const updateConversation = useCallback(async (id: any, updates: any) => {
+  const updateConversation = useCallback(async (id: unknown, updates: unknown) => {
     const { data: updatedConversation, error } = await supabase
       .browser()
       .from("conversations")

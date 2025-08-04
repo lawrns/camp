@@ -8,7 +8,7 @@ import { NextRequest } from 'next/server';
 
 // Mock widget authentication
 jest.mock('@/lib/auth/widget-supabase-auth', () => ({
-  optionalWidgetAuth: (handler: any) => handler,
+  optionalWidgetAuth: (handler: unknown) => handler,
   getOrganizationId: jest.fn().mockReturnValue('test-org-id')
 }));
 
@@ -24,7 +24,7 @@ jest.mock('@/lib/supabase/service-role-server', () => ({
         data: {
           id: 'test-conversation-id',
           organization_id: 'test-org-id',
-          customer_email: 'test@example.com',
+          customerEmail: 'test@example.com',
           status: 'open'
         },
         error: null
@@ -35,7 +35,7 @@ jest.mock('@/lib/supabase/service-role-server', () => ({
           {
             id: 'test-message-id',
             content: 'Test message',
-            sender_type: 'customer',
+            senderType: 'customer',
             created_at: new Date().toISOString()
           }
         ],
@@ -60,7 +60,7 @@ describe('Widget API Integration Tests', () => {
     jest.restoreAllMocks();
   });
 
-  async function testWidgetAPI(endpoint: string, options: any = {}) {
+  async function testWidgetAPI(endpoint: string, options: unknown = {}) {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ describe('Widget API Integration Tests', () => {
         json: async () => ({
           id: 'msg-123',
           content: '🧪 INTEGRATION TEST: Standardized event flow test message',
-          sender_type: 'visitor',
+          senderType: 'visitor',
           organization_id: TEST_ORG_ID
         }),
       } as Response);
@@ -129,7 +129,7 @@ describe('Widget API Integration Tests', () => {
     expect(messageResult.status).toBe(201);
     expect(messageResult.data.id).toBeDefined();
     expect(messageResult.data.content).toBe('🧪 INTEGRATION TEST: Standardized event flow test message');
-    expect(messageResult.data.sender_type).toBe('visitor'); // Maps customer to visitor
+    expect(messageResult.data.senderType).toBe('visitor'); // Maps customer to visitor
     expect(messageResult.data.organization_id).toBe(TEST_ORG_ID);
   });
 
@@ -144,7 +144,7 @@ describe('Widget API Integration Tests', () => {
           conversation_id: 'test-conv-123',
           organization_id: TEST_ORG_ID,
           content: 'Test message',
-          sender_type: 'visitor',
+          senderType: 'visitor',
           created_at: new Date().toISOString()
         }
       ]),
@@ -232,7 +232,7 @@ describe('Widget API Integration Tests', () => {
       json: async () => ({
         id: 'msg-broadcast-test',
         content: 'Test standardized events',
-        sender_type: 'visitor',
+        senderType: 'visitor',
         organization_id: TEST_ORG_ID
       }),
     } as Response);

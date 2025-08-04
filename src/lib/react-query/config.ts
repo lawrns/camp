@@ -48,7 +48,7 @@ export function createQueryClient() {
         gcTime: 30 * 60 * 1000, // 30 minutes
 
         // Retry configuration
-        retry: (failureCount: any, error: any) => {
+        retry: (failureCount: unknown, error: unknown) => {
           // Don't retry on 4xx errors
           if (error?.status >= 400 && error?.status < 500) {
             return false;
@@ -56,7 +56,7 @@ export function createQueryClient() {
           // Retry up to 3 times with exponential backoff
           return failureCount < 3;
         },
-        retryDelay: (attemptIndex: any) => Math.min(1000 * 2 ** attemptIndex, 30000),
+        retryDelay: (attemptIndex: unknown) => Math.min(1000 * 2 ** attemptIndex, 30000),
 
         // Background refetch settings
         refetchOnMount: true,
@@ -72,7 +72,7 @@ export function createQueryClient() {
         retryDelay: 1000,
 
         // Global error handler
-        onError: (error: any) => {
+        onError: (error: unknown) => {
           const message = error?.message || "An error occurred";
           toast.error(message);
         },
@@ -109,8 +109,8 @@ export const invalidateQueries = {
 
 // Optimistic update helpers
 export const optimisticUpdates = {
-  addMessage: (queryClient: QueryClient, conversationId: string, optimisticMessage: any) => {
-    queryClient.setQueryData(queryKeys.messagesList(conversationId), (old: any) => {
+  addMessage: (queryClient: QueryClient, conversationId: string, optimisticMessage: unknown) => {
+    queryClient.setQueryData(queryKeys.messagesList(conversationId), (old: unknown) => {
       if (!old) return { messages: [optimisticMessage] };
       return {
         ...old,
@@ -120,13 +120,13 @@ export const optimisticUpdates = {
   },
 
   updateConversationPreview: (queryClient: QueryClient, conversationId: string, preview: string, timestamp: string) => {
-    queryClient.setQueryData(queryKeys.conversations(), (old: any) => {
+    queryClient.setQueryData(queryKeys.conversations(), (old: unknown) => {
       if (!old) return old;
       const conversations = old.conversations || old;
       return {
         ...old,
-        conversations: conversations.map((conv: any) =>
-          conv.id === conversationId ? { ...conv, last_message_preview: preview, last_message_at: timestamp } : conv
+        conversations: conversations.map((conv: unknown) =>
+          conv.id === conversationId ? { ...conv, last_message_preview: preview, lastMessageAt: timestamp } : conv
         ),
       };
     });

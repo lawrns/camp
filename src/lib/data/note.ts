@@ -19,7 +19,7 @@ export const addNote = async ({
   slackMessageTs?: string | null;
   fileSlugs?: string[];
 }) => {
-  return await db.transaction(async (tx: any) => {
+  return await db.transaction(async (tx: unknown) => {
     const note = await tx
       .insert(notes)
       .values([

@@ -1,13 +1,13 @@
 "use client";
 
 import { motion, useInView } from 'framer-motion';
-import { Brain, MessageCircle, Shield, Zap, Users, Clock } from 'lucide-react';
+import { Brain, MessageCircle, Shield, Zap, Users, Clock, Star, CheckCircle } from 'lucide-react';
 import { useRef } from 'react';
 
 // Optimized animation variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
 };
 
 const staggerContainer = {
@@ -18,146 +18,217 @@ const staggerContainer = {
   }
 };
 
-const scaleOnHover = { scale: 1.05, transition: { duration: 0.2 } };
-
-// Pre-defined features for performance
+// Unified features and social proof data
 const features = [
   {
-    id: 1,
     icon: Brain,
     title: "AI-Powered Intelligence",
-    description: "Advanced natural language processing that understands context and provides human-like responses.",
-    color: "from-blue-500 to-blue-600"
+    description: "Human-like responses with context understanding",
+    metric: "98% accuracy"
   },
   {
-    id: 2,
     icon: MessageCircle,
     title: "Seamless Handoffs",
-    description: "Smooth transitions between AI and human agents with full context preservation.",
-    color: "from-purple-500 to-purple-600"
+    description: "AI to human transitions with full context",
+    metric: "Zero friction"
   },
   {
-    id: 3,
     icon: Shield,
     title: "Enterprise Security",
-    description: "SOC 2 compliant with end-to-end encryption and GDPR compliance built-in.",
-    color: "from-green-500 to-green-600"
+    description: "SOC 2 compliant, GDPR ready",
+    metric: "100% secure"
   },
   {
-    id: 4,
     icon: Zap,
     title: "Lightning Fast",
-    description: "Sub-2 second response times with 99.9% uptime guarantee.",
-    color: "from-yellow-500 to-yellow-600"
+    description: "Sub-2 second response times",
+    metric: "99.9% uptime"
   },
   {
-    id: 5,
     icon: Users,
     title: "Team Collaboration",
-    description: "Real-time collaboration tools for your support team with live typing indicators.",
-    color: "from-indigo-500 to-indigo-600"
+    description: "Real-time support team tools",
+    metric: "10x efficiency"
   },
   {
-    id: 6,
     icon: Clock,
     title: "24/7 Availability",
-    description: "Always-on support that never sleeps, handling requests around the clock.",
-    color: "from-red-500 to-red-600"
+    description: "Always-on customer support",
+    metric: "Round the clock"
   }
+];
+
+const testimonials = [
+  {
+    name: "Sarah Chen",
+    role: "Head of Support, TechFlow",
+    content: "Response time dropped from 4 hours to 2 minutes",
+    rating: 5
+  },
+  {
+    name: "Marcus Rodriguez",
+    role: "Customer Success, DataSync",
+    content: "AI is indistinguishable from human agents",
+    rating: 5
+  }
+];
+
+const stats = [
+  { value: "2 min", label: "Response Time" },
+  { value: "98%", label: "Satisfaction" },
+  { value: "70%", label: "Cost Reduction" },
+  { value: "95%", label: "Resolution Rate" }
 ];
 
 export const FeaturesShowcase = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="py-24 bg-white">
-      <div className="container mx-auto px-6 lg:px-8">
+    <section ref={ref} className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4 md:px-6">
+        {/* Unified Header */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
+            className="text-3xl md:text-4xl font-bold text-gray-900 mb-3"
           >
-            Everything You Need for Modern Customer Service
+            Built for Modern Support Teams
           </motion.h2>
           <motion.p
             variants={fadeInUp}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
-            Built for scale, designed for humans. Every feature is optimized for performance and user experience.
+            Everything you need, nothing you don't. Optimized for performance and user experience.
           </motion.p>
         </motion.div>
 
-        {/* Features Grid */}
+        {/* Stats Row */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
         >
-          {features.map((feature) => (
+          {stats.map((stat) => (
             <motion.div
-              key={feature.id}
+              key={stat.label}
               variants={fadeInUp}
-              whileHover={scaleOnHover}
-              className="group bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-300"
+              className="text-center"
             >
-              {/* Icon */}
-              <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                <feature.icon size={32} className="text-white" />
+              <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-1">
+                {stat.value}
               </div>
-
-              {/* Content */}
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {feature.description}
-              </p>
-
-              {/* Hover Effect */}
-              <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
+              <div className="text-sm text-gray-600">
+                {stat.label}
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Performance Stats */}
+        {/* Compact Features Grid */}
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+        >
+          {features.map((feature) => (
+            <motion.div
+              key={feature.title}
+              variants={fadeInUp}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <feature.icon size={24} className="text-blue-600" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 mb-1">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-1">
+                    {feature.description}
+                  </p>
+                  <p className="text-xs font-medium text-blue-600">
+                    {feature.metric}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Testimonials */}
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto"
+        >
+          {testimonials.map((testimonial) => (
+            <motion.div
+              key={testimonial.name}
+              variants={fadeInUp}
+              className="bg-white rounded-xl p-6 border border-gray-200"
+            >
+              <div className="flex items-center mb-3">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star key={i} size={16} className="text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-700 text-sm mb-3">
+                "{testimonial.content}"
+              </p>
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-sm mr-3">
+                  {testimonial.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900 text-sm">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {testimonial.role}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Trust Indicators */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={fadeInUp}
-          className="mt-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-center text-white"
+          className="text-center mt-12"
         >
-          <h3 className="text-3xl font-bold mb-4">
-            Built for Performance
-          </h3>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Every component is optimized for speed and efficiency, ensuring your customers get instant responses.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-4xl font-bold mb-2">2s</div>
-              <div className="text-blue-100">Average Response Time</div>
+          <div className="inline-flex items-center space-x-6 bg-white rounded-full px-6 py-3 border border-gray-200">
+            <div className="flex items-center space-x-2">
+              <CheckCircle size={16} className="text-green-600" />
+              <span className="text-sm text-gray-700">SOC 2 Compliant</span>
             </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">99.9%</div>
-              <div className="text-blue-100">Uptime Guarantee</div>
+            <div className="w-px h-4 bg-gray-300" />
+            <div className="flex items-center space-x-2">
+              <CheckCircle size={16} className="text-green-600" />
+              <span className="text-sm text-gray-700">GDPR Ready</span>
             </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">10x</div>
-              <div className="text-blue-100">Faster Resolution</div>
+            <div className="w-px h-4 bg-gray-300" />
+            <div className="flex items-center space-x-2">
+              <CheckCircle size={16} className="text-green-600" />
+              <span className="text-sm text-gray-700">99.9% Uptime</span>
             </div>
           </div>
         </motion.div>
       </div>
     </section>
   );
-}; 
+};

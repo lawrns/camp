@@ -212,7 +212,7 @@ export const useMessagesStore = create<MessagesStore>()(
                 ...message,
                 id: tempId,
                 temp_id: tempId,
-                is_optimistic: true as any,
+                is_optimistic: true as unknown,
                 conversationId: conversationId,
                 content: message.content,
                 senderType: message.senderType,
@@ -339,7 +339,7 @@ export const useMessagesStore = create<MessagesStore>()(
                 const response = await fetch(`/api/conversations/${conversationId}/messages`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ content, sender_type: senderType }),
+                  body: JSON.stringify({ content, senderType: senderType }),
                 });
 
                 if (!response.ok) throw new Error("Failed to send message");

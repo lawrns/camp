@@ -42,20 +42,20 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   // Primary Navigation
-  { id: "dashboard", label: "Dashboard", icon: Home as any, href: "/dashboard", section: "primary" },
-  { id: "inbox", label: "Inbox", icon: Inbox as any, href: "/dashboard/inbox", section: "primary" },
-  { id: "tickets", label: "Tickets", icon: Ticket as any, href: "/dashboard/tickets", section: "primary" },
-  { id: "knowledge", label: "Knowledge", icon: BookOpen as any, href: "/dashboard/knowledge", section: "primary" },
-  { id: "analytics", label: "Analytics", icon: BarChart3 as any, href: "/dashboard/analytics", section: "primary" },
-  { id: "ai-insights", label: "AI Insights", icon: Brain as any, href: "/dashboard/ai-insights", section: "primary" },
+  { id: "dashboard", label: "Dashboard", icon: Home as unknown, href: "/dashboard", section: "primary" },
+  { id: "inbox", label: "Inbox", icon: Inbox as unknown, href: "/dashboard/inbox", section: "primary" },
+  { id: "tickets", label: "Tickets", icon: Ticket as unknown, href: "/dashboard/tickets", section: "primary" },
+  { id: "knowledge", label: "Knowledge", icon: BookOpen as unknown, href: "/dashboard/knowledge", section: "primary" },
+  { id: "analytics", label: "Analytics", icon: BarChart3 as unknown, href: "/dashboard/analytics", section: "primary" },
+  { id: "ai-insights", label: "AI Insights", icon: Brain as unknown, href: "/dashboard/ai-insights", section: "primary" },
 
   // Secondary Navigation
-  { id: "settings", label: "Settings", icon: Settings as any, href: "/dashboard/settings", section: "secondary" },
-  { id: "team", label: "Team", icon: Users as any, href: "/dashboard/team", section: "secondary" },
+  { id: "settings", label: "Settings", icon: Settings as unknown, href: "/dashboard/settings", section: "secondary" },
+  { id: "team", label: "Team", icon: Users as unknown, href: "/dashboard/team", section: "secondary" },
   {
     id: "integrations",
     label: "Integrations",
-    icon: Zap as any,
+    icon: Zap as unknown,
     href: "/dashboard/integrations",
     section: "secondary",
   },
@@ -64,12 +64,12 @@ const navItems: NavItem[] = [
   {
     id: "notifications",
     label: "Notifications",
-    icon: Bell as any,
+    icon: Bell as unknown,
     href: "/dashboard/notifications",
     section: "bottom",
   },
-  { id: "help", label: "Help", icon: HelpCircle as any, href: "/dashboard/help", section: "bottom" },
-  { id: "profile", label: "Profile", icon: User as any, href: "/dashboard/profile", section: "bottom" },
+  { id: "help", label: "Help", icon: HelpCircle as unknown, href: "/dashboard/help", section: "bottom" },
+  { id: "profile", label: "Profile", icon: User as unknown, href: "/dashboard/profile", section: "bottom" },
 ];
 
 function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
@@ -142,8 +142,8 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
 
   // Organize navigation items by section and add real unread counts
   const primaryItems = navItems
-    .filter((item: any) => item.section === "primary")
-    .map((item: any) => ({
+    .filter((item: unknown) => item.section === "primary")
+    .map((item: unknown) => ({
       ...item,
       isActive: pathname === item.href || (item.href === "/dashboard/inbox" && pathname === "/inbox"),
       badge:
@@ -158,14 +158,14 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
             : item.badge,
     }));
   const secondaryItems = navItems
-    .filter((item: any) => item.section === "secondary")
-    .map((item: any) => ({
+    .filter((item: unknown) => item.section === "secondary")
+    .map((item: unknown) => ({
       ...item,
       isActive: pathname === item.href,
     }));
   const bottomItems = navItems
-    .filter((item: any) => item.section === "bottom")
-    .map((item: any) => ({
+    .filter((item: unknown) => item.section === "bottom")
+    .map((item: unknown) => ({
       ...item,
       isActive: pathname === item.href,
       badge: item.id === "notifications" ? (notificationCount > 0 ? notificationCount : undefined) : item.badge,
@@ -220,7 +220,7 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
           </div>
 
           <div className="space-y-1">
-            {primaryItems.map((item: any) => (
+            {primaryItems.map((item: unknown) => (
               <SidebarItem key={item.id} item={item} isExpanded={effectiveExpanded} />
             ))}
           </div>
@@ -239,7 +239,7 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
           </div>
 
           <div className="space-y-1">
-            {secondaryItems.map((item: any) => (
+            {secondaryItems.map((item: unknown) => (
               <SidebarItem key={item.id} item={item} isExpanded={effectiveExpanded} />
             ))}
           </div>
@@ -249,7 +249,7 @@ function Sidebar({ isExpanded: controlledExpanded, onToggle }: SidebarProps) {
       {/* Bottom Navigation */}
       <div className="bg-background border-t border-[var(--fl-color-border)] spacing-3 dark:border-gray-800 dark:bg-neutral-900">
         <div className="space-y-1">
-          {bottomItems.map((item: any) => (
+          {bottomItems.map((item: unknown) => (
             <SidebarItem key={item.id} item={item} isExpanded={effectiveExpanded} />
           ))}
         </div>

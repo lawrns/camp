@@ -39,7 +39,7 @@ export const storage = {
   createBucketIfNotExists: async () => {
     const { data: buckets } = await supabase.storage.listBuckets();
 
-    if (!buckets?.find((b: any) => b.name === "message-attachments")) {
+    if (!buckets?.find((b: unknown) => b.name === "message-attachments")) {
       await supabase.storage.createBucket("message-attachments", {
         public: true,
         fileSizeLimit: 5242880, // 5MB

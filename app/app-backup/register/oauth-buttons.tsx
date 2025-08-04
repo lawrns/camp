@@ -10,7 +10,7 @@ interface OAuthButtonsProps {
 
 export default function OAuthButtons({ isLoading }: OAuthButtonsProps) {
   const auth = useAuth();
-  const signInWithOAuth = (auth as any)?.signInWithOAuth;
+  const signInWithOAuth = (auth as unknown)?.signInWithOAuth;
 
   const handleOAuthSignIn = async (provider: "google" | "github") => {
     if (signInWithOAuth) {

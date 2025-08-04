@@ -219,10 +219,10 @@ export const usePresence = (conversationId?: string) => {
     setCurrentUser(mockUsers[0] || null);
   }, []);
 
-  const onlineUsers = users.filter((u: any) => u.status === "online");
-  const awayUsers = users.filter((u: any) => u.status === "away");
-  const busyUsers = users.filter((u: any) => u.status === "busy");
-  const offlineUsers = users.filter((u: any) => u.status === "offline");
+  const onlineUsers = users.filter((u: unknown) => u.status === "online");
+  const awayUsers = users.filter((u: unknown) => u.status === "away");
+  const busyUsers = users.filter((u: unknown) => u.status === "busy");
+  const offlineUsers = users.filter((u: unknown) => u.status === "offline");
 
   return {
     users,

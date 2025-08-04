@@ -1,9 +1,11 @@
 /**
  * PIXEL-PERFECT WIDGET HEADER COMPONENT
- * 
+ *
  * Standardized header component with consistent branding, status indicators,
  * and action buttons following the design system
  */
+
+"use client";
 
 import React from 'react';
 import { motion } from 'framer-motion';

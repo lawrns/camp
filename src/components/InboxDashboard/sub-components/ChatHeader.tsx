@@ -108,6 +108,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   const isCustomerOnline = onlineUsers.includes(conversation.customerEmail);
 
   return (
+    <>
     <div className="ds-inbox-header" data-testid="chat-header">
       <div className="flex items-center justify-between w-full" data-testid="chat-header-content">
         {/* Left side - Customer info */}
@@ -338,7 +339,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         onClose={() => setShowThinkingSidebar(false)}
       />
     )}
-  </>
+    </>
   );
 };
 

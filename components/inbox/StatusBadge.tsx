@@ -4,6 +4,15 @@ import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Tag, Robot, User } from "@phosphor-icons/react";
 import * as React from "react";
+import { getStatusColors, getPriorityColors, getCompleteColorClasses } from "@/lib/design-system/accessibility-colors";
+import {
+  ConversationStatus,
+  ConversationPriority,
+  AIHandoverStatus,
+  getStatusConfig,
+  getPriorityConfig,
+  getAIHandoverConfig,
+} from "@/lib/constants/conversation-enums";
 
 interface StatusBadgeProps {
   status: string;
@@ -25,106 +34,64 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   className,
   showIcon = true,
 }) => {
-  // Unified color system for status badges
-  const getStatusConfig = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "open":
-        return {
-          bg: "bg-green-100",
-          text: "text-green-800",
-          border: "border-green-200",
-          icon: Tag,
-          label: "Open"
-        };
-      case "pending":
-        return {
-          bg: "bg-yellow-100",
-          text: "text-yellow-800",
-          border: "border-yellow-200",
-          icon: Tag,
-          label: "Pending"
-        };
-      case "resolved":
-        return {
-          bg: "bg-blue-100",
-          text: "text-blue-800",
-          border: "border-blue-200",
-          icon: Tag,
-          label: "Resolved"
-        };
-      case "escalated":
-        return {
-          bg: "bg-red-100",
-          text: "text-red-800",
-          border: "border-red-200",
-          icon: Tag,
-          label: "Escalated"
-        };
-      case "ai":
-        return {
-          bg: "bg-purple-100",
-          text: "text-purple-800",
-          border: "border-purple-200",
-          icon: Robot,
-          label: "AI"
-        };
-      case "human":
-        return {
-          bg: "bg-blue-100",
-          text: "text-blue-800",
-          border: "border-blue-200",
-          icon: User,
-          label: "Human"
-        };
-      default:
-        return {
-          bg: "bg-gray-100",
-          text: "text-gray-800",
-          border: "border-gray-200",
-          icon: Tag,
-          label: status
-        };
+  // WCAG AA compliant color system using enums
+  const getStatusConfiguration = (status: string) => {
+    const normalizedStatus = status.toLowerCase();
+
+    // Check if it's an AI handover status
+    if (normalizedStatus === AIHandoverStatus.AI_ACTIVE || normalizedStatus === "ai") {
+      const config = getAIHandoverConfig(AIHandoverStatus.AI_ACTIVE);
+      return {
+        bg: config.colors.background,
+        text: config.colors.text,
+        border: config.colors.border,
+        icon: Robot,
+        label: config.label
+      };
     }
+
+    if (normalizedStatus === AIHandoverStatus.HUMAN_ACTIVE || normalizedStatus === "human") {
+      const config = getAIHandoverConfig(AIHandoverStatus.HUMAN_ACTIVE);
+      return {
+        bg: config.colors.background,
+        text: config.colors.text,
+        border: config.colors.border,
+        icon: User,
+        label: config.label
+      };
+    }
+
+    // Handle regular conversation statuses
+    const config = getStatusConfig(normalizedStatus);
+    return {
+      bg: config.colors.background,
+      text: config.colors.text,
+      border: config.colors.border,
+      icon: Tag,
+      label: config.label
+    };
   };
 
-  // Priority color system
-  const getPriorityConfig = (priority?: string) => {
-    switch (priority?.toLowerCase()) {
-      case "urgent":
-        return {
-          bg: "bg-red-100",
-          text: "text-red-800",
-          border: "border-red-200"
-        };
-      case "high":
-        return {
-          bg: "bg-orange-100",
-          text: "text-orange-800",
-          border: "border-orange-200"
-        };
-      case "medium":
-        return {
-          bg: "bg-yellow-100",
-          text: "text-yellow-800",
-          border: "border-yellow-200"
-        };
-      case "low":
-        return {
-          bg: "bg-green-100",
-          text: "text-green-800",
-          border: "border-green-200"
-        };
-      default:
-        return {
-          bg: "bg-gray-100",
-          text: "text-gray-800",
-          border: "border-gray-200"
-        };
+  // Priority color system using enums
+  const getPriorityConfiguration = (priority?: string) => {
+    if (!priority) {
+      return {
+        bg: "bg-gray-50",
+        text: "text-gray-900",
+        border: "border-gray-200"
+      };
     }
+
+    const config = getPriorityConfig(priority.toLowerCase());
+    return {
+      bg: config.colors.background,
+      text: config.colors.text,
+      border: config.colors.border
+    };
   };
 
-  const statusConfig = getStatusConfig(status);
-  const priorityConfig = getPriorityConfig(priority);
+  const statusConfig = getStatusConfiguration(status);
+  const priorityConfig = getPriorityConfiguration(priority);
 
   // Size classes
   const sizeClasses = {

@@ -170,7 +170,7 @@ export function PriorityManagement({
         <div className="space-y-3 border-t pt-2">
           <div className="space-y-spacing-sm">
             <label className="text-sm font-medium">Change Priority</label>
-            <Select value={selectedPriority} onValueChange={(value: any) => setSelectedPriority(value)}>
+            <Select value={selectedPriority} onValueChange={(value: unknown) => setSelectedPriority(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

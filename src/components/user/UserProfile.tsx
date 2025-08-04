@@ -69,10 +69,10 @@ export function UserProfile() {
   const session: Session | null = user ? { lastLogin: new Date().toISOString(), loginCount: 1 } : null;
 
   // TODO: Implement these methods in the unified auth system
-  const updateProfile = async (data: any) => {
+  const updateProfile = async (data: unknown) => {
     return true;
   };
-  const updateStatus = async (status: any) => {};
+  const updateStatus = async (status: unknown) => {};
   const refreshSession = async (orgId?: string) => {};
   const isOnline = true; // TODO: Implement online status
   // TODO: Implement organization fetching
@@ -239,7 +239,7 @@ export function UserProfile() {
 
               <p className="text-foreground mb-2">{user.email}</p>
 
-              {(user as any).bio && <p className="mb-3 text-sm text-muted-foreground">{(user as any).bio}</p>}
+              {(user as unknown).bio && <p className="mb-3 text-sm text-muted-foreground">{(user as unknown).bio}</p>}
 
               {/* Status Selector */}
               <div className="flex items-center gap-3">

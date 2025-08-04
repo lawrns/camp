@@ -51,7 +51,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser
       );
     }
 
-    const mailboxIds = mailboxes?.map((m: any) => m.id) || [];
+    const mailboxIds = mailboxes?.map((m: unknown) => m.id) || [];
 
     if (mailboxIds.length === 0) {
       // No mailboxes for this organization, return empty array

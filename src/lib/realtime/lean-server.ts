@@ -84,7 +84,7 @@ export async function broadcastToConversation(
   organizationId: string,
   conversationId: string,
   event: string,
-  data: any
+  data: unknown
 ) {
   await publishToRealtime({
     channel: conversationChannel(organizationId, conversationId),
@@ -93,7 +93,7 @@ export async function broadcastToConversation(
   });
 }
 
-export async function broadcastToOrganization(organizationId: string, event: string, data: any) {
+export async function broadcastToOrganization(organizationId: string, event: string, data: unknown) {
   await publishToRealtime({
     channel: organizationChannel(organizationId),
     event,
@@ -105,7 +105,7 @@ export async function broadcastToOrganization(organizationId: string, event: str
 // DASHBOARD SPECIFIC
 // ============================================
 
-export async function broadcastToDashboard(organizationId: string, event: string, data: any) {
+export async function broadcastToDashboard(organizationId: string, event: string, data: unknown) {
   await publishToRealtime({
     channel: dashboardChannel(organizationId),
     event,

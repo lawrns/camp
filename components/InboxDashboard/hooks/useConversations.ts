@@ -151,7 +151,7 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
                   lastMessageAt: message.created_at,
                   lastMessagePreview: message.content.substring(0, 100),
                   // Increment unread count if not from agent
-                  unreadCount: message.sender_type !== "agent" ? (conv.unreadCount || 0) + 1 : conv.unreadCount,
+                  unreadCount: message.senderType !== "agent" ? (conv.unreadCount || 0) + 1 : conv.unreadCount,
                 };
               }
               return conv;

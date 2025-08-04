@@ -46,7 +46,7 @@ export const reindexKnowledgeBase = inngest.createFunction(
       );
 
       // Count results
-      batchResults.forEach((result: any) => {
+      batchResults.forEach((result: unknown) => {
         if (result.status === "fulfilled") {
           if (result.value.success) {
             results.processed++;

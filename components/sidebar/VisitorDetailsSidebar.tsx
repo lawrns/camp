@@ -205,7 +205,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
               <AvatarFallback className="text-status-info-dark bg-[var(--fl-color-info-subtle)] text-lg font-semibold">
                 {visitor.name
                   .split(" ")
-                  .map((n: any) => n[0])
+                  .map((n: unknown) => n[0])
                   .join("")
                   .substring(0, 2)
                   .toUpperCase()}
@@ -255,7 +255,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
       <div className="flex-1 space-y-3 overflow-y-auto spacing-3">
         {/* Contact Information Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Contact Information" icon={User as any} defaultOpen>
+          <AccordionSection title="Contact Information" icon={User as unknown} defaultOpen>
             <div className="space-y-3">
               {/* Identity sub-block with status badges */}
               <div className="space-y-spacing-sm">
@@ -309,7 +309,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Customer Value Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Customer Value" icon={Building as any}>
+          <AccordionSection title="Customer Value" icon={Building as unknown}>
             <div className="space-y-3">
               {visitor.sessions && (
                 <div>
@@ -333,7 +333,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Technical Information Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Technical Information" icon={Globe as any}>
+          <AccordionSection title="Technical Information" icon={Globe as unknown}>
             <div className="space-y-3">
               <div className="flex items-center gap-ds-2">
                 <DeviceIcon className="h-4 w-4 text-muted-foreground" />
@@ -361,7 +361,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
 
         {/* Conversation Insights Section */}
         <div className="rounded-ds-md border border-border bg-muted/50 px-3 py-2">
-          <AccordionSection title="Conversation Insights" icon={MessageSquare as any}>
+          <AccordionSection title="Conversation Insights" icon={MessageSquare as unknown}>
             <div className="space-y-spacing-sm">
               {/* Visited Pages */}
               <div className="mb-4">
@@ -392,7 +392,7 @@ export function VisitorDetailsSidebar({ visitor, className, onClose }: VisitorDe
                   Previous Conversations
                 </h4>
                 {visitor.previousConversations && visitor.previousConversations.length > 0 ? (
-                  visitor.previousConversations.slice(0, 3).map((conversation: any) => (
+                  visitor.previousConversations.slice(0, 3).map((conversation: unknown) => (
                     <div key={conversation.id} className="mb-2 rounded-ds-md bg-background p-spacing-sm">
                       <p className="truncate text-sm font-medium text-primary">{conversation.subject}</p>
                       <div className="mt-1 flex items-center justify-between">

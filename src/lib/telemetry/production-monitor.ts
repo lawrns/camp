@@ -193,7 +193,7 @@ export class ProductionMonitor {
       this.aiInteractions.push({
         ...data,
         timestamp: Date.now(),
-      } as any);
+      } as unknown);
 
       // Keep only last 1000 interactions for performance
       if (this.aiInteractions.length > 1000) {
@@ -270,7 +270,7 @@ export class ProductionMonitor {
     const lastHour = now - 60 * 60 * 1000;
 
     // Filter recent AI interactions
-    const recentAIInteractions = this.aiInteractions.filter((interaction: any) => interaction.timestamp > lastHour);
+    const recentAIInteractions = this.aiInteractions.filter((interaction: unknown) => interaction.timestamp > lastHour);
 
     // Calculate auth metrics
     const authDurations = this.operationDurations.get("auth") || [];
@@ -278,10 +278,10 @@ export class ProductionMonitor {
 
     // Calculate AI metrics
     const aiDurations = this.operationDurations.get("ai.generate") || [];
-    const totalEscalations = recentAIInteractions.filter((i: any) => i.escalated).length;
+    const totalEscalations = recentAIInteractions.filter((i: unknown) => i.escalated).length;
     const avgConfidence =
       recentAIInteractions.length > 0
-        ? recentAIInteractions.reduce((sum: any, i: any) => sum + i.confidence, 0) / recentAIInteractions.length
+        ? recentAIInteractions.reduce((sum: unknown, i: unknown) => sum + i.confidence, 0) / recentAIInteractions.length
         : 0;
 
     // Calculate error rate
@@ -289,7 +289,7 @@ export class ProductionMonitor {
       (sum, durations) => sum + durations.length,
       0
     );
-    const totalErrors = Array.from(this.errorCounts.values()).reduce((sum: any, count: any) => sum + count, 0);
+    const totalErrors = Array.from(this.errorCounts.values()).reduce((sum: unknown, count: unknown) => sum + count, 0);
 
     return {
       operations: {
@@ -311,7 +311,7 @@ export class ProductionMonitor {
         escalationRate: recentAIInteractions.length > 0 ? totalEscalations / recentAIInteractions.length : 0,
         hallucinationRate: this.calculateHallucinationRate(recentAIInteractions),
         totalResponses: recentAIInteractions.length,
-        tokensUsed: recentAIInteractions.reduce((sum: any, i: any) => sum + i.tokens, 0),
+        tokensUsed: recentAIInteractions.reduce((sum: unknown, i: unknown) => sum + i.tokens, 0),
       },
       errors: {
         rate: totalOperations > 0 ? totalErrors / totalOperations : 0,
@@ -392,7 +392,7 @@ campfire_active_users ${metrics.system.activeUsers} ${timestamp}
   }
 
   private calculateAverage(values: number[]): number {
-    return values.length > 0 ? values.reduce((sum: any, val: any) => sum + val, 0) / values.length : 0;
+    return values.length > 0 ? values.reduce((sum: unknown, val: unknown) => sum + val, 0) / values.length : 0;
   }
 
   private calculatePercentile(values: number[], percentile: number): number {
@@ -404,7 +404,7 @@ campfire_active_users ${metrics.system.activeUsers} ${timestamp}
   }
 
   private calculateHallucinationRate(interactions: AIInteractionData[]): number {
-    const withHallucination = interactions.filter((i: any) => i.hallucinationScore && i.hallucinationScore > 0.15);
+    const withHallucination = interactions.filter((i: unknown) => i.hallucinationScore && i.hallucinationScore > 0.15);
     return interactions.length > 0 ? withHallucination.length / interactions.length : 0;
   }
 

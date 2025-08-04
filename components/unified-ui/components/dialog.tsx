@@ -20,7 +20,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
   ({ className = "", children, ...props }, ref) => (
     <div
       ref={ref}
-      className={`relative max-h-[90vh] w-full max-w-lg overflow-auto rounded-ds-lg bg-background spacing-6 shadow-lg ${className}`}
+      className={`relative max-h-[90vh] w-full max-w-lg overflow-auto ds-modal ${className}`}
       {...props}
     >
       {children}

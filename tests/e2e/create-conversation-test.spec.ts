@@ -31,8 +31,8 @@ test('Create conversation and test bidirectional flow', async ({ page, context }
         credentials: 'include',
         body: JSON.stringify({
           id: conversationId, // Use specific ID
-          customer_email: 'test@example.com',
-          customer_name: 'Test Customer',
+          customerEmail: 'test@example.com',
+          customerName: 'Test Customer',
           subject: 'Test Conversation for Bidirectional Communication',
           status: 'open',
           priority: 'medium',

@@ -91,12 +91,12 @@ export function FileGallery({
 
     // Apply search filter
     if (searchQuery) {
-      filtered = filtered.filter((file: any) => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      filtered = filtered.filter((file: unknown) => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
     // Apply type filter
     if (typeFilter !== "all") {
-      filtered = filtered.filter((file: any) => {
+      filtered = filtered.filter((file: unknown) => {
         switch (typeFilter) {
           case "images":
             return file.type.startsWith("image/");
@@ -131,7 +131,7 @@ export function FileGallery({
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: unknown, bValue: unknown;
 
       switch (sortField) {
         case "name":
@@ -217,7 +217,7 @@ export function FileGallery({
 
   const getFileTypeCount = (type: FileTypeFilter): number => {
     if (type === "all") return files.length;
-    return files.filter((file: any) => {
+    return files.filter((file: unknown) => {
       switch (type) {
         case "images":
           return file.type.startsWith("image/");

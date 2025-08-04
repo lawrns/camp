@@ -14,7 +14,7 @@ import type { AppRouter } from "./root";
 
 // CRITICAL FIX: Completely disable DevTools for now to prevent crashes
 // TODO: Properly configure DevTools later
-// let ReactQueryDevtools: any = null;
+// let ReactQueryDevtools: unknown = null;
 // if (process.env.NODE_ENV === 'development') {
 //   try {
 //     ReactQueryDevtools = require('@tanstack/react-query-devtools').ReactQueryDevtools;

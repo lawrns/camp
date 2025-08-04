@@ -104,11 +104,11 @@ export function createChannelName(
 ): string {
   const pattern = CHANNEL_PATTERNS[type];
   if (param1 && param2) {
-    return (pattern as any)(organizationId, param1, param2);
+    return (pattern as unknown)(organizationId, param1, param2);
   } else if (param1) {
-    return (pattern as any)(organizationId, param1);
+    return (pattern as unknown)(organizationId, param1);
   } else {
-    return (pattern as any)(organizationId);
+    return (pattern as unknown)(organizationId);
   }
 }
 
@@ -160,7 +160,7 @@ export class ChannelPool {
   private channels = new Map<string, RealtimeChannel>();
   private maxChannels = MAX_CHANNELS_PER_SESSION;
 
-  constructor(private supabase: any) {}
+  constructor(private supabase: unknown) {}
 
   /**
    * Get or create a channel
@@ -217,10 +217,10 @@ export class ChannelPool {
  * Broadcast event to a channel
  */
 export async function broadcastToChannel(
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   eventType: keyof typeof EVENT_TYPES,
-  payload: any
+  payload: unknown
 ): Promise<void> {
   try {
     const channel = supabase.channel(channelName);
@@ -239,14 +239,14 @@ export async function broadcastToChannel(
  * Subscribe to channel events
  */
 export function subscribeToChannel(
-  supabase: any,
+  supabase: unknown,
   channelName: string,
   eventType: keyof typeof EVENT_TYPES,
-  handler: (payload: any) => void
+  handler: (payload: unknown) => void
 ): () => void {
   const channel = supabase.channel(channelName);
   
-  channel.on('broadcast', { event: EVENT_TYPES[eventType] }, (payload: any) => {
+  channel.on('broadcast', { event: EVENT_TYPES[eventType] }, (payload: unknown) => {
     handler(payload.payload);
   });
 

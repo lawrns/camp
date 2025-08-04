@@ -91,7 +91,7 @@ const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTrig
       React.isValidElement(children) &&
       // Native button element or our custom Button component (identified by displayName)
       ((typeof children.type === "string" && children.type === "button") ||
-        (typeof children.type === "function" && (children.type as any).displayName === "Button"));
+        (typeof children.type === "function" && (children.type as unknown).displayName === "Button"));
 
     const renderAsChild = asChild || autoDetectAsChild;
 

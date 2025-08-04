@@ -11,13 +11,13 @@ export const extractEmailPartsFromDocument = (doc: Document) => {
     if (topLevelQuotedContextElements.length === 0) {
       return fallbackEmailParts;
     }
-    topLevelQuotedContextElements.forEach((element: any) => {
+    topLevelQuotedContextElements.forEach((element: unknown) => {
       if (element.parentElement) element.remove();
     });
 
     return {
       mainContent: doc.body.innerHTML,
-      quotedContext: topLevelQuotedContextElements.map((element: any) => element.outerHTML).join("\n"),
+      quotedContext: topLevelQuotedContextElements.map((element: unknown) => element.outerHTML).join("\n"),
     };
   } catch (e) {
     captureExceptionAndThrowIfDevelopment(e);

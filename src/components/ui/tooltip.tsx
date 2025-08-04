@@ -44,7 +44,7 @@ const TooltipTrigger = React.forwardRef<
       onMouseLeave: handleMouseLeave,
       onFocus: handleFocus,
       onBlur: handleBlur,
-      className: cn(className, (children as any).props?.className),
+      className: cn(className, (children as unknown).props?.className),
       ref,
     });
   }

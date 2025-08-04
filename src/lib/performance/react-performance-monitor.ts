@@ -137,7 +137,7 @@ export class ReactPerformanceMonitor {
     const now = performance.now();
 
     // Remove old updates (older than 100ms)
-    const recentUpdates = updates.filter((time: any) => now - time < 100);
+    const recentUpdates = updates.filter((time: unknown) => now - time < 100);
     recentUpdates.push(startTime);
 
     this.cascadingUpdates.set(componentId, recentUpdates);
@@ -254,24 +254,24 @@ export class ReactPerformanceMonitor {
 
     // Check for frequent updates
     const frequentUpdaters = this.metrics.renderPatterns
-      .filter((p: any) => p.pattern === "frequent-updates")
+      .filter((p: unknown) => p.pattern === "frequent-updates")
       .sort((a, b) => b.count - a.count);
 
     if (frequentUpdaters.length > 0) {
       recommendations.push(
         `Components with frequent updates: ${frequentUpdaters
           .slice(0, 3)
-          .map((p: any) => `${p.componentId} (${p.count} renders)`)
+          .map((p: unknown) => `${p.componentId} (${p.count} renders)`)
           .join(", ")}`
       );
     }
 
     // Check for cascading updates
-    const cascadingComponents = this.metrics.renderPatterns.filter((p: any) => p.pattern === "cascading-updates");
+    const cascadingComponents = this.metrics.renderPatterns.filter((p: unknown) => p.pattern === "cascading-updates");
 
     if (cascadingComponents.length > 0) {
       recommendations.push(
-        `Components with cascading updates: ${cascadingComponents.map((p: any) => p.componentId).join(", ")}`
+        `Components with cascading updates: ${cascadingComponents.map((p: unknown) => p.componentId).join(", ")}`
       );
     }
 
@@ -285,7 +285,7 @@ export class ReactPerformanceMonitor {
     this.callbacks.push(callback);
 
     return () => {
-      this.callbacks = this.callbacks.filter((cb: any) => cb !== callback);
+      this.callbacks = this.callbacks.filter((cb: unknown) => cb !== callback);
     };
   }
 
@@ -293,7 +293,7 @@ export class ReactPerformanceMonitor {
    * Notify callbacks
    */
   private notifyCallbacks(): void {
-    this.callbacks.forEach((callback: any) => callback(this.metrics));
+    this.callbacks.forEach((callback: unknown) => callback(this.metrics));
   }
 
   /**

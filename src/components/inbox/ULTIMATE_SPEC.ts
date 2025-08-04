@@ -175,7 +175,7 @@ export interface Tag {
   category?: string;
   description?: string;
   usage_count: number;
-  created_by: string;
+  createdBy: string;
   created_at: Date;
 }
 
@@ -338,7 +338,7 @@ export interface Template {
   category: string;
   variables: TemplateVariable[];
   usage_count: number;
-  created_by: string;
+  createdBy: string;
   shared: boolean;
   tags: string[];
 }
@@ -347,7 +347,7 @@ export interface TemplateVariable {
   name: string;
   type: "text" | "number" | "date" | "select" | "customer_data";
   required: boolean;
-  default?: any;
+  default?: unknown;
   options?: string[]; // for select type
   customerDataField?: string; // for customer_data type
 }

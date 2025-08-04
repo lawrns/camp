@@ -13,7 +13,7 @@ export function AttachmentPlugin({ pluginId, content, onContentChange, onAction,
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
-    const newAttachments: AttachmentFile[] = files.map((file: any) => ({
+    const newAttachments: AttachmentFile[] = files.map((file: unknown) => ({
       id: crypto.randomUUID(),
       file,
       progress: 0,
@@ -30,7 +30,7 @@ export function AttachmentPlugin({ pluginId, content, onContentChange, onAction,
   };
 
   const removeAttachment = (id: string) => {
-    setAttachments((prev) => prev.filter((att: any) => att.id !== id));
+    setAttachments((prev) => prev.filter((att: unknown) => att.id !== id));
     onAction(pluginId, "file-removed", { id });
   };
 
@@ -74,7 +74,7 @@ export function AttachmentPlugin({ pluginId, content, onContentChange, onAction,
       {attachments.length > 0 && (
         <div className="border-t border-[--border-subtle] px-3 py-2">
           <div className="flex flex-wrap gap-ds-2">
-            {attachments.map((attachment: any) => (
+            {attachments.map((attachment: unknown) => (
               <div
                 key={attachment.id}
                 className={cn(

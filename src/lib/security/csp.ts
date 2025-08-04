@@ -241,7 +241,7 @@ export function createCSPMiddleware(
     customDirectives?: Partial<CSPDirectives>;
   } = {}
 ) {
-  return function cspMiddleware(req: any, res: any, next: any) {
+  return function cspMiddleware(req: unknown, res: unknown, next: unknown) {
     const { reportOnly = false, enableNonce = true, customDirectives = {} } = options;
 
     // Generate nonce for this request

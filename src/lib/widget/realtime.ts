@@ -26,9 +26,9 @@ export interface AgentPresence {
 }
 
 export class WidgetRealtimeClient {
-  private supabase: any;
+  private supabase: unknown;
   private config: WidgetRealtimeConfig;
-  private channel: any = null;
+  private channel: unknown = null;
   private isConnected = false;
 
   // Event callbacks
@@ -58,17 +58,17 @@ export class WidgetRealtimeClient {
           }
         })
         // Listen for unified broadcast events
-        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_START }, (payload: unknown) => {
           if (this.onTyping) {
             this.onTyping(payload.payload);
           }
         })
-        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.TYPING_STOP }, (payload: unknown) => {
           if (this.onTyping) {
             this.onTyping(payload.payload);
           }
         })
-        .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+        .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: unknown) => {
           if (this.onMessage && payload.payload.message) {
             this.onMessage(payload.payload.message);
           }
@@ -144,7 +144,7 @@ export class WidgetRealtimeClient {
   }
 
   // ENHANCED: Bidirectional communication methods
-  async broadcastMessage(message: any): Promise<void> {
+  async broadcastMessage(message: unknown): Promise<void> {
     if (!this.channel || !this.isConnected) {
 
       return;
@@ -263,7 +263,7 @@ export function createWidgetPostMessageBridge(client: WidgetRealtimeClient, targ
             messageId: event.data.messageId,
             success: true,
           },
-          targetOrigin as any
+          targetOrigin as unknown
         );
       } catch (error) {
         event.source?.postMessage(
@@ -272,7 +272,7 @@ export function createWidgetPostMessageBridge(client: WidgetRealtimeClient, targ
             messageId: event.data.messageId,
             error: (error as Error).message,
           },
-          targetOrigin as any
+          targetOrigin as unknown
         );
       }
     }

@@ -686,7 +686,7 @@ export class ChannelTestRunner {
   /**
    * Add test result
    */
-  private addResult(testName: string, success: boolean, duration: number, error?: any, details?: Record<string, any>): void {
+  private addResult(testName: string, success: boolean, duration: number, error?: unknown, details?: Record<string, any>): void {
     this.results.push({
       testName,
       success,
@@ -742,7 +742,7 @@ export async function testChannelFunction(
   supabase: SupabaseClient,
   channelName: string,
   eventName: string,
-  payload: any,
+  payload: unknown,
   timeout: number = 5000
 ): Promise<boolean> {
   try {

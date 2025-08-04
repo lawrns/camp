@@ -31,7 +31,7 @@ export async function createWidgetApiKey(organizationId: string): Promise<{
     const { error } = await supabase
       .from("organizations")
       .update({
-        widget_api_key: newApiKey,
+        widgetApiKey: newApiKey,
         widget_enabled: true,
         updated_at: new Date().toISOString(),
       })
@@ -100,7 +100,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
       return { success: false, error: "Organization not found" };
     }
 
-    if (!data.widget_api_key) {
+    if (!data.widgetApiKey) {
       return {
         success: true,
         keyInfo: {
@@ -111,7 +111,7 @@ export async function getWidgetApiKeyInfo(organizationId: string): Promise<{
     }
 
     // Mask the API key (show first 4 and last 4 characters)
-    const apiKey = data.widget_api_key;
+    const apiKey = data.widgetApiKey;
     const masked =
       apiKey.length > 8
         ? `${apiKey.slice(0, 9)}${"*".repeat(apiKey.length - 13)}${apiKey.slice(-4)}`

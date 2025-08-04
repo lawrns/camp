@@ -11,7 +11,7 @@ interface CachedSession {
   token: string;
   conversationId: string;
   visitorId: string;
-  user: any;
+  user: unknown;
   timestamp: number;
   organizationId: string;
 }
@@ -38,7 +38,7 @@ function getCachedSession(organizationId: string): CachedSession | null {
   }
 }
 
-function setCachedSession(organizationId: string, authData: AuthResponse, user: any): void {
+function setCachedSession(organizationId: string, authData: AuthResponse, user: unknown): void {
   try {
     const session: CachedSession = {
       token: authData.token!,
@@ -181,7 +181,7 @@ export function useWidgetAuth(organizationId: string) {
   };
 
   // Persist auth data
-  const persistAuthData = (authData: AuthResponse, user?: any) => {
+  const persistAuthData = (authData: AuthResponse, user?: unknown) => {
     try {
       if (authData.token) localStorage.setItem(STORAGE_KEYS.token, authData.token);
       if (authData.conversationId) localStorage.setItem(STORAGE_KEYS.conversationId, authData.conversationId);

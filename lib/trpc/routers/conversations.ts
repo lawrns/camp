@@ -282,7 +282,7 @@ export const conversationsRouter = createTRPCRouter({
             conversation_id: input.conversationId,
             content: input.content,
             type: input.type,
-            sender_type: 'user',
+            senderType: 'user',
             senderId: ctx.user.id,
             metadata: input.metadata || {},
           })

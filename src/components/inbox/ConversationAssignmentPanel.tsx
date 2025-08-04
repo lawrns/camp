@@ -103,7 +103,7 @@ export function ConversationAssignmentPanel({
   }, [onAutoAssign, assigningTo, isLoading]);
 
   const currentAssignee = agents.find((agent) => agent.id === currentAssigneeId);
-  const availableAgents = agents.filter((agent: any) => agent.status !== "offline");
+  const availableAgents = agents.filter((agent: unknown) => agent.status !== "offline");
   const sortedAgents = availableAgents.sort((a, b) => a.workload - b.workload);
 
   if (!conversationId) {
@@ -131,7 +131,7 @@ export function ConversationAssignmentPanel({
                 <AvatarFallback className="text-tiny">
                   {currentAssignee.name
                     .split(" ")
-                    .map((n: any) => n[0])
+                    .map((n: unknown) => n[0])
                     .join("")
                     .toUpperCase()}
                 </AvatarFallback>
@@ -165,7 +165,7 @@ export function ConversationAssignmentPanel({
                     <AvatarFallback className="text-tiny">
                       {currentAssignee.name
                         .split(" ")
-                        .map((n: any) => n[0])
+                        .map((n: unknown) => n[0])
                         .join("")
                         .toUpperCase()}
                     </AvatarFallback>
@@ -182,7 +182,7 @@ export function ConversationAssignmentPanel({
 
           {/* Agent List */}
           <div className="max-h-64 space-y-1 overflow-y-auto">
-            {sortedAgents.map((agent: any) => {
+            {sortedAgents.map((agent: unknown) => {
               const isCurrentAssignee = agent.id === currentAssigneeId;
               const isAssigning = assigningTo === agent.id;
 
@@ -204,7 +204,7 @@ export function ConversationAssignmentPanel({
                       <AvatarFallback className="text-tiny">
                         {agent.name
                           .split(" ")
-                          .map((n: any) => n[0])
+                          .map((n: unknown) => n[0])
                           .join("")
                           .toUpperCase()}
                       </AvatarFallback>

@@ -20,7 +20,7 @@ describe('Real-time Handover Synchronization', () => {
   let widgetChannel: RealtimeChannel;
   let aiServiceChannel: RealtimeChannel;
   
-  let receivedEvents: Array<{ source: string; event: any; timestamp: number }> = [];
+  let receivedEvents: Array<{ source: string; event: unknown; timestamp: number }> = [];
 
   beforeEach(async () => {
     // Clear received events
@@ -202,7 +202,7 @@ describe('Real-time Handover Synchronization', () => {
       conversation_id: TEST_CONV_ID,
       message_id: 'msg-during-handover',
       content: 'Are you still there?',
-      sender_type: 'customer',
+      senderType: 'customer',
       timestamp: new Date().toISOString()
     };
 
@@ -229,7 +229,7 @@ describe('Real-time Handover Synchronization', () => {
       conversation_id: TEST_CONV_ID,
       message_id: 'ai-response-1',
       content: 'Yes, I\'m here! I\'m now handling your conversation.',
-      sender_type: 'ai',
+      senderType: 'ai',
       in_reply_to: 'msg-during-handover',
       timestamp: new Date().toISOString()
     };
@@ -246,8 +246,8 @@ describe('Real-time Handover Synchronization', () => {
     const messageEvents = receivedEvents.filter(e => e.event.event === 'message_sent');
     expect(messageEvents.length).toBe(2); // Customer message + AI response
 
-    const customerMsgEvent = messageEvents.find(e => e.event.payload.sender_type === 'customer');
-    const aiMsgEvent = messageEvents.find(e => e.event.payload.sender_type === 'ai');
+    const customerMsgEvent = messageEvents.find(e => e.event.payload.senderType === 'customer');
+    const aiMsgEvent = messageEvents.find(e => e.event.payload.senderType === 'ai');
 
     expect(customerMsgEvent).toBeTruthy();
     expect(aiMsgEvent).toBeTruthy();

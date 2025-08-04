@@ -110,7 +110,7 @@ export function PanelHeader({
       {/* Right Section - Actions */}
       <div className="ml-4 flex flex-shrink-0 items-center gap-1">
         {/* Primary Actions */}
-        {actions.slice(0, 2).map((action: any) => (
+        {actions.slice(0, 2).map((action: unknown) => (
           <Button
             key={action.id}
             variant={action.variant === "primary" ? "default" : "ghost"}
@@ -152,7 +152,7 @@ export function PanelHeader({
                   "py-1"
                 )}
               >
-                {actions.slice(2).map((action: any) => (
+                {actions.slice(2).map((action: unknown) => (
                   <button
                     key={action.id}
                     className={cn(

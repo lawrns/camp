@@ -84,7 +84,7 @@ function NotificationsContent() {
       }
     };
 
-    const filteredNotifications = notifications.filter((notification: any) => {
+    const filteredNotifications = notifications.filter((notification: unknown) => {
       const matchesFilter =
         filter === "all" ||
         (filter === "unread" && !notification.read) ||
@@ -98,7 +98,7 @@ function NotificationsContent() {
       return matchesFilter && matchesSearch;
     });
 
-    const unreadCount = notifications.filter((n: any) => !n.read).length;
+    const unreadCount = notifications.filter((n: unknown) => !n.read).length;
 
     if (loading && notifications.length === 0) {
       return (
@@ -232,7 +232,7 @@ function NotificationsContent() {
                   </CardContent>
                 </Card>
               ) : (
-                filteredNotifications.map((notification: any) => (
+                filteredNotifications.map((notification: unknown) => (
                   <Card
                     key={notification.id}
                     className={`transition-all duration-200 hover:shadow-md ${!notification.read ? "bg-[var(--fl-color-info-subtle)]/30 border-l-4 border-l-blue-500" : ""

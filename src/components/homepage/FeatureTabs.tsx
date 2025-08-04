@@ -13,7 +13,7 @@ import { Icon } from "@/lib/ui/Icon";
 
 interface Feature {
   id: string;
-  icon: any;
+  icon: unknown;
   title: string;
   description: string;
   benefits: string[];

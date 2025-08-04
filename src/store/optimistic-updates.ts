@@ -26,8 +26,8 @@ export interface OptimisticOperation {
   type: "message" | "conversation" | "status" | "assignment";
   action: "create" | "update" | "delete";
   timestamp: number;
-  data: any;
-  rollbackData?: any;
+  data: unknown;
+  rollbackData?: unknown;
   retryCount: number;
   maxRetries: number;
 }
@@ -120,7 +120,7 @@ export const optimisticUtils = {
         // Remove optimistic message
         if (data.conversationId && data.temp_id) {
           const messages = state.messages.get(data.conversationId) || [];
-          const filtered = messages.filter((m: any) => !("temp_id" in m) || m.temp_id !== data.temp_id);
+          const filtered = messages.filter((m: unknown) => !("temp_id" in m) || m.temp_id !== data.temp_id);
           state.messages.set(data.conversationId, filtered);
         }
         break;
@@ -129,7 +129,7 @@ export const optimisticUtils = {
         // Restore original message content
         if (operation.rollbackData && data.conversationId && data.messageId) {
           const messages = state.messages.get(data.conversationId) || [];
-          const index = messages.findIndex((m: any) => m.id === data.messageId);
+          const index = messages.findIndex((m: unknown) => m.id === data.messageId);
           if (index !== -1) {
             messages[index] = { ...messages[index], ...operation.rollbackData };
           }
@@ -142,7 +142,7 @@ export const optimisticUtils = {
           const messages = state.messages.get(data.conversationId) || [];
           messages.push(operation.rollbackData);
           // Sort by creation date
-          messages.sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          messages.sort((a: unknown, b: unknown) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
           state.messages.set(data.conversationId, messages);
         }
         break;
@@ -206,12 +206,12 @@ export const optimisticUtils = {
   },
 
   // Check if entity is optimistic
-  isOptimistic: (entity: any): boolean => {
+  isOptimistic: (entity: unknown): boolean => {
     return entity?.is_optimistic === true || entity?.pending === true;
   },
 
   // Get visual styling for optimistic entities
-  getOptimisticStyles: (entity: any): React.CSSProperties => {
+  getOptimisticStyles: (entity: unknown): React.CSSProperties => {
     if (!optimisticUtils.isOptimistic(entity)) {
       return {};
     }
@@ -234,7 +234,7 @@ export const optimisticUtils = {
 
   // Get status indicator for optimistic operations
   getStatusIndicator: (
-    entity: any
+    entity: unknown
   ): {
     icon: string;
     color: string;
@@ -361,7 +361,7 @@ export const typingUtils = {
   clearTypingUsers: (conversationId: string): void => {
     const users = typingUtils.typingUsers.get(conversationId);
     if (users) {
-      users.forEach((userId: any) => {
+      users.forEach((userId: unknown) => {
         const timeoutKey = `${conversationId}-${userId}`;
         if (typingUtils.typingTimeouts.has(timeoutKey)) {
           clearTimeout(typingUtils.typingTimeouts.get(timeoutKey)!);

@@ -108,7 +108,7 @@ export function SettingsLayout({
           {/* Navigation Tabs */}
           <div className="border-b border-[var(--fl-color-border)]">
             <TabsList className="grid w-full grid-cols-5 lg:flex lg:w-auto lg:grid-cols-none lg:space-x-spacing-sm">
-              {settingsTabs.map((tab: any) => {
+              {settingsTabs.map((tab: unknown) => {
                 const Icon = tab.icon;
                 return (
                   <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-ds-2 px-4 py-2">

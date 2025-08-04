@@ -16,11 +16,11 @@ const s3Config = {
 };
 
 // Lazy-loaded AWS SDK modules
-let S3Client: any;
-let PutObjectCommand: any;
-let GetObjectCommand: any;
-let DeleteObjectCommand: any;
-let getSignedUrl: any;
+let S3Client: unknown;
+let PutObjectCommand: unknown;
+let GetObjectCommand: unknown;
+let DeleteObjectCommand: unknown;
+let getSignedUrl: unknown;
 
 // Cache for AWS SDK modules to avoid repeated imports
 let awsSdkLoaded = false;

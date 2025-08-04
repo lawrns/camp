@@ -252,7 +252,7 @@ export function getInitials(name: string): string {
 
   return parts
     .slice(0, 2)
-    .map((part: any) => part.charAt(0).toUpperCase())
+    .map((part: unknown) => part.charAt(0).toUpperCase())
     .join("");
 }
 

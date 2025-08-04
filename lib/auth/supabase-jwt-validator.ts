@@ -131,7 +131,7 @@ export async function refreshSupabaseJWT(refreshToken: string): Promise<UnifiedA
 /**
  * Extract organization context from Supabase user
  */
-export function extractOrganizationContext(user: any): { organizationId?: string; role?: string; permissions?: string[] } {
+export function extractOrganizationContext(user: unknown): { organizationId?: string; role?: string; permissions?: string[] } {
   const organizationId = user.user_metadata?.organization_id || 
                         user.app_metadata?.organization_id;
   
@@ -149,7 +149,7 @@ export function hasPermission(user: UnifiedUser, permission: string): boolean {
 }
 
 /**
- * Check if user has any of the specified permissions
+ * Check if user has unknown of the specified permissions
  */
 export function hasAnyPermission(user: UnifiedUser, permissions: string[]): boolean {
   return permissions.some(perm => hasPermission(user, perm));
@@ -206,7 +206,7 @@ export async function createUserScopedClient(user: UnifiedUser) {
 /**
  * Helper function to decode JWT payload
  */
-function decodeJwtPayload(token: string): any {
+function decodeJwtPayload(token: string): unknown {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
@@ -222,7 +222,7 @@ function decodeJwtPayload(token: string): any {
 /**
  * Validate JWT structure and required claims
  */
-export function validateJwtStructure(payload: any): { valid: boolean; error?: string } {
+export function validateJwtStructure(payload: unknown): { valid: boolean; error?: string } {
   if (!payload) {
     return { valid: false, error: 'Invalid JWT payload' };
   }
@@ -262,7 +262,7 @@ export function validateJwtStructure(payload: any): { valid: boolean; error?: st
 /**
  * Extract user metadata from JWT payload
  */
-export function extractUserMetadata(payload: any): Record<string, any> {
+export function extractUserMetadata(payload: unknown): Record<string, any> {
   return {
     userId: payload.sub,
     email: payload.email,

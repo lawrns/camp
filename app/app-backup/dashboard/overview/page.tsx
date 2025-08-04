@@ -87,7 +87,7 @@ export default function OverviewPage() {
 
       if (activityData.success && activityData.data.events) {
         // Transform activity data to match our interface
-        const transformedActivity = activityData.data.events.map((event: any, index: number) => ({
+        const transformedActivity = activityData.data.events.map((event: unknown, index: number) => ({
           id: event.id || index,
           type: event.type || "general",
           title: getActivityTitle(event.action || event.type),

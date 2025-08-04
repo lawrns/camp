@@ -13,7 +13,7 @@ interface AuthUser {
 // Force dynamic rendering for API routes
 export const dynamic = "force-dynamic";
 
-export const POST = withOptionalAuth(async (request: NextRequest & { user?: any }): Promise<NextResponse> => {
+export const POST = withOptionalAuth(async (request: NextRequest & { user?: unknown }): Promise<NextResponse> => {
   try {
     const cookieStore = await cookies();
     const { supabase } = await import("@/lib/supabase");

@@ -191,38 +191,87 @@ export const usePresence = (conversationId?: string) => {
     }
   };
 
-  // Initialize with mock data
+  // Initialize with real presence data
   useEffect(() => {
-    const mockUsers: PresenceUser[] = [
-      {
-        id: "current-user",
-        name: "You",
-        status: "online",
-        isCurrentUser: true,
-      },
-      {
-        id: "user-1",
-        name: "Alice Johnson",
-        email: "alice@company.com",
-        status: "online",
-      },
-      {
-        id: "user-2",
-        name: "Bob Smith",
-        email: "bob@company.com",
-        status: "away",
-        lastSeen: new Date(Date.now() - 15 * 60 * 1000),
-      },
-    ];
+    const fetchRealPresenceData = async () => {
+      try {
+        // Import supabase client
+        const { supabase } = await import('@/lib/supabase');
 
-    setUsers(mockUsers);
-    setCurrentUser(mockUsers[0] || null);
+        // Get current user from auth context if available
+        const { data: { session } } = await supabase.client.auth.getSession();
+        const currentUserId = session?.user?.id;
+
+        if (!currentUserId) {
+          console.warn('[PresenceIndicator] No authenticated user found');
+          return;
+        }
+
+        // Get organization ID from user metadata or context
+        const organizationId = session?.user?.user_metadata?.organization_id;
+
+        if (!organizationId) {
+          console.warn('[PresenceIndicator] No organization ID found');
+          return;
+        }
+
+        // Fetch real presence data from profiles table
+        const { data: profiles, error } = await supabase.client
+          .from('profiles')
+          .select('user_id, full_name, email, is_online, last_seen_at, role, avatar_url')
+          .eq('organization_id', organizationId)
+          .order('is_online', { ascending: false })
+          .order('last_seen_at', { ascending: false });
+
+        if (error) {
+          console.error('[PresenceIndicator] Error fetching presence data:', error);
+          return;
+        }
+
+        // Convert to PresenceUser format
+        const realUsers: PresenceUser[] = (profiles || []).map(profile => ({
+          id: profile.user_id,
+          name: profile.full_name || profile.email || 'Unknown User',
+          email: profile.email,
+          status: profile.is_online ? 'online' : 'offline',
+          lastSeen: profile.last_seen_at ? new Date(profile.last_seen_at) : undefined,
+          isCurrentUser: profile.user_id === currentUserId,
+          avatar: profile.avatar_url,
+        }));
+
+        setUsers(realUsers);
+
+        // Set current user
+        const currentUser = realUsers.find(user => user.isCurrentUser) || null;
+        setCurrentUser(currentUser);
+
+        console.log('[PresenceIndicator] Loaded real presence data:', realUsers.length, 'users');
+      } catch (error) {
+        console.error('[PresenceIndicator] Failed to fetch real presence data:', error);
+
+        // Fallback to minimal current user data
+        setUsers([{
+          id: "current-user",
+          name: "You",
+          status: "online",
+          isCurrentUser: true,
+        }]);
+        setCurrentUser({
+          id: "current-user",
+          name: "You",
+          status: "online",
+          isCurrentUser: true,
+        });
+      }
+    };
+
+    fetchRealPresenceData();
   }, []);
 
-  const onlineUsers = users.filter((u: any) => u.status === "online");
-  const awayUsers = users.filter((u: any) => u.status === "away");
-  const busyUsers = users.filter((u: any) => u.status === "busy");
-  const offlineUsers = users.filter((u: any) => u.status === "offline");
+  const onlineUsers = users.filter((u: unknown) => u.status === "online");
+  const awayUsers = users.filter((u: unknown) => u.status === "away");
+  const busyUsers = users.filter((u: unknown) => u.status === "busy");
+  const offlineUsers = users.filter((u: unknown) => u.status === "offline");
 
   return {
     users,

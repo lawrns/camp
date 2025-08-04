@@ -14,7 +14,7 @@ interface StatCardProps {
     period: string;
     trend: "up" | "down" | "neutral";
   };
-  icon?: any;
+  icon?: unknown;
   variant?: "default" | "success" | "warning" | "error";
   loading?: boolean;
   onClick?: () => void;

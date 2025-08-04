@@ -174,7 +174,7 @@ export const InsightsTab: React.FC<InsightsTabProps> = ({ conversation, onAction
             Smart Suggestions
           </h4>
           <div className="space-y-3">
-            {smartSuggestions.map((suggestion: any) => (
+            {smartSuggestions.map((suggestion: unknown) => (
               <Card
                 key={suggestion.id}
                 className={`cursor-pointer spacing-4 transition-all duration-200 hover:shadow-md ${

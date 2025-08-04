@@ -14,7 +14,7 @@ const TEST_CONFIG = {
 };
 
 // Helper function to make API requests
-async function makeWidgetRequest(action: string, data: any = {}) {
+async function makeWidgetRequest(action: string, data: unknown = {}) {
   const response = await fetch(`${TEST_CONFIG.baseURL}/api/widget`, {
     method: 'POST',
     headers: {
@@ -171,16 +171,16 @@ describe('Widget API Bidirectional Communication', () => {
 
       // Verify message order and content
       expect(messages[0].content).toBe('Initial customer message');
-      expect(messages[0].sender_type).toBe('customer');
+      expect(messages[0].senderType).toBe('customer');
 
       expect(messages[1].content).toBe('Customer follow-up message');
-      expect(messages[1].sender_type).toBe('customer');
+      expect(messages[1].senderType).toBe('customer');
 
       expect(messages[2].content).toBe('Agent response message');
-      expect(messages[2].sender_type).toBe('agent');
+      expect(messages[2].senderType).toBe('agent');
 
       expect(messages[3].content).toBe('Customer final message');
-      expect(messages[3].sender_type).toBe('customer');
+      expect(messages[3].senderType).toBe('customer');
     });
 
     test('should validate message content and reject invalid messages', async () => {

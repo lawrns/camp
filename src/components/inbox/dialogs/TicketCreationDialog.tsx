@@ -47,9 +47,9 @@ interface TicketCreationDialogProps {
     customerName: string;
     customerEmail: string;
     subject?: string;
-    messages?: any[];
+    messages?: unknown[];
   };
-  onTicketCreated?: (ticket: any) => void;
+  onTicketCreated?: (ticket: unknown) => void;
 }
 
 type CreationStep = "details" | "assignment" | "review" | "success";
@@ -104,9 +104,9 @@ export function TicketCreationDialog({
   // Transform members to operator options
   const operatorOptions = [
     { id: "auto", name: "Auto-assign", availability: "available" as const, workload: "light" as const },
-    ...members.map((member: any) => ({
+    ...members.map((member: unknown) => ({
       id: member.user_id,
-      name: member.profile?.full_name || member.profile?.email || "Unknown",
+      name: member.profile?.fullName || member.profile?.email || "Unknown",
       availability: member.availability || ("offline" as const),
       workload: member.workload?.status || ("light" as const),
     })),
@@ -141,7 +141,7 @@ export function TicketCreationDialog({
   const handleRemoveTag = (tagToRemove: string) => {
     setTicketData((prev) => ({
       ...prev,
-      tags: prev.tags.filter((tag: any) => tag !== tagToRemove),
+      tags: prev.tags.filter((tag: unknown) => tag !== tagToRemove),
     }));
   };
 
@@ -259,13 +259,13 @@ export function TicketCreationDialog({
           <Label>Priority</Label>
           <Select
             value={ticketData.priority}
-            onValueChange={(value: string) => setTicketData((prev) => ({ ...prev, priority: value as any }))}
+            onValueChange={(value: string) => setTicketData((prev) => ({ ...prev, priority: value as unknown }))}
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {PRIORITY_OPTIONS.map((option: any) => (
+              {PRIORITY_OPTIONS.map((option: unknown) => (
                 <SelectItem key={option.value} value={option.value}>
                   <div className="flex items-center gap-ds-2">
                     <Badge className={cn("text-xs", option.color)}>{option.label}</Badge>
@@ -286,7 +286,7 @@ export function TicketCreationDialog({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {CATEGORY_OPTIONS.map((category: any) => (
+              {CATEGORY_OPTIONS.map((category: unknown) => (
                 <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
@@ -323,7 +323,7 @@ export function TicketCreationDialog({
       <div className="space-y-spacing-sm">
         <Label>Tags</Label>
         <div className="mb-2 flex flex-wrap gap-ds-2">
-          {ticketData.tags.map((tag: any) => (
+          {ticketData.tags.map((tag: unknown) => (
             <Badge key={tag} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveTag(tag)}>
               <Icon icon={TagIcon} className="mr-1 h-3 w-3" />
               {tag}
@@ -376,7 +376,7 @@ export function TicketCreationDialog({
                 <Skeleton className="h-8 w-full" />
               </div>
             ) : (
-              operatorOptions.map((operator: any) => (
+              operatorOptions.map((operator: unknown) => (
                 <SelectItem key={operator.id} value={operator.id}>
                   <div className="flex w-full items-center gap-3">
                     <Icon icon={UserIcon} className="h-4 w-4" />
@@ -452,7 +452,7 @@ export function TicketCreationDialog({
             <div>
               <span className="font-medium">Tags:</span>
               <div className="mt-1 flex flex-wrap gap-1">
-                {ticketData.tags.map((tag: any) => (
+                {ticketData.tags.map((tag: unknown) => (
                   <Badge key={tag} variant="secondary" className="text-tiny">
                     {tag}
                   </Badge>

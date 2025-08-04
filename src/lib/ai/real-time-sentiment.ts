@@ -87,7 +87,7 @@ export class RealTimeSentimentService {
     conversationId: string,
     organizationId: string,
     sentiment: SentimentAnalysis,
-    conversationTrend: any
+    conversationTrend: unknown
   ): SentimentAlert | null {
     const alerts: SentimentAlert[] = [];
 
@@ -193,7 +193,7 @@ export class RealTimeSentimentService {
     messageId: string,
     conversationId: string,
     sentiment: SentimentAnalysis,
-    conversationTrend: any
+    conversationTrend: unknown
   ): Promise<void> {
     try {
       await supabase.from("conversation_sentiment_tracking").insert({

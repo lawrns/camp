@@ -76,9 +76,9 @@ const FRAMER_MOTION_PROPS = [
 ];
 
 // Filter out Framer Motion props to prevent React warnings
-const filterDOMProps = (props: any) => {
-  const filteredProps: any = {};
-  Object.keys(props).forEach((key: any) => {
+const filterDOMProps = (props: unknown) => {
+  const filteredProps: unknown = {};
+  Object.keys(props).forEach((key: unknown) => {
     if (!FRAMER_MOTION_PROPS.includes(key)) {
       filteredProps[key] = props[key];
     }

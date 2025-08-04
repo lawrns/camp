@@ -117,7 +117,7 @@ export function clearAuthCookies(): void {
 
   // Clear Supabase auth cookies (pattern matching)
   if (typeof document !== "undefined") {
-    document.cookie.split(";").forEach((cookie: any) => {
+    document.cookie.split(";").forEach((cookie: unknown) => {
       const eqPos = cookie.indexOf("=");
       const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
       if (name.includes("supabase") || name.includes("auth-token")) {

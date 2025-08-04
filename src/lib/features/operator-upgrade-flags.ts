@@ -39,7 +39,7 @@ export function isOperatorUpgradeEnabled(userId?: string): boolean {
 
   // Percentage-based rollout using user ID hash
   if (userId) {
-    const hash = userId.split("").reduce((acc: any, char: any) => {
+    const hash = userId.split("").reduce((acc: unknown, char: unknown) => {
       return acc + char.charCodeAt(0);
     }, 0);
     return hash % 100 < OPERATOR_UPGRADE_FLAGS.ROLLOUT_PERCENTAGE;

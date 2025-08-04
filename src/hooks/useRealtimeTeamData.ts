@@ -126,7 +126,7 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
     const client = supabase.client();
     
     // Create channel for organization-wide updates using unified standards
-    const realtimeChannel: any = client.channel(UNIFIED_CHANNELS.organization(organizationId))
+    const realtimeChannel: unknown = client.channel(UNIFIED_CHANNELS.organization(organizationId))
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -164,7 +164,7 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
   }, [organizationId, fetchTeamData]);
 
   // Handle agent availability changes
-  const handleAgentAvailabilityChange = useCallback((payload: any) => {
+  const handleAgentAvailabilityChange = useCallback((payload: unknown) => {
     const { eventType, new: newRecord, old: oldRecord } = payload;
     
     setTeamMembers(prevMembers => {
@@ -175,7 +175,7 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
         
         const updatedMember: TeamMember = {
           agentId: newRecord.agent_id,
-          name: newRecord.profiles?.full_name || newRecord.profiles?.email || 'Unknown',
+          name: newRecord.profiles?.fullName || newRecord.profiles?.email || 'Unknown',
           email: newRecord.profiles?.email || '',
           avatar: newRecord.profiles?.avatar_url,
           status: newRecord.status,
@@ -209,7 +209,7 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
   }, [calculateTeamMetrics]);
 
   // Handle metrics updates
-  const handleMetricsUpdate = useCallback((payload: any) => {
+  const handleMetricsUpdate = useCallback((payload: unknown) => {
     const { new: newRecord } = payload;
     
     if (newRecord.time_period === 'current') {
@@ -242,7 +242,7 @@ export function useRealtimeTeamData(organizationId: string): UseRealtimeTeamData
   }, [calculateTeamMetrics]);
 
   // Handle agent status broadcasts
-  const handleAgentStatusBroadcast = useCallback((payload: any) => {
+  const handleAgentStatusBroadcast = useCallback((payload: unknown) => {
     const { agentId, status, statusMessage } = payload.payload;
     
     setTeamMembers(prevMembers => {

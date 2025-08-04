@@ -91,8 +91,8 @@ export default function KnowledgePage() {
     {
       mailboxSlug: "test-mailbox-dev",
       search: searchTerm || undefined,
-      type: selectedType !== "all" ? selectedType as any : undefined,
-      status: selectedStatus !== "all" ? selectedStatus as any : undefined,
+      type: selectedType !== "all" ? selectedType as unknown : undefined,
+      status: selectedStatus !== "all" ? selectedStatus as unknown : undefined,
       limit: 50,
       offset: 0,
     },

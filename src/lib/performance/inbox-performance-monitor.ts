@@ -97,7 +97,7 @@ export class InboxPerformanceMonitor {
   private setupIntersectionObserver(): void {
     this.intersectionObserver = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.isIntersecting) {
             const messageElement = entry.target as HTMLElement;
             const renderTime = performance.now() - parseFloat(messageElement.dataset.renderStart || "0");
@@ -121,7 +121,7 @@ export class InboxPerformanceMonitor {
     try {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.entryType === "measure") {
             this.handlePerformanceMeasure(entry as PerformanceMeasure);
           }
@@ -139,7 +139,7 @@ export class InboxPerformanceMonitor {
     try {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
+        entries.forEach((entry: unknown) => {
           if (entry.name.includes("/api/")) {
             this.recordApiResponseTime(entry.name, entry.duration);
           }
@@ -297,7 +297,7 @@ export class InboxPerformanceMonitor {
   private keepRecentMetrics(metric: keyof InboxPerformanceMetrics, maxCount: number): void {
     const array = this.metrics[metric];
     if (Array.isArray(array) && array.length > maxCount) {
-      this.metrics[metric] = array.slice(-maxCount) as any;
+      this.metrics[metric] = array.slice(-maxCount) as unknown;
     }
   }
 
@@ -323,7 +323,7 @@ export class InboxPerformanceMonitor {
       let actual: number | undefined;
 
       if (Array.isArray(values) && values.length > 0) {
-        actual = values.reduce((sum: any, val: any) => sum + val, 0) / values.length;
+        actual = values.reduce((sum: unknown, val: unknown) => sum + val, 0) / values.length;
       } else if (typeof values === "number") {
         actual = values;
       }
@@ -346,7 +346,7 @@ export class InboxPerformanceMonitor {
    */
   private getAverage(values: number[]): number {
     if (values.length === 0) return 0;
-    return values.reduce((sum: any, val: any) => sum + val, 0) / values.length;
+    return values.reduce((sum: unknown, val: unknown) => sum + val, 0) / values.length;
   }
 
   /**
@@ -371,7 +371,7 @@ export class InboxPerformanceMonitor {
   subscribe(callback: (metrics: InboxPerformanceMetrics) => void): () => void {
     this.callbacks.push(callback);
     return () => {
-      this.callbacks = this.callbacks.filter((cb: any) => cb !== callback);
+      this.callbacks = this.callbacks.filter((cb: unknown) => cb !== callback);
     };
   }
 
@@ -379,14 +379,14 @@ export class InboxPerformanceMonitor {
    * Notify callbacks
    */
   private notifyCallbacks(): void {
-    this.callbacks.forEach((callback: any) => callback(this.metrics));
+    this.callbacks.forEach((callback: unknown) => callback(this.metrics));
   }
 
   /**
    * Clean up
    */
   destroy(): void {
-    this.observers.forEach((observer: any) => observer.disconnect());
+    this.observers.forEach((observer: unknown) => observer.disconnect());
     this.observers.clear();
     this.intersectionObserver?.disconnect();
     if (this.scrollTimeout) clearTimeout(this.scrollTimeout);

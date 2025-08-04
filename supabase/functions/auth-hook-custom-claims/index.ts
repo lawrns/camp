@@ -15,10 +15,10 @@ interface AuthHookPayload {
         organization_id?: string;
         organization_name?: string;
         organization_role?: string;
-        [key: string]: any;
+        [key: string]: unknown;
       };
       user_metadata: {
-        [key: string]: any;
+        [key: string]: unknown;
       };
     };
     access_token: string;
@@ -31,7 +31,7 @@ interface AuthHookResponse {
     organization_id?: string;
     organization_name?: string;
     organization_role?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 

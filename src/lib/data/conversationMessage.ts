@@ -176,7 +176,7 @@ export const getMessages = async (conversationId: string, mailbox: typeof mailbo
   );
 
   const noteInfos = await Promise.all(
-    noteRecords.map(async (note: any) => ({
+    noteRecords.map(async (note: unknown) => ({
       ...note,
       type: "note" as const,
       from: null,
@@ -186,7 +186,7 @@ export const getMessages = async (conversationId: string, mailbox: typeof mailbo
   );
 
   const eventInfos = await Promise.all(
-    eventRecords.map((event: any) => ({
+    eventRecords.map((event: unknown) => ({
       ...event,
 
       changes: {
@@ -346,7 +346,7 @@ export const createReply = async (
   const conversation = await getConversationById(conversationId);
   if (!conversation) throw new Error("Conversation not found");
 
-  return tx0.transaction(async (tx: any) => {
+  return tx0.transaction(async (tx: unknown) => {
     if (shouldAutoAssign && user && !conversation.assignedToUserId) {
       await updateConversation(conversationId, { set: { assignedToUserId: user.id }, byUserId: null }, tx);
     }

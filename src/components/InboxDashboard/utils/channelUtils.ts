@@ -76,10 +76,10 @@ export const getMessageItemSize = () => 80; // Fixed size for message items
  * @param raw - Raw conversation data from database
  * @returns Typed Conversation object
  */
-export const mapConversation = (raw: any): any => {
+export const mapConversation = (raw: unknown): unknown => {
   // Handle both camelCase and snake_case field names from database
-  let customerName = raw.customerName || raw.customer_name;
-  const customerEmail = raw.customerEmail || raw.customer_email;
+  let customerName = raw.customerName || raw.customerName;
+  const customerEmail = raw.customerEmail || raw.customerEmail;
 
   // Check if we need to generate a friendly name
   const needsNameGeneration =
@@ -109,7 +109,7 @@ export const mapConversation = (raw: any): any => {
   }
 
   // Handle both camelCase and snake_case for timestamps
-  let lastMessageAt = raw.lastMessageAt || raw.last_message_at;
+  let lastMessageAt = raw.lastMessageAt || raw.lastMessageAt;
   if (!lastMessageAt || lastMessageAt === "1969-12-31T00:00:00.000Z" || lastMessageAt === "1970-01-01T00:00:00.000Z") {
     lastMessageAt = raw.updated_at || raw.created_at || new Date().toISOString();
   }
@@ -136,7 +136,7 @@ export const mapConversation = (raw: any): any => {
  * @param wait - Wait time in milliseconds
  * @returns Debounced function
  */
-export const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {

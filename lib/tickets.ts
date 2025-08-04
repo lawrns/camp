@@ -135,7 +135,7 @@ export async function autoAssignTicket(ticketId: string, organizationId: string)
   }
 
   // Simple assignment: pick agent with lowest workload (with fallback)
-  const selectedAgent = agents.reduce((prev: any, current: any) => {
+  const selectedAgent = agents.reduce((prev: unknown, current: unknown) => {
     const prevWorkload = prev.workload || 0;
     const currentWorkload = current.workload || 0;
     return prevWorkload < currentWorkload ? prev : current;

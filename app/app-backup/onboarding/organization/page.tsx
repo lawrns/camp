@@ -67,7 +67,7 @@ export default function OrganizationOnboardingPage() {
 
       // Organization created successfully, move to next step
       setStep(2);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError((error instanceof Error ? error.message : String(error)) || "Failed to create organization");
     } finally {
       setIsLoading(false);

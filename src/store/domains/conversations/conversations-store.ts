@@ -709,7 +709,7 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
               if (conversation) {
                 conversation.lastMessagePreview = preview;
                 if (timestamp) {
-                  conversation.last_message_at = timestamp;
+                  conversation.lastMessageAt = timestamp;
                 }
                 if (timestamp) {
                   conversation.updated_at = timestamp;
@@ -720,7 +720,7 @@ export const useConversationsStore = create<ConversationsState & ConversationsAc
         })),
         {
           name: "conversations-store",
-          storage: customStorage as any,
+          storage: customStorage as unknown,
           // Only persist essential data
           partialize: (state) =>
             ({
@@ -742,8 +742,8 @@ export const conversationSelectors = {
   // Get all conversations as array (sorted by last message)
   getAllConversations: (state: ConversationsState): ConversationWithVersion[] => {
     return Array.from(state.conversations.values()).sort((a, b) => {
-      const aTime = a.last_message_at ? new Date(a.last_message_at || "").getTime() : 0;
-      const bTime = b.last_message_at ? new Date(b.last_message_at || "").getTime() : 0;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt || "").getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt || "").getTime() : 0;
       return bTime - aTime;
     });
   },
@@ -778,8 +778,8 @@ export const conversationSelectors = {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (conv) =>
-          conv.customer_name?.toLowerCase().includes(query) ||
-          conv.customer_email?.toLowerCase().includes(query) ||
+          conv.customerName?.toLowerCase().includes(query) ||
+          conv.customerEmail?.toLowerCase().includes(query) ||
           conv.subject?.toLowerCase().includes(query) ||
           conv.lastMessagePreview?.toLowerCase().includes(query)
       );
@@ -787,8 +787,8 @@ export const conversationSelectors = {
 
     // Sort by last message time
     return filtered.sort((a, b) => {
-      const aTime = a.last_message_at ? new Date(a.last_message_at || "").getTime() : 0;
-      const bTime = b.last_message_at ? new Date(b.last_message_at || "").getTime() : 0;
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt || "").getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt || "").getTime() : 0;
       return bTime - aTime;
     });
   },

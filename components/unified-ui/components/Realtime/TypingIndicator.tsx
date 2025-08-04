@@ -61,11 +61,11 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
     } else if (typingUsers.length <= maxUsers) {
       const names = typingUsers
         .slice(0, -1)
-        .map((u: any) => u.name)
+        .map((u: unknown) => u.name)
         .join(", ");
       return `${names} and ${typingUsers[typingUsers.length - 1]?.name} are typing`;
     }
-    const names = visibleUsers.map((u: any) => u.name).join(", ");
+    const names = visibleUsers.map((u: unknown) => u.name).join(", ");
     return `${names} and ${remainingCount} other${remainingCount > 1 ? "s" : ""} are typing`;
   };
 
@@ -73,7 +73,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
     return (
       <div className={`flex items-center space-x-1 ${className}`}>
         <div className="flex space-x-0.5">
-          {[0, 1, 2].map((dot: any) => (
+          {[0, 1, 2].map((dot: unknown) => (
             <div
               key={dot}
               className={`h-1.5 w-1.5 rounded-ds-full bg-fl-text-muted transition-opacity duration-200 ${
@@ -123,7 +123,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
 
         {/* Animated dots */}
         <div className="flex space-x-0.5">
-          {[0, 1, 2].map((dot: any) => (
+          {[0, 1, 2].map((dot: unknown) => (
             <div
               key={dot}
               className={`h-1 w-1 rounded-ds-full bg-fl-text-muted transition-all duration-200 ${

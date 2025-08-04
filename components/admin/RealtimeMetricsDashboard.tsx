@@ -304,7 +304,7 @@ export const RealtimeMetricsDashboard: React.FC = () => {
             {channels
               .sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime())
               .slice(0, 20)
-              .map((channel: any) => (
+              .map((channel: unknown) => (
                 <div key={channel.channelName} className="flex items-center justify-between rounded border p-spacing-sm">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center space-x-spacing-sm">

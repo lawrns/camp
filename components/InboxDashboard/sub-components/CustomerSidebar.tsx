@@ -201,7 +201,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                       customerData?.avatar ||
                       (() => {
                         const { getAvatarPath } = require("@/lib/utils/avatar");
-                        return getAvatarPath(conversation.customer_email || conversation.customerName, "customer");
+                        return getAvatarPath(conversation.customerEmail || conversation.customerName, "customer");
                       })()
                     }
                     alt={customerData?.name || conversation.customerName}
@@ -209,9 +209,9 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                     data-testid="customer-avatar"
                   />
                   <h3 className="text-base font-semibold text-gray-900" data-testid="customer-name">
-                    {customerData?.name || conversation.customer_name}
+                    {customerData?.name || conversation.customerName}
                   </h3>
-                  <p className="text-foreground text-sm" data-testid="customer-email">{customerData?.email || conversation.customer_email}</p>
+                  <p className="text-foreground text-sm" data-testid="customer-email">{customerData?.email || conversation.customerEmail}</p>
                 </div>
 
                 {/* Contact Information */}
@@ -219,7 +219,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                   <div className="flex items-center gap-3" data-testid="customer-email-row">
                     <Envelope className="h-4 w-4 text-gray-400" data-testid="customer-email-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-email-text">
-                      {customerData?.email || conversation.customer_email}
+                      {customerData?.email || conversation.customerEmail}
                     </span>
                   </div>
                   {customerData?.phone && (
