@@ -35,7 +35,7 @@ export default function WidgetTestPage() {
           <div className="space-y-2 text-sm text-gray-600">
             <p><strong>Purpose:</strong> Test basic widget functionality without complex dependencies</p>
             <p><strong>Organization ID:</strong> b5e80170-004c-4e82-a88c-3e2166b169dd</p>
-            <p><strong>Conversation ID:</strong> 48eedfba-2568-4231-bb38-2ce20420900d</p>
+            <p><strong>Conversation ID:</strong> 8ddf595b-b75d-42f2-98e5-9efd3513ea4b</p>
           </div>
         </div>
 
@@ -141,7 +141,7 @@ export default function WidgetTestPage() {
             data-testid="api-test-button"
             onClick={async () => {
               try {
-                const response = await fetch('/api/widget/messages?conversationId=48eedfba-2568-4231-bb38-2ce20420900d', {
+                const response = await fetch('/api/widget/messages?conversationId=8ddf595b-b75d-42f2-98e5-9efd3513ea4b', {
                   headers: {
                     'X-Organization-ID': 'b5e80170-004c-4e82-a88c-3e2166b169dd'
                   }

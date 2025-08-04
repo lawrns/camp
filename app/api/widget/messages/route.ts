@@ -131,11 +131,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update conversation's last message timestamp
+    // Update conversation's last message timestamp - FIXED: Use snake_case column names
     const { error: updateError } = await supabase
       .from('conversations')
       .update({
-        lastMessageAt: new Date().toISOString(),
+        last_message_at: new Date().toISOString(), // FIXED: snake_case to match dashboard query
         updated_at: new Date().toISOString(),
       })
       .eq('id', body.conversationId);

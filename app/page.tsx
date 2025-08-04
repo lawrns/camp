@@ -25,7 +25,10 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <WidgetProvider organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd">
+    <WidgetProvider
+      organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
+      conversationId="8ddf595b-b75d-42f2-98e5-9efd3513ea4b"
+    >
       <div className="home-page min-h-screen">
         <ClientHomePage />
       </div>

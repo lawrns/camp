@@ -86,14 +86,14 @@ test.describe('Basic Widget-Dashboard Communication', () => {
       await dashboardPage.waitForTimeout(3000);
       
       // Check if dashboard has loaded properly
-      const dashboardContent = dashboardPage.locator('main, [data-testid="dashboard-content"], .dashboard');
+      const dashboardContent = dashboardPage.locator('main, [data-testid="inbox-dashboard"], .dashboard');
       const hasContent = await dashboardContent.first().isVisible();
       
       if (hasContent) {
         console.log('✅ Dashboard content loaded');
         
         // Look for conversation elements
-        const conversationElements = await dashboardPage.locator('[data-conversation-id], .conversation, [data-testid*="conversation"]').count();
+        const conversationElements = await dashboardPage.locator('[data-testid="conversation-row"], [data-testid="conversation-card"]').count();
         console.log(`📊 Found ${conversationElements} conversation-related elements`);
         
         // Look for message elements

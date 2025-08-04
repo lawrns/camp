@@ -12,7 +12,7 @@ async function testDashboardMessagesAPI() {
   console.log('==================================');
 
   // Test data
-  const testConversationId = '48eedfba-2568-4231-bb38-2ce20420900d';
+  const testConversationId = '8ddf595b-b75d-42f2-98e5-9efd3513ea4b'; // FIXED: Aligned with dashboard
   const testOrganizationId = 'b5e80170-004c-4e82-a88c-3e2166b169dd';
 
   // Test 1: GET messages without authentication (should fail)

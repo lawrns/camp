@@ -142,7 +142,7 @@ describe('Bidirectional Conversation Flow', () => {
       await page.waitForLoadState ? await page.waitForLoadState('networkidle') : await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Check if we're already on dashboard
-      const dashboardContent = await page.$('[data-testid="dashboard-content"], .dashboard, [class*="dashboard"]');
+      const dashboardContent = await page.$('[data-testid="inbox-dashboard"], .dashboard, [class*="dashboard"]');
       if (dashboardContent) {
         console.log('✅ Already logged in to dashboard');
         return;
@@ -177,7 +177,7 @@ describe('Bidirectional Conversation Flow', () => {
 
       // Wait for navigation or dashboard to load
       await Promise.race([
-        page.waitForSelector('[data-testid="dashboard-content"], .dashboard, [class*="dashboard"]', { timeout: 15000 }),
+        page.waitForSelector('[data-testid="inbox-dashboard"], .dashboard, [class*="dashboard"]', { timeout: 15000 }),
         page.waitForFunction(() => window.location.pathname.includes('dashboard'), { timeout: 15000 })
       ]);
 
@@ -194,7 +194,7 @@ describe('Bidirectional Conversation Flow', () => {
       await page.waitForSelector('[data-testid="conversation-list"]', { timeout: 5000 });
       
       // Click on the specific conversation or use the first available one
-      const conversationSelector = `[data-conversation-id="${conversationId}"], .conversation-item:first-child`;
+      const conversationSelector = `[data-testid="conversation-row"], [data-testid="conversation-card"]`;
       await page.waitForSelector(conversationSelector, { timeout: 5000 });
       await page.click(conversationSelector);
       

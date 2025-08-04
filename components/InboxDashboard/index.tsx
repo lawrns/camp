@@ -52,6 +52,7 @@ interface InboxDashboardProps {
  * Performance optimized with memoization and optimized state management
  */
 export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className = "" }) => {
+  console.log('🚨 [BIDIRECTIONAL FIX v3] InboxDashboard component loaded - API fix active!');
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
@@ -188,33 +189,40 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
       try {
 
-        // 2. Database operation - save message to database
-        console.log(`[SendMessage] 💾 Saving message to database...`);
-        const { data, error } = await supabase
-          .browser()
-          .from("messages")
-          .insert({
-            conversation_id: convId,
-            organization_id: organizationId,
-            content: content.trim(),
-            sender_type: senderType,
-            sender_name: senderType === "agent" ? "Support Agent" : "Customer",
-            metadata: {
-              source: "dashboard",
-              timestamp: new Date().toISOString(),
-            },
-          })
-          .select()
-          .single();
+        // CRITICAL FIX: Use proper API endpoint for bidirectional communication
+        console.log('🚨🚨🚨 [BIDIRECTIONAL FIX v3] DASHBOARD API CALL STARTING - This should appear in server logs!');
 
-        if (error) {
-          console.error(`[SendMessage] ❌ Database error:`, error);
+        const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            content: content.trim(),
+            senderType: senderType === "agent" ? "agent" : senderType,
+            senderName: senderType === "agent" ? "Support Agent" : "Customer"
+          }),
+        });
+
+        console.log('🚨 [BIDIRECTIONAL FIX] API response status:', response.status);
+
+        if (!response.ok) {
+          console.error(`[SendMessage] ❌ API error:`, response.statusText);
           // 5. Failure - cleanup optimistic update
           setMessages(prev => prev.filter(msg => msg.id !== tempId));
-          throw new Error(`Failed to save message: ${error.message}`);
+          throw new Error(`Failed to send message: ${response.statusText}`);
         }
 
-        console.log(`[SendMessage] ✅ Message saved to database:`, data.id);
+        const result = await response.json();
+        const data = result.message;
+
+        if (!data) {
+          setMessages(prev => prev.filter(msg => msg.id !== tempId));
+          throw new Error('No message data returned from API');
+        }
+
+        console.log('🚨 [BIDIRECTIONAL FIX] ✅ Message sent successfully via API endpoint:', data.id);
 
         // Replace optimistic message with real one
         const realMessage: Message = {
@@ -473,7 +481,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   // Send message handler
   // PHASE 3: Enhanced user feedback and error handling
   const handleSendMessage = useCallback(async () => {
-    if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) return;
+    console.log('🚨🚨🚨 [COMPONENTS HANDLE SEND MESSAGE] Function called!', {
+      hasMessage: !!newMessage.trim(),
+      hasConversation: !!selectedConversation,
+      isSending,
+      hasOrgId: !!organizationId
+    });
+
+    if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) {
+      console.log('🚨 [COMPONENTS HANDLE SEND MESSAGE] ❌ Early return due to missing requirements');
+      return;
+    }
 
     setIsSending(true);
     const messageContent = newMessage.trim();

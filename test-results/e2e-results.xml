@@ -1,71 +1,227 @@
-<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="15.808485000000001">
-<testsuite name="focused-simple-test.spec.ts" timestamp="2025-08-03T22:00:20.937Z" hostname="chromium" tests="1" failures="1" skipped="0" time="15.077" errors="0">
-<testcase name="Focused Simple Bidirectional Test › should verify widget to agent message delivery" classname="focused-simple-test.spec.ts" time="15.077">
-<failure message="focused-simple-test.spec.ts:115:7 should verify widget to agent message delivery" type="FAILURE">
-<![CDATA[  [chromium] › focused-simple-test.spec.ts:115:7 › Focused Simple Bidirectional Test › should verify widget to agent message delivery 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: page.click: Target page, context or browser has been closed
-    Call log:
-      - waiting for locator('button[type="submit"]')
-        - locator resolved to <button type="submit" data-testid="login-button" class="inline-flex items-center justify-center font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-white border border-primary hover:bg-primary-600 hover:border-primary-600 hover:shadow-md active:bg-primary-700 active:border-primary-700 shadow-sm h-10 px-4 rounded-md text-sm gap-2 w-full">…</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay="true">…</script> subtree intercepts pointer events
-        - retrying click action
-        - waiting 20ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is visible, enabled and stable
-          - scrolling into view if needed
-          - done scrolling
-          - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay="true">…</script> subtree intercepts pointer events
-        - retrying click action
-          - waiting 100ms
-        27 × waiting for element to be visible, enabled and stable
-           - element is visible, enabled and stable
-           - scrolling into view if needed
-           - done scrolling
-           - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay="true">…</script> subtree intercepts pointer events
-         - retrying click action
-           - waiting 500ms
-
-
-      22 |   await page.fill('#email', TEST_CONFIG.agentEmail);
-      23 |   await page.fill('#password', TEST_CONFIG.agentPassword);
-    > 24 |   await page.click('button[type="submit"]');
-         |              ^
-      25 |   await page.waitForURL('**/dashboard**', { timeout: 15000 });
-      26 |   console.log('✅ Agent logged in successfully');
-      27 | }
-        at loginAsAgent (/Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/focused-simple-test.spec.ts:24:14)
-        at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/focused-simple-test.spec.ts:120:5
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-2.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/error-context.md
-]]>
-</failure>
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="28.376296">
+<testsuite name="simple-homepage-widget-test.spec.ts" timestamp="2025-08-04T01:41:42.943Z" hostname="chromium" tests="2" failures="0" skipped="0" time="30.127" errors="0">
+<testcase name="Simple homepage widget bidirectional test" classname="simple-homepage-widget-test.spec.ts" time="27.871">
 <system-out>
-<![CDATA[
-🎯 TEST 1: Widget → Agent Message Delivery
-==========================================
-🔐 Agent logging in...
+<![CDATA[🎯 SIMPLE HOMEPAGE WIDGET BIDIRECTIONAL TEST
+==============================================
+🏠 Step 1: Testing homepage widget...
+📋 Widget button exists: YES
+✅ Widget opened
+💬 Sending message from widget: SIMPLE TEST: Widget message 1754271710500
+✅ Widget message sent
+📥 Step 2: Checking dashboard...
+✅ Agent logged in
+📋 Dashboard conversations found: 38
+✅ Widget message found in conversation 3
+💬 Step 3: Testing dashboard to widget...
+✅ Dashboard reply sent: SIMPLE TEST: Dashboard reply 1754271728145
+📋 Dashboard reply in widget: NO
 
-[[ATTACHMENT|focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-2.png]]
-
-[[ATTACHMENT|focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-1.png]]
-
-[[ATTACHMENT|focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/error-context.md]]
+🎯 SIMPLE TEST SUMMARY
+======================
+📋 Widget button found: YES
+📋 Dashboard conversations: 38
+📋 Widget → Dashboard: WORKING
+🎉 SUCCESS: Basic bidirectional communication working!
+]]>
+</system-out>
+</testcase>
+<testcase name="Database conversation verification" classname="simple-homepage-widget-test.spec.ts" time="2.256">
+<system-out>
+<![CDATA[🔍 DATABASE CONVERSATION VERIFICATION
+====================================
+📋 Conversation Check Result: {
+  "exists": true,
+  "messageCount": 9,
+  "data": {
+    "messages": [
+      {
+        "id": "c278026b-4d50-439c-bebe-6365b2c9e291",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "Test message - 1754263632915",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Anonymous",
+        "senderEmail": null,
+        "createdAt": "2025-08-03T23:27:14.414882+00:00",
+        "updatedAt": "2025-08-03T23:27:14.414882+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-03T23:27:14.414882+00:00"
+      },
+      {
+        "id": "bbfa973a-83ab-43a1-9b12-253af0f69866",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "MANUAL DATABASE TEST: Agent reply from direct DB insert",
+        "senderType": "agent",
+        "senderId": "",
+        "senderName": "Test Agent",
+        "senderEmail": null,
+        "createdAt": "2025-08-03T23:52:50.595712+00:00",
+        "updatedAt": "2025-08-03T23:52:50.595712+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "agent",
+        "created_at": "2025-08-03T23:52:50.595712+00:00"
+      },
+      {
+        "id": "5afd6285-fcf1-4d21-8d9f-c1d09d5a7d28",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "COMPREHENSIVE TEST: Agent reply 1754266869176",
+        "senderType": "agent",
+        "senderId": "6f9916c7-3575-4a81-b58e-624ab066bebc",
+        "senderName": "jam@jam.com",
+        "senderEmail": "jam@jam.com",
+        "createdAt": "2025-08-04T00:21:10.446782+00:00",
+        "updatedAt": "2025-08-04T00:21:10.446782+00:00",
+        "metadata": {
+          "source": "dashboard",
+          "agent_id": "6f9916c7-3575-4a81-b58e-624ab066bebc",
+          "timestamp": "2025-08-04T00:21:10.324Z"
+        },
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "agent",
+        "created_at": "2025-08-04T00:21:10.446782+00:00"
+      },
+      {
+        "id": "577ec998-49e5-4058-8f8d-ab0f7eb003e7",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "ah ye",
+        "senderType": "agent",
+        "senderId": "",
+        "senderName": "Support Agent",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T00:36:04.546304+00:00",
+        "updatedAt": "2025-08-04T00:36:04.546304+00:00",
+        "metadata": {
+          "source": "dashboard",
+          "timestamp": "2025-08-04T00:36:04.229Z"
+        },
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "agent",
+        "created_at": "2025-08-04T00:36:04.546304+00:00"
+      },
+      {
+        "id": "b5acbb4f-02b8-4763-8cc6-32544357ad4a",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "DIRECT API TEST: Dashboard to Widget 1754267988380",
+        "senderType": "agent",
+        "senderId": "6f9916c7-3575-4a81-b58e-624ab066bebc",
+        "senderName": "jam@jam.com",
+        "senderEmail": "jam@jam.com",
+        "createdAt": "2025-08-04T00:39:49.248062+00:00",
+        "updatedAt": "2025-08-04T00:39:49.248062+00:00",
+        "metadata": {
+          "source": "dashboard",
+          "agent_id": "6f9916c7-3575-4a81-b58e-624ab066bebc",
+          "timestamp": "2025-08-04T00:39:49.101Z"
+        },
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "agent",
+        "created_at": "2025-08-04T00:39:49.248062+00:00"
+      },
+      {
+        "id": "b78951da-fa0e-4878-a1ea-7816f368b7b0",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "API TEST: Direct widget API call 1754270874037",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Test Visitor",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T01:27:54.199638+00:00",
+        "updatedAt": "2025-08-04T01:27:54.199638+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-04T01:27:54.199638+00:00"
+      },
+      {
+        "id": "8cdcaeda-cc49-41bc-a36f-b75ebd68cb60",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "API TEST: Direct widget API call 1754270976724",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Test Visitor",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T01:29:36.932672+00:00",
+        "updatedAt": "2025-08-04T01:29:36.932672+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-04T01:29:36.932672+00:00"
+      },
+      {
+        "id": "75cbe457-d3dd-4871-841b-ce898ec83825",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "BIDIRECTIONAL TEST: Widget message 1754271079852",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Test Visitor",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T01:31:20.01986+00:00",
+        "updatedAt": "2025-08-04T01:31:20.01986+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-04T01:31:20.01986+00:00"
+      },
+      {
+        "id": "56430338-a00d-4ab2-8e96-fa5c71bd3749",
+        "conversationId": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "content": "FINAL TEST: Widget message with last_message_at fix",
+        "senderType": "visitor",
+        "senderId": "",
+        "senderName": "Test User",
+        "senderEmail": null,
+        "createdAt": "2025-08-04T01:41:16.043248+00:00",
+        "updatedAt": "2025-08-04T01:41:16.043248+00:00",
+        "metadata": {},
+        "attachments": [],
+        "status": "sent",
+        "inReplyToId": null,
+        "isDeleted": false,
+        "conversation_id": "8ddf595b-b75d-42f2-98e5-9efd3513ea4b",
+        "sender_type": "visitor",
+        "created_at": "2025-08-04T01:41:16.043248+00:00"
+      }
+    ],
+    "count": 9
+  }
+}
+✅ Conversation exists with 9 messages
 ]]>
 </system-out>
 </testcase>

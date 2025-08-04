@@ -5,6 +5,16 @@ import { cookies } from 'next/headers';
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
+
+    // FIXED: Check if request has body before parsing
+    const contentLength = request.headers.get('content-length');
+    if (!contentLength || contentLength === '0') {
+      return NextResponse.json(
+        { error: 'No body provided' },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const { organizationId } = body;
 

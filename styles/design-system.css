@@ -1031,6 +1031,10 @@ button:hover,
     margin-bottom: var(--ds-spacing-2);
     max-width: 80%;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    overflow: hidden;
     transition: all var(--ds-duration-fast) var(--ds-ease-out);
     font-family: var(--ds-font-family-sans);
     line-height: var(--ds-line-height-relaxed);
@@ -1065,6 +1069,8 @@ button:hover,
 @media (max-width: 767px) {
     .message-bubble {
         max-width: 85%;
+        word-break: break-word;
+        overflow-wrap: break-word;
         padding: var(--ds-spacing-3);
     }
 }
@@ -1327,6 +1333,10 @@ button:hover,
     border-radius: var(--ds-radius-lg);
     max-width: 85%;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    overflow: hidden;
     font-size: var(--ds-font-size-base);
     line-height: var(--ds-line-height-relaxed);
 }

@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 2
     },
     "preserveOutput": "always",
     "reporter": [
@@ -43,7 +43,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "chromium",
         "name": "chromium",
@@ -52,14 +52,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "firefox",
         "name": "firefox",
@@ -68,14 +68,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "webkit",
         "name": "webkit",
@@ -84,14 +84,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -100,14 +100,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -116,14 +116,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "Microsoft Edge",
         "name": "Microsoft Edge",
@@ -132,14 +132,14 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       },
       {
         "outputDir": "/Users/lukatenbosch/Downloads/campfire-v2/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 2
         },
         "id": "Google Chrome",
         "name": "Google Chrome",
@@ -148,7 +148,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 15000
+        "timeout": 45000
       }
     ],
     "shard": null,
@@ -160,106 +160,166 @@
   },
   "suites": [
     {
-      "title": "focused-simple-test.spec.ts",
-      "file": "focused-simple-test.spec.ts",
+      "title": "simple-homepage-widget-test.spec.ts",
+      "file": "simple-homepage-widget-test.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [],
-      "suites": [
+      "specs": [
         {
-          "title": "Focused Simple Bidirectional Test",
-          "file": "focused-simple-test.spec.ts",
-          "line": 96,
-          "column": 6,
-          "specs": [
+          "title": "Simple homepage widget bidirectional test",
+          "ok": true,
+          "tags": [],
+          "tests": [
             {
-              "title": "should verify widget to agent message delivery",
-              "ok": false,
-              "tags": [],
-              "tests": [
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
                 {
-                  "timeout": 15000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27871,
+                  "errors": [],
+                  "stdout": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 15077,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 15000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/focused-simple-test.spec.ts",
-                            "column": 14,
-                            "line": 24
-                          },
-                          "message": "Error: page.click: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for locator('button[type=\"submit\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"submit\" data-testid=\"login-button\" class=\"inline-flex items-center justify-center font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-white border border-primary hover:bg-primary-600 hover:border-primary-600 hover:shadow-md active:bg-primary-700 active:border-primary-700 shadow-sm h-10 px-4 rounded-md text-sm gap-2 w-full\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay=\"true\">…</script> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay=\"true\">…</script> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    27 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <nextjs-portal></nextjs-portal> from <script data-nextjs-dev-overlay=\"true\">…</script> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n\u001b[0m \u001b[90m 22 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#email'\u001b[39m\u001b[33m,\u001b[39m \u001b[33mTEST_CONFIG\u001b[39m\u001b[33m.\u001b[39magentEmail)\u001b[33m;\u001b[39m\n \u001b[90m 23 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#password'\u001b[39m\u001b[33m,\u001b[39m \u001b[33mTEST_CONFIG\u001b[39m\u001b[33m.\u001b[39magentPassword)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 24 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/dashboard**'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 26 |\u001b[39m   console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ Agent logged in successfully'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 27 |\u001b[39m }\u001b[0m\n\u001b[2m    at loginAsAgent (/Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/focused-simple-test.spec.ts:24:14)\u001b[22m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/tests/e2e/focused-simple-test.spec.ts:120:5\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "\n🎯 TEST 1: Widget → Agent Message Delivery\n"
-                        },
-                        {
-                          "text": "==========================================\n"
-                        },
-                        {
-                          "text": "🔐 Agent logging in...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-03T22:00:21.202Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-2.png"
-                        },
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/focused-simple-test-Focuse-c9fee-t-to-agent-message-delivery-chromium/error-context.md"
-                        }
-                      ]
+                      "text": "🎯 SIMPLE HOMEPAGE WIDGET BIDIRECTIONAL TEST\n"
+                    },
+                    {
+                      "text": "==============================================\n"
+                    },
+                    {
+                      "text": "🏠 Step 1: Testing homepage widget...\n"
+                    },
+                    {
+                      "text": "📋 Widget button exists: YES\n"
+                    },
+                    {
+                      "text": "✅ Widget opened\n"
+                    },
+                    {
+                      "text": "💬 Sending message from widget: SIMPLE TEST: Widget message 1754271710500\n"
+                    },
+                    {
+                      "text": "✅ Widget message sent\n"
+                    },
+                    {
+                      "text": "📥 Step 2: Checking dashboard...\n"
+                    },
+                    {
+                      "text": "✅ Agent logged in\n"
+                    },
+                    {
+                      "text": "📋 Dashboard conversations found: 38\n"
+                    },
+                    {
+                      "text": "✅ Widget message found in conversation 3\n"
+                    },
+                    {
+                      "text": "💬 Step 3: Testing dashboard to widget...\n"
+                    },
+                    {
+                      "text": "✅ Dashboard reply sent: SIMPLE TEST: Dashboard reply 1754271728145\n"
+                    },
+                    {
+                      "text": "📋 Dashboard reply in widget: NO\n"
+                    },
+                    {
+                      "text": "\n"
+                    },
+                    {
+                      "text": "🎯 SIMPLE TEST SUMMARY\n"
+                    },
+                    {
+                      "text": "======================\n"
+                    },
+                    {
+                      "text": "📋 Widget button found: YES\n"
+                    },
+                    {
+                      "text": "📋 Dashboard conversations: 38\n"
+                    },
+                    {
+                      "text": "📋 Widget → Dashboard: WORKING\n"
+                    },
+                    {
+                      "text": "🎉 SUCCESS: Basic bidirectional communication working!\n"
                     }
                   ],
-                  "status": "unexpected"
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-08-04T01:41:43.205Z",
+                  "annotations": [],
+                  "attachments": []
                 }
               ],
-              "id": "af828fae70ce9221ba36-d82e0bedbfa329859cde",
-              "file": "focused-simple-test.spec.ts",
-              "line": 115,
-              "column": 7
+              "status": "expected"
             }
-          ]
+          ],
+          "id": "b0291ae167cdc62ddd41-4d205ac1e3423d7812fa",
+          "file": "simple-homepage-widget-test.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "Database conversation verification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2256,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "🔍 DATABASE CONVERSATION VERIFICATION\n"
+                    },
+                    {
+                      "text": "====================================\n"
+                    },
+                    {
+                      "text": "📋 Conversation Check Result: {\n  \"exists\": true,\n  \"messageCount\": 9,\n  \"data\": {\n    \"messages\": [\n      {\n        \"id\": \"c278026b-4d50-439c-bebe-6365b2c9e291\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"Test message - 1754263632915\",\n        \"senderType\": \"visitor\",\n        \"senderId\": \"\",\n        \"senderName\": \"Anonymous\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-03T23:27:14.414882+00:00\",\n        \"updatedAt\": \"2025-08-03T23:27:14.414882+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"visitor\",\n        \"created_at\": \"2025-08-03T23:27:14.414882+00:00\"\n      },\n      {\n        \"id\": \"bbfa973a-83ab-43a1-9b12-253af0f69866\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"MANUAL DATABASE TEST: Agent reply from direct DB insert\",\n        \"senderType\": \"agent\",\n        \"senderId\": \"\",\n        \"senderName\": \"Test Agent\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-03T23:52:50.595712+00:00\",\n        \"updatedAt\": \"2025-08-03T23:52:50.595712+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"agent\",\n        \"created_at\": \"2025-08-03T23:52:50.595712+00:00\"\n      },\n      {\n        \"id\": \"5afd6285-fcf1-4d21-8d9f-c1d09d5a7d28\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"COMPREHENSIVE TEST: Agent reply 1754266869176\",\n        \"senderType\": \"agent\",\n        \"senderId\": \"6f9916c7-3575-4a81-b58e-624ab066bebc\",\n        \"senderName\": \"jam@jam.com\",\n        \"senderEmail\": \"jam@jam.com\",\n        \"createdAt\": \"2025-08-04T00:21:10.446782+00:00\",\n        \"updatedAt\": \"2025-08-04T00:21:10.446782+00:00\",\n        \"metadata\": {\n          \"source\": \"dashboard\",\n          \"agent_id\": \"6f9916c7-3575-4a81-b58e-624ab066bebc\",\n          \"timestamp\": \"2025-08-04T00:21:10.324Z\"\n        },\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"agent\",\n        \"created_at\": \"2025-08-04T00:21:10.446782+00:00\"\n      },\n      {\n        \"id\": \"577ec998-49e5-4058-8f8d-ab0f7eb003e7\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"ah ye\",\n        \"senderType\": \"agent\",\n        \"senderId\": \"\",\n        \"senderName\": \"Support Agent\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-04T00:36:04.546304+00:00\",\n        \"updatedAt\": \"2025-08-04T00:36:04.546304+00:00\",\n        \"metadata\": {\n          \"source\": \"dashboard\",\n          \"timestamp\": \"2025-08-04T00:36:04.229Z\"\n        },\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"agent\",\n        \"created_at\": \"2025-08-04T00:36:04.546304+00:00\"\n      },\n      {\n        \"id\": \"b5acbb4f-02b8-4763-8cc6-32544357ad4a\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"DIRECT API TEST: Dashboard to Widget 1754267988380\",\n        \"senderType\": \"agent\",\n        \"senderId\": \"6f9916c7-3575-4a81-b58e-624ab066bebc\",\n        \"senderName\": \"jam@jam.com\",\n        \"senderEmail\": \"jam@jam.com\",\n        \"createdAt\": \"2025-08-04T00:39:49.248062+00:00\",\n        \"updatedAt\": \"2025-08-04T00:39:49.248062+00:00\",\n        \"metadata\": {\n          \"source\": \"dashboard\",\n          \"agent_id\": \"6f9916c7-3575-4a81-b58e-624ab066bebc\",\n          \"timestamp\": \"2025-08-04T00:39:49.101Z\"\n        },\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"agent\",\n        \"created_at\": \"2025-08-04T00:39:49.248062+00:00\"\n      },\n      {\n        \"id\": \"b78951da-fa0e-4878-a1ea-7816f368b7b0\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"API TEST: Direct widget API call 1754270874037\",\n        \"senderType\": \"visitor\",\n        \"senderId\": \"\",\n        \"senderName\": \"Test Visitor\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-04T01:27:54.199638+00:00\",\n        \"updatedAt\": \"2025-08-04T01:27:54.199638+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"visitor\",\n        \"created_at\": \"2025-08-04T01:27:54.199638+00:00\"\n      },\n      {\n        \"id\": \"8cdcaeda-cc49-41bc-a36f-b75ebd68cb60\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"API TEST: Direct widget API call 1754270976724\",\n        \"senderType\": \"visitor\",\n        \"senderId\": \"\",\n        \"senderName\": \"Test Visitor\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-04T01:29:36.932672+00:00\",\n        \"updatedAt\": \"2025-08-04T01:29:36.932672+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"visitor\",\n        \"created_at\": \"2025-08-04T01:29:36.932672+00:00\"\n      },\n      {\n        \"id\": \"75cbe457-d3dd-4871-841b-ce898ec83825\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"BIDIRECTIONAL TEST: Widget message 1754271079852\",\n        \"senderType\": \"visitor\",\n        \"senderId\": \"\",\n        \"senderName\": \"Test Visitor\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-04T01:31:20.01986+00:00\",\n        \"updatedAt\": \"2025-08-04T01:31:20.01986+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"visitor\",\n        \"created_at\": \"2025-08-04T01:31:20.01986+00:00\"\n      },\n      {\n        \"id\": \"56430338-a00d-4ab2-8e96-fa5c71bd3749\",\n        \"conversationId\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"content\": \"FINAL TEST: Widget message with last_message_at fix\",\n        \"senderType\": \"visitor\",\n        \"senderId\": \"\",\n        \"senderName\": \"Test User\",\n        \"senderEmail\": null,\n        \"createdAt\": \"2025-08-04T01:41:16.043248+00:00\",\n        \"updatedAt\": \"2025-08-04T01:41:16.043248+00:00\",\n        \"metadata\": {},\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"inReplyToId\": null,\n        \"isDeleted\": false,\n        \"conversation_id\": \"8ddf595b-b75d-42f2-98e5-9efd3513ea4b\",\n        \"sender_type\": \"visitor\",\n        \"created_at\": \"2025-08-04T01:41:16.043248+00:00\"\n      }\n    ],\n    \"count\": 9\n  }\n}\n"
+                    },
+                    {
+                      "text": "✅ Conversation exists with 9 messages\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-08-04T01:41:43.207Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b0291ae167cdc62ddd41-bfc9864f4e32feee03af",
+          "file": "simple-homepage-widget-test.spec.ts",
+          "line": 153,
+          "column": 5
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-03T22:00:20.924Z",
-    "duration": 15808.485,
-    "expected": 0,
+    "startTime": "2025-08-04T01:41:42.931Z",
+    "duration": 28376.296,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

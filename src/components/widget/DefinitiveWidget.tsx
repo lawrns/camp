@@ -33,8 +33,8 @@ export function DefinitiveWidget({ organizationId, onClose }: DefinitiveWidgetPr
     contextConversationId = widgetContext.conversationId;
     console.log('[DefinitiveWidget] Widget context:', widgetContext);
     console.log('[DefinitiveWidget] Context conversation ID:', contextConversationId);
-    console.log('[DefinitiveWidget] Expected conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d');
-    console.log('[DefinitiveWidget] Context matches expected:', contextConversationId === '48eedfba-2568-4231-bb38-2ce20420900d');
+    console.log('[DefinitiveWidget] Expected conversation ID: 8ddf595b-b75d-42f2-98e5-9efd3513ea4b');
+    console.log('[DefinitiveWidget] Context matches expected:', contextConversationId === '8ddf595b-b75d-42f2-98e5-9efd3513ea4b');
   } catch (error) {
     console.error('[DefinitiveWidget] Error getting widget context:', error);
     contextConversationId = null;

@@ -32,8 +32,8 @@ export function useWidgetState(
   initialConversationId?: string
 ): UseWidgetStateReturn {
   console.log('[useWidgetState] Called with:', { organizationId, initialConversationId });
-  console.log('[useWidgetState] Expected conversation ID: 48eedfba-2568-4231-bb38-2ce20420900d');
-  console.log('[useWidgetState] Received matches expected:', initialConversationId === '48eedfba-2568-4231-bb38-2ce20420900d');
+  console.log('[useWidgetState] Expected conversation ID: 8ddf595b-b75d-42f2-98e5-9efd3513ea4b'); // FIXED: Aligned with dashboard
+  console.log('[useWidgetState] Received matches expected:', initialConversationId === '8ddf595b-b75d-42f2-98e5-9efd3513ea4b');
 
   const [state, setState] = useState<WidgetState>({
     conversationId: initialConversationId || null,

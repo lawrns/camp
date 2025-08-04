@@ -122,6 +122,31 @@
     background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
   }
 
+  /* Fix overflow issues for hero section elements */
+  .home-page h1,
+  .home-page h2,
+  .home-page h3,
+  .home-page h4,
+  .home-page h5,
+  .home-page h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+  }
+
+  .home-page p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+  }
+
+  .home-page div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
   /* ===== Z-INDEX MANAGEMENT ===== */
   /* Systematic z-index hierarchy for Hero section */
   .z-0 { z-index: 0; }
@@ -210,12 +235,34 @@
     .hero-operator-image {
       max-width: 280px !important;
     }
+
+    /* Prevent floating stats from causing overflow */
+    .grid.grid-cols-1 {
+      overflow: hidden;
+    }
+
+    /* Ensure proper spacing between grid items on mobile */
+    .grid.grid-cols-1 > * + * {
+      margin-top: 2rem;
+    }
   }
 
   /* Tablet adjustments */
   @media (min-width: 769px) and (max-width: 1024px) {
     .hero-floating-metrics {
       right: 0.5rem !important;
+    }
+
+    /* Reduce gap on tablets to prevent overlap */
+    .grid.lg\:grid-cols-2 {
+      gap: 2rem;
+    }
+  }
+
+  /* Large screen optimizations */
+  @media (min-width: 1280px) {
+    .grid.lg\:grid-cols-2 {
+      gap: 5rem;
     }
   }
 
@@ -228,6 +275,20 @@
 .inline-flex.items-center:has(svg),
 .inline-flex.items-center:has([class*="icon"]) {
   white-space: nowrap;
+}
+
+/* Global overflow prevention for all text elements */
+h1, h2, h3, h4, h5, h6, p, div, span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Specific fixes for chat bubbles and message containers */
+[class*="message"], [class*="bubble"], [class*="chat"] {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  overflow: hidden;
 }
 
 /* Fallback for browsers without :has() support - target common icon-text patterns */

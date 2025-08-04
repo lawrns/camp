@@ -405,10 +405,38 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           }
         })
         .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+          console.log('🚨 [WIDGET BROADCAST] MESSAGE_CREATED event received!', {
+            event: UNIFIED_EVENTS.MESSAGE_CREATED,
+            payload: payload,
+            hasMessage: !!payload.payload?.message,
+            messageContent: payload.payload?.message?.content,
+            senderType: payload.payload?.message?.sender_type,
+            timestamp: new Date().toISOString()
+          });
+
           widgetDebugger.logRealtime('info', '📡 Broadcast message received', payload);
+
           if (payload.payload?.message) {
             const message = convertToWidgetMessage(payload.payload.message);
-            config.onMessage?.(message);
+            console.log('🚨 [WIDGET BROADCAST] Converting and processing message:', {
+              originalMessage: payload.payload.message,
+              convertedMessage: message,
+              willCallOnMessage: !!config.onMessage
+            });
+            // CRITICAL: Ensure UI update happens
+            if (config.onMessage) {
+              config.onMessage(message);
+              console.log('🚨 [WIDGET BROADCAST] ✅ Message processed and UI callback triggered');
+
+              // Additional UI update verification
+              setTimeout(() => {
+                console.log('🚨 [WIDGET UI DEBUG] Verifying UI update after broadcast reception');
+              }, 100);
+            } else {
+              console.log('🚨 [WIDGET BROADCAST] ❌ No onMessage callback available for UI update');
+            }
+          } else {
+            console.log('🚨 [WIDGET BROADCAST] ❌ No message in payload:', payload);
           }
         })
         .on('broadcast', { event: UNIFIED_EVENTS.TYPING_START }, (payload: any) => {
@@ -418,7 +446,34 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
           config.onTyping?.(false, payload.payload?.userName);
         });
 
+      // Add global broadcast listener for debugging ALL events
+      channel.on('broadcast', { event: '*' }, (payload: any) => {
+        console.log('🚨 [WIDGET DEBUG] ALL BROADCAST EVENTS received:', {
+          event: payload.event,
+          type: payload.type,
+          payload: payload.payload,
+          channelName,
+          timestamp: new Date().toISOString()
+        });
+
+        // Store logs globally for test access
+        if (typeof window !== 'undefined') {
+          (window as any).widgetBroadcastLogs = (window as any).widgetBroadcastLogs || [];
+          (window as any).widgetBroadcastLogs.push({
+            event: payload.event,
+            payload: payload.payload,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+
       // Subscribe with robust timeout and enhanced error handling
+      console.log('🚨 [WIDGET SUBSCRIPTION] Subscribing to channel:', {
+        channelName,
+        events: [UNIFIED_EVENTS.MESSAGE_CREATED, UNIFIED_EVENTS.TYPING_START, UNIFIED_EVENTS.TYPING_STOP],
+        timestamp: new Date().toISOString()
+      });
+
       return new Promise<void>((resolve, reject) => {
         let isResolved = false;
 
@@ -718,10 +773,46 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
             config.onMessage?.(message);
           }
         })
+        .on('broadcast', { event: '*' }, (payload: any) => {
+          console.log('🚨 [WIDGET SIMPLE DEBUG] ALL BROADCAST EVENTS received:', {
+            event: payload.event,
+            type: payload.type,
+            payload: payload.payload,
+            channelName,
+            timestamp: new Date().toISOString()
+          });
+        })
         .on('broadcast', { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload: any) => {
+          console.log('🚨 [WIDGET BROADCAST ORG] MESSAGE_CREATED event received on org channel!', {
+            event: UNIFIED_EVENTS.MESSAGE_CREATED,
+            payload: payload,
+            hasMessage: !!payload.payload?.message,
+            messageContent: payload.payload?.message?.content,
+            senderType: payload.payload?.message?.sender_type,
+            timestamp: new Date().toISOString()
+          });
+
           if (payload.payload?.message) {
             const message = convertToWidgetMessage(payload.payload.message);
-            config.onMessage?.(message);
+            console.log('🚨 [WIDGET BROADCAST ORG] Converting and processing message:', {
+              originalMessage: payload.payload.message,
+              convertedMessage: message,
+              willCallOnMessage: !!config.onMessage
+            });
+            // CRITICAL: Ensure UI update happens on org channel
+            if (config.onMessage) {
+              config.onMessage(message);
+              console.log('🚨 [WIDGET BROADCAST ORG] ✅ Message processed and UI callback triggered');
+
+              // Additional UI update verification
+              setTimeout(() => {
+                console.log('🚨 [WIDGET ORG UI DEBUG] Verifying UI update after org broadcast reception');
+              }, 100);
+            } else {
+              console.log('🚨 [WIDGET BROADCAST ORG] ❌ No onMessage callback available for UI update');
+            }
+          } else {
+            console.log('🚨 [WIDGET BROADCAST ORG] ❌ No message in payload:', payload);
           }
         });
 

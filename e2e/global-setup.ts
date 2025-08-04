@@ -30,19 +30,25 @@ async function globalSetup(config: FullConfig) {
   console.log('🧪 Setting up standardized E2E test data...');
 
   try {
-    const { E2ETestDataSetup } = await import('./test-data-setup');
-    const testDataSetup = new E2ETestDataSetup();
-
-    // Setup complete test environment
-    await testDataSetup.setupTestEnvironment();
-
+    // Import and use the new test data manager
+    const { testDataManager } = await import('../tests/e2e/test-data-manager');
+    
+    // Create fresh test data
+    const testData = await testDataManager.createTestData();
+    
     // Verify data integrity
-    const isValid = await testDataSetup.verifyTestData();
+    const isValid = await testDataManager.verifyTestData();
     if (!isValid) {
       console.log('⚠️  Test data verification failed, but continuing with setup...');
     }
 
     console.log('✅ Standardized test data setup complete');
+    console.log('📊 Test data created:', {
+      organizationId: testData.organizationId,
+      conversationId: testData.conversationId,
+      messageCount: testData.messages.length,
+      userCount: testData.users.length
+    });
   } catch (error) {
     console.log('⚠️  Standardized test data setup failed, falling back to legacy setup:', error);
 

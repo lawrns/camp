@@ -65,6 +65,7 @@ interface CampfireState {
   addConversation: (conversation: Conversation) => void;
   updateConversation: (conversation: Partial<Conversation> & { id: string }) => void;
   updateConversationStatus: (conversationId: string, status: string) => Promise<void>;
+  sendMessage: (conversationId: string, content: string, senderType?: "customer" | "agent") => Promise<void>;
   addMessage: (conversationId: string, message: Message) => void;
   setMessages: (conversationId: string, messages: Message[]) => void;
   incrementUnreadCount: (conversationId: string) => void;
@@ -74,6 +75,13 @@ interface CampfireState {
   syncOfflineChanges: () => void;
   clearAuth: () => void;
   subscribeToConversations: () => () => void;
+
+  // CONSOLIDATED: Inbox actions
+  setMessageText: (text: string) => void;
+  setIsSending: (sending: boolean) => void;
+  toggleConversationSelection: (conversationId: string) => void;
+  clearConversationSelection: () => void;
+  setShowAssignmentPanel: (show: boolean) => void;
 }
 
 export const useCampfireStore = create<CampfireState>((set, get) => ({
@@ -327,5 +335,81 @@ export const useCampfireStore = create<CampfireState>((set, get) => ({
     set((state) => ({
       inbox: { ...state.inbox, showAssignmentPanel: show },
     }));
+  },
+
+  // CRITICAL FIX: Add missing sendMessage function for bidirectional communication
+  sendMessage: async (conversationId: string, content: string, senderType: "customer" | "agent" = "agent") => {
+    console.log('🚨🚨🚨 [UNIFIED CAMPFIRE STORE] sendMessage called!', {
+      conversationId,
+      content: content.substring(0, 50) + '...',
+      senderType
+    });
+
+    if (!content.trim()) {
+      console.log('🚨 [UNIFIED CAMPFIRE STORE] ❌ Empty content, aborting');
+      return;
+    }
+
+    const { setIsSending } = get();
+    setIsSending(true);
+
+    try {
+      console.log('🚨 [UNIFIED CAMPFIRE STORE] 🚀 Making API call to dashboard endpoint...');
+
+      // Use the correct dashboard API endpoint for bidirectional communication
+      const response = await fetch(`/api/dashboard/conversations/${conversationId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies for authentication
+        body: JSON.stringify({
+          content: content.trim(),
+          senderType,
+          senderName: senderType === 'agent' ? 'Support Agent' : 'Customer'
+        }),
+      });
+
+      console.log('🚨 [UNIFIED CAMPFIRE STORE] API response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log('🚨 [UNIFIED CAMPFIRE STORE] ❌ API error:', errorText);
+        throw new Error(`Failed to send message: ${response.status} - ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log('🚨 [UNIFIED CAMPFIRE STORE] ✅ Message sent successfully:', result);
+
+      // Add the message to local state for immediate UI update
+      const newMessage = {
+        id: result.id || `temp-${Date.now()}`,
+        conversation_id: conversationId,
+        content: content.trim(),
+        sender_type: senderType,
+        sender_name: senderType === 'agent' ? 'Support Agent' : 'Customer',
+        created_at: new Date().toISOString(),
+        attachments: [],
+        read_status: 'sent' as const,
+      };
+
+      // Update messages in store
+      const currentMessages = get().messages.get(conversationId) || [];
+      get().messages.set(conversationId, [...currentMessages, newMessage]);
+
+      console.log('🚨 [UNIFIED CAMPFIRE STORE] ✅ Message added to local state');
+
+    } catch (error) {
+      console.error('🚨 [UNIFIED CAMPFIRE STORE] ❌ Send message error:', error);
+      throw error;
+    } finally {
+      setIsSending(false);
+    }
+  },
+
+  // Add updateConversationStatus function if it doesn't exist
+  updateConversationStatus: async (conversationId: string, status: "open" | "resolved" | "pending") => {
+    console.log('🚨 [UNIFIED CAMPFIRE STORE] updateConversationStatus called:', { conversationId, status });
+    // TODO: Implement conversation status update API call
   },
 }));

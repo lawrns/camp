@@ -6,9 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useConversations } from "@/hooks/useConversations";
 import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
-import { supabase } from "@/lib/supabase";
-import { broadcastToChannel } from "@/lib/realtime/standardized-realtime";
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Robot } from "@phosphor-icons/react";
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
@@ -41,6 +38,7 @@ interface InboxDashboardProps {
  * Main InboxDashboard component - now much smaller and focused on orchestration
  */
 export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }) => {
+  console.log('🚨🚨🚨 [SRC/COMPONENTS/INBOXDASHBOARD] This component is being used!');
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
@@ -159,7 +157,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     reconnectionCount: 0
   };
 
-  // Send message function with real-time broadcasting
+  // Send message function using proper API endpoint for bidirectional communication
   const sendMessageHP = useCallback(
     async (convId: string, content: string, senderType: "customer" | "agent" = "agent") => {
       if (!organizationId || !content.trim()) return;
@@ -186,28 +184,52 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
         // Add optimistic message to UI immediately
         setMessages(prev => [...prev, optimisticMessage]);
 
-        // Send to database
-        const { data, error } = await supabase
-          .browser()
-          .from("messages")
-          .insert({
-            conversation_id: convId,
-            organization_id: organizationId,
-            content: content.trim(),
-            sender_type: senderType,
-            sender_name: senderType === "agent" ? "Support Agent" : "Customer",
-            metadata: {
-              source: "dashboard",
-              timestamp: new Date().toISOString(),
-            },
-          })
-          .select()
-          .single();
+        // CRITICAL FIX: Use proper API endpoint for bidirectional communication
+        console.log('🚨🚨🚨 [DASHBOARD API] Starting API call for bidirectional communication');
+        console.log('🚨 [DASHBOARD API] Request details:', {
+          url: `/api/dashboard/conversations/${convId}/messages`,
+          method: 'POST',
+          convId,
+          content: content.trim(),
+          senderType
+        });
 
-        if (error) {
+        const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            content: content.trim(),
+            senderType: senderType === "agent" ? "agent" : senderType,  // FIXED: Use 'agent' not 'operator'
+            senderName: senderType === "agent" ? "Support Agent" : "Customer"
+          }),
+        });
+
+        console.log('🚨 [DASHBOARD API] Response status:', response.status);
+        console.log('🚨 [DASHBOARD API] Response ok:', response.ok);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('🚨 [DASHBOARD API] ❌ API Error:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorText
+          });
+          throw new Error(`API Error: ${response.status} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log('🚨 [DASHBOARD API] ✅ API Success:', result);
+
+        // Response already parsed above, use existing result variable
+        const data = result.message;
+
+        if (!data) {
           // Remove optimistic message on error
           setMessages(prev => prev.filter(msg => msg.id !== tempId));
-          throw error;
+          throw new Error('No message data returned from API');
         }
 
         // Replace optimistic message with real one
@@ -219,30 +241,8 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
           )
         );
 
-        // Broadcast real-time event using standardized system
-        try {
-          console.log('[InboxDashboard] Broadcasting message using standardized system');
-
-          const success = await broadcastToChannel(
-            UNIFIED_CHANNELS.conversation(organizationId, convId),
-            UNIFIED_EVENTS.MESSAGE_CREATED,
-            {
-              message: { ...data, attachments: [], read_status: "sent" as const },
-              conversation_id: convId,
-              organization_id: organizationId,
-              sender_type: senderType,
-            }
-          );
-
-          if (success) {
-            console.log('[InboxDashboard] ✅ Real-time broadcast successful');
-          } else {
-            console.warn('[InboxDashboard] ⚠️ Real-time broadcast failed');
-          }
-        } catch (broadcastError) {
-          console.error('[InboxDashboard] Real-time broadcast error:', broadcastError);
-          // Don't throw - message was saved successfully
-        }
+        console.log('[InboxDashboard] ✅ Message sent successfully via API endpoint');
+        console.log('[InboxDashboard] 📡 Server-side broadcast events will be handled by API layer');
 
         return data;
       } catch (error) {
@@ -345,7 +345,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
 
   // Send message handler
   const handleSendMessage = useCallback(async () => {
-    if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) return;
+    console.log('🚨🚨🚨 [HANDLE SEND MESSAGE] Function called!', {
+      hasMessage: !!newMessage.trim(),
+      hasConversation: !!selectedConversation,
+      isSending,
+      hasOrgId: !!organizationId
+    });
+
+    if (!newMessage.trim() || !selectedConversation || isSending || !organizationId) {
+      console.log('🚨 [HANDLE SEND MESSAGE] ❌ Early return due to missing requirements');
+      return;
+    }
 
     setIsSending(true);
 

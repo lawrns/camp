@@ -11,7 +11,7 @@ export const WorldClassHero = () => {
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
       <div className="max-w-7xl w-full mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 xl:gap-20 items-center">
           
           {/* Left Column - Content */}
           <motion.div
@@ -108,9 +108,9 @@ export const WorldClassHero = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="flex justify-center relative"
+            className="flex justify-center relative mt-8 lg:mt-0"
           >
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto lg:max-w-none lg:w-full">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto lg:max-w-none lg:w-full relative">
               {/* Header */}
               <div className="bg-blue-600 px-6 py-4">
                 <div className="flex items-center space-x-3">
@@ -175,10 +175,10 @@ export const WorldClassHero = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 3, duration: 0.5 }}
-              className="absolute -top-4 -right-4 bg-white rounded-xl p-3 shadow-lg border"
+              className="absolute -top-2 -right-2 lg:-top-4 lg:-right-4 bg-white rounded-xl p-2 lg:p-3 shadow-lg border z-10"
             >
               <div className="text-center">
-                <div className="text-lg font-bold text-green-600">2.3s</div>
+                <div className="text-sm lg:text-lg font-bold text-green-600">2.3s</div>
                 <div className="text-xs text-gray-500">avg response</div>
               </div>
             </motion.div>
@@ -187,10 +187,10 @@ export const WorldClassHero = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 3.2, duration: 0.5 }}
-              className="absolute -bottom-4 -left-4 bg-white rounded-xl p-3 shadow-lg border"
+              className="absolute -bottom-2 -left-2 lg:-bottom-4 lg:-left-4 bg-white rounded-xl p-2 lg:p-3 shadow-lg border z-10"
             >
               <div className="text-center">
-                <div className="text-lg font-bold text-blue-600">98%</div>
+                <div className="text-sm lg:text-lg font-bold text-blue-600">98%</div>
                 <div className="text-xs text-gray-500">satisfaction</div>
               </div>
             </motion.div>
@@ -229,4 +229,4 @@ export const WorldClassHero = () => {
       )}
     </section>
   );
-}; 
+};

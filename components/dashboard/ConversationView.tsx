@@ -9,7 +9,7 @@ import { MessageComposer } from "@/components/unified-ui/components/Composer";
 import { TypingBubble } from "@/components/unified-ui/components/TypingDots";
 import { useTypingPreview } from "@/lib/realtime/useTypingPreview";
 import { cn } from "@/lib/utils";
-import { formatDistanceToNow } from "date-fns";
+import { formatRelativeTimeShort } from "@/lib/utils/date";
 import React, { useEffect, useState } from "react";
 
 interface Message {
@@ -115,7 +115,7 @@ export function ConversationView({
                 </Badge>
               )}
               <span className="text-tiny text-[var(--fl-color-text-muted)]">
-                {formatDistanceToNow(message.createdAt, { addSuffix: true })}
+                {formatRelativeTimeShort(new Date(message.createdAt))}
               </span>
             </div>
           )}
@@ -137,7 +137,7 @@ export function ConversationView({
           {/* Timestamp for own messages */}
           {isOwn && (
             <div className="px-1 text-tiny text-[var(--fl-color-text-muted)]">
-              {formatDistanceToNow(message.createdAt, { addSuffix: true })}
+              {formatRelativeTimeShort(new Date(message.createdAt))}
               {message.isRead && <span className="ml-1 text-[var(--fl-color-info)]">✓</span>}
             </div>
           )}

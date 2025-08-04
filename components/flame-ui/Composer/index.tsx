@@ -332,14 +332,26 @@ export const Composer = memo(function Composer({
   };
 
   const handleSend = async () => {
-    if (!content.trim() && attachments.length === 0) return;
+    console.log('🚨🚨🚨 [FLAME UI COMPOSER] handleSend called!', {
+      hasContent: !!content.trim(),
+      hasAttachments: attachments.length > 0,
+      onSendFunction: !!onSend,
+      content: content.trim()
+    });
+
+    if (!content.trim() && attachments.length === 0) {
+      console.log('🚨 [FLAME UI COMPOSER] ❌ Early return - no content or attachments');
+      return;
+    }
 
     try {
       if (onStopTyping) {
         onStopTyping();
       }
 
+      console.log('🚨 [FLAME UI COMPOSER] Calling onSend function...');
       await onSend(content.trim(), attachments.length > 0 ? attachments : undefined);
+      console.log('🚨 [FLAME UI COMPOSER] ✅ onSend completed successfully');
 
       // Clear on successful send
       setContent("");

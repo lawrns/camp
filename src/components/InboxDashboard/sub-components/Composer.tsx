@@ -254,7 +254,15 @@ export const Composer: React.FC<ComposerProps> = ({
 
             {/* Send button */}
             <button
-              onClick={sendMessage}
+              onClick={() => {
+                console.log('🚨🚨🚨 [COMPOSER SEND BUTTON] Button clicked!', {
+                  hasMessage: !!newMessage.trim(),
+                  isSending,
+                  isOverLimit,
+                  disabled: !newMessage.trim() || isSending || isOverLimit
+                });
+                sendMessage();
+              }}
               disabled={!newMessage.trim() || isSending || isOverLimit}
               className={`rounded-ds-xl transition-all flex items-center justify-center ${
                 newMessage.trim() && !isSending && !isOverLimit

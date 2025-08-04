@@ -230,7 +230,7 @@ export const GET = withAuth(async (request: NextRequest, user: any, conversation
 export const POST = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
   try {
     const body = await request.json();
-    const { content, senderType = 'operator' } = body;
+    const { content, senderType = 'agent' } = body;
 
     if (!content || typeof content !== 'string' || content.trim().length === 0) {
       return NextResponse.json(
@@ -278,12 +278,29 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       .single();
 
     if (error) {
-      console.error('[Dashboard Messages API] Creation error:', error);
+      console.error('🚨 [DASHBOARD API] DB Insert Error Details:', {
+        error: error,
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        conversationId,
+        organizationId: user.organizationId,
+        senderType,
+        contentLength: content.trim().length
+      });
       return NextResponse.json(
-        { error: 'Failed to create message', code: 'DATABASE_ERROR' },
+        { error: 'Failed to create message', code: 'DATABASE_ERROR', details: error.message },
         { status: 500 }
       );
     }
+
+    console.log('🚨 [DASHBOARD API] ✅ Message inserted successfully:', {
+      messageId: message.id,
+      conversationId,
+      senderType,
+      content: content.substring(0, 50) + '...'
+    });
 
     // CRITICAL: Broadcast message to real-time channels for widget and other agents
     try {
@@ -299,11 +316,19 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       };
 
       // Broadcast to conversation-specific channel (for widget and other agents viewing this conversation)
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.conversation(user.organizationId, conversationId),
+      const conversationChannel = UNIFIED_CHANNELS.conversation(user.organizationId, conversationId);
+      console.log('🚨 [DASHBOARD BROADCAST] Broadcasting to conversation channel:', {
+        channel: conversationChannel,
+        event: UNIFIED_EVENTS.MESSAGE_CREATED,
+        payload: messagePayload
+      });
+
+      const convResult = await broadcastToChannel(
+        conversationChannel,
         UNIFIED_EVENTS.MESSAGE_CREATED,
         messagePayload
       );
+      console.log('🚨 [DASHBOARD BROADCAST] Conversation channel result:', convResult);
 
       // Broadcast to organization channel (for conversation list updates)
       await broadcastToChannel(
@@ -319,11 +344,20 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
       );
 
       // Broadcast to widget channel for bidirectional communication
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.widget(user.organizationId, conversationId),
+      const widgetChannel = UNIFIED_CHANNELS.widget(user.organizationId, conversationId);
+      console.log('🚨 [DASHBOARD BROADCAST] Broadcasting to widget channel:', {
+        channel: widgetChannel,
+        event: UNIFIED_EVENTS.MESSAGE_CREATED,
+        payload: messagePayload,
+        isWidgetChannelSameAsConv: widgetChannel === conversationChannel
+      });
+
+      const widgetResult = await broadcastToChannel(
+        widgetChannel,
         UNIFIED_EVENTS.MESSAGE_CREATED,
         messagePayload
       );
+      console.log('🚨 [DASHBOARD BROADCAST] Widget channel result:', widgetResult);
 
       // Broadcast to conversations channel for dashboard conversation list updates
       await broadcastToChannel(

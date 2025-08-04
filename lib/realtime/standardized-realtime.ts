@@ -7,7 +7,7 @@
 
 import { supabase } from "@/lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "./unified-channel-standards";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS, CHANNEL_CONFIG } from "./unified-channel-standards";
 
 // Re-export unified channels for backward compatibility
 export const CHANNEL_PATTERNS = UNIFIED_CHANNELS;
@@ -37,12 +37,12 @@ class ChannelManager {
   private startCleanup() {
     if (this.cleanupInterval) return;
 
-    this.cleanupInterval = setInterval(() => {
-      this.cleanup();
+    this.cleanupInterval = setInterval(async () => {
+      await this.cleanup();
     }, this.CLEANUP_INTERVAL);
   }
 
-  private cleanup() {
+  private async cleanup() {
     const now = Date.now();
     const channelsToRemove: string[] = [];
 
@@ -52,7 +52,7 @@ class ChannelManager {
       }
     });
 
-    channelsToRemove.forEach((name) => {
+    for (const name of channelsToRemove) {
       const info = this.channels.get(name);
       if (info) {
         try {
@@ -61,15 +61,21 @@ class ChannelManager {
             clearInterval(info.heartbeatInterval);
           }
 
-          const client = supabase.browser();
-          client.removeChannel(info.channel);
+          // FIXED: Use conditional client for server/browser context
+          const client = typeof window === "undefined"
+            ? (await import('@/lib/supabase/consolidated-exports')).supabase.server()
+            : supabase.browser();
+
+          if (client) {
+            client.removeChannel(info.channel);
+          }
           this.channels.delete(name);
           console.log(`[Realtime] Cleaned up idle channel: ${name}`);
         } catch (error) {
           console.warn(`[Realtime] Failed to cleanup channel ${name}:`, error);
         }
       }
-    });
+    }
   }
 
   getChannel(name: string, config?: any): RealtimeChannel {
@@ -96,7 +102,10 @@ class ChannelManager {
           ...config?.config,
           heartbeatIntervalMs: 25000, // Reduced from 30s to prevent timeouts
           rejoinAfterMs: (tries: number) => Math.min(1000 * Math.pow(2, tries), 10000),
-          broadcast: { ack: false },
+          broadcast: {
+            self: true,   // CRITICAL: Sender receives own broadcasts for UI updates
+            ack: true     // CRITICAL: Acknowledgment for reliable delivery
+          },
           presence: { ack: false },
           postgres_changes: [] // <-- disable automatic CDC
         }

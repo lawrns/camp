@@ -9,7 +9,7 @@ import { WidgetProvider } from '../../components/widget';
  */
 export default function WidgetDemoPage() {
   const TEST_ORG_ID = 'b5e80170-004c-4e82-a88c-3e2166b169dd';
-  const TEST_CONVERSATION_ID = '48eedfba-2568-4231-bb38-2ce20420900d';
+  const TEST_CONVERSATION_ID = '8ddf595b-b75d-42f2-98e5-9efd3513ea4b'; // FIXED: Use same conversation as dashboard
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -66,7 +66,7 @@ export default function WidgetDemoPage() {
               <div>
                 <h3 className="font-medium mb-2">Test Conversation:</h3>
                 <p className="text-sm font-mono bg-yellow-100 p-2 rounded">
-                  48eedfba-2568-4231-bb38-2ce20420900d
+                  8ddf595b-b75d-42f2-98e5-9efd3513ea4b
                 </p>
               </div>
             </div>

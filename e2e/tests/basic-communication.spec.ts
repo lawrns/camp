@@ -61,7 +61,7 @@ test.describe('Basic Widget-Dashboard Communication', () => {
     console.log('✅ Dashboard login successful');
     
     // Check if dashboard content is visible
-    const dashboardContent = page.locator('main, [data-testid="dashboard-content"], .dashboard');
+          const dashboardContent = page.locator('main, [data-testid="inbox-dashboard"], .dashboard');
     await expect(dashboardContent.first()).toBeVisible({ timeout: 10000 });
     
     console.log('✅ Dashboard content loaded');
@@ -115,7 +115,7 @@ test.describe('Basic Widget-Dashboard Communication', () => {
     await page.waitForURL('**/dashboard', { timeout: 15000 });
     
     // Look for conversations list or navigation
-    const conversationsList = page.locator('[data-testid="conversations-list"], .conversations, [data-conversation-id]');
+          const conversationsList = page.locator('[data-testid="conversation-list"], [data-testid="conversation-row"]');
     
     // Wait a bit for the page to fully load
     await page.waitForTimeout(3000);

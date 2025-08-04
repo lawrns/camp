@@ -26,7 +26,7 @@ const TEST_CONFIG = {
 
 // Helper functions
 async function setupWidget(page: Page): Promise<void> {
-  await page.goto(`${TEST_CONFIG.baseURL}/widget-test`);
+  await page.goto(`${TEST_CONFIG.baseURL}/`);
   await page.waitForLoadState('networkidle');
 }
 

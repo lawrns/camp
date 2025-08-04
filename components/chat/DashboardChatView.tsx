@@ -39,6 +39,8 @@ interface DashboardChatViewProps {
 }
 
 export function DashboardChatView({ conversationId, className }: DashboardChatViewProps) {
+  console.log('🚨🚨🚨 [DASHBOARD CHAT VIEW] Component rendered!', { conversationId });
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -83,12 +85,23 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
 
   // Send a new message
   const sendMessage = async () => {
-    if (!newMessage.trim() || isSending || !conversationId) return;
+    console.log('🚨🚨🚨 [DASHBOARD CHAT VIEW] sendMessage function called!', {
+      hasMessage: !!newMessage.trim(),
+      isSending,
+      hasConversationId: !!conversationId,
+      messageContent: newMessage.trim()
+    });
+
+    if (!newMessage.trim() || isSending || !conversationId) {
+      console.log('🚨 [DASHBOARD CHAT VIEW] ❌ Early return due to missing requirements');
+      return;
+    }
 
     try {
       setIsSending(true);
       setError(null);
 
+      console.log('🚨 [DASHBOARD CHAT VIEW] 🚀 Starting API call...');
       console.log('[DashboardChatView] Sending message:', newMessage.trim());
 
       const response = await fetch(`/api/dashboard/conversations/${conversationId}/messages`, {
@@ -99,8 +112,8 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
         credentials: 'include',
         body: JSON.stringify({
           content: newMessage.trim(),
-          sender_type: 'operator',
-          sender_name: 'Agent'
+          senderType: 'agent',
+          senderName: 'Agent'
         }),
       });
 
@@ -354,10 +367,18 @@ export function DashboardChatView({ conversationId, className }: DashboardChatVi
             disabled={isSending}
           />
           <Button
-            onClick={sendMessage}
+            onClick={() => {
+              console.log('🚨🚨🚨 [DASHBOARD CHAT VIEW] Send button clicked!', {
+                hasMessage: !!newMessage.trim(),
+                isSending,
+                disabled: !newMessage.trim() || isSending
+              });
+              sendMessage();
+            }}
             disabled={!newMessage.trim() || isSending}
             size="sm"
             className="self-end"
+            aria-label="Send message"
           >
             {isSending ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

@@ -34,7 +34,7 @@ test.describe('AI Handover Flow', () => {
     await agentPage.waitForURL('**/dashboard/inbox');
 
     // Setup widget conversation
-    await widgetPage.goto('http://localhost:3001/widget-test');
+    await widgetPage.goto('http://localhost:3001/');
     await widgetPage.click('[data-testid="start-conversation"]');
     
     // Get conversation ID from widget

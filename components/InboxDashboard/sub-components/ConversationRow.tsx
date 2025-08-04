@@ -3,7 +3,7 @@
 import { Clock, Robot, Tag } from "@phosphor-icons/react";
 import * as React from "react";
 import { memo } from "react";
-import { formatDistanceToNow } from "date-fns";
+import { formatRelativeTimeShort } from "@/lib/utils/date";
 import { StatusBadge } from "@/components/inbox/StatusBadge";
 import type { ConversationRowProps } from "../types";
 
@@ -31,7 +31,7 @@ export const ConversationRow: React.FC<ConversationRowProps> = memo(({ conversat
       }
 
       // Use date-fns for better relative time formatting
-      return formatDistanceToNow(date, { addSuffix: true });
+      return formatRelativeTimeShort(date);
     } catch (error) {
       return "Unknown time";
     }

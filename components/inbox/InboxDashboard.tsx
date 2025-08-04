@@ -69,6 +69,7 @@ export function InboxDashboard({
   currentUserRole,
   className
 }: InboxDashboardProps) {
+  console.log('🚨🚨🚨 [COMPONENTS/INBOX/INBOXDASHBOARD] This component is being used!');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [searchQuery, setSearchQuery] = useState('');

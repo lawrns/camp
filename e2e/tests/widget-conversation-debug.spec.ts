@@ -9,7 +9,7 @@ const TEST_CONFIG = {
   AGENT_EMAIL: 'jam@jam.com',
   AGENT_PASSWORD: 'password123',
   TEST_ORG_ID: 'b5e80170-004c-4e82-a88c-3e2166b169dd',
-  TEST_CONVERSATION_ID: '48eedfba-2568-4231-bb38-2ce20420900d',
+  TEST_CONVERSATION_ID: '8ddf595b-b75d-42f2-98e5-9efd3513ea4b', // FIXED: Aligned with dashboard
   BASE_URL: 'http://localhost:3001'
 };
 

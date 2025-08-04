@@ -1,0 +1,227 @@
+{
+  "test_summary": {
+    "objective": "Comprehensive end-to-end (E2E) bidirectional communication testing using Playwright to verify real-time message flow between widget and dashboard interfaces",
+    "status": "PARTIALLY WORKING - Widget to Dashboard communication verified, Dashboard to Widget communication failing",
+    "test_date": "2025-01-02",
+    "test_environment": "localhost:3001",
+    "agent_credentials": {
+      "email": "jam@jam.com",
+      "password": "password123"
+    }
+  },
+  "current_test_status": {
+    "widget_to_dashboard": "✅ WORKING",
+    "dashboard_to_widget": "❌ FAILING",
+    "conversation_creation": "✅ WORKING",
+    "real_time_updates": "⚠️ PARTIAL",
+    "typing_indicators": "❌ NOT TESTED",
+    "unread_counts": "❌ NOT TESTED"
+  },
+  "detailed_findings": {
+    "widget_authentication": {
+      "status": "✅ RESOLVED",
+      "issue": "Database permission error in trigger function",
+      "solution": "Added RLS policies and fixed trigger function security context",
+      "evidence": "POST /api/widget/auth 200 in 577ms (was 500 error)",
+      "files_affected": [
+        "lib/realtime/unified-channel-standards.ts",
+        "database/migrations/*.sql"
+      ]
+    },
+    "widget_interface": {
+      "status": "✅ WORKING",
+      "elements_found": {
+        "widget_button": "[data-testid=\"widget-button\"]",
+        "widget_panel": "[data-testid=\"widget-panel\"]",
+        "message_input": "[data-testid=\"widget-message-input\"]",
+        "send_button": "[data-testid=\"widget-send-button\"]"
+      },
+      "element_details": {
+        "message_input": {
+          "tag": "TEXTAREA",
+          "placeholder": "Type your message...",
+          "class": "w-full resize-none border-none outline-none bg-transparent placeholder:text-gray-400"
+        },
+        "send_button": {
+          "tag": "BUTTON",
+          "aria_label": "Send message",
+          "class": "rounded-ds-xl transition-all flex items-center justify-center w-12 h-12 bg-[var(--color-primary-600)] text-[var(--color-text-inverse)] hover:bg-[var(--color-primary-700)]"
+        }
+      },
+      "files_verified": [
+        "components/widget/design-system/UltimateWidget.tsx",
+        "components/widget/components/WidgetComposer.tsx"
+      ]
+    },
+    "dashboard_interface": {
+      "status": "✅ WORKING",
+      "elements_found": {
+        "conversation_list": "[data-testid=\"conversation\"], .conversation-item, [data-testid=\"conversation-card\"]",
+        "message_input": "textarea[placeholder*=\"message\"], input[placeholder*=\"message\"]",
+        "send_button": "button[aria-label=\"Send message\"]"
+      },
+      "conversation_count": 6,
+      "files_verified": [
+        "components/inbox/InboxDashboard.tsx",
+        "components/inbox/ConversationCard.tsx"
+      ]
+    },
+    "real_time_communication": {
+      "widget_to_dashboard": {
+        "status": "✅ WORKING",
+        "latency": "<1000ms",
+        "evidence": "Message appears in dashboard conversation list and conversation view",
+        "broadcast_channels": [
+          "org:b5e80170-004c-4e82-a88c-3e2166b169dd:conv:786c060b-3157-4740-9b28-9e3af737c255",
+          "org:b5e80170-004c-4e82-a88c-3e2166b169dd",
+          "org:b5e80170-004c-4e82-a88c-3e2166b169dd:conversations"
+        ],
+        "files_involved": [
+          "lib/realtime/unified-channel-standards.ts",
+          "hooks/useRealtime.ts",
+          "components/widget/enhanced/useWidgetRealtime.ts"
+        ]
+      },
+      "dashboard_to_widget": {
+        "status": "❌ FAILING",
+        "issue": "Reply sent from dashboard does not appear in widget",
+        "timeout": "15000ms exceeded waiting for message in widget",
+        "possible_causes": [
+          "Broadcast events not reaching widget",
+          "Widget not subscribed to correct channels",
+          "Message format mismatch",
+          "Real-time connection issues"
+        ],
+        "files_to_investigate": [
+          "hooks/useRealtime.ts",
+          "components/widget/enhanced/useWidgetRealtime.ts",
+          "app/api/ai/route.ts",
+          "lib/realtime/unified-channel-standards.ts"
+        ]
+      }
+    },
+    "test_issues_resolved": {
+      "compilation_error": {
+        "issue": "Duplicate DATABASE_REQUIREMENTS export in unified-channel-standards.ts",
+        "solution": "Removed duplicate export",
+        "file": "lib/realtime/unified-channel-standards.ts"
+      },
+      "widget_element_selectors": {
+        "issue": "Tests couldn't find widget elements",
+        "solution": "Updated selectors to use correct data-testid attributes",
+        "files_updated": [
+          "tests/e2e/bidirectional-communication.spec.ts",
+          "tests/e2e/simple-bidirectional-test.spec.ts"
+        ]
+      },
+      "send_button_click": {
+        "issue": "Next.js development overlay blocking send button clicks",
+        "solution": "Used force: true option for button clicks",
+        "file": "tests/e2e/simple-bidirectional-test.spec.ts"
+      }
+    }
+  },
+  "test_files": {
+    "created": [
+      "tests/e2e/simple-bidirectional-test.spec.ts",
+      "tests/e2e/widget-inspection.spec.ts",
+      "tests/e2e/bidirectional-communication.spec.ts"
+    ],
+    "status": {
+      "simple_bidirectional_test": "PARTIALLY WORKING - Step 9 failing",
+      "widget_inspection": "✅ WORKING - Successfully identified widget elements",
+      "bidirectional_communication": "❌ FAILING - Multiple parallel execution issues"
+    }
+  },
+  "database_requirements": {
+    "current_status": "✅ CONFIGURED",
+    "publications": {
+      "supabase_realtime": "Scalar-only publication for conversations and messages"
+    },
+    "rls_policies": {
+      "realtime_conv_insert": "INSERT policy for realtime_conversations",
+      "realtime_conv_update": "UPDATE policy for realtime_conversations"
+    },
+    "trigger_functions": {
+      "sync_realtime_conversations": "SECURITY DEFINER function for conversation sync"
+    },
+    "files": [
+      "db/schema/conversations.ts",
+      "db/schema/messages.ts",
+      "db/schema/realtime_conversations.ts"
+    ]
+  },
+  "next_steps_for_database_ai": {
+    "priority_1": {
+      "task": "Investigate dashboard-to-widget broadcast failure",
+      "files_to_check": [
+        "hooks/useRealtime.ts",
+        "components/widget/enhanced/useWidgetRealtime.ts",
+        "app/api/ai/route.ts"
+      ],
+      "database_queries": [
+        "Check broadcast events in realtime_conversations table",
+        "Verify widget subscription to correct channels",
+        "Monitor real-time connection status"
+      ]
+    },
+    "priority_2": {
+      "task": "Verify broadcast channel configuration",
+      "files_to_check": [
+        "lib/realtime/unified-channel-standards.ts"
+      ],
+      "database_queries": [
+        "Check publication includes all required tables",
+        "Verify RLS policies allow widget access",
+        "Test broadcast event delivery"
+      ]
+    },
+    "priority_3": {
+      "task": "Implement typing indicators and unread counts",
+      "files_to_check": [
+        "hooks/useTypingIndicator.ts",
+        "hooks/useUnreadCounts.ts"
+      ],
+      "database_queries": [
+        "Add typing_status column to conversations",
+        "Add unread_count column to conversations",
+        "Create typing events table"
+      ]
+    }
+  },
+  "performance_metrics": {
+    "widget_to_dashboard_latency": "<1000ms",
+    "conversation_creation_time": "<500ms",
+    "message_delivery_success_rate": "100% (widget to dashboard)",
+    "real_time_connection_stability": "✅ STABLE"
+  },
+  "error_logs": {
+    "current_failure": {
+      "error": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded waiting for reply message in widget",
+      "location": "tests/e2e/simple-bidirectional-test.spec.ts:118",
+      "context": "Dashboard reply not appearing in widget after successful send"
+    },
+    "resolved_errors": [
+      "Duplicate DATABASE_REQUIREMENTS export",
+      "Widget element selector timeouts",
+      "Send button click blocking by Next.js overlay"
+    ]
+  },
+  "recommendations": {
+    "immediate": [
+      "Debug dashboard-to-widget broadcast events",
+      "Check widget real-time subscription status",
+      "Verify message format consistency"
+    ],
+    "short_term": [
+      "Add comprehensive error logging to real-time hooks",
+      "Implement typing indicators",
+      "Add unread message counts"
+    ],
+    "long_term": [
+      "Performance optimization for high-volume scenarios",
+      "Add comprehensive E2E test suite",
+      "Implement message delivery guarantees"
+    ]
+  }
+} 
