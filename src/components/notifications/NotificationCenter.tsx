@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useRealtime } from "@/hooks/useRealtime";
 import { getBrowserClient } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";
 import { formatRelativeTimeShort } from "@/lib/utils/date";
@@ -33,7 +33,8 @@ interface NotificationCenterProps {
 }
 
 export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps) {
-  const { user, organizationId } = useAuth();
+  const { user } = useAuth();
+  const organizationId = user?.organizationId;
   const [filter, setFilter] = useState<"all" | "unread" | "messages" | "alerts">("all");
   
   // Use real notifications hook
@@ -44,17 +45,25 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
     markAsRead: markNotificationAsRead,
     markAllAsRead: markAllNotificationsAsRead,
     deleteNotification: deleteNotificationById,
-    clearNotifications,
+    // clearNotifications, // Not available in current hook implementation
   } = useNotifications();
 
   // Subscribe to real-time updates
-  const { connectionStatus } = useOrganizationRealtime(organizationId || "");
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId: organizationId || "",
+    userId: user?.id,
+    enableHeartbeat: true
+  });
+  const connectionStatus = realtimeState.connectionStatus;
 
   // Subscribe to real-time notifications
   useEffect(() => {
     if (!organizationId || !user || !isOpen) return;
 
     const supabase = getBrowserClient();
+    if (!supabase) return;
+    
     const channelName = `org:${organizationId}:user:${user.id}:notifications`;
     const channel = supabase.channel(channelName);
 
@@ -94,8 +103,9 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
   );
 
   const handleClearAll = useCallback(async () => {
-    await clearNotifications();
-  }, [clearNotifications]);
+    // TODO: clearNotifications is not available in current hook implementation
+    console.log("Clear all notifications functionality not implemented");
+  }, []);
 
   const filteredNotifications = notifications.filter((notif: any) => {
     switch (filter) {

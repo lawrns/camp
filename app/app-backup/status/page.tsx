@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useRealtime } from "@/hooks/useRealtime";
 
 export default function StatusPage() {
   const [status, setStatus] = useState({
@@ -31,20 +31,24 @@ export default function StatusPage() {
   );
 
   // Test the consolidated realtime system
-  const realtimeStatus = useOrganizationRealtime(testOrgId, realtimeOptions);
+  const [realtimeState] = useRealtime({
+    type: "general",
+    organizationId: testOrgId,
+    enableHeartbeat: true
+  });
 
   useEffect(() => {
-    // Update realtime status based on native hook
-    if (realtimeStatus.connectionStatus === "connected") {
+    // Update realtime status based on unified hook
+    if (realtimeState.connectionStatus === "connected") {
       setStatus((prev) => ({ ...prev, realtime: "connected" }));
-    } else if (realtimeStatus.connectionStatus === "connecting") {
+    } else if (realtimeState.connectionStatus === "connecting") {
       setStatus((prev) => ({ ...prev, realtime: "connecting" }));
-    } else if (realtimeStatus.error) {
-      setStatus((prev) => ({ ...prev, realtime: `error: ${realtimeStatus.error}` }));
+    } else if (realtimeState.error) {
+      setStatus((prev) => ({ ...prev, realtime: `error: ${realtimeState.error}` }));
     } else {
-      setStatus((prev) => ({ ...prev, realtime: realtimeStatus.connectionStatus }));
+      setStatus((prev) => ({ ...prev, realtime: realtimeState.connectionStatus }));
     }
-  }, [realtimeStatus.connectionStatus, realtimeStatus.error]);
+  }, [realtimeState.connectionStatus, realtimeState.error]);
 
   useEffect(() => {
     const checkImports = async () => {

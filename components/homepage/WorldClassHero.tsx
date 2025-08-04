@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { ArrowRight, MessageSquare, Users, Zap, CheckCircle, Play } from 'lucide-react';
+import { ArrowRight, Users, Zap, CheckCircle, Play } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -36,10 +36,10 @@ export const WorldClassHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight max-w-4xl"
             >
               Customer support that{' '}
-              <span className="text-blue-600 text-4xl lg:text-6xl font-bold">feels human</span>
+              <span className="text-blue-600">feels human</span>
             </motion.h1>
 
             {/* Description */}
@@ -110,7 +110,7 @@ export const WorldClassHero = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="flex justify-center relative mt-8 lg:mt-0"
           >
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto lg:max-w-none lg:w-full relative">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto relative">
               {/* Header */}
               <div className="bg-blue-600 px-6 py-4">
                 <div className="flex items-center space-x-3">
@@ -127,7 +127,7 @@ export const WorldClassHero = () => {
               <div className="p-4 sm:p-6 space-y-4 min-h-[320px]">
                 {/* Customer message */}
                 <div className="flex justify-end">
-                  <div className="bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-br-md max-w-[280px] sm:max-w-sm text-sm">
+                  <div className="bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-br-md max-w-[320px] sm:max-w-md text-sm break-words">
                     Hi! I need help with my billing
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export const WorldClassHero = () => {
                   transition={{ delay: 1, duration: 0.5 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-gray-100 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-bl-md max-w-[280px] sm:max-w-sm text-sm">
+                  <div className="bg-gray-100 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-bl-md max-w-[320px] sm:max-w-md text-sm break-words overflow-wrap-anywhere">
                     I'd be happy to help with your billing! Let me look up your account...
                   </div>
                 </motion.div>
@@ -163,7 +163,7 @@ export const WorldClassHero = () => {
                   transition={{ delay: 2.5, duration: 0.5 }}
                   className="flex justify-start"
                 >
-                  <div className="bg-gray-100 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-bl-md max-w-[280px] sm:max-w-sm text-sm">
+                  <div className="bg-gray-100 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-bl-md max-w-[320px] sm:max-w-md text-sm break-words overflow-wrap-anywhere">
                     Hi! I'm Sarah from billing. I can see your account and I'm ready to help!
                   </div>
                 </motion.div>

@@ -142,20 +142,43 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-
+          console.log('[useMessages] 📨 Postgres INSERT event:', payload);
           const newMessage = payload.new as Message;
 
-          // Avoid duplicates by checking if message already exists
+          // ENHANCED: Robust duplicate prevention with optimistic message cleanup
           setMessages((prev) => {
+            // Check for exact ID duplicates
             const exists = prev.some((msg) => msg.id === newMessage.id);
-            if (exists) return prev;
-            return [...prev, newMessage];
+            if (exists) {
+              console.log('[useMessages] ⚠️ Duplicate message prevented (Postgres):', newMessage.id);
+              return prev;
+            }
+
+            // CRITICAL FIX: Remove optimistic messages that match this real message
+            const filteredMessages = prev.filter((msg) => {
+              // Remove optimistic messages with temp IDs that match content/timestamp
+              if (msg.id?.startsWith('temp_') && msg.content === newMessage.content) {
+                const msgTime = new Date(msg.created_at || msg.createdAt).getTime();
+                const newMsgTime = new Date(newMessage.created_at || newMessage.createdAt).getTime();
+                const timeDiff = Math.abs(msgTime - newMsgTime);
+
+                // If messages are within 5 seconds and have same content, remove optimistic
+                if (timeDiff < 5000) {
+                  console.log('[useMessages] 🧹 Removing optimistic message:', msg.id, 'for real message:', newMessage.id);
+                  return false;
+                }
+              }
+              return true;
+            });
+
+            console.log('[useMessages] ✅ Adding message from Postgres:', newMessage.id);
+            return [...filteredMessages, newMessage];
           });
         }
       )
       // Listen for broadcast events from widget using unified events
       .on("broadcast", { event: UNIFIED_EVENTS.MESSAGE_CREATED }, (payload) => {
-
+        console.log('[useMessages] 📡 Broadcast event received:', payload);
         const { payload: data } = payload;
 
         // Handle new message broadcasts from widget
@@ -165,10 +188,32 @@ export const useMessages = (conversationId?: string, organizationId?: string): U
           // Only process messages for this conversation
           if (newMessage.conversation_id === conversationId) {
             setMessages((prev) => {
+              // Check for exact ID duplicates
               const exists = prev.some((msg) => msg.id === newMessage.id);
-              if (exists) return prev;
+              if (exists) {
+                console.log('[useMessages] ⚠️ Duplicate message prevented (Broadcast):', newMessage.id);
+                return prev;
+              }
 
-              return [...prev, newMessage];
+              // CRITICAL FIX: Remove optimistic messages that match this real message
+              const filteredMessages = prev.filter((msg) => {
+                // Remove optimistic messages with temp IDs that match content/timestamp
+                if (msg.id?.startsWith('temp_') && msg.content === newMessage.content) {
+                  const msgTime = new Date(msg.created_at || msg.createdAt).getTime();
+                  const newMsgTime = new Date(newMessage.created_at || newMessage.createdAt).getTime();
+                  const timeDiff = Math.abs(msgTime - newMsgTime);
+
+                  // If messages are within 5 seconds and have same content, remove optimistic
+                  if (timeDiff < 5000) {
+                    console.log('[useMessages] 🧹 Removing optimistic message:', msg.id, 'for real message:', newMessage.id);
+                    return false;
+                  }
+                }
+                return true;
+              });
+
+              console.log('[useMessages] ✅ Adding message from Broadcast:', newMessage.id);
+              return [...filteredMessages, newMessage];
             });
           }
         }

@@ -52,7 +52,6 @@ interface InboxDashboardProps {
  * Performance optimized with memoization and optimized state management
  */
 export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className = "" }) => {
-  console.log('🚨 [BIDIRECTIONAL FIX v3] InboxDashboard component loaded - API fix active!');
   // User context - using real auth hook with validation
   const { user, isLoading: authLoading } = useAuth();
   const organizationId = user?.organizationId;
@@ -102,13 +101,15 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Real-time data using standardized hook
-  const [realtimeState, realtimeActions] = useRealtime({
-    type: "dashboard",
+  // Real-time data using standardized hook with memoized config
+  const realtimeConfig = useMemo(() => ({
+    type: "dashboard" as const,
     organizationId,
     conversationId: selectedConversation?.id,
     userId,
-  });
+  }), [organizationId, selectedConversation?.id, userId]);
+
+  const [realtimeState, realtimeActions] = useRealtime(realtimeConfig);
   // Extract values from realtime state
   const { isConnected, connectionStatus, error: realtimeError } = realtimeState;
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
@@ -189,9 +190,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
       try {
 
-        // CRITICAL FIX: Use proper API endpoint for bidirectional communication
-        console.log('🚨🚨🚨 [BIDIRECTIONAL FIX v3] DASHBOARD API CALL STARTING - This should appear in server logs!');
-
+        // Use proper API endpoint for bidirectional communication
         const response = await fetch(`/api/dashboard/conversations/${convId}/messages`, {
           method: 'POST',
           headers: {
@@ -204,8 +203,6 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
             senderName: senderType === "agent" ? "Support Agent" : "Customer"
           }),
         });
-
-        console.log('🚨 [BIDIRECTIONAL FIX] API response status:', response.status);
 
         if (!response.ok) {
           console.error(`[SendMessage] ❌ API error:`, response.statusText);
@@ -222,7 +219,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
           throw new Error('No message data returned from API');
         }
 
-        console.log('🚨 [BIDIRECTIONAL FIX] ✅ Message sent successfully via API endpoint:', data.id);
+        console.log('✅ Message sent successfully via API endpoint:', data.id);
 
         // Replace optimistic message with real one
         const realMessage: Message = {
@@ -504,7 +501,12 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
       // Clear form only on success
       setNewMessage("");
       setAttachments([]);
-      handleStopTyping();
+
+      // CRITICAL FIX: Delay handleStopTyping to prevent race condition
+      // This prevents channel unsubscription while sendMessageHP is still broadcasting
+      setTimeout(() => {
+        handleStopTyping();
+      }, 150); // 150ms delay to ensure message broadcast completes
 
       console.log(`[HandleSendMessage] ✅ Message sent successfully and form cleared`);
       // TODO: Add success toast notification
@@ -516,6 +518,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({ className =
 
       // TODO: Replace alert with proper toast notification system
       alert(`Failed to send message: ${errorMessage}\n\nPlease try again.`);
+
+      // Still stop typing on error
+      handleStopTyping();
 
       // Don't clear the message content so user can retry
       console.log(`[HandleSendMessage] 🔄 Message content preserved for retry`);

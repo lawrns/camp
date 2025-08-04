@@ -19,7 +19,7 @@ import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ListItem } from "@/components/unified-ui/components/ListItem";
 import { Progress } from "@/components/unified-ui/components/Progress";
-import { useOrganizationRealtimeSubscription } from "@/contexts/OrganizationRealtimeProvider";
+import { useRealtime } from "@/hooks/useRealtime";
 import { useAuth } from "@/hooks/useAuth";
 import { useDashboardMetrics } from "@/hooks/useDashboardMetrics";
 
@@ -64,8 +64,13 @@ export function WelcomeDashboard() {
     []
   );
 
-  // Realtime updates using native Supabase provider
-  useOrganizationRealtimeSubscription(realtimeOptions);
+  // Realtime updates using unified hook
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId: organizationId || "",
+    userId: user?.id,
+    enableHeartbeat: true
+  });
 
   const quickActions: QuickAction[] = [
     {

@@ -46,6 +46,8 @@ import {
   Z_INDEX
 } from './index';
 import { type WidgetTab } from './WidgetTabs';
+import { EnhancedMessagesInterface } from '../enhanced-messaging/EnhancedMessagesInterface';
+import { useWidget } from '../../../src/components/widget';
 
 // ============================================================================
 // TYPES
@@ -125,6 +127,15 @@ export function UltimateWidget({
 
   // PERFORMANCE: Memoize config to prevent unnecessary re-renders
   const config = useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]);
+
+  // Get conversationId from widget context
+  let contextConversationId = null;
+  try {
+    const widgetContext = useWidget();
+    contextConversationId = widgetContext.conversationId;
+  } catch (error) {
+    console.warn('[UltimateWidget] Widget context not available:', error);
+  }
 
   // Responsive hooks
   const { getWidgetDimensions, isMobile, isTouch } = useWidgetDimensions();
@@ -517,6 +528,8 @@ export function UltimateWidget({
     },
   ];
 
+
+
   if (config.enableHelp) {
     tabs.push({
       id: 'help',
@@ -538,6 +551,7 @@ export function UltimateWidget({
   // Render tab content
   const renderTabContent = () => {
     switch (activeTab) {
+
       case 'chat':
         return (
           <div className="h-full flex flex-col">
@@ -566,9 +580,11 @@ export function UltimateWidget({
               </div>
             )}
 
-            {/* Chat Interface */}
+            {/* Enhanced Messages Interface with Threading */}
             <div className="flex-1">
-              <PixelPerfectChatInterface
+              <EnhancedMessagesInterface
+                organizationId={organizationId}
+                conversationId={contextConversationId || conversationId || undefined}
                 messages={aiHandover.isAIActive ? [
                   {
                     id: 'ai-status',
@@ -594,7 +610,7 @@ export function UltimateWidget({
                 maxFileSize={config.maxFileSize}
                 maxFiles={config.maxFiles}
                 acceptedFileTypes={config.acceptedFileTypes}
-                showHeader={false}
+                enableThreading={config.enableThreading}
                 className="h-full"
               />
             </div>

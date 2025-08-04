@@ -248,6 +248,38 @@ export function IntercomDashboard() {
     setAiInsights(insights);
   }, [enhancedMetrics]);
 
+  // Transform metrics to dashboard format with memoization (MOVED BEFORE EARLY RETURNS)
+  const dashboardMetrics: DashboardMetrics = useMemo(() => {
+    if (!enhancedMetrics) {
+      return {
+        activeChats: 0,
+        avgResponse: 0,
+        csat: 0,
+        resolvedToday: 0,
+      };
+    }
+
+    return {
+      activeChats: enhancedMetrics.openConversations || 0,
+      avgResponse: (() => {
+        const responseTime = enhancedMetrics.responseTime;
+        if (!responseTime) return 0;
+        // Handle different formats: "120s", "120", 120
+        const cleanTime = typeof responseTime === 'string'
+          ? responseTime.replace(/[^\d.]/g, '')
+          : String(responseTime);
+        const parsed = parseFloat(cleanTime);
+        return isNaN(parsed) ? 0 : Math.round(parsed);
+      })(),
+      csat: enhancedMetrics.satisfactionRate || 0,
+      resolvedToday: enhancedMetrics.resolvedToday || 0,
+      pendingChats: enhancedMetrics.openConversations || 0,
+      activeChatsDelta: 12, // Mock trend data
+      avgResponseDelta: -8,
+      resolvedTodayDelta: 15,
+    };
+  }, [enhancedMetrics]);
+
   // Handle loading and error states
   if (isLoading) {
     return (
@@ -276,38 +308,6 @@ export function IntercomDashboard() {
       </div>
     );
   }
-
-  // Transform metrics to dashboard format with memoization
-  const dashboardMetrics: DashboardMetrics = useMemo(() => {
-    if (!enhancedMetrics) {
-      return {
-        activeChats: 0,
-        avgResponse: 0,
-        csat: 0,
-        resolvedToday: 0,
-      };
-    }
-
-    return {
-      activeChats: enhancedMetrics.openConversations || 0,
-      avgResponse: (() => {
-        const responseTime = enhancedMetrics.responseTime;
-        if (!responseTime) return 0;
-        // Handle different formats: "120s", "120", 120
-        const cleanTime = typeof responseTime === 'string' 
-          ? responseTime.replace(/[^\d.]/g, '') 
-          : String(responseTime);
-        const parsed = parseFloat(cleanTime);
-        return isNaN(parsed) ? 0 : Math.round(parsed);
-      })(),
-      csat: enhancedMetrics.satisfactionRate || 0,
-      resolvedToday: enhancedMetrics.resolvedToday || 0,
-      pendingChats: enhancedMetrics.openConversations || 0,
-      activeChatsDelta: 12, // Mock trend data
-      avgResponseDelta: -8,
-      resolvedTodayDelta: 15,
-    };
-  }, [enhancedMetrics]);
 
   // Hero metrics cards configuration
   const metricCards = [

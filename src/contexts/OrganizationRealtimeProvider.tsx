@@ -2,8 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-// TODO: migrate to full useRealtime hook; using direct import for now
-import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useRealtime } from "@/hooks/useRealtime";
 
 interface RealtimeCallbacks {
   onNewMessage?: (message: any) => void;
@@ -143,8 +142,18 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
     ]
   );
 
-  // Single native organization realtime connection
-  const organizationRealtime = useNativeOrganizationRealtime(organizationId || "", realtimeOptions);
+  // Single unified realtime connection for organization
+  const [realtimeState, realtimeActions] = useRealtime({
+    type: "dashboard",
+    organizationId: organizationId || "",
+    userId: user?.id,
+    enableHeartbeat: true
+  });
+
+  // TODO: The unified useRealtime hook handles events differently than the legacy hook.
+  // For now, we'll maintain the existing callback-based architecture while the unified
+  // hook is being developed. The event handling will need to be updated once the
+  // unified hook provides a proper event subscription mechanism.
 
   const subscribe = React.useCallback(
     (callbacks: {
@@ -175,10 +184,10 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
   const contextValue: OrganizationRealtimeContextType = React.useMemo(
     () => ({
       events,
-      connectionStatus: organizationRealtime?.connectionStatus || "disconnected",
+      connectionStatus: (realtimeState.connectionStatus as "connecting" | "connected" | "disconnected" | "error") || "disconnected",
       subscribe,
     }),
-    [events, organizationRealtime?.connectionStatus, subscribe]
+    [events, realtimeState.connectionStatus, subscribe]
   );
 
   return <OrganizationRealtimeContext.Provider value={contextValue}>{children}</OrganizationRealtimeContext.Provider>;

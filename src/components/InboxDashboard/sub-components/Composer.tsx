@@ -4,7 +4,8 @@ import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import * as React from "react";
 import { useRef } from "react";
 import type { ComposerProps } from "../types";
-import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
+import ConsciousnessToggle from "@/components/ai/ConsciousnessToggle";
+import { useAIConsciousness } from "@/hooks/useAIConsciousness";
 import AISuggestionsPanel from "./AISuggestionsPanel";
 import AttachmentPreview from "./AttachmentPreview";
 import EmojiPicker from "./EmojiPicker";
@@ -20,8 +21,6 @@ export const Composer: React.FC<ComposerProps> = ({
   setAttachments,
   isSending,
   sendMessage,
-  isAIActive,
-  toggleAIHandover,
   selectedConversation,
   showEmojiPicker,
   setShowEmojiPicker,
@@ -38,11 +37,19 @@ export const Composer: React.FC<ComposerProps> = ({
   handleFileDrop,
   isDragOver,
   setIsDragOver,
-  typingUsers,
-  onlineUsers,
   handleTyping,
   stopTyping,
 }) => {
+  // AI Consciousness state for composer
+  const composerAI = useAIConsciousness({
+    conversationId: selectedConversation?.id || '',
+    onStateChange: (state) => {
+      console.log('Composer AI consciousness state changed:', state);
+    },
+    onError: (error) => {
+      console.error('Composer AI consciousness error:', error);
+    },
+  });
   const composerRef = useRef<HTMLDivElement>(null);
 
   // Auto-resize textarea
@@ -158,14 +165,19 @@ export const Composer: React.FC<ComposerProps> = ({
           <div className="flex items-end" style={{gap: 'var(--spacing-3)'}} data-testid="composer-input-row">
             {/* Left side actions */}
             <div className="flex items-center" style={{gap: 'var(--spacing-2)'}} data-testid="composer-actions-left">
-              {/* Enhanced AI Handover Button */}
+              {/* AI Consciousness Toggle */}
               {selectedConversation && (
                 <div data-testid="composer-ai-handover">
-                  <AIHandoverButton
+                  <ConsciousnessToggle
                     conversationId={selectedConversation.id}
-                    organizationId={(selectedConversation as any).organization_id || (selectedConversation as any).organizationId || ""}
+                    isAIActive={composerAI.isAIActive}
+                    aiStatus={composerAI.aiStatus}
+                    confidence={composerAI.confidence}
+                    accuracy={composerAI.accuracy}
+                    onToggle={composerAI.toggleAI}
                     variant="inline"
                     showDetails={false}
+                    className="composer-ai-toggle"
                   />
                 </div>
               )}

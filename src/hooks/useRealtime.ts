@@ -75,7 +75,38 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
 
     setState(prev => ({ ...prev, connectionStatus: 'connecting' }));
 
-    const setupConnections = () => {
+    // CRITICAL FIX: Wait for authentication before creating channels
+    const setupConnections = async () => {
+      try {
+        // Check if we have a valid session before creating channels
+        const { supabase } = await import("@/lib/supabase");
+        const client = supabase.browser();
+        const { data: session, error } = await client.auth.getSession();
+
+        if (error || !session?.session?.access_token) {
+          console.log('[useRealtime] ⏳ Waiting for authentication before creating channels...');
+
+          // Listen for auth state changes
+          const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session?.access_token) {
+              console.log('[useRealtime] ✅ Authentication established, creating channels');
+              subscription.unsubscribe();
+              setupConnectionsWithAuth();
+            }
+          });
+
+          return;
+        }
+
+        console.log('[useRealtime] ✅ Valid session found, creating channels');
+        setupConnectionsWithAuth();
+      } catch (error) {
+        console.error('[useRealtime] ❌ Authentication check failed:', error);
+        setState(prev => ({ ...prev, connectionStatus: 'error', error: error as Error }));
+      }
+    };
+
+    const setupConnectionsWithAuth = () => {
       const { organizationId, conversationId, userId, type } = configRef.current;
       const unsubscribers: (() => void)[] = [];
 
@@ -133,6 +164,8 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
           error: null
         }));
 
+        // Store unsubscribers for cleanup
+        unsubscribersRef.current = unsubscribers;
         return unsubscribers;
       } catch (error) {
         console.error('[Realtime] Setup error:', error);
@@ -146,11 +179,12 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
       }
     };
 
-    const unsubscribers = setupConnections();
-    unsubscribersRef.current = unsubscribers;
+    // Start async setup (no await needed in useEffect)
+    setupConnections();
 
     return () => {
-      unsubscribers.forEach(unsubscribe => {
+      // Cleanup any existing subscriptions
+      unsubscribersRef.current.forEach(unsubscribe => {
         try {
           unsubscribe();
         } catch (error) {

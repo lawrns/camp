@@ -306,14 +306,7 @@ export async function broadcastToChannel(
   payload: any,
   config?: any
 ): Promise<boolean> {
-  const timestamp = new Date().toISOString();
-  console.log(`[Realtime] 🚀 SABOTEUR-FIX-V3-${timestamp}: Starting broadcast to ${channelName} -> ${eventType}`);
-
-  // CACHE BUSTER: Expose function globally for testing
-  if (typeof window !== 'undefined') {
-    (window as any).broadcastToChannel = broadcastToChannel;
-    (window as any).REALTIME_VERSION = 'SABOTEUR-FIX-V3';
-  }
+  console.log(`[Realtime] 🚀 Starting broadcast to ${channelName} -> ${eventType}`);
 
   try {
     // CRITICAL FIX: Force subscription before any broadcast attempt

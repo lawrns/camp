@@ -14,10 +14,8 @@ export async function POST(request: NextRequest) {
       reason,
       context,
       targetOperatorId,
-      metadata,
       handoverType = 'agent_to_ai', // New: handover type
-      confidenceThreshold = 0.8, // New: confidence threshold
-      rollbackEnabled = true // New: rollback capability
+      confidenceThreshold = 0.8 // New: confidence threshold
     } = body;
     
     if (!conversationId || !organizationId) {

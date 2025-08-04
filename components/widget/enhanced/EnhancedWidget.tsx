@@ -154,16 +154,15 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     }
   }, [state.isOpen, scrollToBottom, messages.length]);
 
-  // Initialize conversation
-  useEffect(() => {
-    if (state.isOpen && !state.conversationId) {
-      initializeConversation();
-    }
-  }, [state.isOpen]);
+  // DON'T initialize conversation immediately - wait for first message
+  // This prevents empty conversations from cluttering the inbox
 
-  const initializeConversation = async () => {
+  // Create conversation with first message atomically
+  const createConversationWithFirstMessage = async (content: string, attachments?: File[], metadata?: any): Promise<string | null> => {
     try {
       setIsLoading(true);
+
+      // Create conversation and send first message in one API call
       const response = await fetch('/api/widget/conversations', {
         method: 'POST',
         headers: {
@@ -175,6 +174,12 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
           visitorId: `visitor-${Date.now()}`,
           customerName: 'Website Visitor',
           customerEmail: 'visitor@widget.com',
+          initialMessage: content, // Include first message
+          metadata: {
+            source: 'widget',
+            hasInitialMessage: true,
+            ...metadata
+          }
         }),
       });
 
@@ -182,8 +187,8 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
         const data = await response.json();
         const conversationId = data.conversation?.id || data.conversationId || data.id;
         setState(prev => ({ ...prev, conversationId }));
-        
-        // Add welcome message using enhanced-messaging format
+
+        // Add welcome message if configured
         if (config.showWelcomeMessage && config.welcomeMessage) {
           const welcomeMessage: MessageData = {
             id: 'welcome',
@@ -195,9 +200,15 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
           };
           setMessages([welcomeMessage]);
         }
+
+        return conversationId;
       }
+
+      console.error('Failed to create conversation:', response.statusText);
+      return null;
     } catch (error) {
-      console.error('Failed to initialize conversation:', error);
+      console.error('Failed to create conversation with first message:', error);
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -205,7 +216,18 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
 
   // Enhanced message sending with enterprise-grade composer
   const handleSendMessage = async (content: string, attachments?: File[], metadata?: any) => {
-    if (!content.trim() || !state.conversationId) return;
+    if (!content.trim()) return;
+
+    // Create conversation lazily if it doesn't exist
+    let conversationId = state.conversationId;
+    let isFirstMessage = false;
+
+    if (!conversationId) {
+      const newConversationId = await createConversationWithFirstMessage(content, attachments, metadata);
+      if (!newConversationId) return; // Failed to create conversation
+      conversationId = newConversationId;
+      isFirstMessage = true;
+    }
 
     const userMessage: MessageData = {
       id: `msg-${Date.now()}`,
@@ -213,7 +235,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
       senderType: 'user',
       senderName: 'You',
       timestamp: new Date().toISOString(),
-      status: 'sending',
+      status: isFirstMessage ? 'sent' : 'sending', // First message is already sent via conversation creation
       attachments: attachments?.map((file, index) => ({
         id: `att-${Date.now()}-${index}`,
         name: file.name,
@@ -228,6 +250,11 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
     // Force auto-scroll when user sends a message
     setShouldAutoScroll(true);
 
+    // If this is the first message, it was already sent during conversation creation
+    if (isFirstMessage) {
+      return; // Skip sending the message again
+    }
+
     try {
       const response = await fetch('/api/widget/messages', {
         method: 'POST',
@@ -236,7 +263,7 @@ export const EnhancedWidget: React.FC<EnhancedWidgetProps> = ({
           'X-Organization-ID': organizationId,
         },
         body: JSON.stringify({
-          conversationId: state.conversationId,
+          conversationId: conversationId,
           content,
           senderType: 'visitor',
           attachments: metadata?.attachments

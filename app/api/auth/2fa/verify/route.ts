@@ -5,6 +5,49 @@ import { z } from "zod";
 import { withTenantGuard, type TenantContext } from "@/lib/core/auth";
 import { supabase } from "@/lib/supabase";
 import { env } from "@/lib/utils/env-config";
+import type { Profile, Json } from "@/lib/supabase/types";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+// Type definitions for database tables and metadata
+interface TwoFactorMetadata {
+  two_factor_enabled?: boolean;
+  two_factor_secret?: string;
+  last_login_at?: string;
+  [key: string]: unknown;
+}
+
+interface ProfileWithMetadata extends Profile {
+  metadata: TwoFactorMetadata | null;
+}
+
+interface UserSession {
+  id: string;
+  user_id: string;
+  token?: string;
+  deviceInfo: Json;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  expiresAt: string;
+  created_at: string;
+}
+
+interface TwoFactorCode {
+  id: string;
+  user_id: string;
+  code: string;
+  expiresAt: string;
+  usedAt: string | null;
+}
+
+interface LoginAttempt {
+  email: string;
+  success: boolean;
+  failureReason?: string;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}
+
+type TypedSupabaseClient = SupabaseClient;
 
 // Verification schema
 const verifySchema = z.object({
@@ -35,13 +78,13 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
     const { token, sessionId } = validationResult.data;
 
     // Get pending 2FA session
-    const { data: pendingSession, error: sessionError } = await (supabase as any)
+    const { data: pendingSession, error: sessionError } = await (supabaseClient as TypedSupabaseClient)
       .from("user_sessions")
-      .select("user_id, device_info")
+      .select("user_id, deviceInfo")
       .eq("id", sessionId)
-      .eq("device_info->type", "2fa_pending")
-      .gt("expires_at", new Date().toISOString())
-      .single();
+      .eq("deviceInfo->type", "2fa_pending")
+      .gt("expiresAt", new Date().toISOString())
+      .single() as { data: Pick<UserSession, 'user_id' | 'deviceInfo'> | null; error: unknown };
 
     if (sessionError || !pendingSession) {
       return NextResponse.json(
@@ -59,7 +102,8 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
       .eq("id", pendingSession.user_id)
       .single();
 
-    if (profileError || !profile || !(profile as any)?.metadata?.two_factor_enabled) {
+    const profileWithMetadata = profile as ProfileWithMetadata;
+    if (profileError || !profile || !profileWithMetadata?.metadata?.two_factor_enabled) {
       return NextResponse.json(
         {
           error: "Two-factor authentication not enabled",
@@ -73,7 +117,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
     // Check if it's a TOTP code (6 digits)
     if (token.length === 6 && /^\d+$/.test(token)) {
       verified = speakeasy.totp.verify({
-        secret: (profile as any)?.metadata?.two_factor_secret,
+        secret: profileWithMetadata?.metadata?.two_factor_secret,
         encoding: "base32",
         token,
         window: 2, // Allow 2 time windows for clock skew
@@ -84,13 +128,13 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
       const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
       try {
-        const { data: recoveryCode, error: codeError } = await (supabase as any)
+        const { data: recoveryCode, error: codeError } = await (supabaseClient as TypedSupabaseClient)
           .from("two_factor_codes")
           .select("id")
           .eq("user_id", pendingSession.user_id)
           .eq("code", hashedToken)
-          .is("used_at", null)
-          .gt("expires_at", new Date().toISOString())
+          .is("usedAt", null)
+          .gt("expiresAt", new Date().toISOString())
           .single();
 
         if (!codeError && recoveryCode) {
@@ -99,7 +143,7 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
           // Mark recovery code as used
           await (supabase as any)
             .from("two_factor_codes")
-            .update({ used_at: new Date().toISOString() })
+            .update({ usedAt: new Date().toISOString() })
             .eq("id", recoveryCode.id);
         }
       } catch (error) {}
@@ -111,9 +155,9 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
         await (supabase as any).from("login_attempts").insert({
           email: profile.email,
           success: false,
-          failure_reason: "2FA verification failed",
-          ip_address: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
-          user_agent: req.headers.get("user-agent"),
+          failureReason: "2FA verification failed",
+          ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
+          userAgent: req.headers.get("user-agent"),
         });
       } catch (error) {}
 
@@ -130,10 +174,10 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
     const { error: createSessionError } = await (supabase as any).from("user_sessions").insert({
       user_id: pendingSession.user_id,
       token: sessionToken,
-      device_info: (pendingSession as any).device_info?.deviceInfo || {},
-      ip_address: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
-      user_agent: req.headers.get("user-agent"),
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      deviceInfo: (pendingSession as any).deviceInfo?.deviceInfo || {},
+      ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
+      userAgent: req.headers.get("user-agent"),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     });
 
     if (createSessionError) {
@@ -169,8 +213,8 @@ export const POST = withTenantGuard(async (req: NextRequest, { user, organizatio
       await (supabase as any).from("login_attempts").insert({
         email: profile.email,
         success: true,
-        ip_address: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
-        user_agent: req.headers.get("user-agent"),
+        ipAddress: req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip"),
+        userAgent: req.headers.get("user-agent"),
       });
     } catch (error) {}
 
@@ -211,8 +255,8 @@ export const PUT = withTenantGuard(async (req: NextRequest, { user, organization
       .from("user_sessions")
       .select("user_id, created_at")
       .eq("id", sessionId)
-      .eq("device_info->type", "2fa_pending")
-      .gt("expires_at", new Date().toISOString())
+      .eq("deviceInfo->type", "2fa_pending")
+      .gt("expiresAt", new Date().toISOString())
       .single();
 
     if (sessionError || !pendingSession) {

@@ -30,12 +30,12 @@ test('Manual dashboard message sending test', async ({ page }) => {
   console.log('✅ Inbox loaded');
 
   // Step 3: Check conversations
-  const conversations = await page.locator('[data-testid="conversation-row"], [data-testid="conversation-card"]').count();
+  const conversations = await page.locator('[data-testid="conversation-row"], [data-testid="conversation-card"], .conversation-item').count();
   console.log(`📋 Found ${conversations} conversations`);
 
   if (conversations > 0) {
     // Step 4: Click on first conversation
-    await page.locator('[data-testid="conversation-row"], [data-testid="conversation-card"]').first().click();
+    await page.locator('[data-testid="conversation-row"], [data-testid="conversation-card"], .conversation-item').first().click();
     console.log('✅ Clicked on first conversation');
     
     // Wait for chat view to load

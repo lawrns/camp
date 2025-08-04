@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function GET() {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
     // Get the current user session
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -34,7 +34,7 @@ export async function GET() {
       .from('profiles')
       .select(`
         id,
-        fullName,
+        full_name,
         email,
         avatar_url,
         role
@@ -54,7 +54,7 @@ export async function GET() {
     // Transform agents data with availability info
     const agentsWithAvailability = (agents || []).map(agent => ({
       user_id: agent.id,
-      fullName: agent.fullName || agent.email,
+      fullName: agent.full_name || agent.email,
       email: agent.email,
       avatar_url: agent.avatar_url,
       workload: 0, // TODO: Calculate actual workload

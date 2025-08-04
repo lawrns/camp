@@ -57,6 +57,7 @@ export async function getAvailableAgents(organizationId: string, category?: stri
     const response = await fetch(`/api/organizations/${organizationId}/agents`, {
       method: "GET",
       headers,
+      credentials: "include", // CRITICAL FIX: Include cookies for authentication
     });
 
     if (!response.ok) {

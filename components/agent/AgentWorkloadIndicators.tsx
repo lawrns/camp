@@ -7,7 +7,7 @@ import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Skeleton } from "@/components/unified-ui/components/Skeleton";
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useRealtime } from "@/hooks/useRealtime";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,12 @@ export function AgentWorkloadIndicators({ organizationId, teamId, className }: A
   const [loading, setLoading] = useState(true);
 
   // Use unified realtime for agent workload updates
-  const organizationRealtime = useOrganizationRealtime(organizationId);
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId,
+    enableHeartbeat: true
+  });
+  const organizationRealtime = realtimeState;
 
   useEffect(() => {
     const fetchWorkloads = async () => {

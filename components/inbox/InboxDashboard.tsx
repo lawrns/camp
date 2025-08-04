@@ -422,7 +422,7 @@ export function InboxDashboard({
                 <p className="text-muted-foreground">No conversations found</p>
               </div>
             ) : (
-              <ul className="space-y-1 p-2" data-testid="conversation-list-container">
+              <ul className="p-2" data-testid="conversation-list-container">
               {filteredConversations.map((conversation) => {
                 // Transform conversation data to match ConversationCard format
                 const transformedConversation = {

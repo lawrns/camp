@@ -2,8 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-// TODO: Replace with standardized useRealtime hook
-import { useNativeOrganizationRealtime } from "@/lib/realtime/native-supabase";
+// MIGRATED: Using unified realtime hook
+import { useRealtime } from "@/hooks/useRealtime";
 
 interface RealtimeCallbacks {
   onNewMessage?: (message: any) => void;
@@ -143,8 +143,18 @@ export function OrganizationRealtimeProvider({ children }: OrganizationRealtimeP
     ]
   );
 
-  // Single native organization realtime connection
-  const organizationRealtime = useNativeOrganizationRealtime(organizationId || "", realtimeOptions);
+  // Single unified organization realtime connection
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId: organizationId || "",
+    userId: user?.id,
+    enableHeartbeat: true,
+    enablePresence: true
+  });
+  const organizationRealtime = {
+    connectionStatus: realtimeState.connectionStatus as "connecting" | "connected" | "disconnected" | "error",
+    error: realtimeState.error
+  };
 
   const subscribe = React.useCallback(
     (callbacks: {

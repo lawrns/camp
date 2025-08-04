@@ -1,10 +1,12 @@
 // ChatHeader component for conversation header
 
 import { AIConfidenceIndicator } from "@/components/inbox/AIConfidenceIndicator";
-import { AIHandoverButton } from "@/components/inbox/AIHandoverButton";
+import ConsciousnessToggle from "@/components/ai/ConsciousnessToggle";
+import ThinkingSidebar from "@/components/ai/ThinkingSidebar";
+import { useAIConsciousness } from "@/hooks/useAIConsciousness";
 import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
 import { useAuth } from "@/hooks/useAuth";
-import { Clock, MoreVertical, Info, Tag, Ticket, Users } from "lucide-react";
+import { Clock, MoreVertical, Info, Tag, Ticket, Users, Brain } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import type { Conversation } from "../types";
@@ -42,6 +44,22 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
   // State for assignment dialog
   const [showAssignmentDialog, setShowAssignmentDialog] = useState(false);
+  // State for thinking sidebar
+  const [showThinkingSidebar, setShowThinkingSidebar] = useState(false);
+
+  // AI Consciousness state
+  const aiConsciousness = useAIConsciousness({
+    conversationId: conversation.id,
+    organizationId: user?.organizationId,
+    userId: user?.id,
+    onStateChange: (state) => {
+      console.log('AI consciousness state changed:', state);
+    },
+    onError: (error) => {
+      console.error('AI consciousness error:', error);
+    },
+  });
+
   // Format last activity with error handling
   const formatLastActivity = (timestamp: string) => {
     try {
@@ -241,20 +259,34 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             </button>
           )}
 
-          {/* AI Handover Button - Agent Only */}
-          {isAgent && (
-            <div data-testid="chat-header-ai-handover">
-              <AIHandoverButton
-                conversationId={conversation.id}
-                organizationId={user?.organizationId || ""}
-                userId={user?.id || ""}
-                currentConfidence={0.85} // Default confidence since ai_confidence_score doesn't exist
-                variant="button"
-                showDetails={false}
-                className="agent-only"
-              />
-            </div>
-          )}
+          {/* AI Consciousness Toggle */}
+          {/* Temporarily visible for all users for testing */}
+          <div data-testid="chat-header-ai-handover">
+            <ConsciousnessToggle
+              conversationId={conversation.id}
+              isAIActive={aiConsciousness.isAIActive}
+              aiStatus={aiConsciousness.aiStatus}
+              confidence={aiConsciousness.confidence}
+              accuracy={aiConsciousness.accuracy}
+              onToggle={aiConsciousness.toggleAI}
+              isLoading={false}
+              variant="inline"
+              showDetails={true}
+              className="test-visible"
+            />
+          </div>
+
+          {/* AI Thinking Sidebar Toggle */}
+          {/* Temporarily visible for all users for testing */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowThinkingSidebar(!showThinkingSidebar)}
+              className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              title="Toggle AI Thinking Sidebar"
+            >
+              <Brain className="h-5 w-5" />
+            </button>
+          </div>
 
           {/* Customer details toggle */}
           <button
@@ -292,6 +324,21 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         }}
       />
     </div>
+
+    {/* AI Thinking Sidebar */}
+    {showThinkingSidebar && (
+      <ThinkingSidebar
+        conversationId={conversation.id}
+        isVisible={showThinkingSidebar}
+        aiStatus={aiConsciousness.aiStatus}
+        confidence={aiConsciousness.confidence}
+        accuracy={aiConsciousness.accuracy}
+        isThinking={aiConsciousness.isThinking}
+        reasoning={aiConsciousness.reasoning}
+        onClose={() => setShowThinkingSidebar(false)}
+      />
+    )}
+  </>
   );
 };
 

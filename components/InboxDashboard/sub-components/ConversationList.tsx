@@ -150,7 +150,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     const conversation = sortedConversations[index];
     return (
       <ConversationRow
-        key={conversation.id}
         conversation={conversation}
         selectedId={selectedConversationId}
         onSelect={onSelectConversation}

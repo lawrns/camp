@@ -12,7 +12,7 @@
 
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import InboxDashboard from "@/components/InboxDashboard/index";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { useAuth } from "@/hooks/useAuth";
@@ -29,8 +29,7 @@ const getGreeting = (): string => {
   return "Good evening";
 };
 
-export default function InboxPage(): JSX.Element {
-  console.log('🚨🚨🚨 [INBOX PAGE] Page component rendered!');
+export default React.memo(function InboxPage(): JSX.Element {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>("there");
 
@@ -77,4 +76,4 @@ export default function InboxPage(): JSX.Element {
       </div>
     </AuthGuard>
   );
-}
+});

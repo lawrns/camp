@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-// CONSOLIDATED: Use modern real-time hooks instead of deprecated manager
-import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useRealtime } from "@/hooks/useRealtime";
 import { ChannelFactory } from "@/lib/realtime/channels";
 import { getBrowserClient } from "@/lib/supabase";
 import { useAudioNotifications } from "./useAudioNotifications";
@@ -39,16 +38,23 @@ export function useMessageNotifications({
   const lastMessageIdRef = useRef<string | null>(null);
   const isInitialLoadRef = useRef(true);
 
-  // CONSOLIDATED: Use modern organization realtime hook
-  const { connectionStatus } = useOrganizationRealtime(organizationId || "");
+  // Use unified realtime hook for connection status
+  const [realtimeState] = useRealtime({
+    type: "general",
+    organizationId: organizationId || "",
+    userId
+  });
+  const connectionStatus = realtimeState.connectionStatus;
 
   useEffect(() => {
     if (!enabled || !organizationId) return;
 
     // Use native Supabase client for notifications since this is browser-only
-    const supabaseClient = supabase.browser();
+    const supabaseClient = getBrowserClient();
+    if (!supabaseClient) return;
+    
     const channelName = `cf-org-messages-bcast-${organizationId}-${conversationId || "all"}`;
-    const channel = supabase.channel(channelName);
+    const channel = supabaseClient.channel(channelName);
 
     // Subscribe to new messages
     channel.on(

@@ -157,7 +157,9 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
     dispatch({ type: "SET_LOADING", payload: true });
 
     try {
-      const response = await fetch(`/api/organizations/${organizationId}/agents`);
+      const response = await fetch(`/api/organizations/${organizationId}/agents`, {
+        credentials: "include", // CRITICAL FIX: Include cookies for authentication
+      });
       if (!response.ok) {
         throw new Error("Failed to load agents");
       }
@@ -176,7 +178,9 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
     dispatch({ type: "SET_LOADING", payload: true });
 
     try {
-      const response = await fetch(`/api/organizations/${organizationId}/handoffs`);
+      const response = await fetch(`/api/organizations/${organizationId}/handoffs`, {
+        credentials: "include", // CRITICAL FIX: Include cookies for authentication
+      });
       if (!response.ok) {
         throw new Error("Failed to load handoffs");
       }

@@ -114,6 +114,9 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({
               showWelcomeMessage: true,
               enableHelp: true,
               enableNotifications: true,
+              enableThreading: true,
+              enableFileUpload: true,
+              enableReactions: true,
             }}
             onMessage={(message) => {
               console.log('Widget message:', message);

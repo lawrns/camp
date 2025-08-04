@@ -221,6 +221,11 @@ module.exports = {
       // Generate design system utilities
       const dsUtilities = {};
 
+      // Add text overflow utilities
+      dsUtilities['.overflow-wrap-anywhere'] = { 'overflow-wrap': 'anywhere' };
+      dsUtilities['.overflow-wrap-break-word'] = { 'overflow-wrap': 'break-word' };
+      dsUtilities['.word-break-break-word'] = { 'word-break': 'break-word' };
+
       // Add padding utilities with ds- prefix
       Object.entries(spacing).forEach(([key, value]) => {
         if (key.startsWith('ds-')) {

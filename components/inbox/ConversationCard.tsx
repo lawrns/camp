@@ -192,7 +192,7 @@ export const ConversationCard = memo(function ConversationCard({
           "border border-fl-border hover:border-fl-border-strong",
           "hover:shadow-fl-shadow/5 hover:shadow-lg",
           "hover:translate-x-0.5",
-          "min-h-[56px]",
+          "min-h-[80px]",
           isSelected && ["border-fl-brand bg-fl-brand-subtle/50", "shadow-md shadow-fl-brand/10"],
           conversation.unread && "bg-fl-background-subtle/30"
         )}

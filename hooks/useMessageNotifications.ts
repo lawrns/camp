@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-// CONSOLIDATED: Use modern real-time hooks instead of deprecated manager
-import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
+// CONSOLIDATED: Use unified real-time hook
+import { useRealtime } from "./useRealtime";
 import { ChannelFactory } from "@/lib/realtime/channels";
-import { getBrowserClient } from "@/lib/supabase";
+import { getBrowserClient, supabase } from "@/lib/supabase";
 import { useAudioNotifications } from "./useAudioNotifications";
 
 // Mock deprecated supabase hook
@@ -39,16 +39,24 @@ export function useMessageNotifications({
   const lastMessageIdRef = useRef<string | null>(null);
   const isInitialLoadRef = useRef(true);
 
-  // CONSOLIDATED: Use modern organization realtime hook
-  const { connectionStatus } = useOrganizationRealtime(organizationId || "");
+  // CONSOLIDATED: Use unified realtime hook
+  const [realtimeState] = useRealtime({
+    type: "general",
+    organizationId: organizationId || "",
+    conversationId,
+    enableHeartbeat: true
+  });
+  const { connectionStatus } = realtimeState;
 
   useEffect(() => {
     if (!enabled || !organizationId) return;
 
     // Use native Supabase client for notifications since this is browser-only
-    const supabaseClient = supabase.browser();
+    const supabaseClient = getBrowserClient();
+    if (!supabaseClient) return;
+    
     const channelName = `org:${organizationId}:messages:${conversationId || "all"}`;
-    const channel = supabase.channel(channelName);
+    const channel = supabaseClient.channel(channelName);
 
     // Subscribe to new messages
     channel.on(
@@ -59,7 +67,7 @@ export function useMessageNotifications({
         table: "messages",
         filter: conversationId ? `conversation_id=eq.${conversationId}` : `organization_id=eq.${organizationId}`,
       },
-      async (payload) => {
+      async (payload: any) => {
         const newMessage = payload.new;
 
         // Skip if this is the initial load

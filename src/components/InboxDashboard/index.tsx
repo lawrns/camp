@@ -366,9 +366,17 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
       // Clear form immediately for better UX
       setNewMessage("");
       setAttachments([]);
-      handleStopTyping();
-    } catch (error) {
 
+      // CRITICAL FIX: Delay handleStopTyping to prevent race condition
+      // This prevents channel unsubscription while sendMessageHP is still broadcasting
+      setTimeout(() => {
+        handleStopTyping();
+      }, 150); // 150ms delay to ensure message broadcast completes
+
+    } catch (error) {
+      console.error('[HandleSendMessage] ❌ Error sending message:', error);
+      // Still stop typing on error
+      handleStopTyping();
     } finally {
       setIsSending(false);
     }

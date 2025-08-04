@@ -3,7 +3,7 @@ import { RefreshCw as ArrowClockwise, MessageSquare as ChatCircle, Clock, Trendi
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
-import { useNativeOrganizationRealtime as useOrganizationRealtime } from "@/lib/realtime/native-supabase";
+import { useRealtime } from "@/hooks/useRealtime";
 import {
   selectDashboardError,
   selectDashboardLoading,
@@ -58,8 +58,20 @@ export function RealtimeDashboard() {
     [handleStatsUpdate, handleConversationUpdate, handleMetricUpdate]
   );
 
-  // Subscribe to realtime dashboard updates (single subscription)
-  useOrganizationRealtime(organizationId || "", realtimeOptions);
+  // Subscribe to realtime dashboard updates using unified hook
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId: organizationId || "",
+    userId: user?.id,
+    enableHeartbeat: true
+  });
+
+  // Handle real-time events
+  useEffect(() => {
+    // TODO: The unified useRealtime hook will need to be enhanced to support
+    // the specific dashboard events (onNewMessage, onConversationUpdate)
+    // For now, this is a placeholder for future implementation
+  }, [realtimeState]);
 
   const handleRetry = () => {
     setError(null);

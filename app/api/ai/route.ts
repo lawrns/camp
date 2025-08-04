@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/service-role-server';
 import { aiHandoverService } from '@/lib/ai/handover';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 
@@ -79,7 +78,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   return NextResponse.json(
     { message: 'AI API is running', version: '1.0.0' },
     { status: 200 }

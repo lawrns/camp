@@ -151,8 +151,9 @@ function NotificationsContent() {
       );
     }
 
-    return (
-      <div className="space-y-6 spacing-6 max-w-4xl mx-auto">
+    try {
+      return (
+        <div className="space-y-6 spacing-6 max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -591,6 +592,10 @@ function NotificationsContent() {
     );
   }
 }
+
+const NotificationErrorBoundary = ({ children }: { children: React.ReactNode }) => {
+  return <>{children}</>;
+};
 
 export default function NotificationsPage() {
   return (

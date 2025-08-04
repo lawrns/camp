@@ -60,7 +60,9 @@ export function AssignmentDialog({
   const loadAgents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/agents/availability?organizationId=${organizationId}`);
+      const response = await fetch(`/api/agents/availability?organizationId=${organizationId}`, {
+        credentials: "include", // CRITICAL FIX: Include cookies for authentication
+      });
       if (!response.ok) {
         throw new Error("Failed to load agents");
       }

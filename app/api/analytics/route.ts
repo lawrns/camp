@@ -86,16 +86,16 @@ export async function GET(request: NextRequest) {
     const avgMessagesPerConversation = totalConversations > 0 ? totalMessages / totalConversations : 0;
 
     // Conversation status breakdown
-    const statusBreakdown = conversationMetrics?.reduce((acc: unknown, conv) => {
+    const statusBreakdown = conversationMetrics?.reduce((acc: Record<string, number>, conv) => {
       acc[conv.status] = (acc[conv.status] || 0) + 1;
       return acc;
-    }, {}) || {};
+    }, {} as Record<string, number>) || {};
 
     // Message sender breakdown
-    const senderBreakdown = messageMetrics?.reduce((acc: unknown, msg) => {
+    const senderBreakdown = messageMetrics?.reduce((acc: Record<string, number>, msg) => {
       acc[msg.senderType] = (acc[msg.senderType] || 0) + 1;
       return acc;
-    }, {}) || {};
+    }, {} as Record<string, number>) || {};
 
     // AI performance metrics
     const aiPerformance = aiMetrics ? {
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   return NextResponse.json(
     { error: 'Method not allowed' },
     { status: 405 }

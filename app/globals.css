@@ -291,6 +291,17 @@ h1, h2, h3, h4, h5, h6, p, div, span {
   overflow: hidden;
 }
 
+/* Enhanced chat message overflow prevention */
+[class*="bg-gray-100"],
+.chat-message,
+.message-bubble,
+.rounded-2xl {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  max-width: 100%;
+}
+
 /* Fallback for browsers without :has() support - target common icon-text patterns */
 @supports not selector(:has(*)) {
   .flex.items-center > svg + *,

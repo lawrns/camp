@@ -337,16 +337,10 @@ export const useCampfireStore = create<CampfireState>((set, get) => ({
     }));
   },
 
-  // CRITICAL FIX: Add missing sendMessage function for bidirectional communication
+  // Add missing sendMessage function for bidirectional communication
   sendMessage: async (conversationId: string, content: string, senderType: "customer" | "agent" = "agent") => {
-    console.log('🚨🚨🚨 [UNIFIED CAMPFIRE STORE] sendMessage called!', {
-      conversationId,
-      content: content.substring(0, 50) + '...',
-      senderType
-    });
-
     if (!content.trim()) {
-      console.log('🚨 [UNIFIED CAMPFIRE STORE] ❌ Empty content, aborting');
+      console.warn('[Store] Empty message content, aborting send');
       return;
     }
 

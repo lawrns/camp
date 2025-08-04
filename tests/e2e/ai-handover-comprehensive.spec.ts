@@ -10,16 +10,17 @@ test.describe('AI Handover Comprehensive Tests', () => {
     const dashboardPage = await context.newPage();
     
     try {
-      // Setup widget
+      // Setup widget (need to open it first)
       await widgetPage.goto(TEST_CONFIG.WIDGET_URL);
       await widgetPage.waitForLoadState('networkidle');
       
+      // Click widget button to open it
       const widgetButton = widgetPage.locator(TEST_CONFIG.SELECTORS.WIDGET_BUTTON);
       await expect(widgetButton).toBeVisible({ timeout: 10000 });
       await widgetButton.click();
       
       const widgetPanel = widgetPage.locator(TEST_CONFIG.SELECTORS.WIDGET_PANEL);
-      await expect(widgetPanel).toBeVisible();
+      await expect(widgetPanel).toBeVisible({ timeout: 10000 });
       
       // Send initial message from widget
       const messageInput = widgetPage.locator(TEST_CONFIG.SELECTORS.WIDGET_MESSAGE_INPUT);

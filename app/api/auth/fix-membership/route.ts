@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
         .insert({
           id: user.id,
           email: user.email,
-          full_name: user.user_metadata?.full_name || user.email?.split("@")[0],
+          fullName: user.user_metadata?.full_name || user.email?.split("@")[0],
           organization_id: user.user_metadata?.organization_id
         });
 

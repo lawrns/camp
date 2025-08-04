@@ -7,7 +7,7 @@ import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Skeleton } from "@/components/unified-ui/components/Skeleton";
-import { useOrganizationRealtime } from "@/lib/realtime";
+import { useRealtime } from "@/hooks/useRealtime";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,11 @@ export function AgentWorkloadIndicators({ organizationId, teamId, className }: A
   const [loading, setLoading] = useState(true);
 
   // Use unified realtime for agent workload updates
-  const organizationRealtime = useOrganizationRealtime(organizationId);
+  const [realtimeState] = useRealtime({
+    type: "dashboard",
+    organizationId,
+    enableHeartbeat: true
+  });
 
   useEffect(() => {
     const fetchWorkloads = async () => {
@@ -62,9 +66,9 @@ export function AgentWorkloadIndicators({ organizationId, teamId, className }: A
   // Handle realtime workload updates
   useEffect(() => {
     // Note: This is a placeholder for future realtime workload updates
-    // The current implementation doesn't support events array
+    // The unified realtime hook will be enhanced to support workload events
     // TODO: Implement proper realtime workload updates when the feature is available
-  }, [organizationRealtime]);
+  }, [realtimeState]);
 
   const getUtilizationColor = (percentage: number) => {
     if (percentage >= 90) return "text-[var(--fl-color-danger)]";

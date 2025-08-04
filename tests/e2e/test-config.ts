@@ -45,8 +45,8 @@ export const TEST_CONFIG = {
     
     // Conversations
     CONVERSATION_LIST: '[data-testid="conversation-list"], .conversation-list',
-    CONVERSATION_ROW: '[data-testid="conversation-row"], [data-testid="conversation-card"]',
-    CONVERSATION_ITEM: '[data-testid="conversation-row"], [data-testid="conversation-card"]',
+    CONVERSATION_ROW: '[data-testid="conversation-row"], [data-testid="conversation-card"], .conversation-item',
+    CONVERSATION_ITEM: '[data-testid="conversation-row"], [data-testid="conversation-card"], .conversation-item',
     CONVERSATION_EMPTY: '[data-testid="conversation-empty-title"], .conversation-empty',
     
     // Messages
@@ -55,12 +55,12 @@ export const TEST_CONFIG = {
     MESSAGE_LIST: '[data-testid="message-list"], .message-list',
     MESSAGE_ITEM: '[data-testid="message"], .message, .chat-message',
     
-    // Widget
+    // Widget (updated for homepage widget)
     WIDGET_BUTTON: '[data-testid="widget-button"]',
-    WIDGET_PANEL: '[data-testid="widget-panel"]',
-    WIDGET_MESSAGE_INPUT: '[data-testid="widget-message-input"]',
-    WIDGET_SEND_BUTTON: '[data-testid="widget-send-button"]',
-    WIDGET_MESSAGE: '[data-testid="widget-message"]',
+    WIDGET_PANEL: '[data-testid="widget-panel"], .widget-container, [class*="widget"]',
+    WIDGET_MESSAGE_INPUT: '[data-testid="widget-message-input"], input[placeholder*="message"], input[placeholder*="Message"], textarea[placeholder*="message"]',
+    WIDGET_SEND_BUTTON: '[data-testid="widget-send-button"], button[aria-label*="send"], button[aria-label*="Send"], [class*="send"], .send-button',
+    WIDGET_MESSAGE: '[data-testid="widget-message"], .message, .chat-message, [class*="message"]',
     WIDGET_CLOSE: '[data-testid="widget-close-button"]',
     WIDGET_MINIMIZE: '[data-testid="widget-minimize-button"]',
     

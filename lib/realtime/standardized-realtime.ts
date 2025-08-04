@@ -391,14 +391,7 @@ export async function broadcastToChannel(
   payload: any,
   config?: any
 ): Promise<boolean> {
-  const timestamp = new Date().toISOString();
-  console.log(`[Realtime] 🚀 SABOTEUR-FIX-V3-${timestamp}: Starting broadcast to ${channelName} -> ${eventType}`);
-
-  // CACHE BUSTER: Expose function globally for testing
-  if (typeof window !== 'undefined') {
-    (window as any).broadcastToChannel = broadcastToChannel;
-    (window as any).REALTIME_VERSION = 'SABOTEUR-FIX-V3';
-  }
+  console.log(`[Realtime] 🚀 Starting broadcast to ${channelName} -> ${eventType}`);
 
   try {
     // CRITICAL FIX: Force subscription before any broadcast attempt
@@ -474,11 +467,21 @@ export function subscribeToChannel(
     }
   });
 
-  // Return unsubscribe function
+  // Return unsubscribe function with better error handling
   return () => {
     try {
-      // For Supabase RealtimeChannel, use unsubscribe() method
-      channel.unsubscribe();
+      // CRITICAL FIX: Check if channel is still active before unsubscribing
+      if (channel && typeof channel.unsubscribe === 'function') {
+        // Add small delay to prevent race conditions during active operations
+        setTimeout(() => {
+          try {
+            channel.unsubscribe();
+            console.log(`[Realtime] ✅ Channel ${channelName} unsubscribed successfully`);
+          } catch (error) {
+            console.warn(`[Realtime] Channel cleanup error for ${channelName}:`, error);
+          }
+        }, 50); // 50ms delay to prevent race conditions
+      }
     } catch (error) {
       console.warn(`[Realtime] Channel cleanup error for ${channelName}:`, error);
     }
@@ -488,21 +491,51 @@ export function subscribeToChannel(
 
 // Convenience functions for common operations
 export const RealtimeHelpers = {
-  // Broadcast message to conversation
-  broadcastMessage: (orgId: string, convId: string, message: any) =>
-    broadcastToChannel(
-      CHANNEL_PATTERNS.conversation(orgId, convId),
-      EVENT_TYPES.MESSAGE_CREATED,
-      { message }
-    ),
+  // Broadcast message to conversation with connection state guards
+  broadcastMessage: async (orgId: string, convId: string, message: any) => {
+    try {
+      // CRITICAL FIX: Check if we have valid parameters before broadcasting
+      if (!orgId || !convId || !message) {
+        console.warn('[RealtimeHelpers] Cannot broadcast message - missing parameters');
+        return false;
+      }
 
-  // Broadcast typing status
-  broadcastTyping: (orgId: string, convId: string, userId: string, isTyping: boolean) =>
-    broadcastToChannel(
-      CHANNEL_PATTERNS.conversationTyping(orgId, convId),
-      isTyping ? EVENT_TYPES.TYPING_START : EVENT_TYPES.TYPING_STOP,
-      { userId, isTyping }
-    ),
+      const channelName = CHANNEL_PATTERNS.conversation(orgId, convId);
+      console.log(`[RealtimeHelpers] 📤 Broadcasting message to: ${channelName}`);
+
+      return await broadcastToChannel(
+        channelName,
+        EVENT_TYPES.MESSAGE_CREATED,
+        { message }
+      );
+    } catch (error) {
+      console.error('[RealtimeHelpers] ❌ Failed to broadcast message:', error);
+      return false;
+    }
+  },
+
+  // Broadcast typing status with connection state guards
+  broadcastTyping: async (orgId: string, convId: string, userId: string, isTyping: boolean) => {
+    try {
+      // CRITICAL FIX: Check if we have valid parameters before broadcasting
+      if (!orgId || !convId || !userId) {
+        console.warn('[RealtimeHelpers] Cannot broadcast typing - missing parameters');
+        return false;
+      }
+
+      const channelName = CHANNEL_PATTERNS.conversationTyping(orgId, convId);
+      console.log(`[RealtimeHelpers] ⌨️ Broadcasting typing (${isTyping}) to: ${channelName}`);
+
+      return await broadcastToChannel(
+        channelName,
+        isTyping ? EVENT_TYPES.TYPING_START : EVENT_TYPES.TYPING_STOP,
+        { userId, isTyping }
+      );
+    } catch (error) {
+      console.error('[RealtimeHelpers] ❌ Failed to broadcast typing:', error);
+      return false;
+    }
+  },
 
   // Broadcast conversation assignment
   broadcastAssignment: (orgId: string, convId: string, assigneeId: string, assignedBy: string) =>

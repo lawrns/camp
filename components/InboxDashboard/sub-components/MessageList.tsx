@@ -145,7 +145,6 @@ export const MessageList: React.FC<MessageListProps> = ({
     const message = messages[index];
     return (
       <MessageRow
-        key={message.id}
         message={message}
         selectedConversation={selectedConversation}
         hoveredMessage={hoveredMessage}
