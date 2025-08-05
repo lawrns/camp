@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Check, FileText, Loader2, Sparkles, Tag, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {
   Dialog,

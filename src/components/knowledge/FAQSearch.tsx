@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";

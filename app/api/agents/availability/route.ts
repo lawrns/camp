@@ -1,45 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { getServiceClient } from '@/lib/supabase/service';
 
 export async function GET(request: NextRequest) {
   try {
-    // CRITICAL-003 FIX: Enhanced authentication handling
-    const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    // Use service client for agent availability
+    const supabase = getServiceClient();
 
-    // Check for Authorization header (for API clients)
-    const authHeader = request.headers.get('Authorization');
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.substring(7);
-      await supabase.auth.setSession({
-        access_token: token,
-        refresh_token: '' // Not needed for API access
-      });
-    }
+    // Get organization ID from query params
+    const { searchParams } = new URL(request.url);
+    const organizationId = searchParams.get('organizationId');
 
-    // Get the current user session
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-    if (sessionError || !session) {
-      console.error('[AgentAvailability] Authentication failed:', sessionError?.message);
+    if (!organizationId) {
       return NextResponse.json(
-        { error: 'Unauthorized', details: sessionError?.message },
-        { status: 401 }
-      );
-    }
-
-    // Get user's organization
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('user_id', session.user.id)
-      .single();
-
-    if (!profile?.organization_id) {
-      return NextResponse.json(
-        { error: 'Organization not found' },
-        { status: 403 }
+        { error: 'Organization ID is required' },
+        { status: 400 }
       );
     }
 
@@ -58,15 +32,14 @@ export async function GET(request: NextRequest) {
         is_online,
         last_seen_at
       `)
-      .eq('organization_id', profile.organization_id)
+      .eq('organization_id', organizationId)
       .in('role', ['admin', 'agent'])
-      .order('full_name');
+      .order('fullName');
 
     if (error) {
       console.error('Error fetching agents:', error);
       console.error('Query details:', {
-        organizationId: profile.organization_id,
-        userId: session.user.id,
+        organizationId: organizationId,
         error: error.message
       });
       return NextResponse.json(
@@ -76,7 +49,18 @@ export async function GET(request: NextRequest) {
     }
 
     // CRITICAL-003 FIX: Transform agents data with real availability info
-    const agentsWithAvailability = (agents || []).map((agent: any) => {
+    const agentsWithAvailability = (agents || []).map((agent: {
+      user_id: string;
+      full_name: string | null;
+      email: string;
+      avatar_url: string | null;
+      role: string;
+      status: string | null;
+      current_chat_count: number | null;
+      max_concurrent_chats: number | null;
+      is_online: boolean | null;
+      last_seen_at: string | null;
+    }) => {
       // Calculate actual workload based on current chat count
       const workload = agent.current_chat_count || 0;
       const capacity = agent.max_concurrent_chats || 10;
@@ -117,7 +101,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       agents: agentsWithAvailability,
-      organizationId: profile.organization_id,
+      organizationId: organizationId,
       timestamp: new Date().toISOString()
     });
 

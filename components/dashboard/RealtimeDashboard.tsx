@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { ArrowClockwise, ChatCircle, Clock, TrendUp, Users, Warning } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtime } from "@/hooks/useRealtime";

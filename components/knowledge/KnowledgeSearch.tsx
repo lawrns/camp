@@ -14,7 +14,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import { EmptyState, EmptyStateVariantsConfig } from "@/components/unified-ui/components/empty-state";
 import { ImprovedInput } from "@/components/unified-ui/components/improved-input";

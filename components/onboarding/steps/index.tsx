@@ -2,7 +2,7 @@
 "use client";
 
 import { Spinner as Loader2 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 
 interface StepProps {

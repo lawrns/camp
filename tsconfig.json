@@ -7,6 +7,10 @@
     "strict": true,
     "noEmit": true,
     "incremental": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "module": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -16,13 +20,14 @@
     // Additional strict mode options
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"
@@ -41,9 +46,37 @@
       "@/inngest/*": ["./inngest/*"],
       "@/app/*": ["./src/app/*"],
       "@/env.mjs": ["./env.mjs"],
-      "@/trpc": ["./trpc"]
+      "@/trpc": ["./trpc"],
+      "@/unified-ui/*": ["./src/components/unified-ui/components/*"],
+      // Project references
+      "@/shared/*": ["./projects/shared/src/*"],
+      "@/widget/*": ["./projects/widget/src/*"],
+      "@/dashboard/*": ["./projects/dashboard/src/*"]
     }
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "ui-migration-backup-20250711-093804", "components/flame-ui"]
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "projects/*/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "ui-migration-backup-20250711-093804",
+    "components/flame-ui",
+    ".next",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "references": [
+    { "path": "./projects/shared" },
+    { "path": "./projects/widget" },
+    { "path": "./projects/dashboard" }
+  ]
 }

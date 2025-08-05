@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Warning as AlertTriangle } from "@phosphor-icons/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { hasValidSupabaseConfig } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";
 import { SupabaseErrorBoundary as UnifiedSupabaseErrorBoundary } from "./ErrorBoundaryProvider";

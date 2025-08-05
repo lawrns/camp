@@ -1,6 +1,10 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// ============================================================================
+// ROUTE CONFIGURATION
+// ============================================================================
+
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
   '/',
@@ -10,6 +14,7 @@ const PUBLIC_ROUTES = [
   '/api/auth',
   '/api/widget',
   '/api/health',
+  '/api/status',
   '/widget',
   '/api/webhooks',
   '/api/inngest',
@@ -20,6 +25,38 @@ const PUBLIC_ROUTES = [
   '/icon.svg',
   '/auth',
 ];
+
+// Routes that require authentication
+const PROTECTED_ROUTES = [
+  '/dashboard',
+  '/api/dashboard',
+  '/api/conversations',
+  '/api/messages',
+  '/api/users',
+  '/api/organizations',
+];
+
+// Widget-specific routes
+const WIDGET_ROUTES = [
+  '/widget',
+];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+function isValidUUID(uuid: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+}
+
+function isProtectedRoute(pathname: string): boolean {
+  return PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+}
+
+function isWidgetRoute(pathname: string): boolean {
+  return WIDGET_ROUTES.some(route => pathname.startsWith(route));
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -93,20 +130,51 @@ export async function middleware(request: NextRequest) {
   // Prevent redirect loops - don't redirect if already on auth pages
   const isAuthPage = pathname.startsWith('/auth/') || pathname.startsWith('/login');
   
+  // Enhanced route handling
+  const isProtectedRouteCheck = isProtectedRoute(pathname)
+  const isWidgetRouteCheck = isWidgetRoute(pathname)
+
+  // Handle widget routes with special validation
+  if (isWidgetRouteCheck) {
+    const orgId = request.nextUrl.searchParams.get('org')
+
+    if (!orgId || !isValidUUID(orgId)) {
+      console.log('[Middleware] Invalid widget organization ID:', orgId)
+      const errorUrl = new URL('/widget-error', request.url)
+      errorUrl.searchParams.set('error', 'invalid-organization')
+      return NextResponse.redirect(errorUrl)
+    }
+
+    // Add widget-specific headers
+    supabaseResponse.headers.set('x-widget-org-id', orgId)
+    supabaseResponse.headers.set('X-Frame-Options', 'ALLOWALL') // Allow embedding
+
+    return supabaseResponse
+  }
+
   // Redirect unauthenticated users to login for protected routes
-  if (!user && pathname.startsWith('/dashboard') && !isAuthPage) {
+  if (!user && isProtectedRouteCheck && !isAuthPage) {
     console.log('[Middleware] Redirecting unauthenticated user to login')
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
+    url.searchParams.set('redirectTo', pathname)
     return NextResponse.redirect(url)
   }
-  
+
   // If there's an auth error and we're on a protected route, redirect to login
-  if (authError && pathname.startsWith('/dashboard') && !isAuthPage) {
-    console.log('[Middleware] Auth error, redirecting to login:', authError.message)
+  if (authError && isProtectedRouteCheck && !isAuthPage) {
+    console.log('[Middleware] Auth error, redirecting to login:', authError instanceof Error ? authError.message : 'Unknown error')
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
+    url.searchParams.set('error', 'auth-error')
     return NextResponse.redirect(url)
+  }
+
+  // Add user context headers for authenticated requests
+  if (user && isProtectedRouteCheck) {
+    supabaseResponse.headers.set('x-user-id', user.id)
+    supabaseResponse.headers.set('x-user-role', user.user_metadata?.role || 'user')
+    supabaseResponse.headers.set('x-organization-id', user.user_metadata?.organization_id || '')
   }
 
   // Add security headers

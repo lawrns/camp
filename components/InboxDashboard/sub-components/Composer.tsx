@@ -59,7 +59,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
 }) => {
   const composerRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const organizationId = (selectedConversation as any)?.organization_id || (selectedConversation as any)?.organizationId || "";
+  const organizationId = selectedConversation?.organization_id || selectedConversation?.organizationId || "";
 
   // Enhanced state management
   const [composerMode, setComposerMode] = useState<'reply' | 'note' | 'forward'>('reply');
@@ -214,7 +214,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
   }, [setNewMessage, handleTyping, autoResizeTextarea]);
 
   // Handle mention selection
-  const handleMentionSelect = useCallback((member: any) => {
+  const handleMentionSelect = useCallback((member: { id: string; name: string; email: string; avatar?: string }) => {
     setShowMentions(false);
     // The MentionsSystem will handle the actual insertion
   }, []);

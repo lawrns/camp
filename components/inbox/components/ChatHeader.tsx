@@ -15,7 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +24,7 @@ import {
 } from "@/components/unified-ui/components/dropdown-menu";
 import { Icon } from "@/lib/ui/Icon";
 import { getUnifiedCustomerData } from "@/lib/utils/unified-customer-display";
-// import { IconButton } from "@/components/ui/Button-unified"; // Component doesn't exist, using Button instead
+// import { IconButton } from "@/components/ui/button"; // Component doesn't exist, using Button instead
 import { cn } from "@/lib/utils";
 import type { UnifiedConversation } from "../ConversationInterface";
 

@@ -10,7 +10,7 @@ import {
   SpeakerHigh as Volume2,
   SpeakerSlash as VolumeX,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {
   Select,

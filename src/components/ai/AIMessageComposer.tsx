@@ -15,7 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { isFeatureEnabled } from "@/lib/features";
 import { Icon } from "@/lib/ui/Icon";

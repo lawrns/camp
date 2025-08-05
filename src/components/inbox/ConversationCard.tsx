@@ -1,7 +1,7 @@
 "use client";
 
 import { AIActivityIndicator, AIStatusBadge, type AIStatusData } from "@/components/ai/AIStatusIndicators";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card } from "@/components/unified-ui/components/Card";

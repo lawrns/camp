@@ -2,7 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 // import { captureExceptionAndLogIfDevelopment } from '@/lib/sentry-client'; // Module not found
 import { handleComponentError } from "@/lib/client-errors";
 import { AppError, handleError } from "@/lib/errors/errorHandling";

@@ -20,7 +20,7 @@ import {
   Lightning as Zap,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card as GlassCard } from "@/components/unified-ui/components/Card";
 import { Slider } from "@/components/unified-ui/components/slider";
 import { Switch } from "@/components/unified-ui/components/switch";

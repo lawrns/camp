@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Bot, Check, Loader2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

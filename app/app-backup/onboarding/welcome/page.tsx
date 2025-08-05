@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Buildings as Building2, Spinner as Loader2, Sparkle as Sparkles } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";

@@ -15,7 +15,7 @@ import {
 import { VariableSizeList as List, ListChildComponentProps, ListOnScrollProps } from "react-window";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Message } from "@/types/entities";
 

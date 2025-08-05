@@ -12,7 +12,9 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '<rootDir>/cypress/'
+    '<rootDir>/cypress/',
+    '<rootDir>/e2e/',
+    '<rootDir>/tests/e2e/'
   ],
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
@@ -53,7 +55,7 @@ const customJestConfig = {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]
   },
   transformIgnorePatterns: [
-    '/node_modules/',
+    'node_modules/(?!(date-fns|date-fns-tz|@supabase|isows)/)',
     '^.+\\.module\\.(css|sass|scss)$'
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

@@ -12,7 +12,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import {

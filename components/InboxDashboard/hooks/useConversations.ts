@@ -30,19 +30,20 @@ export const useConversations = (organizationId?: string): UseConversationsRetur
     setError(null);
 
     try {
-      const client = supabase.browser();
+      // Use the widget conversations API to get all conversations for the organization
+      const response = await fetch(`/api/widget/conversations?organizationId=${organizationId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-      // Query conversations with all needed fields
-      const { data, error } = await client
-        .from("conversations")
-        .select("id, subject, status, customerName, customerEmail, lastMessageAt, status, priority, tags, metadata, assignedToUserId, customerId, customerVerified, customerOnline, customerBrowser, customerOs, customerDeviceType, ragEnabled, aiHandoverActive, aiPersona, aiConfidenceScore, assignmentMetadata, assignedAt, closedAt")
-        .eq("organization_id", organizationId);
-
-      if (error) {
-        console.error("[useConversations] Error loading conversations:", error);
-        setError(error.message);
-        return;
+      if (!response.ok) {
+        throw new Error(`Failed to fetch conversations: ${response.status}`);
       }
+
+      const result = await response.json();
+      const data = result.conversations || [];
 
       console.log("[useConversations] Raw conversations data:", data);
 

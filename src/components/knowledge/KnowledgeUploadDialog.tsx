@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 // Temporarily disable animations to fix infinite loop
 // import { motion, AnimatePresence } from 'framer-motion';
 import {

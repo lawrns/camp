@@ -3,7 +3,7 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { UnifiedErrorBoundary } from "./UnifiedErrorBoundary";
 

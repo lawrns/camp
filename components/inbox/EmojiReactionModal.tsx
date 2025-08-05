@@ -3,9 +3,17 @@
 import React, { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { Heart, Smiley as Smile, ThumbsUp, Lightning as Zap } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/unified-ui/components/dialog";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/unified-ui/dialog";
+import { Input } from "@/unified-ui/input";
+import { ScrollArea } from "@/unified-ui/ScrollArea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/unified-ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface EmojiReactionModalProps {

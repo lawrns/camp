@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { CaretDown as ChevronDown, CaretUp as ChevronUp, DotsSixVertical as GripVertical } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

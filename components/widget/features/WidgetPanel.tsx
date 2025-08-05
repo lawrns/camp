@@ -95,7 +95,7 @@ export const WidgetPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-background border-ds-border mt-2 flex h-96 w-80 flex-col overflow-hidden rounded-ds-lg border shadow-xl">
+    <div className="bg-background border-ds-border mt-2 flex h-96 w-80 flex-col overflow-hidden rounded-ds-lg border shadow-xl" data-testid="widget-panel">
       {/* Header */}
       <div className="bg-primary flex items-center justify-between spacing-3 text-white">
         <div>
@@ -184,6 +184,7 @@ export const WidgetPanel: React.FC = () => {
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             className="border-ds-border-strong flex-1 rounded-ds-lg border px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-testid="message-input"
           />
 
           {/* Send Button */}
@@ -192,6 +193,7 @@ export const WidgetPanel: React.FC = () => {
             disabled={!inputValue.trim()}
             className="bg-primary rounded-ds-lg p-spacing-sm text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Send message"
+            data-testid="widget-send-button"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="22" y1="2" x2="11" y2="13"></line>

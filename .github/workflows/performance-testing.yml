@@ -1,0 +1,481 @@
+name: Performance Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run performance tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '18'
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+jobs:
+  lighthouse-ci:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.12.x
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_TOKEN: ${{ secrets.LHCI_TOKEN }}
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 30
+
+      - name: Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const resultsPath = '.lighthouseci/lhr-*.json';
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              
+              const scores = {
+                performance: Math.round(results.categories.performance.score * 100),
+                accessibility: Math.round(results.categories.accessibility.score * 100),
+                'best-practices': Math.round(results.categories['best-practices'].score * 100),
+                seo: Math.round(results.categories.seo.score * 100)
+              };
+              
+              const comment = `## 🚀 Lighthouse Performance Report
+              
+              | Category | Score |
+              |----------|-------|
+              | Performance | ${scores.performance}% |
+              | Accessibility | ${scores.accessibility}% |
+              | Best Practices | ${scores['best-practices']}% |
+              | SEO | ${scores.seo}% |
+              
+              ### Core Web Vitals
+              - **LCP**: ${results.audits['largest-contentful-paint'].displayValue}
+              - **FID**: ${results.audits['max-potential-fid'].displayValue}
+              - **CLS**: ${results.audits['cumulative-layout-shift'].displayValue}
+              
+              [View detailed report](https://googlechrome.github.io/lighthouse/viewer/?psi=${encodeURIComponent(JSON.stringify(results))})
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Could not post Lighthouse results:', error);
+            }
+
+  bundle-analysis:
+    name: Bundle Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Analyze bundle
+        run: |
+          npm run build
+          npm run analyze
+        env:
+          ANALYZE: true
+
+      - name: Run bundle size analysis
+        run: node scripts/analyze-widget-bundle.js --compare --suggest
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            .next/analyze/
+            bundle-analysis/
+          retention-days: 30
+
+      - name: Check bundle size limits
+        run: |
+          # Check if bundle sizes exceed limits
+          CORE_SIZE=$(find .next/static/chunks -name "*widget-core*" -exec stat -c%s {} \; | head -1)
+          TOTAL_SIZE=$(find .next/static/chunks -name "*widget*" -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
+          
+          CORE_LIMIT=30720  # 30KB
+          TOTAL_LIMIT=256000  # 250KB
+          
+          echo "Core widget size: $CORE_SIZE bytes"
+          echo "Total widget size: $TOTAL_SIZE bytes"
+          
+          if [ "$CORE_SIZE" -gt "$CORE_LIMIT" ]; then
+            echo "❌ Core widget bundle exceeds 30KB limit"
+            exit 1
+          fi
+          
+          if [ "$TOTAL_SIZE" -gt "$TOTAL_LIMIT" ]; then
+            echo "❌ Total widget bundle exceeds 250KB limit"
+            exit 1
+          fi
+          
+          echo "✅ Bundle sizes within limits"
+
+  performance-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: npm start &
+        env:
+          PORT: 3001
+
+      - name: Wait for application
+        run: npx wait-on http://localhost:3001 --timeout 60000
+
+      - name: Run performance benchmarks
+        run: |
+          # Install autocannon for load testing
+          npm install -g autocannon
+          
+          # Test widget loading performance
+          autocannon -c 10 -d 30 -j http://localhost:3001/widget?org=test > widget-perf.json
+          
+          # Test API performance
+          autocannon -c 5 -d 15 -j http://localhost:3001/api/health > api-perf.json
+
+      - name: Analyze performance results
+        run: |
+          echo "## Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Widget performance
+          WIDGET_RPS=$(cat widget-perf.json | jq '.requests.average')
+          WIDGET_LATENCY=$(cat widget-perf.json | jq '.latency.average')
+          
+          echo "### Widget Performance" >> $GITHUB_STEP_SUMMARY
+          echo "- Requests/sec: $WIDGET_RPS" >> $GITHUB_STEP_SUMMARY
+          echo "- Average latency: ${WIDGET_LATENCY}ms" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # API performance
+          API_RPS=$(cat api-perf.json | jq '.requests.average')
+          API_LATENCY=$(cat api-perf.json | jq '.latency.average')
+          
+          echo "### API Performance" >> $GITHUB_STEP_SUMMARY
+          echo "- Requests/sec: $API_RPS" >> $GITHUB_STEP_SUMMARY
+          echo "- Average latency: ${API_LATENCY}ms" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-benchmarks
+          path: |
+            widget-perf.json
+            api-perf.json
+          retention-days: 30
+
+  memory-leak-detection:
+    name: Memory Leak Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: npm start &
+        env:
+          PORT: 3001
+
+      - name: Wait for application
+        run: npx wait-on http://localhost:3001 --timeout 60000
+
+      - name: Run memory leak tests
+        run: |
+          node << 'EOF'
+          const puppeteer = require('puppeteer');
+          
+          (async () => {
+            const browser = await puppeteer.launch({
+              headless: true,
+              args: ['--no-sandbox', '--disable-dev-shm-usage']
+            });
+            
+            const page = await browser.newPage();
+            
+            // Enable runtime domain to get heap usage
+            await page._client.send('Runtime.enable');
+            
+            const measurements = [];
+            
+            // Navigate to widget
+            await page.goto('http://localhost:3001/widget?org=test');
+            
+            // Perform actions that might cause memory leaks
+            for (let i = 0; i < 50; i++) {
+              // Open and close widget
+              await page.click('[data-testid="widget-button"]');
+              await page.waitForSelector('[data-testid="chat-interface"]');
+              await page.click('[data-testid="close-button"]');
+              
+              // Measure memory every 10 iterations
+              if (i % 10 === 0) {
+                const heapUsage = await page._client.send('Runtime.getHeapUsage');
+                measurements.push({
+                  iteration: i,
+                  usedSize: heapUsage.usedSize,
+                  totalSize: heapUsage.totalSize
+                });
+                console.log(`Iteration ${i}: ${Math.round(heapUsage.usedSize / 1024 / 1024)}MB used`);
+              }
+            }
+            
+            // Check for memory growth
+            const firstMeasurement = measurements[0];
+            const lastMeasurement = measurements[measurements.length - 1];
+            const growth = lastMeasurement.usedSize - firstMeasurement.usedSize;
+            const growthMB = Math.round(growth / 1024 / 1024);
+            
+            console.log(`Memory growth: ${growthMB}MB`);
+            
+            // Fail if memory growth exceeds 10MB
+            if (growthMB > 10) {
+              console.error('❌ Potential memory leak detected');
+              process.exit(1);
+            } else {
+              console.log('✅ No significant memory leaks detected');
+            }
+            
+            await browser.close();
+          })();
+          EOF
+
+  core-web-vitals:
+    name: Core Web Vitals
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install web-vitals CLI
+        run: npm install -g web-vitals-cli
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: npm start &
+        env:
+          PORT: 3001
+
+      - name: Wait for application
+        run: npx wait-on http://localhost:3001 --timeout 60000
+
+      - name: Measure Core Web Vitals
+        run: |
+          # Measure CWV for different pages
+          web-vitals http://localhost:3001 --output cwv-homepage.json
+          web-vitals http://localhost:3001/widget?org=test --output cwv-widget.json
+          
+          # Check thresholds
+          node << 'EOF'
+          const fs = require('fs');
+          
+          const thresholds = {
+            LCP: 2500,  // 2.5s
+            FID: 100,   // 100ms
+            CLS: 0.1    // 0.1
+          };
+          
+          const files = ['cwv-homepage.json', 'cwv-widget.json'];
+          let allPassed = true;
+          
+          files.forEach(file => {
+            if (fs.existsSync(file)) {
+              const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+              console.log(`\n${file}:`);
+              
+              Object.entries(thresholds).forEach(([metric, threshold]) => {
+                const value = data[metric];
+                const passed = value <= threshold;
+                const status = passed ? '✅' : '❌';
+                
+                console.log(`  ${status} ${metric}: ${value} (threshold: ${threshold})`);
+                
+                if (!passed) allPassed = false;
+              });
+            }
+          });
+          
+          if (!allPassed) {
+            console.error('\n❌ Core Web Vitals thresholds exceeded');
+            process.exit(1);
+          } else {
+            console.log('\n✅ All Core Web Vitals within thresholds');
+          }
+          EOF
+
+      - name: Upload CWV results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: core-web-vitals
+          path: cwv-*.json
+          retention-days: 30
+
+  performance-regression:
+    name: Performance Regression Detection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies (base)
+        run: npm ci
+
+      - name: Build and measure baseline
+        run: |
+          npm run build
+          npm start &
+          npx wait-on http://localhost:3001 --timeout 60000
+          
+          # Measure baseline performance
+          curl -w "@curl-format.txt" -o /dev/null -s http://localhost:3001 > baseline-perf.txt
+          
+          pkill -f "npm start"
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install dependencies (PR)
+        run: npm ci
+
+      - name: Build and measure PR performance
+        run: |
+          npm run build
+          npm start &
+          npx wait-on http://localhost:3001 --timeout 60000
+          
+          # Measure PR performance
+          curl -w "@curl-format.txt" -o /dev/null -s http://localhost:3001 > pr-perf.txt
+
+      - name: Create curl format file
+        run: |
+          cat > curl-format.txt << 'EOF'
+          time_namelookup:  %{time_namelookup}\n
+          time_connect:     %{time_connect}\n
+          time_appconnect:  %{time_appconnect}\n
+          time_pretransfer: %{time_pretransfer}\n
+          time_redirect:    %{time_redirect}\n
+          time_starttransfer: %{time_starttransfer}\n
+          time_total:       %{time_total}\n
+          EOF
+
+      - name: Compare performance
+        run: |
+          echo "## Performance Comparison" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Baseline (main branch)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat baseline-perf.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### PR Branch" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat pr-perf.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

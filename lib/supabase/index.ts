@@ -318,6 +318,131 @@ export interface RealtimeMessage {
 // Re-export realtime channel type
 export type RealtimeChannel = any;
 
+// ============================================================================
+// SSR SAFETY ENHANCEMENTS
+// ============================================================================
+
+/**
+ * SSR-safe environment detection
+ */
+export function isBrowser(): boolean {
+  return typeof window !== 'undefined' && typeof document !== 'undefined';
+}
+
+export function isServer(): boolean {
+  return typeof window === 'undefined';
+}
+
+/**
+ * SSR-safe client factory
+ */
+export function createSSRSafeClient() {
+  if (isBrowser()) {
+    return getBrowserClient();
+  } else {
+    return getSimpleServerClient();
+  }
+}
+
+// ============================================================================
+// ERROR HANDLING
+// ============================================================================
+
+export class SupabaseError extends Error {
+  constructor(
+    message: string,
+    public code?: string,
+    public details?: string,
+    public hint?: string
+  ) {
+    super(message);
+    this.name = 'SupabaseError';
+  }
+}
+
+export function handleSupabaseError(error: any): SupabaseError {
+  if (error?.code && error?.message) {
+    return new SupabaseError(
+      error.message,
+      error.code,
+      error.details,
+      error.hint
+    );
+  }
+
+  return new SupabaseError(
+    error?.message || 'An unknown database error occurred'
+  );
+}
+
+// ============================================================================
+// CONNECTION HEALTH
+// ============================================================================
+
+export async function checkConnectionHealth(client: any): Promise<{
+  isHealthy: boolean;
+  latency: number;
+  error?: string;
+}> {
+  const startTime = Date.now();
+
+  try {
+    const { error } = await client
+      .from('organizations')
+      .select('id')
+      .limit(1);
+
+    const latency = Date.now() - startTime;
+
+    if (error) {
+      return {
+        isHealthy: false,
+        latency,
+        error: error.message,
+      };
+    }
+
+    return {
+      isHealthy: true,
+      latency,
+    };
+  } catch (error) {
+    return {
+      isHealthy: false,
+      latency: Date.now() - startTime,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+// ============================================================================
+// REALTIME CONFIGURATION
+// ============================================================================
+
+export const realtimeConfig = {
+  enabledTables: [
+    'messages',
+    'conversations',
+    'typing_indicators',
+    'presence_states',
+  ],
+
+  settings: {
+    eventsPerSecond: 10,
+    heartbeatIntervalMs: 25000,
+    reconnectAfterMs: 1000,
+    maxReconnectAttempts: 5,
+    timeout: 15000,
+  },
+
+  getChannelName: (organizationId: string, conversationId?: string) => {
+    if (conversationId) {
+      return `org:${organizationId}:conv:${conversationId}`;
+    }
+    return `org:${organizationId}`;
+  },
+};
+
 // Type exports
 export type { SupabaseClient } from "@supabase/supabase-js";
 export type { Database };

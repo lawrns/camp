@@ -1,5 +1,5 @@
 // DEPRECATED: Use specific imports instead of barrel imports for better tree-shaking
-// Example: import { Button } from "@/components/ui/Button-unified" instead of from "@/components"
+// Example: import { Button } from "@/components/ui/button" instead of from "@/components"
 
 // Only keep essential re-exports for UI components
 export { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";

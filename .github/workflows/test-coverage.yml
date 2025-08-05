@@ -1,0 +1,411 @@
+name: Test Coverage & Quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '18'
+  COVERAGE_THRESHOLD: 85
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm run test:coverage
+        env:
+          CI: true
+
+      - name: Check coverage thresholds
+        run: |
+          # Extract coverage percentages
+          LINES=$(npx nyc report --reporter=text-summary | grep "Lines" | awk '{print $2}' | sed 's/%//')
+          FUNCTIONS=$(npx nyc report --reporter=text-summary | grep "Functions" | awk '{print $2}' | sed 's/%//')
+          BRANCHES=$(npx nyc report --reporter=text-summary | grep "Branches" | awk '{print $2}' | sed 's/%//')
+          STATEMENTS=$(npx nyc report --reporter=text-summary | grep "Statements" | awk '{print $2}' | sed 's/%//')
+          
+          echo "Coverage Report:"
+          echo "Lines: ${LINES}%"
+          echo "Functions: ${FUNCTIONS}%"
+          echo "Branches: ${BRANCHES}%"
+          echo "Statements: ${STATEMENTS}%"
+          
+          # Check thresholds
+          THRESHOLD=${{ env.COVERAGE_THRESHOLD }}
+          
+          if (( $(echo "$LINES < $THRESHOLD" | bc -l) )); then
+            echo "❌ Line coverage ${LINES}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+          
+          if (( $(echo "$FUNCTIONS < $THRESHOLD" | bc -l) )); then
+            echo "❌ Function coverage ${FUNCTIONS}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+          
+          if (( $(echo "$BRANCHES < $THRESHOLD" | bc -l) )); then
+            echo "❌ Branch coverage ${BRANCHES}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+          
+          if (( $(echo "$STATEMENTS < $THRESHOLD" | bc -l) )); then
+            echo "❌ Statement coverage ${STATEMENTS}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+          
+          echo "✅ All coverage thresholds met"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: Generate coverage badge
+        run: |
+          COVERAGE=$(npx nyc report --reporter=text-summary | grep "Lines" | awk '{print $2}')
+          COLOR="red"
+          
+          if [[ "${COVERAGE%\%}" -ge 90 ]]; then
+            COLOR="brightgreen"
+          elif [[ "${COVERAGE%\%}" -ge 80 ]]; then
+            COLOR="yellow"
+          elif [[ "${COVERAGE%\%}" -ge 70 ]]; then
+            COLOR="orange"
+          fi
+          
+          curl -s "https://img.shields.io/badge/coverage-${COVERAGE}-${COLOR}" > coverage-badge.svg
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            coverage/
+            coverage-badge.svg
+          retention-days: 30
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: campfire_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup test database
+        run: |
+          # Run database migrations for testing
+          npm run db:migrate:test
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/campfire_test
+
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/campfire_test
+          NODE_ENV: test
+
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            test-results/
+            coverage/
+          retention-days: 30
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          CI: true
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 30
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint:check
+
+      - name: Run Prettier
+        run: npm run format:check
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for unused dependencies
+        run: npx depcheck
+
+      - name: Check bundle size
+        run: |
+          npm run build
+          npx bundlesize
+
+  test-matrix:
+    name: Test Matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ['16', '18', '20']
+        exclude:
+          # Exclude some combinations to reduce CI time
+          - os: windows-latest
+            node-version: '16'
+          - os: macos-latest
+            node-version: '16'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download unit test coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage-unit/
+
+      - name: Download integration test coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: integration-test-results
+          path: coverage-integration/
+        continue-on-error: true
+
+      - name: Merge coverage reports
+        run: |
+          npm install -g nyc
+          
+          # Merge coverage from different test types
+          mkdir -p coverage-merged
+          
+          if [ -d "coverage-unit" ]; then
+            cp -r coverage-unit/* coverage-merged/
+          fi
+          
+          if [ -d "coverage-integration/coverage" ]; then
+            nyc merge coverage-integration/coverage coverage-merged/coverage-integration.json
+          fi
+          
+          # Generate combined report
+          nyc report --reporter=html --reporter=text-summary --report-dir=coverage-merged
+
+      - name: Generate coverage summary
+        run: |
+          echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "coverage-merged/coverage-summary.json" ]; then
+            echo "### Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat coverage-merged/coverage-summary.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Coverage by Category" >> $GITHUB_STEP_SUMMARY
+          echo "- Unit Tests: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Integration Tests: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E Tests: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Quality Gates" >> $GITHUB_STEP_SUMMARY
+          echo "- Coverage Threshold: ${{ env.COVERAGE_THRESHOLD }}% ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Code Quality: ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Security Audit: ✅" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let comment = `## 📊 Test Coverage Report\n\n`;
+            
+            try {
+              if (fs.existsSync('coverage-merged/coverage-summary.json')) {
+                const summary = JSON.parse(fs.readFileSync('coverage-merged/coverage-summary.json', 'utf8'));
+                const total = summary.total;
+                
+                comment += `| Metric | Coverage | Status |\n`;
+                comment += `|--------|----------|--------|\n`;
+                comment += `| Lines | ${total.lines.pct}% | ${total.lines.pct >= 85 ? '✅' : '❌'} |\n`;
+                comment += `| Functions | ${total.functions.pct}% | ${total.functions.pct >= 85 ? '✅' : '❌'} |\n`;
+                comment += `| Branches | ${total.branches.pct}% | ${total.branches.pct >= 85 ? '✅' : '❌'} |\n`;
+                comment += `| Statements | ${total.statements.pct}% | ${total.statements.pct >= 85 ? '✅' : '❌'} |\n\n`;
+                
+                const overallPass = total.lines.pct >= 85 && total.functions.pct >= 85 && 
+                                   total.branches.pct >= 85 && total.statements.pct >= 85;
+                
+                comment += `**Overall Status:** ${overallPass ? '✅ PASS' : '❌ FAIL'}\n\n`;
+                comment += `Threshold: 85% for all metrics\n`;
+              }
+            } catch (error) {
+              comment += `Error generating coverage report: ${error.message}\n`;
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Upload merged coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-coverage-report
+          path: coverage-merged/
+          retention-days: 30
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, e2e-tests, code-quality]
+    if: always()
+    
+    steps:
+      - name: Generate test summary
+        run: |
+          echo "## 🧪 Test Suite Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Unit Tests: ${{ needs.unit-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Integration Tests: ${{ needs.integration-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E Tests: ${{ needs.e2e-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Code Quality: ${{ needs.code-quality.result == 'success' && '✅ PASS' || '❌ FAIL' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Determine overall status
+          if [[ "${{ needs.unit-tests.result }}" == "success" && 
+                "${{ needs.integration-tests.result }}" == "success" && 
+                "${{ needs.e2e-tests.result }}" == "success" && 
+                "${{ needs.code-quality.result }}" == "success" ]]; then
+            echo "### 🎉 Overall Status: PASS" >> $GITHUB_STEP_SUMMARY
+            echo "All test suites passed successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Overall Status: FAIL" >> $GITHUB_STEP_SUMMARY
+            echo "One or more test suites failed. Please review the results above." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if any tests failed
+        if: needs.unit-tests.result != 'success' || needs.integration-tests.result != 'success' || needs.e2e-tests.result != 'success' || needs.code-quality.result != 'success'
+        run: exit 1

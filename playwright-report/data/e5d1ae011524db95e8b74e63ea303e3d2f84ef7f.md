@@ -1,0 +1,262 @@
+# Page snapshot
+
+```yaml
+- alert
+- navigation "Main navigation":
+  - img "Campfire logo"
+  - navigation:
+    - text: Primary
+    - link "Dashboard":
+      - /url: /dashboard
+      - img
+      - text: Dashboard
+    - link "Inbox":
+      - /url: /dashboard/inbox
+      - img
+      - text: Inbox
+    - link "Tickets":
+      - /url: /dashboard/tickets
+      - img
+      - text: Tickets
+    - link "Knowledge":
+      - /url: /dashboard/knowledge
+      - img
+      - text: Knowledge
+    - link "Analytics":
+      - /url: /dashboard/analytics
+      - img
+      - text: Analytics
+    - link "AI Insights":
+      - /url: /dashboard/ai-insights
+      - img
+      - text: AI Insights
+    - text: Tools
+    - link "Settings":
+      - /url: /dashboard/settings
+      - img
+      - text: Settings
+    - link "Team":
+      - /url: /dashboard/team
+      - img
+      - text: Team
+    - link "Integrations":
+      - /url: /dashboard/integrations
+      - img
+      - text: Integrations
+  - link "Notifications":
+    - /url: /dashboard/notifications
+    - img
+    - text: Notifications
+  - link "Help":
+    - /url: /dashboard/help
+    - img
+    - text: Help
+  - link "Profile":
+    - /url: /dashboard/profile
+    - img
+    - text: Profile
+- main:
+  - heading "Good morning, jam" [level=1]
+  - paragraph: Manage customer conversations and support requests
+  - textbox "Search conversations..."
+  - button "Filters"
+  - button
+  - button "Keyboard shortcuts"
+  - button
+  - banner:
+    - search:
+      - searchbox "Search conversations"
+      - text: Search through your conversations by customer name, message content, or status Filter conversations by status
+      - combobox "Filter conversations by status":
+        - option "All conversations" [selected]
+        - option "Open"
+        - option "Closed"
+        - option "Pending"
+    - button "Start new conversation": New
+  - heading "Conversations" [level=2]
+  - paragraph: 30 conversations
+  - button "Select All"
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 1m
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 1m
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - img
+  - heading "Choose a conversation" [level=3]
+  - paragraph: Select a conversation from the sidebar to start chatting with your customers and providing support.
+```

@@ -20,9 +20,9 @@ import {
   User,
   Lightning as Zap,
 } from "@phosphor-icons/react";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
-import { Input } from "@/components/unified-ui/components/input";
+import { Badge } from "@/unified-ui/Badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/unified-ui/input";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

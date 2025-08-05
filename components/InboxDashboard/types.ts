@@ -18,7 +18,7 @@ export interface Conversation {
   lastMessageAt: string;
   unreadCount: number;
   lastMessagePreview: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   assigned_to_ai?: boolean;
   ai_handover_session_id?: string;
   priority?: "low" | "medium" | "high" | "urgent";
@@ -50,9 +50,9 @@ export interface Message {
   is_private: boolean | null;
   confidence_score: number | null;
   escalation_required: boolean | null;
-  ai_metadata: Record<string, any> | null;
+  ai_metadata: Record<string, unknown> | null;
   attachments: FileAttachment[] | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   created_at: string;
   updated_at: string | null;
   agent_id: string | null;

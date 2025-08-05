@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { useCollapsiblePanels } from "@/hooks/useCollapsiblePanels";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";

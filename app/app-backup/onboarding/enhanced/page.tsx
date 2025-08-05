@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";

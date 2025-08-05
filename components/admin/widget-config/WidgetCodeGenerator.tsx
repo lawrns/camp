@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { CheckCircle as Check, Code, Copy } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { Icon } from "@/lib/ui/Icon";

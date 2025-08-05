@@ -8,7 +8,7 @@ import {
   PaperPlaneTilt as Send,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Skeleton } from "@/components/unified-ui/components/Skeleton";
 import { Icon } from "@/lib/ui/Icon";

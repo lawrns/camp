@@ -10,29 +10,29 @@ import {
   Tag as TagIcon,
   User as UserIcon,
 } from "@phosphor-icons/react";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
-import { Calendar } from "@/components/unified-ui/components/calendar";
-import { Checkbox } from "@/components/unified-ui/components/checkbox";
+import { Badge } from "@/unified-ui/Badge";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/unified-ui/calendar";
+import { Checkbox } from "@/unified-ui/checkbox";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/unified-ui/components/dialog";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
+} from "@/unified-ui/dialog";
+import { Input } from "@/unified-ui/input";
+import { Label } from "@/unified-ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/unified-ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Skeleton } from "@/components/unified-ui/components/Skeleton";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+} from "@/unified-ui/select";
+import { Skeleton } from "@/unified-ui/Skeleton";
+import { Textarea } from "@/unified-ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
 import { Icon } from "@/lib/ui/Icon";

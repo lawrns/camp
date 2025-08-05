@@ -1,0 +1,23 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3001",
+      "localStorage": [
+        {
+          "name": "test-user",
+          "value": "jam@jam.com"
+        },
+        {
+          "name": "test-mode",
+          "value": "true"
+        },
+        {
+          "name": "supabase.auth.token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzM1MjgwMDAwLCJpYXQiOjE3MzUyNzY0MDAsImlzcyI6Imh0dHBzOi8vZXhhbXBsZS5zdXBhYmFzZS5jbyIsInN1YiI6InRlc3QtdXNlci1pZCIsImVtYWlsIjoiamFtQGphbS5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7Im5hbWUiOiJUZXN0IEFnZW50Iiwicm9sZSI6ImFnZW50Iiwib3JnYW5pemF0aW9uX2lkIjoiYjVlODAxNzAtMDA0Yy00ZTgyLWE4OGMtM2UyMTY2YjE2OWRkIn0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3MzUyNzY0MDB9XSwic2Vzc2lvbl9pZCI6InRlc3Qtc2Vzc2lvbi1pZCJ9.test-signature"
+        }
+      ],
+      "sessionStorage": []
+    }
+  ]
+} 

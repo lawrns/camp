@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { CheckCircle as Check, FileText, Spinner as Loader2, Sparkle as Sparkles, Tag, X } from "@phosphor-icons/react";
 import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {
   Dialog,

@@ -8,7 +8,7 @@ import {
   House as Home,
   ArrowsClockwise as RefreshCw,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { CriticalErrorBoundary as UnifiedCriticalErrorBoundary } from "./ErrorBoundaryProvider";
 

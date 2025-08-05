@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/unified-ui/components/collapsible";
 import { cn } from "@/lib/utils";
 

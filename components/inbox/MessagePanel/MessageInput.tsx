@@ -3,7 +3,7 @@
 import React, { useCallback, useMemo } from "react";
 import { Paperclip, PaperPlaneTilt as Send } from "@phosphor-icons/react";
 import { AIReplySuggestions } from "@/components/ai/AIReplySuggestions";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { useDebouncedAISuggestions } from "@/hooks/useDebouncedAISuggestions";
 import { Icon } from "@/lib/ui/Icon";

@@ -5,7 +5,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TextB as Bold, Code, TextItalic as Italic, List, ListNumbers as ListOrdered } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

@@ -293,7 +293,7 @@ describe('Composer Component', () => {
       const setShowTemplates = jest.fn();
       render(<Composer {...defaultProps} setShowTemplates={setShowTemplates} />);
       
-      const templatesButton = screen.getByTestId('composer-templates-button');
+      const templatesButton = screen.getByTestId('composer-tab-note');
       await user.click(templatesButton);
       
       expect(setShowTemplates).toHaveBeenCalledWith(true);
@@ -316,11 +316,9 @@ describe('Composer Component', () => {
       render(<Composer {...defaultProps} />);
       
       expect(screen.getByLabelText('Send')).toBeInTheDocument();
-      expect(screen.getByLabelText('Add emoji')).toBeInTheDocument();
+      expect(screen.getByLabelText('Open emoji picker')).toBeInTheDocument();
       expect(screen.getByLabelText('Attach files')).toBeInTheDocument();
-      expect(screen.getByLabelText('Quick templates')).toBeInTheDocument();
-      expect(screen.getByLabelText('Generate AI suggestions')).toBeInTheDocument();
-      expect(screen.getByLabelText('Mention team members')).toBeInTheDocument();
+      expect(screen.getByLabelText('Upload image')).toBeInTheDocument();
     });
 
     it('has proper test IDs for testing', () => {
@@ -330,7 +328,7 @@ describe('Composer Component', () => {
       expect(screen.getByTestId('composer-textarea')).toBeInTheDocument();
       expect(screen.getByTestId('composer-send-button')).toBeInTheDocument();
       expect(screen.getByTestId('composer-tabs')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-row')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-toolbar')).toBeInTheDocument();
     });
   });
 

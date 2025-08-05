@@ -16,7 +16,7 @@ import {
   Lightning as Zap,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

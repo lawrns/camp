@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Conversation List Responsive Behavior', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the inbox dashboard
-    await page.goto('/dashboard/inbox');
+    await page.goto('/inbox');
     // Wait for the conversation list to load
     await page.waitForSelector('[data-testid="conversation-list-container"]');
   });

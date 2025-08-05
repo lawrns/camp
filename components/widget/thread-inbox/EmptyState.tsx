@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChatCircle, ArrowRight } from '@phosphor-icons/react';
+import { MessageCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface EmptyStateProps {
@@ -27,7 +27,7 @@ export function EmptyState({ onSendMessage, className }: EmptyStateProps) {
         className="mb-6"
       >
         <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-          <ChatCircle className="w-8 h-8 text-gray-400" />
+          <MessageCircle className="w-8 h-8 text-gray-400" />
         </div>
       </motion.div>
 

@@ -176,12 +176,15 @@ jest.mock('framer-motion', () => ({
   AnimatePresence: ({ children }) => children
 }));
 
-// Mock date-fns
-jest.mock('date-fns', () => ({
-  formatDistanceToNow: jest.fn(() => '2 minutes ago'),
-  format: jest.fn(() => '2023-01-01'),
-  isValid: jest.fn(() => true)
-}));
+// Mock date-fns - only mock specific functions that might cause issues
+jest.mock('date-fns', () => {
+  const actual = jest.requireActual('date-fns');
+  return {
+    ...actual,
+    formatDistanceToNow: jest.fn(() => '2 minutes ago'),
+    format: jest.fn(() => '2023-01-01'),
+  };
+});
 
 // Mock recharts
 jest.mock('recharts', () => ({

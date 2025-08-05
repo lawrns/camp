@@ -2,7 +2,7 @@
 
 import React, { Component, type ErrorInfo, type ReactNode } from "react";
 import { Alert } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   children: ReactNode;

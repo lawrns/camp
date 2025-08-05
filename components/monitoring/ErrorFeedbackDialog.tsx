@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { Warning as AlertTriangle, PaperPlaneTilt as Send, Star } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,

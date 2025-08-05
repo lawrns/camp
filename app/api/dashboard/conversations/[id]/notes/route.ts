@@ -51,7 +51,7 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for dashboard endpoints
-function withAuth(handler: (req: NextRequest, user: any, conversationId: string) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: { userId: string; email: string; name: string; organizationId: string; role: string }, conversationId: string) => Promise<NextResponse>) {
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
       // Use compatible cookie store that handles base64 format
@@ -111,7 +111,7 @@ function withAuth(handler: (req: NextRequest, user: any, conversationId: string)
   };
 }
 
-export const POST = withAuth(async (request: NextRequest, user: any, conversationId: string) => {
+export const POST = withAuth(async (request: NextRequest, user: { userId: string; email: string; name: string; organizationId: string; role: string }, conversationId: string) => {
   try {
     const body = await request.json();
     const { message } = body;
@@ -149,14 +149,14 @@ export const POST = withAuth(async (request: NextRequest, user: any, conversatio
         conversation_id: conversationId,
         organization_id: user.organizationId,
         content: message.trim(),
-        sender_email: user.email,
-        sender_name: user.name,
-        sender_type: 'agent',
-        sender_id: user.userId,
+        senderEmail: user.email,
+        senderName: user.name,
+        senderType: 'agent',
+        senderId: user.userId,
         topic: 'note',
         extension: 'text',
-        is_internal: true,
-        is_private: true,
+        isInternal: true,
+        isPrivate: true,
         metadata: {
           source: 'dashboard',
           type: 'internal_note',

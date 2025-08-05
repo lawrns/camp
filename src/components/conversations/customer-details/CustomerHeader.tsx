@@ -1,7 +1,7 @@
 "use client";
 
 import ImprovedHandoverButton from "@/components/ai/handover/ImprovedHandoverButton";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";

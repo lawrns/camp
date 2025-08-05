@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Buildings as Building, CheckCircle, Spinner as Loader2, Users, XCircle } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";

@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { Robot as Bot, CheckCircle as Check, UserPlus, Users } from "@phosphor-icons/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { Separator } from "@/components/unified-ui/components/Separator";
 import { Icon } from "@/lib/ui/Icon";

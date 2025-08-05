@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { ChatCircle, PaperPlaneTilt, User, Robot } from "@phosphor-icons/react";
 import { getBrowserClient } from "@/lib/supabase";
 

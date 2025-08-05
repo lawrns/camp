@@ -1,20 +1,20 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { retryable } from "..";
 import { sleep } from "../sleep";
 
 describe("retryable", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.spyOn(global, "setTimeout");
+    jest.useFakeTimers();
+    jest.spyOn(global, "setTimeout");
   });
 
   afterEach(() => {
-    vi.useRealTimers();
-    vi.clearAllMocks();
+    jest.useRealTimers();
+    jest.clearAllMocks();
   });
 
   it("should succeed on first attempt", async () => {
-    const mockFn = vi.fn().mockResolvedValue("success");
+    const mockFn = jest.fn().mockResolvedValue("success");
     const retryableFn = retryable(mockFn);
 
     const result = await retryableFn();
@@ -24,7 +24,7 @@ describe("retryable", () => {
   });
 
   it("should retry on failure and eventually succeed", async () => {
-    const mockFn = vi
+    const mockFn = jest
       .fn()
       .mockRejectedValueOnce(new Error("Temporary failure"))
       .mockRejectedValueOnce(new Error("Temporary failure"))
@@ -34,7 +34,7 @@ describe("retryable", () => {
     const promise = retryableFn();
 
     // Fast-forward through all timers
-    vi.runAllTimers();
+    jest.runAllTimers();
 
     const result = await promise;
 
@@ -43,7 +43,7 @@ describe("retryable", () => {
   });
 
   it("should respect maxRetries option", async () => {
-    const mockFn = vi.fn().mockRejectedValue(new Error("Permanent failure"));
+    const mockFn = jest.fn().mockRejectedValue(new Error("Permanent failure"));
 
     const retryableFn = retryable(mockFn, {
       maxRetries: 2,
@@ -53,14 +53,14 @@ describe("retryable", () => {
     const promise = retryableFn();
 
     // Fast-forward through all timers
-    vi.runAllTimers();
+    jest.runAllTimers();
 
     await expect(promise).rejects.toThrow("Permanent failure");
     expect(mockFn).toHaveBeenCalledTimes(3); // Initial + 2 retries
   });
 
   it("should use exponential backoff with jitter", async () => {
-    const mockFn = vi
+    const mockFn = jest
       .fn()
       .mockRejectedValueOnce(new Error("Error 1"))
       .mockRejectedValueOnce(new Error("Error 2"))
@@ -81,7 +81,7 @@ describe("retryable", () => {
     expect((setTimeout as unknown).mock.calls[0][1]).toBeLessThanOrEqual(100);
 
     // Fast-forward past first delay
-    vi.advanceTimersByTime(100);
+    jest.advanceTimersByTime(100);
 
     // Second retry should be after ~200ms (100 * 2^1 with jitter)
     expect(setTimeout).toHaveBeenCalledTimes(2);
@@ -89,20 +89,20 @@ describe("retryable", () => {
     expect((setTimeout as unknown).mock.calls[1][1]).toBeLessThanOrEqual(300);
 
     // Fast-forward past second delay
-    vi.advanceTimersByTime(300);
+    jest.advanceTimersByTime(300);
 
     const result = await promise;
     expect(result).toBe("success");
   });
 
   it("should call onRetry callback before each retry", async () => {
-    const mockFn = vi
+    const mockFn = jest
       .fn()
       .mockRejectedValueOnce(new Error("Error 1"))
       .mockRejectedValueOnce(new Error("Error 2"))
       .mockResolvedValue("success");
 
-    const onRetry = vi.fn();
+    const onRetry = jest.fn();
 
     const retryableFn = retryable(mockFn, {
       maxRetries: 2,
@@ -113,7 +113,7 @@ describe("retryable", () => {
     const promise = retryableFn();
 
     // Fast-forward through all timers
-    vi.runAllTimers();
+    jest.runAllTimers();
 
     await promise;
 
@@ -128,7 +128,7 @@ describe("retryable", () => {
 describe("retryable with custom options", () => {
   it("should use custom retry options", async () => {
     let attempts = 0;
-    const testFn = vi.fn().mockImplementation(async () => {
+    const testFn = jest.fn().mockImplementation(async () => {
       attempts++;
       if (attempts <= 2) {
         throw new Error(`Attempt ${attempts} failed`);
@@ -144,7 +144,7 @@ describe("retryable with custom options", () => {
     });
 
     const promise = retryableFn();
-    vi.runAllTimers();
+    jest.runAllTimers();
 
     const result = await promise;
     expect(result).toBe("success");
@@ -152,7 +152,7 @@ describe("retryable with custom options", () => {
   });
 
   it("should respect jitter setting", async () => {
-    const testFn = vi.fn().mockRejectedValue(new Error("Test error"));
+    const testFn = jest.fn().mockRejectedValue(new Error("Test error"));
 
     const retryableFn = retryable(testFn, {
       maxRetries: 1,
@@ -165,7 +165,7 @@ describe("retryable with custom options", () => {
     // With jitter disabled, delay should be exactly 100ms
     expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 100);
 
-    vi.runAllTimers();
+    jest.runAllTimers();
 
     await expect(promise).rejects.toThrow("Test error");
   });

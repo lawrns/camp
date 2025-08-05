@@ -28,10 +28,10 @@ class ChannelManager {
     reconnectAttempts: number;
   }>();
   private cleanupInterval: NodeJS.Timeout | null = null;
-  private readonly CLEANUP_INTERVAL = 30000; // 30 seconds
-  private readonly IDLE_TIMEOUT = 300000; // 5 minutes
-  private readonly HEARTBEAT_INTERVAL = 25000; // 25 seconds
-  private readonly MAX_RECONNECT_ATTEMPTS = 5;
+  private readonly CLEANUP_INTERVAL = 60000; // 60 seconds
+  private readonly IDLE_TIMEOUT = 600000; // 10 minutes
+  private readonly HEARTBEAT_INTERVAL = 30000; // 30 seconds
+  private readonly MAX_RECONNECT_ATTEMPTS = 3;
 
   constructor() {
     this.startCleanup();
@@ -91,37 +91,22 @@ class ChannelManager {
       const client = typeof window !== 'undefined' ? supabase.browser() : supabase.admin();
 
       // STANDARD-002 FIX: Check auth token exists before channel creation
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && client) {
         const { data: { session }, error } = await client.auth.getSession();
 
         if (error || !session?.access_token) {
-          console.warn(`[Realtime] ⚠️ No valid auth token for channel: ${name}, waiting for auth...`);
+          console.warn(`[Realtime] ⚠️ No valid auth token for channel: ${name}, proceeding without auth...`);
 
-          // Wait for auth or throw error
-          return new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-              reject(new Error(`Auth timeout for channel: ${name}`));
-            }, 10000); // 10 second timeout
+          // Skip auth validation and proceed with unauthenticated channel
+          const channel = this.createChannelWithAuth(name, config, client);
+          return channel;
 
-            const { data: { subscription } } = client.auth.onAuthStateChange(async (event, session) => {
-              if (event === 'SIGNED_IN' && session?.access_token) {
-                clearTimeout(timeout);
-                subscription.unsubscribe();
-
-                // Set auth for realtime
-                await client.realtime.setAuth(session.access_token);
-                console.log(`[Realtime] ✅ Auth established for channel: ${name}`);
-
-                // Create channel now that auth is ready
-                const channel = await this.createChannelWithAuth(name, config, client);
-                resolve(channel);
-              }
-            });
-          });
         }
 
         // Set auth token for realtime if we have a session
-        await client.realtime.setAuth(session.access_token);
+        if (client) {
+          await client.realtime.setAuth(session.access_token);
+        }
         console.log(`[Realtime] 🔐 Auth token set for channel: ${name}`);
       }
 
@@ -132,12 +117,12 @@ class ChannelManager {
     }
   }
 
-  private createChannelWithAuth(name: string, config: unknown, client: any): RealtimeChannel {
+  private createChannelWithAuth(name: string, config: any, client: any): RealtimeChannel {
     // STEP 3 TEST: Use broadcast-only channel to prevent mismatch errors
     const channel = client.channel(`bcast:${name}`, {
-      ...config,
+      ...(config || {}),
       config: {
-        ...config?.config,
+        ...(config?.config || {}),
         heartbeatIntervalMs: 25000, // Reduced from 30s to prevent timeouts
         rejoinAfterMs: (tries: number) => Math.min(1000 * Math.pow(2, tries), 10000),
         broadcast: {
@@ -156,7 +141,7 @@ class ChannelManager {
       });
 
       // PHASE 3 FIX: Enhanced error handling for channel status changes
-      channel.on('system', {}, (payload) => {
+      channel.on('system', {}, (payload: any) => {
         console.log(`[Realtime] 📊 Channel ${name} system event:`, payload);
 
         if (payload.status === 'error' || payload.status === 'closed') {
@@ -180,7 +165,7 @@ class ChannelManager {
       //   console.log(`[Realtime] 📝 Postgres change on ${name}:`, payload);
       // });
 
-      channel.on('broadcast', { event: '*' }, (payload) => {
+      channel.on('broadcast', { event: '*' }, (payload: any) => {
         console.log(`[Realtime] 📡 Broadcast received on ${name}:`, payload);
       });
 
@@ -215,7 +200,7 @@ class ChannelManager {
       // Clear heartbeat if no subscribers
       if (info.subscribers === 0 && info.heartbeatInterval) {
         clearInterval(info.heartbeatInterval);
-        info.heartbeatInterval = undefined;
+        delete info.heartbeatInterval;
       }
     }
   }
@@ -342,7 +327,7 @@ async function ensureChannelSubscription(channelName: string, config?: unknown, 
   const currentTimeout = timeouts[attempt - 1] || timeouts[timeouts.length - 1];
 
   console.log(`[Realtime] 🔍 Attempt ${attempt}/${maxAttempts}: Ensuring subscription for: ${channelName}`);
-  console.log(`[Realtime] ⏱️ Using timeout: ${currentTimeout / 1000}s, retry delay: ${retryDelay / 1000}s (exponential backoff)`);
+  console.log(`[Realtime] ⏱️ Using timeout: ${(currentTimeout || 15000) / 1000}s, retry delay: ${retryDelay / 1000}s (exponential backoff)`);
 
   // Skip auth validation temporarily as per existing code
   console.log(`[Realtime] 🔐 ⚠️ Skipping auth validation`);
@@ -474,9 +459,9 @@ export async function broadcastToChannel(
   } catch (error) {
     console.error(`[Realtime] 💥 Broadcast error: ${channelName} -> ${eventType}`, error);
     console.error(`[Realtime] 🔍 Error details:`, {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       channelName,
       eventType
     });
@@ -516,7 +501,7 @@ export function subscribeToChannel(
       return () => {}; // Return no-op unsubscribe function
     }
 
-    channel = client.channel(channelName, config);
+    channel = client.channel(channelName, config as any);
     channelManager.addSubscriber(channelName);
   } catch (error) {
     console.error(`[Realtime] Failed to get channel ${channelName}:`, error);

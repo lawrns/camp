@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Crown, Eye, Envelope, DotsThreeVertical, Shield, UserPlus, Users } from "@phosphor-icons/react";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {
   DropdownMenu,

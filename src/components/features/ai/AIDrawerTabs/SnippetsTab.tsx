@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Check, Copy, FileText, Search } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";

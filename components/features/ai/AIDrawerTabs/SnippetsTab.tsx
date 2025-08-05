@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowSquareOut, CheckCircle as Check, Copy, FileText, MagnifyingGlass as Search } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";

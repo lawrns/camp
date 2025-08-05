@@ -1,6 +1,6 @@
 import { Buildings as Building, Clock, Envelope as Mail, MapPin, User } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/unified-ui/components/dialog";
 import { CustomerProfile } from "@/hooks/useCustomerProfile";
 import { Icon } from "@/lib/ui/Icon";

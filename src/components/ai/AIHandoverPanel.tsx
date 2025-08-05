@@ -10,7 +10,7 @@ import {
   User,
 } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Switch } from "@/components/unified-ui/components/switch";

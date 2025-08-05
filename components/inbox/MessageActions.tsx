@@ -12,7 +12,7 @@ import {
   PencilSimple
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -286,4 +286,4 @@ export function MessageActions({
       </DropdownMenu>
     </div>
   );
-} 
+}

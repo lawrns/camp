@@ -21,7 +21,7 @@ import {
   YAxis,
 } from "@/components/charts/LazyCharts";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { Skeleton } from "@/components/unified-ui/components/Skeleton";

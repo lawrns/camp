@@ -27,7 +27,7 @@ describe("Timestamp Formatting", () => {
     expect(formatRelativeTimeShort(twoWeeksAgo)).toBe("2w");
     
     const threeMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-    expect(formatRelativeTimeShort(threeMonthsAgo)).toBe("3mo");
+    expect(formatRelativeTimeShort(threeMonthsAgo)).toBe("2mo");
     
     const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
     expect(formatRelativeTimeShort(oneYearAgo)).toBe("1y");

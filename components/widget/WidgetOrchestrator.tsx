@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * WIDGET ORCHESTRATOR
  *
@@ -9,32 +7,17 @@
  * with proper state management and dynamic welcome experiences.
  */
 
+"use client";
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UltimateWidget } from './design-system/UltimateWidget';
+import { UltimateWidgetConfig } from './design-system/types';
+import { useWidget } from './index';
 
 // ============================================================================
 // TYPES
 // ============================================================================
-
-export interface UltimateWidgetConfig {
-  organizationName: string;
-  welcomeMessage: string;
-  showWelcomeMessage: boolean;
-  primaryColor: string;
-  position: string;
-  theme: string;
-  soundEnabled: boolean;
-  enableFileUpload: boolean;
-  enableReactions: boolean;
-  enableThreading: boolean;
-  maxFileSize: number;
-  maxFiles: number;
-  acceptedFileTypes: string[];
-  showAgentTyping: boolean;
-  enableSound: boolean;
-}
-
 export interface WidgetOrchestratorProps {
   organizationId: string;
   conversationId?: string;
@@ -55,7 +38,8 @@ export interface WelcomeExperience {
 // ============================================================================
 function generateWelcomeExperience(
   organizationName: string,
-  isReturningUser: boolean
+  isReturningUser: boolean,
+  context?: any
 ): WelcomeExperience {
   if (isReturningUser) {
     return {
@@ -161,10 +145,40 @@ function DynamicWelcomeExperience({
 }
 
 // ============================================================================
-// CONNECTION STATUS INDICATOR (REMOVED)
+// CONNECTION STATUS INDICATOR
 // ============================================================================
-// Connection status is now handled within the UltimateWidget component itself
-// to prevent UI pollution in the main application layout
+function ConnectionStatus({ isConnected, isConnecting }: { isConnected: boolean; isConnecting: boolean }) {
+  return (
+    <AnimatePresence mode="wait">
+      {isConnecting && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="absolute top-0 left-0 right-0 bg-amber-50 border-b border-amber-200 px-4 py-2 text-center"
+        >
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+            <span className="text-sm text-amber-700">Connecting to conversation...</span>
+          </div>
+        </motion.div>
+      )}
+      {!isConnected && !isConnecting && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="absolute top-0 left-0 right-0 bg-red-50 border-b border-red-200 px-4 py-2 text-center"
+        >
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-red-500 rounded-full" />
+            <span className="text-sm text-red-700">Connection lost. Retrying...</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
 // ============================================================================
 // MAIN ORCHESTRATOR COMPONENT
@@ -175,8 +189,12 @@ export function WidgetOrchestrator({
   config: userConfig,
   className,
 }: WidgetOrchestratorProps) {
-  const [showWelcome, setShowWelcome] = useState(false); // Start with widget, not welcome
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const [isReturningUser, setIsReturningUser] = useState(false);
+
+  const { widget } = useWidget();
 
   // Enhanced configuration with defaults
   const config = useMemo<UltimateWidgetConfig>(() => ({
@@ -215,7 +233,17 @@ export function WidgetOrchestrator({
 
   const handleStartConversation = useCallback(async () => {
     setShowWelcome(false);
-    // Connection handling is now managed within the UltimateWidget component
+    setIsConnecting(true);
+    setConnectionError(null);
+
+    try {
+      // Simulate connection establishment
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setIsConnecting(false);
+    } catch (error) {
+      setConnectionError('Failed to establish connection');
+      setIsConnecting(false);
+    }
   }, []);
 
   const handleClose = useCallback(() => {
@@ -224,6 +252,11 @@ export function WidgetOrchestrator({
 
   return (
     <div className={className}>
+      <ConnectionStatus 
+        isConnected={widget?.isConnected || false} 
+        isConnecting={isConnecting} 
+      />
+      
       <AnimatePresence mode="wait">
         {showWelcome ? (
           <DynamicWelcomeExperience

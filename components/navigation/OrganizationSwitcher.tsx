@@ -11,9 +11,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Building2, Check, ChevronDown, LogOut, Plus, Settings, Users } from "lucide-react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/unified-ui/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import {
   Dialog,
@@ -22,7 +22,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/unified-ui/components/dialog";
+} from "@/unified-ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +30,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/unified-ui/components/dropdown-menu";
+} from "@/unified-ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/unified-ui/popover";
+import { Switch } from "@/unified-ui/switch";
+import { Tooltip } from "@/unified-ui/tooltip";
 import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
+import { Label } from "@/unified-ui/label";
 import { Separator } from "@/components/unified-ui/components/Separator";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { createClient } from "@/lib/supabase/client";

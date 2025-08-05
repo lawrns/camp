@@ -1,7 +1,7 @@
 "use client";
 
 import { MessageItem } from "@/components/InboxDashboard/sub-components/MessagePanel/MessageItem";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { MessageComposer } from "@/components/unified-ui/components/Composer";

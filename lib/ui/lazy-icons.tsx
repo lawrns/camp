@@ -1,4 +1,4 @@
-import { Spinner, type IconProps } from "@phosphor-icons/react";
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // LoadingIcon

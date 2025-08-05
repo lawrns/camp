@@ -10,7 +10,7 @@ import {
   extractVariables,
   type VariableContext,
 } from "@/lib/cannedResponses/variableSubstitution";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/unified-ui/components/Input";
 import { Textarea } from "@/components/unified-ui/components/Textarea";
 import { Badge } from "@/components/unified-ui/components/Badge";

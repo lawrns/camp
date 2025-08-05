@@ -13,7 +13,7 @@ import { Building2, Check, ChevronDown, LogOut, Plus, Settings, Users } from "lu
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import {
   Dialog,

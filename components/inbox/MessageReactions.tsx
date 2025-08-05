@@ -8,8 +8,8 @@
 import { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { Plus } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/unified-ui/tooltip";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

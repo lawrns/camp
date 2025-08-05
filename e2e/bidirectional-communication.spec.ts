@@ -48,10 +48,8 @@ test.describe('Bidirectional Communication E2E', () => {
       organizationId: testMetadata.testOrgId,
     };
 
-    // Setup agent context with authentication
-    testContext.agentContext = await testContext.agentBrowser.newContext({
-      storageState: 'e2e/auth-state.json',
-    });
+    // Setup agent context (will authenticate manually)
+    testContext.agentContext = await testContext.agentBrowser.newContext();
     testContext.agentPage = await testContext.agentContext.newPage();
 
     // Setup customer context (no auth needed for widget)
@@ -82,29 +80,66 @@ test.describe('Bidirectional Communication E2E', () => {
     test.setTimeout(TEST_TIMEOUT);
 
     // ========================================
-    // 1. SETUP AGENT DASHBOARD
-    // ========================================
-    await testContext.agentPage.goto('/dashboard/conversations');
-    await testContext.agentPage.waitForLoadState('networkidle');
-
-    // Navigate to specific conversation
-    await testContext.agentPage.click(`[data-testid="conversation-${testContext.conversationId}"]`);
-    await testContext.agentPage.waitForSelector('[data-testid="message-input"]');
-
-    // ========================================
-    // 2. SETUP CUSTOMER WIDGET (UltimateWidget)
+    // 1. SETUP CUSTOMER WIDGET FIRST (to create conversation)
     // ========================================
     await testContext.customerPage.goto('/');
     await testContext.customerPage.waitForLoadState('networkidle');
+    
+    // Open widget
     await testContext.customerPage.click('[data-testid="widget-button"]');
     await testContext.customerPage.waitForSelector('[data-testid="widget-message-input"]');
+    
+    // Send initial message to create conversation
+    const initialMessage = `E2E_TEST: Initial message ${Date.now()}`;
+    await testContext.customerPage.fill('[data-testid="widget-message-input"]', initialMessage);
+    await testContext.customerPage.click('[data-testid="widget-send-button"]');
+    
+    // Wait for message to be sent
+    await testContext.customerPage.waitForTimeout(2000);
 
     // ========================================
-    // 3. TEST CUSTOMER TO AGENT MESSAGE FLOW
+    // 2. SETUP AGENT DASHBOARD
+    // ========================================
+    await testContext.agentPage.goto('/dashboard/inbox');
+    await testContext.agentPage.waitForLoadState('networkidle');
+    
+    // Check if we need to login
+    const currentUrl = testContext.agentPage.url();
+    if (currentUrl.includes('/login')) {
+      console.log('🔐 Agent needs to login...');
+      
+      // Login as agent
+      await testContext.agentPage.fill('input[type="email"], #email, input[name="email"]', 'jam@jam.com');
+      await testContext.agentPage.fill('input[type="password"], #password, input[name="password"]', 'password123');
+      await testContext.agentPage.click('button[type="submit"], button:has-text("Sign in"), button:has-text("Login")');
+      
+      // Wait for successful login
+      await testContext.agentPage.waitForURL('**/dashboard**', { timeout: 15000 });
+      console.log('✅ Agent login successful');
+      
+      // Navigate to inbox
+      await testContext.agentPage.goto('/dashboard/inbox');
+      await testContext.agentPage.waitForLoadState('networkidle');
+    }
+    
+    // Wait for conversation to appear and click on it
+    await testContext.agentPage.waitForSelector('[data-testid="conversation"]', { timeout: 10000 });
+    await testContext.agentPage.click('[data-testid="conversation"]');
+    await testContext.agentPage.waitForSelector('[data-testid="composer-textarea"]');
+
+    // ========================================
+    // 3. VERIFY INITIAL MESSAGE APPEARED IN AGENT DASHBOARD
+    // ========================================
+    await expect(
+      testContext.agentPage.locator(`[data-testid="message"]:has-text("${initialMessage}")`)
+    ).toBeVisible({ timeout: MESSAGE_WAIT_TIME });
+
+    // ========================================
+    // 4. TEST CUSTOMER TO AGENT MESSAGE FLOW
     // ========================================
     const customerMessage = `E2E_TEST: Customer message at ${Date.now()}`;
     
-    // Customer sends message
+    // Customer sends another message
     await testContext.customerPage.fill('[data-testid="widget-message-input"]', customerMessage);
     await testContext.customerPage.click('[data-testid="widget-send-button"]');
 
@@ -119,13 +154,13 @@ test.describe('Bidirectional Communication E2E', () => {
     ).toBeVisible({ timeout: MESSAGE_WAIT_TIME });
 
     // ========================================
-    // 4. TEST AGENT TO CUSTOMER MESSAGE FLOW
+    // 5. TEST AGENT TO CUSTOMER MESSAGE FLOW
     // ========================================
     const agentMessage = `E2E_TEST: Agent response at ${Date.now()}`;
 
     // Agent sends message
-    await testContext.agentPage.fill('[data-testid="message-input"]', agentMessage);
-    await testContext.agentPage.click('[data-testid="send-button"]');
+    await testContext.agentPage.fill('[data-testid="composer-textarea"]', agentMessage);
+    await testContext.agentPage.click('[data-testid="composer-send-button"]');
 
     // Verify message appears in agent dashboard
     await expect(
@@ -143,9 +178,31 @@ test.describe('Bidirectional Communication E2E', () => {
   test('should handle typing indicators bidirectionally', async () => {
     test.setTimeout(TEST_TIMEOUT);
 
-    // Ensure both pages are ready
-    await testContext.agentPage.waitForSelector('[data-testid="message-input"]');
-    await testContext.customerPage.waitForSelector('[data-testid="widget-message-input"]');
+    // ========================================
+    // 1. SETUP PAGES (if not already set up)
+    // ========================================
+    
+    // Check if agent page is on dashboard, if not navigate there
+    const currentUrl = testContext.agentPage.url();
+    if (!currentUrl.includes('/dashboard/inbox')) {
+      await testContext.agentPage.goto('/dashboard/inbox');
+      await testContext.agentPage.waitForLoadState('networkidle');
+      
+      // Wait for conversation to appear and click on it
+      await testContext.agentPage.waitForSelector('[data-testid="conversation"]', { timeout: 10000 });
+      await testContext.agentPage.click('[data-testid="conversation"]');
+      await testContext.agentPage.waitForSelector('[data-testid="composer-textarea"]');
+    }
+    
+    // Check if customer page has widget open, if not open it
+    const widgetInput = testContext.customerPage.locator('[data-testid="widget-message-input"]');
+    const inputCount = await widgetInput.count();
+    if (inputCount === 0) {
+      await testContext.customerPage.goto('/');
+      await testContext.customerPage.waitForLoadState('networkidle');
+      await testContext.customerPage.click('[data-testid="widget-button"]');
+      await testContext.customerPage.waitForSelector('[data-testid="widget-message-input"]');
+    }
 
     // ========================================
     // 1. TEST CUSTOMER TYPING → AGENT SEES
@@ -173,8 +230,8 @@ test.describe('Bidirectional Communication E2E', () => {
     // ========================================
 
     // Agent starts typing
-    await testContext.agentPage.focus('[data-testid="message-input"]');
-    await testContext.agentPage.type('[data-testid="message-input"]', 'Agent is typing...');
+    await testContext.agentPage.focus('[data-testid="composer-textarea"]');
+    await testContext.agentPage.type('[data-testid="composer-textarea"]', 'Agent is typing...');
 
     // Customer should see typing indicator
     await expect(
@@ -182,7 +239,7 @@ test.describe('Bidirectional Communication E2E', () => {
     ).toBeVisible({ timeout: MESSAGE_WAIT_TIME });
 
     // Clear agent input (stop typing)
-    await testContext.agentPage.fill('[data-testid="message-input"]', '');
+    await testContext.agentPage.fill('[data-testid="composer-textarea"]', '');
 
     // Typing indicator should disappear
     await expect(
@@ -340,8 +397,8 @@ test.describe('Bidirectional Communication E2E', () => {
         await testContext.customerPage.click('[data-testid="widget-send-button"]');
       })(),
       (async () => {
-        await testContext.agentPage.fill('[data-testid="message-input"]', agentMessage);
-        await testContext.agentPage.click('[data-testid="send-button"]');
+        await testContext.agentPage.fill('[data-testid="composer-textarea"]', agentMessage);
+        await testContext.agentPage.click('[data-testid="composer-send-button"]');
       })(),
     ]);
 

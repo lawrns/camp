@@ -13,22 +13,22 @@ import {
   WifiHigh,
   WifiSlash as WifiHighOff,
 } from "@phosphor-icons/react";
-import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
+import { Alert, AlertDescription } from "@/unified-ui/Alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/unified-ui/Avatar";
+import { Badge } from "@/unified-ui/Badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/unified-ui/Card";
+import { Input } from "@/unified-ui/input";
+import { Label } from "@/unified-ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Switch } from "@/components/unified-ui/components/switch";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+} from "@/unified-ui/select";
+import { Switch } from "@/unified-ui/switch";
+import { Textarea } from "@/unified-ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 

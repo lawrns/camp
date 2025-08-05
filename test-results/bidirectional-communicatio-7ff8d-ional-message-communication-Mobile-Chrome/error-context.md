@@ -1,0 +1,198 @@
+# Page snapshot
+
+```yaml
+- alert
+- button:
+  - img
+- main:
+  - heading "Good morning, jam" [level=1]
+  - button
+  - textbox "Search conversations..."
+  - banner
+  - heading "Conversations" [level=2]
+  - paragraph: 30 conversations
+  - button "Select All"
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human just now
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 1m
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 1m
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - checkbox "Select conversation with Anonymous User"
+  - img "Anonymous User"
+  - heading "Anonymous User" [level=3]
+  - text: Human 11h
+  - paragraph: No messages yet
+  - text: Open Medium
+  - img
+  - heading "Choose a conversation" [level=3]
+  - paragraph: Select a conversation from the sidebar to start chatting with your customers and providing support.
+```

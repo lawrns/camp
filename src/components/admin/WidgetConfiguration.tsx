@@ -15,20 +15,20 @@ import {
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
+import { Input } from "@/unified-ui/input";
+import { Label } from "@/unified-ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Switch } from "@/components/unified-ui/components/switch";
+} from "@/unified-ui/select";
+import { Switch } from "@/unified-ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+import { Textarea } from "@/unified-ui/textarea";
 import { Icon } from "@/lib/ui/Icon";
 import type { BusinessHourUpdate, UpdateConfigFunction, WidgetConfig, WidgetConfigSection } from "./types";
 

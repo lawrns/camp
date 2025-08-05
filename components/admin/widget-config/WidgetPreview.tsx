@@ -8,7 +8,7 @@ import {
   DeviceTablet as Tablet,
   X,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

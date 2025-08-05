@@ -1,0 +1,75 @@
+{
+  "testOrgId": "test-org-123",
+  "testUserId": "test-user-456",
+  "testConversations": [
+    {
+      "id": "conv-test-001",
+      "organization_id": "test-org-123",
+      "customer_id": "customer-001",
+      "customer_name": "Test Customer",
+      "customer_email": "test@example.com",
+      "status": "active",
+      "created_at": "2025-01-26T00:00:00Z",
+      "updated_at": "2025-01-26T00:00:00Z"
+    },
+    {
+      "id": "conv-test-002",
+      "organization_id": "test-org-123",
+      "customer_id": "customer-002",
+      "customer_name": "Another Customer",
+      "customer_email": "another@example.com",
+      "status": "active",
+      "created_at": "2025-01-26T00:00:00Z",
+      "updated_at": "2025-01-26T00:00:00Z"
+    }
+  ],
+  "testMessages": [
+    {
+      "id": "msg-test-001",
+      "conversation_id": "conv-test-001",
+      "sender_type": "customer",
+      "sender_id": "customer-001",
+      "content": "Hello, I need help with my order",
+      "created_at": "2025-01-26T00:00:00Z"
+    },
+    {
+      "id": "msg-test-002",
+      "conversation_id": "conv-test-001",
+      "sender_type": "agent",
+      "sender_id": "test-user-456",
+      "content": "Hi! I'd be happy to help you with your order. Can you provide your order number?",
+      "created_at": "2025-01-26T00:01:00Z"
+    }
+  ],
+  "testUsers": [
+    {
+      "id": "test-user-456",
+      "organization_id": "test-org-123",
+      "email": "agent@test.com",
+      "name": "Test Agent",
+      "role": "agent",
+      "status": "online"
+    }
+  ],
+  "widgetConfig": {
+    "organization_id": "test-org-123",
+    "widget_token": "test-widget-token-123",
+    "theme": {
+      "primary_color": "#3b82f6",
+      "background_color": "#ffffff",
+      "text_color": "#1e293b"
+    },
+    "settings": {
+      "welcome_message": "Hello! How can I help you today?",
+      "auto_open": false,
+      "position": "bottom-right"
+    }
+  },
+  "testConfig": {
+    "baseURL": "http://localhost:3001",
+    "timeout": 30000,
+    "realtimeTimeout": 5000,
+    "performanceThreshold": 1000,
+    "successRateThreshold": 0.8
+  }
+} 

@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowSquareOut, Clock, MapPin, Phone, User } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 

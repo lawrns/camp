@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Buildings as Building2, Globe, Spinner as Loader2, TrendUp as TrendingUp, Users } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";
 import {

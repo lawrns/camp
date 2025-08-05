@@ -4,7 +4,7 @@ import React from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { CaretDown as ChevronDown, CaretUp as ChevronUp, DotsThree as MoreHorizontal, X } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

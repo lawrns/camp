@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { AlertTriangle, Send, Star } from "lucide-react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,

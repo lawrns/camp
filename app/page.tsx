@@ -1,5 +1,6 @@
 import ClientHomePage from "@/components/homepage/ClientHomePage";
 import { WidgetOrchestrator } from "@/components/widget/WidgetOrchestrator";
+import { WidgetProvider } from "@/components/widget/index";
 
 export const metadata = {
   title: "Campfire - Customer support that feels completely human",
@@ -27,22 +28,24 @@ export default function HomePage() {
   return (
     <div className="home-page">
       <ClientHomePage />
-      <WidgetOrchestrator
-        organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
-        conversationId="8ddf595b-b75d-42f2-98e5-9efd3513ea4b"
-        config={{
-          organizationName: "Campfire",
-          welcomeMessage: "Welcome! I'm here to help you get the most out of Campfire. What can I assist you with today?",
-          showWelcomeMessage: true,
-          enableFileUpload: true,
-          enableReactions: true,
-          enableThreading: true,
-          soundEnabled: true,
-          primaryColor: "#3b82f6",
-          position: "bottom-right",
-          theme: "light",
-        }}
-      />
+      <WidgetProvider organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd">
+        <WidgetOrchestrator
+          organizationId="b5e80170-004c-4e82-a88c-3e2166b169dd"
+          conversationId="8ddf595b-b75d-42f2-98e5-9efd3513ea4b"
+          config={{
+            organizationName: "Campfire",
+            welcomeMessage: "Welcome! I'm here to help you get the most out of Campfire. What can I assist you with today?",
+            showWelcomeMessage: true,
+            enableFileUpload: true,
+            enableReactions: true,
+            enableThreading: true,
+            soundEnabled: true,
+            primaryColor: "#3b82f6",
+            position: "bottom-right",
+            theme: "light",
+          }}
+        />
+      </WidgetProvider>
     </div>
   );
 }

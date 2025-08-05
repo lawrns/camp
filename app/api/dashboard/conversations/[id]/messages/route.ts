@@ -6,8 +6,8 @@ import { supabase } from '@/lib/supabase/consolidated-exports';
 import { mapDbMessageToApi, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 
 // Custom cookie parser that handles both base64 and JSON formats
-function createCompatibleCookieStore() {
-  const cookieStore = cookies();
+async function createCompatibleCookieStore() {
+  const cookieStore = await cookies();
 
   return {
     get: (name: string) => {
@@ -63,12 +63,13 @@ interface AuthenticatedUser {
 
 // Authentication wrapper for dashboard endpoints (FIXED: removed async from function declaration)
 function withAuth(handler: (req: NextRequest, user: AuthenticatedUser, conversationId: string) => Promise<NextResponse>) {
-  return async (request: NextRequest, { params }: { params: { id: string } }) => {
+  return async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     try {
-      console.log('[Dashboard withAuth] Starting authentication for conversation:', params.id);
+      const resolvedParams = await params;
+      console.log('[Dashboard withAuth] Starting authentication for conversation:', resolvedParams.id);
 
       // Use compatible cookie store that handles base64 format
-      const compatibleCookieStore = createCompatibleCookieStore();
+      const compatibleCookieStore = await createCompatibleCookieStore();
       const supabaseClient = createRouteHandlerClient({ cookies: () => compatibleCookieStore });
 
       console.log('[Dashboard withAuth] Supabase client created with compatible cookie store, getting session...');
@@ -141,7 +142,7 @@ function withAuth(handler: (req: NextRequest, user: AuthenticatedUser, conversat
         email: user.email
       });
 
-      const result = await handler(request, user, params.id);
+      const result = await handler(request, user, resolvedParams.id);
       console.log('[Dashboard withAuth] Handler completed successfully');
       return result;
     } catch (error) {
@@ -315,10 +316,10 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
         conversation_id: conversationId,
         organization_id: user.organizationId,
         content: content.trim(),
-        sender_email: user.email,
-        sender_name: user.name,
-        sender_type: senderType,
-        sender_id: user.userId,
+        senderEmail: user.email,
+        senderName: user.name,
+        senderType: senderType,
+        senderId: user.userId,
         topic: 'message', // Required field
         extension: 'text', // Required field
         metadata: {

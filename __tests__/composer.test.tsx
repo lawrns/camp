@@ -1,43 +1,43 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import userEvent from '@testing-library/user-event';
 import Composer from '../components/InboxDashboard/sub-components/Composer';
 
 // Mock dependencies
-vi.mock('@/hooks/useAuth', () => ({
+jest.mock('@/hooks/useAuth', () => ({
   useAuth: () => ({
     user: { id: 'test-user-id', organizationId: 'test-org-id' }
   })
 }));
 
-vi.mock('@/lib/data/note', () => ({
-  addNote: vi.fn()
+jest.mock('@/lib/data/note', () => ({
+  addNote: jest.fn()
 }));
 
-vi.mock('@/components/inbox/MentionsSystem', () => ({
+jest.mock('@/components/inbox/MentionsSystem', () => ({
   MentionsSystem: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="mentions-system">{children}</div>
   )
 }));
 
-vi.mock('@/components/inbox/AIHandoverButton', () => ({
+jest.mock('@/components/inbox/AIHandoverButton', () => ({
   AIHandoverButton: () => <div data-testid="ai-handover-button" />
 }));
 
-vi.mock('./EmojiPicker', () => ({
+jest.mock('./EmojiPicker', () => ({
   default: () => <div data-testid="emoji-picker" />
 }));
 
-vi.mock('./TemplatePanel', () => ({
+jest.mock('./TemplatePanel', () => ({
   default: () => <div data-testid="template-panel" />
 }));
 
-vi.mock('./AISuggestionsPanel', () => ({
+jest.mock('./AISuggestionsPanel', () => ({
   default: () => <div data-testid="ai-suggestions-panel" />
 }));
 
-vi.mock('./AttachmentPreview', () => ({
+jest.mock('./AttachmentPreview', () => ({
   default: () => <div data-testid="attachment-preview" />
 }));
 
@@ -53,38 +53,38 @@ const mockConversation = {
 // Mock props
 const defaultProps = {
   newMessage: '',
-  setNewMessage: vi.fn(),
+  setNewMessage: jest.fn(),
   attachments: [],
-  setAttachments: vi.fn(),
+  setAttachments: jest.fn(),
   isSending: false,
-  sendMessage: vi.fn(),
+  sendMessage: jest.fn(),
   isAIActive: false,
-  toggleAIHandover: vi.fn(),
+  toggleAIHandover: jest.fn(),
   selectedConversation: mockConversation,
   showEmojiPicker: false,
-  setShowEmojiPicker: vi.fn(),
+  setShowEmojiPicker: jest.fn(),
   showTemplates: false,
-  setShowTemplates: vi.fn(),
+  setShowTemplates: jest.fn(),
   showAISuggestions: false,
-  setShowAISuggestions: vi.fn(),
+  setShowAISuggestions: jest.fn(),
   aiSuggestions: [],
-  generateAISuggestions: vi.fn(),
-  useSuggestion: vi.fn(),
+  generateAISuggestions: jest.fn(),
+  useSuggestion: jest.fn(),
   textareaRef: { current: null },
   fileInputRef: { current: null },
-  handleFileInput: vi.fn(),
-  handleFileDrop: vi.fn(),
+  handleFileInput: jest.fn(),
+  handleFileDrop: jest.fn(),
   isDragOver: false,
-  setIsDragOver: vi.fn(),
+  setIsDragOver: jest.fn(),
   typingUsers: [],
   onlineUsers: [],
-  handleTyping: vi.fn(),
-  stopTyping: vi.fn(),
+  handleTyping: jest.fn(),
+  stopTyping: jest.fn(),
 };
 
 describe('Composer Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Rendering', () => {
@@ -93,8 +93,7 @@ describe('Composer Component', () => {
       
       expect(screen.getByTestId('composer')).toBeInTheDocument();
       expect(screen.getByTestId('composer-tabs')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-row')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-input-row')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-toolbar')).toBeInTheDocument();
       expect(screen.getByTestId('composer-textarea')).toBeInTheDocument();
       expect(screen.getByTestId('composer-send-button')).toBeInTheDocument();
     });
@@ -111,14 +110,9 @@ describe('Composer Component', () => {
     it('renders all icon buttons', () => {
       render(<Composer {...defaultProps} />);
       
-      expect(screen.getByTestId('composer-icon-document')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-bookmark')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-emoji')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-image')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-clipboard')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-grid')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-star')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-heart')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-attachment-button')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-image-button')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-emoji-button')).toBeInTheDocument();
     });
   });
 
@@ -160,7 +154,7 @@ describe('Composer Component', () => {
   describe('Message Input', () => {
     it('updates message when typing', async () => {
       const user = userEvent.setup();
-      const setNewMessage = vi.fn();
+      const setNewMessage = jest.fn();
       render(<Composer {...defaultProps} setNewMessage={setNewMessage} />);
       
       const textarea = screen.getByTestId('composer-textarea');
@@ -171,7 +165,7 @@ describe('Composer Component', () => {
 
     it('handles Enter key to submit message', async () => {
       const user = userEvent.setup();
-      const sendMessage = vi.fn();
+      const sendMessage = jest.fn();
       render(<Composer {...defaultProps} newMessage="Test message" sendMessage={sendMessage} />);
       
       const textarea = screen.getByTestId('composer-textarea');
@@ -261,7 +255,7 @@ describe('Composer Component', () => {
 
     it('handles file input change', async () => {
       const user = userEvent.setup();
-      const handleFileInput = vi.fn();
+      const handleFileInput = jest.fn();
       render(<Composer {...defaultProps} handleFileInput={handleFileInput} />);
       
       const fileInput = screen.getByTestId('composer-file-input');
@@ -276,10 +270,10 @@ describe('Composer Component', () => {
   describe('AI Features', () => {
     it('toggles AI suggestions panel', async () => {
       const user = userEvent.setup();
-      const setShowAISuggestions = vi.fn();
+      const setShowAISuggestions = jest.fn();
       render(<Composer {...defaultProps} setShowAISuggestions={setShowAISuggestions} />);
       
-      const aiButton = screen.getByTestId('composer-ai-suggestions-button');
+      const aiButton = screen.getByTestId('composer-tab-reply');
       await user.click(aiButton);
       
       expect(setShowAISuggestions).toHaveBeenCalledWith(true);
@@ -287,10 +281,10 @@ describe('Composer Component', () => {
 
     it('toggles templates panel', async () => {
       const user = userEvent.setup();
-      const setShowTemplates = vi.fn();
+      const setShowTemplates = jest.fn();
       render(<Composer {...defaultProps} setShowTemplates={setShowTemplates} />);
       
-      const templatesButton = screen.getByTestId('composer-templates-button');
+      const templatesButton = screen.getByTestId('composer-tab-note');
       await user.click(templatesButton);
       
       expect(setShowTemplates).toHaveBeenCalledWith(true);
@@ -298,7 +292,7 @@ describe('Composer Component', () => {
 
     it('toggles emoji picker', async () => {
       const user = userEvent.setup();
-      const setShowEmojiPicker = vi.fn();
+      const setShowEmojiPicker = jest.fn();
       render(<Composer {...defaultProps} setShowEmojiPicker={setShowEmojiPicker} />);
       
       const emojiButton = screen.getByTestId('composer-emoji-button');
@@ -313,11 +307,9 @@ describe('Composer Component', () => {
       render(<Composer {...defaultProps} />);
       
       expect(screen.getByLabelText('Send')).toBeInTheDocument();
-      expect(screen.getByLabelText('Add emoji')).toBeInTheDocument();
+      expect(screen.getByLabelText('Open emoji picker')).toBeInTheDocument();
       expect(screen.getByLabelText('Attach files')).toBeInTheDocument();
-      expect(screen.getByLabelText('Quick templates')).toBeInTheDocument();
-      expect(screen.getByLabelText('Generate AI suggestions')).toBeInTheDocument();
-      expect(screen.getByLabelText('Mention team members')).toBeInTheDocument();
+      expect(screen.getByLabelText('Upload image')).toBeInTheDocument();
     });
 
     it('has proper test IDs for testing', () => {
@@ -327,7 +319,7 @@ describe('Composer Component', () => {
       expect(screen.getByTestId('composer-textarea')).toBeInTheDocument();
       expect(screen.getByTestId('composer-send-button')).toBeInTheDocument();
       expect(screen.getByTestId('composer-tabs')).toBeInTheDocument();
-      expect(screen.getByTestId('composer-icon-row')).toBeInTheDocument();
+      expect(screen.getByTestId('composer-toolbar')).toBeInTheDocument();
     });
   });
 
@@ -335,9 +327,9 @@ describe('Composer Component', () => {
     it('handles note submission errors gracefully', async () => {
       const user = userEvent.setup();
       const { addNote } = await import('@/lib/data/note');
-      vi.mocked(addNote).mockRejectedValueOnce(new Error('Note submission failed'));
+      jest.mocked(addNote).mockRejectedValueOnce(new Error('Note submission failed'));
       
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
       
       render(<Composer {...defaultProps} newMessage="Test note" />);
       

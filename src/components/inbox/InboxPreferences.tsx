@@ -9,7 +9,7 @@ import {
   SpeakerHigh as Volume2,
   Lightning as Zap,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/unified-ui/components/label";
 import { Switch } from "@/components/unified-ui/components/switch";
 import { useToast } from "@/hooks/use-toast";

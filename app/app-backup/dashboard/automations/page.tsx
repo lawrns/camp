@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { AlertTriangle, CheckCircle, Clock, Pause, Play, Plus, Settings, Target, TrendingUp, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {
   Dialog,

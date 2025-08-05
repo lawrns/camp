@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";
 import { Label } from "@/components/unified-ui/components/label";

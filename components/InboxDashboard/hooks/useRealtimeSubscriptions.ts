@@ -125,9 +125,9 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
         // CRITICAL-002 FIX: Use proper Supabase client method
         const { data: profiles, error } = await supabase.browser()
           .from('profiles')
-          .select('user_id, full_name, email, is_online, last_seen_at, role, avatar_url')
+          .select('user_id, fullName, email, isOnline, lastSeenAt, role, avatarUrl')
           .eq('organization_id', organizationId)
-          .eq('is_online', true);
+          .eq('isOnline', true);
 
         if (error) {
           console.error('[useRealtimeSubscriptions] Error fetching online users:', error);
@@ -136,12 +136,12 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
 
         const users: OnlineUser[] = (profiles || []).map(profile => ({
           id: profile.user_id,
-          name: profile.full_name || profile.email || 'Unknown User',
+          name: profile.fullName || profile.email || 'Unknown User',
           email: profile.email,
-          isOnline: profile.is_online,
-          lastSeenAt: profile.last_seen_at,
+          isOnline: profile.isOnline,
+          lastSeenAt: profile.lastSeenAt,
           role: profile.role || 'member',
-          avatarUrl: profile.avatar_url,
+          avatarUrl: profile.avatarUrl,
         }));
 
         setOnlineUsers(users);
@@ -167,7 +167,7 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
         unsubscribe = subscribeToChannel(
           UNIFIED_CHANNELS.agentsPresence(organizationId),
           UNIFIED_EVENTS.PRESENCE_UPDATE,
-          (payload: any) => {
+          (payload: { userId?: string; status?: string; userName?: string; userEmail?: string; lastSeen?: string; role?: string; avatarUrl?: string }) => {
             console.log('[useRealtimeSubscriptions] Presence update:', payload);
 
             if (payload.userId && payload.status) {
@@ -226,8 +226,8 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
       const { error } = await supabase.client
         .from('profiles')
         .update({
-          is_online: status === 'online',
-          last_seen_at: new Date().toISOString(),
+          isOnline: status === 'online',
+          lastSeenAt: new Date().toISOString(),
         })
         .eq('user_id', userId)
         .eq('organization_id', organizationId);

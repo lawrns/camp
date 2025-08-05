@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

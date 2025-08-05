@@ -3,4 +3,4 @@
  * Re-exports the unified button component
  */
 
-export { Button, buttonVariants, type ButtonProps } from "./Button-unified";
+export { Button, buttonVariants, type ButtonProps } from "./button";

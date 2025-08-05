@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

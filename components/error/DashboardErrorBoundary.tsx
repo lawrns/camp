@@ -3,7 +3,7 @@
 import React from "react";
 import { Warning as AlertTriangle, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { isFeatureEnabled } from "@/lib/feature-flags";
 import { Icon } from "@/lib/ui/Icon";
 import { DashboardErrorBoundary as UnifiedDashboardErrorBoundary } from "./ErrorBoundaryProvider";

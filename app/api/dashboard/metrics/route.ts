@@ -42,13 +42,13 @@ export async function GET() {
       // Get all conversations count and status breakdown
       supabaseClient
         .from('conversations')
-        .select('id, status, created_at, ai_handover_active', { count: 'exact' })
+        .select('id, status, created_at, aiHandoverActive', { count: 'exact' })
         .eq('organization_id', organizationId),
 
       // Get messages for response time calculation
       supabaseClient
         .from('messages')
-        .select('created_at, sender_type, conversation_id')
+        .select('created_at, senderType, conversation_id')
         .eq('organization_id', organizationId)
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
         .order('created_at', { ascending: true }),
@@ -133,7 +133,7 @@ export async function GET() {
   }
 }
 
-function calculateRealResponseTime(messages: any[]): number {
+function calculateRealResponseTime(messages: { conversation_id: string; created_at: string; senderType: string }[]): number {
   if (!messages || messages.length === 0) return 2.5;
 
   // Group messages by conversation to calculate response times
@@ -146,7 +146,7 @@ function calculateRealResponseTime(messages: any[]): number {
   let totalResponseTime = 0;
   let responseCount = 0;
 
-  Object.values(conversationMessages).forEach((convMessages: any) => {
+  Object.values(conversationMessages).forEach((convMessages: { conversation_id: string; created_at: string; senderType: string }[]) => {
     convMessages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
     for (let i = 1; i < convMessages.length; i++) {
@@ -167,11 +167,11 @@ function calculateRealResponseTime(messages: any[]): number {
   return responseCount > 0 ? Math.round((totalResponseTime / responseCount / 1000 / 60) * 10) / 10 : 2.5;
 }
 
-function calculateRealAIResolutionRate(conversations: any[]): number {
+function calculateRealAIResolutionRate(conversations: { status: string; aiHandoverActive?: boolean }[]): number {
   if (!conversations || conversations.length === 0) return 85;
 
   // Filter conversations with AI handover active
-  const aiConversations = conversations.filter(c => c.ai_handover_active === true);
+  const aiConversations = conversations.filter(c => c.aiHandoverActive === true);
 
   if (aiConversations.length === 0) return 85;
 
@@ -221,7 +221,7 @@ async function getActiveAgentsCount(supabaseClient: SupabaseClient, organization
   }
 }
 
-function calculateMessagesByHour(messages: any[]): number[] {
+function calculateMessagesByHour(messages: { created_at: string }[]): number[] {
   const hourlyMessages = new Array(24).fill(0);
 
   messages.forEach(msg => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader } from "@/components/unified-ui/components/Card";
 import { Brain, ChatCircle, Clock, Sparkle, Users } from "@phosphor-icons/react";
@@ -117,4 +117,4 @@ export default function TestDashboardStyling() {
             </div>
         </div>
     );
-} 
+}

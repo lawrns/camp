@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Warning as AlertTriangle, Database, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { useUIStore } from "@/store/domains/ui/ui-store";
 import { useStore as useCampfireStore } from "@/store/phoenix-store";

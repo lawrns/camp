@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cookies } from "next/headers";
 import {
   Warning as AlertCircle,
   Robot as Bot,
@@ -14,11 +13,11 @@ import {
   Lightning as Zap,
 } from "@phosphor-icons/react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { useAuth } from "@/hooks/useAuth";
-import { createServerClient } from "@/lib/core/auth";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client-factory";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +50,7 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
   const [lastConfidence, setLastConfidence] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const supabaseClient = createServerClient(cookies());
+  const supabaseClient = createBrowserSupabaseClient().client;
 
   // Use the organization ID from props or auth
   const effectiveOrgId = organizationId || authOrgId;
@@ -77,8 +76,8 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
     };
 
     // Extract confidence from log data
-    if (newLog.data?.confidence !== undefined) {
-      setLastConfidence(newLog.data.confidence);
+    if ((newLog.data as any)?.confidence !== undefined) {
+      setLastConfidence((newLog.data as any).confidence);
     }
 
     setLogs((prev) => {
@@ -112,8 +111,8 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
         {
           event: "ai_processing_update",
         },
-        (payload: { payload: unknown }) => {
-          const eventData = payload.payload;
+        (payload: { payload: any }) => {
+          const eventData = payload.payload as any;
 
           // Only process events for this conversation
           if (eventData.conversationId !== conversationId) return;
@@ -147,8 +146,8 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
           }
 
           // Extract confidence from events
-          if (eventData.data?.confidence !== undefined) {
-            setLastConfidence(eventData.data.confidence);
+          if ((eventData.data as any)?.confidence !== undefined) {
+            setLastConfidence((eventData.data as any).confidence);
           }
         }
       )
@@ -334,7 +333,7 @@ export function AIProcessingTerminal({ conversationId, organizationId, className
             </div>
           ) : (
             <div className="space-y-spacing-sm">
-              {logs.map((log: unknown) => (
+              {logs.map((log: AIProcessingLog) => (
                 <div
                   key={log.id}
                   className={cn(

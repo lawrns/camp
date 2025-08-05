@@ -9,7 +9,7 @@
 
 import React from "react";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 
 interface ErrorBoundaryState {
   hasError: boolean;

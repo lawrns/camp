@@ -1,0 +1,22 @@
+{
+  "testCommand": "npm test -- --testPathPattern=\"__tests__/design-token-compliance.test.ts\" --verbose",
+  "description": "Design Token Compliance Test - Enforces design system as rule of law",
+  "expectedResult": "29 tests passing, 0 failing",
+  "criticalChecks": [
+    "Design tokens accessible",
+    "8px grid system enforced", 
+    "No hardcoded colors",
+    "AI-specific tokens valid",
+    "Motion tokens performant",
+    "Accessibility compliance"
+  ],
+  "failureIndicators": [
+    "Design token violations",
+    "Hardcoded colors (bg-blue-500)",
+    "Arbitrary spacing (p-5)",
+    "Missing AI tokens",
+    "Non-compliant shadows"
+  ],
+  "quickFix": "Run: npm run tokens:fix",
+  "validateCommand": "npm run tokens:validate"
+} 

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Robot as Bot, CheckCircle as Check, Spinner as Loader2, UserPlus } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

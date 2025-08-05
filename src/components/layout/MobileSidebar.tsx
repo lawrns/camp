@@ -19,7 +19,7 @@ import {
   List as Menu,
   X,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/unified-ui/components/sheet";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
