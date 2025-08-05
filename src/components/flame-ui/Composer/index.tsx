@@ -4,17 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  Image,
-  Microphone as Mic,
-  Paperclip,
-  PaperPlaneTilt as Send,
-  Smiley as Smile,
-  Sparkle as Sparkles,
-  Square,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Image, Mic as Mic, Paperclip, Send as Send, Smile as Smile, Sparkles as Sparkles, Square, X, Zap as Zap,  } from "lucide-react";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Export all the types for backward compatibility

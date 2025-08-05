@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, PaperPlaneRight } from '@phosphor-icons/react';
+import { ArrowLeft, PaperPlaneRight } from "lucide-react";
 import { cn } from '@/lib/utils';
 import type { ThreadData, ThreadMessage } from '@/types/thread-inbox';
 

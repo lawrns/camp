@@ -13,30 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Warning as AlertCircle,
-  ArrowSquareOut,
-  ChartBar as BarChart3,
-  Book,
-  BookOpen,
-  Brain,
-  CheckCircle,
-  Clock,
-  Database,
-  Download,
-  PencilSimple as Edit,
-  FileText,
-  Fire as Flame,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Sparkle as Sparkles,
-  Target,
-  Trash as Trash2,
-  TrendUp as TrendingUp,
-  Upload,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, ArrowSquareOut, ChartBar as BarChart3, Book, BookOpen, Brain, CheckCircle, Clock, Database, Download, PencilSimple as Edit, FileText, Flame as Flame, RefreshCw as RefreshCw, Search as Search, Settings as Settings, Sparkles as Sparkles, Target, Trash as Trash2, TrendUp as TrendingUp, Upload, Zap as Zap,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

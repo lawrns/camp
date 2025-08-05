@@ -2,19 +2,7 @@
 
 import React from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertCircle,
-  Brain,
-  CheckCircle,
-  CaretRight as ChevronRight,
-  Clock,
-  Info,
-  ChatCircle as MessageSquare,
-  Shield,
-  Sparkle as Sparkles,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Brain, CheckCircle, CaretRight as ChevronRight, Clock, Info, MessageCircle as MessageSquare, Shield, Sparkles as Sparkles, TrendUp as TrendingUp, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";

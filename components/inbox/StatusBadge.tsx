@@ -2,7 +2,7 @@
 
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Tag, Robot, User } from "@phosphor-icons/react";
+import { Tag, Bot, User } from "lucide-react";
 import * as React from "react";
 import { getStatusColors, getPriorityColors, getCompleteColorClasses } from "@/lib/design-system/accessibility-colors";
 import {
@@ -45,7 +45,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
         bg: config.colors.background,
         text: config.colors.text,
         border: config.colors.border,
-        icon: Robot,
+        icon: Bot,
         label: config.label
       };
     }
@@ -100,51 +100,39 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     lg: "px-4 py-2 text-base"
   };
 
-  // Variant classes
+  // Variant classes - Always use rounded-full for consistent design
   const variantClasses = {
     default: "rounded-full border",
-    compact: "rounded-md",
+    compact: "rounded-full",
     header: "rounded-full border"
   };
 
   const baseClasses = cn(
-    "inline-flex items-center gap-1 font-medium transition-colors",
+    "inline-flex items-center gap-1.5 font-medium transition-colors",
     sizeClasses[size],
     variantClasses[variant],
     className
   );
 
-  return (
-    <div className="flex items-center gap-1">
-      {/* Status Badge */}
-      <span
-        className={cn(
-          baseClasses,
-          statusConfig.bg,
-          statusConfig.text,
-          variant === "default" && statusConfig.border
-        )}
-      >
-        {showIcon && statusConfig.icon && (
-          <Icon icon={statusConfig.icon} className="h-3 w-3" />
-        )}
-        {statusConfig.label}
-      </span>
+  // Combine status and priority into a single badge for cleaner design
+  const displayText = priority
+    ? `${statusConfig.label} • ${priority}`
+    : statusConfig.label;
 
-      {/* Priority Badge (if provided) */}
-      {priority && (
-        <span
-          className={cn(
-            baseClasses,
-            priorityConfig.bg,
-            priorityConfig.text,
-            variant === "default" && priorityConfig.border
-          )}
-        >
-          {priority}
-        </span>
+  return (
+    <span
+      className={cn(
+        baseClasses,
+        statusConfig.bg,
+        statusConfig.text,
+        variant === "default" && statusConfig.border
       )}
-    </div>
+    >
+      {showIcon && statusConfig.icon && (
+        <statusConfig.icon className="h-3 w-3 flex-shrink-0" />
+      )}
+      <span className="truncate">{displayText}</span>
+    </span>
   );
 };
 

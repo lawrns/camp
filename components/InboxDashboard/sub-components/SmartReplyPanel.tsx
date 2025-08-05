@@ -14,7 +14,7 @@
  */
 
 import { SmartReplyService } from "@/lib/ai/SmartReplyService";
-import { Warning as AlertTriangle, Clock, ChatCircle as MessageSquare, Sparkle as Sparkles, TrendUp as TrendingUp, Lightning as Zap } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Clock, MessageCircle as MessageSquare, Sparkles as Sparkles, TrendUp as TrendingUp, Zap as Zap } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,7 @@
 
 import { BrandLogo } from "@/components/unified-ui/components/BrandLogo";
 import { Icon } from "@/lib/ui/Icon";
-import { ArrowRight, CheckCircle as Check } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle as Check } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
 

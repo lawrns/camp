@@ -8,7 +8,7 @@
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Activity, TrendDown as TrendingDown, TrendUp as TrendingUp } from "@phosphor-icons/react";
+import { Activity, TrendDown as TrendingDown, TrendUp as TrendingUp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 // Lazy load heavy framer-motion utilities only when needed
 const useLazyFramerMotion = () => {

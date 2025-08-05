@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle, Warning, XCircle, TrendUp, TrendDown } from "@phosphor-icons/react";
+import { CheckCircle, AlertTriangle, XCircle, TrendingUp, TrendingDown } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
@@ -87,13 +87,13 @@ export function AIConfidenceIndicator({
         return {
           icon: "h-6 w-6",
           text: "text-base",
-          badge: "text-sm px-3 py-1",
+          badge: "text-sm px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)]",
         };
       default:
         return {
           icon: "h-4 w-4",
           text: "text-sm",
-          badge: "text-xs px-2 py-1",
+          badge: "text-xs px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]",
         };
     }
   };
@@ -105,12 +105,12 @@ export function AIConfidenceIndicator({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className={cn("flex items-center gap-1", className)}>
+            <div className={cn("flex items-center gap-[var(--fl-spacing-1)]", className)}>
               <Icon icon={getStatusIcon()} className={cn(sizeClasses.icon, getStatusColor())} />
               <span className={cn("font-medium", sizeClasses.text, getStatusColor())}>{confidencePercent}%</span>
               {showTrend && previousConfidence !== undefined && trend !== "stable" && (
                 <Icon
-                  icon={trend === "up" ? TrendUp : TrendDown}
+                  icon={trend === "up" ? TrendingUp : TrendingDown}
                   className={cn("h-3 w-3", trend === "up" ? "text-green-500" : "text-red-500")}
                 />
               )}
@@ -135,7 +135,7 @@ export function AIConfidenceIndicator({
         <Icon icon={getStatusIcon()} className={cn(sizeClasses.icon, "mr-1")} />
         {confidencePercent}%
         {showTrend && previousConfidence !== undefined && trend !== "stable" && (
-          <Icon icon={trend === "up" ? TrendUp : TrendDown} className="ml-1 h-3 w-3" />
+          <Icon icon={trend === "up" ? TrendingUp : TrendingDown} className="ml-1 h-3 w-3" />
         )}
       </Badge>
     );
@@ -149,11 +149,11 @@ export function AIConfidenceIndicator({
             <Icon icon={getStatusIcon()} className={cn(sizeClasses.icon, getStatusColor())} />
             <span className={cn("font-medium", sizeClasses.text)}>AI Confidence</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-[var(--fl-spacing-1)]">
             <span className={cn("font-bold", sizeClasses.text, getStatusColor())}>{confidencePercent}%</span>
             {showTrend && previousConfidence !== undefined && trend !== "stable" && (
               <Icon
-                icon={trend === "up" ? TrendUp : TrendDown}
+                icon={trend === "up" ? TrendingUp : TrendingDown}
                 className={cn("h-3 w-3", trend === "up" ? "text-green-500" : "text-red-500")}
               />
             )}
@@ -189,10 +189,10 @@ export function AIConfidenceIndicator({
       </div>
 
       {showTrend && previousConfidence !== undefined && (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-[var(--fl-spacing-1)]">
           {trend !== "stable" && (
             <Icon
-              icon={trend === "up" ? TrendUp : TrendDown}
+              icon={trend === "up" ? TrendingUp : TrendingDown}
               className={cn("h-3 w-3", trend === "up" ? "text-green-500" : "text-red-500")}
             />
           )}

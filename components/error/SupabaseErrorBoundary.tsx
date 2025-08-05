@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Warning as AlertTriangle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Button } from "@/components/ui/button";
 import { hasValidSupabaseConfig } from "@/lib/supabase";

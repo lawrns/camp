@@ -1,15 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Clock,
-  ChatCircle as MessageSquare,
-  Palette,
-  Plus,
-  Shield,
-  Sparkle as Sparkles,
-  Trash as Trash2,
-} from "@phosphor-icons/react";
+import { Clock, MessageCircle as MessageSquare, Palette, Plus, Shield, Sparkles as Sparkles, Trash as Trash2,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";

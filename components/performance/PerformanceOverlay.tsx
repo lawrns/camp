@@ -1,20 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  CaretDown,
-  CaretUp,
-  CheckCircle,
-  Clock,
-  Cpu,
-  Database,
-  Globe,
-  Pulse,
-  TrendUp,
-  Warning,
-  X,
-  XCircle,
-} from "@phosphor-icons/react";
+import { ChevronDown, CaretUp, CheckCircle, Clock, Cpu, Database, Globe, Pulse, TrendUp, AlertTriangle, X, XCircle,  } from "lucide-react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { inboxPerformanceMonitor } from "@/lib/performance/inbox-performance-monitor";
 import { ReactPerformanceMetrics, reactPerformanceMonitor } from "@/lib/performance/react-performance-monitor";
@@ -80,7 +67,7 @@ export function PerformanceOverlay({
       case "good":
         return <CheckCircle className="text-semantic-success h-3 w-3" />;
       case "needs-improvement":
-        return <Warning className="text-semantic-warning h-3 w-3" />;
+        return <AlertTriangle className="text-semantic-warning h-3 w-3" />;
       case "poor":
         return <XCircle className="text-brand-mahogany-500 h-3 w-3" />;
     }
@@ -121,7 +108,7 @@ export function PerformanceOverlay({
               className="hover:bg-background rounded spacing-1 transition-colors"
             >
               {isExpanded ? (
-                <CaretDown className="text-foreground h-4 w-4" />
+                <ChevronDown className="text-foreground h-4 w-4" />
               ) : (
                 <CaretUp className="text-foreground h-4 w-4" />
               )}
@@ -459,7 +446,7 @@ function MetricRow({ icon, label, value, rating }: MetricRowProps) {
       case "good":
         return <CheckCircle className="text-semantic-success h-3 w-3" />;
       case "needs-improvement":
-        return <Warning className="text-semantic-warning h-3 w-3" />;
+        return <AlertTriangle className="text-semantic-warning h-3 w-3" />;
       case "poor":
         return <XCircle className="text-brand-mahogany-500 h-3 w-3" />;
     }

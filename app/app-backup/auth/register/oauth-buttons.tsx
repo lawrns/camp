@@ -1,6 +1,6 @@
 "use client";
 
-import { GoogleChromeLogo as Chrome, GithubLogo as Github } from "@phosphor-icons/react";
+import { GoogleChromeLogo as Chrome, GithubLogo as Github } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 

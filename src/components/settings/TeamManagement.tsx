@@ -2,19 +2,7 @@
 
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Warning as AlertTriangle,
-  CheckCircle,
-  Clock,
-  Crown,
-  PencilSimple as Edit,
-  Envelope as Mail,
-  Shield,
-  Trash,
-  UserPlus,
-  Users,
-  XCircle,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, CheckCircle, Clock, Crown, PencilSimple as Edit, Envelope as Mail, Shield, Trash, UserPlus, Users, XCircle,  } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";

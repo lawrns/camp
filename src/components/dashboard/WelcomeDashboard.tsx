@@ -186,7 +186,7 @@ export function WelcomeDashboard() {
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
                 <ChatCircle className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Today</Badge>
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Today</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="total-conversations">
                 {metrics?.totalConversations || 0}
@@ -199,7 +199,7 @@ export function WelcomeDashboard() {
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
                 <Clock className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Avg</Badge>
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Avg</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="avg-response-time">
                 {metrics?.responseTime || "< 1 min"}
@@ -212,7 +212,7 @@ export function WelcomeDashboard() {
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
                 <Users className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Active</Badge>
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Active</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="ai-handovers">
                 {metrics?.activeAgents || 0}
@@ -231,7 +231,7 @@ export function WelcomeDashboard() {
                 <div className="h-16 w-16 overflow-hidden rounded-ds-xl">
                   <img src="/images/rag.png" alt="RAG AI System" className="h-full w-full object-cover" />
                 </div>
-                <Badge className="text-status-info-dark border-0 bg-[var(--fl-color-info-subtle)] text-tiny font-semibold">
+                <Badge className="text-status-info-dark border-0 bg-[var(--fl-color-info-subtle)] text-tiny font-semibold rounded-full">
                   AI POWERED
                 </Badge>
               </div>
@@ -270,7 +270,7 @@ export function WelcomeDashboard() {
                     description={action.description}
                     badge={
                       action.badge && (
-                        <Badge variant="secondary" className="text-tiny">
+                        <Badge variant="secondary" className="text-tiny rounded-full">
                           {action.badge}
                         </Badge>
                       )

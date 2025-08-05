@@ -1,7 +1,7 @@
 // components/ai/AIReplySuggestions.tsx
 import { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { PencilSimple as Edit, ArrowsClockwise as RefreshCw, Sparkle as Sparkles, X } from "@phosphor-icons/react";
+import { PencilSimple as Edit, RefreshCw as RefreshCw, Sparkles as Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

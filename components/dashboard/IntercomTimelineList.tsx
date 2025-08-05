@@ -3,15 +3,7 @@
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
 import { Badge } from '@/components/unified-ui/components/Badge';
-import { 
-  ChatCircle, 
-  CheckCircle, 
-  Clock, 
-  Star, 
-  Users, 
-  ArrowUp,
-  UserCircle
-} from '@phosphor-icons/react';
+import { MessageCircle, CheckCircle, Clock, Star, Users, ArrowUp, UserCircle } from "lucide-react";
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -42,18 +34,18 @@ interface IntercomTimelineListProps {
 
 const activityConfig = {
   conversation_started: {
-    icon: ChatCircle,
+    icon: MessageCircle,
     color: 'text-blue-600',
     bg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
     border: 'border-blue-200/50',
-    badge: 'bg-blue-100 text-blue-700'
+    badge: 'bg-[var(--fl-color-primary-subtle)] text-blue-700'
   },
   message_sent: {
-    icon: ChatCircle,
+    icon: MessageCircle,
     color: 'text-blue-600',
     bg: 'bg-gradient-to-br from-blue-50 to-blue-100',
     border: 'border-blue-200/50',
-    badge: 'bg-blue-100 text-blue-700'
+    badge: 'bg-[var(--fl-color-primary-subtle)] text-blue-700'
   },
   conversation_resolved: {
     icon: CheckCircle,
@@ -154,8 +146,8 @@ function TimelineItem({ activity, index }: { activity: TimelineActivity; index: 
       {/* Content */}
       <div className="flex-1 min-w-0 space-y-2">
         {/* Header */}
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center justify-between gap-[var(--fl-spacing-2)]">
+          <div className="flex items-center gap-[var(--fl-spacing-2)] min-w-0">
             <span className="font-medium text-sm text-gray-900 truncate">
               {activity.memberName}
             </span>
@@ -184,7 +176,7 @@ function TimelineItem({ activity, index }: { activity: TimelineActivity; index: 
         {activity.metadata && (
           <div className="flex items-center gap-3 text-xs text-gray-500">
             {activity.metadata.satisfaction && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Star className="w-3 h-3 text-amber-500" />
                 <span className="font-numeric tabular-nums">
                   {activity.metadata.satisfaction}/5
@@ -192,7 +184,7 @@ function TimelineItem({ activity, index }: { activity: TimelineActivity; index: 
               </div>
             )}
             {activity.metadata.responseTime && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Clock className="w-3 h-3 text-blue-500" />
                 <span className="font-numeric tabular-nums">
                   {activity.metadata.responseTime}s
@@ -200,8 +192,8 @@ function TimelineItem({ activity, index }: { activity: TimelineActivity; index: 
               </div>
             )}
             {activity.metadata.messagesCount && (
-              <div className="flex items-center gap-1">
-                <ChatCircle className="w-3 h-3 text-blue-500" />
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
+                <MessageCircle className="w-3 h-3 text-blue-500" />
                 <span className="font-numeric tabular-nums">
                   {activity.metadata.messagesCount} messages
                 </span>
@@ -226,7 +218,7 @@ export function IntercomTimelineList({
     return (
       <Card className={cn("glass-card", className)}>
         <CardHeader className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 border-b border-gray-100/50">
-          <CardTitle className="flex items-center gap-2 text-gray-900 font-heading">
+          <CardTitle className="flex items-center gap-[var(--fl-spacing-2)] text-gray-900 font-heading">
             <Users className="w-5 h-5" />
             {title}
           </CardTitle>
@@ -252,11 +244,11 @@ export function IntercomTimelineList({
     <Card className={cn("glass-card overflow-hidden", className)}>
       {/* Sticky header */}
       <CardHeader className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 border-b border-gray-100/50">
-        <CardTitle className="flex items-center gap-2 text-gray-900 font-heading">
+        <CardTitle className="flex items-center gap-[var(--fl-spacing-2)] text-gray-900 font-heading">
           <Users className="w-5 h-5" />
           {title}
           {activities.length > 0 && (
-            <Badge variant="secondary" className="ml-auto text-xs">
+            <Badge variant="secondary" className="ml-auto text-xs rounded-full">
               {activities.length}
             </Badge>
           )}

@@ -21,13 +21,7 @@ import {
 import { Input } from "@/components/unified-ui/components/input";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { cn } from "@/lib/utils";
-import {
-  ArrowLeft,
-  Funnel as Filter,
-  Plus,
-  ArrowClockwise as RefreshCw,
-  MagnifyingGlass as Search
-} from "@phosphor-icons/react";
+import { ArrowLeft, Funnel as Filter, Plus, ArrowClockwise as RefreshCw, Search as Search } from "lucide-react";
 import { MobileHeaderProps } from "./types";
 
 const DEFAULT_FILTERS = [
@@ -138,7 +132,7 @@ export function MobileHeader({
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-[var(--fl-spacing-2)]">
           {showSearch && (
             <Button
               variant="ghost"
@@ -163,7 +157,7 @@ export function MobileHeader({
               {headerState.activeFilters.length > 0 && (
                 <Badge
                   variant="secondary"
-                  className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs"
+                  className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs rounded-full"
                 >
                   {headerState.activeFilters.length}
                 </Badge>
@@ -249,7 +243,7 @@ export function MobileHeader({
                   {filter.label}
                 </label>
                 {filter.count && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs rounded-full">
                     {filter.count}
                   </Badge>
                 )}

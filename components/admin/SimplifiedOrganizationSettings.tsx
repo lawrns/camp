@@ -4,16 +4,7 @@
  */
 
 import React, { useState } from "react";
-import {
-  Warning as AlertCircle,
-  Bell,
-  Buildings as Building,
-  CreditCard,
-  Link as Link2,
-  Spinner as Loader2,
-  FloppyDisk as Save,
-  Shield,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Bell, Buildings as Building, CreditCard, Link as Link2, Spinner as Loader2, FloppyDisk as Save, Shield,  } from "lucide-react";
 import { toast } from "sonner";
 import type { OrganizationSettings } from "@/components/admin/types";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";

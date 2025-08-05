@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  ArrowBendUpLeft, 
-  Heart, 
-  Share, 
-  DotsThree, 
-  ThumbsUp,
-  Copy,
-  Trash,
-  PencilSimple
-} from "@phosphor-icons/react";
+import { ArrowBendUpLeft, Heart, Share, DotsThree, ThumbsUp, Copy, Trash, PencilSimple } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {

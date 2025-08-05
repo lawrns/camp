@@ -12,27 +12,7 @@ import { api } from "@/lib/trpc/provider";
 import { PermissionGuard, PermissionButton } from "@/lib/rbac/components";
 
 // Import icons
-import {
-  FloppyDisk as Save,
-  Eye,
-  Upload,
-  ArrowLeft as Back,
-  FileText,
-  Tag,
-  Folder,
-  Globe,
-  Lock,
-  Clock,
-  User,
-  PencilSimple as Edit,
-  CheckCircle,
-  Warning,
-  X,
-  Plus,
-  Trash,
-  Copy,
-  ArrowsClockwise as RefreshCw,
-} from "@phosphor-icons/react";
+import { FloppyDisk as Save, Eye, Upload, ArrowLeft as Back, FileText, Tag, Folder, Globe, Lock, Clock, User, PencilSimple as Edit, CheckCircle, AlertTriangle, X, Plus, Trash, Copy, RefreshCw as RefreshCw,  } from "lucide-react";
 
 interface DocumentData {
   id?: string;
@@ -250,14 +230,14 @@ export default function DocumentEditorPage() {
               Back to Knowledge Base
             </Button>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={FileText} className="h-5 w-5 text-gray-500" />
               <span className="text-lg font-medium">
                 {isEditing ? 'Edit Document' : 'New Document'}
               </span>
               {isDirty && (
-                <Badge variant="warning">
-                  <Icon icon={Warning} className="mr-1 h-3 w-3" />
+                <Badge variant="secondary" className="rounded-full">
+                  <Icon icon={AlertTriangle} className="mr-1 h-3 w-3" />
                   Unsaved
                 </Badge>
               )}
@@ -267,11 +247,11 @@ export default function DocumentEditorPage() {
           <div className="flex items-center gap-3">
             {/* Document Status */}
             {isEditing && (
-              <div className="flex items-center gap-2">
-                <Badge variant={document.isActive ? 'success' : 'secondary'}>
+              <div className="flex items-center gap-[var(--fl-spacing-2)]">
+                <Badge variant={document.isActive ? 'success' : 'secondary'} className="rounded-full">
                   {document.isActive ? 'Published' : 'Draft'}
                 </Badge>
-                <Badge variant={document.isPublic ? 'default' : 'secondary'}>
+                <Badge variant={document.isPublic ? 'default' : 'secondary'} className="rounded-full">
                   <Icon icon={document.isPublic ? Globe : Lock} className="mr-1 h-3 w-3" />
                   {document.isPublic ? 'Public' : 'Private'}
                 </Badge>
@@ -389,7 +369,7 @@ export default function DocumentEditorPage() {
             {/* Document Settings */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                   <Icon icon={Folder} className="h-4 w-4" />
                   Settings
                 </CardTitle>
@@ -436,14 +416,14 @@ export default function DocumentEditorPage() {
             {/* Tags */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                   <Icon icon={Tag} className="h-4 w-4" />
                   Tags
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Add Tag */}
-                <div className="flex gap-2">
+                <div className="flex gap-[var(--fl-spacing-2)]">
                   <input
                     type="text"
                     value={newTag}
@@ -462,12 +442,12 @@ export default function DocumentEditorPage() {
                 </div>
 
                 {/* Tag List */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-[var(--fl-spacing-2)]">
                   {document.tags.map((tag) => (
                     <Badge
                       key={tag}
                       variant="secondary"
-                      className="flex items-center gap-1"
+                      className="flex items-center gap-[var(--fl-spacing-1)] rounded-full"
                     >
                       {tag}
                       <button
@@ -486,7 +466,7 @@ export default function DocumentEditorPage() {
             {isEditing && document.metadata && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                     <Icon icon={Clock} className="h-4 w-4" />
                     Document Info
                   </CardTitle>

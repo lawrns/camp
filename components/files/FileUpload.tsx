@@ -8,18 +8,7 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
-import {
-  Warning as AlertCircle,
-  Archive,
-  CheckCircle,
-  File,
-  FileText,
-  Image,
-  MusicNote as Music,
-  Upload,
-  VideoCamera as Video,
-  X,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Archive, CheckCircle, File, FileText, Image, MusicNote as Music, Upload, VideoCamera as Video, X,  } from "lucide-react";
 import { FileMetadata, fileService, FileUploadOptions } from "@/lib/files/FileService";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { format } from "date-fns";
-import { Download, FileXls as FileSpreadsheet, FileText, Spinner as Loader2 } from "@phosphor-icons/react";
+import { Download, FileXls as FileSpreadsheet, FileText, Spinner as Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Checkbox } from "@/components/unified-ui/components/checkbox";

@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Bell,
-  Eye,
-  ChatCircle as MessageSquare,
-  FloppyDisk as Save,
-  SpeakerHigh as Volume2,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Bell, Eye, MessageCircle as MessageSquare, FloppyDisk as Save, SpeakerHigh as Volume2, Zap as Zap,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/unified-ui/components/label";
 import { Switch } from "@/components/unified-ui/components/switch";

@@ -2,27 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ChartBar as BarChart3,
-  Bell,
-  Robot as Bot,
-  Brain,
-  FileText,
-  House as Home,
-  Tray as Inbox,
-  SignOut as LogOut,
-  Envelope as Mail,
-  Package,
-  Plus,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Shield,
-  Sparkle as Sparkles,
-  Ticket,
-  User,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { BarChart3 as BarChart3, Bell, Bot as Bot, Brain, FileText, Home as Home, Inbox, LogOut as LogOut, Mail as Mail, Package, Plus, Search as Search, Settings as Settings, Shield, Sparkles as Sparkles, Ticket, User, Users, Zap as Zap,  } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   Command,

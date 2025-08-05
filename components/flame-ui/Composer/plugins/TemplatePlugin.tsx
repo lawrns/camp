@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Lightning as Zap } from "@phosphor-icons/react";
+import { X, Zap as Zap } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { ComposerPluginProps, Template } from "../types";

@@ -2,7 +2,7 @@
 // Provides bulk operations for multiple conversations
 
 import { useState } from 'react';
-import { Check, X, Tag, Flag, Clock, Archive, Trash, Users, Download } from '@phosphor-icons/react';
+import { Check, X, Tag, Flag, Clock, Archive, Trash, Users, Download } from "lucide-react";
 import type { Conversation } from '../types';
 
 interface BulkActionsProps {

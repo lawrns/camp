@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Robot, User, Clock, CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Bot, User, Clock, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
@@ -105,7 +105,7 @@ export function AIHandoverButton({
             </div>
             <div className="flex items-center gap-ds-2">
               {showDetails && (
-                <Badge variant={isLowConfidence ? "destructive" : "secondary"} className="text-tiny">
+                <Badge variant={isLowConfidence ? "destructive" : "secondary"} className="text-tiny rounded-full">
                   {Math.round(currentConfidence * 100)}%
                 </Badge>
               )}
@@ -119,7 +119,7 @@ export function AIHandoverButton({
                 {handover.isProcessing ? (
                   <Icon icon={Clock} className="h-3 w-3 animate-spin" />
                 ) : handover.isAIActive ? (
-                  <Icon icon={Robot} className="h-3 w-3" />
+                  <Icon icon={Bot} className="h-3 w-3" />
                 ) : (
                   <Icon icon={User} className="h-3 w-3" />
                 )}
@@ -147,14 +147,14 @@ export function AIHandoverButton({
 
   if (variant === "inline") {
     return (
-      <div className={cn("flex items-center gap-2", className)}>
+      <div className={cn("flex items-center gap-[var(--fl-spacing-2)]", className)}>
         <Icon
           icon={getStatusIcon()}
           className={cn("h-4 w-4", getStatusColor(), handover.isProcessing && "animate-spin")}
         />
         <span className="text-sm font-medium">{handover.isAIActive ? "AI Active" : "AI Inactive"}</span>
         {showDetails && (
-          <Badge variant={isLowConfidence ? "destructive" : "secondary"} className="text-tiny">
+          <Badge variant={isLowConfidence ? "destructive" : "secondary"} className="text-tiny rounded-full">
             {Math.round(currentConfidence * 100)}%
           </Badge>
         )}
@@ -168,7 +168,7 @@ export function AIHandoverButton({
           {handover.isProcessing ? (
             <Icon icon={Clock} className="h-3 w-3 animate-spin" />
           ) : handover.isAIActive ? (
-            <Icon icon={Robot} className="h-3 w-3" />
+            <Icon icon={Bot} className="h-3 w-3" />
           ) : (
             <Icon icon={User} className="h-3 w-3" />
           )}
@@ -191,13 +191,13 @@ export function AIHandoverButton({
         {handover.isProcessing ? (
           <Icon icon={Clock} className="h-4 w-4 animate-spin flex-shrink-0" />
         ) : handover.isAIActive ? (
-          <Icon icon={Robot} className="h-4 w-4 flex-shrink-0" />
+          <Icon icon={Bot} className="h-4 w-4 flex-shrink-0" />
         ) : (
           <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
         )}
         <span className="truncate">{getButtonText()}</span>
         {showDetails && (
-          <Badge variant="secondary" className="ml-1 text-tiny">
+          <Badge variant="secondary" className="ml-1 text-tiny rounded-full">
             {Math.round(currentConfidence * 100)}%
           </Badge>
         )}

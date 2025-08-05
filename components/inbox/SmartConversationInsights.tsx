@@ -1,31 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Activity,
-  Warning as AlertTriangle,
-  ArrowRight,
-  ChartBar as BarChart3,
-  Brain,
-  CheckCircle,
-  Clock,
-  Eye,
-  Flag,
-  Heart,
-  Info,
-  Lightbulb,
-  ChatCircle as MessageCircle,
-  Shield,
-  Star,
-  Target,
-  ThumbsDown,
-  ThumbsUp,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  Users,
-  XCircle,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Activity, AlertTriangle as AlertTriangle, ArrowRight, ChartBar as BarChart3, Brain, CheckCircle, Clock, Eye, Flag, Heart, Info, Lightbulb, MessageCircle as MessageCircle, Shield, Star, Target, ThumbsDown, ThumbsUp, TrendDown as TrendingDown, TrendUp as TrendingUp, Users, XCircle, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
@@ -261,27 +237,27 @@ export function SmartConversationInsights({
       case "platinum":
         return "bg-purple-100 text-purple-800";
       case "gold":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]";
       case "silver":
-        return "bg-gray-100 text-gray-800";
+        return "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]";
       case "bronze":
         return "bg-orange-100 text-orange-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]";
     }
   };
 
   const getJourneyStageColor = (stage: string) => {
     const colors = {
-      awareness: "bg-blue-100 text-blue-800",
+      awareness: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)]",
       consideration: "bg-purple-100 text-purple-800",
-      purchase: "bg-green-100 text-green-800",
+      purchase: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]",
       onboarding: "bg-indigo-100 text-indigo-800",
       support: "bg-orange-100 text-orange-800",
-      retention: "bg-yellow-100 text-yellow-800",
+      retention: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]",
       advocacy: "bg-pink-100 text-pink-800",
     };
-    return colors[stage as keyof typeof colors] || "bg-gray-100 text-gray-800";
+    return colors[stage as keyof typeof colors] || "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]";
   };
 
   const handleInsightAction = (insight: ConversationInsight, action: string) => {
@@ -305,7 +281,7 @@ export function SmartConversationInsights({
           <h3 className="text-base font-semibold text-gray-900">Smart Insights</h3>
           <p className="text-foreground text-sm">AI-powered conversation analysis</p>
         </div>
-        <Badge variant="secondary" className="gap-1">
+        <Badge variant="secondary" className="gap-[var(--fl-spacing-1)] rounded-full">
           <Icon icon={Brain} className="h-3 w-3" />
           AI Powered
         </Badge>
@@ -462,10 +438,10 @@ export function SmartConversationInsights({
                     <Badge
                       variant="secondary"
                       className={cn(
-                        insight.severity === "critical" && "bg-status-error-light text-red-800",
+                        insight.severity === "critical" && "bg-status-error-light text-[var(--fl-color-danger)]",
                         insight.severity === "high" && "bg-orange-100 text-orange-800",
-                        insight.severity === "medium" && "bg-status-warning-light text-yellow-800",
-                        insight.severity === "low" && "bg-status-info-light text-blue-800"
+                        insight.severity === "medium" && "bg-status-warning-light text-[var(--fl-color-warning)]",
+                        insight.severity === "low" && "bg-status-info-light text-[var(--fl-color-primary)]"
                       )}
                     >
                       {insight.severity}
@@ -495,7 +471,7 @@ export function SmartConversationInsights({
 
                 {insight.actionable && !insight.metadata?.actionTaken && (
                   <div className="ml-4 flex gap-ds-2">
-                    <Button size="sm" onClick={() => handleInsightAction(insight, "apply")} className="gap-1">
+                    <Button size="sm" onClick={() => handleInsightAction(insight, "apply")} className="gap-[var(--fl-spacing-1)]">
                       <Icon icon={Zap} className="h-3 w-3" />
                       Apply
                     </Button>
@@ -506,7 +482,7 @@ export function SmartConversationInsights({
                 )}
 
                 {insight.metadata?.actionTaken && (
-                  <Badge variant="secondary" className="ml-4">
+                  <Badge variant="secondary" className="ml-4 rounded-full">
                     {insight.metadata.actionTaken === "apply" ? "Applied" : "Dismissed"}
                   </Badge>
                 )}

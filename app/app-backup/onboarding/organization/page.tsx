@@ -3,13 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  ArrowRight,
-  Buildings as Building,
-  ChatCircle as MessageSquare,
-  Sparkle as Sparkles,
-  Users,
-} from "@phosphor-icons/react";
+import { ArrowRight, Buildings as Building, MessageCircle as MessageSquare, Sparkles as Sparkles, Users,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

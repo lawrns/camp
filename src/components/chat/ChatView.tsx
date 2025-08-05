@@ -2,16 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertTriangle,
-  DotsThreeVertical as MoreVertical,
-  Paperclip as PaperclipIcon,
-  PaperPlaneTilt as Send,
-  Smiley as SmileIcon,
-  Ticket,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, MoreVertical as MoreVertical, Paperclip as PaperclipIcon, Send as Send, Smile as SmileIcon, Ticket, WifiHigh, WifiSlash as WifiHighOff,  } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";

@@ -13,31 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Warning as AlertCircle,
-  ArrowSquareOut,
-  ChartBar as BarChart3,
-  Book,
-  BookOpen,
-  Brain,
-  CheckCircle,
-  Clock,
-  Database,
-  Download,
-  PencilSimple as Edit,
-  FileText,
-  Fire as Flame,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Sparkle as Sparkles,
-  Plus,
-  Target,
-  Trash as Trash2,
-  TrendUp as TrendingUp,
-  Upload,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, ExternalLink, ChartBar as BarChart3, Book, BookOpen, Brain, CheckCircle, Clock, Database, Download, Pencil as Edit, FileText, Flame as Flame, RefreshCw as RefreshCw, Search as Search, Settings as Settings, Sparkles as Sparkles, Plus, Target, Trash as Trash2, TrendingUp, Upload, Zap as Zap,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
@@ -186,28 +162,28 @@ export default function KnowledgePage() {
   const getStatusBadge = (status: KnowledgeDocument["status"]) => {
     switch (status) {
       case "published":
-        return <Badge variant="primary">Published</Badge>;
+        return <Badge variant="default" className="rounded-full">Published</Badge>;
       case "draft":
-        return <Badge variant="secondary">Draft</Badge>;
+        return <Badge variant="secondary" className="rounded-full">Draft</Badge>;
       case "archived":
-        return <Badge variant="outline">Archived</Badge>;
+        return <Badge variant="outline" className="rounded-full">Archived</Badge>;
       default:
-        return <Badge variant="outline">Unknown</Badge>;
+        return <Badge variant="outline" className="rounded-full">Unknown</Badge>;
     }
   };
 
   const getTypeBadge = (type: KnowledgeDocument["type"]) => {
     switch (type) {
       case "article":
-        return <Badge variant="outline">Article</Badge>;
+        return <Badge variant="outline" className="rounded-full">Article</Badge>;
       case "faq":
-        return <Badge variant="outline">FAQ</Badge>;
+        return <Badge variant="outline" className="rounded-full">FAQ</Badge>;
       case "guide":
-        return <Badge variant="outline">Guide</Badge>;
+        return <Badge variant="outline" className="rounded-full">Guide</Badge>;
       case "policy":
-        return <Badge variant="outline">Policy</Badge>;
+        return <Badge variant="outline" className="rounded-full">Policy</Badge>;
       default:
-        return <Badge variant="outline">Document</Badge>;
+        return <Badge variant="outline" className="rounded-full">Document</Badge>;
     }
   };
 
@@ -407,7 +383,7 @@ export default function KnowledgePage() {
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
                         <h3 className="font-semibold text-gray-900 line-clamp-2">{doc.title}</h3>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           {getStatusBadge(doc.status)}
                           {getTypeBadge(doc.type)}
                         </div>
@@ -428,7 +404,7 @@ export default function KnowledgePage() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">AI Embedding</span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           {doc.vectorized ? (
                             <Icon icon={CheckCircle} className="h-4 w-4 text-green-500" />
                           ) : (
@@ -444,7 +420,7 @@ export default function KnowledgePage() {
                       )}
                     </div>
 
-                    <div className="flex gap-2 pt-2">
+                    <div className="flex gap-[var(--fl-spacing-2)] pt-2">
                       <Button
                         size="sm"
                         variant="outline"
@@ -472,13 +448,13 @@ export default function KnowledgePage() {
           <TabsContent value="search" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                   <Icon icon={Brain} className="h-5 w-5" />
                   AI-Powered Knowledge Search
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex gap-2">
+                <div className="flex gap-[var(--fl-spacing-2)]">
                   <Input
                     type="text"
                     placeholder="Ask a question about your knowledge base..."
@@ -511,13 +487,13 @@ export default function KnowledgePage() {
                             <div className="space-y-2">
                               <h4 className="font-medium">{result.title}</h4>
                               <p className="text-sm text-gray-600">{result.chunk}</p>
-                              <div className="flex items-center gap-2">
-                                <Badge variant="outline">
+                              <div className="flex items-center gap-[var(--fl-spacing-2)]">
+                                <Badge variant="outline" className="rounded-full">
                                   {Math.round(result.relevance * 100)}% relevance
                                 </Badge>
                               </div>
                             </div>
-                            <Button size="sm" variant="outline" leftIcon={<Icon icon={ArrowSquareOut} className="h-3 w-3" />}>
+                            <Button size="sm" variant="outline" leftIcon={<Icon icon={ExternalLink} className="h-3 w-3" />}>
                             </Button>
                           </div>
                         </CardContent>
@@ -534,7 +510,7 @@ export default function KnowledgePage() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                     <Icon icon={BarChart3} className="h-5 w-5" />
                     Embedding Progress
                   </CardTitle>
@@ -567,7 +543,7 @@ export default function KnowledgePage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                     <Icon icon={TrendingUp} className="h-5 w-5" />
                     Usage Statistics
                   </CardTitle>

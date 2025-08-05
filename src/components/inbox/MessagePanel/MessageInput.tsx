@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo } from "react";
-import { Paperclip, PaperPlaneTilt as Send } from "@phosphor-icons/react";
+import { Paperclip, Send as Send } from "lucide-react";
 import { AIReplySuggestions } from "@/components/ai/AIReplySuggestions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/unified-ui/components/textarea";

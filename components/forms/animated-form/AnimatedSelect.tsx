@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Warning as AlertCircle, CheckCircle as Check, CaretDown as ChevronDown } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle as Check, ChevronDown as ChevronDown } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { SelectFieldProps } from "./types";

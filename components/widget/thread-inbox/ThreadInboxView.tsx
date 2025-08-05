@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from '@phosphor-icons/react';
+import { X } from "lucide-react";
 import { ThreadList } from './ThreadList';
 import { EmptyState } from './EmptyState';
 import { BottomNavigation } from './BottomNavigation';

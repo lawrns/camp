@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { Robot as Bot, CheckCircle as Check, UserPlus, Users } from "@phosphor-icons/react";
+import { Bot as Bot, CheckCircle as Check, UserPlus, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ function WorkloadIndicator({ load, className }: WorkloadIndicatorProps) {
   };
 
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div className={cn("flex items-center gap-[var(--fl-spacing-1)]", className)}>
       <div className="h-2 w-2 rounded-ds-full" style={{ backgroundColor: getLoadColor(load) }} />
       <span className="text-tiny text-[var(--fl-color-text-muted)]">{getLoadLabel(load)}</span>
     </div>
@@ -122,7 +122,7 @@ export function ConversationAssignmentPanel({
           variant="ghost"
           size="sm"
           aria-label={currentAssignee ? `Reassign from ${currentAssignee.name}` : "Assign conversation"}
-          className={cn("flex items-center gap-2", className)}
+          className={cn("flex items-center gap-[var(--fl-spacing-2)]", className)}
         >
           {currentAssignee ? (
             <>
@@ -171,7 +171,7 @@ export function ConversationAssignmentPanel({
                     </AvatarFallback>
                   </Avatar>
                   <span className="text-sm font-medium">{currentAssignee.name}</span>
-                  <Badge variant="secondary" className="ml-auto">
+                  <Badge variant="secondary" className="ml-auto rounded-full">
                     {currentAssignee.activeChats} chats
                   </Badge>
                 </div>
@@ -244,7 +244,7 @@ export function ConversationAssignmentPanel({
             onClick={handleAutoAssign}
             disabled={assigningTo === "auto" || isLoading}
             className={cn(
-              "text-typography-sm hover:bg-status-info-light flex w-full items-center gap-2 rounded-ds-md spacing-2 text-blue-600 transition-colors",
+              "text-typography-sm hover:bg-status-info-light flex w-full items-center gap-[var(--fl-spacing-2)] rounded-ds-md spacing-2 text-blue-600 transition-colors",
               "focus:outline-none focus:ring-2 focus:ring-blue-500",
               (assigningTo === "auto" || isLoading) && "cursor-not-allowed opacity-50"
             )}

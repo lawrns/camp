@@ -3,14 +3,7 @@
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
 import { Badge } from '@/components/unified-ui/components/Badge';
-import { 
-  Users, 
-  Circle, 
-  Clock, 
-  ChatCircle, 
-  Star,
-  CheckCircle
-} from '@phosphor-icons/react';
+import { Users, Circle, Clock, MessageCircle, Star, CheckCircle } from "lucide-react";
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -143,7 +136,7 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
           
           {/* Agent info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-[var(--fl-spacing-2)] mb-1">
               <h4 className="font-medium text-sm text-gray-900 truncate">
                 {agent.name}
               </h4>
@@ -155,7 +148,7 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
               </Badge>
             </div>
             
-            <div className="flex items-center gap-1 text-xs text-gray-500">
+            <div className="flex items-center gap-[var(--fl-spacing-1)] text-xs text-gray-500">
               <Clock className="w-3 h-3" />
               {agent.status === 'offline' && agent.lastSeen ? (
                 <span>Last seen {formatLastSeen(agent.lastSeen)}</span>
@@ -187,16 +180,16 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
               Last 24h Performance
             </h5>
             
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="flex items-center gap-1">
-                <ChatCircle className="w-3 h-3 text-blue-500" />
+            <div className="grid grid-cols-2 gap-[var(--fl-spacing-2)] text-xs">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
+                <MessageCircle className="w-3 h-3 text-blue-500" />
                 <span className="text-gray-600">Conversations:</span>
                 <span className="font-medium font-numeric tabular-nums">
                   {agent.kpis.conversationsToday}
                 </span>
               </div>
               
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Clock className="w-3 h-3 text-orange-500" />
                 <span className="text-gray-600">Avg Response:</span>
                 <span className="font-medium font-numeric tabular-nums">
@@ -204,7 +197,7 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
                 </span>
               </div>
               
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Star className="w-3 h-3 text-amber-500" />
                 <span className="text-gray-600">Satisfaction:</span>
                 <span className="font-medium font-numeric tabular-nums">
@@ -212,7 +205,7 @@ function AgentCard({ agent, showKPIs }: { agent: Agent; showKPIs?: boolean }) {
                 </span>
               </div>
               
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-[var(--fl-spacing-1)]">
                 <CheckCircle className="w-3 h-3 text-blue-500" />
                 <span className="text-gray-600">Resolved:</span>
                 <span className="font-medium font-numeric tabular-nums">
@@ -271,7 +264,7 @@ function AvatarStack({ agents, maxVisible = 5 }: { agents: Agent[]; maxVisible?:
         
         {/* Remaining count */}
         {remainingCount > 0 && (
-          <div className="w-8 h-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-[var(--fl-color-surface)] border-2 border-white flex items-center justify-center shadow-sm">
             <span className="text-xs font-medium text-gray-600">
               +{remainingCount}
             </span>
@@ -280,7 +273,7 @@ function AvatarStack({ agents, maxVisible = 5 }: { agents: Agent[]; maxVisible?:
       </div>
       
       {/* Online count */}
-      <div className="ml-3 flex items-center gap-1 text-sm text-gray-600">
+      <div className="ml-3 flex items-center gap-[var(--fl-spacing-1)] text-sm text-gray-600">
                         <Circle className="w-2 h-2 text-blue-500" weight="fill" />
         <span className="font-medium font-numeric tabular-nums">
           {agents.filter(a => a.status === 'online').length}
@@ -306,7 +299,7 @@ export function IntercomAgentPresencePanel({
     <Card className={cn("glass-card", className)}>
       <CardHeader className="border-b border-gray-100/50">
         <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-gray-900 font-heading">
+          <div className="flex items-center gap-[var(--fl-spacing-2)] text-gray-900 font-heading">
             <Users className="w-5 h-5" />
             {title}
           </div>
@@ -331,21 +324,21 @@ export function IntercomAgentPresencePanel({
             {/* Status summary */}
             <div className="flex items-center gap-4 text-sm">
               {onlineAgents.length > 0 && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <Circle className="w-2 h-2 text-blue-500" weight="fill" />
                   <span className="font-medium font-numeric tabular-nums">{onlineAgents.length}</span>
                   <span className="text-gray-600">online</span>
                 </div>
               )}
               {busyAgents.length > 0 && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <Circle className="w-2 h-2 text-amber-500" weight="fill" />
                   <span className="font-medium font-numeric tabular-nums">{busyAgents.length}</span>
                   <span className="text-gray-600">busy</span>
                 </div>
               )}
               {offlineAgents.length > 0 && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <Circle className="w-2 h-2 text-gray-400" weight="fill" />
                   <span className="font-medium font-numeric tabular-nums">{offlineAgents.length}</span>
                   <span className="text-gray-600">offline</span>

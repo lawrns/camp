@@ -1,5 +1,5 @@
 import React from "react";
-import { Monitor, DeviceMobile as Smartphone } from "@phosphor-icons/react";
+import { Monitor, DeviceMobile as Smartphone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 import { formatTimeAgo } from "@/lib/utils";

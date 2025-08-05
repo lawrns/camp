@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Warning as AlertCircle,
-  CheckCircle,
-  Copy,
-  Lightbulb,
-  Spinner as Loader2,
-  ArrowsClockwise as RefreshCw,
-  PaperPlaneTilt as Send,
-  Sparkle as Sparkles,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle, Copy, Lightbulb, Spinner as Loader2, RefreshCw as RefreshCw, Send as Send, Sparkles as Sparkles,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

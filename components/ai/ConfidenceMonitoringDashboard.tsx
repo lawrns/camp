@@ -24,20 +24,7 @@ import { Switch } from "@/components/unified-ui/components/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  ChartLine as Activity,
-  Warning as AlertTriangle,
-  ChartBar as BarChart3,
-  Brain,
-  CheckCircle,
-  Clock,
-  Spinner as Loader2,
-  Gear as Settings,
-  Target,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, AlertTriangle as AlertTriangle, ChartBar as BarChart3, Brain, CheckCircle, Clock, Spinner as Loader2, Settings as Settings, Target, TrendDown as TrendingDown, TrendUp as TrendingUp, Zap as Zap,  } from "lucide-react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { useEffect, useState } from "react";
 

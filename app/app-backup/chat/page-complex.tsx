@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getBrowserClient } from "@/lib/supabase";
-import { ChatCircle, PaperPlaneTilt, Robot, User } from "@phosphor-icons/react";
+import { MessageCircle, Send, Bot, User } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { aiService } from "../services/aiService";
 
@@ -269,7 +269,7 @@ export default function ChatPage() {
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <ChatCircle size={24} weight="fill" className="text-blue-600" />
+            <MessageCircle size={24} weight="fill" className="text-blue-600" />
             <div>
               <h1 className="text-xl font-bold text-gray-900">Live Chat</h1>
               <p className="text-sm text-gray-600">
@@ -299,7 +299,7 @@ export default function ChatPage() {
         <Card className="flex-1 flex flex-col min-h-[600px]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <ChatCircle className="h-5 w-5 text-blue-600" />
+              <MessageCircle className="h-5 w-5 text-blue-600" />
               Conversation
             </CardTitle>
           </CardHeader>
@@ -310,7 +310,7 @@ export default function ChatPage() {
               {messages.length === 0 && (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center text-gray-500">
-                    <ChatCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                     <p className="text-lg font-medium">No messages yet</p>
                     <p className="text-sm">Start a conversation by typing a message below</p>
                   </div>
@@ -327,9 +327,9 @@ export default function ChatPage() {
                         {message.senderType === 'agent' ? (
                           <User className="h-8 w-8 p-1 bg-blue-100 text-blue-600 rounded-full" />
                         ) : message.senderType === 'ai' ? (
-                          <Robot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
+                          <Bot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
                         ) : (
-                          <ChatCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
+                          <MessageCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
                         )}
                       </div>
                     )}
@@ -405,7 +405,7 @@ export default function ChatPage() {
                   disabled={!newMessage.trim()}
                   className="px-4 py-2"
                 >
-                  <PaperPlaneTilt className="h-4 w-4" />
+                  <Send className="h-4 w-4" />
                 </Button>
               </div>
             </div>

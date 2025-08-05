@@ -15,16 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";
 import { useAuthUser, useOrganization } from "@/store/selectors";
-import {
-  CaretDown as ChevronDown,
-  CreditCard,
-  Question as HelpCircle,
-  Spinner as Loader2,
-  SignOut as LogOut,
-  Gear as Settings,
-  Shield,
-  User,
-} from "@phosphor-icons/react";
+import { ChevronDown as ChevronDown, CreditCard, HelpCircle as HelpCircle, Spinner as Loader2, SignOut as LogOut, Settings as Settings, Shield, User,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

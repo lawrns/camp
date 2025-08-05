@@ -2,19 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertCircle,
-  Bell,
-  Robot as Bot,
-  Crown,
-  ChatCircle as MessageCircle,
-  Phone,
-  PaperPlaneTilt as Send,
-  Gear as Settings,
-  Shield,
-  Users,
-  VideoCamera as Video,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Bell, Bot as Bot, Crown, MessageCircle as MessageCircle, Phone, Send as Send, Settings as Settings, Shield, Users, VideoCamera as Video,  } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

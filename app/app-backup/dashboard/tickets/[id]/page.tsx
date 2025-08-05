@@ -12,7 +12,7 @@ import {
 } from "@/components/unified-ui/components/select";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { Icon } from "@/lib/ui/Icon";
-import { ArrowLeft, CheckCircle, Clock, Ticket, User, Warning, WarningCircle } from "@phosphor-icons/react";
+import { ArrowLeft, CheckCircle, Clock, Ticket, User, AlertTriangle, AlertCircle } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -73,7 +73,7 @@ interface TicketDetails {
 
 const statusOptions = [
   { value: "open", label: "Open", color: "bg-blue-100 text-blue-800", icon: Clock },
-  { value: "in_progress", label: "In Progress", color: "bg-yellow-100 text-yellow-800", icon: Warning },
+  { value: "in_progress", label: "In Progress", color: "bg-yellow-100 text-yellow-800", icon: AlertTriangle },
   { value: "resolved", label: "Resolved", color: "bg-green-100 text-green-800", icon: CheckCircle },
   { value: "closed", label: "Closed", color: "bg-gray-100 text-gray-800", icon: CheckCircle },
 ];
@@ -215,7 +215,7 @@ export default function TicketDetailPage({ params }: TicketDetailPageProps) {
     return (
       <div className="spacing-6">
         <div className="text-center">
-          <Icon icon={WarningCircle} className="text-brand-mahogany-500 mx-auto mb-4 h-16 w-16" />
+          <Icon icon={AlertCircle} className="text-brand-mahogany-500 mx-auto mb-4 h-16 w-16" />
           <h2 className="mb-2 text-xl font-semibold text-gray-900">Ticket Not Found</h2>
           <p className="mb-4 text-gray-600">
             The ticket you're looking for doesn't exist or you don't have access to it.

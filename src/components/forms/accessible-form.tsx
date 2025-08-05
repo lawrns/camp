@@ -1,5 +1,5 @@
 import React, { forwardRef, useId } from "react";
-import { Warning as AlertCircle, CheckCircle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

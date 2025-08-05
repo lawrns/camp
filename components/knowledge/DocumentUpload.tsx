@@ -1,23 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import {
-  Warning as AlertCircle,
-  Brain,
-  CheckCircle,
-  Clock,
-  Download,
-  File,
-  FileText,
-  FolderOpen,
-  Globe,
-  Image,
-  Link,
-  Plus,
-  Upload,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Brain, CheckCircle, Clock, Download, File, FileText, FolderOpen, Globe, Image, Link, Plus, Upload, X, Zap as Zap,  } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

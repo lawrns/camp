@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { PencilSimple, User } from "@phosphor-icons/react";
+import { PencilSimple, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { useTypingPreview as useTypingPreviewDisplay } from "@/lib/realtime/useTypingPreview";
@@ -65,7 +65,7 @@ function PreviewItem({ preview, isAgent = true }: PreviewItemProps) {
           <span className={cn("text-typography-sm font-medium", isAgent ? "text-blue-900" : "text-gray-900")}>
             {preview.userName || "Agent"}
           </span>
-          <Badge variant="secondary" className="px-1 py-0 text-tiny">
+          <Badge variant="secondary" className="px-1 py-0 text-tiny rounded-full">
             <User className="mr-1 h-3 w-3" />
             Agent
           </Badge>
@@ -78,7 +78,7 @@ function PreviewItem({ preview, isAgent = true }: PreviewItemProps) {
               className={cn(
                 "text-typography-sm leading-relaxed rounded-ds-lg border spacing-3 font-mono",
                 isAgent
-                  ? "border-status-info-light/60 bg-gradient-to-r from-blue-50 to-blue-100/50 text-blue-800"
+                  ? "border-status-info-light/60 bg-gradient-to-r from-blue-50 to-blue-100/50 text-[var(--fl-color-primary)]"
                   : "border-[var(--fl-color-border)]/60 bg-gradient-to-r from-gray-50 to-gray-100/50 text-neutral-800"
               )}
             >
@@ -97,7 +97,7 @@ function PreviewItem({ preview, isAgent = true }: PreviewItemProps) {
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-typography-xs border-0 px-2 py-1 shadow-sm",
+                  "text-typography-xs border-0 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] shadow-sm",
                   isAgent ? "bg-status-info-light text-status-info-dark" : "bg-neutral-100 text-neutral-700"
                 )}
               >
@@ -110,7 +110,7 @@ function PreviewItem({ preview, isAgent = true }: PreviewItemProps) {
 
         {(!preview.content || preview.content.trim() === "" || preview.content === "typing...") && (
           <div className="flex items-center gap-3 py-2">
-            <div className="flex gap-1">
+            <div className="flex gap-[var(--fl-spacing-1)]">
               <div
                 className={cn("h-2 w-2 animate-bounce rounded-ds-full", isAgent ? "bg-brand-blue-500" : "bg-neutral-500")}
                 style={{ animationDelay: "0ms" }}
@@ -223,7 +223,7 @@ export function AgentTypingPreviewPanel({ conversationId, className }: { convers
       <div className="text-foreground flex items-center gap-ds-2 border-b pb-2 text-sm font-medium">
         <div className="bg-semantic-success h-2 w-2 animate-pulse rounded-ds-full" />
         <span>Live Typing Activity</span>
-        <Badge variant="secondary" className="text-tiny">
+        <Badge variant="secondary" className="text-tiny rounded-full">
           {typedPreviews.length}
         </Badge>
       </div>

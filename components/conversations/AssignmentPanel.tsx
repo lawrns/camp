@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/unified-ui/components/Skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Warning as AlertCircle, CheckCircle, Clock, UserCircle, UserPlus } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle, Clock, UserCircle, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Agent {

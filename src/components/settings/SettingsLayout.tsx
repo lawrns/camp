@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Warning as AlertTriangle,
-  ChatCircle as MessageSquare,
-  Palette,
-  Gear as Settings,
-  Shield,
-  Users,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, MessageCircle as MessageSquare, Palette, Settings as Settings, Shield, Users,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

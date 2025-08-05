@@ -13,16 +13,7 @@ import { Progress } from "@/components/unified-ui/components/Progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Warning as AlertTriangle,
-  Brain,
-  CheckCircle,
-  Clock,
-  ChatCircle as MessageSquare,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Brain, CheckCircle, Clock, MessageCircle as MessageSquare, RefreshCw as RefreshCw, Search as Search, TrendUp as TrendingUp,  } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // AI Insights API Response Types

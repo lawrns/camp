@@ -2,19 +2,7 @@
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowUpRight,
-  Brain,
-  Calendar,
-  ChatCircle,
-  Clock,
-  Fire,
-  Lightning,
-  Sparkle,
-  TrendUp,
-  Users,
-  Warning,
-} from "@phosphor-icons/react";
+import { ArrowUpRight, Brain, Calendar, MessageCircle, Clock, Flame, Zap, Sparkles, TrendUp, Users, AlertTriangle,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { ListItem } from "@/components/unified-ui/components/ListItem";
@@ -77,7 +65,7 @@ export function WelcomeDashboard() {
       id: "inbox",
       title: "Inbox",
       description: "Manage conversations",
-      icon: ChatCircle,
+      icon: MessageCircle,
       href: "/dashboard/inbox",
       color: "blue",
       badge: metrics?.totalConversations ? `${metrics.totalConversations} active` : undefined,
@@ -102,7 +90,7 @@ export function WelcomeDashboard() {
       id: "ai-insights",
       title: "AI Insights",
       description: "Smart recommendations",
-      icon: Sparkle,
+      icon: Sparkles,
       href: "/ai-insights",
       color: "blue",
     },
@@ -145,7 +133,7 @@ export function WelcomeDashboard() {
         <div className="container mx-auto max-w-6xl px-6 py-12">
           <Card className="border-status-error-light bg-[var(--fl-color-danger-subtle)]">
             <CardContent className="p-spacing-lg text-center">
-              <Warning className="text-brand-mahogany-500 mx-auto mb-4 h-12 w-12" />
+              <AlertTriangle className="text-brand-mahogany-500 mx-auto mb-4 h-12 w-12" />
               <h3 className="mb-2 text-base font-semibold text-red-900">Unable to Load Dashboard</h3>
               <p className="text-red-600-dark mb-4">{metricsError?.message || "Unable to load dashboard data"}</p>
               <button
@@ -169,7 +157,7 @@ export function WelcomeDashboard() {
         {/* Welcome Header with Fire Icon */}
         <div className="mb-12 text-center">
           <div className="mb-6 inline-flex items-center gap-3">
-            <Fire size={47} weight="fill" className="flex-shrink-0 text-blue-600" />
+            <Flame size={47} weight="fill" className="flex-shrink-0 text-blue-600" />
             <div className="text-left">
               <h1 className="text-4xl font-bold text-gray-900">
                 {getGreeting()}, {userName}!
@@ -189,8 +177,8 @@ export function WelcomeDashboard() {
           <Card className="border-0 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
-                <ChatCircle className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Today</Badge>
+                <MessageCircle className="h-8 w-8" weight="duotone" />
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Today</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="total-conversations">
                 {metrics?.totalConversations || 0}
@@ -203,7 +191,7 @@ export function WelcomeDashboard() {
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
                 <Clock className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Avg</Badge>
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Avg</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="avg-response-time">
                 {metrics?.responseTime || "< 1 min"}
@@ -216,7 +204,7 @@ export function WelcomeDashboard() {
             <CardContent className="p-spacing-md">
               <div className="mb-4 flex items-center justify-between">
                 <Users className="h-8 w-8" weight="duotone" />
-                <Badge className="bg-background/20 border-0 text-tiny text-white">Active</Badge>
+                <Badge className="bg-background/20 border-0 text-tiny text-white rounded-full">Active</Badge>
               </div>
               <div className="mb-1 text-3xl font-bold" data-testid="ai-handovers">
                 {metrics?.activeAgents || 0}
@@ -235,7 +223,7 @@ export function WelcomeDashboard() {
                 <div className="h-16 w-16 overflow-hidden rounded-ds-xl">
                   <img src="/images/rag.png" alt="RAG AI System" className="h-full w-full object-cover" />
                 </div>
-                <Badge className="text-status-info-dark border-0 bg-[var(--fl-color-info-subtle)] text-tiny font-semibold">
+                <Badge className="text-status-info-dark border-0 bg-[var(--fl-color-info-subtle)] text-tiny font-semibold rounded-full">
                   AI POWERED
                 </Badge>
               </div>
@@ -256,7 +244,7 @@ export function WelcomeDashboard() {
           <Card className="bg-background border-0">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-ds-2 text-lg">
-                <Lightning className="h-6 w-6 text-blue-600" weight="duotone" />
+                <Zap className="h-6 w-6 text-blue-600" weight="duotone" />
                 Quick Actions
               </CardTitle>
             </CardHeader>
@@ -274,7 +262,7 @@ export function WelcomeDashboard() {
                     description={action.description}
                     badge={
                       action.badge && (
-                        <Badge variant="secondary" className="text-tiny">
+                        <Badge variant="secondary" className="text-tiny rounded-full">
                           {action.badge}
                         </Badge>
                       )
@@ -308,7 +296,7 @@ export function WelcomeDashboard() {
               {/* AI Insights */}
               <div className="rounded-ds-xl bg-gradient-to-r from-blue-50 to-blue-100 spacing-3">
                 <div className="flex items-start gap-3">
-                  <Sparkle className="h-6 w-6 text-blue-600" weight="fill" />
+                  <Sparkles className="h-6 w-6 text-blue-600" weight="fill" />
                   <div className="flex-1">
                     <h4 className="mb-1 font-semibold text-blue-900">AI Insight</h4>
                     <p className="text-status-info-dark leading-relaxed text-sm">
@@ -341,7 +329,7 @@ export function WelcomeDashboard() {
                 className="bg-primary flex w-full items-center justify-center gap-ds-2 rounded-ds-md px-4 py-2 text-white transition-colors hover:bg-blue-700"
                 onClick={() => router.push("/dashboard/inbox")}
               >
-                <ChatCircle className="h-5 w-5" weight="duotone" />
+                <MessageCircle className="h-5 w-5" weight="duotone" />
                 Start Handling Conversations
                 <ArrowUpRight className="h-4 w-4" />
               </button>

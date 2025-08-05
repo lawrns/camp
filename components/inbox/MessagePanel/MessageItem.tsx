@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle as Check, Checks as CheckCheck, Clock } from "@phosphor-icons/react";
+import { CheckCircle as Check, Checks as CheckCheck, Clock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Icon } from "@/lib/ui/Icon";
 // import { UnifiedAvatar } from "@/components/unified-ui/components/unified-avatar"; // Component doesn't exist, using Avatar

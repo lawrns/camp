@@ -6,15 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/com
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  CheckCircle,
-  CaretRight as ChevronRight,
-  Shield,
-  Star,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-  X,
-} from "@phosphor-icons/react";
+import { CheckCircle, CaretRight as ChevronRight, Shield, Star, WifiHigh, WifiSlash as WifiHighOff, X,  } from "lucide-react";
 
 interface CustomerHeaderProps {
   customer: CustomerData;

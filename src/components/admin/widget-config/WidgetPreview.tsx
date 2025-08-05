@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import {
-  ArrowsOut as Maximize,
-  Monitor,
-  DeviceMobile as Smartphone,
-  DeviceTablet as Tablet,
-  X,
-} from "@phosphor-icons/react";
+import { ArrowsOut as Maximize, Monitor, DeviceMobile as Smartphone, DeviceTablet as Tablet, X,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkle as Sparkles, X } from "@phosphor-icons/react";
+import { Sparkles as Sparkles, X } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { AISuggestion, ComposerPluginProps } from "../types";

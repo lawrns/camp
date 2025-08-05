@@ -8,20 +8,7 @@ import { Separator } from "@/components/unified-ui/components/Separator";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Conversation } from "@/types/conversation";
-import {
-  ChartLine as Activity,
-  ArrowSquareOut,
-  Calendar,
-  Clock,
-  Copy,
-  PencilSimple as Edit2,
-  Envelope as Mail,
-  MapPin,
-  ChatCircle as MessageSquare,
-  Phone,
-  User,
-  X,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, ArrowSquareOut, Calendar, Clock, Copy, PencilSimple as Edit2, Envelope as Mail, MapPin, MessageCircle as MessageSquare, Phone, User, X,  } from "lucide-react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import React, { useEffect, useState } from "react";
 
@@ -164,7 +151,7 @@ function CustomerDetails({ customer }: { customer: typeof mockCustomer }) {
         <h3 className="text-base font-semibold">{customer.name}</h3>
         <div className="mt-2 flex items-center justify-center gap-ds-2">
           {customer.tags.map((tag: unknown) => (
-            <Badge key={tag} variant="secondary" className="text-tiny">
+            <Badge key={tag} variant="secondary" className="text-tiny rounded-full">
               {tag}
             </Badge>
           ))}
@@ -283,7 +270,7 @@ function CustomerDetails({ customer }: { customer: typeof mockCustomer }) {
               </div>
               <div className="text-right">
                 <div className="text-sm font-medium">{order.amount}</div>
-                <Badge variant={order.status === "Delivered" ? "default" : "secondary"} className="text-tiny">
+                <Badge variant={order.status === "Delivered" ? "default" : "secondary"} className="text-tiny rounded-full">
                   {order.status}
                 </Badge>
               </div>
@@ -334,11 +321,11 @@ function ConversationDetails({ conversationId }: { conversationId?: string }) {
         <div className="space-y-spacing-sm">
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Status</span>
-            <Badge variant="default">Active</Badge>
+            <Badge variant="default" className="rounded-full">Active</Badge>
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Priority</span>
-            <Badge variant="secondary">Medium</Badge>
+            <Badge variant="secondary" className="rounded-full">Medium</Badge>
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-muted-foreground">Created</span>

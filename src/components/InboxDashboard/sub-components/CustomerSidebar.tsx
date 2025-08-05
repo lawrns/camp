@@ -1,7 +1,7 @@
 // CustomerSidebar component with accordion-based design
 
 import { useAuth } from "@/hooks/useAuth";
-import { Calendar, Clock, Envelope, Flag, MapPin, Phone, Star, Tag } from "@phosphor-icons/react";
+import { Calendar, Clock, Envelope, Flag, MapPin, Phone, Star, Tag } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import { useAddCustomerNote, useCustomerData } from "../hooks/useCustomerData";

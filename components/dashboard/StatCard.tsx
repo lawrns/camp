@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { TrendDown, TrendUp } from "@phosphor-icons/react";
+import { TrendDown, TrendUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

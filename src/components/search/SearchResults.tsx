@@ -1,16 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  BookOpen,
-  Eye,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  Phone,
-  MagnifyingGlass as Search,
-  Star,
-  Users,
-} from "@phosphor-icons/react";
+import { BookOpen, Eye, Envelope as Mail, MessageCircle as MessageSquare, Phone, Search as Search, Star, Users,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

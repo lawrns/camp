@@ -2,7 +2,7 @@
 // Provides comprehensive filtering options for conversations
 
 import { useState, useEffect } from 'react';
-import { Funnel, X, Calendar, User, Tag, Flag, Clock } from '@phosphor-icons/react';
+import { Funnel, X, Calendar, User, Tag, Flag, Clock } from "lucide-react";
 
 interface FilterOptions {
   status: string[];

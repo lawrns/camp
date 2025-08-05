@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Buildings as Building2, Calendar, Copy, Shield, Users } from "@phosphor-icons/react";
+import { Buildings as Building2, Calendar, Copy, Shield, Users } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

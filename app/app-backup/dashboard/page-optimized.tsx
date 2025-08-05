@@ -13,23 +13,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowUpRight,
-  BookOpen,
-  Brain,
-  Calendar,
-  CaretRight,
-  ChartBar,
-  ChatCircle,
-  Clock,
-  Fire,
-  Gear,
-  Lightning,
-  PuzzlePiece,
-  Sparkle,
-  Ticket,
-  Users,
-} from "@phosphor-icons/react";
+import { ArrowUpRight, BookOpen, Brain, Calendar, CaretRight, ChartBar, MessageCircle, Clock, Flame, Settings, Zap, PuzzlePiece, Sparkles, Ticket, Users,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
@@ -170,7 +154,7 @@ const DashboardPage = () => {
         title: "Conversations",
         description: "Handle customer conversations",
         href: "/dashboard/inbox",
-        icon: ChatCircle,
+        icon: MessageCircle,
         badge: `${metrics.activeConversations}`,
       },
       {
@@ -206,7 +190,7 @@ const DashboardPage = () => {
         title: "Settings",
         description: "Configure your organization",
         href: "/dashboard/settings",
-        icon: Gear,
+        icon: Settings,
       },
       {
         id: "integrations",
@@ -322,7 +306,7 @@ const DashboardPage = () => {
         {/* Welcome Header with Fire Icon */}
         <div className="mb-12 text-center">
           <div className="mb-6 inline-flex items-center gap-4">
-            <Fire size={47} weight="fill" className="flex-shrink-0 text-blue-600" />
+            <Flame size={47} weight="fill" className="flex-shrink-0 text-blue-600" />
             <div className="text-left">
               <h1 className="text-4xl font-bold text-gray-900">
                 {getGreeting()}, {userName}!
@@ -342,7 +326,7 @@ const DashboardPage = () => {
               size="sm"
               className="border-status-info-light flex items-center gap-2 text-blue-600 hover:bg-[var(--fl-color-info-subtle)]"
             >
-              <Lightning className="h-4 w-4" />
+              <Zap className="h-4 w-4" />
               Test AI System
             </Button>
           </div>
@@ -352,7 +336,7 @@ const DashboardPage = () => {
         <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             gradient="bg-gradient-to-br from-blue-500 to-blue-600"
-            icon={ChatCircle}
+            icon={MessageCircle}
             badge="Today"
             value={metrics.totalConversations}
             label="Total Conversations"
@@ -386,7 +370,7 @@ const DashboardPage = () => {
           <Card className="border-0 bg-white shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-2 text-xl">
-                <Lightning className="h-6 w-6 text-blue-600" weight="duotone" />
+                <Zap className="h-6 w-6 text-blue-600" weight="duotone" />
                 Quick Actions
               </CardTitle>
             </CardHeader>
@@ -427,7 +411,7 @@ const DashboardPage = () => {
               {/* AI Insights */}
               <div className="rounded-ds-xl bg-gradient-to-r from-blue-50 to-blue-100 spacing-4">
                 <div className="flex items-start gap-3">
-                  <Sparkle className="h-6 w-6 text-blue-600" weight="fill" />
+                  <Sparkles className="h-6 w-6 text-blue-600" weight="fill" />
                   <div className="flex-1">
                     <h4 className="mb-1 font-semibold text-blue-900">AI Insight</h4>
                     <p className="text-status-info-dark leading-relaxed text-sm">
@@ -456,7 +440,7 @@ const DashboardPage = () => {
                 className="w-full bg-blue-600 text-white hover:bg-blue-700"
                 onClick={() => handleNavigation("/dashboard/inbox")}
               >
-                <ChatCircle className="mr-2 h-5 w-5" weight="duotone" />
+                <MessageCircle className="mr-2 h-5 w-5" weight="duotone" />
                 Start Handling Conversations
                 <ArrowUpRight className="ml-2 h-4 w-4" />
               </Button>

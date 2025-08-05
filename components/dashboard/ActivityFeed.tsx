@@ -10,15 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { formatDistanceToNowShort } from "@/lib/utils/date";
-import {
-  ChartLine as Activity,
-  Robot as Bot,
-  CheckCircle,
-  ChatCircle as MessageSquare,
-  Star,
-  User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, Bot as Bot, CheckCircle, MessageCircle as MessageSquare, Star, User, Zap as Zap,  } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 // Activity types
@@ -319,7 +311,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                           <span className="text-tiny text-muted-foreground">{formatTime(activity.timestamp)}</span>
 
                           {activity.metadata?.rating && (
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-[var(--fl-spacing-1)]">
                               {Array.from({ length: activity.metadata.rating }).map((_, i) => (
                                 <Star key={i} className="text-semantic-warning h-3 w-3 fill-current" />
                               ))}
@@ -327,13 +319,13 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                           )}
 
                           {activity.metadata?.count && (
-                            <Badge variant="outline" className="text-tiny">
+                            <Badge variant="outline" className="text-tiny rounded-full">
                               {activity.metadata.count} items
                             </Badge>
                           )}
 
                           {activity.user?.role && (
-                            <Badge variant="secondary" className="text-tiny">
+                            <Badge variant="secondary" className="text-tiny rounded-full">
                               {activity.user.role}
                             </Badge>
                           )}

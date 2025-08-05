@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PaperPlaneRight } from '@phosphor-icons/react';
+import { Send } from "lucide-react";
 import { cn } from '@/lib/utils';
 import type { ThreadData, ThreadMessage } from '@/types/thread-inbox';
 
@@ -167,7 +167,7 @@ export function InlineThreadConversation({
             {isSending ? (
               <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
             ) : (
-              <PaperPlaneRight size={16} />
+              <Send size={16} />
             )}
           </button>
         </div>

@@ -2,25 +2,7 @@
 "use client";
 
 import React from "react";
-import {
-  Activity,
-  Warning as AlertTriangle,
-  Brain,
-  CheckCircle as CheckCircle2,
-  Clock,
-  Eye,
-  Spinner as Loader2,
-  ChatCircle as MessageSquare,
-  Pause,
-  Play,
-  Shield,
-  Sparkle as Sparkles,
-  Target,
-  ThumbsUp,
-  TrendUp as TrendingUp,
-  User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Activity, AlertTriangle as AlertTriangle, Brain, CheckCircle as CheckCircle2, Clock, Eye, Spinner as Loader2, MessageCircle as MessageSquare, Pause, Play, Shield, Sparkles as Sparkles, Target, ThumbsUp, TrendUp as TrendingUp, User, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

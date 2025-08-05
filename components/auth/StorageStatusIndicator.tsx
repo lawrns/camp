@@ -7,7 +7,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Warning as AlertCircle, CheckCircle, Info } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle, Info } from "lucide-react";
 import { storageAdapter } from "@/lib/auth/seamless-storage-adapter";
 import { Icon } from "@/lib/ui/Icon";
 

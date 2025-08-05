@@ -2,7 +2,7 @@
 
 import React from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import { CaretDown as ChevronDown, CaretUp as ChevronUp, DotsThree as MoreHorizontal, X } from "@phosphor-icons/react";
+import { ChevronDown as ChevronDown, CaretUp as ChevronUp, DotsThree as MoreHorizontal, X } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
@@ -92,7 +92,7 @@ export function PanelHeader({
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1, type: "spring", stiffness: 500, damping: 25 }}
               >
-                <Badge variant={badge.variant || "secondary"} className="panel-header-badge text-tiny">
+                <Badge variant={badge.variant || "secondary"} className="panel-header-badge text-tiny rounded-full">
                   {badge.text}
                 </Badge>
               </OptimizedMotion.div>
@@ -108,7 +108,7 @@ export function PanelHeader({
       </div>
 
       {/* Right Section - Actions */}
-      <div className="ml-4 flex flex-shrink-0 items-center gap-1">
+      <div className="ml-4 flex flex-shrink-0 items-center gap-[var(--fl-spacing-1)]">
         {/* Primary Actions */}
         {actions.slice(0, 2).map((action: unknown) => (
           <Button
@@ -158,7 +158,7 @@ export function PanelHeader({
                     className={cn(
                       "panel-header-dropdown-item",
                       "w-full px-3 py-2 text-left",
-                      "flex items-center gap-2",
+                      "flex items-center gap-[var(--fl-spacing-2)]",
                       "text-typography-sm text-neutral-700",
                       "hover:bg-[var(--fl-color-background-subtle)]",
                       "disabled:cursor-not-allowed disabled:opacity-50"

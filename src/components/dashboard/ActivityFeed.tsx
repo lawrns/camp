@@ -319,7 +319,7 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                           <span className="text-tiny text-muted-foreground">{formatTime(activity.timestamp)}</span>
 
                           {activity.metadata?.rating && (
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-[var(--fl-spacing-1)]">
                               {Array.from({ length: activity.metadata.rating }).map((_, i) => (
                                 <Star key={i} className="text-semantic-warning h-3 w-3 fill-current" />
                               ))}
@@ -327,13 +327,13 @@ export function ActivityFeed({ compact = false, maxItems = 20 }: ActivityFeedPro
                           )}
 
                           {activity.metadata?.count && (
-                            <Badge variant="outline" className="text-tiny">
+                            <Badge variant="outline" className="text-tiny rounded-full">
                               {activity.metadata.count} items
                             </Badge>
                           )}
 
                           {activity.user?.role && (
-                            <Badge variant="secondary" className="text-tiny">
+                            <Badge variant="secondary" className="text-tiny rounded-full">
                               {activity.user.role}
                             </Badge>
                           )}

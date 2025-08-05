@@ -1,16 +1,6 @@
 import { storageAdapter } from "@/lib/auth/seamless-storage-adapter";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Warning as AlertTriangle,
-  ArrowSquareOut,
-  CheckCircle,
-  Eye,
-  EyeSlash as EyeOff,
-  Info,
-  ArrowCounterClockwise as RotateCcw,
-  Wrench,
-  X
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowSquareOut, CheckCircle, Eye, EyeSlash as EyeOff, Info, ArrowCounterClockwise as RotateCcw, Wrench, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Browser diagnostics functionality temporarily disabled

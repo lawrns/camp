@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { At as AtSign, CheckCircle, Clock, Users } from "@phosphor-icons/react";
+import { At as AtSign, CheckCircle, Clock, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { useTeamMembers } from "@/hooks/useTeamMembers";
@@ -261,7 +261,7 @@ export function MentionsSystem({
         <Icon icon={AtSign} className="h-4 w-4 text-[var(--fl-color-text-muted)]" />
         <span className="text-foreground text-sm font-medium">Mention team member</span>
         {mentionQuery && (
-          <Badge variant="secondary" className="text-tiny">
+          <Badge variant="secondary" className="text-tiny rounded-full">
             "{mentionQuery}"
           </Badge>
         )}
@@ -315,7 +315,7 @@ export function MentionsSystem({
             </div>
 
             {/* Status indicator */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-[var(--fl-spacing-1)]">
               {member.status === "online" && member.isAvailable && (
                 <Icon icon={CheckCircle} className="text-semantic-success h-4 w-4" />
               )}
@@ -329,7 +329,7 @@ export function MentionsSystem({
       <div className="border-t border-[var(--fl-color-border-subtle)] bg-[var(--fl-color-background-subtle)] px-3 py-2">
         <div className="flex items-center justify-between text-tiny text-[var(--fl-color-text-muted)]">
           <span>↑↓ Navigate • Enter/Tab Select • Esc Close</span>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-[var(--fl-spacing-1)]">
             <Icon icon={Users} className="h-3 w-3" />
             <span>{suggestions.length} available</span>
           </div>

@@ -78,7 +78,7 @@ export function AccessibleFilters({
       ref={containerRef}
       role="group"
       aria-label={ariaLabel}
-      className={cn("flex gap-1 overflow-x-auto pb-1", className)}
+      className={cn("flex gap-[var(--fl-spacing-1)] overflow-x-auto pb-1", className)}
     >
       {options.map((option, index) => {
         const isActive = value === option.id;
@@ -101,7 +101,7 @@ export function AccessibleFilters({
             }}
             onFocus={() => setFocusedIndex(index)}
             className={cn(
-              "text-typography-sm inline-flex items-center gap-2 rounded-ds-md px-3 py-1.5 font-medium",
+              "text-typography-sm inline-flex items-center gap-[var(--fl-spacing-2)] rounded-ds-md px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)].5 font-medium",
               "transition-all duration-200",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
               isActive

@@ -2,11 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  House, 
-  ChatCircle, 
-  Lifebuoy 
-} from '@phosphor-icons/react';
+import { House, MessageCircle, HelpCircle } from "lucide-react";
 import { cn } from '@/lib/utils';
 import { SPACING, COLORS, RADIUS, LAYOUT, ANIMATIONS } from '../design-system/tokens';
 
@@ -33,13 +29,13 @@ export const WidgetBottomTabs: React.FC<WidgetBottomTabsProps> = ({
     { 
       id: "messages" as WidgetTabType, 
       label: "Messages", 
-      icon: ChatCircle,
+      icon: MessageCircle,
       description: "Chat with Support"
     },
     { 
       id: "help" as WidgetTabType, 
       label: "Help", 
-      icon: Lifebuoy,
+      icon: HelpCircle,
       description: "FAQ & Knowledge Base"
     },
   ];

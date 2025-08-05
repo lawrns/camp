@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { ChatCircle as MessageSquare, X } from "@phosphor-icons/react";
+import { MessageCircle as MessageSquare, X } from "lucide-react";
 import { CommandBar } from "@/components/inbox/CommandBar";
 import { DetailsSidebar } from "@/components/inbox/DetailsSidebar";
 import { InboxHeader } from "@/components/inbox/InboxHeader";

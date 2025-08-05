@@ -2,7 +2,7 @@
 
 import { BrandLogo } from "@/components/unified-ui/components/BrandLogo";
 import { FlameGradient } from "@/components/unified-ui/components/flame-gradient";
-import { ArrowRight, CheckCircle as Check, Lightning, ShieldCheck, Users, ChartBar, Star, Globe } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle as Check, Zap, ShieldCheck, Users, ChartBar, Star, Globe } from "lucide-react";
 import Link from "next/link";
 import { memo, useEffect, useState } from "react";
 

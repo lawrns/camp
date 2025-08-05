@@ -3,15 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Buildings as Building,
-  Eye,
-  EyeSlash as EyeOff,
-  Lock,
-  Envelope as Mail,
-  User,
-} from "@phosphor-icons/react";
+import { ArrowRight, Buildings as Building, Eye, EyeSlash as EyeOff, Lock, Envelope as Mail, User,  } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 
 // Dynamic imports for lazy loading

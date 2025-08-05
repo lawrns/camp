@@ -1,17 +1,7 @@
 "use client";
 
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import {
-  Image,
-  Microphone as Mic,
-  Paperclip,
-  PaperPlaneTilt as Send,
-  Smiley as Smile,
-  Sparkle as Sparkles,
-  Square,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Image, Mic as Mic, Paperclip, Send as Send, Smile as Smile, Sparkles as Sparkles, Square, X, Zap as Zap,  } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Button } from "../Button";

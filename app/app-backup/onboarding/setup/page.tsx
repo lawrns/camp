@@ -16,27 +16,7 @@ import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { apiPost } from "@/lib/utils/api-client";
 import { getAppUrl } from "@/lib/utils/env-config";
-import {
-  Warning as AlertCircle,
-  Brain,
-  Buildings as Building,
-  CheckCircle as Check,
-  CheckCircle as CheckCircle2,
-  Clock,
-  Copy,
-  CurrencyDollar,
-  Globe,
-  Spinner as Loader2,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  Phone,
-  Gear as Settings,
-  Star,
-  Target,
-  TrendUp as TrendingUp,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Brain, Buildings as Building, CheckCircle as Check, CheckCircle as CheckCircle2, Clock, Copy, CurrencyDollar, Globe, Spinner as Loader2, Envelope as Mail, MessageCircle as MessageSquare, Phone, Settings as Settings, Star, Target, TrendUp as TrendingUp, Users, Zap as Zap,  } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 

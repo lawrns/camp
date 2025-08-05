@@ -2,14 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import {
-  Bell,
-  BellSlash as BellOff,
-  Play,
-  Gear as Settings,
-  SpeakerHigh as Volume2,
-  SpeakerSlash as VolumeX,
-} from "@phosphor-icons/react";
+import { Bell, BellSlash as BellOff, Play, Settings as Settings, SpeakerHigh as Volume2, SpeakerSlash as VolumeX,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import {

@@ -8,17 +8,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Clock,
-  Download,
-  Eye,
-  File,
-  FileText,
-  Image,
-  MusicNote as Music,
-  Share,
-  VideoCamera as Video,
-} from "@phosphor-icons/react";
+import { Clock, Download, Eye, File, FileText, Image, MusicNote as Music, Share, VideoCamera as Video,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

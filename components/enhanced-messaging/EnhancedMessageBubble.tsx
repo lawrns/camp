@@ -2,21 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Check,
-  Checks,
-  Clock,
-  Copy,
-  DotsThree,
-  PencilSimple,
-  ArrowBendLeftUp,
-  Trash,
-  Warning,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smiley
-} from '@phosphor-icons/react';
+import { Check, Checks, Clock, Copy, DotsThree, PencilSimple, ArrowBendLeftUp, Trash, AlertTriangle, Heart, ThumbsUp, ThumbsDown, Smile } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -152,7 +138,7 @@ export function EnhancedMessageBubble({
       case 'read':
         return <Checks className="h-3 w-3 text-blue-500" />;
       case 'failed':
-        return <Warning className="h-3 w-3 text-red-500" />;
+        return <AlertTriangle className="h-3 w-3 text-red-500" />;
       default:
         return null;
     }
@@ -361,7 +347,7 @@ export function EnhancedMessageBubble({
                       onClick={() => setShowReactionPicker(!showReactionPicker)}
                       className="h-6 w-6 p-0"
                     >
-                      <Smiley className="h-3 w-3" />
+                      <Smile className="h-3 w-3" />
                     </Button>
                   </div>
                 )}

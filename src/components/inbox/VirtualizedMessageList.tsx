@@ -110,7 +110,7 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
               message?.senderType === "system" && "bg-purple-100",
               (message?.senderType === "operator" || message?.senderType === "agent") &&
                 "bg-[var(--fl-color-info-subtle)]",
-              (message?.senderType === "customer" || message?.senderType === "visitor") && "bg-gray-100"
+              (message?.senderType === "customer" || message?.senderType === "visitor") && "bg-[var(--fl-color-surface)]"
             )}
           >
             {getMessageIcon(message?.senderType || "customer")}
@@ -139,7 +139,7 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
             {/* AI Metadata */}
             {message?.metadata && "ragUsed" in message.metadata && message.metadata.ragUsed && (
               <div className="mt-2 border-t border-white/20 pt-2">
-                <div className="flex items-center gap-1 text-xs opacity-75">
+                <div className="flex items-center gap-[var(--fl-spacing-1)] text-xs opacity-75">
                   <Zap className="h-3 w-3" />
                   AI Response
                   {message?.metadata &&
@@ -155,7 +155,7 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
           {/* Message Footer */}
           <div
             className={cn(
-              "text-xs mt-1 flex items-center gap-2 text-gray-500",
+              "text-xs mt-1 flex items-center gap-[var(--fl-spacing-2)] text-gray-500",
               (message?.senderType === "operator" || message?.senderType === "agent") && "justify-end"
             )}
           >
@@ -166,7 +166,7 @@ const MessageRow = ({ index, style, data }: MessageRowProps) => {
 
           {/* Reaction Buttons */}
           {message?.senderType === "system" && (
-            <div className="mt-2 flex gap-1">
+            <div className="mt-2 flex gap-[var(--fl-spacing-1)]">
               <Button variant="ghost" size="sm" className="h-6 px-2">
                 <ThumbsUp className="h-3 w-3" />
               </Button>

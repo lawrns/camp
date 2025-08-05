@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { File, Paperclip, X } from "@phosphor-icons/react";
+import { File, Paperclip, X } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { AttachmentFile, ComposerPluginProps } from "../types";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Warning as AlertTriangle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle } from "lucide-react";
 import { WidgetSettingsForm } from "@/components/settings/WidgetSettingsForm";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Card, CardContent, CardHeader } from "@/components/unified-ui/components/Card";

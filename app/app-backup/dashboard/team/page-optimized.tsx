@@ -13,19 +13,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowSquareOut,
-  ChartBar as BarChart3,
-  Clock,
-  Fire as Flame,
-  ChatCircle as MessageCircle,
-  Sparkle as Sparkles,
-  Star,
-  Target,
-  User,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ArrowSquareOut, ChartBar as BarChart3, Clock, Flame as Flame, MessageCircle as MessageCircle, Sparkles as Sparkles, Star, Target, User, Users, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

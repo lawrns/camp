@@ -19,18 +19,7 @@ import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
 import { api } from "@/lib/trpc/provider";
 import { Icon } from "@/lib/ui/Icon";
 import { useOrganization } from "@/store/domains/organization";
-import {
-  Clock,
-  DotsThreeVertical,
-  Envelope,
-  Fire,
-  Lightning,
-  MagnifyingGlass,
-  Star,
-  TrendUp,
-  User,
-  Users,
-} from "@phosphor-icons/react";
+import { Clock, MoreVertical, Envelope, Flame, Zap, Search, Star, TrendUp, User, Users,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -370,7 +359,7 @@ export default function TeamManagementPage() {
         {/* Welcome Header with Fire Icon */}
         <div className="mb-12 text-center">
           <div className="mb-6 inline-flex items-center gap-4">
-            <Icon icon={Fire} size={47} className="flex-shrink-0 text-blue-600" />
+            <Icon icon={Flame} size={47} className="flex-shrink-0 text-blue-600" />
             <div className="text-left">
               <h1 className="text-4xl font-bold text-gray-900">
                 {getGreeting()}, {userName}!
@@ -390,7 +379,7 @@ export default function TeamManagementPage() {
               size="sm"
               className="border-status-info-light flex items-center gap-2 text-blue-600 hover:bg-[var(--fl-color-info-subtle)]"
             >
-              <Icon icon={Lightning} className="h-4 w-4" />
+              <Icon icon={Zap} className="h-4 w-4" />
               Back to Dashboard
             </Button>
           </div>
@@ -545,7 +534,7 @@ export default function TeamManagementPage() {
                   >
                     <Icon icon={Envelope} className="mr-2 h-5 w-5" />
                     View Conversations
-                    <Icon icon={DotsThreeVertical} className="ml-2 h-4 w-4" />
+                    <Icon icon={MoreVertical} className="ml-2 h-4 w-4" />
                   </Button>
 
                   <Button
@@ -553,7 +542,7 @@ export default function TeamManagementPage() {
                     className="border-status-info-light w-full text-blue-600 hover:bg-[var(--fl-color-info-subtle)]"
                     onClick={() => router.push("/dashboard/analytics")}
                   >
-                    <Icon icon={MagnifyingGlass} className="mr-2 h-5 w-5" />
+                    <Icon icon={Search} className="mr-2 h-5 w-5" />
                     View Analytics
                   </Button>
                 </div>

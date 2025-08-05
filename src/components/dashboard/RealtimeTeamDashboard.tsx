@@ -106,7 +106,7 @@ export function RealtimeTeamDashboard({ organizationId }: RealtimeTeamDashboardP
   if (teamError || queueError) {
     return (
       <div className="p-spacing-md bg-red-50 border border-[var(--fl-color-danger-muted)] rounded-ds-lg">
-        <p className="text-red-800">
+        <p className="text-[var(--fl-color-danger)]">
           Error loading dashboard: {teamError || queueError}
         </p>
         <Button onClick={handleRefresh} className="mt-2">
@@ -199,10 +199,10 @@ export function RealtimeTeamDashboard({ organizationId }: RealtimeTeamDashboardP
             <Zap className="h-5 w-5" />
             Assignment Queue
             {pendingCount > 0 && (
-              <Badge variant="secondary">{pendingCount} pending</Badge>
+              <Badge variant="secondary" className="rounded-full">{pendingCount} pending</Badge>
             )}
             {highPriorityCount > 0 && (
-              <Badge variant="destructive">{highPriorityCount} urgent</Badge>
+              <Badge variant="destructive" className="rounded-full">{highPriorityCount} urgent</Badge>
             )}
           </CardTitle>
         </CardHeader>
@@ -221,7 +221,7 @@ export function RealtimeTeamDashboard({ organizationId }: RealtimeTeamDashboardP
                       <Badge variant="outline" className={getPriorityColor(item.priority)}>
                         Priority {item.priority}
                       </Badge>
-                      <Badge variant="secondary">
+                      <Badge variant="secondary" className="rounded-full">
                         {item.type}
                       </Badge>
                       <span className="text-sm text-muted-foreground">
@@ -280,7 +280,7 @@ export function RealtimeTeamDashboard({ organizationId }: RealtimeTeamDashboardP
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{member.name}</p>
                   <div className="flex items-center gap-ds-2 mt-1">
-                    <Badge variant={getStatusBadgeVariant(member.status)} className="text-tiny">
+                    <Badge variant={getStatusBadgeVariant(member.status)} className="text-tiny rounded-full">
                       {member.status}
                     </Badge>
                     <span className="text-tiny text-muted-foreground">

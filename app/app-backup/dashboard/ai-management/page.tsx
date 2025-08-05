@@ -12,20 +12,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Brain,
-  CheckCircle,
-  Clock,
-  Eye,
-  Gear,
-  Lightning,
-  MagnifyingGlass,
-  Play,
-  Plus,
-  Robot,
-  TrendUp,
-  WarningCircle,
-} from "@phosphor-icons/react";
+import { Brain, CheckCircle, Clock, Eye, Settings, Zap, Search, Play, Plus, Bot, TrendUp, AlertCircle,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
@@ -157,7 +144,7 @@ export default function AIManagementPage() {
           </p>
         </div>
         <Button onClick={testUnifiedAI} className="flex items-center gap-2">
-          <Icon icon={Lightning} className="h-4 w-4" />
+          <Icon icon={Zap} className="h-4 w-4" />
           Test Unified AI
         </Button>
       </div>
@@ -235,7 +222,7 @@ export default function AIManagementPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Icon icon={MagnifyingGlass} className="h-5 w-5" />
+                  <Icon icon={Search} className="h-5 w-5" />
                   Performance Metrics
                 </CardTitle>
                 <CardDescription>Real-time AI system performance</CardDescription>
@@ -296,7 +283,7 @@ export default function AIManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Icon icon={Robot} className="h-5 w-5" />
+                <Icon icon={Bot} className="h-5 w-5" />
                 Human-like AI Pipeline
               </CardTitle>
               <CardDescription>Advanced AI that mimics human conversation patterns</CardDescription>
@@ -414,7 +401,7 @@ export default function AIManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Icon icon={MagnifyingGlass} className="h-5 w-5" />
+                <Icon icon={Search} className="h-5 w-5" />
                 Knowledge Base Management
               </CardTitle>
               <CardDescription>Monitor and manage your AI knowledge sources</CardDescription>
@@ -469,7 +456,7 @@ export default function AIManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Icon icon={WarningCircle} className="h-5 w-5" />
+                <Icon icon={AlertCircle} className="h-5 w-5" />
                 Escalation Management
               </CardTitle>
               <CardDescription>Configure when conversations should be escalated to human agents</CardDescription>
@@ -554,7 +541,7 @@ export default function AIManagementPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Icon icon={Gear} className="h-5 w-5" />
+                <Icon icon={Settings} className="h-5 w-5" />
                 AI System Configuration
               </CardTitle>
               <CardDescription>Configure your unified AI system settings</CardDescription>

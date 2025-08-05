@@ -13,16 +13,7 @@ import {
 } from "@/components/unified-ui/components/select";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  BookOpen,
-  CaretRight as ChevronRight,
-  Eye,
-  MagnifyingGlass as Search,
-  Sparkle as Sparkles,
-  Tag,
-  ThumbsDown,
-  ThumbsUp
-} from "@phosphor-icons/react";
+import { BookOpen, CaretRight as ChevronRight, Eye, Search as Search, Sparkles as Sparkles, Tag, ThumbsDown, ThumbsUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 interface FAQCategory {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Checks, Clock, Eye, Warning } from '@phosphor-icons/react';
+import { Check, Checks, Clock, Eye, AlertTriangle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -79,7 +79,7 @@ export function ReadReceiptIndicator({
         };
       case 'failed':
         return {
-          icon: Warning,
+          icon: AlertTriangle,
           color: 'text-red-500',
           label: 'Failed to send',
           animate: false,

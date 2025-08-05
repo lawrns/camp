@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Warning as AlertTriangle,
-  Brain,
-  CheckCircle,
-  Info,
-  TrendUp as TrendingUp,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Brain, CheckCircle, Info, TrendUp as TrendingUp, Zap as Zap,  } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 
 interface ConfidenceBreakdown {

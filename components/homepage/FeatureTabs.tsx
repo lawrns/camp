@@ -1,17 +1,7 @@
 "use client";
 
 import { Icon } from "@/lib/ui/Icon";
-import { 
-  ChatCircle, 
-  Robot, 
-  Lightning, 
-  ChartLine, 
-  Users, 
-  Shield, 
-  Globe, 
-  ArrowRight,
-  CheckCircle
-} from "@phosphor-icons/react";
+import { MessageCircle, Bot, Zap, ChartLine, Users, Shield, Globe, ArrowRight, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { memo, useState } from "react";
 
@@ -27,7 +17,7 @@ const features = [
       "Smart conversation routing",
       "Real-time collaboration"
     ],
-    icon: ChatCircle,
+    icon: MessageCircle,
   },
   {
     id: "ai-agents",
@@ -39,7 +29,7 @@ const features = [
       "Smart handoff detection",
       "24/7 availability"
     ],
-    icon: Robot,
+    icon: Bot,
   },
   {
     id: "real-time",
@@ -51,7 +41,7 @@ const features = [
       "Instant notifications",
       "Team performance insights"
     ],
-    icon: Lightning,
+    icon: Zap,
   },
   {
     id: "analytics",
@@ -79,7 +69,7 @@ const UnifiedInboxVisual = () => (
     <div className="space-y-3">
       <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
         <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-          <Icon icon={ChatCircle} className="w-4 h-4 text-white" />
+          <Icon icon={MessageCircle} className="w-4 h-4 text-white" />
         </div>
         <div className="flex-1">
           <div className="text-sm font-medium text-gray-900">Chat Support</div>
@@ -122,7 +112,7 @@ const AIAgentsVisual = () => (
     <div className="space-y-3">
       <div className="flex items-start gap-3">
         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-          <Icon icon={Robot} className="w-4 h-4 text-white" />
+          <Icon icon={Bot} className="w-4 h-4 text-white" />
         </div>
         <div className="bg-white rounded-lg p-3 shadow-sm max-w-xs">
           <p className="text-sm text-gray-800">Hi! I'm here to help you with any questions about our product.</p>
@@ -138,7 +128,7 @@ const AIAgentsVisual = () => (
       </div>
       <div className="flex items-start gap-3">
         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-          <Icon icon={Robot} className="w-4 h-4 text-white" />
+          <Icon icon={Bot} className="w-4 h-4 text-white" />
         </div>
         <div className="bg-white rounded-lg p-3 shadow-sm max-w-xs">
           <p className="text-sm text-gray-800">I can help with that! Let me connect you with a human agent who specializes in authentication issues.</p>

@@ -1,16 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Clock,
-  PencilSimple as Edit3,
-  ChatCircle as MessageSquare,
-  Plus,
-  FloppyDisk as Save,
-  Tag,
-  User,
-  X,
-} from "@phosphor-icons/react";
+import { Clock, PencilSimple as Edit3, MessageCircle as MessageSquare, Plus, FloppyDisk as Save, Tag, User, X,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

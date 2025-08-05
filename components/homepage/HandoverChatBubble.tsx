@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, Robot as Bot, User } from "@phosphor-icons/react";
+import { ArrowRight, Bot as Bot, User } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 
 // Simple chat bubble component for homepage demo

@@ -1,5 +1,5 @@
 import React from "react";
-import { Warning as AlertTriangle, Star, TrendUp as TrendingUp, Lightning as Zap } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Star, TrendUp as TrendingUp, Zap as Zap } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";

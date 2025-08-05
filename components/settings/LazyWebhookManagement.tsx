@@ -9,7 +9,7 @@
 
 import { lazy, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Spinner } from "@phosphor-icons/react";
+import { Spinner } from "lucide-react";
 
 // Lazy load the heavy WebhookManagement component
 const WebhookManagement = lazy(() => import("./WebhookManagement"));

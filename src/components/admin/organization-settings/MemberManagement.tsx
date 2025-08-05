@@ -9,7 +9,7 @@
 
 import * as React from "react";
 import { useState } from "react";
-import { Crown, Eye, Envelope, DotsThreeVertical, Shield, UserPlus, Users } from "@phosphor-icons/react";
+import { Crown, Eye, Envelope, MoreVertical, Shield, UserPlus, Users } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
@@ -250,7 +250,7 @@ export function MemberManagement({ members, onInvite, onUpdateRole, onRemoveMemb
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm">
-                        <DotsThreeVertical className="h-4 w-4" />
+                        <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

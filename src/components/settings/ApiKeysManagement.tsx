@@ -1,19 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Warning as AlertTriangle,
-  CheckCircle,
-  Clock,
-  Copy,
-  Key,
-  Spinner as Loader2,
-  DotsThree as MoreHorizontal,
-  Plus,
-  Shield,
-  Trash as Trash2,
-  XCircle,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, CheckCircle, Clock, Copy, Key, Spinner as Loader2, DotsThree as MoreHorizontal, Plus, Shield, Trash as Trash2, XCircle,  } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";

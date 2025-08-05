@@ -2,14 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  PaperPlaneTilt as Send, 
-  Smiley, 
-  Paperclip, 
-  Image as ImageIcon,
-  X,
-  Plus
-} from '@phosphor-icons/react';
+import { Send as Send, Smile, Paperclip, Image as ImageIcon, X, Plus } from "lucide-react";
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/unified-ui/components/tooltip';
 
@@ -254,7 +247,7 @@ export function WidgetComposer({
                     className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                     aria-label="Add emoji"
                   >
-                    <Smiley className="h-5 w-5" />
+                    <Smile className="h-5 w-5" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top" align="center">

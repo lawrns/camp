@@ -4,16 +4,7 @@ import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { useRealtime } from '@/hooks/useRealtime';
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { 
-  ChatCircle, 
-  CheckCircle, 
-  Clock, 
-  Star, 
-  Users, 
-  ChatCircle as MessageCircle,
-  UserCircle,
-  ArrowUp
-} from '@phosphor-icons/react';
+import { MessageCircle, CheckCircle, Clock, Star, Users, MessageCircle as MessageCircle, UserCircle, ArrowUp } from "lucide-react";
 import { useState, useEffect } from 'react';
 
 interface TeamActivity {
@@ -38,7 +29,7 @@ interface TeamActivityFeedProps {
 }
 
 const activityIcons = {
-  conversation_started: ChatCircle,
+  conversation_started: MessageCircle,
   message_sent: MessageCircle,
   conversation_resolved: CheckCircle,
   satisfaction_updated: Star,

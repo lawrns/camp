@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChartBar as BarChart3,
-  Globe,
-  Shield,
-  Sparkle as Sparkles,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartBar as BarChart3, Globe, Shield, Sparkles as Sparkles, Users, Zap as Zap,  } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 
 interface Feature {

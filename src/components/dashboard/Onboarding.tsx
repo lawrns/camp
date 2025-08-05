@@ -293,7 +293,7 @@ export function Onboarding({ isOpen = true, onClose, onComplete }: OnboardingPro
 
                 {/* Footer actions */}
                 <div className="mt-6 border-t border-white/30 pt-6">
-                  <Button variant="ghost" onClick={handleSkip} className="text-foreground w-full hover:text-gray-800">
+                  <Button variant="ghost" onClick={handleSkip} className="text-foreground w-full hover:text-[var(--fl-color-text)]">
                     Skip for now
                   </Button>
                 </div>
@@ -727,7 +727,7 @@ const KnowledgeDemo = React.memo(function KnowledgeDemo() {
               className="bg-background flex items-center justify-between rounded-ds-lg border border-[var(--fl-color-border)] p-spacing-sm"
             >
               <span className="text-sm font-medium">{result.title}</span>
-              <Badge variant="secondary" className="text-tiny">
+              <Badge variant="secondary" className="text-tiny rounded-full">
                 {result.relevance}% match
               </Badge>
             </OptimizedMotion.div>

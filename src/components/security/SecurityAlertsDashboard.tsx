@@ -2,19 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import {
-  Warning as AlertCircle,
-  Warning as AlertTriangle,
-  Prohibit as Ban,
-  CheckCircle,
-  Clock,
-  Eye,
-  Funnel as Filter,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  ShieldWarning as ShieldAlert,
-  XCircle,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, AlertTriangle as AlertTriangle, Prohibit as Ban, CheckCircle, Clock, Eye, Funnel as Filter, RefreshCw as RefreshCw, Search as Search, ShieldWarning as ShieldAlert, XCircle,  } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

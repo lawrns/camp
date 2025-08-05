@@ -6,17 +6,7 @@ import { Input } from "@/components/unified-ui/components/input";
 import { useCannedResponses } from "@/hooks/useCannedResponses";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  Clock,
-  Copy,
-  Hash,
-  ChatCircle as MessageCircle,
-  Plus,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Star,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Clock, Copy, Hash, MessageCircle as MessageCircle, Plus, Search as Search, Settings as Settings, Star, Zap as Zap,  } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // Types
@@ -46,12 +36,12 @@ interface CannedResponsesProps {
 // Real canned responses data is now fetched from API via useCannedResponses hook
 
 const CATEGORIES = [
-  { id: "all", name: "All", icon: MessageCircle, color: "bg-gray-100 text-gray-700" },
-  { id: "greeting", name: "Greetings", icon: MessageCircle, color: "bg-blue-100 text-blue-700" },
-  { id: "action", name: "Actions", icon: Zap, color: "bg-yellow-100 text-yellow-700" },
-  { id: "security", name: "Security", icon: Settings, color: "bg-red-100 text-red-700" },
+  { id: "all", name: "All", icon: MessageCircle, color: "bg-[var(--fl-color-surface)] text-gray-700" },
+  { id: "greeting", name: "Greetings", icon: MessageCircle, color: "bg-[var(--fl-color-primary-subtle)] text-blue-700" },
+  { id: "action", name: "Actions", icon: Zap, color: "bg-[var(--fl-color-warning-subtle)] text-yellow-700" },
+  { id: "security", name: "Security", icon: Settings, color: "bg-[var(--fl-color-danger-subtle)] text-red-700" },
   { id: "escalation", name: "Escalation", icon: Plus, color: "bg-purple-100 text-purple-700" },
-  { id: "follow-up", name: "Follow-up", icon: Clock, color: "bg-green-100 text-green-700" },
+  { id: "follow-up", name: "Follow-up", icon: Clock, color: "bg-[var(--fl-color-success-subtle)] text-green-700" },
   { id: "closing", name: "Closing", icon: MessageCircle, color: "bg-indigo-100 text-indigo-700" },
   { id: "technical", name: "Technical", icon: Settings, color: "bg-orange-100 text-orange-700" },
   { id: "billing", name: "Billing", icon: Hash, color: "bg-pink-100 text-pink-700" },
@@ -316,7 +306,7 @@ export function CannedResponses({
       </div>
 
       {/* Categories */}
-      <div className="flex gap-1 overflow-x-auto border-b border-[var(--fl-color-border-subtle)] p-spacing-sm">
+      <div className="flex gap-[var(--fl-spacing-1)] overflow-x-auto border-b border-[var(--fl-color-border-subtle)] p-spacing-sm">
         {CATEGORIES.map((category: unknown) => {
           const Icon = category.icon;
           const isSelected = selectedCategory === category.id;
@@ -357,7 +347,7 @@ export function CannedResponses({
                   <div className="mb-1 flex items-center gap-ds-2">
                     <span className="truncate text-sm font-medium text-gray-900">{response.title}</span>
                     {response.shortcut && (
-                      <Badge variant="outline" className="px-1 py-0 text-tiny">
+                      <Badge variant="outline" className="px-1 py-0 text-tiny rounded-full">
                         {response.shortcut}
                       </Badge>
                     )}
@@ -366,7 +356,7 @@ export function CannedResponses({
                   <div className="flex items-center gap-ds-2 text-tiny text-gray-400">
                     <span>{response.usage_count} uses</span>
                     {response.tags.slice(0, 2).map((tag: unknown) => (
-                      <Badge key={tag} variant="secondary" className="px-1 py-0 text-tiny">
+                      <Badge key={tag} variant="secondary" className="px-1 py-0 text-tiny rounded-full">
                         {tag}
                       </Badge>
                     ))}
@@ -374,7 +364,7 @@ export function CannedResponses({
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <button onClick={(e) => toggleFavorite(response.id, e)} className="rounded spacing-1 hover:bg-gray-200">
                     <Icon
                       icon={Star}

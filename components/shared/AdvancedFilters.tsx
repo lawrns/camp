@@ -2,20 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import {
-  Warning as AlertCircle,
-  Robot as Bot,
-  Calendar as CalendarIcon,
-  Clock,
-  Funnel as Filter,
-  ChatCircle as MessageSquare,
-  MagnifyingGlass as Search,
-  Star,
-  Tag,
-  TrendUp as TrendingUp,
-  User,
-  X,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Bot as Bot, Calendar as CalendarIcon, Clock, Funnel as Filter, MessageCircle as MessageSquare, Search as Search, Star, Tag, TrendUp as TrendingUp, User, X,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Calendar } from "@/components/unified-ui/components/calendar";

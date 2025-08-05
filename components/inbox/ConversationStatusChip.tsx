@@ -18,7 +18,7 @@ const statusMap: Record<ConversationStatus, StatusConfig> = {
   human: {
     label: "Human",
     icon: "User",
-    bg: "bg-blue-100 text-blue-700",
+    bg: "bg-[var(--fl-color-primary-subtle)] text-blue-700",
     dark: "dark:bg-blue-900/30 dark:text-blue-300",
   },
   ai: {
@@ -30,7 +30,7 @@ const statusMap: Record<ConversationStatus, StatusConfig> = {
   open: {
     label: "Open",
     icon: "Circle",
-    bg: "bg-yellow-100 text-yellow-700",
+    bg: "bg-[var(--fl-color-warning-subtle)] text-yellow-700",
     dark: "dark:bg-yellow-900/30 dark:text-yellow-300",
   },
   closed: {
@@ -78,7 +78,7 @@ export function ConversationStatusChip({ status, className }: ConversationStatus
     <Badge
       variant="secondary"
       className={cn(
-        "text-typography-xs inline-flex items-center gap-1 font-medium",
+        "text-typography-xs inline-flex items-center gap-[var(--fl-spacing-1)] font-medium",
         "transition-all duration-150 ease-out",
         config.bg,
         config.dark,

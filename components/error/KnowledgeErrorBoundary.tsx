@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Warning as AlertTriangle, BookOpen, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, BookOpen, RefreshCw as RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";

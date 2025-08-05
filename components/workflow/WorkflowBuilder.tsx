@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Play, Plus, FloppyDisk as Save, Gear as Settings, X } from "@phosphor-icons/react";
+import { Play, Plus, FloppyDisk as Save, Settings as Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";

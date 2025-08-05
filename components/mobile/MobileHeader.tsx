@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Bell, List as Menu, MagnifyingGlass as Search } from "@phosphor-icons/react";
+import { ArrowLeft, Bell, List as Menu, Search as Search } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

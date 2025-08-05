@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Warning as AlertTriangle, Database, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Database, RefreshCw as RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";

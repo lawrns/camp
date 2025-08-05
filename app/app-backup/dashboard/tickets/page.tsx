@@ -28,21 +28,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";
 import { apiGet, apiPatch, handleApiResponse } from "@/lib/utils/api-client";
-import {
-  Archive,
-  CalendarBlank,
-  CaretDown,
-  CheckCircle,
-  Clock,
-  DotsThreeVertical,
-  FunnelSimple,
-  MagnifyingGlass,
-  Plus,
-  Ticket,
-  User,
-  Warning,
-  WarningCircle,
-} from "@phosphor-icons/react";
+import { Archive, Calendar, ChevronDown, CheckCircle, Clock, MoreVertical, Filter, Search, Plus, Ticket, User, AlertTriangle, AlertCircle,  } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -84,7 +70,7 @@ interface AssignmentResponse {
 
 const statusOptions = [
   { value: "open", label: "Open", color: "bg-blue-100 text-blue-800", icon: Clock },
-  { value: "in_progress", label: "In Progress", color: "bg-orange-100 text-orange-800", icon: WarningCircle },
+  { value: "in_progress", label: "In Progress", color: "bg-orange-100 text-orange-800", icon: AlertCircle },
   { value: "waiting", label: "Waiting", color: "bg-purple-100 text-purple-800", icon: User },
   { value: "resolved", label: "Resolved", color: "bg-green-100 text-green-800", icon: CheckCircle },
   { value: "closed", label: "Closed", color: "bg-gray-100 text-gray-800", icon: Archive },
@@ -291,7 +277,7 @@ export default function DashboardTicketsPage() {
 
         <Card>
           <CardContent className="spacing-4 text-center">
-            <Icon icon={WarningCircle} className="mx-auto mb-2 h-8 w-8 text-orange-600" />
+            <Icon icon={AlertCircle} className="mx-auto mb-2 h-8 w-8 text-orange-600" />
             <div className="text-2xl font-bold">{ticketStats.inProgress}</div>
             <div className="text-sm text-[var(--fl-color-text-muted)]">In Progress</div>
           </CardContent>
@@ -307,7 +293,7 @@ export default function DashboardTicketsPage() {
 
         <Card>
           <CardContent className="spacing-4 text-center">
-            <Icon icon={Warning} className="mx-auto mb-2 h-8 w-8 text-red-600" />
+            <Icon icon={AlertTriangle} className="mx-auto mb-2 h-8 w-8 text-red-600" />
             <div className="text-2xl font-bold">{ticketStats.overdue}</div>
             <div className="text-sm text-[var(--fl-color-text-muted)]">Overdue</div>
           </CardContent>
@@ -321,7 +307,7 @@ export default function DashboardTicketsPage() {
             <div className="min-w-[200px] flex-1">
               <div className="relative">
                 <Icon
-                  icon={MagnifyingGlass}
+                  icon={Search}
                   className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
                 />
                 <Input
@@ -361,7 +347,7 @@ export default function DashboardTicketsPage() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline" size="sm" leftIcon={<Icon icon={FunnelSimple} className="h-4 w-4" />}>
+            <Button variant="outline" size="sm" leftIcon={<Icon icon={Filter} className="h-4 w-4" />}>
               More Filters
             </Button>
           </div>
@@ -448,19 +434,19 @@ export default function DashboardTicketsPage() {
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger className="rounded px-2 py-1 hover:bg-gray-100">
-                              <Icon icon={DotsThreeVertical} className="h-4 w-4" />
+                              <Icon icon={MoreVertical} className="h-4 w-4" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="right-0">
                               <DropdownMenuItem onClick={() => router.push(`/dashboard/tickets/${ticket.id}`)}>
-                                <Icon icon={MagnifyingGlass} className="mr-2 h-4 w-4" />
+                                <Icon icon={Search} className="mr-2 h-4 w-4" />
                                 View Details
                               </DropdownMenuItem>
                               <DropdownMenuItem>
-                                <Icon icon={CaretDown} className="mr-2 h-4 w-4" />
+                                <Icon icon={ChevronDown} className="mr-2 h-4 w-4" />
                                 Edit Ticket
                               </DropdownMenuItem>
                               <DropdownMenuItem>
-                                <Icon icon={CalendarBlank} className="mr-2 h-4 w-4" />
+                                <Icon icon={Calendar} className="mr-2 h-4 w-4" />
                                 View Conversation
                               </DropdownMenuItem>
                               {!ticket.assigneeId && (

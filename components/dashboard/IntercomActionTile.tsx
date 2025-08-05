@@ -50,7 +50,7 @@ const colorConfig = {
     bg: 'bg-gradient-to-br from-gray-50 to-slate-100 hover:from-gray-100 hover:to-slate-200',
     border: 'border-gray-200/50 hover:border-gray-300/70',
     icon: 'text-gray-600 group-hover:text-gray-700',
-    iconBg: 'bg-gray-100 group-hover:bg-gray-200',
+    iconBg: 'bg-[var(--fl-color-surface)] group-hover:bg-gray-200',
     text: 'text-gray-900',
     shadow: 'hover:shadow-gray-200/50'
   }

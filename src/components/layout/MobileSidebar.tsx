@@ -2,23 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  House,
-  Tray,
-  Ticket,
-  BookOpen,
-  ChartBar,
-  Lightbulb,
-  Gear,
-  Users,
-  Plug,
-  Bell,
-  Question,
-  User,
-  Fire,
-  List as Menu,
-  X,
-} from "@phosphor-icons/react";
+import { House, Inbox, Ticket, BookOpen, ChartBar, Lightbulb, Settings, Users, Plug, Bell, HelpCircle, User, Flame, List as Menu, X,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/unified-ui/components/sheet";
 import { Icon } from "@/lib/ui/Icon";
@@ -42,14 +26,14 @@ interface NavItem {
 const navigationItems: NavItem[] = [
   // Primary Navigation
   { id: "dashboard", label: "Dashboard", icon: House, href: "/dashboard", section: "primary" },
-  { id: "inbox", label: "Inbox", icon: Tray, href: "/inbox", section: "primary" },
+  { id: "inbox", label: "Inbox", icon: Inbox, href: "/inbox", section: "primary" },
   { id: "tickets", label: "Tickets", icon: Ticket, href: "/tickets", section: "primary" },
   { id: "knowledge", label: "Knowledge", icon: BookOpen, href: "/knowledge", section: "primary" },
   { id: "analytics", label: "Analytics", icon: ChartBar, href: "/analytics", section: "primary" },
   { id: "ai-insights", label: "AI Insights", icon: Lightbulb, href: "/ai-insights", section: "primary" },
 
   // Secondary Navigation
-  { id: "settings", label: "Settings", icon: Gear, href: "/settings", section: "secondary" },
+  { id: "settings", label: "Settings", icon: Settings, href: "/settings", section: "secondary" },
   { id: "team", label: "Team", icon: Users, href: "/team", section: "secondary" },
   { id: "integrations", label: "Integrations", icon: Plug, href: "/integrations", section: "secondary" },
 ];

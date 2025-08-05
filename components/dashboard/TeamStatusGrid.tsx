@@ -4,15 +4,7 @@ import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { Badge } from '@/components/unified-ui/components/Badge';
 import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { 
-  UserCircle, 
-  Clock, 
-  CheckCircle, 
-  Star, 
-  ChatCircle,
-  Circle,
-  XCircle
-} from '@phosphor-icons/react';
+import { UserCircle, Clock, CheckCircle, Star, MessageCircle, Circle, XCircle } from "lucide-react";
 
 interface TeamStatusGridProps {
   organizationId: string;
@@ -110,7 +102,7 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
             <UserCircle className="w-5 h-5" />
             Team Status
           </CardTitle>
@@ -135,7 +127,7 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
           <UserCircle className="w-5 h-5" />
           Team Status
         </CardTitle>
@@ -181,11 +173,11 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-[var(--fl-spacing-2)] mb-1">
                       <h4 className="font-medium text-sm text-gray-900 truncate">
                         {member.name}
                       </h4>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs rounded-full">
                         {member.role}
                       </Badge>
                     </div>
@@ -222,24 +214,24 @@ export function TeamStatusGrid({ organizationId }: TeamStatusGridProps) {
                   </div>
 
                   {/* Performance metrics */}
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="flex items-center gap-1">
+                  <div className="grid grid-cols-2 gap-[var(--fl-spacing-2)] text-xs">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)]">
                       <Clock className="w-3 h-3 text-blue-600" />
                       <span className="text-gray-600">Avg response:</span>
                       <span className="font-medium">{member.avgResponseTime}s</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)]">
                       <Star className="w-3 h-3 text-yellow-600" />
                       <span className="text-gray-600">Satisfaction:</span>
                       <span className="font-medium">{member.satisfactionScore.toFixed(1)}/5</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)]">
                       <CheckCircle className="w-3 h-3 text-green-600" />
                       <span className="text-gray-600">Resolved today:</span>
                       <span className="font-medium">{member.resolvedToday}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <ChatCircle className="w-3 h-3 text-purple-600" />
+                    <div className="flex items-center gap-[var(--fl-spacing-1)]">
+                      <MessageCircle className="w-3 h-3 text-purple-600" />
                       <span className="text-gray-600">Workload:</span>
                       <span className="font-medium">{workloadPercentage.toFixed(0)}%</span>
                     </div>

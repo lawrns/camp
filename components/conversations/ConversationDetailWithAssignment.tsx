@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Clock, ChatCircle as MessageSquare, Tag, UserCircle } from "@phosphor-icons/react";
+import { Clock, MessageCircle as MessageSquare, Tag, UserCircle } from "lucide-react";
 import { Avatar } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

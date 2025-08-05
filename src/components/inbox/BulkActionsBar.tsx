@@ -2,18 +2,7 @@
 
 import React, { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Archive,
-  ArrowRight,
-  CheckCircle,
-  CaretDown as ChevronDown,
-  Envelope as Mail,
-  Tag,
-  Trash as Trash2,
-  UserPlus,
-  X,
-  XCircle,
-} from "@phosphor-icons/react";
+import { Archive, ArrowRight, CheckCircle, ChevronDown as ChevronDown, Envelope as Mail, Tag, Trash as Trash2, UserPlus, X, XCircle,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -69,7 +58,7 @@ export function BulkActionsBar({ selectedCount, onClearSelection, onBulkAction, 
         >
           {/* Selection Count */}
           <div className="flex items-center gap-ds-2">
-            <Badge variant="secondary" className="text-status-info-dark bg-[var(--fl-color-info-subtle)]">
+            <Badge variant="secondary" className="text-status-info-dark bg-[var(--fl-color-info-subtle)] rounded-full">
               {selectedCount} selected
             </Badge>
             <Button variant="ghost" size="sm" onClick={onClearSelection} className="h-8 w-8 p-0">

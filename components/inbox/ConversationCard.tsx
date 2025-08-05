@@ -259,9 +259,9 @@ export const ConversationCard = memo(function ConversationCard({
             {/* Content */}
             <div className="flex-1 min-w-0">
               {/* Top row: Name, time, actions */}
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start justify-between gap-[var(--fl-spacing-2)]">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[var(--fl-spacing-2)]">
                     <h4 className="truncate text-sm font-medium text-gray-900">
                       {customerDisplay.name}
                     </h4>
@@ -276,7 +276,7 @@ export const ConversationCard = memo(function ConversationCard({
 
                 {/* Quick actions */}
                 {isHovered && !isBulkSelectMode && (
-                  <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  <div className="flex items-center gap-[var(--fl-spacing-1)] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                     <Button
                       size="sm"
                       variant="ghost"
@@ -319,28 +319,28 @@ export const ConversationCard = memo(function ConversationCard({
               </p>
 
               {/* Bottom row: Badges and metadata */}
-              <div className="mt-2 flex items-center justify-between gap-2">
+              <div className="mt-2 flex items-center justify-between gap-[var(--fl-spacing-2)]">
                 {/* Left side: Badges */}
-                <div className="flex flex-wrap items-center gap-1">
+                <div className="flex flex-wrap items-center gap-[var(--fl-spacing-1)]">
                   {/* Priority badge */}
-                  <Badge variant={priorityVariant} className="text-xs">
+                  <Badge variant={priorityVariant} className="text-xs rounded-full">
                     {conversation.priority}
                   </Badge>
 
                   {/* Status badge */}
                   {conversation.status === "assigned" ? (
-                    <Badge variant="default" className="bg-blue-500 text-white text-xs">
+                    <Badge variant="default" className="bg-blue-500 text-white text-xs rounded-full">
                       Human
                     </Badge>
                   ) : (
-                    <Badge variant="default" className="bg-green-500 text-white text-xs">
+                    <Badge variant="default" className="bg-green-500 text-white text-xs rounded-full">
                       Open
                     </Badge>
                   )}
 
                   {/* Escalation risk */}
                   {conversation.escalationRisk === "high" && (
-                    <Badge variant="destructive" className="flex items-center gap-1 text-xs">
+                    <Badge variant="destructive" className="flex items-center gap-[var(--fl-spacing-1)] text-xs rounded-full">
                       <TrendingUp className="h-2.5 w-2.5" aria-hidden="true" />
                       Risk
                     </Badge>
@@ -348,7 +348,7 @@ export const ConversationCard = memo(function ConversationCard({
 
                   {/* Tags (limited to 2) */}
                   {conversation.tags.slice(0, 2).map((tag: string) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
+                    <Badge key={tag} variant="outline" className="text-xs rounded-full">
                       {tag}
                     </Badge>
                   ))}
@@ -365,7 +365,7 @@ export const ConversationCard = memo(function ConversationCard({
 
                   {/* Response time */}
                   {conversation.responseTime && (
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)] text-xs text-gray-500">
                       <Clock className="h-3 w-3" aria-hidden="true" />
                       <span>{responseTimeDisplay}</span>
                     </div>
@@ -401,7 +401,7 @@ export const ConversationCard = memo(function ConversationCard({
                 )}
 
                 {/* View conversation hint */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <span>View conversation</span>
                   <ChevronRight className="h-3 w-3" aria-hidden="true" />
                 </div>

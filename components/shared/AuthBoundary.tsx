@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Spinner as Loader2 } from "@phosphor-icons/react";
+import { Spinner as Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 

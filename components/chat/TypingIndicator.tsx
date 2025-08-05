@@ -13,7 +13,7 @@ import { Badge } from "@/components/unified-ui/components/Badge";
 import { channelManager } from "@/lib/realtime/ChannelManager";
 import { Icon } from "@/lib/ui/Icon";
 import { useTypingUsers } from "@/store/memoized-selectors-improved";
-import { ChatCircle as MessageCircle } from "@phosphor-icons/react";
+import { MessageCircle as MessageCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 interface TypingUser {

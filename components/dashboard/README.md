@@ -154,12 +154,12 @@ import { MetricCard } from './StandardizedDashboard';
 ### From `MetricCard.tsx`
 Replace:
 ```tsx
-import { MetricCard } from './MetricCard';
+import { MetricCard } from './StandardizedDashboard';
 
 <MetricCard
   title="Response Time"
   value="2.5s"
-  status="success"
+  variant="success"
 />
 ```
 

@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-u
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { useMemoryMonitor } from "@/hooks/useMemoryMonitor";
 import { Icon } from "@/lib/ui/Icon";
-import { ChartLine as Activity, Warning as AlertTriangle } from "@phosphor-icons/react";
+import { ChartLine as Activity, AlertTriangle as AlertTriangle } from "lucide-react";
 import React from "react";
 
 interface MemoryMonitorProps {

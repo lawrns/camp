@@ -14,21 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { useAuth } from "@/hooks/useAuth";
 import { useMemoryLeakDetector } from "@/hooks/useMemoryMonitor";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Activity,
-  ArrowSquareOut,
-  ChartBar as BarChart3,
-  Robot as Bot,
-  CheckCircle,
-  Fire as Flame,
-  ChatCircle as MessageSquare,
-  Sparkle as Sparkles,
-  Star,
-  Target,
-  TrendUp as TrendingUp,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Activity, ArrowSquareOut, ChartBar as BarChart3, Bot as Bot, CheckCircle, Flame as Flame, MessageCircle as MessageSquare, Sparkles as Sparkles, Star, Target, TrendUp as TrendingUp, Users, Zap as Zap,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -165,7 +151,7 @@ const AnalyticsContent = () => {
       },
       performance: {
         title: "Performance Monitoring",
-        icon: Lightning,
+        icon: Zap,
         component: <LazyPerformanceMonitoringDashboard organizationId={organizationId || ""} />,
       },
     }),

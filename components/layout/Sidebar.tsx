@@ -4,20 +4,7 @@
 import { BrandLogo } from "@/components/unified-ui/components/BrandLogo";
 import { FlameGradient } from "@/components/unified-ui/components/flame-gradient";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  ChartBar as BarChart3,
-  Bell,
-  BookOpen,
-  Brain,
-  Question as HelpCircle,
-  House as Home,
-  Tray as Inbox,
-  Gear as Settings,
-  Ticket,
-  User,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartBar as BarChart3, Bell, BookOpen, Brain, HelpCircle as HelpCircle, House as Home, Inbox, Settings as Settings, Ticket, User, Users, Zap as Zap,  } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";

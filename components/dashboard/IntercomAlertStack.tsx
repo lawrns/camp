@@ -3,13 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
 import { Badge } from '@/components/unified-ui/components/Badge';
 import { Button } from '@/components/unified-ui/components/Button';
-import {
-  Warning,
-  Info,
-  Sparkle,
-  X,
-  ArrowRight
-} from '@phosphor-icons/react';
+import { AlertTriangle, Info, Sparkles, X, ArrowRight } from "lucide-react";
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -41,12 +35,12 @@ interface IntercomAlertStackProps {
 
 const alertConfig = {
   high: {
-    icon: Warning,
+    icon: AlertTriangle,
     color: 'text-red-600',
     bg: 'bg-gradient-to-br from-red-50 to-rose-100',
     border: 'border-red-200/50',
-    iconBg: 'bg-red-100',
-    badge: 'bg-red-100 text-red-700'
+    iconBg: 'bg-[var(--fl-color-danger-subtle)]',
+    badge: 'bg-[var(--fl-color-danger-subtle)] text-red-700'
   },
   medium: {
     icon: Info,
@@ -57,7 +51,7 @@ const alertConfig = {
     badge: 'bg-amber-100 text-amber-700'
   },
   positive: {
-    icon: Sparkle,
+    icon: Sparkles,
     color: 'text-blue-600',
     bg: 'bg-gradient-to-br from-blue-50 to-blue-100',
     border: 'border-blue-200/50',
@@ -146,7 +140,7 @@ function AlertCard({
           {/* Content */}
           <div className="flex-1 min-w-0 space-y-2">
             {/* Header */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               <h4 className="font-semibold text-sm text-gray-900 leading-tight">
                 {alert.title}
               </h4>
@@ -168,8 +162,8 @@ function AlertCard({
               <button
                 onClick={handleAction}
                 className={cn(
-                  "inline-flex items-center gap-1 text-sm font-medium transition-all duration-200",
-                  "hover:gap-2 focus:outline-none focus:ring-2 focus:ring-offset-1 rounded-md px-1 py-0.5",
+                  "inline-flex items-center gap-[var(--fl-spacing-1)] text-sm font-medium transition-all duration-200",
+                  "hover:gap-[var(--fl-spacing-2)] focus:outline-none focus:ring-2 focus:ring-offset-1 rounded-md px-1 py-0.5",
                   config.color,
                   config.color.replace('text-', 'focus:ring-'),
                   "hover:underline"
@@ -218,11 +212,11 @@ export function IntercomAlertStack({
     <Card className={cn("glass-card overflow-hidden", className)}>
       <CardHeader className="border-b border-gray-100/50">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-gray-900 font-heading">
-            <Sparkle className="w-5 h-5 text-purple-600" />
+          <CardTitle className="flex items-center gap-[var(--fl-spacing-2)] text-gray-900 font-heading">
+            <Sparkles className="w-5 h-5 text-purple-600" />
             {title}
             {sortedAlerts.length > 0 && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs rounded-full">
                 {sortedAlerts.length}
               </Badge>
             )}
@@ -230,7 +224,7 @@ export function IntercomAlertStack({
           
           {/* Header actions */}
           {actions.length > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               {actions.map((action, index) => (
                 <Button
                   key={index}
@@ -251,7 +245,7 @@ export function IntercomAlertStack({
         {sortedAlerts.length === 0 ? (
           <div className="text-center py-8">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center">
-              <Sparkle className="w-8 h-8 text-purple-500" />
+              <Sparkles className="w-8 h-8 text-purple-500" />
             </div>
             <p className="text-sm text-gray-500 leading-relaxed">
               No insights available at the moment.

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Briefcase, Headphones, Sparkle as Sparkles, Storefront as Store } from "@phosphor-icons/react";
+import { Briefcase, Headphones, Sparkles as Sparkles, Storefront as Store } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

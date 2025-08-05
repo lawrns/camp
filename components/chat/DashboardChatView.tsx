@@ -9,15 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatDistanceToNow } from 'date-fns';
-import {
-  PaperPlaneTilt as Send,
-  Robot as Bot,
-  User,
-  Clock,
-  CheckCircle,
-  Warning as AlertCircle,
-  DotsThree as MoreHorizontal
-} from '@phosphor-icons/react';
+import { Send as Send, Bot as Bot, User, Clock, CheckCircle, AlertTriangle as AlertCircle, DotsThree as MoreHorizontal } from "lucide-react";
 import { SmartRepliesHeaderIcon } from './SmartRepliesHeaderIcon';
 
 interface Message {

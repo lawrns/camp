@@ -1,7 +1,7 @@
 // CustomerSidebar component with accordion-based design
 
 import { useAuth } from "@/hooks/useAuth";
-import { Calendar, Clock, Envelope, Flag, MapPin, Phone, Star, Tag } from "@phosphor-icons/react";
+import { Calendar, Clock, Mail, Flag, MapPin, Phone, Star, Tag } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import { useAddCustomerNote, useCustomerData } from "../hooks/useCustomerData";
@@ -217,7 +217,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 {/* Contact Information */}
                 <div className="space-y-3" data-testid="customer-contact-info">
                   <div className="flex items-center gap-3" data-testid="customer-email-row">
-                    <Envelope className="h-4 w-4 text-gray-400" data-testid="customer-email-icon" />
+                    <Mail className="h-4 w-4 text-gray-400" data-testid="customer-email-icon" />
                     <span className="text-sm text-gray-900" data-testid="customer-email-text">
                       {customerData?.email || conversation.customerEmail}
                     </span>

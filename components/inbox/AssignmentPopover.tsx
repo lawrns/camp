@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Robot as Bot, CheckCircle as Check, Spinner as Loader2, UserPlus } from "@phosphor-icons/react";
+import { Bot as Bot, CheckCircle as Check, Spinner as Loader2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Button } from "@/components/ui/button";

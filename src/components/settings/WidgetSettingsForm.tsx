@@ -2,18 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Warning as AlertTriangle,
-  Clock,
-  Code,
-  Eye,
-  ChatCircle as MessageSquare,
-  Monitor,
-  Palette,
-  FloppyDisk as Save,
-  Gear as Settings,
-  DeviceMobile as Smartphone,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Clock, Code, Eye, MessageCircle as MessageSquare, Monitor, Palette, FloppyDisk as Save, Settings as Settings, DeviceMobile as Smartphone,  } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";

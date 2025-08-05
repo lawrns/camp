@@ -1,26 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Activity,
-  Warning as AlertTriangle,
-  CheckCircle,
-  Clock,
-  Download,
-  Funnel as Filter,
-  Envelope as Mail,
-  DotsThree as MoreHorizontal,
-  Pencil,
-  Phone,
-  Prohibit,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Shield,
-  Trash as Trash2,
-  Upload,
-  UserPlus,
-  Users,
-} from "@phosphor-icons/react";
+import { Activity, AlertTriangle as AlertTriangle, CheckCircle, Clock, Download, Funnel as Filter, Envelope as Mail, DotsThree as MoreHorizontal, Pencil, Phone, Prohibit, Search as Search, Settings as Settings, Shield, Trash as Trash2, Upload, UserPlus, Users,  } from "lucide-react";
 import { Avatar } from "@/components/flame-ui/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

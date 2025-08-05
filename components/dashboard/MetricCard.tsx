@@ -1,3 +1,26 @@
+/**
+ * @deprecated This component has been deprecated in favor of StandardizedDashboard.MetricCard
+ * 
+ * Migration guide:
+ * - Replace import: import { MetricCard } from './StandardizedDashboard'
+ * - Change prop: status="success" → variant="success"
+ * - Use preset components from StandardizedDashboard for common use cases
+ * 
+ * This file will be removed in the next major version.
+ */
+
+/**
+ * @deprecated This component has been deprecated in favor of StandardizedDashboard.MetricCard
+ *
+ * Migration guide:
+ * - Replace import: import { MetricCard } from './StandardizedDashboard'
+ * - Change prop: status="success" → variant="success"
+ * - Use preset components from StandardizedDashboard for common use cases:
+ *   - ResponseTimeMetric, SatisfactionMetric, HandoffRateMetric, ResolutionRateMetric
+ *
+ * This file will be removed in the next major version.
+ */
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

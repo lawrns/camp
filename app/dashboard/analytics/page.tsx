@@ -249,15 +249,15 @@ export default function AnalyticsPage() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Chat Widget</span>
-                        <Badge variant="secondary">65%</Badge>
+                        <Badge variant="secondary" className="rounded-full">65%</Badge>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Email</span>
-                        <Badge variant="secondary">25%</Badge>
+                        <Badge variant="secondary" className="rounded-full">25%</Badge>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">API</span>
-                        <Badge variant="secondary">10%</Badge>
+                        <Badge variant="secondary" className="rounded-full">10%</Badge>
                       </div>
                     </div>
                   </div>
@@ -266,15 +266,15 @@ export default function AnalyticsPage() {
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Resolved</span>
-                        <Badge variant="default">78%</Badge>
+                        <Badge variant="default" className="rounded-full">78%</Badge>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Active</span>
-                        <Badge variant="secondary">15%</Badge>
+                        <Badge variant="secondary" className="rounded-full">15%</Badge>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Pending</span>
-                        <Badge variant="outline">7%</Badge>
+                        <Badge variant="outline" className="rounded-full">7%</Badge>
                       </div>
                     </div>
                   </div>

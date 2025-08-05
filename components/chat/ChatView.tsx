@@ -2,16 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertTriangle,
-  DotsThreeVertical as MoreVertical,
-  Paperclip as PaperclipIcon,
-  PaperPlaneTilt as Send,
-  Smiley as SmileIcon,
-  Ticket,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, MoreVertical as MoreVertical, Paperclip as PaperclipIcon, Send as Send, Smile as SmileIcon, Ticket, WifiHigh, WifiSlash as WifiHighOff,  } from "lucide-react";
 import { Separator } from "@/components/unified-ui/components/Separator";
 import {
   subscribeToMessages,

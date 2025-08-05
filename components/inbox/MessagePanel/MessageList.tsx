@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CaretDown as ChevronDown, ChatCircle as MessageCircle } from "@phosphor-icons/react";
+import { ChevronDown as ChevronDown, MessageCircle as MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Clock,
-  ChatCircle as MessageSquare,
-  ArrowsClockwise as RefreshCw,
-  TrendUp as TrendingUp,
-  Users,
-} from "@phosphor-icons/react";
+import { Clock, MessageCircle as MessageSquare, RefreshCw as RefreshCw, TrendUp as TrendingUp, Users,  } from "lucide-react";
 import {
   Bar,
   BarChart,

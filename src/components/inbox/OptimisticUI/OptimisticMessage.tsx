@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Warning as AlertCircle,
-  CheckCircle as Check,
-  Clock,
-  ArrowsClockwise as RefreshCw,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle as Check, Clock, RefreshCw as RefreshCw,  } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { optimisticUtils, type OptimisticMessage } from "@/store/optimistic-updates";

@@ -7,7 +7,7 @@
 
 import React, { useCallback, useRef, useState } from "react";
 import { motion, PanInfo, useAnimation, useDragControls, useMotionValue, useTransform } from "framer-motion";
-import { ArrowsOut as Maximize2, ArrowsOutCardinal as Move, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { ArrowsOut as Maximize2, ArrowsOutCardinal as Move, RefreshCw as RefreshCw } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

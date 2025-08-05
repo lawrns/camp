@@ -1,7 +1,7 @@
 // ShortcutsModal component for keyboard shortcuts
 
 import * as React from "react";
-import { Command, Keyboard, X } from "@phosphor-icons/react";
+import { Command, Keyboard, X } from "lucide-react";
 import { keyboardShortcuts } from "../constants/messageTemplates";
 
 interface ShortcutsModalProps {

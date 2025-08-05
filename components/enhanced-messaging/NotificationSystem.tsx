@@ -2,17 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  X, 
-  Bell, 
-  BellSlash, 
-  ChatCircle, 
-  User, 
-  Warning, 
-  CheckCircle, 
-  Info,
-  ArrowRight
-} from '@phosphor-icons/react';
+import { X, Bell, BellSlash, MessageCircle, User, AlertTriangle, CheckCircle, Info, ArrowRight } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
@@ -190,7 +180,7 @@ export function NotificationSystem({
     switch (type) {
       case 'message':
         return {
-          icon: ChatCircle,
+          icon: MessageCircle,
           bgColor: 'bg-blue-50 border-blue-200',
           iconColor: 'text-blue-600',
           titleColor: 'text-blue-900',
@@ -204,14 +194,14 @@ export function NotificationSystem({
         };
       case 'reaction':
         return {
-          icon: ChatCircle,
+          icon: MessageCircle,
           bgColor: 'bg-pink-50 border-pink-200',
           iconColor: 'text-pink-600',
           titleColor: 'text-pink-900',
         };
       case 'error':
         return {
-          icon: Warning,
+          icon: AlertTriangle,
           bgColor: 'bg-red-50 border-red-200',
           iconColor: 'text-red-600',
           titleColor: 'text-red-900',

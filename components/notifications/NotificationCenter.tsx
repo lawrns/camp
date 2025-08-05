@@ -13,19 +13,7 @@ import { getBrowserClient } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { Icon } from "@/lib/ui/Icon";
 import { formatRelativeTimeShort } from "@/lib/utils/date";
-import {
-  Bell,
-  BellSlash as BellOff,
-  CheckCircle as Check,
-  Checks as CheckCheck,
-  Clock,
-  ChatCircle as MessageSquare,
-  Gear as Settings,
-  Trash as Trash2,
-  X,
-  Warning,
-  Info,
-} from "@phosphor-icons/react";
+import { Bell, BellSlash as BellOff, CheckCircle as Check, Checks as CheckCheck, Clock, MessageCircle as MessageSquare, Settings as Settings, Trash as Trash2, X, AlertTriangle, Info,  } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 interface NotificationCenterProps {
@@ -259,7 +247,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
                   </div>
                 ) : error ? (
                   <EmptyState
-                    icon={<Icon icon={Warning} />}
+                    icon={<Icon icon={AlertTriangle} />}
                     title="Error loading notifications"
                     description="Please try again later"
                   />

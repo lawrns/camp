@@ -1,13 +1,7 @@
 "use client";
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import {
-  Warning as AlertCircle,
-  Warning as AlertTriangle,
-  Bug,
-  House as Home,
-  ArrowsClockwise as RefreshCw,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, AlertTriangle as AlertTriangle, Bug, House as Home, RefreshCw as RefreshCw,  } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { CriticalErrorBoundary as UnifiedCriticalErrorBoundary } from "./ErrorBoundaryProvider";

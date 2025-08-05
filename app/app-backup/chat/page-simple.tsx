@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ChatCircle, PaperPlaneTilt, User, Robot } from "@phosphor-icons/react";
+import { MessageCircle, Send, User, Bot } from "lucide-react";
 import { getBrowserClient } from "@/lib/supabase";
 
 interface Message {
@@ -130,7 +130,7 @@ export default function SimpleChatPage() {
       <div className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <ChatCircle size={24} weight="fill" className="text-blue-600" />
+            <MessageCircle size={24} weight="fill" className="text-blue-600" />
             <div>
               <h1 className="text-xl font-bold text-gray-900">Live Chat</h1>
               <p className="text-sm text-gray-600">
@@ -158,9 +158,9 @@ export default function SimpleChatPage() {
                     {message.senderType === 'agent' ? (
                       <User className="h-8 w-8 p-1 bg-blue-100 text-blue-600 rounded-full" />
                     ) : message.senderType === 'ai' ? (
-                      <Robot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
+                      <Bot className="h-8 w-8 p-1 bg-purple-100 text-purple-600 rounded-full" />
                     ) : (
-                      <ChatCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
+                      <MessageCircle className="h-8 w-8 p-1 bg-gray-100 text-gray-600 rounded-full" />
                     )}
                   </div>
                 )}
@@ -231,7 +231,7 @@ export default function SimpleChatPage() {
               disabled={!newMessage.trim()}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <PaperPlaneTilt className="h-5 w-5" />
+              <Send className="h-5 w-5" />
             </Button>
           </div>
         </div>

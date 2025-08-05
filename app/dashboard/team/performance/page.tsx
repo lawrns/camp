@@ -10,25 +10,7 @@ import { Icon } from "@/lib/ui/Icon";
 import { api } from "@/lib/trpc/provider";
 
 // Import icons
-import {
-  ArrowUp,
-  ArrowDown,
-  Clock,
-  Star,
-  TrendUp as TrendingUp,
-  TrendDown as TrendingDown,
-  Users,
-  Target,
-  Pulse as Activity,
-  ChartBar as BarChart3,
-  Calendar,
-  FunnelSimple as Filter,
-  Download,
-  ArrowsClockwise as RefreshCw,
-  Warning as AlertTriangle,
-  CheckCircle,
-  User,
-} from "@phosphor-icons/react";
+import { ArrowUp, ArrowDown, Clock, Star, TrendUp as TrendingUp, TrendDown as TrendingDown, Users, Target, Pulse as Activity, ChartBar as BarChart3, Calendar, Filter as Filter, Download, RefreshCw as RefreshCw, AlertTriangle as AlertTriangle, CheckCircle, User,  } from "lucide-react";
 
 interface PerformanceMetrics {
   totalTickets: number;
@@ -132,10 +114,10 @@ export default function TeamPerformancePage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'overloaded': return 'bg-red-100 text-red-800';
-      case 'underutilized': return 'bg-yellow-100 text-yellow-800';
-      case 'balanced': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'overloaded': return 'bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)]';
+      case 'underutilized': return 'bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]';
+      case 'balanced': return 'bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]';
+      default: return 'bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]';
     }
   };
 
@@ -174,7 +156,7 @@ export default function TeamPerformancePage() {
           </div>
           <div className="flex items-center gap-4">
             {/* Period Selector */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={Calendar} className="h-4 w-4 text-gray-500" />
               <select
                 value={selectedPeriod}
@@ -191,7 +173,7 @@ export default function TeamPerformancePage() {
             <Button
               variant="outline"
               onClick={() => refetchPerformance()}
-              className="flex items-center gap-2"
+              className="flex items-center gap-[var(--fl-spacing-2)]"
             >
               <Icon icon={RefreshCw} className="h-4 w-4" />
               Refresh
@@ -199,7 +181,7 @@ export default function TeamPerformancePage() {
             
             <Button
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-[var(--fl-spacing-2)]"
             >
               <Icon icon={Download} className="h-4 w-4" />
               Export
@@ -270,7 +252,7 @@ export default function TeamPerformancePage() {
         {teamInsights && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                 <Icon icon={BarChart3} className="h-5 w-5" />
                 Team Insights
               </CardTitle>
@@ -280,9 +262,9 @@ export default function TeamPerformancePage() {
                 {/* Top Performer */}
                 {teamInsights.topPerformer && (
                   <div className="p-4 bg-green-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-[var(--fl-spacing-2)] mb-2">
                       <Icon icon={Star} className="h-4 w-4 text-green-600" />
-                      <span className="font-medium text-green-800">Top Performer</span>
+                      <span className="font-medium text-[var(--fl-color-success)]">Top Performer</span>
                     </div>
                     <p className="text-sm text-green-700">
                       {teamInsights.topPerformer.name} - {teamInsights.topPerformer.metrics.efficiency.toFixed(1)}% efficiency
@@ -293,9 +275,9 @@ export default function TeamPerformancePage() {
                 {/* Workload Issues */}
                 {teamInsights.workloadIssues.length > 0 && (
                   <div className="p-4 bg-yellow-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-[var(--fl-spacing-2)] mb-2">
                       <Icon icon={AlertTriangle} className="h-4 w-4 text-yellow-600" />
-                      <span className="font-medium text-yellow-800">Workload Issues</span>
+                      <span className="font-medium text-[var(--fl-color-warning)]">Workload Issues</span>
                     </div>
                     <p className="text-sm text-yellow-700">
                       {teamInsights.workloadIssues.length} members need attention
@@ -305,9 +287,9 @@ export default function TeamPerformancePage() {
 
                 {/* Team Health */}
                 <div className="p-4 bg-blue-50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-[var(--fl-spacing-2)] mb-2">
                     <Icon icon={Activity} className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium text-blue-800">Team Health</span>
+                    <span className="font-medium text-[var(--fl-color-primary)]">Team Health</span>
                   </div>
                   <p className="text-sm text-blue-700">
                     {teamInsights.avgEfficiency.toFixed(1)}% average efficiency
@@ -321,7 +303,7 @@ export default function TeamPerformancePage() {
         {/* Team Member Performance */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={Users} className="h-5 w-5" />
               Team Member Performance
             </CardTitle>
@@ -336,7 +318,7 @@ export default function TeamPerformancePage() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-full bg-[var(--fl-color-primary-subtle)] flex items-center justify-center">
                         <Icon icon={User} className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
@@ -364,7 +346,7 @@ export default function TeamPerformancePage() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Satisfaction</p>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-[var(--fl-spacing-1)]">
                         <Icon icon={Star} className="h-3 w-3 text-yellow-500" />
                         <p className="text-sm font-medium">{member.metrics.customerSatisfaction.toFixed(1)}</p>
                       </div>
@@ -384,7 +366,7 @@ export default function TeamPerformancePage() {
                   </div>
 
                   {member.metrics.overdueTickets > 0 && (
-                    <div className="mt-3 p-2 bg-red-50 rounded text-xs text-red-700 flex items-center gap-1">
+                    <div className="mt-3 p-2 bg-red-50 rounded text-xs text-red-700 flex items-center gap-[var(--fl-spacing-1)]">
                       <Icon icon={AlertTriangle} className="h-3 w-3" />
                       {member.metrics.overdueTickets} overdue tickets
                     </div>
@@ -399,7 +381,7 @@ export default function TeamPerformancePage() {
         {workloadData && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                 <Icon icon={BarChart3} className="h-5 w-5" />
                 Workload Distribution
               </CardTitle>
@@ -409,7 +391,7 @@ export default function TeamPerformancePage() {
                 {workloadData.map((member) => (
                   <div key={member.memberId} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                      <div className="h-8 w-8 rounded-full bg-[var(--fl-color-surface)] flex items-center justify-center">
                         <Icon icon={User} className="h-4 w-4 text-gray-600" />
                       </div>
                       <div>
@@ -437,7 +419,7 @@ export default function TeamPerformancePage() {
         {trendsData && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                 <Icon icon={TrendingUp} className="h-5 w-5" />
                 Performance Trends
               </CardTitle>
@@ -453,7 +435,7 @@ export default function TeamPerformancePage() {
                         <span className="text-gray-500">
                           {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           <div className="w-16 bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-blue-500 h-2 rounded-full"
@@ -476,7 +458,7 @@ export default function TeamPerformancePage() {
                         <span className="text-gray-500">
                           {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           <div className="w-16 bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-green-500 h-2 rounded-full"
@@ -499,7 +481,7 @@ export default function TeamPerformancePage() {
                         <span className="text-gray-500">
                           {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           <div className="w-16 bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-purple-500 h-2 rounded-full"

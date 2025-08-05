@@ -1,7 +1,7 @@
 // components/shared/TagInput.tsx
 import { useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Hash, X } from "@phosphor-icons/react";
+import { Hash, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Tag {

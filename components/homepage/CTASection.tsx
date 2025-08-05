@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@/lib/ui/Icon";
-import { ArrowRight } from "@phosphor-icons/react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
 

@@ -1,4 +1,4 @@
-import { Buildings as Building, Clock, Envelope as Mail, MapPin, User } from "@phosphor-icons/react";
+import { Buildings as Building, Clock, Envelope as Mail, MapPin, User } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/unified-ui/components/dialog";
@@ -82,16 +82,16 @@ export function CustomerProfileModal({ isOpen, onClose, profile, isLoading, erro
                       <Badge
                         className={` ${
                           profile.status === "online"
-                            ? "border-status-success-light bg-[var(--fl-color-success-subtle)] text-green-800"
+                            ? "border-status-success-light bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]"
                             : profile.status === "away"
                               ? "border-orange-200 bg-orange-100 text-orange-800"
-                              : "border-[var(--fl-color-border)] bg-gray-100 text-gray-800"
+                              : "border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]"
                         } `}
                       >
                         {profile.status}
                       </Badge>
                       {profile.tags.map((tag: unknown) => (
-                        <Badge key={tag} variant="outline" className="text-tiny">
+                        <Badge key={tag} variant="outline" className="text-tiny rounded-full">
                           {tag}
                         </Badge>
                       ))}

@@ -19,7 +19,7 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { ChatCircle } from '@phosphor-icons/react';
+import { MessageCircle } from "lucide-react";
 import { useRealtime } from '@/hooks/useRealtime';
 import { useWidgetRealtime } from '../enhanced/useWidgetRealtime';
 import { useAIHandover } from '@/hooks/useAIHandover';
@@ -679,7 +679,7 @@ export function UltimateWidget({
             data-testid="widget-button"
             aria-label="Open chat support"
           >
-            <ChatCircle size={24} />
+            <MessageCircle size={24} />
             {/* Notification indicator - 8px grid aligned */}
             {hasUnreadMessages && (
               <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>

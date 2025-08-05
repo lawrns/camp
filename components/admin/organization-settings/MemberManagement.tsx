@@ -9,7 +9,7 @@
 
 import * as React from "react";
 import { useState } from "react";
-import { Crown, Eye, Mail, MoreVertical, Shield, UserPlus, Users } from "@phosphor-icons/react";
+import { Crown, Eye, Mail, MoreVertical, Shield, UserPlus, Users } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

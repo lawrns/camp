@@ -170,7 +170,7 @@ export function MemoryMonitor({
             <CardTitle>AI Memory Monitor</CardTitle>
           </div>
           <div className="flex items-center space-x-2">
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs rounded-full">
               Last updated: {lastRefresh ? formatDistanceToNow(lastRefresh, { addSuffix: true }) : 'Never'}
             </Badge>
             <Button
@@ -331,13 +331,13 @@ export function MemoryMonitor({
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Error Rate</span>
-                      <Badge variant={metrics && metrics.errorRate < 1 ? 'default' : 'destructive'}>
+                      <Badge variant={metrics && metrics.errorRate < 1 ? 'default' : 'destructive'} className="rounded-full">
                         {metrics ? `${metrics.errorRate.toFixed(2)}%` : '---'}
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Cache Hit Rate</span>
-                      <Badge variant={metrics && metrics.cacheHitRate > 90 ? 'default' : 'secondary'}>
+                      <Badge variant={metrics && metrics.cacheHitRate > 90 ? 'default' : 'secondary'} className="rounded-full">
                         {metrics ? `${metrics.cacheHitRate.toFixed(1)}%` : '---'}
                       </Badge>
                     </div>
@@ -355,13 +355,13 @@ export function MemoryMonitor({
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Avg Response Time</span>
-                      <Badge variant={getResponseTimeStatus() === 'success' ? 'default' : 'destructive'}>
+                      <Badge variant={getResponseTimeStatus() === 'success' ? 'default' : 'destructive'} className="rounded-full">
                         {metrics ? formatTime(metrics.averageResponseTime) : '---'}
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm">Memory Efficiency</span>
-                      <Badge variant={getMemoryUsageStatus() === 'success' ? 'default' : 'secondary'}>
+                      <Badge variant={getMemoryUsageStatus() === 'success' ? 'default' : 'secondary'} className="rounded-full">
                         {metrics ? `${(100 - (metrics.totalMemoryUsage / metrics.maxMemoryLimit) * 100).toFixed(1)}%` : '---'}
                       </Badge>
                     </div>

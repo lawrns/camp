@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { SmartReplyPanel } from '@/components/InboxDashboard/sub-components/SmartReplyPanel';
-import { Sparkle, Spinner } from '@phosphor-icons/react';
+import { Sparkles, Spinner } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 interface SmartReply {
@@ -103,7 +103,7 @@ export function SmartRepliesHeaderIcon({
           {isLoading ? (
             <Spinner className="h-4 w-4 animate-spin" />
           ) : (
-            <Sparkle className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" />
           )}
           {suggestions.length > 0 && !isLoading && (
             <Badge 

@@ -7,21 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertTriangle,
-  Brain,
-  CheckCircle,
-  Clock,
-  Funnel as Filter,
-  ChatCircle as MessageSquare,
-  Pencil,
-  FloppyDisk as Save,
-  MagnifyingGlass as Search,
-  Star,
-  ThumbsDown,
-  ThumbsUp,
-  X,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Brain, CheckCircle, Clock, Funnel as Filter, MessageCircle as MessageSquare, Pencil, FloppyDisk as Save, Search as Search, Star, ThumbsDown, ThumbsUp, X,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

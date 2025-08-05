@@ -7,7 +7,7 @@
  */
 import { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Plus } from "@phosphor-icons/react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/unified-ui/tooltip";
 import { Icon } from "@/lib/ui/Icon";

@@ -7,15 +7,7 @@
  * TEAMA-005: Knowledge Vector TTL & Cleanup
  */
 import React, { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  CheckCircle,
-  Clock,
-  Database,
-  HardDrive,
-  ArrowsClockwise as RefreshCw,
-  Trash as Trash2,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, CheckCircle, Clock, Database, HardDrive, RefreshCw as RefreshCw, Trash as Trash2,  } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";

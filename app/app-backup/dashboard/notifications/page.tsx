@@ -9,23 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { useNotifications } from "@/hooks/useNotifications";
 import { isFeatureEnabled } from "@/lib/feature-flags";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Warning as AlertTriangle,
-  Bell,
-  CheckCircle,
-  Checks,
-  Clock,
-  Spinner as Loader2,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  Monitor,
-  ArrowsClockwise as RefreshCw,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  DeviceMobile as Smartphone,
-  Trash as Trash2,
-  Users
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Bell, CheckCircle, Checks, Clock, Spinner as Loader2, Envelope as Mail, MessageCircle as MessageSquare, Monitor, RefreshCw as RefreshCw, Search as Search, Settings as Settings, DeviceMobile as Smartphone, Trash as Trash2, Users } from "lucide-react";
 import { useState } from "react";
 
 function NotificationsContent() {

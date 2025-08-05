@@ -3,17 +3,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Brain,
-  PencilSimple as Edit,
-  File,
-  Microphone as Mic,
-  ArrowsClockwise as RefreshCw,
-  PaperPlaneTilt as Send,
-  Sparkle as Sparkles,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Brain, PencilSimple as Edit, File, Mic as Mic, RefreshCw as RefreshCw, Send as Send, Sparkles as Sparkles, X, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/unified-ui/input";

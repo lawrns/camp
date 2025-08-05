@@ -27,23 +27,23 @@ export const LazyIcons = {
   }),
 
   // Common action icons (lazy load)
-  Search: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.MagnifyingGlass }))),
+  Search: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Search }))),
   Filter: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Funnel }))),
-  Settings: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Gear }))),
+  Settings: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Settings }))),
   Plus: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Plus }))),
   Edit: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.PencilSimple }))),
   Trash: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Trash }))),
 
   // Status icons (lazy load)
   Check: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Check }))),
-  AlertCircle: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.WarningCircle }))),
+  AlertCircle: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.AlertCircle }))),
   Info: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Info }))),
 
   // AI/Feature icons (lazy load)
   Brain: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Brain }))),
-  Sparkles: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Sparkle }))),
-  Zap: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Lightning }))),
-  Bot: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Robot }))),
+  Sparkles: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Sparkles }))),
+  Zap: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Zap }))),
+  Bot: lazyPhosphorIcon(() => import("@phosphor-icons/react").then((mod) => ({ default: mod.Bot }))),
 };
 
 // Icon bundle helper for related icons
@@ -59,7 +59,7 @@ export function createIconBundle<T extends Record<string, () => Promise<any>>>(
 
 // Example usage:
 // const ChatIcons = createIconBundle({
-//   Send: () => import('phosphor-react').then(mod => ({ default: mod.PaperPlaneTilt })),
+//   Send: () => import('phosphor-react').then(mod => ({ default: mod.Send })),
 //   Paperclip: () => import('phosphor-react').then(mod => ({ default: mod.Paperclip })),
-//   Smile: () => import('phosphor-react').then(mod => ({ default: mod.Smiley })),
+//   Smile: () => import('phosphor-react').then(mod => ({ default: mod.Smile })),
 // });

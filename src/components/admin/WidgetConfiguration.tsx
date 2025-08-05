@@ -1,18 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  CheckCircle,
-  Clock,
-  Code,
-  Copy,
-  Eye,
-  Globe,
-  ChatCircle as MessageSquare,
-  Palette,
-  Gear as Settings,
-  Shield,
-} from "@phosphor-icons/react";
+import { CheckCircle, Clock, Code, Copy, Eye, Globe, MessageCircle as MessageSquare, Palette, Settings as Settings, Shield,  } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

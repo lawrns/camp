@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Warning as AlertCircle,
-  CheckCircle as CheckCircle2,
-  Database,
-  FileCode,
-  Package,
-  Radio,
-  ArrowsClockwise as RefreshCw,
-  XCircle,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle as CheckCircle2, Database, FileCode, Package, Radio, RefreshCw as RefreshCw, XCircle,  } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

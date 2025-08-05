@@ -2,18 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import {
-  Warning as AlertTriangle,
-  Prohibit as Ban,
-  CheckCircle,
-  FileText,
-  Globe,
-  ClockCounterClockwise as History,
-  Lock,
-  PaperPlaneTilt as Send,
-  Shield,
-  UserMinus as UserX,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Prohibit as Ban, CheckCircle, FileText, Globe, ClockCounterClockwise as History, Lock, Send as Send, Shield, UserMinus as UserX,  } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

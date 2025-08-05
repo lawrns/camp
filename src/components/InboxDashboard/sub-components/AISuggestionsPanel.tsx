@@ -1,7 +1,7 @@
 // AISuggestionsPanel component for AI-generated suggestions
 
 import * as React from "react";
-import { ArrowRight, Lightbulb, Robot, Sparkle, X } from "@phosphor-icons/react";
+import { ArrowRight, Lightbulb, Bot, Sparkles, X } from "lucide-react";
 import type { AISuggestion } from "../types";
 
 interface AISuggestionsPanelProps {
@@ -25,7 +25,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
     switch (type) {
       case "response":
         return {
-          icon: Robot,
+          icon: Bot,
           color: "text-blue-600",
           bg: "bg-[var(--fl-color-info-subtle)]",
           border: "border-[var(--fl-color-info-muted)]",
@@ -46,7 +46,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
         };
       default:
         return {
-          icon: Sparkle,
+          icon: Sparkles,
           color: "text-purple-600",
           bg: "bg-purple-50",
           border: "border-purple-200",
@@ -66,7 +66,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--fl-color-border)] spacing-3">
         <h3 className="flex items-center text-sm font-medium text-gray-900">
-          <Sparkle className="mr-2 h-4 w-4 text-purple-600" />
+          <Sparkles className="mr-2 h-4 w-4 text-purple-600" />
           AI Suggestions
         </h3>
         <button onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close AI suggestions">
@@ -86,7 +86,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
         ) : suggestions.length === 0 ? (
           // Empty state
           <div className="spacing-4 text-center text-[var(--fl-color-text-muted)]">
-            <Robot className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+            <Bot className="mx-auto mb-2 h-8 w-8 text-gray-400" />
             <p className="text-sm">No suggestions available</p>
             <p className="mt-1 text-tiny text-gray-400">Try generating new suggestions based on the conversation</p>
           </div>
@@ -149,7 +149,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
               {suggestions.length} suggestion{suggestions.length !== 1 ? "s" : ""} generated
             </span>
             <span className="flex items-center">
-              <Sparkle className="mr-1 h-3 w-3" />
+              <Sparkles className="mr-1 h-3 w-3" />
               Powered by AI
             </span>
           </div>

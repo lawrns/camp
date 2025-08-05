@@ -1,5 +1,5 @@
 import React, { ForwardRefExoticComponent, RefAttributes } from "react";
-import { ChartLine as Activity, IconProps as PhosphorIconProps } from "@phosphor-icons/react";
+import { ChartLine as Activity, IconProps as PhosphorIconProps } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

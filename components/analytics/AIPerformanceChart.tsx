@@ -27,15 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { formatTimestamp } from "@/lib/utils/date";
-import {
-  ChartLineUp as Activity,
-  Warning as AlertTriangle,
-  Brain,
-  Clock,
-  ChatCircle as MessageSquare,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+import { ChartLineUp as Activity, AlertTriangle as AlertTriangle, Brain, Clock, MessageCircle as MessageSquare, TrendDown as TrendingDown, TrendUp as TrendingUp,  } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface AIPerformanceData {

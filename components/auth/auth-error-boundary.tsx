@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Component, ReactNode } from "react";
-import { Warning as AlertCircle, ArrowsClockwise as RefreshCw } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, RefreshCw as RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";

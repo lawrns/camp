@@ -8,18 +8,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  ChartBar as BarChart3,
-  CheckCircle,
-  Clock,
-  Lightbulb,
-  ChatCircle as MessageSquare,
-  MagnifyingGlass as Search,
-  Target,
-  TrendUp as TrendingUp,
-  Users,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ChartBar as BarChart3, CheckCircle, Clock, Lightbulb, MessageCircle as MessageSquare, Search as Search, Target, TrendUp as TrendingUp, Users,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

@@ -36,21 +36,7 @@ import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
 import { api } from "../../../src/lib/trpc/provider";
 import { Icon } from "@/lib/ui/Icon";
 import { useOrganization, useSetOrganization } from "@/store/domains/organization";
-import {
-  CheckCircle,
-  Clock,
-  DotsThreeVertical,
-  Envelope,
-  Fire,
-  Lightning,
-  MagnifyingGlass,
-  Shield,
-  Star,
-  TrendUp,
-  User,
-  Users,
-  X,
-} from "@phosphor-icons/react";
+import { CheckCircle, Clock, MoreVertical, Mail, Flame, Zap, Search, Shield, Star, TrendingUp, User, Users, X,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, useRef } from "react";
 
@@ -344,31 +330,31 @@ export default function TeamManagementPage() {
     switch (status) {
       case "online":
         return (
-          <Badge variant="primary" className="bg-emerald-600">
+          <Badge variant="default" className="bg-emerald-600 rounded-full">
             Online
           </Badge>
         );
       case "busy":
         return (
-          <Badge variant="destructive" className="bg-red-600">
+          <Badge variant="destructive" className="bg-red-600 rounded-full">
             Busy
           </Badge>
         );
       case "away":
         return (
-          <Badge variant="secondary" className="bg-yellow-600">
+          <Badge variant="secondary" className="bg-yellow-600 rounded-full">
             Away
           </Badge>
         );
       case "offline":
         return (
-          <Badge variant="outline" className="bg-gray-400">
+          <Badge variant="outline" className="bg-gray-400 rounded-full">
             Offline
           </Badge>
         );
       default:
         return (
-          <Badge variant="outline">
+          <Badge variant="outline" className="rounded-full">
             Unknown
           </Badge>
         );
@@ -433,22 +419,22 @@ export default function TeamManagementPage() {
               <Button
                 variant="outline"
                 onClick={() => router.push('/dashboard/team/performance')}
-                className="flex items-center gap-2 whitespace-nowrap"
+                className="flex items-center gap-[var(--fl-spacing-2)] whitespace-nowrap"
               >
-                <Icon icon={TrendUp} className="h-4 w-4 flex-shrink-0" />
+                <Icon icon={TrendingUp} className="h-4 w-4 flex-shrink-0" />
                 Performance
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push('/dashboard/team/roles')}
-                className="flex items-center gap-2 whitespace-nowrap"
+                className="flex items-center gap-[var(--fl-spacing-2)] whitespace-nowrap"
               >
                 <Icon icon={Shield} className="h-4 w-4 flex-shrink-0" />
                 Roles
               </Button>
               <Button
                 onClick={() => setShowAddAgent(true)}
-                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
+                className="bg-blue-600 hover:bg-blue-700 flex items-center gap-[var(--fl-spacing-2)] whitespace-nowrap"
               >
                 <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
                 Invite Member
@@ -466,7 +452,7 @@ export default function TeamManagementPage() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-green-800">
+              <h3 className="text-sm font-medium text-[var(--fl-color-success)]">
                 🚀 System Fully Operational!
               </h3>
               <div className="mt-2 text-sm text-green-700">
@@ -503,7 +489,7 @@ export default function TeamManagementPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Chats</CardTitle>
-              <Icon icon={Fire} className="h-4 w-4 text-muted-foreground" />
+              <Icon icon={Flame} className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{metrics.totalActiveChats}</div>
@@ -516,7 +502,7 @@ export default function TeamManagementPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Avg Response</CardTitle>
-              <Icon icon={Lightning} className="h-4 w-4 text-muted-foreground" />
+              <Icon icon={Zap} className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{metrics.avgResponseTime}s</div>
@@ -546,7 +532,7 @@ export default function TeamManagementPage() {
             <h2 className="text-xl font-semibold text-gray-900">Team Members</h2>
             <div className="flex items-center gap-4">
               <div className="relative">
-                <Icon icon={MagnifyingGlass} className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Icon icon={Search} className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search agents..."
@@ -575,7 +561,7 @@ export default function TeamManagementPage() {
               {!searchTerm && (
                 <Button
                   onClick={() => setShowAddAgent(true)}
-                  className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 whitespace-nowrap"
+                  className="bg-blue-600 hover:bg-blue-700 flex items-center gap-[var(--fl-spacing-2)] whitespace-nowrap"
                 >
                   <Icon icon={User} className="h-4 w-4 flex-shrink-0" />
                   Invite First Member
@@ -600,16 +586,16 @@ export default function TeamManagementPage() {
                         <p className="text-sm text-gray-500">{agent.role}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-[var(--fl-spacing-2)]">
                       <button
                         onClick={() => handleMemberAction(agent, 'view')}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        className="text-blue-600 hover:text-[var(--fl-color-primary)] text-sm font-medium"
                       >
                         View
                       </button>
                       <button
                         onClick={() => handleMemberAction(agent, 'edit')}
-                        className="text-gray-600 hover:text-gray-800 text-sm"
+                        className="text-gray-600 hover:text-[var(--fl-color-text)] text-sm"
                       >
                         Edit
                       </button>
@@ -657,7 +643,7 @@ export default function TeamManagementPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex gap-[var(--fl-spacing-2)] pt-2">
                     <Button
                       size="sm"
                       variant="outline"
@@ -695,8 +681,8 @@ export default function TeamManagementPage() {
               {pendingInvitations.map((invitation) => (
                 <div key={invitation.id} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
                   <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                      <Icon icon={Envelope} className="h-5 w-5 text-yellow-600" />
+                    <div className="h-10 w-10 rounded-full bg-[var(--fl-color-warning-subtle)] flex items-center justify-center">
+                      <Icon icon={Mail} className="h-5 w-5 text-yellow-600" />
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-900">{invitation.email}</h3>
@@ -707,8 +693,8 @@ export default function TeamManagementPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  <div className="flex items-center gap-[var(--fl-spacing-2)]">
+                    <span className="inline-flex items-center px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] rounded-full text-xs font-medium bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]">
                       Pending
                     </span>
                     <Button
@@ -741,7 +727,7 @@ export default function TeamManagementPage() {
 
       {/* Success Notification */}
       {showSuccessMessage && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-[var(--fl-spacing-2)]">
           <Icon icon={CheckCircle} className="h-5 w-5" />
           <span>Invitation sent successfully!</span>
         </div>
@@ -749,7 +735,7 @@ export default function TeamManagementPage() {
 
       {/* Error Notification */}
       {errorMessage && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-[var(--fl-spacing-2)]">
           <Icon icon={X} className="h-5 w-5" />
           <span>{errorMessage}</span>
           <button

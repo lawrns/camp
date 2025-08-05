@@ -3,7 +3,7 @@
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Warning as AlertCircle, CheckCircle as Check, Eye, EyeSlash as EyeOff, Info } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle as Check, Eye, EyeSlash as EyeOff, Info } from "lucide-react";
 import { useAnimation } from "framer-motion";
 import React, { forwardRef, useEffect, useState } from "react";
 import { FormFieldProps } from "./types";

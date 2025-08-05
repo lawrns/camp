@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Smiley as Smile } from "@phosphor-icons/react";
+import { Smile as Smile } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { ComposerPluginProps, Emoji } from "../types";

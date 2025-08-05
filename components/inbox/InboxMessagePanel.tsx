@@ -17,7 +17,7 @@ import { useUIState } from "@/store/useInboxStore";
 // Flame styles now handled by design-system.css
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import type { Message } from "@/types/entities/message";
-import { DotsThreeVertical as MoreVertical, Sparkle as Sparkles, Note as StickyNote, UserPlus } from "@phosphor-icons/react";
+import { MoreVertical as MoreVertical, Sparkles as Sparkles, Note as StickyNote, UserPlus } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AssignmentDialog } from "@/components/conversations/AssignmentDialog";
@@ -122,13 +122,13 @@ export function InboxMessagePanel({
   const getStatusColor = (status?: string) => {
     switch (status) {
       case "open":
-        return "bg-green-100 text-green-800 border-[var(--fl-color-success-muted)]";
+        return "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] border-[var(--fl-color-success-muted)]";
       case "resolved":
-        return "bg-gray-100 text-gray-800 border-[var(--fl-color-border)]";
+        return "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)] border-[var(--fl-color-border)]";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]";
+        return "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-muted)]";
       default:
-        return "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]";
+        return "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] border-[var(--fl-color-info-muted)]";
     }
   };
 
@@ -189,7 +189,7 @@ export function InboxMessagePanel({
         <div className="bg-background radius-2xl border border-[var(--fl-color-border)] px-4 py-3 shadow-card-base">
           <div className="flex items-center gap-ds-2">
             <span className="text-tiny font-medium text-[var(--fl-color-text-muted)]">AI Assistant is typing</span>
-            <div className="flex gap-1">
+            <div className="flex gap-[var(--fl-spacing-1)]">
               {[0, 1, 2].map((i: unknown) => (
                 <OptimizedMotion.div
                   key={i}
@@ -228,7 +228,7 @@ export function InboxMessagePanel({
       <div
         className={cn(
           "max-w-[70%] radius-2xl px-4 py-3",
-          index % 2 === 0 ? "bg-gray-100" : "bg-[var(--fl-color-info-subtle)]"
+          index % 2 === 0 ? "bg-[var(--fl-color-surface)]" : "bg-[var(--fl-color-info-subtle)]"
         )}
       >
         <div className="space-y-spacing-sm">
@@ -255,7 +255,7 @@ export function InboxMessagePanel({
       animate={{ opacity: 1, scale: 1 }}
       className="my-6 flex items-center justify-center"
     >
-      <div className="bg-background text-foreground rounded-ds-full px-3 py-1 text-tiny font-medium">
+      <div className="bg-background text-foreground rounded-ds-full px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)] text-tiny font-medium">
         {date && !isNaN(date.getTime()) ? formatDistanceToNow(date, { addSuffix: true }) : "Unknown"}
       </div>
     </OptimizedMotion.div>
@@ -534,7 +534,7 @@ export function InboxMessagePanel({
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.5 }}
-                                    className="absolute -bottom-5 right-0 flex items-center gap-1"
+                                    className="absolute -bottom-5 right-0 flex items-center gap-[var(--fl-spacing-1)]"
                                   >
                                     <OptimizedMotion.svg
                                       width="16"

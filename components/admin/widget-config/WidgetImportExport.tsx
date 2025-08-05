@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Download, FileCode as FileJson, Upload } from "@phosphor-icons/react";
+import { Download, FileCode as FileJson, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";

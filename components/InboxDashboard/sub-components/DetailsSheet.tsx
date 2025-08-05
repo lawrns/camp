@@ -1,5 +1,5 @@
 import React from "react";
-import { X } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import CustomerSidebar from "./CustomerSidebar";
 import { ConversationManagement } from "./ConversationManagement";
 import type { Conversation } from "../types";

@@ -1,26 +1,24 @@
 "use client";
 
 import { memo, useEffect, useMemo, useState } from "react";
-// PHOSPHOR ICONS: Updated to use Phosphor icons for consistency
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } from "@/components/ui/Button-unified";
+import { Button } from "@/components/unified-ui/components/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
-import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
+import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
 import { cn } from "@/lib/utils";
-import {
-  ArrowDown,
-  ArrowUp,
-  CheckCircle,
-  Clock,
-  Eye,
-  Lightning,
-  Pulse,
-  Target,
-  TrendDown,
-  TrendUp,
-  Warning,
-} from "@phosphor-icons/react";
+
+/**
+ * LivePerformanceMonitor - Design System Compliant Version
+ *
+ * Migrated to use unified design tokens and components:
+ * - Unified import patterns from @/components/unified-ui/
+ * - Design token-based status colors and styling
+ * - Consistent spacing and layout using design tokens
+ * - Enhanced accessibility and responsive design
+ * - Preserved real-time monitoring and alert functionality
+ */
+import { ArrowDown, ArrowUp, CheckCircle, Clock, Eye, Zap, Pulse, Target, TrendDown, TrendUp, AlertTriangle,  } from "lucide-react";
 
 interface PerformanceMetric {
   id: string;
@@ -60,31 +58,31 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
     switch (status) {
       case "excellent":
         return {
-          color: "text-green-600",
-          bgColor: "bg-[var(--fl-color-success-subtle)] border-[var(--fl-color-success-muted)]",
+          color: "text-[var(--fl-color-success)]",
+          bgColor: "bg-[var(--fl-color-success-subtle)] border-[var(--fl-color-success-200)]",
           icon: CheckCircle,
-          badgeColor: "bg-green-100 text-green-800 border-[var(--fl-color-success-muted)]",
+          badgeColor: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] border-[var(--fl-color-success-200)]",
         };
       case "good":
         return {
-          color: "text-blue-600",
-          bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-muted)]",
+          color: "text-[var(--fl-color-info)]",
+          bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-200)]",
           icon: Target,
-          badgeColor: "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]",
+          badgeColor: "bg-[var(--fl-color-info-subtle)] text-[var(--fl-color-info)] border-[var(--fl-color-info-200)]",
         };
       case "warning":
         return {
-          color: "text-yellow-600",
-          bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-muted)]",
-          icon: Warning,
-          badgeColor: "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]",
+          color: "text-[var(--fl-color-warning)]",
+          bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-200)]",
+          icon: AlertTriangle,
+          badgeColor: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-200)]",
         };
       case "critical":
         return {
-          color: "text-red-600",
-          bgColor: "bg-[var(--fl-color-danger-subtle)] border-[var(--fl-color-danger-muted)]",
-          icon: Warning,
-          badgeColor: "bg-red-100 text-red-800 border-[var(--fl-color-danger-muted)]",
+          color: "text-[var(--fl-color-error)]",
+          bgColor: "bg-[var(--fl-color-error-subtle)] border-[var(--fl-color-error-200)]",
+          icon: AlertTriangle,
+          badgeColor: "bg-[var(--fl-color-error-subtle)] text-[var(--fl-color-error)] border-[var(--fl-color-error-200)]",
         };
     }
   };
@@ -94,19 +92,19 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
       case "up":
         return {
           icon: TrendUp,
-          color: "text-green-600",
+          color: "text-[var(--fl-color-success)]",
           arrowIcon: ArrowUp,
         };
       case "down":
         return {
           icon: TrendDown,
-          color: "text-red-600",
+          color: "text-[var(--fl-color-error)]",
           arrowIcon: ArrowDown,
         };
       case "stable":
         return {
           icon: Pulse,
-          color: "text-gray-600",
+          color: "text-[var(--fl-color-text-muted)]",
           arrowIcon: null,
         };
     }
@@ -125,20 +123,21 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
     <OptimizedMotion.div layout whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
       <Card
         className={cn(
-          "cursor-pointer border transition-all duration-200 hover:shadow-md",
+          "cursor-pointer border transition-all duration-200",
+          "hover:shadow-[var(--fl-shadow-md)]",
           statusConfig.bgColor,
-          onClick && "hover:border-[var(--fl-color-border-interactive)]"
+          onClick && "hover:border-[var(--fl-color-border-strong)]"
         )}
         onClick={onClick}
       >
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-[var(--fl-spacing-3)]">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-foreground text-sm font-medium">{metric.name}</CardTitle>
-            <div className="flex items-center gap-ds-2">
+            <CardTitle className="text-[var(--fl-color-text)] text-sm font-medium">{metric.name}</CardTitle>
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               <StatusIcon className={cn("h-4 w-4", statusConfig.color)} />
               <Badge
                 variant="secondary"
-                className={cn("text-typography-xs border px-2 py-0.5", statusConfig.badgeColor)}
+                className={cn("text-xs border px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]", statusConfig.badgeColor)}
               >
                 {metric.status}
               </Badge>
@@ -148,20 +147,20 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
 
         <CardContent>
           {/* Value and Unit */}
-          <div className="mb-2 flex items-baseline justify-between">
-            <div className="flex items-baseline gap-1">
-              <span className="text-3xl font-bold text-gray-900">
+          <div className="mb-[var(--fl-spacing-2)] flex items-baseline justify-between">
+            <div className="flex items-baseline gap-[var(--fl-spacing-1)]">
+              <span className="text-3xl font-bold text-[var(--fl-color-text)]">
                 {typeof metric.value === "number" ? metric.value.toLocaleString() : metric.value}
               </span>
-              <span className="text-foreground text-sm">{metric.unit}</span>
+              <span className="text-[var(--fl-color-text)] text-sm">{metric.unit}</span>
             </div>
 
             {/* Trend Indicator */}
-            <div className={cn("flex items-center gap-1", trendConfig.color)}>
+            <div className={cn("flex items-center gap-[var(--fl-spacing-1)]", trendConfig.color)}>
               <TrendIcon className="h-4 w-4" />
               {ArrowIcon && <ArrowIcon className="h-3 w-3" />}
               {metric.change !== undefined && (
-                <span className="text-tiny font-medium">
+                <span className="text-xs font-medium">
                   {metric.change > 0 ? "+" : ""}
                   {metric.change}%
                 </span>
@@ -171,8 +170,8 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
 
           {/* Target Progress Bar */}
           {progressPercentage !== undefined && (
-            <div className="space-y-1">
-              <div className="text-foreground flex justify-between text-tiny">
+            <div className="space-y-[var(--fl-spacing-1)]">
+              <div className="text-[var(--fl-color-text)] flex justify-between text-xs">
                 <span>Progress to target</span>
                 <span>
                   {metric.target?.toLocaleString()} {metric.unit}
@@ -182,10 +181,10 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
                 value={progressPercentage}
                 className={cn(
                   "h-2",
-                  metric.status === "excellent" && "[&>div]:bg-semantic-success",
-                  metric.status === "good" && "[&>div]:bg-brand-blue-500",
-                  metric.status === "warning" && "[&>div]:bg-semantic-warning",
-                  metric.status === "critical" && "[&>div]:bg-brand-mahogany-500"
+                  metric.status === "excellent" && "[&>div]:bg-[var(--fl-color-success)]",
+                  metric.status === "good" && "[&>div]:bg-[var(--fl-color-info)]",
+                  metric.status === "warning" && "[&>div]:bg-[var(--fl-color-warning)]",
+                  metric.status === "critical" && "[&>div]:bg-[var(--fl-color-error)]"
                 )}
               />
             </div>
@@ -193,7 +192,7 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
 
           {/* Description */}
           {metric.description && (
-            <p className="leading-relaxed text-foreground mt-2 text-tiny">{metric.description}</p>
+            <p className="leading-relaxed text-[var(--fl-color-text)] mt-[var(--fl-spacing-2)] text-xs">{metric.description}</p>
           )}
         </CardContent>
       </Card>
@@ -206,27 +205,27 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
     switch (severity) {
       case "critical":
         return {
-          color: "text-red-600",
-          bgColor: "bg-[var(--fl-color-danger-subtle)] border-[var(--fl-color-danger-muted)]",
-          badgeColor: "bg-red-100 text-red-800 border-[var(--fl-color-danger-muted)]",
+          color: "text-[var(--fl-color-error)]",
+          bgColor: "bg-[var(--fl-color-error-subtle)] border-[var(--fl-color-error-200)]",
+          badgeColor: "bg-[var(--fl-color-error-subtle)] text-[var(--fl-color-error)] border-[var(--fl-color-error-200)]",
         };
       case "high":
         return {
-          color: "text-orange-600",
-          bgColor: "bg-orange-50 border-orange-200",
-          badgeColor: "bg-orange-100 text-orange-800 border-orange-200",
+          color: "text-[var(--fl-color-warning)]",
+          bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-200)]",
+          badgeColor: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-200)]",
         };
       case "medium":
         return {
-          color: "text-yellow-600",
-          bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-muted)]",
-          badgeColor: "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]",
+          color: "text-[var(--fl-color-warning)]",
+          bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-200)]",
+          badgeColor: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-200)]",
         };
       case "low":
         return {
-          color: "text-blue-600",
-          bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-muted)]",
-          badgeColor: "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]",
+          color: "text-[var(--fl-color-info)]",
+          bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-200)]",
+          badgeColor: "bg-[var(--fl-color-info-subtle)] text-[var(--fl-color-info)] border-[var(--fl-color-info-200)]",
         };
     }
   };
@@ -240,25 +239,25 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2 }}
-      className={cn("rounded-ds-lg border spacing-4", severityConfig.bgColor)}
+      className={cn("rounded-[var(--fl-radius-lg)] border p-[var(--fl-spacing-4)]", severityConfig.bgColor)}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-[var(--fl-spacing-3)]">
         <div className="flex-1">
-          <div className="mb-1 flex items-center gap-ds-2">
-            <Warning className={cn("h-4 w-4", severityConfig.color)} />
-            <h4 className="text-sm font-semibold text-gray-900">{alert.title}</h4>
+          <div className="mb-[var(--fl-spacing-1)] flex items-center gap-[var(--fl-spacing-2)]">
+            <AlertTriangle className={cn("h-4 w-4", severityConfig.color)} />
+            <h4 className="text-sm font-semibold text-[var(--fl-color-text)]">{alert.title}</h4>
             <Badge
               variant="secondary"
-              className={cn("text-typography-xs border px-2 py-0.5", severityConfig.badgeColor)}
+              className={cn("text-xs border px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]", severityConfig.badgeColor)}
             >
               {alert.severity}
             </Badge>
           </div>
 
-          <p className="leading-relaxed text-foreground mb-2 text-sm">{alert.message}</p>
+          <p className="leading-relaxed text-[var(--fl-color-text)] mb-[var(--fl-spacing-2)] text-sm">{alert.message}</p>
 
-          <div className="text-foreground flex items-center gap-3 text-tiny">
-            <span className="flex items-center gap-1">
+          <div className="text-[var(--fl-color-text)] flex items-center gap-[var(--fl-spacing-3)] text-xs">
+            <span className="flex items-center gap-[var(--fl-spacing-1)]">
               <Clock className="h-3 w-3" />
               {alert.timestamp.toLocaleTimeString("en-US", {
                 hour: "numeric",
@@ -267,13 +266,13 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
               })}
             </span>
             {alert.metric && (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Target className="h-3 w-3" />
                 {alert.metric}
               </span>
             )}
             {alert.actionRequired && (
-              <Badge className="text-red-600-dark border-status-error-light bg-[var(--fl-color-danger-subtle)] px-1.5 py-0.5 text-tiny">
+              <Badge className="text-[var(--fl-color-error)] border-[var(--fl-color-error-200)] bg-[var(--fl-color-error-subtle)] px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-xs rounded-full">
                 Action Required
               </Badge>
             )}
@@ -284,7 +283,7 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
           <Button
             variant="ghost"
             size="sm"
-            className="hover:text-foreground h-6 w-6 p-0 text-[var(--fl-color-text-muted)]"
+            className="hover:text-[var(--fl-color-text)] h-6 w-6 p-0 text-[var(--fl-color-text-muted)]"
             onClick={onDismiss}
           >
             ×
@@ -346,92 +345,92 @@ export function LivePerformanceMonitor({
   };
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn("space-y-[var(--fl-spacing-6)]", className)}>
       {/* Header with Live Status */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="flex items-center gap-ds-2 text-lg font-bold text-gray-900">
-            <Pulse className="h-5 w-5 text-blue-600" />
+          <h2 className="flex items-center gap-[var(--fl-spacing-2)] text-lg font-bold text-[var(--fl-color-text)]">
+            <Pulse className="h-5 w-5 text-[var(--fl-color-primary)]" />
             Live Performance Monitor
           </h2>
-          <p className="text-foreground mt-1 text-sm">Real-time system health and performance metrics</p>
+          <p className="text-[var(--fl-color-text)] mt-[var(--fl-spacing-1)] text-sm">Real-time system health and performance metrics</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-[var(--fl-spacing-3)]">
           {/* Health Score */}
           <div className="text-right">
-            <div className="text-3xl font-bold text-gray-900">{summaryStats.healthScore}%</div>
-            <div className="text-foreground text-tiny">Health Score</div>
+            <div className="text-3xl font-bold text-[var(--fl-color-text)]">{summaryStats.healthScore}%</div>
+            <div className="text-[var(--fl-color-text)] text-xs">Health Score</div>
           </div>
 
           {/* Live Indicator */}
           <div
             className={cn(
-              "flex items-center gap-2 rounded-ds-lg border px-3 py-1.5",
+              "flex items-center gap-[var(--fl-spacing-2)] rounded-[var(--fl-radius-lg)] border px-[var(--fl-spacing-3)] py-[var(--fl-spacing-2)]",
               isLive
-                ? "bg-status-success-light border-status-success-light text-status-success-dark"
-                : "border-[var(--fl-color-border)] bg-neutral-50 text-neutral-600"
+                ? "bg-[var(--fl-color-success-subtle)] border-[var(--fl-color-success-200)] text-[var(--fl-color-success)]"
+                : "border-[var(--fl-color-border)] bg-[var(--fl-color-background-subtle)] text-[var(--fl-color-text-muted)]"
             )}
           >
-            <div className={cn("h-2 w-2 rounded-ds-full", isLive ? "bg-semantic-success" : "bg-neutral-400")} />
+            <div className={cn("h-2 w-2 rounded-[var(--fl-radius-full)]", isLive ? "bg-[var(--fl-color-success)]" : "bg-[var(--fl-color-text-muted)]")} />
             <span className="text-sm font-medium">{isLive ? "Live" : "Offline"}</span>
           </div>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-        <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="spacing-3">
+      <div className="grid grid-cols-1 gap-[var(--fl-spacing-3)] md:grid-cols-4">
+        <Card className="border-l-4 border-l-[var(--fl-color-info)]">
+          <CardContent className="p-[var(--fl-spacing-3)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-foreground text-sm font-medium">Total Metrics</p>
-                <p className="text-3xl font-bold text-gray-900">{summaryStats.total}</p>
+                <p className="text-[var(--fl-color-text)] text-sm font-medium">Total Metrics</p>
+                <p className="text-3xl font-bold text-[var(--fl-color-text)]">{summaryStats.total}</p>
               </div>
-              <Target className="h-8 w-8 text-blue-600" />
+              <Target className="h-8 w-8 text-[var(--fl-color-info)]" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
-          <CardContent className="spacing-3">
+        <Card className="border-l-4 border-l-[var(--fl-color-success)]">
+          <CardContent className="p-[var(--fl-spacing-3)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-foreground text-sm font-medium">Excellent</p>
-                <p className="text-semantic-success-dark text-3xl font-bold">{summaryStats.excellent}</p>
+                <p className="text-[var(--fl-color-text)] text-sm font-medium">Excellent</p>
+                <p className="text-[var(--fl-color-success)] text-3xl font-bold">{summaryStats.excellent}</p>
               </div>
-              <CheckCircle className="text-semantic-success-dark h-8 w-8" />
+              <CheckCircle className="text-[var(--fl-color-success)] h-8 w-8" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
-          <CardContent className="spacing-3">
+        <Card className="border-l-4 border-l-[var(--fl-color-warning)]">
+          <CardContent className="p-[var(--fl-spacing-3)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-foreground text-sm font-medium">Warnings</p>
-                <p className="text-3xl font-bold text-yellow-600">{summaryStats.warning}</p>
+                <p className="text-[var(--fl-color-text)] text-sm font-medium">Warnings</p>
+                <p className="text-3xl font-bold text-[var(--fl-color-warning)]">{summaryStats.warning}</p>
               </div>
-              <Warning className="h-8 w-8 text-yellow-600" />
+              <AlertTriangle className="h-8 w-8 text-[var(--fl-color-warning)]" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
-          <CardContent className="spacing-3">
+        <Card className="border-l-4 border-l-[var(--fl-color-error)]">
+          <CardContent className="p-[var(--fl-spacing-3)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-foreground text-sm font-medium">Critical</p>
-                <p className="text-3xl font-bold text-red-600">{summaryStats.critical}</p>
+                <p className="text-[var(--fl-color-text)] text-sm font-medium">Critical</p>
+                <p className="text-3xl font-bold text-[var(--fl-color-error)]">{summaryStats.critical}</p>
               </div>
-              <Lightning className="h-8 w-8 text-red-600" />
+              <Zap className="h-8 w-8 text-[var(--fl-color-error)]" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-[var(--fl-spacing-3)] md:grid-cols-2 lg:grid-cols-3">
         <OptimizedAnimatePresence mode="popLayout">
           {metrics.map((metric: unknown) => (
             <MetricCard key={metric.id} metric={metric} onClick={() => onMetricClick?.(metric)} />
@@ -441,10 +440,10 @@ export function LivePerformanceMonitor({
 
       {/* Alerts Section */}
       {visibleAlerts.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-[var(--fl-spacing-3)]">
           <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-ds-2 text-base font-semibold text-gray-900">
-              <Warning className="h-5 w-5 text-red-600" />
+            <h3 className="flex items-center gap-[var(--fl-spacing-2)] text-base font-semibold text-[var(--fl-color-text)]">
+              <AlertTriangle className="h-5 w-5 text-[var(--fl-color-error)]" />
               Active Alerts ({visibleAlerts.length})
             </h3>
             {visibleAlerts.length > 0 && (
@@ -452,14 +451,14 @@ export function LivePerformanceMonitor({
                 variant="outline"
                 size="sm"
                 onClick={() => setVisibleAlerts([])}
-                className="text-foreground hover:text-gray-800"
+                className="text-[var(--fl-color-text)] hover:text-[var(--fl-color-text)]"
               >
                 Clear All
               </Button>
             )}
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-[var(--fl-spacing-3)]">
             <OptimizedAnimatePresence mode="popLayout">
               {visibleAlerts.map((alert: unknown) => (
                 <AlertCard key={alert.id} alert={alert} onDismiss={() => handleAlertDismiss(alert.id)} />
@@ -470,8 +469,8 @@ export function LivePerformanceMonitor({
       )}
 
       {/* Last Update Timestamp */}
-      <div className="flex items-center justify-center border-t border-[var(--fl-color-border)] pt-4 text-tiny text-[var(--fl-color-text-muted)]">
-        <Eye className="mr-1 h-3 w-3" />
+      <div className="flex items-center justify-center border-t border-[var(--fl-color-border)] pt-[var(--fl-spacing-4)] text-xs text-[var(--fl-color-text-muted)]">
+        <Eye className="mr-[var(--fl-spacing-1)] h-3 w-3" />
         Last updated:{" "}
         {lastUpdate.toLocaleTimeString("en-US", {
           hour: "numeric",

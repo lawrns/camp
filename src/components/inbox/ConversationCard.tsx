@@ -9,21 +9,7 @@ import { SlaTimerChip } from "@/components/unified-ui/components/SlaTimerChip";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { getCustomerDisplayFromConversation } from "@/lib/utils/unified-customer-display";
-import {
-  Archive,
-  CheckCircle as CheckCircle2,
-  CaretRight as ChevronRight,
-  Clock,
-  Flag,
-  SmileyXEyes as Frown,
-  SmileyMeh as Meh,
-  DotsThree as MoreHorizontal,
-  Smiley as Smile,
-  Star,
-  TrendUp as TrendingUp,
-  User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Archive, CheckCircle as CheckCircle2, CaretRight as ChevronRight, Clock, Flag, SmileyXEyes as Frown, SmileyMeh as Meh, DotsThree as MoreHorizontal, Smile as Smile, Star, TrendUp as TrendingUp, User, Zap as Zap,  } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import React, { memo, useCallback, useState } from "react";
 
@@ -267,7 +253,7 @@ export const ConversationCard = memo(function ConversationCard({
                   <h3 className="truncate font-semibold text-fl-text">{customerDisplay.displayName}</h3>
 
                   {/* Customer badges */}
-                  <div className="flex flex-shrink-0 items-center gap-1">
+                  <div className="flex flex-shrink-0 items-center gap-[var(--fl-spacing-1)]">
                     {conversation.isVerified && <Icon icon={CheckCircle2} className="h-3.5 w-3.5 text-fl-info" />}
                     {conversation.tags.includes("VIP") && (
                       <Icon icon={Star} className="h-3.5 w-3.5 fill-fl-warning text-fl-warning" />
@@ -341,7 +327,7 @@ export const ConversationCard = memo(function ConversationCard({
 
               {/* Enhanced message sender info */}
               {conversation.lastMessageSender && (
-                <div className="flex items-center gap-2 text-xs text-fl-text-muted mb-1">
+                <div className="flex items-center gap-[var(--fl-spacing-2)] text-xs text-fl-text-muted mb-1">
                   <span>
                     {conversation.lastMessageSender === "ai" ? "AI Assistant" :
                      conversation.lastMessageSender === "agent" ? "Support Agent" :
@@ -364,7 +350,7 @@ export const ConversationCard = memo(function ConversationCard({
                 <div className="flex min-w-0 items-center gap-ds-2">
                   {/* Priority indicator */}
                   {conversation.priority !== "low" && (
-                    <Badge variant={getPriorityVariant()} size="sm" className="flex items-center gap-1">
+                    <Badge variant={getPriorityVariant()} size="sm" className="flex items-center gap-[var(--fl-spacing-1)] rounded-full">
                       <Icon icon={Flag} className="h-2.5 w-2.5" />
                       {conversation.priority}
                     </Badge>
@@ -374,24 +360,24 @@ export const ConversationCard = memo(function ConversationCard({
                   {conversation.aiStatus ? (
                     <AIStatusBadge aiData={conversation.aiStatus} variant="compact" showConfidence={true} />
                   ) : conversation.assigned_to_ai || conversation.aiEnabled ? (
-                    <Badge variant="info" size="sm" className="flex items-center gap-1">
+                    <Badge variant="default" size="sm" className="flex items-center gap-[var(--fl-spacing-1)] rounded-full">
                       <Icon icon={Zap} className="h-2.5 w-2.5" />
                       AI
                     </Badge>
                   ) : conversation.assignedTo ? (
-                    <Badge variant="success" size="sm" className="flex items-center gap-1">
+                    <Badge variant="success" size="sm" className="flex items-center gap-[var(--fl-spacing-1)] rounded-full">
                       <Icon icon={User} className="h-2.5 w-2.5" />
                       Human
                     </Badge>
                   ) : (
-                    <Badge variant="info" size="sm" className="bg-brand-blue-500 text-white">
+                    <Badge variant="default" size="sm" className="bg-brand-blue-500 text-white rounded-full">
                       Open
                     </Badge>
                   )}
 
                   {/* Escalation risk */}
                   {conversation.escalationRisk === "high" && (
-                    <Badge variant="warning" size="sm" className="flex items-center gap-1">
+                    <Badge variant="secondary" size="sm" className="flex items-center gap-[var(--fl-spacing-1)] rounded-full">
                       <Icon icon={TrendingUp} className="h-2.5 w-2.5" />
                       Risk
                     </Badge>
@@ -399,7 +385,7 @@ export const ConversationCard = memo(function ConversationCard({
 
                   {/* Tags (limited to 2) */}
                   {conversation.tags.slice(0, 2).map((tag: string) => (
-                    <Badge key={tag} variant="outline" size="sm" className="text-fl-text-subtle">
+                    <Badge key={tag} variant="outline" size="sm" className="text-fl-text-subtle rounded-full">
                       {tag}
                     </Badge>
                   ))}
@@ -416,7 +402,7 @@ export const ConversationCard = memo(function ConversationCard({
 
                   {/* Response time */}
                   {conversation.responseTime && (
-                    <div className="flex items-center gap-1 text-tiny text-fl-text-subtle">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)] text-tiny text-fl-text-subtle">
                       <Icon icon={Clock} className="h-3 w-3" />
                       {getResponseTimeDisplay()}
                     </div>
@@ -424,9 +410,9 @@ export const ConversationCard = memo(function ConversationCard({
 
                   {/* Enhanced unread indicator */}
                   {conversation.unread && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-[var(--fl-spacing-1)]">
                       {conversation.unreadCount && conversation.unreadCount > 1 ? (
-                        <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-fl-brand px-2 py-1 text-xs font-bold text-white">
+                        <span className="inline-flex min-w-[20px] min-h-[20px] items-center justify-center rounded-ds-full bg-fl-brand px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-xs font-bold text-white">
                           {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
                         </span>
                       ) : (
@@ -457,7 +443,7 @@ export const ConversationCard = memo(function ConversationCard({
                 )}
 
                 {/* View conversation hint */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   <span>View conversation</span>
                   <Icon icon={ChevronRight} className="h-3 w-3" />
                 </div>

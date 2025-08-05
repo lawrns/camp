@@ -8,26 +8,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import {
-  Calendar,
-  Download,
-  Eye,
-  File,
-  FileText,
-  Funnel as Filter,
-  GridFour as Grid3X3,
-  Image as ImageIcon,
-  List,
-  DotsThreeVertical as MoreVertical,
-  MusicNote as Music,
-  MagnifyingGlass as Search,
-  Share,
-  SortAscending as SortAsc,
-  SortDescending as SortDesc,
-  Trash as Trash2,
-  Upload,
-  VideoCamera as Video,
-} from "@phosphor-icons/react";
+import { Calendar, Download, Eye, File, FileText, Funnel as Filter, GridFour as Grid3X3, Image as ImageIcon, List, MoreVertical as MoreVertical, MusicNote as Music, Search as Search, Share, SortAscending as SortAsc, SortDescending as SortDesc, Trash as Trash2, Upload, VideoCamera as Video,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ChatCircle } from "@phosphor-icons/react";
+import { ArrowDown, MessageCircle } from "lucide-react";
 import { VariableSizeList as List } from "react-window";
 import type { Conversation, Message } from "../types";
 import { getMessageItemSize } from "../utils/channelUtils";
@@ -172,7 +172,7 @@ export const MessageList: React.FC<MessageListProps> = ({
           <div className="flex items-center justify-center h-full">
             <div className="text-center p-6">
               <div className="text-red-500 mb-2">
-                <ChatCircle size={48} />
+                <MessageCircle size={48} />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Messages</h3>
               <p className="text-gray-600 mb-4">{error}</p>

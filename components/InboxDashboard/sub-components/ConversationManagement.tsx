@@ -2,7 +2,7 @@
 // Provides tagging, priority, status, notes, and history management
 
 import { useState, useEffect } from 'react';
-import { Tag, Flag, Clock, User, Download, Plus, X, Check } from '@phosphor-icons/react';
+import { Tag, Flag, Clock, User, Download, Plus, X, Check } from "lucide-react";
 import type { Conversation } from '../types';
 
 interface ConversationManagementProps {

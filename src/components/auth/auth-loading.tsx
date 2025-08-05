@@ -1,5 +1,5 @@
 import React from "react";
-import { Spinner as Loader2 } from "@phosphor-icons/react";
+import { Spinner as Loader2 } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 
 export function AuthLoading() {

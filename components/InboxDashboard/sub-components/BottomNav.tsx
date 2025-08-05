@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatCircle, Users, Gear, Bell } from "@phosphor-icons/react";
+import { MessageCircle, Users, Settings, Bell } from "lucide-react";
 
 interface BottomNavProps {
   activeTab: "conversations" | "customers" | "settings" | "notifications";
@@ -22,7 +22,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     {
       id: "conversations" as const,
       label: "Conversations",
-      icon: ChatCircle,
+      icon: MessageCircle,
       badge: unreadCount > 0 ? unreadCount : undefined,
     },
     {
@@ -38,7 +38,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     {
       id: "settings" as const,
       label: "Settings",
-      icon: Gear,
+      icon: Settings,
     },
   ];
 

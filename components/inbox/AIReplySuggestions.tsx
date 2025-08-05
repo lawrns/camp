@@ -101,11 +101,11 @@ export function AIReplySuggestions({
 
   const getToneColor = (tone: string) => {
     switch (tone) {
-      case 'professional': return 'bg-blue-100 text-blue-800';
-      case 'friendly': return 'bg-green-100 text-green-800';
+      case 'professional': return 'bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)]';
+      case 'friendly': return 'bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]';
       case 'empathetic': return 'bg-purple-100 text-purple-800';
-      case 'technical': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'technical': return 'bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]';
+      default: return 'bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]';
     }
   };
 
@@ -124,7 +124,7 @@ export function AIReplySuggestions({
 
   return (
     <Card className={`p-4 ${className}`}>
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-[var(--fl-spacing-2)] mb-3">
         <Sparkles className="h-4 w-4 text-blue-500" />
         <h3 className="text-sm font-medium text-gray-900">AI Reply Suggestions</h3>
         {isLoading && (
@@ -150,8 +150,8 @@ export function AIReplySuggestions({
               className="border border-gray-200 rounded-lg p-3 hover:border-blue-300 transition-colors cursor-pointer"
               onClick={() => onSelectSuggestion(suggestion.content)}
             >
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
+              <div className="flex items-start justify-between gap-[var(--fl-spacing-2)] mb-2">
+                <div className="flex items-center gap-[var(--fl-spacing-2)]">
                   <CategoryIcon className="h-3 w-3 text-gray-500" />
                   <Badge variant="secondary" className={getToneColor(suggestion.tone)}>
                     {suggestion.tone}

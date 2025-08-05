@@ -1,5 +1,5 @@
 import React from "react";
-import { MagnifyingGlass as Search, Target, TrendUp as TrendingUp, Lightning as Zap } from "@phosphor-icons/react";
+import { Search as Search, Target, TrendUp as TrendingUp, Zap as Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 

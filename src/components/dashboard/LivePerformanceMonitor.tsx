@@ -63,28 +63,28 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
           color: "text-green-600",
           bgColor: "bg-[var(--fl-color-success-subtle)] border-[var(--fl-color-success-muted)]",
           icon: CheckCircle,
-          badgeColor: "bg-green-100 text-green-800 border-[var(--fl-color-success-muted)]",
+          badgeColor: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] border-[var(--fl-color-success-muted)]",
         };
       case "good":
         return {
           color: "text-blue-600",
           bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-muted)]",
           icon: Target,
-          badgeColor: "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]",
+          badgeColor: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] border-[var(--fl-color-info-muted)]",
         };
       case "warning":
         return {
           color: "text-yellow-600",
           bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-muted)]",
           icon: Warning,
-          badgeColor: "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]",
+          badgeColor: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-muted)]",
         };
       case "critical":
         return {
           color: "text-red-600",
           bgColor: "bg-[var(--fl-color-danger-subtle)] border-[var(--fl-color-danger-muted)]",
           icon: Warning,
-          badgeColor: "bg-red-100 text-red-800 border-[var(--fl-color-danger-muted)]",
+          badgeColor: "bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)] border-[var(--fl-color-danger-muted)]",
         };
     }
   };
@@ -149,7 +149,7 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
         <CardContent>
           {/* Value and Unit */}
           <div className="mb-2 flex items-baseline justify-between">
-            <div className="flex items-baseline gap-1">
+            <div className="flex items-baseline gap-[var(--fl-spacing-1)]">
               <span className="text-3xl font-bold text-gray-900">
                 {typeof metric.value === "number" ? metric.value.toLocaleString() : metric.value}
               </span>
@@ -157,7 +157,7 @@ const MetricCard = memo(function MetricCard({ metric, onClick }: { metric: Perfo
             </div>
 
             {/* Trend Indicator */}
-            <div className={cn("flex items-center gap-1", trendConfig.color)}>
+            <div className={cn("flex items-center gap-[var(--fl-spacing-1)]", trendConfig.color)}>
               <TrendIcon className="h-4 w-4" />
               {ArrowIcon && <ArrowIcon className="h-3 w-3" />}
               {metric.change !== undefined && (
@@ -208,7 +208,7 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
         return {
           color: "text-red-600",
           bgColor: "bg-[var(--fl-color-danger-subtle)] border-[var(--fl-color-danger-muted)]",
-          badgeColor: "bg-red-100 text-red-800 border-[var(--fl-color-danger-muted)]",
+          badgeColor: "bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)] border-[var(--fl-color-danger-muted)]",
         };
       case "high":
         return {
@@ -220,13 +220,13 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
         return {
           color: "text-yellow-600",
           bgColor: "bg-[var(--fl-color-warning-subtle)] border-[var(--fl-color-warning-muted)]",
-          badgeColor: "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]",
+          badgeColor: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-muted)]",
         };
       case "low":
         return {
           color: "text-blue-600",
           bgColor: "bg-[var(--fl-color-info-subtle)] border-[var(--fl-color-info-muted)]",
-          badgeColor: "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]",
+          badgeColor: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] border-[var(--fl-color-info-muted)]",
         };
     }
   };
@@ -258,7 +258,7 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
           <p className="leading-relaxed text-foreground mb-2 text-sm">{alert.message}</p>
 
           <div className="text-foreground flex items-center gap-3 text-tiny">
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-[var(--fl-spacing-1)]">
               <Clock className="h-3 w-3" />
               {alert.timestamp.toLocaleTimeString("en-US", {
                 hour: "numeric",
@@ -267,13 +267,13 @@ const AlertCard = memo(function AlertCard({ alert, onDismiss }: { alert: Alert; 
               })}
             </span>
             {alert.metric && (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Target className="h-3 w-3" />
                 {alert.metric}
               </span>
             )}
             {alert.actionRequired && (
-              <Badge className="text-red-600-dark border-status-error-light bg-[var(--fl-color-danger-subtle)] px-1.5 py-0.5 text-tiny">
+              <Badge className="text-red-600-dark border-status-error-light bg-[var(--fl-color-danger-subtle)] px-1.5 py-0.5 text-tiny rounded-full">
                 Action Required
               </Badge>
             )}
@@ -367,7 +367,7 @@ export function LivePerformanceMonitor({
           {/* Live Indicator */}
           <div
             className={cn(
-              "flex items-center gap-2 rounded-ds-lg border px-3 py-1.5",
+              "flex items-center gap-[var(--fl-spacing-2)] rounded-ds-lg border px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)].5",
               isLive
                 ? "bg-status-success-light border-status-success-light text-status-success-dark"
                 : "border-[var(--fl-color-border)] bg-neutral-50 text-neutral-600"
@@ -452,7 +452,7 @@ export function LivePerformanceMonitor({
                 variant="outline"
                 size="sm"
                 onClick={() => setVisibleAlerts([])}
-                className="text-foreground hover:text-gray-800"
+                className="text-foreground hover:text-[var(--fl-color-text)]"
               >
                 Clear All
               </Button>

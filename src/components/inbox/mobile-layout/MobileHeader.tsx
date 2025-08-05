@@ -22,13 +22,7 @@ import {
 import { Input } from "@/components/unified-ui/components/input";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { cn } from "@/lib/utils";
-import {
-  ArrowLeft,
-  Funnel as Filter,
-  Plus,
-  ArrowClockwise as RefreshCw,
-  MagnifyingGlass as Search
-} from "@phosphor-icons/react";
+import { ArrowLeft, Funnel as Filter, Plus, ArrowClockwise as RefreshCw, Search as Search } from "lucide-react";
 import { ActivePanel, MobileHeaderState } from "./types";
 
 interface MobileHeaderProps {
@@ -176,7 +170,7 @@ export function MobileHeader({
           <div className="mobile-header-center">
             <span className="mobile-header-title">{title}</span>
             {unreadCount > 0 && (
-              <Badge variant="error" className="h-5 min-w-[1.25rem] text-tiny">
+              <Badge variant="destructive" className="h-5 min-w-[1.25rem] text-tiny rounded-full">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </Badge>
             )}
@@ -203,7 +197,7 @@ export function MobileHeader({
                 >
                   <Filter className="h-5 w-5" />
                   {headerState.activeFilters.length > 0 && (
-                    <Badge variant="error" className="absolute -right-1 -top-1 h-4 min-w-[1rem] text-tiny">
+                    <Badge variant="destructive" className="absolute -right-1 -top-1 h-4 min-w-[1rem] text-tiny rounded-full">
                       {headerState.activeFilters.length}
                     </Badge>
                   )}
@@ -276,7 +270,7 @@ export function MobileHeader({
                   </label>
                 </div>
                 {filter.count !== undefined && (
-                  <Badge variant="secondary" className="text-tiny">
+                  <Badge variant="secondary" className="text-tiny rounded-full">
                     {filter.count}
                   </Badge>
                 )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkle, Users, Clock, Star } from '@phosphor-icons/react';
+import { Sparkles, Users, Clock, Star } from "lucide-react";
 import { Card, CardContent } from '@/components/unified-ui/components/Card';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -77,7 +77,7 @@ export function EnhancedHeroSection({ metrics, userName }: EnhancedHeroSectionPr
             </div>
           </div>
           <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce-slow">
-            <Sparkle className="w-8 h-8 text-white" />
+            <Sparkles className="w-8 h-8 text-white" />
           </div>
         </div>
       </div>

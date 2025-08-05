@@ -1,7 +1,7 @@
 // AttachmentPreview component for file previews
 
 import * as React from "react";
-import { ArrowClockwise, File, Image, Warning, X } from "@phosphor-icons/react";
+import { ArrowClockwise, File, Image, AlertTriangle, X } from "lucide-react";
 import type { FileAttachment } from "../types";
 
 interface AttachmentPreviewProps {
@@ -75,7 +75,7 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment
                 {/* File icon */}
                 <div className="mt-1 flex-shrink-0">
                   {hasError ? (
-                    <Warning className="h-5 w-5 text-[var(--fl-color-danger)]" />
+                    <AlertTriangle className="h-5 w-5 text-[var(--fl-color-danger)]" />
                   ) : isImage ? (
                     <Image
                       className={`h-5 w-5 ${isSuccess ? "text-[var(--fl-color-success)]" : "text-[var(--fl-color-text-muted)]"}`}

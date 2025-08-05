@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { DotsThree as MoreHorizontal, MagnifyingGlass as Search } from "@phosphor-icons/react";
+import { DotsThree as MoreHorizontal, Search as Search } from "lucide-react";
 import MobileHeader from "@/components/mobile/MobileHeader";
 import { MessageComposer } from "@/components/unified-ui/components/Composer";
 import { Icon } from "@/lib/ui/Icon";

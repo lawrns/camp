@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
-import { Clock, Download, Eye, Heart, DotsThree, ArrowBendUpLeft, Share, ThumbsUp } from "@phosphor-icons/react";
+import { Clock, Download, Eye, Heart, MoreHorizontal, CornerUpLeft, Share, ThumbsUp } from "lucide-react";
 import * as React from "react";
 import { useState, memo } from "react";
 import type { Message } from "../types";
@@ -182,7 +182,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             title="Reply"
             data-testid="message-reply"
           >
-            <ArrowBendUpLeft className="h-3 w-3" />
+            <CornerUpLeft className="h-3 w-3" />
           </button>
           <button
             onClick={() => onReact?.(message.id, "like")}
@@ -214,7 +214,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             title="More options"
             data-testid="message-more"
           >
-            <DotsThree className="h-3 w-3" />
+            <MoreHorizontal className="h-3 w-3" />
           </button>
         </div>
 
@@ -236,7 +236,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
                 className="ml-auto hover:bg-background rounded p-1 text-gray-400 transition-colors"
                 data-testid="close-reactions"
               >
-                <DotsThree className="h-4 w-4" />
+                <MoreHorizontal className="h-4 w-4" />
               </button>
             </div>
             <div className="flex items-center gap-2 mt-2" data-testid="reactions-options">

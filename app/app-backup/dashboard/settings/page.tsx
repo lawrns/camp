@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useOrganizationSettings } from "@/hooks/useOrganizationSettings";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
-import { ChatCircle as MessageSquare, Palette, Gear as Settings, Shield, Users } from "@phosphor-icons/react";
+import { MessageCircle as MessageSquare, Palette, Settings as Settings, Shield, Users } from "lucide-react";
 import { useState } from "react";
 
 export default function SettingsPage() {

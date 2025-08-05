@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } = "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 
 export interface AISession {

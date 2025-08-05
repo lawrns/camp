@@ -2,17 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Warning as AlertTriangle,
-  Clock,
-  Download,
-  Eye,
-  Image,
-  Palette,
-  FloppyDisk as Save,
-  Trash,
-  Upload,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Clock, Download, Eye, Image, Palette, FloppyDisk as Save, Trash, Upload,  } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";

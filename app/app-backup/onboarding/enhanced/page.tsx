@@ -7,14 +7,7 @@ import { Label } from "@/components/unified-ui/components/label";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  ArrowRight,
-  Buildings as Building2,
-  CheckCircle,
-  Spinner as Loader2,
-  Gear as Settings,
-  Users,
-} from "@phosphor-icons/react";
+import { ArrowRight, Buildings as Building2, CheckCircle, Spinner as Loader2, Settings as Settings, Users,  } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

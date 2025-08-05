@@ -2,20 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  ArrowRight,
-  ChartBar as BarChart3,
-  Calendar,
-  Clock,
-  Command,
-  FileText,
-  Question as HelpCircle,
-  ChatCircle as MessageSquare,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Tag,
-  User,
-} from "@phosphor-icons/react";
+import { ArrowRight, ChartBar as BarChart3, Calendar, Clock, Command, FileText, HelpCircle as HelpCircle, MessageCircle as MessageSquare, Search as Search, Settings as Settings, Tag, User,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
 import { Separator } from "@/components/unified-ui/components/Separator";
@@ -170,7 +157,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
-                <div className="ml-3 flex items-center gap-1">
+                <div className="ml-3 flex items-center gap-[var(--fl-spacing-1)]">
                   <kbd className="rounded border bg-muted px-1.5 py-0.5 text-tiny">ESC</kbd>
                   <span className="text-tiny text-muted-foreground">to close</span>
                 </div>
@@ -183,7 +170,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                   <div className="p-spacing-sm">
                     {filteredResults.length > 0 ? (
                       <>
-                        <div className="mb-2 px-2 py-1 text-tiny font-medium text-muted-foreground">Search Results</div>
+                        <div className="mb-2 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-tiny font-medium text-muted-foreground">Search Results</div>
                         {filteredResults.map((result, index) => (
                           <CommandBarItem
                             key={result.id}
@@ -208,7 +195,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                     {/* Recent Searches */}
                     {recentSearches.length > 0 && (
                       <>
-                        <div className="mb-2 px-2 py-1 text-tiny font-medium text-muted-foreground">
+                        <div className="mb-2 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-tiny font-medium text-muted-foreground">
                           Recent Searches
                         </div>
                         <div className="mb-4 flex flex-wrap gap-ds-2 px-2">
@@ -216,7 +203,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                             <button
                               key={search}
                               onClick={() => setQuery(search)}
-                              className="inline-flex items-center gap-1 rounded-ds-md border bg-muted/50 px-2 py-1 text-tiny hover:bg-muted"
+                              className="inline-flex items-center gap-[var(--fl-spacing-1)] rounded-ds-md border bg-muted/50 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-tiny hover:bg-muted"
                             >
                               <Icon icon={Clock} className="h-3 w-3" />
                               {search}
@@ -228,7 +215,7 @@ export function CommandBar({ isOpen, onClose, onSearch }: CommandBarProps) {
                     )}
 
                     {/* Quick Actions */}
-                    <div className="mb-2 px-2 py-1 text-tiny font-medium text-muted-foreground">Quick Actions</div>
+                    <div className="mb-2 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-tiny font-medium text-muted-foreground">Quick Actions</div>
                     {quickActions.map((action, index) => (
                       <button
                         key={action.id}
@@ -298,7 +285,7 @@ function CommandBarItem({
         {result.subtitle && <div className="truncate text-tiny opacity-70">{result.subtitle}</div>}
       </div>
       {result.badge && (
-        <Badge variant={isSelected ? "secondary" : "default"} className="ml-2">
+        <Badge variant={isSelected ? "secondary" : "default"} className="ml-2 rounded-full">
           {result.badge}
         </Badge>
       )}

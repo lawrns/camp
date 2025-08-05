@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { ArrowClockwise, ChatCircle, Clock, TrendUp, Users, Warning } from "@phosphor-icons/react";
+import { ArrowClockwise, MessageCircle, Clock, TrendUp, Users, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
@@ -98,7 +98,7 @@ export function RealtimeDashboard() {
     return (
       <Card className="border-status-error-light bg-[var(--fl-color-danger-subtle)]">
         <CardContent className="p-spacing-lg text-center">
-          <Warning className="text-brand-mahogany-500 mx-auto mb-4 h-12 w-12" />
+          <AlertTriangle className="text-brand-mahogany-500 mx-auto mb-4 h-12 w-12" />
           <h3 className="mb-2 text-base font-semibold text-red-900">Unable to Load Dashboard</h3>
           <p className="text-red-600-dark mb-4" data-testid="error-message">
             {error}
@@ -140,7 +140,7 @@ export function RealtimeDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Conversations</CardTitle>
-            <ChatCircle className="h-4 w-4 text-muted-foreground" />
+            <MessageCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold" data-testid="total-conversations">

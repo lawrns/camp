@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import {
-  CheckCircle as Check,
-  Copy,
-  ArrowsClockwise as RefreshCw,
-  PaperPlaneTilt as Send,
-} from "@phosphor-icons/react";
+import { CheckCircle as Check, Copy, RefreshCw as RefreshCw, Send as Send,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";

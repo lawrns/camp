@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Warning as AlertTriangle, ArrowRight, CheckCircle, Clock, User, XCircle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowRight, CheckCircle, Clock, User, XCircle } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

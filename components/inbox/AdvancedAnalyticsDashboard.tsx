@@ -1,30 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Activity,
-  Warning as AlertCircle,
-  ChartBar as BarChart3,
-  Brain,
-  Calendar,
-  ChartPie,
-  CheckCircle,
-  Clock,
-  Download,
-  Funnel as Filter,
-  Heart,
-  ChatCircle as MessageCircle,
-  ChatCircle as MessageSquare,
-  ArrowsClockwise as RefreshCw,
-  Star,
-  Target,
-  Timer,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  UserFocus as UserCheck,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Activity, AlertTriangle as AlertCircle, ChartBar as BarChart3, Brain, Calendar, ChartPie, CheckCircle, Clock, Download, Funnel as Filter, Heart, MessageCircle as MessageCircle, MessageCircle as MessageSquare, RefreshCw as RefreshCw, Star, Target, Timer, TrendDown as TrendingDown, TrendUp as TrendingUp, UserFocus as UserCheck, Users, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
@@ -252,13 +229,13 @@ export function AdvancedAnalyticsDashboard({
   const getWorkloadColor = (workload: string) => {
     switch (workload) {
       case "light":
-        return "bg-green-100 text-green-800";
+        return "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]";
       case "moderate":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]";
       case "heavy":
-        return "bg-red-100 text-red-800";
+        return "bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)]";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)]";
     }
   };
 
@@ -335,7 +312,7 @@ export function AdvancedAnalyticsDashboard({
                     <p className="text-3xl font-bold text-gray-900">{metric.value}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-[var(--fl-spacing-1)]">
                   {getTrendIcon(metric.trend, metric.change)}
                   <span
                     className={cn(
@@ -443,7 +420,7 @@ export function AdvancedAnalyticsDashboard({
                             {agent.workload}
                           </Badge>
                           {agent.expertise.map((skill: unknown) => (
-                            <Badge key={skill} variant="outline" className="text-tiny">
+                            <Badge key={skill} variant="outline" className="text-tiny rounded-full">
                               {skill}
                             </Badge>
                           ))}
@@ -488,10 +465,10 @@ export function AdvancedAnalyticsDashboard({
                         <Badge
                           variant="secondary"
                           className={cn(
-                            insight.severity === "critical" && "bg-status-error-light text-red-800",
+                            insight.severity === "critical" && "bg-status-error-light text-[var(--fl-color-danger)]",
                             insight.severity === "high" && "bg-orange-100 text-orange-800",
-                            insight.severity === "medium" && "bg-status-warning-light text-yellow-800",
-                            insight.severity === "low" && "bg-status-info-light text-blue-800"
+                            insight.severity === "medium" && "bg-status-warning-light text-[var(--fl-color-warning)]",
+                            insight.severity === "low" && "bg-status-info-light text-[var(--fl-color-primary)]"
                           )}
                         >
                           {insight.severity}

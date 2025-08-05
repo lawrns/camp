@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Spinner, ChatCircle, Warning, Wifi } from '@phosphor-icons/react';
+import { Spinner, MessageCircle, AlertTriangle, Wifi } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -146,7 +146,7 @@ export function ConnectionLoader({
         };
       case 'failed':
         return {
-          icon: Warning,
+          icon: AlertTriangle,
           title: 'Connection Failed',
           message: message || 'Unable to connect to chat server',
           showRetry: true,
@@ -202,7 +202,7 @@ export function ConnectionLoader({
 
 // Empty state component
 export function EmptyState({
-  icon: Icon = ChatCircle,
+  icon: Icon = MessageCircle,
   title = "No messages yet",
   description = "Start the conversation by sending a message",
   action,
@@ -272,7 +272,7 @@ export function ErrorState({
       )}
     >
       <div className="mb-4 p-4 bg-red-100 rounded-full">
-        <Warning className="h-12 w-12 text-red-600" />
+        <AlertTriangle className="h-12 w-12 text-red-600" />
       </div>
       
       <h3 className="text-lg font-semibold text-red-900 mb-2">

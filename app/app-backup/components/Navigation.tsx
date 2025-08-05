@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChatCircle, House, Gear as Settings, TestTube, User, List, X } from "@phosphor-icons/react";
+import { MessageCircle, House, Settings as Settings, TestTube, User, List, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,7 +17,7 @@ const navigationItems = [
   {
     name: "Live Chat",
     href: "/app/chat",
-    icon: ChatCircle,
+    icon: MessageCircle,
   },
   {
     name: "Auth Test",

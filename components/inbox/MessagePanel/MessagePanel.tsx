@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useInboxStore } from "@/hooks/useInboxStore";
 import { useTypingPreview } from "@/lib/realtime/useTypingPreview";
 import { Icon } from "@/lib/ui/Icon";
-import { ChatCircle as MessageCircle } from "@phosphor-icons/react";
+import { MessageCircle as MessageCircle } from "lucide-react";
 import React, { useMemo } from "react";
 import { MessagePanelErrorBoundary } from "./ErrorBoundary";
 import { MessageList } from "./MessageList";

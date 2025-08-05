@@ -7,7 +7,7 @@
 
 "use client";
 
-import { Buildings as Building, Globe, MapPin, Upload } from "@phosphor-icons/react";
+import { Buildings as Building, Globe, MapPin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Input } from "@/components/unified-ui/components/input";

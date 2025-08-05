@@ -1,14 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import {
-  List as Menu,
-  Sidebar as PanelLeft,
-  SidebarSimple as PanelLeftClose,
-  Columns as PanelRight,
-  Rows as PanelRightClose,
-  X,
-} from "@phosphor-icons/react";
+import { List as Menu, Sidebar as PanelLeft, SidebarSimple as PanelLeftClose, Columns as PanelRight, Rows as PanelRightClose, X,  } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

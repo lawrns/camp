@@ -8,7 +8,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Warning as AlertCircle, CheckCircle, Spinner as Loader2, Ticket } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle, Spinner as Loader2, Ticket } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

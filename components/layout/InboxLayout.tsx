@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { List as Menu, ChatCircle as MessageSquare, Users, X } from "@phosphor-icons/react";
+import { List as Menu, MessageCircle as MessageSquare, Users, X } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

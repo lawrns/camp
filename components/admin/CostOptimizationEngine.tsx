@@ -1,22 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  ArrowRight,
-  ChartBar as BarChart3,
-  Robot as Bot,
-  CheckCircle,
-  Clock,
-  CurrencyDollar,
-  Gauge,
-  Lightbulb,
-  ArrowsClockwise as RefreshCw,
-  Gear as Settings,
-  Target,
-  TrendDown as TrendingDown,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowRight, ChartBar as BarChart3, Bot as Bot, CheckCircle, Clock, CurrencyDollar, Gauge, Lightbulb, RefreshCw as RefreshCw, Settings as Settings, Target, TrendDown as TrendingDown, Zap as Zap,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader } from "@/components/unified-ui/components/Card";
-import { Brain, ChatCircle, Clock, Sparkle, Users } from "@phosphor-icons/react";
+import { Brain, MessageCircle, Clock, Sparkles, Users } from "lucide-react";
 
 export default function TestDashboardStyling() {
     return (
@@ -15,7 +15,7 @@ export default function TestDashboardStyling() {
                     <Card className="border-0 bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200">
                         <CardContent className="spacing-6">
                             <div className="flex items-center justify-between">
-                                <ChatCircle className="h-8 w-8 text-white/90" weight="duotone" />
+                                <MessageCircle className="h-8 w-8 text-white/90" weight="duotone" />
                                 <Badge className="border-0 bg-white/20 text-xs font-medium text-white">Today</Badge>
                             </div>
                             <div className="mb-2 text-3xl font-bold text-white">1,234</div>
@@ -83,7 +83,7 @@ export default function TestDashboardStyling() {
                         <CardContent>
                             <div className="rounded-ds-xl bg-gradient-to-r from-blue-50 to-blue-100 spacing-4 border border-blue-200">
                                 <div className="flex items-start gap-3">
-                                    <Sparkle className="h-6 w-6 text-blue-600 flex-shrink-0" weight="fill" />
+                                    <Sparkles className="h-6 w-6 text-blue-600 flex-shrink-0" weight="fill" />
                                     <div>
                                         <h4 className="mb-2 font-semibold text-blue-900">AI Insight</h4>
                                         <p className="text-sm leading-relaxed text-blue-800">

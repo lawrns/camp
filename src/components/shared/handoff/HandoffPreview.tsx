@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Warning as AlertTriangle, ArrowRight, Clock, ChatCircle as MessageSquare, User } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowRight, Clock, MessageCircle as MessageSquare, User } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";

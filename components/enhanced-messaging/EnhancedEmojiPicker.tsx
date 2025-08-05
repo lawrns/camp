@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MagnifyingGlass, Clock, Heart, Smiley, HandWaving, Lightbulb, Football, Car, Pizza } from '@phosphor-icons/react';
+import { Search, Clock, Heart, Smile, HandWaving, Lightbulb, Football, Car, Pizza } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -17,7 +17,7 @@ const EMOJI_CATEGORIES = {
   },
   smileys: {
     name: 'Smileys & People',
-    icon: Smiley,
+    icon: Smile,
     emojis: [
       '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
       '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚',
@@ -194,7 +194,7 @@ export function EnhancedEmojiPicker({
       {/* Search */}
       {showSearch && (
         <div className="relative mb-3">
-          <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             ref={searchInputRef}
             value={searchQuery}
@@ -253,7 +253,7 @@ export function EnhancedEmojiPicker({
           <div className="text-center py-8 text-gray-500">
             {searchQuery ? (
               <>
-                <MagnifyingGlass className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No emojis found for "{searchQuery}"</p>
               </>
             ) : activeCategory === 'recent' ? (

@@ -136,7 +136,7 @@ export function OnboardingStatusCard({ className, showDismiss = true }: Onboardi
                 </p>
                 <p className="text-foreground text-sm">Continue where you left off</p>
               </div>
-              <Badge variant="secondary" className="text-status-info-dark bg-[var(--fl-color-info-subtle)]">
+              <Badge variant="secondary" className="text-status-info-dark bg-[var(--fl-color-info-subtle)] rounded-full">
                 Current
               </Badge>
             </div>
@@ -151,7 +151,7 @@ export function OnboardingStatusCard({ className, showDismiss = true }: Onboardi
                     return (
                       <div
                         key={stepId}
-                        className="flex items-center gap-ds-2 rounded-ds-md bg-[var(--fl-color-success-subtle)] px-2 py-1 text-sm"
+                        className="flex items-center gap-ds-2 rounded-ds-md bg-[var(--fl-color-success-subtle)] px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-sm"
                       >
                         <Icon icon={CheckCircle2} className="text-semantic-success-dark h-3 w-3" />
                         <span className="text-green-600-dark">{getStepTitle(stepId)}</span>

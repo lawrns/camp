@@ -2,14 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MagnifyingGlass, 
-  Article, 
-  CaretDown, 
-  CaretRight,
-  Clock,
-  Star
-} from '@phosphor-icons/react';
+import { Search, Article, ChevronDown, CaretRight, Clock, Star } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 interface HelpTabProps {
@@ -184,7 +177,7 @@ export const HelpTab: React.FC<HelpTabProps> = ({
       {/* Search Bar */}
       <div className="p-4 border-b border-gray-200">
         <div className="relative">
-          <MagnifyingGlass 
+          <Search 
             size={18} 
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
           />
@@ -280,7 +273,7 @@ export const HelpTab: React.FC<HelpTabProps> = ({
                           </span>
                         </div>
                         {isExpanded ? (
-                          <CaretDown size={16} className="text-gray-400" />
+                          <ChevronDown size={16} className="text-gray-400" />
                         ) : (
                           <CaretRight size={16} className="text-gray-400" />
                         )}

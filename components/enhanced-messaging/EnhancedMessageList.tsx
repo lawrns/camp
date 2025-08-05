@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChatCircle, ArrowDown, Spinner } from '@phosphor-icons/react';
+import { MessageCircle, ArrowDown, Spinner } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -223,7 +223,7 @@ export function EnhancedMessageList({
     return (
       <div className={cn('flex-1 flex items-center justify-center p-8', className)}>
         <div className="text-center text-gray-500">
-          <ChatCircle className="h-16 w-16 mx-auto mb-4 opacity-50" />
+          <MessageCircle className="h-16 w-16 mx-auto mb-4 opacity-50" />
           <h3 className="text-lg font-medium mb-2">No messages yet</h3>
           <p className="text-sm">Start the conversation by sending a message.</p>
         </div>

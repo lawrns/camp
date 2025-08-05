@@ -22,7 +22,7 @@ import {
 } from "@/components/unified-ui/components/select";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { useAuth } from "@/hooks/useAuth";
-import { ArrowRight, CheckCircle, Ticket, User, Warning } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle, Ticket, User, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 // REMOVED: Old fragmented ticket creation - now using unified API
 import { getAvailableAgents } from "@/lib/tickets";
@@ -413,7 +413,7 @@ export function ConvertToTicketDialog({ open, onOpenChange, conversation, onConv
             {!isFormValid && (
               <div className="ds-warning-message">
                 <div className="flex items-center gap-ds-2">
-                  <Icon icon={Warning} className="h-4 w-4" />
+                  <Icon icon={AlertTriangle} className="h-4 w-4" />
                   <span className="text-sm font-medium">Please complete required fields:</span>
                 </div>
                 <ul className="mt-1 ml-6 text-sm list-disc">

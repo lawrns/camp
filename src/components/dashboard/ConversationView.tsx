@@ -110,7 +110,7 @@ export function ConversationView({
                 {message.senderName || (isAgent ? "Agent" : "User")}
               </span>
               {isAI && (
-                <Badge variant="secondary" className="px-1.5 py-0.5 text-tiny">
+                <Badge variant="secondary" className="px-1.5 py-0.5 text-tiny rounded-full">
                   AI
                 </Badge>
               )}

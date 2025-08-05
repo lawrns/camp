@@ -39,22 +39,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-u
 import { OptimizationRecommendation, PerformanceInsight, RAGMetrics } from "@/lib/analytics/RAGAnalyticsService";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  ChartLine as Activity,
-  Warning as AlertCircle,
-  Warning as AlertTriangle,
-  ChartBar as BarChart3,
-  CheckCircle,
-  Clock,
-  CurrencyDollar as DollarSign,
-  Download,
-  Lightbulb,
-  ChartPie as PieChartIcon,
-  ArrowsClockwise as RefreshCw,
-  Target,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, AlertTriangle as AlertCircle, AlertTriangle as AlertTriangle, ChartBar as BarChart3, CheckCircle, Clock, CurrencyDollar as DollarSign, Download, Lightbulb, ChartPie as PieChartIcon, RefreshCw as RefreshCw, Target, TrendDown as TrendingDown, TrendUp as TrendingUp,  } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface RAGAnalyticsDashboardProps {

@@ -2,17 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import {
-  Calendar,
-  Eye,
-  Funnel as Filter,
-  MagnifyingGlass as Search,
-  Sparkle as Sparkles,
-  Star,
-  Tag,
-  User,
-  X,
-} from "@phosphor-icons/react";
+import { Calendar, Eye, Funnel as Filter, Search as Search, Sparkles as Sparkles, Star, Tag, User, X,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

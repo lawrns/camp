@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { TrendDown, TrendUp } from "@phosphor-icons/react/dist/ssr";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { cn } from "@/lib/utils";
@@ -125,7 +125,7 @@ export function MetricCard({
                   calculatedTrend.isGood ? "text-semantic-success-dark" : "text-red-600"
                 )}
               >
-                {calculatedTrend.isUp ? <TrendUp className="h-4 w-4" /> : <TrendDown className="h-4 w-4" />}
+                {calculatedTrend.isUp ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 <span className="font-medium">{calculatedTrend.percentage}%</span>
               </OptimizedMotion.div>
               <span className="text-tiny text-muted-foreground">vs last period</span>

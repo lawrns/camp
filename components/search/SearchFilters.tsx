@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Funnel as Filter } from "@phosphor-icons/react";
+import { Funnel as Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Checkbox } from "@/components/unified-ui/components/checkbox";
 import { Label } from "@/components/unified-ui/components/label";

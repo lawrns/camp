@@ -1,7 +1,7 @@
 // Placeholder components for remaining onboarding steps
 "use client";
 
-import { Spinner as Loader2 } from "@phosphor-icons/react";
+import { Spinner as Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 

@@ -1,14 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Warning as AlertCircle,
-  Clock,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  TrendUp as TrendingUp,
-  User,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Clock, Envelope as Mail, MessageCircle as MessageSquare, TrendUp as TrendingUp, User,  } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card } from "@/components/unified-ui/components/Card";

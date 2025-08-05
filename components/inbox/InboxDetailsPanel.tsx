@@ -3,21 +3,7 @@
 import React, { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Activity,
-  Brain,
-  Buildings as Building,
-  Calendar,
-  Clock,
-  Envelope as Mail,
-  MapPin,
-  ChatCircle as MessageSquare,
-  Phone,
-  Star,
-  Tag,
-  TrendUp as TrendingUp,
-  User,
-} from "@phosphor-icons/react";
+import { Activity, Brain, Buildings as Building, Calendar, Clock, Envelope as Mail, MapPin, MessageCircle as MessageSquare, Phone, Star, Tag, TrendUp as TrendingUp, User,  } from "lucide-react";
 import { ImprovedHandoverButton } from "@/components/ai/handover/ImprovedHandoverButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
@@ -187,7 +173,7 @@ export function InboxDetailsPanel({ conversation, customerData }: InboxDetailsPa
                       <CardContent>
                         <div className="flex flex-wrap gap-ds-2">
                           {customerData.tags.map((tag: unknown) => (
-                            <Badge key={tag} variant="secondary" className="text-tiny">
+                            <Badge key={tag} variant="secondary" className="text-tiny rounded-full">
                               {tag}
                             </Badge>
                           ))}

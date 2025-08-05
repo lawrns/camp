@@ -11,21 +11,7 @@ import { useDashboardMetrics } from "@/lib/realtime/dashboard-metrics";
 import { Icon } from "@/lib/ui/Icon";
 import { useOrganization } from "@/store/domains/organization";
 import { api } from "@/trpc/react";
-import {
-  ChartLine as Activity,
-  ArrowSquareOut,
-  ChartBar as BarChart3,
-  Robot as Bot,
-  CheckCircle,
-  Fire as Flame,
-  ChatCircle as MessageSquare,
-  Sparkle as Sparkles,
-  Star,
-  Target,
-  TrendUp as TrendingUp,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, ArrowSquareOut, ChartBar as BarChart3, Bot as Bot, CheckCircle, Flame as Flame, MessageCircle as MessageSquare, Sparkles as Sparkles, Star, Target, TrendUp as TrendingUp, Users, Zap as Zap,  } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

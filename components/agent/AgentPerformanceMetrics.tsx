@@ -1,15 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  Clock,
-  ChatCircle as MessageSquare,
-  Star,
-  Target,
-  TrendUp as TrendingUp,
-  Trophy,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Clock, MessageCircle as MessageSquare, Star, Target, TrendUp as TrendingUp, Trophy,  } from "lucide-react";
 import {
   Area,
   AreaChart,

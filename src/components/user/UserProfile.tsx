@@ -2,17 +2,7 @@
 
 import { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Bell,
-  Buildings as Building,
-  CheckCircle,
-  Crown,
-  FloppyDisk as Save,
-  Shield,
-  User,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-} from "@phosphor-icons/react";
+import { Bell, Buildings as Building, CheckCircle, Crown, FloppyDisk as Save, Shield, User, WifiHigh, WifiSlash as WifiHighOff,  } from "lucide-react";
 import { Alert, AlertDescription } from "@/unified-ui/Alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/unified-ui/Avatar";
 import { Badge } from "@/unified-ui/Badge";

@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  ArrowSquareOut,
-  CheckCircle,
-  Eye,
-  EyeSlash as EyeOff,
-  Info,
-  ArrowCounterClockwise as RotateCcw,
-  Shield,
-  Wrench,
-  X,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowSquareOut, CheckCircle, Eye, EyeSlash as EyeOff, Info, ArrowCounterClockwise as RotateCcw, Shield, Wrench, X,  } from "lucide-react";
 import { storageAdapter } from "@/lib/auth/seamless-storage-adapter";
 import { FadeIn, ScaleIn, SlideIn } from "@/lib/performance/lightweight-animations";
 import { Icon } from "@/lib/ui/Icon";

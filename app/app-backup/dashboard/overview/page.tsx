@@ -2,20 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  Clock,
-  Download,
-  Funnel as Filter,
-  ChatCircle as MessageSquare,
-  Minus,
-  Plus,
-  ArrowsClockwise as RefreshCw,
-  Gear as Settings,
-  TrendUp as TrendingUp,
-  Users,
-} from "@phosphor-icons/react";
+import { ArrowDownRight, ArrowUpRight, Clock, Download, Funnel as Filter, MessageCircle as MessageSquare, Minus, Plus, RefreshCw as RefreshCw, Settings as Settings, TrendUp as TrendingUp, Users,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, StatCard } from "@/components/unified-ui/components/Card";

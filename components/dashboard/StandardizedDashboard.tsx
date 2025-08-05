@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/unified-ui/components/Card";
+import { Progress } from "@/components/unified-ui/components/Progress";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -130,7 +131,9 @@ export function MetricCard({
   target,
   status,
 }: MetricCardProps) {
-  const styles = variantStyles[variant];
+  // Support legacy 'status' prop for backward compatibility
+  const effectiveVariant = status || variant;
+  const styles = variantStyles[effectiveVariant];
 
   const formatValue = (val: string | number): string => {
     if (typeof val === "number") {
@@ -164,7 +167,7 @@ export function MetricCard({
 
   if (loading) {
     return (
-      <Card className={cn(metricCardVariants({ variant }), className)}>
+      <Card className={cn(metricCardVariants({ variant: effectiveVariant }), className)}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="h-4 w-24 animate-pulse rounded bg-[var(--fl-color-background-subtle)]" />
           {IconComponent && <div className="h-4 w-4 animate-pulse rounded bg-[var(--fl-color-background-subtle)]" />}
@@ -181,7 +184,7 @@ export function MetricCard({
   return (
     <Card
       className={cn(
-        metricCardVariants({ variant, interactive: !!onClick }),
+        metricCardVariants({ variant: effectiveVariant, interactive: !!onClick }),
         className
       )}
       onClick={onClick}
@@ -220,12 +223,10 @@ export function MetricCard({
                 {formatValue(value)} / {formatValue(target.value)}
               </span>
             </div>
-            <div className="h-2 w-full rounded-full bg-[var(--fl-color-background-subtle)]">
-              <div
-                className="h-full rounded-full bg-[var(--fl-color-primary)] transition-all duration-300"
-                style={{ width: `${calculateProgress()}%` }}
-              />
-            </div>
+            <Progress
+              value={calculateProgress()}
+              className="h-2"
+            />
             <div className="text-xs text-[var(--fl-color-text-muted)] text-right">
               {calculateProgress().toFixed(1)}% of target
             </div>
@@ -274,6 +275,7 @@ interface DashboardGridProps {
   columns?: 1 | 2 | 3 | 4;
   gap?: "sm" | "md" | "lg";
   className?: string;
+  "aria-label"?: string;
 }
 
 const gridVariants = cva("grid", {
@@ -296,9 +298,12 @@ const gridVariants = cva("grid", {
   },
 });
 
-export function DashboardGrid({ children, columns, gap, className }: DashboardGridProps) {
+export function DashboardGrid({ children, columns, gap, className, "aria-label": ariaLabel }: DashboardGridProps) {
   return (
-    <div className={cn(gridVariants({ columns, gap }), className)}>
+    <div
+      className={cn(gridVariants({ columns, gap }), className)}
+      aria-label={ariaLabel}
+    >
       {children}
     </div>
   );
@@ -397,8 +402,95 @@ export function ActivityFeed({ items, loading = false, className }: ActivityFeed
   );
 }
 
+// Preset metric components for common use cases (migrated from legacy MetricCard.tsx)
+export function ResponseTimeMetric({
+  value,
+  target = 2000,
+  className
+}: {
+  value: number;
+  target?: number;
+  className?: string;
+}) {
+  const variant = value <= target ? 'success' : value <= target * 1.5 ? 'warning' : 'error';
+
+  return (
+    <MetricCard
+      title="Avg Response Time"
+      value={`${(value / 1000).toFixed(1)}s`}
+      description="Average AI response time"
+      target={{
+        value: target / 1000,
+        label: 'Target response time'
+      }}
+      variant={variant}
+      className={className}
+    />
+  );
+}
+
+export function SatisfactionMetric({
+  value,
+  className
+}: {
+  value: number;
+  className?: string;
+}) {
+  const variant = value >= 4.5 ? 'success' : value >= 3.5 ? 'warning' : 'error';
+
+  return (
+    <MetricCard
+      title="Customer Satisfaction"
+      value={`${value.toFixed(1)}/5`}
+      description="Average rating from customers"
+      variant={variant}
+      className={className}
+    />
+  );
+}
+
+export function HandoffRateMetric({
+  value,
+  className
+}: {
+  value: number;
+  className?: string;
+}) {
+  const variant = value <= 10 ? 'success' : value <= 25 ? 'warning' : 'error';
+
+  return (
+    <MetricCard
+      title="AI Handoff Rate"
+      value={`${value.toFixed(1)}%`}
+      description="Percentage of conversations handed off to humans"
+      variant={variant}
+      className={className}
+    />
+  );
+}
+
+export function ResolutionRateMetric({
+  value,
+  className
+}: {
+  value: number;
+  className?: string;
+}) {
+  const variant = value >= 90 ? 'success' : value >= 75 ? 'warning' : 'error';
+
+  return (
+    <MetricCard
+      title="Resolution Rate"
+      value={`${value.toFixed(1)}%`}
+      description="Percentage of issues resolved"
+      variant={variant}
+      className={className}
+    />
+  );
+}
+
 // Export all components
 export {
   MetricCard as StatCard,
   MetricCardSkeleton as StatCardSkeleton,
-}; 
+};

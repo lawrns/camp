@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { TextB as Bold, Code, TextItalic as Italic, List, ListNumbers as ListOrdered } from "@phosphor-icons/react";
+import { TextB as Bold, Code, TextItalic as Italic, List, ListNumbers as ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

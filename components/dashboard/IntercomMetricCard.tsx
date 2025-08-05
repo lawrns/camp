@@ -1,9 +1,19 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { ArrowUpRight, ArrowDownLeft } from '@phosphor-icons/react';
+import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+
+/**
+ * IntercomMetricCard - Design System Compliant Version
+ *
+ * Migrated to use design tokens while preserving Intercom-specific features:
+ * - CountUpNumber animation
+ * - Glass effect styling (using design tokens)
+ * - Hover interactions
+ * - Trend indicators
+ */
 
 interface IntercomMetricCardProps {
   label: string;
@@ -13,59 +23,98 @@ interface IntercomMetricCardProps {
     direction: 'up' | 'down' | 'stable';
   };
   icon: React.ComponentType<{ className?: string }>;
-  color: 'warm' | 'success' | 'danger' | 'info';
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
   suffix?: string;
   loading?: boolean;
   onClick?: () => void;
   className?: string;
+  // Legacy prop for backward compatibility
+  color?: 'warm' | 'success' | 'danger' | 'info';
 }
 
-const colorConfig = {
-  warm: {
-    icon: 'text-amber-600',
-    iconBg: 'bg-gradient-to-br from-amber-50 to-orange-100',
-    cardBg: 'glass-card metric-warm',
-    border: 'border-amber-200/50',
+// Design token-based variant styles with glass effect support
+const variantStyles = {
+  default: {
+    icon: 'text-[var(--fl-color-text)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-background-subtle)] to-[var(--fl-color-background-muted)]',
+    cardBg: 'bg-[var(--fl-color-surface)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-border)]',
+    accent: 'from-[var(--fl-color-background-subtle)] to-[var(--fl-color-background-muted)]',
     trend: {
-      up: 'text-amber-700 bg-amber-50',
-      down: 'text-amber-600 bg-amber-50',
-      stable: 'text-amber-600 bg-amber-50'
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-text-muted)] bg-[var(--fl-color-background-subtle)]'
+    }
+  },
+  primary: {
+    icon: 'text-[var(--fl-color-primary-600)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-primary-50)] to-[var(--fl-color-primary-100)]',
+    cardBg: 'bg-[var(--fl-color-primary-subtle)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-primary-200)]',
+    accent: 'from-[var(--fl-color-primary-50)] to-[var(--fl-color-primary-100)]',
+    trend: {
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-primary-600)] bg-[var(--fl-color-primary-subtle)]'
     }
   },
   success: {
-    icon: 'text-blue-600',
-    iconBg: 'bg-gradient-to-br from-blue-50 to-blue-100',
-    cardBg: 'glass-card metric-success',
-    border: 'border-blue-200/50',
+    icon: 'text-[var(--fl-color-success-600)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-success-50)] to-[var(--fl-color-success-100)]',
+    cardBg: 'bg-[var(--fl-color-success-subtle)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-success-200)]',
+    accent: 'from-[var(--fl-color-success-50)] to-[var(--fl-color-success-100)]',
     trend: {
-      up: 'text-blue-700 bg-blue-50',
-      down: 'text-blue-600 bg-blue-50',
-      stable: 'text-blue-600 bg-blue-50'
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-success-600)] bg-[var(--fl-color-success-subtle)]'
     }
   },
-  danger: {
-    icon: 'text-red-600',
-    iconBg: 'bg-gradient-to-br from-red-50 to-rose-100',
-    cardBg: 'glass-card metric-danger',
-    border: 'border-red-200/50',
+  warning: {
+    icon: 'text-[var(--fl-color-warning-600)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-warning-50)] to-[var(--fl-color-warning-100)]',
+    cardBg: 'bg-[var(--fl-color-warning-subtle)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-warning-200)]',
+    accent: 'from-[var(--fl-color-warning-50)] to-[var(--fl-color-warning-100)]',
     trend: {
-      up: 'text-red-700 bg-red-50',
-      down: 'text-red-600 bg-red-50',
-      stable: 'text-red-600 bg-red-50'
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-warning-600)] bg-[var(--fl-color-warning-subtle)]'
+    }
+  },
+  error: {
+    icon: 'text-[var(--fl-color-error-600)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-error-50)] to-[var(--fl-color-error-100)]',
+    cardBg: 'bg-[var(--fl-color-error-subtle)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-error-200)]',
+    accent: 'from-[var(--fl-color-error-50)] to-[var(--fl-color-error-100)]',
+    trend: {
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-error-600)] bg-[var(--fl-color-error-subtle)]'
     }
   },
   info: {
-    icon: 'text-blue-600',
-    iconBg: 'bg-gradient-to-br from-blue-50 to-indigo-100',
-    cardBg: 'glass-card metric-info',
-    border: 'border-blue-200/50',
+    icon: 'text-[var(--fl-color-info-600)]',
+    iconBg: 'bg-gradient-to-br from-[var(--fl-color-info-50)] to-[var(--fl-color-info-100)]',
+    cardBg: 'bg-[var(--fl-color-info-subtle)] backdrop-blur-sm',
+    border: 'border-[var(--fl-color-info-200)]',
+    accent: 'from-[var(--fl-color-info-50)] to-[var(--fl-color-info-100)]',
     trend: {
-      up: 'text-blue-700 bg-blue-50',
-      down: 'text-blue-600 bg-blue-50',
-      stable: 'text-blue-600 bg-blue-50'
+      up: 'text-[var(--fl-color-success)] bg-[var(--fl-color-success-subtle)]',
+      down: 'text-[var(--fl-color-error)] bg-[var(--fl-color-error-subtle)]',
+      stable: 'text-[var(--fl-color-info-600)] bg-[var(--fl-color-info-subtle)]'
     }
   }
 };
+
+// Legacy color to variant mapping for backward compatibility
+const legacyColorMap = {
+  warm: 'warning',
+  success: 'success',
+  danger: 'error',
+  info: 'info',
+} as const;
 
 const CountUpNumber = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
@@ -110,26 +159,32 @@ export function IntercomMetricCard({
   value,
   trend,
   icon: Icon,
-  color,
+  variant = 'default',
   suffix = '',
   loading = false,
   onClick,
-  className
+  className,
+  color, // Legacy prop
 }: IntercomMetricCardProps) {
-  const colors = colorConfig[color];
+  // Support legacy color prop for backward compatibility
+  const effectiveVariant = color ? legacyColorMap[color] : variant;
+  const colors = variantStyles[effectiveVariant];
   const [isHovered, setIsHovered] = useState(false);
 
   if (loading) {
     return (
       <div className={cn("animate-fade-in-up", className)}>
-        <Card className="glass-card animate-pulse">
+        <Card className={cn(
+          "bg-[var(--fl-color-surface)] backdrop-blur-sm animate-pulse",
+          "border-[var(--fl-color-border)] shadow-[var(--fl-shadow-sm)]"
+        )}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <div className="h-4 bg-gray-200 rounded w-24"></div>
-            <div className="h-5 w-5 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-[var(--fl-color-background-muted)] rounded w-24"></div>
+            <div className="h-5 w-5 bg-[var(--fl-color-background-muted)] rounded"></div>
           </CardHeader>
           <CardContent className="pb-4">
-            <div className="h-8 bg-gray-200 rounded w-20 mb-2"></div>
-            <div className="h-3 bg-gray-200 rounded w-16"></div>
+            <div className="h-8 bg-[var(--fl-color-background-muted)] rounded w-20 mb-2"></div>
+            <div className="h-3 bg-[var(--fl-color-background-muted)] rounded w-16"></div>
           </CardContent>
         </Card>
       </div>
@@ -151,9 +206,11 @@ export function IntercomMetricCard({
   };
 
   return (
-    <div 
+    <div
       className={cn(
-        "animate-fade-in-up hover-lift cursor-pointer group",
+        "animate-fade-in-up group transition-all duration-200 ease-out",
+        !onClick && "cursor-default",
+        onClick && "cursor-pointer hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98]",
         className
       )}
       onClick={onClick}
@@ -166,42 +223,56 @@ export function IntercomMetricCard({
         colors.cardBg,
         colors.border,
         "transition-all duration-300 relative overflow-hidden",
-        "hover:shadow-xl hover:-translate-y-1",
-        onClick && "cursor-pointer focus-visible:focus-brand"
+        "shadow-[var(--fl-shadow-sm)] hover:shadow-[var(--fl-shadow-lg)]",
+        "ring-1 ring-[var(--fl-color-border-subtle)]",
+        onClick && "focus-visible:ring-2 focus-visible:ring-[var(--fl-color-primary-500)] focus-visible:ring-offset-2"
       )}>
-        {/* Glass overlay for extra depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 relative z-10">
-          <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300 font-body">
+        {/* Glass overlay for extra depth - using design tokens */}
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+          "from-[var(--fl-color-surface)]/20 to-transparent"
+        )} />
+
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-[var(--fl-spacing-3)] relative z-10">
+          <CardTitle className={cn(
+            "text-sm font-medium font-body",
+            "text-[var(--fl-color-text-muted)]"
+          )}>
             {label}
           </CardTitle>
           <div className={cn(
-            "p-2 rounded-lg transition-all duration-300",
+            "p-[var(--fl-spacing-2)] rounded-[var(--fl-radius-md)] transition-all duration-300",
+            "ring-1 ring-[var(--fl-color-border-subtle)]",
             colors.iconBg,
             isHovered && "scale-110 rotate-3"
           )}>
             <Icon className={cn("h-4 w-4", colors.icon)} />
           </div>
         </CardHeader>
-        
-        <CardContent className="pb-4 relative z-10">
-          <div className="space-y-2">
+
+        <CardContent className="pb-[var(--fl-spacing-4)] relative z-10">
+          <div className="space-y-[var(--fl-spacing-2)]">
             {/* Main metric value */}
-            <div className="text-3xl font-bold text-gray-900 dark:text-white font-heading leading-none">
+            <div className={cn(
+              "text-3xl font-bold font-heading leading-none",
+              "text-[var(--fl-color-text)]"
+            )}>
               {typeof value === 'number' ? (
                 <CountUpNumber value={value} suffix={suffix} />
               ) : (
                 <span className="font-numeric tabular-nums">{value}</span>
               )}
             </div>
-            
+
             {/* Trend indicator */}
             {trend && (
               <div className={cn(
-                "inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-all duration-300",
-                getTrendColor(),
-                "animate-scale-in"
+                "inline-flex items-center gap-[var(--fl-spacing-1)]",
+                "px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]",
+                "rounded-[var(--fl-radius-full)] text-xs font-medium",
+                "transition-all duration-300 animate-scale-in",
+                "ring-1 ring-[var(--fl-color-border-subtle)]",
+                getTrendColor()
               )}>
                 {getTrendIcon()}
                 <span className="font-numeric tabular-nums">
@@ -211,12 +282,12 @@ export function IntercomMetricCard({
             )}
           </div>
         </CardContent>
-        
-        {/* Subtle bottom accent */}
+
+        {/* Subtle bottom accent using design tokens */}
         <div className={cn(
           "absolute bottom-0 left-0 right-0 h-1 transition-all duration-300",
-          colors.iconBg.replace('bg-gradient-to-br', 'bg-gradient-to-r'),
-          "opacity-0 group-hover:opacity-100"
+          "bg-gradient-to-r opacity-0 group-hover:opacity-100",
+          colors.accent
         )} />
       </Card>
     </div>

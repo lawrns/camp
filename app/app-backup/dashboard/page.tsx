@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeDashboard } from '../hooks/useRealtimeDashboard';
-import { Bell, ChatCircle, Clock, Fire, MagnifyingGlass as Search, Gear as Settings, Users, Ticket, CheckCircle, ArrowRight } from "@phosphor-icons/react";
+import { Bell, MessageCircle, Clock, Flame, Search as Search, Settings as Settings, Users, Ticket, CheckCircle, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -83,7 +83,7 @@ export default function EnhancedDashboard() {
           <div className="ds-dashboard-card ds-bg-primary-500 ds-text-primary-50 ds-border-0">
             <div className="ds-p-4">
               <div className="ds-flex ds-items-center ds-justify-between ds-mb-2">
-                <ChatCircle className="ds-h-6 ds-w-6 ds-text-primary-100" weight="duotone" />
+                <MessageCircle className="ds-h-6 ds-w-6 ds-text-primary-100" weight="duotone" />
                 <Badge className="ds-border-0 ds-bg-white/20 ds-text-xs ds-text-white">Live</Badge>
               </div>
               <div className="ds-text-2xl ds-font-bold ds-text-primary-50">{metrics.conversations}</div>
@@ -116,7 +116,7 @@ export default function EnhancedDashboard() {
           <div className="ds-dashboard-card ds-bg-warning-500 ds-text-warning-50 ds-border-0">
             <div className="ds-p-4">
               <div className="ds-flex ds-items-center ds-justify-between ds-mb-2">
-                <Fire className="ds-h-6 ds-w-6 ds-text-warning-100" weight="duotone" />
+                <Flame className="ds-h-6 ds-w-6 ds-text-warning-100" weight="duotone" />
                 <Badge className="ds-border-0 ds-bg-white/20 ds-text-xs ds-text-white">Score</Badge>
               </div>
               <div className="ds-text-2xl ds-font-bold ds-text-warning-50">{metrics.satisfaction}%</div>
@@ -153,14 +153,14 @@ export default function EnhancedDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Fire className="h-5 w-5 text-blue-600" />
+                <Flame className="h-5 w-5 text-blue-600" />
                 Quick Actions
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <Button className="w-full justify-start" variant="outline">
-                  <ChatCircle className="mr-2 h-4 w-4" />
+                  <MessageCircle className="mr-2 h-4 w-4" />
                   Start New Conversation
                 </Button>
                 <Button className="w-full justify-start" variant="outline">

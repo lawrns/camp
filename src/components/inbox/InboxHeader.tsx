@@ -2,22 +2,7 @@
 
 import React from "react";
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
-import {
-  Archive,
-  CaretRight as ChevronRight,
-  Clock,
-  Command,
-  Funnel as Filter,
-  GridFour as Grid3x3,
-  Tray as Inbox,
-  List,
-  List as Menu,
-  DotsThreeVertical as MoreVertical,
-  MagnifyingGlass as Search,
-  PaperPlaneTilt as Send,
-  Gear as Settings,
-  Users,
-} from "@phosphor-icons/react";
+import { Archive, ChevronRight as ChevronRight, Clock, Command, Filter as Filter, Grid3x3 as Grid3x3, Inbox, Menu, Menu as Menu, MoreVertical as MoreVertical, Search as Search, Send as Send, Settings as Settings, Users,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/unified-ui/components/Separator";
@@ -89,7 +74,7 @@ export function InboxHeader({
           <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
           {/* Quick Filters */}
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-[var(--fl-spacing-1)] md:flex">
             {inboxFilters.map((filter: unknown) => {
               const Icon = filter.icon;
               const isActive = activeFilter === filter.id;
@@ -101,7 +86,7 @@ export function InboxHeader({
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setActiveFilter(filter.id)}
                   className={cn(
-                    "text-typography-sm inline-flex items-center gap-2 rounded-ds-md px-3 py-1.5 font-medium transition-all",
+                    "text-typography-sm inline-flex items-center gap-[var(--fl-spacing-2)] rounded-ds-md px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)].5 font-medium transition-all",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -110,7 +95,7 @@ export function InboxHeader({
                   <Icon className="h-3.5 w-3.5" />
                   <span>{filter.label}</span>
                   {filter.count > 0 && (
-                    <Badge variant={isActive ? "secondary" : "outline"} className="ml-1 h-5 px-1.5 text-tiny">
+                    <Badge variant={isActive ? "secondary" : "outline"} className="ml-1 h-5 px-1.5 text-tiny rounded-full">
                       {filter.count}
                     </Badge>
                   )}
@@ -149,7 +134,7 @@ export function InboxHeader({
                 viewMode === "list" ? "bg-background shadow-sm" : "hover:bg-background/50"
               )}
             >
-              <Icon icon={List} className="h-4 w-4" />
+              <Icon icon={Menu} className="h-4 w-4" />
             </OptimizedMotion.button>
             <OptimizedMotion.button
               whileHover={{ scale: 1.05 }}
@@ -170,8 +155,8 @@ export function InboxHeader({
               <Icon icon={Filter} className="h-4 w-4" />
               {filterCount > 0 && (
                 <Badge
-                  variant="error"
-                  className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center p-0 text-tiny"
+                  variant="destructive"
+                  className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center p-0 text-tiny rounded-full"
                 >
                   {filterCount}
                 </Badge>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle as Check, Code, Copy } from "@phosphor-icons/react";
+import { CheckCircle as Check, Code, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";
 import { Textarea } from "@/components/unified-ui/components/textarea";

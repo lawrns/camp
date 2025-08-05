@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useConversations } from "@/hooks/useConversations";
 import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
-import { Robot } from "@phosphor-icons/react";
+import { Bot } from "lucide-react";
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
 // Import utilities
@@ -551,7 +551,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
               <div className="flex w-80 flex-col border-l border-gray-200 bg-white shadow-lg">
                 <div className="border-b border-gray-200 bg-blue-50 p-4">
                   <h3 className="flex items-center text-lg font-semibold text-gray-900">
-                    <Robot className="mr-2 h-5 w-5 text-blue-600" />
+                    <Bot className="mr-2 h-5 w-5 text-blue-600" />
                     Smart Replies
                   </h3>
                   <p className="mt-1 text-sm text-gray-600">AI-powered suggestions coming soon</p>

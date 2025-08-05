@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Reply, ArrowBendUpLeft, ChatCircle } from '@phosphor-icons/react';
+import { X, Reply, ArrowBendUpLeft, MessageCircle } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -133,7 +133,7 @@ export function MessageThread({
           <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
             {replies.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-                <ChatCircle className="h-8 w-8 mb-2 opacity-50" />
+                <MessageCircle className="h-8 w-8 mb-2 opacity-50" />
                 <p className="text-sm">No replies yet</p>
                 <p className="text-xs opacity-75">Be the first to reply!</p>
               </div>

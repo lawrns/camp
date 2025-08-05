@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Warning as AlertCircle, CheckCircle, CaretDown as ChevronDown, Clock, XCircle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle, ChevronDown as ChevronDown, Clock, XCircle } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,25 +28,25 @@ const statusConfig = {
   open: {
     label: "Open",
     icon: AlertCircle,
-    color: "bg-green-100 text-green-800 border-[var(--fl-color-success-muted)]",
+    color: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] border-[var(--fl-color-success-muted)]",
     description: "Active conversation",
   },
   in_progress: {
     label: "In Progress",
     icon: Clock,
-    color: "bg-yellow-100 text-yellow-800 border-[var(--fl-color-warning-muted)]",
+    color: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] border-[var(--fl-color-warning-muted)]",
     description: "Being worked on",
   },
   resolved: {
     label: "Resolved",
     icon: CheckCircle,
-    color: "bg-blue-100 text-blue-800 border-[var(--fl-color-info-muted)]",
+    color: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] border-[var(--fl-color-info-muted)]",
     description: "Issue resolved",
   },
   closed: {
     label: "Closed",
     icon: XCircle,
-    color: "bg-gray-100 text-gray-800 border-[var(--fl-color-border)]",
+    color: "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)] border-[var(--fl-color-border)]",
     description: "Conversation closed",
   },
 };
@@ -112,8 +112,8 @@ export function ConversationStatusDropdown({
   };
 
   const sizeClasses = {
-    sm: "text-xs px-2 py-1",
-    md: "text-sm px-3 py-1.5",
+    sm: "text-xs px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]",
+    md: "text-sm px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)].5",
     lg: "text-base px-4 py-2",
   };
 
@@ -122,7 +122,7 @@ export function ConversationStatusDropdown({
       <DropdownMenuTrigger
         disabled={disabled || isLoading}
         className={cn(
-          "gap-2 border transition-all hover:shadow-sm",
+          "gap-[var(--fl-spacing-2)] border transition-all hover:shadow-sm",
           "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
           currentConfig.color,
           sizeClasses[size],
@@ -157,7 +157,7 @@ export function ConversationStatusDropdown({
                 <div className="text-tiny text-muted-foreground">{config.description}</div>
               </div>
               {isSelected && (
-                <Badge variant="secondary" className="text-tiny">
+                <Badge variant="secondary" className="text-tiny rounded-full">
                   Current
                 </Badge>
               )}

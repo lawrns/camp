@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  TrendingUp,
-  TrendingDown,
-  Users,
-  MessageCircle,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Info
-} from "@phosphor-icons/react";
+import { TrendingUp, TrendingDown, Users, MessageCircle, Clock, CheckCircle, AlertTriangle, Info } from "lucide-react";
 import {
   MetricCard,
   DashboardGrid,

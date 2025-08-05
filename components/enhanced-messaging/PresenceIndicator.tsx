@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Circle, Wifi, WifiSlash, Warning } from '@phosphor-icons/react';
+import { Circle, Wifi, WifiSlash, AlertTriangle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -368,7 +368,7 @@ export function ConnectionStatusIndicator({
         };
       case 'error':
         return {
-          icon: Warning,
+          icon: AlertTriangle,
           color: 'text-red-500',
           label: 'Connection Error',
           animate: false,

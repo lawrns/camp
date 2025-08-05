@@ -8,23 +8,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  CaretLeft as ChevronLeft,
-  CaretRight as ChevronRight,
-  Download,
-  Info,
-  ArrowsOut as Maximize,
-  ArrowsIn as Minimize,
-  Pause,
-  Play,
-  ArrowClockwise as RotateCw,
-  Share,
-  SpeakerHigh as Volume2,
-  SpeakerSlash as VolumeX,
-  X,
-  MagnifyingGlassPlus as ZoomIn,
-  MagnifyingGlassMinus as ZoomOut,
-} from "@phosphor-icons/react";
+import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, Download, Info, ArrowsOut as Maximize, ArrowsIn as Minimize, Pause, Play, ArrowClockwise as RotateCw, Share, SpeakerHigh as Volume2, SpeakerSlash as VolumeX, X, MagnifyingGlassPlus as ZoomIn, MagnifyingGlassMinus as ZoomOut,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/unified-ui/components/dialog";

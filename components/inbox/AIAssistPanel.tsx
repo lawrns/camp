@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Brain, Copy, ThumbsDown, ThumbsUp } from "@phosphor-icons/react";
+import { Brain, Copy, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useRAG } from "@/hooks/useRAG";
 import { Icon } from "@/lib/ui/Icon";
 

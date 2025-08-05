@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkle, TrendUp, Warning, CheckCircle, Lightbulb, Target } from '@phosphor-icons/react';
+import { Sparkles, TrendUp, AlertTriangle, CheckCircle, Lightbulb, Target } from "lucide-react";
 import { Badge } from '@/components/unified-ui/components/Badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
 import { useRouter } from 'next/navigation';
@@ -37,7 +37,7 @@ const insightConfig = {
     border: 'border-green-200',
   },
   warning: {
-    icon: Warning,
+    icon: AlertTriangle,
     color: 'text-orange-600',
     bg: 'bg-orange-50',
     border: 'border-orange-200',
@@ -81,7 +81,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
         type: 'warning',
         title: 'Below Target Performance',
         description: 'You\'ve resolved fewer conversations than usual. Consider checking your workflow.',
-        icon: Warning,
+        icon: AlertTriangle,
         action: {
           label: 'View Analytics',
           href: '/dashboard/analytics',
@@ -98,7 +98,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
         type: 'warning',
         title: 'Response Time Alert',
         description: `Your average response time is ${metrics.responseTime}, which is above the target.`,
-        icon: Warning,
+        icon: AlertTriangle,
         action: {
           label: 'Optimize Workflow',
           href: '/dashboard/inbox',
@@ -124,7 +124,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
         type: 'warning',
         title: 'Customer Satisfaction Alert',
         description: `Your satisfaction rate of ${metrics.satisfaction} needs improvement.`,
-        icon: Warning,
+        icon: AlertTriangle,
         action: {
           label: 'Review Conversations',
           href: '/dashboard/inbox',
@@ -149,7 +149,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
         type: 'warning',
         title: 'High Workload Alert',
         description: `You have ${metrics.pendingConversations} pending conversations. Consider team assistance.`,
-        icon: Warning,
+        icon: AlertTriangle,
         action: {
           label: 'Request Help',
           href: '/dashboard/team',
@@ -204,8 +204,8 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Sparkle className="w-5 h-5" />
+        <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
+          <Sparkles className="w-5 h-5" />
           AI Insights
         </CardTitle>
       </CardHeader>
@@ -213,7 +213,7 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
         <div className="space-y-4">
           {insights.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              <Sparkle className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+              <Sparkles className="w-8 h-8 mx-auto mb-2 text-gray-400" />
               <p className="text-sm">No insights available</p>
             </div>
           ) : (
@@ -232,16 +232,16 @@ export function AIInsightsPanel({ metrics, organizationId }: AIInsightsPanelProp
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-[var(--fl-spacing-2)] mb-1">
                         <h4 className="font-medium text-sm text-gray-900">
                           {insight.title}
                         </h4>
                         <Badge 
                           variant="secondary" 
                           className={`text-xs ${
-                            insight.priority === 'high' ? 'bg-red-100 text-red-700' :
-                            insight.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-green-100 text-green-700'
+                            insight.priority === 'high' ? 'bg-[var(--fl-color-danger-subtle)] text-red-700' :
+                            insight.priority === 'medium' ? 'bg-[var(--fl-color-warning-subtle)] text-yellow-700' :
+                            'bg-[var(--fl-color-success-subtle)] text-green-700'
                           }`}
                         >
                           {insight.priority}

@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from "react";
-import { Warning as AlertTriangle, PaperPlaneTilt as Send, Star } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Send as Send, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

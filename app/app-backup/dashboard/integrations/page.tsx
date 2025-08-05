@@ -1,22 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChartBar as BarChart3,
-  CheckCircle,
-  Clock,
-  Cloud,
-  Database,
-  Globe,
-  Envelope as Mail,
-  ChatCircle as MessageSquare,
-  Plus,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Shield,
-  Users,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartBar as BarChart3, CheckCircle, Clock, Cloud, Database, Globe, Envelope as Mail, MessageCircle as MessageSquare, Plus, Search as Search, Settings as Settings, Shield, Users, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

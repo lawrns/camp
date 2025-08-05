@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Warning as AlertCircle,
-  Robot as Bot,
-  Brain,
-  Spinner as Loader2,
-  ChatCircle as MessageSquare,
-  Play,
-  Square,
-  User,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Bot as Bot, Brain, Spinner as Loader2, MessageCircle as MessageSquare, Play, Square, User,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle as Check, FileText, Spinner as Loader2, Sparkle as Sparkles, Tag, X } from "@phosphor-icons/react";
+import { CheckCircle as Check, FileText, Spinner as Loader2, Sparkles as Sparkles, Tag, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ArrowSquareOut, CheckCircle as Check, Copy, FileText, MagnifyingGlass as Search } from "@phosphor-icons/react";
+import { ArrowSquareOut, CheckCircle as Check, Copy, FileText, Search as Search } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/unified-ui/components/Card";

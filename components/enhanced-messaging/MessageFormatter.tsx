@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link, Code, Quote, ListBullets, ListNumbers } from '@phosphor-icons/react';
+import { Link, Code, Quote, ListBullets, ListNumbers } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 interface MessageFormatterProps {

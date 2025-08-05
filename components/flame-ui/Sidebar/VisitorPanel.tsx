@@ -1,21 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Activity,
-  Buildings as Building,
-  CaretDown as ChevronDown,
-  CaretRight as ChevronRight,
-  Clock,
-  Eye,
-  Globe,
-  Envelope as Mail,
-  MapPin,
-  ChatCircle as MessageSquare,
-  Phone,
-  Tag,
-  User,
-} from "@phosphor-icons/react";
+import { Activity, Buildings as Building, ChevronDown as ChevronDown, CaretRight as ChevronRight, Clock, Eye, Globe, Envelope as Mail, MapPin, MessageCircle as MessageSquare, Phone, Tag, User,  } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface VisitorData {

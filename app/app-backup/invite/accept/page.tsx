@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Buildings as Building, CheckCircle, Spinner as Loader2, Users, XCircle } from "@phosphor-icons/react";
+import { Buildings as Building, CheckCircle, Spinner as Loader2, Users, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Button } from "@/components/ui/button";

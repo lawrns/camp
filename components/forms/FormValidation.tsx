@@ -7,18 +7,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertCircle,
-  CheckCircle as Check,
-  Clock,
-  Eye,
-  Lock,
-  Shield,
-  Star,
-  TrendUp as TrendingUp,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, CheckCircle as Check, Clock, Eye, Lock, Shield, Star, TrendUp as TrendingUp, X, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Icon } from "@/lib/ui/Icon";

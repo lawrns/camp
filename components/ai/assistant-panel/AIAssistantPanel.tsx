@@ -15,7 +15,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { ArrowsClockwise as RefreshCw, Shield } from "@phosphor-icons/react";
+import { RefreshCw as RefreshCw, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 // Import our refactored modules
 import { MetricsPanel } from "./MetricsPanel";

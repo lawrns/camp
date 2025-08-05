@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Gear as Settings, Shield, User } from "@phosphor-icons/react";
+import { Bell, Settings as Settings, Shield, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";

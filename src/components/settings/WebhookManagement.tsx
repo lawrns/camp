@@ -39,21 +39,7 @@ import {
 } from "@/components/unified-ui/components/table";
 import { Textarea } from "@/components/unified-ui/components/textarea";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Warning as AlertTriangle,
-  CheckCircle,
-  Clock,
-  Copy,
-  PencilSimple as Edit2,
-  Link as Globe,
-  Spinner as Loader2,
-  DotsThree as MoreHorizontal,
-  Play,
-  Plus,
-  Trash as Trash2,
-  XCircle,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, CheckCircle, Clock, Copy, PencilSimple as Edit2, Link as Globe, Spinner as Loader2, DotsThree as MoreHorizontal, Play, Plus, Trash as Trash2, XCircle, Zap as Zap,  } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 

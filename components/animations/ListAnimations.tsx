@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, PanInfo, Reorder, useMotionValue, useTransform } from "framer-motion";
-import { Archive, DotsThreeVertical as MoreVertical, Trash as Trash2 } from "@phosphor-icons/react";
+import { Archive, MoreVertical as MoreVertical, Trash as Trash2 } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

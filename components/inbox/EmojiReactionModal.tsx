@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { Heart, Smiley as Smile, ThumbsUp, Lightning as Zap } from "@phosphor-icons/react";
+import { Heart, Smile as Smile, ThumbsUp, Zap as Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

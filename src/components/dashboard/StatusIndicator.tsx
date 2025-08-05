@@ -37,56 +37,56 @@ const statusConfig = {
   online: {
     color: "bg-green-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    badgeClass: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] dark:bg-green-900 dark:text-green-300",
     icon: CheckCircle,
     label: "Online",
   },
   offline: {
     color: "bg-gray-400",
     badgeVariant: "secondary" as const,
-    badgeClass: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+    badgeClass: "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)] dark:bg-gray-800 dark:text-gray-300",
     icon: XCircle,
     label: "Offline",
   },
   active: {
     color: "bg-blue-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+    badgeClass: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] dark:bg-blue-900 dark:text-blue-300",
     icon: Play,
     label: "Active",
   },
   inactive: {
     color: "bg-gray-400",
     badgeVariant: "secondary" as const,
-    badgeClass: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+    badgeClass: "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)] dark:bg-gray-800 dark:text-gray-300",
     icon: Pause,
     label: "Inactive",
   },
   error: {
     color: "bg-red-500",
     badgeVariant: "destructive" as const,
-    badgeClass: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+    badgeClass: "bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)] dark:bg-red-900 dark:text-red-300",
     icon: XCircle,
     label: "Error",
   },
   warning: {
     color: "bg-yellow-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+    badgeClass: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] dark:bg-yellow-900 dark:text-yellow-300",
     icon: Warning,
     label: "Warning",
   },
   success: {
     color: "bg-green-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    badgeClass: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] dark:bg-green-900 dark:text-green-300",
     icon: CheckCircle,
     label: "Success",
   },
   pending: {
     color: "bg-yellow-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+    badgeClass: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)] dark:bg-yellow-900 dark:text-yellow-300",
     icon: Clock,
     label: "Pending",
   },
@@ -100,21 +100,21 @@ const statusConfig = {
   running: {
     color: "bg-green-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    badgeClass: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)] dark:bg-green-900 dark:text-green-300",
     icon: Lightning,
     label: "Running",
   },
   visible: {
     color: "bg-blue-500",
     badgeVariant: "default" as const,
-    badgeClass: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+    badgeClass: "bg-[var(--fl-color-primary-subtle)] text-[var(--fl-color-primary)] dark:bg-blue-900 dark:text-blue-300",
     icon: Eye,
     label: "Visible",
   },
   hidden: {
     color: "bg-gray-400",
     badgeVariant: "secondary" as const,
-    badgeClass: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+    badgeClass: "bg-[var(--fl-color-surface)] text-[var(--fl-color-text)] dark:bg-gray-800 dark:text-gray-300",
     icon: EyeSlash,
     label: "Hidden",
   },
@@ -123,7 +123,7 @@ const statusConfig = {
 const sizeConfig = {
   small: {
     dot: "w-2 h-2",
-    badge: "text-xs px-2 py-1",
+    badge: "text-xs px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)]",
     icon: "w-3 h-3",
   },
   medium: {
@@ -154,7 +154,7 @@ export function StatusIndicator({
 
   if (mode === "dot") {
     return (
-      <div className={cn("flex items-center gap-2", className)}>
+      <div className={cn("flex items-center gap-[var(--fl-spacing-2)]", className)}>
         <div
           className={cn("rounded-ds-full", customColor || config.color, sizeStyles.dot, animated && "animate-pulse")}
           aria-label={displayLabel}
@@ -168,7 +168,7 @@ export function StatusIndicator({
     return (
       <Badge
         variant={config.badgeVariant}
-        className={cn(config.badgeClass, sizeStyles.badge, "flex items-center gap-1", className)}
+        className={cn(config.badgeClass, sizeStyles.badge, "flex items-center gap-[var(--fl-spacing-1)]", className)}
       >
         {showIcon && <Icon icon={config.icon} className={sizeStyles.icon} />}
         {displayLabel}
@@ -180,7 +180,7 @@ export function StatusIndicator({
     return (
       <div
         className={cn(
-          "inline-flex items-center gap-2 rounded-ds-full px-3 py-1",
+          "inline-flex items-center gap-[var(--fl-spacing-2)] rounded-ds-full px-[var(--fl-spacing-3)] py-[var(--fl-spacing-1)]",
           config.badgeClass,
           sizeStyles.badge,
           className

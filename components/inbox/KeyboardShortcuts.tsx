@@ -1,25 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Archive,
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  Command,
-  Hash,
-  Keyboard,
-  ChatCircle as MessageCircle,
-  Plus,
-  ArrowBendUpLeft as Reply,
-  MagnifyingGlass as Search,
-  Gear as Settings,
-  Star,
-  Trash as Trash2,
-  User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Archive, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Command, Hash, Keyboard, MessageCircle as MessageCircle, Plus, ArrowBendUpLeft as Reply, Search as Search, Settings as Settings, Star, Trash as Trash2, User, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/unified-ui/components/input";
@@ -339,7 +321,7 @@ export function CommandPalette({ isOpen, onClose, onExecute, className }: Comman
         </div>
 
         {/* Categories */}
-        <div className="flex gap-1 overflow-x-auto border-b border-[var(--fl-color-border-subtle)] spacing-3">
+        <div className="flex gap-[var(--fl-spacing-1)] overflow-x-auto border-b border-[var(--fl-color-border-subtle)] spacing-3">
           {CATEGORIES.map((category: unknown) => {
             const Icon = category.icon;
             const isSelected = selectedCategory === category.id;
@@ -386,16 +368,16 @@ export function CommandPalette({ isOpen, onClose, onExecute, className }: Comman
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3">
                       <span className="font-medium text-gray-900">{shortcut.name}</span>
-                      <Badge variant="secondary" className="text-tiny">
+                      <Badge variant="secondary" className="text-tiny rounded-full">
                         {shortcut.category}
                       </Badge>
                     </div>
                     <p className="text-foreground mt-1 text-sm">{shortcut.description}</p>
                   </div>
-                  <div className="ml-4 flex items-center gap-1">
+                  <div className="ml-4 flex items-center gap-[var(--fl-spacing-1)]">
                     {shortcut.keys.map((key, keyIndex) => (
                       <React.Fragment key={keyIndex}>
-                        <kbd className="bg-background rounded border border-[var(--fl-color-border)] px-2 py-1 font-mono text-tiny">
+                        <kbd className="bg-background rounded border border-[var(--fl-color-border)] px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] font-mono text-tiny">
                           {key}
                         </kbd>
                         {keyIndex < shortcut.keys.length - 1 && <span className="text-tiny text-gray-400">+</span>}
@@ -532,7 +514,7 @@ export function ShortcutBadge({ shortcutId, className }: { shortcutId: string; c
   if (!shortcut) return null;
 
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div className={cn("flex items-center gap-[var(--fl-spacing-1)]", className)}>
       {shortcut.keys.map((key, index) => (
         <React.Fragment key={index}>
           <kbd className="bg-background rounded border border-[var(--fl-color-border)] px-1.5 py-0.5 font-mono text-tiny">

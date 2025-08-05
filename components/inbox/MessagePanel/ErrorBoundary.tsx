@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Warning as AlertCircle } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 

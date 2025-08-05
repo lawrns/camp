@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import { ArrowRight, Robot as Bot, CheckCircle, Sparkle as Sparkles, User } from "@phosphor-icons/react";
+import { ArrowRight, Bot as Bot, CheckCircle, Sparkles as Sparkles, User } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

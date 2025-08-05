@@ -28,16 +28,7 @@ import {
 import { Skeleton } from "@/components/unified-ui/components/Skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  Warning as AlertCircle,
-  Robot as Bot,
-  Clock,
-  ChatCircle as MessageSquare,
-  CheckCircle as ThumbsUp,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  Users,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Bot as Bot, Clock, MessageCircle as MessageSquare, CheckCircle as ThumbsUp, TrendDown as TrendingDown, TrendUp as TrendingUp, Users,  } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface DashboardProps {

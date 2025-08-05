@@ -15,19 +15,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Archive,
-  CalendarBlank,
-  CaretDown,
+  Calendar,
+  ChevronDown,
   CheckCircle,
   Clock,
-  DotsThreeVertical,
-  FunnelSimple,
-  MagnifyingGlass,
+  MoreVertical,
+  Filter,
+  Search,
   Plus,
   Ticket,
   User,
-  Warning,
-  WarningCircle,
-} from "@phosphor-icons/react";
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/Button-unified";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
@@ -48,7 +48,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/unified-ui/components/table";
-import { Icon } from "@/lib/ui/Icon";
 
 interface TicketData {
   id: string;
@@ -169,17 +168,17 @@ export default function TicketsPage() {
   const getStatusConfig = (status: TicketData["status"]) => {
     switch (status) {
       case "open":
-        return { icon: Clock, color: "bg-blue-500", badge: "primary" };
+        return { icon: AlertCircle, color: "bg-[var(--fl-color-primary)]", badge: "destructive" };
       case "in_progress":
-        return { icon: User, color: "bg-yellow-500", badge: "secondary" };
+        return { icon: User, color: "bg-blue-500", badge: "default" };
       case "waiting":
-        return { icon: Warning, color: "bg-orange-500", badge: "outline" };
+        return { icon: Clock, color: "bg-orange-500", badge: "secondary" };
       case "resolved":
-        return { icon: CheckCircle, color: "bg-green-500", badge: "primary" };
+        return { icon: CheckCircle, color: "bg-green-500", badge: "success" };
       case "closed":
-        return { icon: Archive, color: "bg-gray-500", badge: "outline" };
+        return { icon: Archive, color: "bg-[var(--fl-color-text-muted)]", badge: "outline" };
       default:
-        return { icon: Clock, color: "bg-gray-400", badge: "outline" };
+        return { icon: Clock, color: "bg-[var(--fl-color-text-muted)]", badge: "outline" };
     }
   };
 
@@ -194,20 +193,20 @@ export default function TicketsPage() {
       case "low":
         return { color: "bg-green-500", badge: "outline" };
       default:
-        return { color: "bg-gray-400", badge: "outline" };
+        return { color: "bg-[var(--fl-color-text-muted)]", badge: "outline" };
     }
   };
 
   const getSlaStatusConfig = (slaStatus: TicketData["slaStatus"]) => {
     switch (slaStatus) {
       case "on_track":
-        return { icon: CheckCircle, color: "text-green-600", badge: "primary" };
+        return { icon: CheckCircle, color: "text-green-600", badge: "success" };
       case "at_risk":
-        return { icon: Warning, color: "text-yellow-600", badge: "secondary" };
+        return { icon: AlertTriangle, color: "text-yellow-600", badge: "secondary" };
       case "overdue":
-        return { icon: WarningCircle, color: "text-red-600", badge: "destructive" };
+        return { icon: AlertCircle, color: "text-red-600", badge: "destructive" };
       default:
-        return { icon: Clock, color: "text-gray-600", badge: "outline" };
+        return { icon: Clock, color: "text-[var(--fl-color-text-muted)]", badge: "outline" };
     }
   };
 
@@ -234,11 +233,11 @@ export default function TicketsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-blue-50">
-        <div className="container mx-auto max-w-6xl px-6 py-12">
+      <div className="min-h-screen bg-[var(--fl-color-background)]">
+        <div className="container mx-auto max-w-6xl px-[var(--fl-spacing-6)] py-[var(--fl-spacing-12)]">
           <div className="text-center">
-            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
-            <p className="text-gray-600">Loading tickets...</p>
+            <div className="mx-auto mb-[var(--fl-spacing-4)] h-8 w-8 animate-spin rounded-full border-b-2 border-[var(--fl-color-primary)]"></div>
+            <p className="text-[var(--fl-color-text-muted)]">Loading tickets...</p>
           </div>
         </div>
       </div>
@@ -246,24 +245,24 @@ export default function TicketsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-blue-50">
-      <div className="container mx-auto max-w-6xl px-6 py-12">
+    <div className="min-h-screen bg-[var(--fl-color-background)]">
+      <div className="container mx-auto max-w-6xl px-[var(--fl-spacing-6)] py-[var(--fl-spacing-12)]">
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="mb-[var(--fl-spacing-8)]">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-[var(--fl-color-text)]">
                 {getGreeting()}, {userName}
               </h1>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-[var(--fl-spacing-2)] text-[var(--fl-color-text-muted)]">
                 Manage support tickets and track customer issues
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-[var(--fl-spacing-3)]">
               <Button
                 onClick={() => router.push("/dashboard/tickets/new")}
-                className="bg-blue-600 hover:bg-blue-700"
-                leftIcon={<Icon icon={Plus} className="h-4 w-4" />}
+                className="bg-[var(--fl-color-primary)] hover:bg-[var(--fl-color-primary)]/90"
+                leftIcon={<Plus className="h-4 w-4" />}
               >
                 New Ticket
               </Button>
@@ -272,54 +271,62 @@ export default function TicketsPage() {
         </div>
 
         {/* Metrics Overview */}
-        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Tickets</CardTitle>
-              <Icon icon={Ticket} className="h-4 w-4 text-muted-foreground" />
+        <div className="mb-[var(--fl-spacing-8)] grid grid-cols-1 gap-[var(--fl-spacing-6)] md:grid-cols-2 lg:grid-cols-4">
+          <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-[var(--fl-spacing-2)]">
+              <CardTitle className="text-sm font-medium text-[var(--fl-color-text-muted)]">Total Tickets</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-[var(--fl-color-primary)]/10 flex items-center justify-center">
+                <Ticket className="h-4 w-4 text-[var(--fl-color-primary)]" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{metrics.totalTickets}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-[var(--fl-color-text)]">{metrics.totalTickets}</div>
+              <p className="text-xs text-[var(--fl-color-text-muted)] mt-[var(--fl-spacing-1)]">
                 All time
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Open Tickets</CardTitle>
-              <Icon icon={Clock} className="h-4 w-4 text-muted-foreground" />
+          <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-[var(--fl-spacing-2)]">
+              <CardTitle className="text-sm font-medium text-[var(--fl-color-text-muted)]">Open Tickets</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                <Clock className="h-4 w-4 text-orange-500" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{metrics.openTickets}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-[var(--fl-color-text)]">{metrics.openTickets}</div>
+              <p className="text-xs text-[var(--fl-color-text-muted)] mt-[var(--fl-spacing-1)]">
                 Needs attention
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-              <Icon icon={User} className="h-4 w-4 text-muted-foreground" />
+          <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-[var(--fl-spacing-2)]">
+              <CardTitle className="text-sm font-medium text-[var(--fl-color-text-muted)]">In Progress</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                <User className="h-4 w-4 text-blue-500" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{metrics.inProgressTickets}</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-[var(--fl-color-text)]">{metrics.inProgressTickets}</div>
+              <p className="text-xs text-[var(--fl-color-text-muted)] mt-[var(--fl-spacing-1)]">
                 Being worked on
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">SLA Compliance</CardTitle>
-              <Icon icon={CheckCircle} className="h-4 w-4 text-muted-foreground" />
+          <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-[var(--fl-spacing-2)]">
+              <CardTitle className="text-sm font-medium text-[var(--fl-color-text-muted)]">SLA Compliance</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{metrics.slaCompliance}%</div>
-              <p className="text-xs text-muted-foreground">
+              <div className="text-2xl font-bold text-[var(--fl-color-text)]">{metrics.slaCompliance}%</div>
+              <p className="text-xs text-[var(--fl-color-text-muted)] mt-[var(--fl-spacing-1)]">
                 This month
               </p>
             </CardContent>
@@ -327,25 +334,26 @@ export default function TicketsPage() {
         </div>
 
         {/* Filters and Search */}
-        <div className="mb-6 space-y-4">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Icon icon={MagnifyingGlass} className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Search tickets..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 w-64"
-                />
+        <Card className="mb-[var(--fl-spacing-6)] border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm">
+          <CardContent className="p-[var(--fl-spacing-6)]">
+            <div className="flex flex-col gap-[var(--fl-spacing-4)] md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-[var(--fl-spacing-4)]">
+                <div className="relative">
+                  <Search className="absolute left-[var(--fl-spacing-3)] top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--fl-color-text-muted)]" />
+                  <Input
+                    type="text"
+                    placeholder="Search tickets..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 w-64 border-[var(--fl-color-border)] bg-[var(--fl-color-background)]"
+                  />
+                </div>
+                <Button variant="outline" size="sm" leftIcon={<Filter className="h-4 w-4" />}>
+                  Filters
+                </Button>
               </div>
-              <Button variant="outline" size="sm" leftIcon={<Icon icon={FunnelSimple} className="h-4 w-4" />}>
-                Filters
-              </Button>
-            </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-[var(--fl-spacing-2)]">
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Status" />
@@ -386,10 +394,11 @@ export default function TicketsPage() {
               </Select>
             </div>
           </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Tickets Table */}
-        <Card>
+        <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm">
           <CardContent className="p-0">
             <Table>
               <TableHeader>
@@ -415,62 +424,68 @@ export default function TicketsPage() {
                   return (
                     <TableRow
                       key={ticket.id}
-                      className="cursor-pointer hover:bg-gray-50"
+                      className="cursor-pointer hover:bg-[var(--fl-color-background)] transition-colors border-b border-[var(--fl-color-border)]"
                       onClick={() => handleTicketClick(ticket.id)}
                     >
                       <TableCell>
-                        <div className="space-y-1">
-                          <div className="font-medium text-gray-900">{ticket.title}</div>
-                          <div className="text-sm text-gray-500">#{ticket.id}</div>
+                        <div className="space-y-[var(--fl-spacing-1)]">
+                          <div className="font-medium text-[var(--fl-color-text)]">{ticket.title}</div>
+                          <div className="text-sm text-[var(--fl-color-text-muted)]">#{ticket.id}</div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="space-y-1">
+                        <div className="space-y-[var(--fl-spacing-1)]">
                           <div className="font-medium">{ticket.customer.name}</div>
                           {ticket.customer.email && (
-                            <div className="text-sm text-gray-500">{ticket.customer.email}</div>
+                            <div className="text-sm text-[var(--fl-color-text-muted)]">{ticket.customer.email}</div>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={statusConfig.badge as unknown} className="capitalize">
-                          <Icon icon={StatusIcon} className="mr-1 h-3 w-3" />
+                        <Badge
+                          variant={statusConfig.badge as any}
+                          className="capitalize rounded-full"
+                          leftIcon={<StatusIcon className="h-3 w-3" />}
+                        >
                           {ticket.status.replace('_', ' ')}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={priorityConfig.badge as unknown} className="capitalize">
+                        <Badge
+                          variant={priorityConfig.badge as any}
+                          className="capitalize rounded-full"
+                        >
                           {ticket.priority}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         {ticket.assignee ? (
-                          <div className="flex items-center gap-2">
-                            <div className="h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold">
+                          <div className="flex items-center gap-[var(--fl-spacing-2)]">
+                            <div className="h-6 w-6 rounded-full bg-[var(--fl-color-primary)] flex items-center justify-center text-white text-xs font-semibold">
                               {ticket.assignee.name.charAt(0)}
                             </div>
                             <span className="text-sm">{ticket.assignee.name}</span>
                           </div>
                         ) : (
-                          <span className="text-sm text-gray-500">Unassigned</span>
+                          <span className="text-sm text-[var(--fl-color-text-muted)]">Unassigned</span>
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Icon icon={SlaIcon} className={`h-4 w-4 ${slaConfig.color}`} />
+                        <div className="flex items-center gap-[var(--fl-spacing-1)]">
+                          <SlaIcon className={`h-4 w-4 ${slaConfig.color}`} />
                           <span className={`text-sm ${slaConfig.color}`}>
                             {ticket.slaStatus.replace('_', ' ')}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[var(--fl-color-text-muted)]">
                           {new Date(ticket.updatedAt).toLocaleDateString()}
                         </div>
                       </TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm">
-                          <Icon icon={DotsThreeVertical} className="h-4 w-4" />
+                          <MoreVertical className="h-4 w-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -482,18 +497,22 @@ export default function TicketsPage() {
         </Card>
 
         {filteredTickets.length === 0 && (
-          <div className="text-center py-12">
-            <Icon icon={Ticket} className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No tickets found</h3>
-            <p className="text-gray-500 mb-4">
-              {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || assigneeFilter !== "all"
-                ? "Try adjusting your filters or search query."
-                : "Create your first ticket to get started."}
-            </p>
-            <Button onClick={() => router.push("/dashboard/tickets/new")} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
-              Create Ticket
-            </Button>
-          </div>
+          <Card className="border-[var(--fl-color-border)] bg-[var(--fl-color-surface)] shadow-sm">
+            <CardContent className="text-center py-[var(--fl-spacing-12)]">
+              <div className="h-16 w-16 mx-auto mb-[var(--fl-spacing-4)] rounded-full bg-[var(--fl-color-primary)]/10 flex items-center justify-center">
+                <Ticket className="h-8 w-8 text-[var(--fl-color-primary)]" />
+              </div>
+              <h3 className="text-lg font-medium text-[var(--fl-color-text)] mb-[var(--fl-spacing-2)]">No tickets found</h3>
+              <p className="text-[var(--fl-color-text-muted)] mb-[var(--fl-spacing-4)] max-w-md mx-auto">
+                {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || assigneeFilter !== "all"
+                  ? "Try adjusting your filters or search query."
+                  : "Create your first ticket to get started."}
+              </p>
+              <Button onClick={() => router.push("/dashboard/tickets/new")} leftIcon={<Plus className="h-4 w-4" />}>
+                Create Ticket
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

@@ -11,16 +11,7 @@ import { Card, CardContent } from "@/components/unified-ui/components/Card";
 import { Progress } from "@/components/unified-ui/components/Progress";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import {
-  Warning as AlertTriangle,
-  ArrowRight,
-  Robot as Bot,
-  CheckCircle,
-  Clock,
-  Target,
-  User,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, ArrowRight, Bot as Bot, CheckCircle, Clock, Target, User, Zap as Zap,  } from "lucide-react";
 import React, { useState } from "react";
 
 export interface HandoverReason {

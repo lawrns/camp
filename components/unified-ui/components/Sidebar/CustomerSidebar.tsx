@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Activity, MapPin, Monitor, User } from "@phosphor-icons/react";
+import { Activity, MapPin, Monitor, User } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../Avatar";

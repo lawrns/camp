@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag } from "@phosphor-icons/react";
+import { Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 

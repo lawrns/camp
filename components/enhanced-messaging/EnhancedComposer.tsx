@@ -2,19 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  PaperPlaneTilt as Send, 
-  Smiley, 
-  Paperclip, 
-  Microphone, 
-  Image as ImageIcon,
-  X,
-  Plus,
-  Sparkles,
-  ArrowClockwise,
-  Check,
-  Warning
-} from '@phosphor-icons/react';
+import { Send as Send, Smile, Paperclip, Mic, Image as ImageIcon, X, Plus, Sparkles, ArrowClockwise, Check, AlertTriangle } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -368,7 +356,7 @@ export function EnhancedComposer({
                     disabled={disabled}
                     className="h-8 w-8 p-0"
                   >
-                    <Smiley className="h-4 w-4" />
+                    <Smile className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Add emoji</TooltipContent>

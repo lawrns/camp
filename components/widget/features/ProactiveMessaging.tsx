@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MessageCircle } from '@phosphor-icons/react';
+import { X, MessageCircle } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 

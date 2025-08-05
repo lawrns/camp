@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Warning as AlertTriangle, Robot as Bot, CheckCircle, Clock, User } from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Bot as Bot, CheckCircle, Clock, User } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Label } from "@/components/unified-ui/components/label";

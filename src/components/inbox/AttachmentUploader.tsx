@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
-import { CheckCircle, File, FileText, Image, Paperclip, Upload, Warning, X } from "@phosphor-icons/react";
+import { CheckCircle, File, FileText, Image, Paperclip, Upload, AlertTriangle, X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { supabase } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";
@@ -230,7 +230,7 @@ export const AttachmentUploader: React.FC<AttachmentUploaderProps> = ({
                 )}
 
                 {/* Status Icons */}
-                {file.error && <Icon icon={Warning} className="text-brand-mahogany-500 h-4 w-4" title={file.error} />}
+                {file.error && <Icon icon={AlertTriangle} className="text-brand-mahogany-500 h-4 w-4" title={file.error} />}
                 {file.uploadProgress === 100 && <Icon icon={CheckCircle} className="text-semantic-success h-4 w-4" />}
 
                 {/* Remove Button */}

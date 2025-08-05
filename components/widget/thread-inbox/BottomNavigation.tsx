@@ -1,5 +1,5 @@
 import React from 'react';
-import { House, ChatCircle, Question } from '@phosphor-icons/react';
+import { House, MessageCircle, HelpCircle } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 interface BottomNavigationProps {
@@ -11,8 +11,8 @@ interface BottomNavigationProps {
 export function BottomNavigation({ activeTab, onTabChange, className }: BottomNavigationProps) {
   const tabs = [
     { id: 'home' as const, icon: House, label: 'Home' },
-    { id: 'messages' as const, icon: ChatCircle, label: 'Messages' },
-    { id: 'help' as const, icon: Question, label: 'Help' }
+    { id: 'messages' as const, icon: MessageCircle, label: 'Messages' },
+    { id: 'help' as const, icon: HelpCircle, label: 'Help' }
   ];
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/unified-ui/components/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";

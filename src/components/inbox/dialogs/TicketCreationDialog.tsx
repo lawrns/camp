@@ -3,13 +3,7 @@
 // Direct imports to avoid barrel export circular dependency issues
 import React, { useState } from "react";
 import { format } from "date-fns";
-import {
-  Warning as AlertTriangleIcon,
-  Calendar as CalendarIcon,
-  CheckCircle as CheckCircleIcon,
-  Tag as TagIcon,
-  User as UserIcon,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangleIcon, Calendar as CalendarIcon, CheckCircle as CheckCircleIcon, Tag as TagIcon, User as UserIcon,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/unified-ui/components/calendar";
@@ -69,10 +63,10 @@ interface TicketData {
 }
 
 const PRIORITY_OPTIONS = [
-  { value: "low", label: "Low", color: "bg-green-100 text-green-800" },
-  { value: "medium", label: "Medium", color: "bg-yellow-100 text-yellow-800" },
+  { value: "low", label: "Low", color: "bg-[var(--fl-color-success-subtle)] text-[var(--fl-color-success)]" },
+  { value: "medium", label: "Medium", color: "bg-[var(--fl-color-warning-subtle)] text-[var(--fl-color-warning)]" },
   { value: "high", label: "High", color: "bg-orange-100 text-orange-800" },
-  { value: "urgent", label: "Urgent", color: "bg-red-100 text-red-800" },
+  { value: "urgent", label: "Urgent", color: "bg-[var(--fl-color-danger-subtle)] text-[var(--fl-color-danger)]" },
   { value: "critical", label: "Critical", color: "bg-purple-100 text-purple-800" },
 ];
 
@@ -324,7 +318,7 @@ export function TicketCreationDialog({
         <Label>Tags</Label>
         <div className="mb-2 flex flex-wrap gap-ds-2">
           {ticketData.tags.map((tag: unknown) => (
-            <Badge key={tag} variant="secondary" className="cursor-pointer" onClick={() => handleRemoveTag(tag)}>
+            <Badge key={tag} variant="secondary" className="cursor-pointer rounded-full" onClick={() => handleRemoveTag(tag)}>
               <Icon icon={TagIcon} className="mr-1 h-3 w-3" />
               {tag}
               <span className="ml-1 text-tiny">×</span>
@@ -388,7 +382,7 @@ export function TicketCreationDialog({
                     </div>
                     <Badge
                       variant={operator.availability === "available" ? "default" : "secondary"}
-                      className="text-tiny"
+                      className="text-tiny rounded-full"
                     >
                       {operator.availability}
                     </Badge>
@@ -451,9 +445,9 @@ export function TicketCreationDialog({
           {ticketData.tags.length > 0 && (
             <div>
               <span className="font-medium">Tags:</span>
-              <div className="mt-1 flex flex-wrap gap-1">
+              <div className="mt-1 flex flex-wrap gap-[var(--fl-spacing-1)]">
                 {ticketData.tags.map((tag: unknown) => (
-                  <Badge key={tag} variant="secondary" className="text-tiny">
+                  <Badge key={tag} variant="secondary" className="text-tiny rounded-full">
                     {tag}
                   </Badge>
                 ))}
@@ -488,7 +482,7 @@ export function TicketCreationDialog({
 
       <div className="rounded-ds-lg bg-[var(--fl-color-success-subtle)] spacing-3">
         <h4 className="mb-2 font-medium text-green-900">Next Steps</h4>
-        <ul className="space-y-1 text-sm text-green-800">
+        <ul className="space-y-1 text-sm text-[var(--fl-color-success)]">
           <li>• The assigned operator will be notified</li>
           <li>• Customer will receive a confirmation email</li>
           <li>• You can track progress in the tickets dashboard</li>

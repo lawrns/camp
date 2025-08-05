@@ -3,7 +3,7 @@
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Warning as AlertCircle, Info } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, Info } from "lucide-react";
 import { useAnimation } from "framer-motion";
 import React, { forwardRef, useEffect, useState } from "react";
 import { TextAreaFieldProps } from "./types";

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useState } from "react";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { Search, X } from "lucide-react";
 import { emojiPickerEmojis } from "../constants/messageTemplates";
 
 interface EmojiPickerProps {
@@ -154,7 +154,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji, onClose
       <div className="border-b border-[var(--fl-color-border)] spacing-3">
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <MagnifyingGlass className="h-4 w-4 text-gray-400" />
+            <Search className="h-4 w-4 text-gray-400" />
           </div>
           <input
             type="text"

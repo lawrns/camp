@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
-import { Warning as AlertCircle, File, FileText, Image, Info, Upload, X } from "@phosphor-icons/react";
+import { AlertTriangle as AlertCircle, File, FileText, Image, Info, Upload, X } from "lucide-react";
 import { useAnimation } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { FileUploadFieldProps } from "./types";

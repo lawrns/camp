@@ -1,19 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Buildings as Building,
-  Clock,
-  Globe,
-  MapPin,
-  ChatCircle as MessageSquare,
-  Monitor,
-  Phone,
-  DeviceMobile as Smartphone,
-  User,
-  WifiHigh,
-  WifiSlash as WifiHighOff,
-} from "@phosphor-icons/react";
+import { Buildings as Building, Clock, Globe, MapPin, MessageCircle as MessageSquare, Monitor, Phone, DeviceMobile as Smartphone, User, WifiHigh, WifiSlash as WifiHighOff,  } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";

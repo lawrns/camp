@@ -9,25 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import {
-  MagnifyingGlass as Search,
-  Funnel as Filter,
-  ChatCircle as MessageSquare,
-  Clock,
-  User,
-  Robot as Bot,
-  Warning as AlertCircle,
-  CheckCircle,
-  XCircle as X,
-  Archive,
-  Star,
-  Flag,
-  DotsThree as MoreHorizontal,
-  ArrowsClockwise as RefreshCw,
-  ChatCircle as MessageSquareIcon,
-  Robot as BotIcon,
-  CaretRight as ChevronRight
-} from '@phosphor-icons/react';
+import { Search as Search, Funnel as Filter, MessageCircle as MessageSquare, Clock, User, Bot as Bot, AlertTriangle as AlertCircle, CheckCircle, XCircle as X, Archive, Star, Flag, DotsThree as MoreHorizontal, RefreshCw as RefreshCw, MessageCircle as MessageSquareIcon, Bot as BotIcon, CaretRight as ChevronRight } from "lucide-react";
 import { DashboardChatView } from '@/components/chat/DashboardChatView';
 import { ConversationCard } from '@/components/inbox/ConversationCard';
 import { ConversationList } from '@/components/InboxDashboard/sub-components/ConversationList';
@@ -597,7 +579,7 @@ export function InboxDashboard({
                   <h3 className="ds-typography-h4 font-semibold">{selectedConversation.customerName}</h3>
                   <Badge 
                     variant={getPriorityColor(selectedConversation.priority)} 
-                    className="ds-badge"
+                    className="ds-badge rounded-full"
                   >
                     {selectedConversation.priority}
                   </Badge>

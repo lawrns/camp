@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Clock, ArrowsClockwise as RefreshCw, MagnifyingGlass as Search } from "@phosphor-icons/react";
+import { Clock, RefreshCw as RefreshCw, Search as Search } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

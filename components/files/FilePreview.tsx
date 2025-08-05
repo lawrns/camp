@@ -8,26 +8,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Archive,
-  ArrowSquareOut,
-  Download,
-  Eye,
-  File,
-  FileText,
-  Image as ImageIcon,
-  MusicNote as Music,
-  Pause,
-  Play,
-  ArrowClockwise as RotateCw,
-  Share,
-  VideoCamera as Video,
-  SpeakerHigh as Volume2,
-  SpeakerSlash as VolumeX,
-  X,
-  MagnifyingGlassPlus as ZoomIn,
-  MagnifyingGlassMinus as ZoomOut,
-} from "@phosphor-icons/react";
+import { Archive, ArrowSquareOut, Download, Eye, File, FileText, Image as ImageIcon, MusicNote as Music, Pause, Play, ArrowClockwise as RotateCw, Share, VideoCamera as Video, SpeakerHigh as Volume2, SpeakerSlash as VolumeX, X, MagnifyingGlassPlus as ZoomIn, MagnifyingGlassMinus as ZoomOut,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/unified-ui/components/Card";

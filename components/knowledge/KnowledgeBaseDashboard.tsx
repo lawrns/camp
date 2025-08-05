@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { BookOpen, Brain } from "@phosphor-icons/react";
+import { BookOpen, Brain } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

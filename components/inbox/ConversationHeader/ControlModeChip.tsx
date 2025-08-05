@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Robot as Bot, User } from "@phosphor-icons/react";
+import { Bot as Bot, User } from "lucide-react";
 import { Icon } from "@/lib/ui/Icon";
 // import { Icon } from "@/components/unified-ui/components/Icon"; // Component doesn't exist
 

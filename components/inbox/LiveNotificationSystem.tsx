@@ -2,19 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { OptimizedMotion, OptimizedAnimatePresence } from "@/lib/animations/OptimizedMotion";
-import {
-  Warning as AlertTriangle,
-  Bell,
-  CheckCircle as CheckCircle2,
-  Clock,
-  ChatCircle as MessageCircle,
-  User,
-  Users,
-  SpeakerHigh as Volume2,
-  SpeakerSlash as VolumeX,
-  X,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Bell, CheckCircle as CheckCircle2, Clock, MessageCircle as MessageCircle, User, Users, SpeakerHigh as Volume2, SpeakerSlash as VolumeX, X, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
@@ -191,18 +179,18 @@ const NotificationCard = ({
           {/* Metadata */}
           <div className="text-foreground mb-3 flex items-center gap-3 text-tiny">
             {notification.customerName && (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Icon icon={User} className="h-3 w-3" />
                 {notification.customerName}
               </span>
             )}
             {notification.agentName && (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-[var(--fl-spacing-1)]">
                 <Icon icon={Users} className="h-3 w-3" />
                 {notification.agentName}
               </span>
             )}
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-[var(--fl-spacing-1)]">
               <Icon icon={Clock} className="h-3 w-3" />
               {notification.timestamp.toLocaleTimeString("en-US", {
                 hour: "numeric",
@@ -371,7 +359,7 @@ export function LiveNotificationSystem({
           animate={{ opacity: 1, scale: 1 }}
           className="flex justify-center"
         >
-          <Badge className="bg-brand-blue-500 px-2 py-1 text-white">+{notifications.length - maxVisible} more</Badge>
+          <Badge className="bg-brand-blue-500 px-[var(--fl-spacing-2)] py-[var(--fl-spacing-1)] text-white rounded-full">+{notifications.length - maxVisible} more</Badge>
         </OptimizedMotion.div>
       )}
     </div>

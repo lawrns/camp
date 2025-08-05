@@ -7,18 +7,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, MotionStyle, useInView, useReducedMotion } from "framer-motion";
-import {
-  Activity,
-  Eye,
-  EyeSlash as EyeOff,
-  Stack as Layers,
-  Pause,
-  Play,
-  ArrowCounterClockwise as RotateCcw,
-  Gear as Settings,
-  Sparkle as Sparkles,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { Activity, Eye, EyeSlash as EyeOff, Stack as Layers, Pause, Play, ArrowCounterClockwise as RotateCcw, Settings as Settings, Sparkles as Sparkles, Zap as Zap,  } from "lucide-react";
 import { Badge } from "@/components/unified-ui/components/Badge";
 import { Button } from "@/components/ui/button";
 import { Card as GlassCard } from "@/components/unified-ui/components/Card";

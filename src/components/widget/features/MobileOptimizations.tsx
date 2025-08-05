@@ -55,7 +55,7 @@ export function useMobileOptimizations() {
       ...prev,
       isMobile: browser.isMobile,
       isTablet: browser.isTablet,
-      touchSupport: "ontouchstart" in window || navigator.maxTouchPoints > 0 || Boolean((window as any).touch)
+      touchSupport: "ontouchstart" in window || navigator.maxTouchPoints > 0 || Boolean((window as any).touch),
       networkType: network.effectiveType,
       isSlowConnection: network.isSlowConnection,
     }));

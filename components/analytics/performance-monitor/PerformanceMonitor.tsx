@@ -1,20 +1,11 @@
 "use client";
 
 import { Badge } from "@/components/unified-ui/components/Badge";
-import { Button } = "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
 import { Icon } from "@/lib/ui/Icon";
-import {
-  ChartLine as Activity,
-  ChartBar as BarChart3,
-  Globe,
-  Monitor,
-  TrendDown as TrendingDown,
-  TrendUp as TrendingUp,
-  WifiHigh,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { ChartLine as Activity, ChartBar as BarChart3, Globe, Monitor, TrendDown as TrendingDown, TrendUp as TrendingUp, WifiHigh, Zap as Zap,  } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { MetricCard } from "./MetricCard";

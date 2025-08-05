@@ -27,24 +27,7 @@ import {
 import { SystemRole } from "@/lib/rbac/types";
 
 // Import icons
-import {
-  Shield,
-  Users,
-  Gear as Settings,
-  Plus,
-  PencilSimple as Edit,
-  Trash,
-  Eye,
-  Warning,
-  CheckCircle,
-  Clock,
-  Crown,
-  UserGear,
-  Key,
-  Lock,
-  LockOpen,
-  ArrowsClockwise as RefreshCw,
-} from "@phosphor-icons/react";
+import { Shield, Users, Settings as Settings, Plus, PencilSimple as Edit, Trash, Eye, AlertTriangle, CheckCircle, Clock, Crown, UserGear, Key, Lock, LockOpen, RefreshCw as RefreshCw,  } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -185,7 +168,7 @@ export default function RolesManagementPage() {
         {/* Current User Info */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={UserGear} className="h-5 w-5" />
               Your Access Level
             </CardTitle>
@@ -211,7 +194,7 @@ export default function RolesManagementPage() {
         {/* Role Statistics */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={Shield} className="h-5 w-5" />
               Role Distribution
             </CardTitle>
@@ -236,7 +219,7 @@ export default function RolesManagementPage() {
         {/* Team Members */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
               <Icon icon={Users} className="h-5 w-5" />
               Team Members ({members.length})
             </CardTitle>
@@ -257,7 +240,7 @@ export default function RolesManagementPage() {
                       className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-[var(--fl-color-primary-subtle)] flex items-center justify-center">
                           <Icon icon={RoleIcon} className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
@@ -271,7 +254,7 @@ export default function RolesManagementPage() {
                         
                         <Badge 
                           variant={member.status === 'active' ? 'success' : 'warning'}
-                        >
+                         className="rounded-full">
                           {member.status}
                         </Badge>
 
@@ -282,7 +265,7 @@ export default function RolesManagementPage() {
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-[var(--fl-spacing-2)]">
                           <PermissionButton
                             action="assign"
                             resource="roles"
@@ -322,23 +305,23 @@ export default function RolesManagementPage() {
         <AdminOnly>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                 <Icon icon={Settings} className="h-5 w-5" />
                 Admin Controls
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-[var(--fl-spacing-2)]">
                   <Icon icon={Shield} className="h-4 w-4" />
                   Role Templates
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-[var(--fl-spacing-2)]">
                   <Icon icon={Key} className="h-4 w-4" />
                   Permission Matrix
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Icon icon={Warning} className="h-4 w-4" />
+                <Button variant="outline" className="flex items-center gap-[var(--fl-spacing-2)]">
+                  <Icon icon={AlertTriangle} className="h-4 w-4" />
                   Audit Logs
                 </Button>
               </div>
@@ -350,7 +333,7 @@ export default function RolesManagementPage() {
         {permissionSummary && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-[var(--fl-spacing-2)]">
                 <Icon icon={Key} className="h-5 w-5" />
                 Your Permissions
               </CardTitle>
@@ -366,7 +349,7 @@ export default function RolesManagementPage() {
                           access.level === 'admin' || access.level === 'owner' ? 'success' :
                           access.level === 'write' ? 'warning' : 'secondary'
                         }
-                      >
+                       className="rounded-full">
                         {access.level}
                       </Badge>
                     </div>

@@ -1,20 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Warning as AlertTriangle,
-  Robot as Bot,
-  CheckCircle,
-  Database,
-  Info,
-  Envelope as Mail,
-  ArrowsClockwise as RefreshCw,
-  FloppyDisk as Save,
-  Gear as Settings,
-  Shield,
-  Link as Webhook,
-  Lightning as Zap,
-} from "@phosphor-icons/react";
+import { AlertTriangle as AlertTriangle, Bot as Bot, CheckCircle, Database, Info, Envelope as Mail, RefreshCw as RefreshCw, FloppyDisk as Save, Settings as Settings, Shield, Link as Webhook, Zap as Zap,  } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
 import { Badge } from "@/components/unified-ui/components/Badge";
