@@ -2,9 +2,7 @@
   "name": "campfire-v2",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "projects/*"
-  ],
+
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
     "build": "npm run projects:build && npm run security:validate && next build",
