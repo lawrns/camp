@@ -6,9 +6,8 @@
  * proper Row Level Security (RLS) and organization isolation.
  */
 
-import { createRouteHandlerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 import { validateOrganizationId, validateUserId } from '@/lib/utils/validation';
 
 export interface SecureClientOptions {
@@ -33,7 +32,7 @@ export async function createSecureClient(options: SecureClientOptions = {}) {
   // For authenticated user operations, use the standard client with RLS
   if (requireAuth && !allowServiceRole) {
     const cookieStore = cookies();
-    const client = createRouteHandlerClient({ cookies: () => cookieStore });
+    const client = supabase.server(cookieStore);
     
     // Validate the user's session
     const { data: { user }, error: authError } = await client.auth.getUser();
@@ -123,7 +122,7 @@ export async function createWidgetClient(organizationId: string) {
  */
 export async function createAuthenticatedClient(requiredOrganizationId?: string) {
   const cookieStore = await cookies();
-  const client = createRouteHandlerClient({ cookies: () => cookieStore });
+  const client = supabase.server(cookieStore);
   
   const { data: { user }, error: authError } = await client.auth.getUser();
   

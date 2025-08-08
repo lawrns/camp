@@ -326,7 +326,7 @@ export function applyTheme(theme: "light" | "dark", element: HTMLElement = docum
 /**
  * Component loading utilities
  */
-export async function loadComponent(componentName: string): Promise<any> {
+export async function loadComponent(componentName: string): Promise<unknown> {
   const info = getComponentInfo(componentName);
 
   if (!info) {

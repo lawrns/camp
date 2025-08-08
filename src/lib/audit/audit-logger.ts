@@ -5,7 +5,7 @@
  * conversations, and analytics domains for production monitoring
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 export interface AuditLogEntry {
   id?: string;

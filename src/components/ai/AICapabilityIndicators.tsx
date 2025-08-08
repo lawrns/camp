@@ -17,9 +17,9 @@ import {
   XCircle,
   Zap,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card } from "@/components/unified-ui/components/Card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface AICapability {

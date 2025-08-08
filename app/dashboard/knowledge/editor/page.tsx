@@ -11,8 +11,8 @@ import { api } from "@/lib/trpc/provider";
 // RBAC imports
 import { PermissionGuard, PermissionButton } from "@/lib/rbac/components";
 
-// Import icons
-import { FloppyDisk as Save, Eye, Upload, ArrowLeft as Back, FileText, Tag, Folder, Globe, Lock, Clock, User, PencilSimple as Edit, CheckCircle, AlertTriangle, X, Plus, Trash, Copy, RefreshCw as RefreshCw,  } from "lucide-react";
+// Import icons (use available names from lucide-react)
+import { Save, Eye, Upload, ArrowLeft as Back, FileText, Tag, Folder, Globe, Lock, Clock, User, Pencil as Edit, CheckCircle, AlertTriangle, X, Plus, Trash, Copy, RefreshCw } from "lucide-react";
 
 interface DocumentData {
   id?: string;

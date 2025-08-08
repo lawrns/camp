@@ -1,8 +1,8 @@
 "use client";
 
 import { Sparkles, TrendUp, AlertTriangle, CheckCircle, Lightbulb, Target } from "lucide-react";
-import { Badge } from '@/components/unified-ui/components/Badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 
 interface AIInsightsPanelProps {

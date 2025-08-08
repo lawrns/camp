@@ -1,8 +1,8 @@
 "use client";
 
-import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { Badge } from '@/components/unified-ui/components/Badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { MessageCircle, CheckCircle, Clock, Star, Users, ArrowUp, UserCircle } from "lucide-react";
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';

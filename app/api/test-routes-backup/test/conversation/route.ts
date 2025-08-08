@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { mapDbConversationToApi, mapDbMessageToApi } from '@/lib/utils/db-type-mappers';
 
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
 
     // Check authentication
     const { data: { session }, error: authError } = await supabase.auth.getSession();

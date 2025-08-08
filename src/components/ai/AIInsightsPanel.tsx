@@ -17,10 +17,10 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

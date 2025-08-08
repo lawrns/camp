@@ -3,7 +3,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { errorLogger } from "@/lib/services/ErrorLoggingService";
 import { Icon } from "@/lib/ui/Icon";
 

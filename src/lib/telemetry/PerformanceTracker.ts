@@ -17,7 +17,7 @@
  * - Ticket creation time (<500ms)
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 export interface PerformanceMetric {
   id: string;

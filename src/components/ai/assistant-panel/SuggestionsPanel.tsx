@@ -4,10 +4,10 @@
 
 import { OptimizedMotion } from "@/lib/animations/OptimizedMotion";
 import { Copy, ThumbsUp } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
-import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { SuggestedResponse } from "./types";

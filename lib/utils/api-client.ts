@@ -2,7 +2,7 @@
  * Utility for making API calls with proper CSRF protection and auth
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 // Create appropriate Supabase client based on environment
 function getSupabaseClient() {

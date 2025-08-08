@@ -28,24 +28,24 @@ import {
   Upload,
   Video,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/unified-ui/components/dropdown-menu";
-import { Input } from "@/components/unified-ui/components/input";
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
+} from "@/components/ui/select";
 import { Icon } from "@/lib/ui/Icon";
 import { FileMetadata } from "./FilePreview";
 import { MediaViewer } from "./MediaViewer";

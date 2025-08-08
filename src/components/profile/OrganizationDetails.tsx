@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { Building2, Calendar, Copy, Shield, Users } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";

@@ -2,8 +2,8 @@
 
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { useRealtime } from '@/hooks/useRealtime';
-import { Avatar, AvatarFallback } from '@/components/unified-ui/components/Avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageCircle, CheckCircle, Clock, Star, Users, MessageCircle as MessageCircle, UserCircle, ArrowUp } from "lucide-react";
 import { useState, useEffect } from 'react';
 

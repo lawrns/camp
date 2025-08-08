@@ -5,10 +5,10 @@
  * No circular dependencies, no over-engineering
  */
 
-import type { Database } from "@/types/supabase";
+import type { Database } from "@/types/supabase-generated";
+import type { SupabaseClient as SupabaseJsClient, RealtimeChannel as SupabaseRealtimeChannel } from "@supabase/supabase-js";
 import { createBrowserClient, createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Environment variables - server-side only
 const getEnv = () => {
@@ -33,7 +33,7 @@ let browserClient: ReturnType<typeof createBrowserClient<Database>> | null = nul
 let browserClientInitialized = false;
 
 // Service client singleton
-let serviceClient: ReturnType<typeof createSupabaseClient<Database>> | null = null;
+let serviceClient: ReturnType<typeof createSupabaseClient<Database>> | undefined;
 
 // validateAuthToken is imported from ./auth-validation - removed duplicate definition
 
@@ -45,9 +45,10 @@ export function getClient() {
   if (typeof window === "undefined") {
     // Server environment: Use server component client for realtime cleanup
     try {
-      // Dynamic import to avoid client-side issues
-      const { cookies } = require('next/headers');
-      return createServerComponentClient<Database>({ cookies: () => cookies() });
+      // Import using require to avoid top-level await issues in SSR chunks
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { cookies } = require('next/headers') as { cookies: () => { getAll(): Array<{ name: string; value: string }>; set(name: string, value: string, options?: unknown): void } };
+      return getServerClient(cookies());
     } catch (error) {
       // Fallback to simple server client if cookies not available
       return getSimpleServerClient();
@@ -179,7 +180,7 @@ function getWidgetClient() {
 /**
  * Get service client (server-side only)
  */
-function getServiceClient() {
+function getServiceClient(): ReturnType<typeof createSupabaseClient<Database>> {
   if (typeof window !== "undefined") {
     throw new Error("Service client cannot be used in browser environment");
   }
@@ -214,7 +215,7 @@ function getServiceClient() {
 /**
  * Get simple server client for cleanup operations (no cookies needed)
  */
-function getSimpleServerClient() {
+function getSimpleServerClient(): SupabaseJsClient<Database> {
   if (typeof window !== "undefined") {
     throw new Error("Server client cannot be used in browser environment");
   }
@@ -231,7 +232,9 @@ function getSimpleServerClient() {
 /**
  * Get server client (server-side only)
  */
-function getServerClient(cookies: unknown) {
+type CookieStore = { getAll(): Array<{ name: string; value: string }>; set(name: string, value: string, options?: unknown): void };
+
+function getServerClient(cookies: CookieStore): SupabaseJsClient<Database> {
   if (typeof window !== "undefined") {
     throw new Error("Server client cannot be used in browser environment");
   }
@@ -240,12 +243,12 @@ function getServerClient(cookies: unknown) {
   return createServerClient<Database>(env.url, env.anonKey, {
     cookies: {
       getAll() {
-        return cookies?.getAll?.() || [];
+        return cookies.getAll();
       },
-      setAll(cookiesToSet: unknown) {
+      setAll(cookiesToSet: Array<{ name: string; value: string; options?: unknown }>) {
         try {
-          cookiesToSet.forEach(({ name, value, options }: unknown) => {
-            cookies?.set?.(name, value, options);
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookies.set(name, value, options);
           });
         } catch {
           // Ignore - server component
@@ -360,7 +363,7 @@ export class SupabaseError extends Error {
   }
 }
 
-export function handleSupabaseError(error: any): SupabaseError {
+export function handleSupabaseError(error: unknown): SupabaseError {
   if (error?.code && error?.message) {
     return new SupabaseError(
       error.message,
@@ -379,7 +382,7 @@ export function handleSupabaseError(error: any): SupabaseError {
 // CONNECTION HEALTH
 // ============================================================================
 
-export async function checkConnectionHealth(client: any): Promise<{
+export async function checkConnectionHealth(client: SupabaseJsClient<Database>): Promise<{
   isHealthy: boolean;
   latency: number;
   error?: string;

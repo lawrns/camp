@@ -56,6 +56,12 @@ const eslintConfig = [
           'ai_session_id'
         ]
       }],
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_'
+      }],
     },
   },
   // Temporary targeted relaxations for legacy util and hooks to keep lint passing

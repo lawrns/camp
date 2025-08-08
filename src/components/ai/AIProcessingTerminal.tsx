@@ -13,10 +13,10 @@ import {
   Trash2,
   Zap,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/useAuth";
 import { createServerClient } from "@/lib/core/auth";
 import { Icon } from "@/lib/ui/Icon";

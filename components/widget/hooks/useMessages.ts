@@ -264,7 +264,7 @@ export function useMessages(
 
         // Import supabase dynamically to avoid build issues
         console.log("[useMessages] Setting up real-time subscription for conversation:", conversationId);
-        import("@/lib/supabase/consolidated-exports").then(({ supabase }) => {
+  import("@/lib/supabase").then(({ supabase }) => {
             const client = supabase.browser();
             const channel = client
                 .channel(channelName)

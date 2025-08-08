@@ -97,8 +97,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
       channel.unsubscribe();
     }
 
-    const { createBrowserClient } = require("@/lib/supabase");
-    const supabaseClient = createBrowserClient();
+    const supabaseClient = supabase.browser();
 
     const newChannel = supabaseClient
       .channel(`conversation_${conversationId}`)

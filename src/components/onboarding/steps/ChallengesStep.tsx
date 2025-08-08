@@ -11,16 +11,16 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
-import { Checkbox } from "@/components/unified-ui/components/checkbox";
-import { Label } from "@/components/unified-ui/components/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Icon } from "@/lib/ui/Icon";
 import { apiGet, apiPost } from "@/lib/utils/api-client";
 

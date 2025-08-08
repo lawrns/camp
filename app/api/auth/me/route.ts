@@ -30,7 +30,7 @@ export async function GET() {
       organizationId: profile?.organization_id,
       role: ((profile?.metadata as Record<string, unknown>)?.role as string) || "agent",
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 }

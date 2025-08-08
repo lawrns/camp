@@ -7,7 +7,7 @@
 export * from "./entities";
 
 // Re-export database types
-export type { Database } from "./supabase";
+export type { Database } from "./supabase-generated";
 export * from "./database-extensions";
 
 // Re-export common types (excluding duplicates)

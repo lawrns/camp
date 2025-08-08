@@ -15,13 +15,13 @@ import {
   Users,
   Video,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
-import { Separator } from "@/components/unified-ui/components/Separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";
 

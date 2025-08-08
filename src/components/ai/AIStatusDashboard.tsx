@@ -4,9 +4,9 @@
  * Real-time dashboard showing AI system status and metrics
  */
 
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import React, { useEffect, useState } from "react";
 
 export interface AISystemStatus {

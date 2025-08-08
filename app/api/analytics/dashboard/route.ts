@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 interface AuthUser {
@@ -13,10 +13,10 @@ async function withAuth(handler: (req: NextRequest, user: AuthUser) => Promise<N
   return async (request: NextRequest) => {
     try {
       const cookieStore = cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+      const supabaseClient = supabase.server(cookieStore);
 
       // Check authentication
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      const { data: { session }, error: authError } = await supabaseClient.auth.getSession();
       
       if (authError || !session) {
         return NextResponse.json({ error: 'Unauthorized', code: 'UNAUTHORIZED' }, { status: 401 });
@@ -29,10 +29,10 @@ async function withAuth(handler: (req: NextRequest, user: AuthUser) => Promise<N
         return NextResponse.json({ error: 'Organization not found', code: 'ORGANIZATION_NOT_FOUND' }, { status: 400 });
       }
 
-      const user = {
+      const user: AuthUser = {
         userId: session.user.id,
         organizationId,
-        email: session.user.email
+        ...(session.user.email ? { email: session.user.email } : {})
       };
 
       return await handler(request, user);
@@ -50,7 +50,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabaseClient = supabase.server(cookieStore);
 
     // Calculate date range based on period
     const now = new Date();
@@ -83,7 +83,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
     }
 
     // Get conversations data
-    const { data: conversations, error: conversationsError } = await supabase
+    const { data: conversations, error: conversationsError } = await supabaseClient
       .from('conversations')
       .select('createdAt, status, customerEmail')
       .eq('organizationId', user.organizationId)
@@ -99,7 +99,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
     }
 
     // Get messages data
-    const { data: messages, error: messagesError } = await supabase
+    const { data: messages, error: messagesError } = await db
       .from('messages')
       .select('createdAt, senderType, conversationId')
       .eq('organizationId', user.organizationId)
@@ -115,7 +115,7 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
     }
 
     // Get tickets data
-    const { data: tickets, error: ticketsError } = await supabase
+    const { data: tickets, error: ticketsError } = await db
       .from('tickets')
       .select('createdAt, status, priority')
       .eq('organizationId', user.organizationId)
@@ -131,20 +131,28 @@ export const GET = withAuth(async (request: NextRequest, user: AuthUser) => {
     }
 
     // Calculate metrics
-    const totalConversations = conversations?.length || 0;
-    const openConversations = conversations?.filter(c => c.status === 'open').length || 0;
-    const resolvedConversations = conversations?.filter(c => c.status === 'resolved').length || 0;
+    type ConversationRow = { createdAt: string; status: string; customerEmail: string };
+    type MessageRow = { createdAt: string; senderType: string; conversationId: string };
+    type TicketRow = { createdAt: string; status: string; priority: string };
+
+    const typedConversations = (conversations || []) as ConversationRow[];
+    const typedMessages = (messages || []) as MessageRow[];
+    const typedTickets = (tickets || []) as TicketRow[];
+
+    const totalConversations = typedConversations.length;
+    const openConversations = typedConversations.filter((c: ConversationRow) => c.status === 'open').length || 0;
+    const resolvedConversations = typedConversations.filter((c: ConversationRow) => c.status === 'resolved').length || 0;
     
-    const totalMessages = messages?.length || 0;
-    const customerMessages = messages?.filter(m => m.senderType === 'customer').length || 0;
-    const agentMessages = messages?.filter(m => m.senderType === 'agent').length || 0;
+    const totalMessages = typedMessages.length;
+    const customerMessages = typedMessages.filter((m: MessageRow) => m.senderType === 'customer').length || 0;
+    const agentMessages = typedMessages.filter((m: MessageRow) => m.senderType === 'agent').length || 0;
     
-    const totalTickets = tickets?.length || 0;
-    const openTickets = tickets?.filter(t => t.status === 'open').length || 0;
-    const urgentTickets = tickets?.filter(t => t.priority === 'urgent').length || 0;
+    const totalTickets = typedTickets.length || 0;
+    const openTickets = typedTickets.filter((t: TicketRow) => t.status === 'open').length || 0;
+    const urgentTickets = typedTickets.filter((t: TicketRow) => t.priority === 'urgent').length || 0;
 
     // Calculate unique customers
-    const uniqueCustomers = new Set(conversations?.map(c => c.customerEmail)).size;
+    const uniqueCustomers = new Set(typedConversations.map((c: ConversationRow) => c.customerEmail)).size;
 
     // Calculate average response time (simplified)
     const avgResponseTime = totalMessages > 0 ? Math.round(totalMessages / totalConversations) : 0;

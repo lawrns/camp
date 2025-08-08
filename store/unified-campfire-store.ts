@@ -2,7 +2,7 @@
  * Unified Campfire Store - Stub Implementation
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { create } from "zustand";
 
 interface Notification {

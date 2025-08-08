@@ -6,9 +6,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {

@@ -1,39 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
-import { supabase } from '@/lib/supabase/consolidated-exports';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { mapDbConversationToApi } from '@/lib/utils/db-type-mappers';
+// (removed unused: supabaseFactory, cookies)
+import { supabase } from '@/lib/supabase';
+// (unused imports removed)
 import { createOrGetSharedConversation } from '@/lib/services/shared-conversation-service';
 
-// Simplified optional auth wrapper for widget endpoints
-async function withOptionalAuth(handler: (req: NextRequest, user?: unknown) => Promise<NextResponse>) {
-  return async (request: NextRequest) => {
-    try {
-      const supabase = createRouteHandlerClient({ cookies });
-
-      // Try to get authentication, but don't require it
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
-      
-      let user = undefined;
-      if (!authError && session) {
-        const organizationId = session.user.user_metadata?.organization_id;
-        if (organizationId) {
-          user = {
-            userId: session.user.id,
-            organizationId,
-            email: session.user.email
-          };
-        }
-      }
-
-      return await handler(request, user);
-    } catch (error) {
-      console.error('[Auth Error]:', error);
-      return await handler(request, undefined);
-    }
-  };
-}
+// (unused optional auth wrapper removed)
 
 // GET method for session validation
 export async function GET(request: NextRequest) {
@@ -77,7 +48,7 @@ export async function GET(request: NextRequest) {
       organizationId,
       organization: {
         id: organization.id,
-        widgetEnabled: (organization.settings as unknown)?.widget_enabled ?? true
+        widgetEnabled: ((organization.settings as { widget_enabled?: boolean } | null)?.widget_enabled) ?? true
       }
     });
 
@@ -164,8 +135,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const settings = organization.settings as unknown;
-    const widgetEnabled = settings?.widget_enabled ?? true; // Default to enabled
+    const settings = organization.settings as { widget_enabled?: boolean } | null;
+    const widgetEnabled = (settings && typeof settings.widget_enabled === 'boolean') ? settings.widget_enabled : true; // Default to enabled
     if (!widgetEnabled) {
       return NextResponse.json(
         { error: 'Widget not enabled for this organization', code: 'FORBIDDEN' },

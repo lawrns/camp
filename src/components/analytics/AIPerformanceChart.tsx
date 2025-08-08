@@ -21,9 +21,9 @@ import {
   XAxis,
   YAxis,
 } from "@/components/charts/LazyCharts";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { formatTimestamp } from "@/lib/utils/date";

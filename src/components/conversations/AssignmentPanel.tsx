@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
+import { Avatar } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Skeleton } from "@/components/unified-ui/components/Skeleton";
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

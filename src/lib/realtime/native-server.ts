@@ -3,7 +3,7 @@
  * Replaces lean-server with direct Supabase server-side broadcasting
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 // Create a singleton server client for broadcasting
 let serverClient: ReturnType<typeof createClient> | null = null;

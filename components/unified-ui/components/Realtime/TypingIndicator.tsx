@@ -5,7 +5,7 @@
  * Supports multiple users typing simultaneously with smart layout
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import React, { useEffect, useState } from "react";
 

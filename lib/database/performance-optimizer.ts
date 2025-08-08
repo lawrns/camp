@@ -13,7 +13,7 @@
  * - Automated optimization suggestions
  */
 
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 import { monitor } from '@/lib/monitoring/comprehensive-monitoring';
 
 interface QueryMetrics {

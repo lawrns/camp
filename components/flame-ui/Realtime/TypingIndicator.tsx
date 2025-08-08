@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 interface TypingUser {
   id: string;

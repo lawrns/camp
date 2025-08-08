@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/ssr';
+import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { supabase } from '@/lib/supabase/consolidated-exports';
@@ -8,8 +8,8 @@ import { supabase } from '@/lib/supabase/consolidated-exports';
 async function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
-      const cookieStore = cookies();
-      const supabaseClient = createRouteHandlerClient({ cookies: () => cookieStore });
+  const cookieStore = cookies();
+  const supabaseClient = supabase.server(cookieStore);
 
       // Require authentication for presence endpoints
       const { data: { session }, error: authError } = await supabaseClient.auth.getSession();

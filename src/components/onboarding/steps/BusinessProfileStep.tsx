@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 import { apiGet, apiPost } from "@/lib/utils/api-client";
 

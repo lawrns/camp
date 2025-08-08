@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 // Remove direct import: // import { RealtimeChannel } from '@supabase/supabase-js';
 // Use any for channel type if specific type not available in centralized exports
 import { useCallback, useEffect, useState } from 'react';

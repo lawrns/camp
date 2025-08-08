@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/ssr';
+import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 // Simplified auth wrapper for API endpoints
@@ -7,7 +7,7 @@ async function withAuth(handler: (req: NextRequest, user: unknown, params: unkno
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
       const cookieStore = cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+      const supabase = supabaseFactory.server(cookieStore);
 
       // Check authentication
       const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -51,7 +51,7 @@ export const GET = withAuth(async (request: NextRequest, user: unknown, params: 
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
 
     // Get organization settings with proper organization context
     const { data: settings, error } = await supabase
@@ -139,7 +139,7 @@ export const PUT = withAuth(async (request: NextRequest, user: unknown, params: 
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
 
     // Update or create settings with proper organization context
     const { data: settings, error } = await supabase

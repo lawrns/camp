@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
+import { supabase as consolidatedSupabase } from '@/lib/supabase';
 import { UNIFIED_EVENTS, UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 
 interface TypingIndicatorProps {

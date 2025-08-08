@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAuthStore } from "../store/domains/auth/auth-store"; // Adjust path as needed

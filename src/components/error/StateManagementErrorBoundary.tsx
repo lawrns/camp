@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, Database, RefreshCw } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/lib/ui/Icon";
 import { useUIStore } from "@/store/domains/ui/ui-store";

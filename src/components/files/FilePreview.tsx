@@ -28,9 +28,9 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
+import { Card, CardContent } from "@/components/ui/card";
 import { FileMetadata } from "@/lib/files/FileService";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

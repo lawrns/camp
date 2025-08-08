@@ -78,7 +78,7 @@ export const POST = withPublic(async (request: NextRequest) => {
             timestamp: new Date().toISOString(),
           },
         });
-      } catch (auditError) {
+      } catch (_auditError) {
 
       }
 
@@ -139,12 +139,11 @@ export const POST = withPublic(async (request: NextRequest) => {
                 timestamp: new Date().toISOString(),
               },
             });
-          } catch (auditError) {
+          } catch (_auditError) {
 
           }
         }
-      } catch (orgError) {
-
+      } catch (_orgError) {
         // Don't fail login if organization context fails
       }
     }
@@ -241,14 +240,13 @@ export const POST = withPublic(async (request: NextRequest) => {
             timestamp: new Date().toISOString(),
           },
         });
-      } catch (auditError) {
+      } catch (_auditError) {
 
       }
     }
 
     return applySecurityHeaders(response);
-  } catch (error) {
-
+  } catch (_error) {
     return createErrorResponse("Invalid request", 400, "INVALID_REQUEST");
   }
 });

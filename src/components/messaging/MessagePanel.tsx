@@ -15,10 +15,10 @@ import {
 import { AIReplySuggestions, type AISuggestion } from "@/components/ai/AIReplySuggestions";
 import { VirtualizedMessageList } from "@/components/inbox/VirtualizedMessageList";
 import { MessageComposerTags } from "@/components/shared/TagInput";
-import { Avatar, AvatarFallback } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { useConversationAI } from "@/hooks/unified-migration-hooks";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@/lib/ui/Icon";

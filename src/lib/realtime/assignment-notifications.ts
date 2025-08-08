@@ -6,7 +6,7 @@
  */
 
 import { broadcastToOrganization, broadcastToConversation, broadcastToDashboard } from "./lean-server";
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { trackNotificationLatency } from "@/lib/telemetry/performance-utils";
 
 export interface AssignmentNotificationData {

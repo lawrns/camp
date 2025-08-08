@@ -5,7 +5,7 @@
  * Implements connection pooling, message batching, and performance monitoring
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 interface RealtimeMetrics {
   messageLatency: number;

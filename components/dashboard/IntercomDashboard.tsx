@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
-import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
+import { supabase as consolidatedSupabase } from '@/lib/supabase';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent } from '@/components/ui/card';
 import { IntercomMetricCard } from './IntercomMetricCard';

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 
 export interface DashboardReadReceiptStatus {
   messageId: string;

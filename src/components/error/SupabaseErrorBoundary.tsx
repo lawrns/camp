@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/unified-ui/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/Button-unified";
 import { hasValidSupabaseConfig } from "@/lib/supabase";
 import { Icon } from "@/lib/ui/Icon";

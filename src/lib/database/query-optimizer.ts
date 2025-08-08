@@ -5,7 +5,7 @@
  * Implements connection pooling, query caching, and performance monitoring
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 interface QueryOptions {
   useCache?: boolean;

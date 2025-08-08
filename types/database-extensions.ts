@@ -3,7 +3,7 @@
  * Extends the base database types with custom functionality
  */
 
-import type { Database } from './supabase';
+import type { Database } from './supabase-generated';
 
 // Extended database types
 export type ExtendedDatabase = Database;

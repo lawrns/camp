@@ -25,9 +25,9 @@ import {
   MagnifyingGlassPlus as ZoomIn,
   MagnifyingGlassMinus as ZoomOut,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/unified-ui/components/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Icon } from "@/lib/ui/Icon";
 import { FileMetadata } from "./FilePreview";
 

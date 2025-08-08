@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/Button-unified";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { EmptyState, EmptyStateVariantsConfig } from "@/components/unified-ui/components/empty-state";
-import { ScrollArea } from "@/components/unified-ui/components/ScrollArea";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState, EmptyStateVariantsConfig } from "@/components/ui/empty-state";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { OptimizedAnimatePresence, OptimizedMotion } from "@/lib/animations/OptimizedMotion";

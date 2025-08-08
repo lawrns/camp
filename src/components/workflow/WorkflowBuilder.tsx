@@ -1,18 +1,18 @@
 import React, { useCallback, useState } from "react";
 import { Play, Plus, Save, Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/Button-unified";
-import { Card } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Switch } from "@/components/unified-ui/components/switch";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { useWorkflow } from "@/hooks/useWorkflow";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";

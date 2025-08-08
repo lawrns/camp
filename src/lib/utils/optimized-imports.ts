@@ -13,6 +13,6 @@ import { MessageCircle, Send, Smile, X, AlertTriangle } from "lucide-react";
 export { MessageCircle as ChatCircle, Send as PaperPlaneTilt, Smile as Smiley, X, AlertTriangle as Warning } from "lucide-react";
 
 // Optimized UI component imports
-export { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/unified-ui/components/Dialog";
+export { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default {};

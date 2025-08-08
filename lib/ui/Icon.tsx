@@ -3,7 +3,7 @@ import { ElementType } from "react";
 
 export interface IconProps extends Omit<PhosphorIconProps, "size" | "weight"> {
   /** The Phosphor icon component to render */
-  icon: ElementType<any> | React.ForwardRefExoticComponent<any>;
+  icon: ElementType<unknown> | React.ForwardRefExoticComponent<unknown>;
   /** Pixel size. Default 20. */
   size?: number;
   /** Icon weight. Default "regular". */

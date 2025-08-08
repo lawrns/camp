@@ -12,10 +12,10 @@ import {
   WifiHigh,
   Lightning as Zap,
 } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { errorReporter, type PerformanceMetric } from "@/lib/monitoring/error-reporter";
 import { Icon } from "@/lib/ui/Icon";
 

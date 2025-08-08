@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@/components/unified-ui/components/Card";
+import { Card } from "@/components/ui/card";
 import { Icon } from "@/lib/ui/Icon";
 import {
   Activity,

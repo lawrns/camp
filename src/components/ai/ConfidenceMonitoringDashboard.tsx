@@ -15,13 +15,13 @@ import {
   XAxis,
   YAxis,
 } from "@/components/charts/LazyCharts";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Label } from "@/components/unified-ui/components/label";
-import { Slider } from "@/components/unified-ui/components/slider";
-import { Switch } from "@/components/unified-ui/components/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import {

@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useRealtimeTeamData } from '@/hooks/useRealtimeTeamData';
 import { useAssignmentQueue } from '@/hooks/useAssignmentQueue';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { Badge } from '@/components/unified-ui/components/Badge';
-import { Button } from '@/components/unified-ui/components/Button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/unified-ui/components/Avatar';
-import { Progress } from '@/components/unified-ui/components/Progress';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
 /**

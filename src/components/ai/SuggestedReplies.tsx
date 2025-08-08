@@ -9,10 +9,10 @@ import {
   Send,
   Sparkles,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Icon } from "@/lib/ui/Icon";
 import { useUIStore } from "@/store/domains/ui/ui-store";
 

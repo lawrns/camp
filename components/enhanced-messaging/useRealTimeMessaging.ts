@@ -10,7 +10,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
+import { supabase as consolidatedSupabase } from '@/lib/supabase';
 import { MessageData } from './EnhancedMessageBubble';
 import { TypingUser, PresenceUser } from './PresenceIndicator';
 import { Notification } from './NotificationSystem';

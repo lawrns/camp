@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { User, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AIStatusUtils, type AIStatus, type AIConfidenceLevel } from "./AIStatusIndicators";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 
 export interface ConsciousnessToggleProps {
   conversationId: string;

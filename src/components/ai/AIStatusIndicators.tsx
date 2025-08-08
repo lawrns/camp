@@ -20,7 +20,7 @@ import {
   User,
   Zap,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

@@ -5,7 +5,7 @@
  * Handles complex scenarios for widget embedding across different domains
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 export interface CorsAuthOptions {

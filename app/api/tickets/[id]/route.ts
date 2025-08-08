@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/ssr';
+import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 // Simplified auth wrapper for API endpoints
@@ -7,7 +7,7 @@ async function withAuth(handler: (req: NextRequest, user: unknown, params: unkno
   return async (request: NextRequest, { params }: { params: { id: string } }) => {
     try {
       const cookieStore = cookies();
-      const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+      const supabase = supabaseFactory.server(cookieStore);
 
       // Check authentication
       const { data: { session }, error: authError } = await supabase.auth.getSession();
@@ -37,16 +37,18 @@ async function withAuth(handler: (req: NextRequest, user: unknown, params: unkno
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
+export const GET = withAuth(async (_request: NextRequest, user: unknown, params: unknown) => {
   try {
-    const { id } = params;
+    const { id } = params as { id: string };
+    const u = user as { organizationId: string; userId: string; email?: string };
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
+    const db = supabase as any;
 
     // Get ticket with proper organization context
-    const { data: ticket, error } = await supabase
+    const { data: ticket, error } = await db
       .from('tickets')
       .select(`
         *,
@@ -59,7 +61,7 @@ export const GET = withAuth(async (request: NextRequest, user: unknown, params: 
         )
       `)
       .eq('id', id)
-      .eq('organizationId', user.organizationId)
+      .eq('organizationId', u.organizationId)
       .single();
 
     if (error) {
@@ -89,7 +91,8 @@ export const GET = withAuth(async (request: NextRequest, user: unknown, params: 
 
 export const PUT = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
   try {
-    const { id } = params;
+    const { id } = params as { id: string };
+    const u = user as { organizationId: string; userId: string; email?: string };
     const body = await request.json();
     const { title, description, priority, status, assigneeId } = body;
 
@@ -142,10 +145,11 @@ export const PUT = withAuth(async (request: NextRequest, user: unknown, params: 
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
+    const db = supabase as any;
 
     // Update ticket with proper organization context
-    const { data: ticket, error } = await supabase
+    const { data: ticket, error } = await db
       .from('tickets')
       .update({
         title,
@@ -156,7 +160,7 @@ export const PUT = withAuth(async (request: NextRequest, user: unknown, params: 
         updatedAt: new Date().toISOString()
       })
       .eq('id', id)
-      .eq('organizationId', user.organizationId)
+      .eq('organizationId', u.organizationId)
       .select()
       .single();
 
@@ -185,20 +189,22 @@ export const PUT = withAuth(async (request: NextRequest, user: unknown, params: 
   }
 });
 
-export const DELETE = withAuth(async (request: NextRequest, user: unknown, params: unknown) => {
+export const DELETE = withAuth(async (_request: NextRequest, user: unknown, params: unknown) => {
   try {
-    const { id } = params;
+    const { id } = params as { id: string };
+    const u = user as { organizationId: string; userId: string };
 
     // Initialize Supabase client
     const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = supabaseFactory.server(cookieStore);
+    const db = supabase as any;
 
     // Delete ticket with proper organization context
-    const { error } = await supabase
+    const { error } = await db
       .from('tickets')
       .delete()
       .eq('id', id)
-      .eq('organizationId', user.organizationId);
+      .eq('organizationId', u.organizationId);
 
     if (error) {
       console.error('[Tickets API] Delete error:', error);

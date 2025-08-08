@@ -5,7 +5,7 @@
  * in real-time scenarios across all message handling paths
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 export interface MessageIdentifier {
   id?: string;

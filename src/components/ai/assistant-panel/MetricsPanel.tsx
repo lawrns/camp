@@ -3,10 +3,10 @@
  */
 
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "@/components/charts/LazyCharts";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
-import { Separator } from "@/components/unified-ui/components/Separator";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { AIMetrics, SentimentDataPoint } from "./types";
 import { getConfidenceColor, getSentimentIcon } from "./utils";

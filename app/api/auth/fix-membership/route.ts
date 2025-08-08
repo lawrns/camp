@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
             userSource = "body";
           }
         }
-      } catch (e) {
+      } catch (_e) {
         // Body parsing failed, continue
       }
     }
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
  * GET /api/auth/fix-membership
  * Check membership status without making changes
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const supabaseClient = supabase.server(cookieStore);

@@ -5,9 +5,9 @@ import {
   Loader2,
   MessageSquare,
 } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { Customer } from "@/types/customer";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Component, type ErrorInfo, type ReactNode } from "react";
-import { Alert } from "@/components/unified-ui/components/Alert";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 interface Props {

@@ -4,7 +4,7 @@
  * Service for analyzing Retrieval-Augmented Generation performance using real data
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 export interface RAGMetrics {
   totalQueries: number;

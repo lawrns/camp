@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
-import { Badge } from '@/components/unified-ui/components/Badge';
-import { Button } from '@/components/unified-ui/components/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { AlertTriangle, Info, Sparkles, X, ArrowRight } from "lucide-react";
 import { useState } from 'react';
 import { cn } from '@/lib/utils';

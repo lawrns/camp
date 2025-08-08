@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { HandoverQueueSimulation } from "./HandoverQueueSimulation";
 import { useAIHandoverWithQueue } from "@/hooks/useAIHandoverWithQueue";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Bot, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Message } from "@/types/entities/message";

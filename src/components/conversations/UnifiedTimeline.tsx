@@ -7,8 +7,8 @@
 
 import React from "react";
 import { AlertCircle, Bot, Clock, MessageCircle, User } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/lib/ui/Icon";
 
 export interface TimelineEvent {

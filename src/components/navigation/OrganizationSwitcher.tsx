@@ -11,10 +11,10 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Building2, Check, ChevronDown, LogOut, Plus, Settings, Users } from "lucide-react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/unified-ui/components/Avatar";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +22,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/unified-ui/components/dialog";
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,12 +30,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/unified-ui/components/dropdown-menu";
-import { Input } from "@/components/unified-ui/components/input";
-import { Label } from "@/components/unified-ui/components/label";
-import { Separator } from "@/components/unified-ui/components/Separator";
-import { Textarea } from "@/components/unified-ui/components/textarea";
-import { createClient } from "@/lib/supabase/client";
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase as supabaseFactory } from "@/lib/supabase";
 
 interface Organization {
   id: string;
@@ -67,7 +67,7 @@ export function OrganizationSwitcher({ currentOrganization, className }: Organiz
   });
 
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = supabaseFactory.browser();
 
   // Load user's organizations
   useEffect(() => {

@@ -19,11 +19,11 @@ import {
   Sparkle as Sparkles,
   Lightning as Zap,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card as GlassCard } from "@/components/unified-ui/components/Card";
-import { Slider } from "@/components/unified-ui/components/slider";
-import { Switch } from "@/components/unified-ui/components/switch";
+import { Card as GlassCard } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

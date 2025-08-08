@@ -12,7 +12,7 @@ import {
   FeatureFlagUtils,
   getFeatureFlag,
   getUIFeatureFlag,
-  useNewUIComponents,
+  isNewUIEnabled as getIsNewUIEnabled,
   type FeatureFlagKey,
   type UIFeatureFlagKey,
 } from "@/lib/feature-flags";
@@ -60,11 +60,11 @@ export function useUIFeatureFlag(flag: UIFeatureFlagKey, fallback: boolean = fal
  * Hook to check if new UI components should be used
  */
 export function useNewUI(): boolean {
-  const [shouldUseNew, setShouldUseNew] = useState(() => useNewUIComponents());
+  const [shouldUseNew, setShouldUseNew] = useState(() => getIsNewUIEnabled());
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      const checkNewUI = () => setShouldUseNew(useNewUIComponents());
+      const checkNewUI = () => setShouldUseNew(getIsNewUIEnabled());
       const interval = setInterval(checkNewUI, 5000);
       return () => clearInterval(interval);
     }

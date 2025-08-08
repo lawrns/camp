@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { Card, CardContent } from '@/components/unified-ui/components/Card';
-import { Badge } from '@/components/unified-ui/components/Badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 

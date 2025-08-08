@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 /**
@@ -17,7 +17,7 @@ interface ScanResult {
 export async function POST(request: NextRequest): Promise<NextResponse<ScanResult>> {
   try {
     // Verify authentication
-    const supabase = createRouteHandlerClient({ cookies });
+  const supabaseClient = supabase.server(cookies());
     const { data: { session }, error: authError } = await supabase.auth.getSession();
 
     if (authError || !session) {

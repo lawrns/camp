@@ -20,9 +20,9 @@ import {
   Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/unified-ui/components/Badge";
-import { Card, CardContent, CardHeader } from "@/components/unified-ui/components/Card";
-import { Progress } from "@/components/unified-ui/components/Progress";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { AIActivityIndicator, AIConfidenceIndicator, type AIStatus, type AIConfidenceLevel } from "./AIStatusIndicators";
 import { useReasoningStream } from "@/hooks/useAIConsciousness";
 

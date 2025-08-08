@@ -1,13 +1,11 @@
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const browserSupabase = supabase.browser();
 
 export const auth = {
   login: async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await browserSupabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -15,7 +13,7 @@ export const auth = {
   },
 
   logout: async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await browserSupabase.auth.signOut();
     return { error };
   },
 
@@ -23,7 +21,7 @@ export const auth = {
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser();
+    } = await browserSupabase.auth.getUser();
     return { user, error };
   },
 
@@ -31,7 +29,7 @@ export const auth = {
     const {
       data: { session },
       error,
-    } = await supabase.auth.getSession();
+    } = await browserSupabase.auth.getSession();
     return { session, error };
   },
 };

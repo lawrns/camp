@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useState } from "react";
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 

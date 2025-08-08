@@ -12,7 +12,7 @@
  * - Performance monitoring and metrics
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 interface BatchedMessage {
   id: string;

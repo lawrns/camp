@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
 export async function DELETE(
@@ -7,10 +7,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabaseClient = supabase.server(cookies());
     
     // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -26,7 +26,7 @@ export async function DELETE(
     }
 
     // Get the message to check ownership
-    const { data: message, error: messageError } = await supabase
+    const { data: message, error: messageError } = await supabaseClient
       .from("messages")
       .select("*, conversations!inner(*)")
       .eq("id", params.id)
@@ -54,7 +54,7 @@ export async function DELETE(
     }
 
     // Delete message reactions first
-    const { error: reactionsError } = await supabase
+    const { error: reactionsError } = await supabaseClient
       .from("message_reactions")
       .delete()
       .eq("message_id", params.id);
@@ -64,7 +64,7 @@ export async function DELETE(
     }
 
     // Delete the message
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseClient
       .from("messages")
       .delete()
       .eq("id", params.id);
@@ -94,10 +94,10 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabaseClient = supabase.server(cookies());
     
     // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -113,7 +113,7 @@ export async function PATCH(
     }
 
     // Get the message to check ownership
-    const { data: message, error: messageError } = await supabase
+    const { data: message, error: messageError } = await supabaseClient
       .from("messages")
       .select("*, conversations!inner(*)")
       .eq("id", params.id)
@@ -135,7 +135,7 @@ export async function PATCH(
     }
 
     // Update the message
-    const { data: updatedMessage, error: updateError } = await supabase
+    const { data: updatedMessage, error: updateError } = await supabaseClient
       .from("messages")
       .update({
         content,

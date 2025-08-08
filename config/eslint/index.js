@@ -11,7 +11,14 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'warn',
     'prefer-const': 'error',
-    'no-var': 'error'
+    'no-var': 'error',
+    'no-restricted-imports': ['error', {
+      'paths': [
+        { name: '@supabase/auth-helpers-nextjs', message: 'Use the consolidated factory from @/lib/supabase' },
+        { name: '@supabase/ssr', importNames: ['createRouteHandlerClient', 'createClientComponentClient', 'createServerComponentClient'], message: 'Use the consolidated factory from @/lib/supabase' },
+        { name: '@supabase/supabase-js', importNames: ['createClient'], message: 'Use the consolidated factory from @/lib/supabase (allowed in scripts/** and supabase/functions/** only)' }
+      ]
+    }]
   },
   env: {
     browser: true,

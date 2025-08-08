@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/unified-ui/components/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';

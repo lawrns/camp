@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 // Custom cookie parser that handles both base64 and JSON formats
@@ -56,7 +56,7 @@ function withAuth(handler: (req: NextRequest, user: { userId: string; email: str
     try {
       // Use compatible cookie store that handles base64 format
       const compatibleCookieStore = createCompatibleCookieStore();
-      const supabaseClient = createRouteHandlerClient({ cookies: () => compatibleCookieStore });
+      const supabaseClient = supabaseFactory.server(compatibleCookieStore);
 
       // Require authentication for dashboard endpoints
       const { data: { session }, error: authError } = await supabaseClient.auth.getSession();
@@ -125,7 +125,7 @@ export const POST = withAuth(async (request: NextRequest, user: { userId: string
 
     // Use the same Supabase client for consistency
     const compatibleCookieStore = createCompatibleCookieStore();
-    const supabaseClient = createRouteHandlerClient({ cookies: () => compatibleCookieStore });
+    const supabaseClient = supabaseFactory.server(compatibleCookieStore);
 
     // Verify conversation exists and belongs to user's organization
     const { data: conversation, error: conversationError } = await supabaseClient

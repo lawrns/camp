@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "@/components/charts/LazyCharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Define the type locally since @/types doesn't exist
 interface DailyMetric {

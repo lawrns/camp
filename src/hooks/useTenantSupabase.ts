@@ -9,7 +9,7 @@ import { useCallback, useMemo } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { ChannelFactory } from "@/lib/realtime/channels";
 import { supabase } from "@/lib/supabase";
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 // DISABLED: import { getUnifiedRealtimeManager } from '@/lib/realtime';
 import { useTenant } from "@/lib/tenant/useTenant";
 

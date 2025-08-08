@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+// Note: middleware must use @supabase/ssr directly; app code uses the consolidated factory.
 import { NextResponse, type NextRequest } from 'next/server'
 
 // ============================================================================
@@ -99,13 +100,13 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({
             request,
           })
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options }) => {
             supabaseResponse.cookies.set(name, value, options)
-          )
+          })
         },
       },
     }

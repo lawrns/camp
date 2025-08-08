@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Checkbox } from "@/components/unified-ui/components/checkbox";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -13,16 +13,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/unified-ui/components/dialog";
-import { Label } from "@/components/unified-ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@/components/unified-ui/components/radio-group";
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Icon } from "@/lib/ui/Icon";
 

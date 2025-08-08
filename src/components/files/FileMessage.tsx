@@ -19,9 +19,9 @@ import {
   Share,
   VideoCamera as Video,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Icon } from "@/lib/ui/Icon";
 import { FileMetadata } from "./FilePreview";
 import { MediaViewer } from "./MediaViewer";

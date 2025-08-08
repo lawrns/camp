@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
 export async function POST(
@@ -7,10 +7,10 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabaseClient = supabase.server(cookies());
     
     // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -35,7 +35,7 @@ export async function POST(
     }
 
     // Check if user already reacted to this message
-    const { data: existingReaction } = await supabase
+    const { data: existingReaction } = await supabaseClient
       .from("message_reactions")
       .select("*")
       .eq("message_id", params.id)
@@ -45,7 +45,7 @@ export async function POST(
 
     if (existingReaction) {
       // Remove reaction
-      const { error: deleteError } = await supabase
+      const { error: deleteError } = await supabaseClient
         .from("message_reactions")
         .delete()
         .eq("id", existingReaction.id);
@@ -64,7 +64,7 @@ export async function POST(
       });
     } else {
       // Add reaction
-      const { data: newReaction, error: insertError } = await supabase
+      const { data: newReaction, error: insertError } = await supabaseClient
         .from("message_reactions")
         .insert({
           message_id: params.id,
@@ -103,16 +103,16 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabaseClient = supabase.server(cookies());
     
     // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get reactions for this message
-    const { data: reactions, error } = await supabase
+    const { data: reactions, error } = await supabaseClient
       .from("message_reactions")
       .select(`
         *,

@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 export interface AnalyticsFilter {
   timeRange: "24h" | "7d" | "30d" | "90d" | "12m" | "custom";

@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/unified-ui/components/dialog";
+} from "@/components/ui/dialog";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 import { AssignmentPanel } from "./AssignmentPanel";

@@ -275,7 +275,6 @@ export function MockDataWarning() {
         {warnings.length} issue{warnings.length !== 1 ? "s" : ""} found
       </div>
       <button
-}
         onClick={() => console.log(report)}
         style={{
           background: "#007bff",

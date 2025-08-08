@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { supabase } from '@/lib/supabase';
 import { UNIFIED_CHANNELS } from '@/lib/realtime/unified-channel-standards';
 // Remove direct import: // import { RealtimeChannel } from '@supabase/supabase-js';
 

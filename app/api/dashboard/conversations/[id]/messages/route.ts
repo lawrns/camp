@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { supabase } from '@/lib/supabase/consolidated-exports';
@@ -70,7 +70,7 @@ function withAuth(handler: (req: NextRequest, user: AuthenticatedUser, conversat
 
       // Use compatible cookie store that handles base64 format
       const compatibleCookieStore = await createCompatibleCookieStore();
-      const supabaseClient = createRouteHandlerClient({ cookies: () => compatibleCookieStore });
+      const supabaseClient = supabaseFactory.server(compatibleCookieStore);
 
       console.log('[Dashboard withAuth] Supabase client created with compatible cookie store, getting session...');
 

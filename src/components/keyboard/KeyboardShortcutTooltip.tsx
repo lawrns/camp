@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/unified-ui/components/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { keyboardShortcutManager } from "@/lib/keyboard/KeyboardShortcutManager";
 import { cn } from "@/lib/utils";
 

@@ -1,9 +1,13 @@
-import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
+import { Icon } from "./Icon";
+import type { IconProps } from "./Icon";
 
 // LoadingIcon
 const LoadingIcon = ({ className, ...props }: IconProps) => (
-  <Spinner className={`animate-spin ${className}`} {...props} />
+  <Icon icon={() => <svg viewBox="0 0 24 24" className={`h-4 w-4 animate-spin ${className}`} {...props}>
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25" />
+    <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" strokeWidth="4" fill="none" />
+  </svg>} />
 );
 
 // Helper to create lazy-loaded Phosphor icons
@@ -47,13 +51,18 @@ export const LazyIcons = {
 };
 
 // Icon bundle helper for related icons
-export function createIconBundle<T extends Record<string, () => Promise<any>>>(
+type LazyIconLoader = () => Promise<{ default: React.ComponentType<IconProps> }>;
+
+export function createIconBundle<T extends Record<string, LazyIconLoader>>(
   icons: T
 ): { [K in keyof T]: ReturnType<typeof lazyPhosphorIcon> } {
-  const bundle = {} as unknown;
-  for (const [key, importFn] of Object.entries(icons)) {
-    bundle[key] = lazyPhosphorIcon(importFn as unknown);
-  }
+  const bundle = {} as { [K in keyof T]: ReturnType<typeof lazyPhosphorIcon> };
+  (Object.keys(icons) as Array<keyof T>).forEach((key) => {
+    const importFn = icons[key];
+    (bundle as unknown as Record<keyof T, ReturnType<typeof lazyPhosphorIcon>>)[key] = lazyPhosphorIcon(
+      importFn
+    );
+  });
   return bundle;
 }
 

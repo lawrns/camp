@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/ssr';
+import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,12 +14,12 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const client = supabase.browser();
 
   const checkAuthAndOnboarding = useCallback(async () => {
     try {
       // Check if user is authenticated
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      const { data: { session }, error: authError } = await client.auth.getSession();
       
       if (authError || !session) {
         console.log('[Onboarding] No session, redirecting to login');
@@ -30,7 +30,7 @@ export default function OnboardingPage() {
       setUser(session.user);
 
       // Get user's organization from profile
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile, error: profileError } = await client
         .from('profiles')
         .select('organization_id, metadata')
         .eq('user_id', session.user.id)

@@ -3,26 +3,14 @@
  * Replaces lean-server with direct Supabase server-side broadcasting
  */
 
-import { supabase } from "@/lib/supabase/consolidated-exports";
+import { supabase } from "@/lib/supabase";
 
 // Create a singleton server client for broadcasting
-let serverClient: ReturnType<typeof createClient> | null = null;
+let serverClient: ReturnType<typeof supabase.admin> | null = null;
 
 function getServerClient() {
   if (!serverClient) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error("Supabase configuration missing for server-side broadcasting");
-    }
-
-    serverClient = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
+    serverClient = supabase.admin();
   }
 
   return serverClient;

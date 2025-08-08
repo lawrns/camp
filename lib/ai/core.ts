@@ -257,9 +257,9 @@ export const cleanUpTextForAI = (text: string | null) => {
   return withSingleLineBreaks.replace(/\s+/g, " ").trim();
 };
 
-const openaiClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openaiClient = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null as unknown as OpenAI;
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -313,6 +313,9 @@ export async function generateAIResponse(
       return response.content[0].type === 'text' ? response.content[0].text : '';
     }
 
+    if (!openaiClient) {
+      throw new Error('OPENAI_API_KEY missing');
+    }
     const response = await openaiClient.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -347,6 +350,9 @@ Context: ${JSON.stringify(context, null, 2)}
 
 Respond only with valid JSON.`;
 
+    if (!openaiClient) {
+      throw new Error('OPENAI_API_KEY missing');
+    }
     const response = await openaiClient.chat.completions.create({
       model: 'gpt-4',
       messages: [{ role: 'user', content: analysisPrompt }],
@@ -411,6 +417,9 @@ function buildMessageHistory(
 
 export async function generateEmbeddingFromOpenAI(text: string): Promise<number[]> {
   try {
+    if (!openaiClient) {
+      throw new Error('OPENAI_API_KEY missing');
+    }
     const response = await openaiClient.embeddings.create({
       model: 'text-embedding-ada-002',
       input: text,

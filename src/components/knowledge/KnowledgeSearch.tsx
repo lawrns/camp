@@ -13,19 +13,19 @@ import {
   User,
   X,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/unified-ui/components/Card";
-import { EmptyState, EmptyStateVariantsConfig } from "@/components/unified-ui/components/empty-state";
-import { ImprovedInput } from "@/components/unified-ui/components/improved-input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/unified-ui/components/popover";
+import { Card, CardContent } from "@/components/ui/card";
+import { EmptyState, EmptyStateVariantsConfig } from "@/components/ui/empty-state";
+import { ImprovedInput } from "@/components/ui/improved-input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/unified-ui/components/select";
+} from "@/components/ui/select";
 import { Icon } from "@/lib/ui/Icon";
 import { cn } from "@/lib/utils";
 

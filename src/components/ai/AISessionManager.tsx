@@ -5,9 +5,9 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface AISession {
   id: string;
