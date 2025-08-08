@@ -7,6 +7,7 @@ import { Icons } from '@/lib/icons/standardized-icons';
 import { VariableSizeList as List } from "react-window";
 import type { Conversation, Message } from "../types";
 import { getMessageItemSize } from "../utils/channelUtils";
+import { getAvatarPath } from "@/lib/utils/avatar";
 import { MessageRow } from "./MessageRow";
 
 interface MessageListProps {
@@ -113,15 +114,13 @@ export const MessageList: React.FC<MessageListProps> = ({
     if (typingUsers.length === 0) return null;
 
     return (
-      <div className="flex space-x-3 spacing-3">
+        <div className="flex space-x-3 spacing-3">
         <div className="flex-shrink-0">
-          <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              selectedConversation?.customerName || "User"
-            )}&size=32&background=e5e7eb&color=374151`}
-            alt="Customer"
-            className="h-8 w-8 rounded-ds-full"
-          />
+            <img
+              src={getAvatarPath(selectedConversation?.customerEmail || selectedConversation?.customerName || "User", "customer")}
+              alt="Customer"
+              className="h-8 w-8 rounded-ds-full object-cover"
+            />
         </div>
         <div className="flex-1">
           <div className="bg-background max-w-xs rounded-ds-lg px-4 py-2">
@@ -212,6 +211,7 @@ export const MessageList: React.FC<MessageListProps> = ({
       {/* Scroll to bottom button */}
       {showScrollToBottom && (
         <button
+          type="button"
           onClick={() => scrollToBottom()}
           className="ds-inbox-button ds-inbox-button-primary absolute bottom-4 right-4 z-10 rounded-full"
           style={{ padding: 'var(--ds-spacing-3)' }}

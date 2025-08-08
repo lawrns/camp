@@ -13,7 +13,7 @@ const TEST_CONFIG = {
 };
 
 test.describe('Authentication Debug', () => {
-  test('should debug authentication flow and identify 401 errors', async ({ page }) => {
+  test('should debug authentication flow and identify 401 errors', async ({ page, context }) => {
     console.log('🔍 Starting authentication debug...');
     
     // Listen for all network requests to catch 401 errors
@@ -44,38 +44,58 @@ test.describe('Authentication Debug', () => {
       }
     });
     
-    // Step 1: Test login flow
-    console.log('🔐 Testing login flow...');
-    await page.goto(`${TEST_CONFIG.BASE_URL}/login`);
-    await page.waitForLoadState('networkidle');
-    
-    // Fill login form
-    await page.fill('#email', TEST_CONFIG.AGENT_EMAIL);
-    await page.fill('#password', TEST_CONFIG.AGENT_PASSWORD);
-    
-    // Submit login
-    await page.click('button[type="submit"]');
-    
-    // Wait for redirect
-    try {
-      await page.waitForURL('**/dashboard', { timeout: 15000 });
-      console.log('✅ Login successful, redirected to dashboard');
-    } catch (error) {
-      console.log('❌ Login failed or redirect timeout');
-      const currentUrl = page.url();
-      console.log(`Current URL: ${currentUrl}`);
+    // Step 1: Ensure authenticated session (prefer API login to avoid overlay)
+    console.log('🔐 Ensuring authenticated session...');
+    const preSession = await page.request.get(`${TEST_CONFIG.BASE_URL}/api/auth/session`);
+    let authenticated = false;
+    if (preSession.ok()) {
+      try {
+        const body = await preSession.json();
+        authenticated = !!body?.authenticated;
+      } catch {}
     }
-    
+
+    if (!authenticated) {
+      // Try API-based login first to set cookies in this browser context
+      const apiLogin = await page.request.post(`${TEST_CONFIG.BASE_URL}/api/auth/login`, {
+        data: { email: TEST_CONFIG.AGENT_EMAIL, password: TEST_CONFIG.AGENT_PASSWORD },
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!apiLogin.ok()) {
+        // Fallback to UI login with overlay suppression
+        await page.goto(`${TEST_CONFIG.BASE_URL}/login`, { waitUntil: 'networkidle' });
+        await page.addStyleTag({ content: 'nextjs-portal,[data-nextjs-portal],#nextjs__container,[data-nextjs-error-overlay]{display:none!important;pointer-events:none!important;}' });
+        await page.fill('#email', TEST_CONFIG.AGENT_EMAIL);
+        await page.fill('#password', TEST_CONFIG.AGENT_PASSWORD);
+        await page.click('button[type="submit"]', { force: true });
+        try {
+          await page.waitForURL('**/dashboard', { timeout: 20000 });
+          authenticated = true;
+        } catch {}
+      } else {
+        // Navigate to dashboard to materialize session in page
+        await page.goto(`${TEST_CONFIG.BASE_URL}/dashboard`, { waitUntil: 'load' });
+        authenticated = true;
+      }
+    }
+
+    if (!authenticated) {
+      console.log('❌ Unable to authenticate via API or UI');
+    } else {
+      console.log('✅ Authenticated; proceeding to dashboard checks');
+    }
+
     // Step 2: Test dashboard authentication
     console.log('📊 Testing dashboard authentication...');
     
     // Navigate to inbox
-    await page.goto(`${TEST_CONFIG.BASE_URL}/dashboard/inbox`);
+    await page.goto(`${TEST_CONFIG.BASE_URL}/dashboard/inbox`, { waitUntil: 'load' });
     await page.waitForLoadState('networkidle');
-    
+
     // Wait for auth requests to complete
     await page.waitForTimeout(3000);
-    
+
     // Step 3: Test auth API endpoints directly
     console.log('🧪 Testing auth API endpoints...');
     

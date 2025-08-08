@@ -13,6 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase/consolidated-exports';
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { validateSession } from '@/lib/services/visitor-identification';
 import { messageRateLimit } from '@/lib/middleware/rate-limit';
 
@@ -79,11 +80,25 @@ export async function POST(request: NextRequest) {
         }
 
         console.log('[Typing API] ✅ Typing indicator created:', { conversationId, userId, isTyping });
+        // Broadcast standardized typing start event
+        try {
+          const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+          await broadcastToChannel(
+            UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+            UNIFIED_EVENTS.TYPING_START,
+            {
+              userId,
+              userName: userName || 'Customer',
+              senderType: 'visitor',
+              isTyping: true,
+              conversationId,
+              organizationId,
+              timestamp: new Date().toISOString()
+            }
+          );
+        } catch {}
 
-        return NextResponse.json({
-          success: true,
-          data: { typingIndicator: data?.[0] }
-        });
+        return NextResponse.json({ success: true, data: { typingIndicator: data?.[0] } });
 
       } else {
         // Remove typing indicator
@@ -102,11 +117,25 @@ export async function POST(request: NextRequest) {
         }
 
         console.log('[Typing API] ✅ Typing indicator removed:', { conversationId, userId, isTyping });
+        // Broadcast standardized typing stop event
+        try {
+          const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+          await broadcastToChannel(
+            UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+            UNIFIED_EVENTS.TYPING_STOP,
+            {
+              userId,
+              userName: userName || 'Customer',
+              senderType: 'visitor',
+              isTyping: false,
+              conversationId,
+              organizationId,
+              timestamp: new Date().toISOString()
+            }
+          );
+        } catch {}
 
-        return NextResponse.json({
-          success: true,
-          data: { removed: true }
-        });
+        return NextResponse.json({ success: true, data: { removed: true } });
       }
 
     } catch (error) {

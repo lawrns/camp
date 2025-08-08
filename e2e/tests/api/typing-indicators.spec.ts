@@ -6,16 +6,17 @@ test.describe('Typing Indicator APIs', () => {
 
   test.describe('Widget Typing API', () => {
     test('should allow typing indicators without authentication', async ({ page }) => {
-      // Test widget typing start
+      // Test widget typing start (align with route: header X-Organization-ID and userId required)
       const startResponse = await page.request.post('/api/widget/typing', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': testOrganizationId,
+        },
         data: {
           conversationId: testConversationId,
-          organizationId: testOrganizationId,
+          userId: 'visitor-test',
+          userName: 'Test Visitor',
           isTyping: true,
-          senderName: 'Test Visitor',
-          senderEmail: 'visitor@test.com',
-          senderType: 'visitor',
-          content: 'Hello, I am typing...'
         }
       });
 
@@ -35,13 +36,15 @@ test.describe('Typing Indicator APIs', () => {
     test('should stop typing indicators', async ({ page }) => {
       // Test widget typing stop
       const stopResponse = await page.request.post('/api/widget/typing', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': testOrganizationId,
+        },
         data: {
           conversationId: testConversationId,
-          organizationId: testOrganizationId,
+          userId: 'visitor-test',
+          userName: 'Test Visitor',
           isTyping: false,
-          senderName: 'Test Visitor',
-          senderEmail: 'visitor@test.com',
-          senderType: 'visitor'
         }
       });
 
@@ -92,9 +95,13 @@ test.describe('Typing Indicator APIs', () => {
 
     test('should validate isTyping parameter type', async ({ page }) => {
       const response = await page.request.post('/api/widget/typing', {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Organization-ID': testOrganizationId,
+        },
         data: {
           conversationId: testConversationId,
-          organizationId: testOrganizationId,
+          userId: 'visitor-test',
           isTyping: 'invalid' // Should be boolean
         }
       });
@@ -109,14 +116,12 @@ test.describe('Typing Indicator APIs', () => {
 
   test.describe('Dashboard Typing API', () => {
     test.beforeEach(async ({ page }) => {
-      // Login as test user to get authentication
-      await page.goto('/auth/login');
-      await page.fill('[data-testid="email-input"], #email, input[type="email"]', 'jam@jam.com');
-      await page.fill('[data-testid="password-input"], #password, input[type="password"]', 'password123');
-      await page.click('[data-testid="login-button"], button[type="submit"], button:has-text("Sign in")');
-      
-      // Wait for successful login
-      await page.waitForURL('**/dashboard', { timeout: 15000 });
+      // Use API-based login to avoid UI flakiness
+      const res = await page.request.post('/api/auth/login', {
+        data: { email: 'jam@jam.com', password: 'password123' },
+        headers: { 'Content-Type': 'application/json' }
+      });
+      expect(res.ok()).toBe(true);
     });
 
     test('should require authentication for dashboard typing', async ({ page }) => {

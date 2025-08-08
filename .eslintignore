@@ -1,0 +1,24 @@
+# Ignore backup and experimental directories to keep CI hooks green
+app/app-backup/
+newjacket/
+logic/
+docs/
+services/
+scripts/
+
+# Generated and build outputs
+.next/
+out/
+build/
+dist/
+coverage/
+playwright-report/
+
+e2e/
+__tests__/
+visual-tests/
+reports/
+
+# Node modules
+node_modules/
+

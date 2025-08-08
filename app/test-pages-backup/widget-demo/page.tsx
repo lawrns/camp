@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { WidgetProvider } from '../../components/widget';
+import { WidgetProvider } from '@/components/widget';
 
 /**
  * Widget Demo Page

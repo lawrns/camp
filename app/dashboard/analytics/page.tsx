@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Page, PageHeader, PageHeaderRow, PageTitle, PageToolbar, PageContent } from '@/components/ui/page-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -82,26 +83,25 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">
-            Track your team&apos;s performance and customer satisfaction metrics
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
-            <RefreshCwIcon className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <DownloadIcon className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-        </div>
-      </div>
+    <Page width="7xl">
+      <PageHeader>
+        <PageHeaderRow
+          left={<PageTitle>Analytics</PageTitle>}
+          right={
+            <PageToolbar>
+              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+                <RefreshCwIcon className={`${isLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleExport}>
+                <DownloadIcon />
+                Export
+              </Button>
+            </PageToolbar>
+          }
+        />
+      </PageHeader>
+      <PageContent>
 
       {/* Time Range Selector */}
       <div className="flex items-center space-x-2">
@@ -318,6 +318,7 @@ export default function AnalyticsPage() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </PageContent>
+    </Page>
   );
 }

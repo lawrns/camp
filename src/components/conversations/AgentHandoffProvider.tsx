@@ -232,16 +232,19 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
 
   const acceptHandoff = useCallback(async (handoffId: string) => {
     try {
-      const response = await fetch(`/api/handoffs/${handoffId}/accept`, {
+      const response = await fetch(`/api/organizations/${organizationId}/handoffs/accept`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ handoverId: handoffId, conversationId: (state.activeHandoffs.find(h=>h.id===handoffId)?.conversation_id) }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to accept handoff");
       }
 
-      const updatedHandoff = await response.json();
-      dispatch({ type: "UPDATE_HANDOFF", payload: updatedHandoff });
+      // Refresh handoffs
+      await loadActiveHandoffs();
     } catch (error) {
       dispatch({
         type: "SET_ERROR",
@@ -249,7 +252,7 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
       });
       throw error;
     }
-  }, []);
+  }, [organizationId, state.activeHandoffs, loadActiveHandoffs]);
 
   const declineHandoff = useCallback(async (handoffId: string, reason?: string) => {
     try {
@@ -278,15 +281,19 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
 
   const completeHandoff = useCallback(async (handoffId: string) => {
     try {
-      const response = await fetch(`/api/handoffs/${handoffId}/complete`, {
+      const response = await fetch(`/api/organizations/${organizationId}/handoffs/stop`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ conversationId: (state.activeHandoffs.find(h=>h.id===handoffId)?.conversation_id), handoverId: handoffId }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to complete handoff");
       }
 
-      dispatch({ type: "REMOVE_HANDOFF", payload: handoffId });
+      // Refresh handoffs
+      await loadActiveHandoffs();
     } catch (error) {
       dispatch({
         type: "SET_ERROR",
@@ -294,7 +301,7 @@ export const AgentHandoffProvider: React.FC<AgentHandoffProviderProps> = ({ chil
       });
       throw error;
     }
-  }, []);
+  }, [organizationId, state.activeHandoffs, loadActiveHandoffs]);
 
   const cancelHandoff = useCallback(async (handoffId: string) => {
     try {

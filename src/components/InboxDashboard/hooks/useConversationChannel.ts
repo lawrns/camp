@@ -29,20 +29,12 @@ export const useConversationChannel = (
   // Broadcast typing status using the conversation channel
   const broadcastTyping = useCallback(
     (isTyping: boolean) => {
-
-      if (!conversationId || !userId || !conversationChannelRef.current) {
-
-        return;
-      }
-
-      const payload = { user_id: userId, isTyping: isTyping };
-
+      if (!conversationId || !userId || !conversationChannelRef.current) return;
       conversationChannelRef.current.send({
         type: "broadcast",
-        event: "typing",
-        payload,
+        event: isTyping ? "typing:start" : "typing:stop",
+        payload: { user_id: userId, isTyping },
       });
-
     },
     [conversationId, userId]
   );
@@ -114,7 +106,7 @@ export const useConversationChannel = (
     }
 
     conversationChannel
-      .on("broadcast", { event: "typing" }, (payload) => {
+      .on("broadcast", { event: "typing:start" }, (payload) => {
 
         // FIXED: Handle both widget and dashboard typing payload formats
         const data = payload.payload;
@@ -134,16 +126,21 @@ export const useConversationChannel = (
           displayName = typingUserId?.slice(0, 8) || "Someone";
         }
 
-        setTypingUsers((prev) => {
-          if (isTyping) {
-            // Use display name instead of user ID
-            return [...prev.filter((u) => u !== displayName), displayName];
-          } else {
-            return prev.filter((u) => u !== displayName);
-          }
-        });
+        if (isTyping) {
+          setTypingUsers((prev) => [...prev.filter((u) => u !== displayName), displayName]);
+        }
       })
-      .on("broadcast", { event: "read_receipt" }, (payload) => {
+      .on("broadcast", { event: "typing:stop" }, (payload) => {
+        const data = payload.payload;
+        const typingUserId = data.user_id || data.senderId || data.visitorId;
+        if (typingUserId === userId) return;
+        let displayName = "Someone";
+        if (data.senderType === "visitor") displayName = "Visitor";
+        else if (data.senderType === "agent") displayName = "Agent";
+        else displayName = typingUserId?.slice(0, 8) || "Someone";
+        setTypingUsers((prev) => prev.filter((u) => u !== displayName));
+      })
+      .on("broadcast", { event: "read:receipt" }, (payload) => {
         const { messageId, readBy, readAt, visitorId } = payload.payload;
 
         // Handle visitor read receipts (when visitor reads agent messages)

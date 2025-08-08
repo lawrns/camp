@@ -145,7 +145,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji, onClose
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--fl-color-border)] spacing-3">
         <h3 className="text-sm font-medium text-gray-900">Emoji</h3>
-        <button onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close emoji picker">
+        <button type="button" onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close emoji picker">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -173,7 +173,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji, onClose
           <div className="spacing-3">
             <div className="grid grid-cols-8 gap-1">
               {filteredEmojis.map((emoji, index) => (
-                <button
+                <button type="button"
                   key={index}
                   onClick={() => onSelectEmoji(emoji)}
                   className="hover:bg-background rounded p-spacing-sm text-base transition-colors"
@@ -195,7 +195,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji, onClose
                 <h4 className="text-foreground mb-2 text-tiny font-medium">{category}</h4>
                 <div className="grid grid-cols-8 gap-1">
                   {emojis.map((emoji, index) => (
-                    <button
+                    <button type="button"
                       key={index}
                       onClick={() => onSelectEmoji(emoji)}
                       className="hover:bg-background rounded p-spacing-sm text-base transition-colors"
@@ -216,7 +216,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji, onClose
         <h4 className="text-foreground mb-2 text-tiny font-medium">Recently Used</h4>
         <div className="grid grid-cols-8 gap-1">
           {["😊", "👍", "❤️", "😂", "🎉", "👏", "🔥", "💯"].map((emoji, index) => (
-            <button
+            <button type="button"
               key={index}
               onClick={() => onSelectEmoji(emoji)}
               className="hover:bg-background rounded p-spacing-sm text-base transition-colors"

@@ -50,7 +50,7 @@ export const TemplatePanel: React.FC<TemplatePanelProps> = ({ onSelectTemplate, 
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--fl-color-border-subtle)] spacing-3">
         <h3 className="flex items-center text-sm font-medium text-gray-900">📝 Quick Templates</h3>
-        <button onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close templates">
+        <button type="button" onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close templates">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -74,7 +74,7 @@ export const TemplatePanel: React.FC<TemplatePanelProps> = ({ onSelectTemplate, 
         {/* Category filter */}
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
-            <button
+            <button type="button"
               key={category}
               onClick={() => setSelectedCategory(category)}
               className={`rounded-ds-full px-3 py-1 text-xs font-medium transition-colors ${
@@ -105,7 +105,7 @@ export const TemplatePanel: React.FC<TemplatePanelProps> = ({ onSelectTemplate, 
                 <h4 className="text-foreground mb-2 text-tiny font-medium uppercase tracking-wide">{category}</h4>
                 <div className="space-y-1">
                   {templates.map((template) => (
-                    <button
+                    <button type="button"
                       key={template.id}
                       onClick={() => onSelectTemplate(template)}
                       className="w-full rounded-ds-lg border border-transparent spacing-3 text-left transition-colors hover:border-[var(--fl-color-border)] hover:bg-background"
@@ -131,7 +131,7 @@ export const TemplatePanel: React.FC<TemplatePanelProps> = ({ onSelectTemplate, 
           // Show flat list for specific category
           <div className="space-y-1 spacing-3">
             {filteredTemplates.map((template) => (
-              <button
+              <button type="button"
                 key={template.id}
                 onClick={() => onSelectTemplate(template)}
                 className="w-full rounded-ds-lg border border-transparent spacing-3 text-left transition-colors hover:border-[var(--fl-color-border)] hover:bg-background"

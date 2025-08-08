@@ -193,6 +193,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* NEW: Assign Conversation Button */}
           {onAssignConversation && (
             <button
+              type="button"
               onClick={() => setShowAssignmentDialog(true)}
               className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
               title="Assign conversation"
@@ -206,6 +207,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* NEW: Convert to Ticket Button */}
           {onConvertToTicket && (
             <button
+              type="button"
               onClick={onConvertToTicket}
               className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
               title="Convert to ticket"
@@ -234,6 +236,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           {/* Conversation Management toggle */}
           {onToggleConversationManagement && (
             <button
+              type="button"
               onClick={onToggleConversationManagement}
               className="rounded-ds-lg p-2 transition-colors w-10 h-10 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600"
               title="Manage conversation"
@@ -246,6 +249,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* Customer details toggle */}
           <button
+            type="button"
             onClick={() => setShowCustomerDetails(!showCustomerDetails)}
             className={`rounded-ds-lg p-2 transition-colors w-10 h-10 flex items-center justify-center ${
               showCustomerDetails ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
@@ -259,6 +263,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
           {/* More actions menu */}
           <button
+            type="button"
             className="hover:bg-background hover:text-foreground rounded-ds-lg p-2 text-gray-400 transition-colors w-10 h-10 flex items-center justify-center"
             title="More actions"
             aria-label="More actions"

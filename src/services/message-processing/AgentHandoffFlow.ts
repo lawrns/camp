@@ -113,9 +113,9 @@ export class AgentHandoffFlow {
   private async persistAgentResponse(message: AgentMessage): Promise<AgentMessage & { id: string; timestamp: string }> {
     const { data, error } = await supabase
       .browser()
-      .from("conversation_messages")
+      .from("messages")
       .insert({
-        id: message.id || `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: message.id || undefined,
         conversation_id: message.conversationId,
         organization_id: message.organizationId,
         senderId: message.agentId,

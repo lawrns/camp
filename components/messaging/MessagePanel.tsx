@@ -182,7 +182,7 @@ export default function MessagePanel({ conversationId, organizationId }: Message
 
         unsubscribe = subscribeToChannel(
           UNIFIED_CHANNELS.conversation(organizationId, conversationId),
-          UNIFIED_EVENTS.READ_RECEIPT_UPDATED,
+          UNIFIED_EVENTS.READ_RECEIPT,
           (payload: any) => {
             console.log('[MessagePanel] Read receipt update:', payload);
 

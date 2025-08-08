@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { aiHandoverService } from '@/lib/ai/handover';
+import { handoverOrchestrator } from '@/lib/ai/HandoverOrchestrator';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 
 export async function POST(
@@ -80,20 +80,16 @@ export async function POST(
     };
     
     // Evaluate and execute handover
-    const handoverResult = await aiHandoverService.evaluateHandover(handoverContext);
-    
-    if (handoverResult.shouldHandover) {
-      await aiHandoverService.executeHandover(handoverContext, handoverResult);
-    }
+    const { requested, result: handoverResult } = await handoverOrchestrator.request({ context: handoverContext });
     
     return NextResponse.json({
       success: true,
       conversationId,
-      shouldHandover: handoverResult.shouldHandover,
-      reason: handoverResult.reason,
-      urgency: handoverResult.urgency,
-      message: handoverResult.handoverMessage,
-      contextSummary: handoverResult.contextSummary
+      shouldHandover: handoverResult?.shouldHandover || false,
+      reason: handoverResult?.reason,
+      urgency: handoverResult?.urgency,
+      message: handoverResult?.handoverMessage,
+      contextSummary: handoverResult?.contextSummary
     });
     
   } catch (error) {

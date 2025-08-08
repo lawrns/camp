@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Command, Keyboard, X } from "lucide-react";
-import { keyboardShortcuts } from "../constants/messageTemplates";
+// import { keyboardShortcuts } from "../constants/messageTemplates";
 
 interface ShortcutsModalProps {
   onClose: () => void;
@@ -70,6 +70,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ onClose }) => {
               <h2 id="shortcuts-modal-title" className="text-lg font-semibold">Keyboard Shortcuts</h2>
             </div>
             <button
+              type="button"
               onClick={onClose}
               className="hover:text-foreground text-gray-400 transition-colors"
               aria-label="Close shortcuts modal"
@@ -139,6 +140,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ onClose }) => {
               to close
             </p>
             <button
+              type="button"
               onClick={onClose}
               className="ds-button-primary"
             >

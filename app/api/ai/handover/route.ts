@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { aiHandoverService } from '@/lib/ai/handover';
+import { handoverOrchestrator } from '@/lib/ai/HandoverOrchestrator';
 import { AI_PERSONALITIES } from '@/lib/ai/personalities';
 
 export async function POST(request: NextRequest) {
@@ -126,10 +126,9 @@ export async function POST(request: NextRequest) {
       };
       
       // Evaluate and execute handover
-      const handoverResult = await aiHandoverService.evaluateHandover(handoverContext);
+      const { requested, result: handoverResult } = await handoverOrchestrator.request({ context: handoverContext, targetOperatorId });
       
-      if (handoverResult.shouldHandover) {
-        await aiHandoverService.executeHandover(handoverContext, handoverResult, targetOperatorId);
+      if (requested && handoverResult?.shouldHandover) {
         
         // Update conversation status
         await supabase
@@ -147,10 +146,10 @@ export async function POST(request: NextRequest) {
         success: true,
         action: 'start',
         conversationId,
-        shouldHandover: handoverResult.shouldHandover,
-        reason: handoverResult.reason,
-        urgency: handoverResult.urgency,
-        message: handoverResult.handoverMessage,
+        shouldHandover: handoverResult?.shouldHandover || false,
+        reason: handoverResult?.reason,
+        urgency: handoverResult?.urgency,
+        message: handoverResult?.handoverMessage,
         confidence: handoverContext.aiAnalysis.confidence,
         strategy: 'knowledge_base'
       });

@@ -80,14 +80,14 @@ export class ChannelManager {
       return this.channels.get(channelName)!;
     }
 
-    // STEP 1 FIX: Use broadcast-only channel to prevent mismatch errors
+    // Use canonical channel name and broadcast-only configuration
     const channel = this.supabaseClient.channel(
-      `bcast:${config.organizationId}:${config.conversationId}`,
+      this.getChannelName(config),
       {
         config: {
-          broadcast: { ack: false },
+          broadcast: { self: true, ack: true },
           presence: { ack: false },
-          postgres_changes: [] // <-- disable automatic CDC
+          postgres_changes: []
         }
       }
     );
@@ -107,7 +107,10 @@ export class ChannelManager {
     }
 
     if (config.enableTyping) {
-      channel.on("broadcast", { event: "typing" }, (payload: RealtimePayload) => {
+      channel.on("broadcast", { event: "typing:start" }, (payload: RealtimePayload) => {
+        this.handleTypingEvent(payload, config);
+      });
+      channel.on("broadcast", { event: "typing:stop" }, (payload: RealtimePayload) => {
         this.handleTypingEvent(payload, config);
       });
     }
@@ -169,7 +172,7 @@ export class ChannelManager {
 
     void channel.send({
       type: "broadcast",
-      event: "typing",
+      event: isTyping ? "typing:start" : "typing:stop",
       payload: typingEvent,
     });
 

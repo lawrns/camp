@@ -34,10 +34,14 @@ export interface UseDashboardReadReceiptsReturn {
   };
 }
 
+import { useAuth } from '@/hooks/useAuth';
+
 export function useDashboardReadReceipts(
   conversationId: string | undefined,
   userId: string | undefined
 ): UseDashboardReadReceiptsReturn {
+  const { user } = useAuth();
+  const orgId = user?.organizationId || '';
   const [readReceipts, setReadReceipts] = useState<Record<string, DashboardReadReceiptStatus>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -188,7 +192,7 @@ export function useDashboardReadReceipts(
     
     // Subscribe to conversation-specific channel
     const conversationChannel = client
-      .channel(UNIFIED_CHANNELS.conversation('*', conversationId)) // Use wildcard for org since we don't have it here
+      .channel(UNIFIED_CHANNELS.conversation(orgId, conversationId))
       .on(
         'broadcast',
         { event: UNIFIED_EVENTS.READ_RECEIPT },
@@ -246,7 +250,7 @@ export function useDashboardReadReceipts(
       console.log('[useDashboardReadReceipts] Cleaning up real-time subscription');
       client.removeChannel(conversationChannel);
     };
-  }, [conversationId, userId]);
+  }, [conversationId, userId, orgId]);
 
   // Initial fetch
   useEffect(() => {

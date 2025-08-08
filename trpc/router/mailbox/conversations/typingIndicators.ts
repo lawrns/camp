@@ -5,7 +5,8 @@ import { db } from "@/db/client";
 import { conversations } from "@/db/schema";
 import { SenderType, typingIndicators } from "@/db/schema/typingIndicators";
 import { getUser } from "@/lib/core/auth";
-import { broadcastToConversation } from "@/lib/realtime/lean-server";
+import { broadcastToChannel } from "@/lib/realtime/standardized-realtime";
+import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
 import { assertDefined } from "@/lib/utils/assert";
 import { conversationProcedure } from "./procedure";
 
@@ -101,16 +102,23 @@ export const typingIndicatorsRouter = {
           .returning();
       }
 
-      // Broadcast typing indicator via Supabase Realtime
+      // Broadcast typing indicator via standardized realtime
       try {
-        await broadcastToConversation(ctx.mailbox.organizationId, ctx.conversation.uid, "typingIndicator", {
-          userId: user.id,
-          senderType,
-          isTyping,
-          content: content || null,
-          updatedAt: new Date().toISOString(),
-          timestamp: new Date().toISOString(),
-        });
+        await broadcastToChannel(
+          UNIFIED_CHANNELS.conversation(ctx.mailbox.organizationId, ctx.conversation.uid),
+          isTyping ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP,
+          {
+            userId: user.id,
+            senderType,
+            isTyping,
+            content: content || null,
+            conversationId: ctx.conversation.uid,
+            organizationId: ctx.mailbox.organizationId,
+            updatedAt: new Date().toISOString(),
+            timestamp: new Date().toISOString(),
+            source: 'dashboard'
+          }
+        );
       } catch (realtimeError) {
         // Don't fail the main operation if realtime broadcast fails
       }
@@ -172,16 +180,23 @@ export const typingIndicatorsRouter = {
           .returning();
       }
 
-      // Broadcast system typing indicator via Supabase Realtime
+      // Broadcast system typing indicator via standardized realtime
       try {
-        await broadcastToConversation(ctx.mailbox.organizationId, ctx.conversation.uid, "typingIndicator", {
-          userId,
-          senderType,
-          isTyping,
-          content: content || null,
-          updatedAt: new Date().toISOString(),
-          timestamp: new Date().toISOString(),
-        });
+        await broadcastToChannel(
+          UNIFIED_CHANNELS.conversation(ctx.mailbox.organizationId, ctx.conversation.uid),
+          isTyping ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP,
+          {
+            userId,
+            senderType,
+            isTyping,
+            content: content || null,
+            conversationId: ctx.conversation.uid,
+            organizationId: ctx.mailbox.organizationId,
+            updatedAt: new Date().toISOString(),
+            timestamp: new Date().toISOString(),
+            source: 'system'
+          }
+        );
       } catch (realtimeError) {
         // Don't fail the main operation if realtime broadcast fails
       }

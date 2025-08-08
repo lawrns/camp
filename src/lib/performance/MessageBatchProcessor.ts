@@ -298,16 +298,13 @@ export class RealtimeMessageBatchProcessor extends MessageBatchProcessor {
 
     try {
       // Broadcast message via real-time channel
-      const channel = this.realtimeClient.channel(`org:${message.organizationId}:conv:${message.conversationId}`);
-
-      await channel.send({
-        type: "broadcast",
-        event: "new_message",
-        payload: {
-          message: message,
-          timestamp: Date.now(),
-        },
-      });
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+      const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversation(message.organizationId, message.conversationId),
+        UNIFIED_EVENTS.MESSAGE_CREATED,
+        { message, timestamp: new Date().toISOString(), source: 'batch' }
+      );
 
       const processingTime = Date.now() - startTime;
 

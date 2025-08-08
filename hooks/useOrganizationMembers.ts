@@ -41,6 +41,9 @@ export function useOrganizationMembers(organizationId: string) {
       try {
         setLoading(true);
         const supabaseClient = supabase.browser();
+        if (!supabaseClient) {
+          throw new Error('Supabase client unavailable');
+        }
 
         // Get organization members with a simpler query first
         const { data: members, error: membersError } = await supabaseClient
@@ -66,7 +69,7 @@ export function useOrganizationMembers(organizationId: string) {
         // Get profiles for these users
         const { data: profiles, error: profilesError } = await supabaseClient
           .from("profiles")
-          .select("user_id, fullName, email, avatarUrl")
+          .select("user_id, fullName, email, avatar_url")
           .in("user_id", userIds);
 
         if (profilesError) {
@@ -79,18 +82,18 @@ export function useOrganizationMembers(organizationId: string) {
 
         // Enhance with real workload data
         const enhancedMembers = await Promise.all(
-          members.map(async (member: unknown) => {
+          members.map(async (member: any) => {
             const profile = profileMap.get(member.user_id);
 
             // Get real workload data for this member
-            const { data: memberConversations } = await supabaseClient
+             const { data: memberConversations } = await supabaseClient
               .from("conversations")
               .select("id, status")
               .eq("organization_id", organizationId)
               .eq("assignedToUserId", member.user_id)
               .eq("status", "open");
 
-            const { data: memberMessages } = await supabaseClient
+             const { data: memberMessages } = await supabaseClient
               .from("messages")
               .select("created_at, sender_type")
               .eq("organization_id", organizationId)
@@ -104,8 +107,14 @@ export function useOrganizationMembers(organizationId: string) {
               Math.floor(Math.random() * 60) + 1;
 
             return {
-              ...member,
-              profile: profile || {
+              ...(member as object),
+              profile: profile ? {
+                user_id: profile.user_id,
+                fullName: profile.fullName,
+                email: profile.email,
+                avatarUrl: profile.avatar_url,
+                last_seen: null,
+              } : {
                 user_id: member.user_id,
                 fullName: null,
                 email: `user-${member.user_id}@example.com`,
@@ -125,7 +134,7 @@ export function useOrganizationMembers(organizationId: string) {
           })
         );
 
-        setMembers(enhancedMembers);
+        setMembers(enhancedMembers as unknown as OrganizationMember[]);
       } catch (error) {
 
         setError(error as Error);
@@ -138,6 +147,7 @@ export function useOrganizationMembers(organizationId: string) {
 
     // Set up real-time subscription for member updates
     const supabaseClient = supabase.browser();
+    if (!supabaseClient) return () => {};
     const subscription = supabaseClient
       .channel("organization_members_changes")
       .on(
@@ -148,8 +158,7 @@ export function useOrganizationMembers(organizationId: string) {
           table: "organization_members",
           filter: `organization_id=eq.${organizationId}`,
         },
-        (payload) => {
-
+        () => {
           fetchMembers();
         }
       )

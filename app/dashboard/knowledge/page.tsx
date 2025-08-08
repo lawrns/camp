@@ -14,14 +14,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle as AlertCircle, ExternalLink, ChartBar as BarChart3, Book, BookOpen, Brain, CheckCircle, Clock, Database, Download, Pencil as Edit, FileText, Flame as Flame, RefreshCw as RefreshCw, Search as Search, Settings as Settings, Sparkles as Sparkles, Plus, Target, Trash as Trash2, TrendingUp, Upload, Zap as Zap,  } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/unified-ui/components/Alert";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import { Progress } from "@/components/unified-ui/components/Progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
-import { Textarea } from "@/components/unified-ui/components/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Page, PageHeader, PageHeaderRow, PageTitle, PageToolbar, PageContent } from "@/components/ui/page-shell";
 import { Icon } from "@/lib/ui/Icon";
 import { api } from "@/lib/trpc/provider";
 
@@ -263,40 +264,26 @@ export default function KnowledgePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-blue-50">
-      <div className="container mx-auto max-w-6xl px-6 py-12">
-        {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {getGreeting()}, {userName}
-              </h1>
-              <p className="mt-2 text-gray-600">
-                Manage your knowledge base and AI training content
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button
-                onClick={() => router.push('/dashboard/knowledge/editor')}
-                className="bg-blue-600 hover:bg-blue-700"
-                leftIcon={<Icon icon={Plus} className="h-4 w-4" />}
-              >
+    <Page>
+      <PageHeader>
+        <PageHeaderRow
+          left={<PageTitle subtitle="Manage your knowledge base and AI training content">{`${getGreeting()}, ${userName}`}</PageTitle>}
+          right={
+            <PageToolbar>
+              <Button onClick={() => router.push('/dashboard/knowledge/editor')} leftIcon={<Icon icon={Plus} className="h-4 w-4" />}>
                 New Document
               </Button>
-              <Button
-                onClick={() => setShowAddDocument(true)}
-                variant="outline"
-                leftIcon={<Icon icon={Upload} className="h-4 w-4" />}
-              >
+              <Button onClick={() => setShowAddDocument(true)} variant="outline" leftIcon={<Icon icon={Upload} className="h-4 w-4" />}>
                 Upload File
               </Button>
-            </div>
-          </div>
-        </div>
+            </PageToolbar>
+          }
+        />
+      </PageHeader>
 
+      <PageContent>
         {/* Knowledge Metrics Overview */}
-        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
@@ -573,7 +560,7 @@ export default function KnowledgePage() {
             </div>
           </TabsContent>
         </Tabs>
-      </div>
-    </div>
+      </PageContent>
+    </Page>
   );
 }

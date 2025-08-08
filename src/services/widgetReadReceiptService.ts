@@ -356,18 +356,21 @@ export class WidgetReadReceiptService {
     readerType: ReaderType
   ): Promise<void> {
     try {
-      const channel = this.supabase.channel(`conversation:${organizationId}:${conversationId}`);
-      await channel.send({
-        type: "broadcast",
-        event: "read_receipts",
-        payload: {
+      const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+      const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+      await broadcastToChannel(
+        UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+        UNIFIED_EVENTS.READ_RECEIPT,
+        {
           messageIds,
           readerId,
           readerType,
           conversationId,
+          organizationId,
           timestamp: new Date().toISOString(),
-        },
-      });
+          source: 'widget'
+        }
+      );
     } catch (error) {}
   }
 }

@@ -143,6 +143,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
       <div className="flex items-center justify-between border-b border-[var(--fl-color-border)] px-6 py-4" data-testid="customer-sidebar-header">
         <h2 className="text-base font-semibold text-gray-900" data-testid="customer-sidebar-title">Customer Details</h2>
         <button
+          type="button"
           onClick={onClose}
           className="rounded-ds-lg p-2 text-gray-400 hover:bg-background hover:text-foreground transition-colors"
           aria-label="Close sidebar"
@@ -167,7 +168,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
         ) : error ? (
           <div className="p-4 text-center" data-testid="customer-sidebar-error">
             <p className="text-sm text-red-600" data-testid="customer-sidebar-error-message">Failed to load customer data</p>
-            <button onClick={refetch} className="mt-2 text-sm text-blue-600 hover:underline" data-testid="customer-sidebar-error-retry">
+            <button type="button" onClick={refetch} className="mt-2 text-sm text-blue-600 hover:underline" data-testid="customer-sidebar-error-retry">
               Try again
             </button>
           </div>
@@ -201,12 +202,15 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                       customerData?.avatar ||
                       (() => {
                         const { getAvatarPath } = require("@/lib/utils/avatar");
-                        return getAvatarPath(conversation.customerEmail || conversation.customerName, "customer");
+                        return getAvatarPath(conversation.customerEmail || conversation.customerName || conversation.id, "customer");
                       })()
                     }
                     alt={customerData?.name || conversation.customerName}
-                    className="mx-auto mb-3 h-16 w-16 rounded-ds-full"
+                    className="mx-auto mb-3 h-16 w-16 rounded-ds-full object-cover"
                     data-testid="customer-avatar"
+                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    }}
                   />
                   <h3 className="text-base font-semibold text-gray-900" data-testid="customer-name">
                     {customerData?.name || conversation.customerName}
@@ -289,10 +293,10 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                 <div className="space-y-2" data-testid="ai-quick-actions">
                   <h5 className="text-sm font-medium text-gray-900" data-testid="ai-quick-actions-title">Quick Actions</h5>
                   <div className="grid grid-cols-2 gap-2" data-testid="ai-quick-actions-grid">
-                    <button className="bg-background text-foreground rounded px-2 py-1 text-tiny transition-colors hover:bg-gray-200" data-testid="ai-generate-response-button">
+                  <button type="button" className="bg-background text-foreground rounded px-2 py-1 text-tiny transition-colors hover:bg-gray-200" data-testid="ai-generate-response-button">
                       Generate Response
                     </button>
-                    <button className="bg-background text-foreground rounded px-2 py-1 text-tiny transition-colors hover:bg-gray-200" data-testid="ai-summarize-chat-button">
+                  <button type="button" className="bg-background text-foreground rounded px-2 py-1 text-tiny transition-colors hover:bg-gray-200" data-testid="ai-summarize-chat-button">
                       Summarize Chat
                     </button>
                   </div>
@@ -375,7 +379,8 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                       data-testid="add-note-textarea"
                     />
                     <div className="flex gap-2" data-testid="add-note-actions">
-                      <button
+                  <button
+                    type="button"
                         onClick={handleAddNote}
                         disabled={!newNote.trim() || isAdding}
                         className="bg-primary rounded px-3 py-1 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
@@ -383,7 +388,8 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                       >
                         {isAdding ? "Adding..." : "Add Note"}
                       </button>
-                      <button
+                  <button
+                    type="button"
                         onClick={() => {
                           setIsAddingNote(false);
                           setNewNote("");
@@ -397,6 +403,7 @@ export const CustomerSidebar: React.FC<CustomerSidebarProps> = ({ conversation, 
                   </div>
                 ) : (
                   <button
+                    type="button"
                     onClick={() => setIsAddingNote(true)}
                     className="w-full rounded-ds-lg border-2 border-dashed border-ds-border-strong p-3 text-left text-sm text-foreground transition-colors hover:border-gray-400 hover:text-gray-800"
                     data-testid="add-note-trigger-button"

@@ -118,8 +118,8 @@ class ChannelManager {
   }
 
   private createChannelWithAuth(name: string, config: any, client: any): RealtimeChannel {
-    // STEP 3 TEST: Use broadcast-only channel to prevent mismatch errors
-    const channel = client.channel(`bcast:${name}`, {
+    // Use broadcast-only channel with the provided canonical name
+    const channel = client.channel(name, {
       ...(config || {}),
       config: {
         ...(config?.config || {}),

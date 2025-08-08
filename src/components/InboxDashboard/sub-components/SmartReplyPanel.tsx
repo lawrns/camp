@@ -207,7 +207,7 @@ export const SmartReplyPanel: React.FC<SmartReplyPanelProps> = ({
             <div className="py-8 text-center">
               <AlertTriangle className="mx-auto mb-2 h-8 w-8 text-[var(--fl-color-danger)]" />
               <p className="text-sm text-red-600">{error}</p>
-              <button onClick={generateSmartReplies} className="mt-2 text-sm text-blue-600 hover:text-blue-700">
+              <button type="button" onClick={generateSmartReplies} className="mt-2 text-sm text-blue-600 hover:text-blue-700">
                 Try again
               </button>
             </div>
@@ -278,6 +278,7 @@ export const SmartReplyPanel: React.FC<SmartReplyPanelProps> = ({
           <div className="text-foreground flex items-center justify-between text-tiny">
             <span>AI-powered suggestions</span>
             <button
+              type="button"
               onClick={generateSmartReplies}
               disabled={isLoading}
               className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 disabled:opacity-50"

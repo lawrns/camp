@@ -258,7 +258,7 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
           setTypingUsers((prev) => prev.filter((u: unknown) => u.user_id !== typing.user_id));
         }
       )
-      .on("broadcast", { event: "typing" }, (payload: unknown) => {
+      .on("broadcast", { event: "typing:start" }, (payload: unknown) => {
         const { conversationId: typingConversationId, isTyping, content, sender_id, sender_type } = payload.payload;
 
         // Only process if it's for this conversation and not from current user
@@ -282,6 +282,12 @@ export function RealtimeMessageLoader({ conversationId }: RealtimeMessageLoaderP
             // Remove typing indicator
             setTypingUsers((prev) => prev.filter((u: unknown) => u.user_id !== sender_id));
           }
+        }
+      })
+      .on("broadcast", { event: "typing:stop" }, (payload: unknown) => {
+        const { conversationId: typingConversationId, sender_id } = payload.payload;
+        if (typingConversationId === conversationIdStr && sender_id !== currentUserId) {
+          setTypingUsers((prev) => prev.filter((u: unknown) => u.user_id !== sender_id));
         }
       })
       .subscribe();

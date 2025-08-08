@@ -48,9 +48,9 @@ export class WidgetRealtimeClient {
       // UNIFIED STANDARD: Use unified channel naming convention
       const channelName = UNIFIED_CHANNELS.conversation(this.config.organizationId, this.config.sessionId);
 
-      // STEP 1 FIX: Use broadcast-only channel to prevent mismatch errors
+      // Use broadcast-only channel with unified channel name
       this.channel = this.supabase
-        .channel(`bcast:${this.config.organizationId}:${this.config.sessionId}`, {
+        .channel(channelName, {
           config: {
             broadcast: { ack: false },
             presence: { ack: false },
@@ -94,11 +94,13 @@ export class WidgetRealtimeClient {
 
   async sendMessage(conversationId: string, content: string): Promise<void> {
     // Send via HTTP API (this handles the message creation and realtime broadcast)
-    const response = await fetch("/api/widget/message", {
+    const response = await fetch("/api/widget/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.widgetJWT}`,
+        // Required by the server to route correctly
+        "x-organization-id": this.config.organizationId,
       },
       body: JSON.stringify({
         conversationId,
@@ -116,12 +118,15 @@ export class WidgetRealtimeClient {
     if (this.channel) {
       await this.channel.send({
         type: "broadcast",
-        event: "typing",
+        event: isTyping ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP,
         payload: {
-          conversationId,
-          sessionId: this.config.sessionId,
+          userId: `visitor_${this.config.organizationId}`,
+          userName: "Visitor",
+          userType: "visitor",
           isTyping,
-          timestamp: Date.now(),
+          conversationId,
+          organizationId: this.config.organizationId,
+          timestamp: new Date().toISOString(),
         },
       });
     }
@@ -153,7 +158,7 @@ export class WidgetRealtimeClient {
     try {
       await this.channel.send({
         type: "broadcast",
-        event: "new_message",
+        event: UNIFIED_EVENTS.MESSAGE_CREATED,
         payload: {
           message,
           conversationId: this.config.sessionId,
@@ -177,7 +182,7 @@ export class WidgetRealtimeClient {
     try {
       await this.channel.send({
         type: "broadcast",
-        event: isTyping ? "typing_start" : "typing_stop",
+        event: isTyping ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP,
         payload: {
           userId: `visitor_${this.config.organizationId}`,
           userName: "Visitor",
@@ -204,7 +209,7 @@ export class WidgetRealtimeClient {
     try {
       await this.channel.send({
         type: "broadcast",
-        event: "read_receipt",
+        event: UNIFIED_EVENTS.READ_RECEIPT,
         payload: {
           messageId,
           visitorId: `visitor_${this.config.organizationId}`,

@@ -122,32 +122,34 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
 
     const fetchOnlineUsers = async () => {
       try {
-        // CRITICAL-002 FIX: Use proper Supabase client method
-        const { data: profiles, error } = await supabase.browser()
+        // Guarded fetch: avoid throwing in UI; tolerate RLS or schema mismatch
+        const client = supabase.browser();
+        const query = client
           .from('profiles')
-          .select('user_id, fullName, email, isOnline, lastSeenAt, role, avatarUrl')
+          .select('user_id, full_name, email, is_online, last_seen_at, role, avatar_url')
           .eq('organization_id', organizationId)
-          .eq('isOnline', true);
+          .eq('is_online', true);
+        const { data: profiles, error } = await query;
 
         if (error) {
-          console.error('[useRealtimeSubscriptions] Error fetching online users:', error);
+          // Soft fail: do not spam console or break layout
           return;
         }
 
-        const users: OnlineUser[] = (profiles || []).map(profile => ({
+        const users: OnlineUser[] = (profiles || []).map((profile: any) => ({
           id: profile.user_id,
-          name: profile.fullName || profile.email || 'Unknown User',
+          name: profile.full_name || profile.email || 'Unknown User',
           email: profile.email,
-          isOnline: profile.isOnline,
-          lastSeenAt: profile.lastSeenAt,
+          isOnline: Boolean(profile.is_online),
+          lastSeenAt: profile.last_seen_at,
           role: profile.role || 'member',
-          avatarUrl: profile.avatarUrl,
+          avatarUrl: profile.avatar_url || undefined,
         }));
 
         setOnlineUsers(users);
         console.log('[useRealtimeSubscriptions] Loaded online users:', users.length);
-      } catch (error) {
-        console.error('[useRealtimeSubscriptions] Failed to fetch online users:', error);
+      } catch (_error) {
+        // Swallow errors to avoid layout disruption
       }
     };
 
@@ -217,40 +219,20 @@ export function useRealtimeSubscriptions(config: UseRealtimeSubscriptionsConfig)
     };
   }, [organizationId]);
 
-  // Update user presence
+  // Update user presence via API to ensure unified storage and broadcast
   const updatePresence = useCallback(async (status: "online" | "away" | "offline") => {
     if (!organizationId || !userId) return;
 
     try {
-      // Update presence in database
-      const { error } = await supabase.client
-        .from('profiles')
-        .update({
-          isOnline: status === 'online',
-          lastSeenAt: new Date().toISOString(),
-        })
-        .eq('user_id', userId)
-        .eq('organization_id', organizationId);
-
-      if (error) {
-        console.error('[useRealtimeSubscriptions] Error updating presence:', error);
-        return;
+      const res = await fetch('/api/presence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('[useRealtimeSubscriptions] Presence API error:', err?.error || res.statusText);
       }
-
-      // Broadcast presence update
-      await broadcastToChannel(
-        UNIFIED_CHANNELS.agentsPresence(organizationId),
-        UNIFIED_EVENTS.PRESENCE_UPDATE,
-        {
-          userId,
-          status,
-          lastSeen: new Date().toISOString(),
-          organizationId,
-          timestamp: new Date().toISOString(),
-        }
-      );
-
-      console.log('[useRealtimeSubscriptions] Presence updated:', status);
     } catch (error) {
       console.error('[useRealtimeSubscriptions] Failed to update presence:', error);
     }

@@ -6,7 +6,7 @@ import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AuthGuard } from '@/components/auth/auth-guard';
-import { Card, CardContent } from '@/components/unified-ui/components/Card';
+import { Card, CardContent } from '@/components/ui/card';
 import { IntercomMetricCard } from './IntercomMetricCard';
 import { IntercomActionTileGrid } from './IntercomActionTile';
 import { IntercomTimelineList } from './IntercomTimelineList';

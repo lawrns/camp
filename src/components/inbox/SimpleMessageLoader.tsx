@@ -74,7 +74,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
         if (isTyping) {
           channel.send({
             type: "broadcast",
-            event: "typing",
+            event: "typing:start",
             payload: {
               user_id: "current-user",
               typing: false,
@@ -138,7 +138,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
           setMessages((prev) => prev.map((msg) => (msg.id === updatedMessage.id ? updatedMessage : msg)));
         }
       )
-      .on("broadcast", { event: "typing" }, ({ payload }: { payload: unknown }) => {
+      .on("broadcast", { event: "typing:start" }, ({ payload }: { payload: unknown }) => {
 
         if (payload.user_id !== "current-user") {
           setTypingUsers((prev) => {
@@ -428,7 +428,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
                 if (channel) {
                   channel.send({
                     type: "broadcast",
-                    event: "typing",
+                    event: "typing:start",
                     payload: {
                       user_id: "current-user",
                       typing: isCurrentlyTyping,
@@ -446,7 +446,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
                 if (channel) {
                   channel.send({
                     type: "broadcast",
-                    event: "typing",
+                    event: "typing:stop",
                     payload: {
                       user_id: "current-user",
                       typing: false,
@@ -467,7 +467,7 @@ export function SimpleMessageLoader({ conversationId }: SimpleMessageLoaderProps
                 if (channel) {
                   channel.send({
                     type: "broadcast",
-                    event: "typing",
+                    event: "typing:start",
                     payload: {
                       user_id: "current-user",
                       typing: false,

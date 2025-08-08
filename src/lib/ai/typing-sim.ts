@@ -193,19 +193,20 @@ async function sendTypingIndicator(
   action: "start" | "stop"
 ): Promise<void> {
   try {
-    const supabaseClient = supabase.admin();
-    const channel = `${organizationId}:conversation:${conversationId}`;
-
-    await supabase.channel(channel).send({
-      type: "broadcast",
-      event: "typing_indicator",
-      payload: {
-        action,
-        senderType: "ai_assistant",
-        senderName: "AI Assistant",
+    const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+    await broadcastToChannel(
+      UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+      action === 'start' ? UNIFIED_EVENTS.TYPING_START : UNIFIED_EVENTS.TYPING_STOP,
+      {
+        senderType: 'ai_assistant',
+        senderName: 'AI Assistant',
+        isTyping: action === 'start',
+        conversationId,
+        organizationId,
         timestamp: new Date().toISOString(),
-      },
-    });
+      }
+    );
   } catch (error) {}
 }
 
@@ -247,15 +248,13 @@ async function sendPartialMessage(
     }
 
     // Broadcast partial message
-    const channel = `${organizationId}:conversation:${conversationId}`;
-    await supabase.channel(channel).send({
-      type: "broadcast",
-      event: "new_message",
-      payload: {
-        message,
-        partial: true,
-      },
-    });
+    const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+    await broadcastToChannel(
+      UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+      UNIFIED_EVENTS.MESSAGE_CREATED,
+      { message, partial: true, source: 'ai' }
+    );
 
     return message.id;
   } catch (error) {
@@ -299,16 +298,13 @@ export async function updatePartialMessage(
     }
 
     // Broadcast the updated message
-    const channel = `${organizationId}:conversation:${conversationId}`;
-    await supabase.channel(channel).send({
-      type: "broadcast",
-      event: "message_updated",
-      payload: {
-        message: updatedMessage,
-        partial: false,
-        updated: true,
-      },
-    });
+    const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+    const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+    await broadcastToChannel(
+      UNIFIED_CHANNELS.conversation(organizationId, conversationId),
+      UNIFIED_EVENTS.MESSAGE_UPDATED,
+      { message: updatedMessage, partial: false, updated: true, source: 'ai' }
+    );
 
     return {
       success: true,

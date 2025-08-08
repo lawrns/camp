@@ -5,14 +5,12 @@ test.describe('Dashboard Messages API', () => {
   const testOrganizationId = 'b5e80170-004c-4e82-a88c-3e2166b169dd';
 
   test.beforeEach(async ({ page }) => {
-    // Login as test user to get authentication
-    await page.goto('/auth/login');
-    await page.fill('[data-testid="email-input"], #email, input[type="email"]', 'jam@jam.com');
-    await page.fill('[data-testid="password-input"], #password, input[type="password"]', 'password123');
-    await page.click('[data-testid="login-button"], button[type="submit"], button:has-text("Sign in")');
-    
-    // Wait for successful login
-    await page.waitForURL('**/dashboard', { timeout: 15000 });
+    // Use API-based login to avoid UI flakiness
+    const res = await page.request.post('/api/auth/login', {
+      data: { email: 'jam@jam.com', password: 'password123' },
+      headers: { 'Content-Type': 'application/json' }
+    });
+    expect(res.ok()).toBe(true);
   });
 
   test('should require authentication for GET messages', async ({ page }) => {

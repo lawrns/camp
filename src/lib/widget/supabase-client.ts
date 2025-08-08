@@ -81,7 +81,9 @@ export class WidgetSupabaseClient {
 
     // Subscribe to broadcast events
     if (callbacks.onTyping && this.config.realtimeConfig.events.includes("typing")) {
-      channel.on("broadcast", { event: "typing" }, callbacks.onTyping);
+      // Listen to standardized typing events
+      channel.on("broadcast", { event: "typing:start" }, callbacks.onTyping);
+      channel.on("broadcast", { event: "typing:stop" }, callbacks.onTyping);
     }
 
     // Subscribe to presence
@@ -152,7 +154,7 @@ export class WidgetSupabaseClient {
 
     await channel.send({
       type: "broadcast",
-      event: "typing",
+      event: isTyping ? "typing:start" : "typing:stop",
       payload: {
         isTyping,
         timestamp: new Date().toISOString(),

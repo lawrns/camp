@@ -148,7 +148,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <Funnel className="h-5 w-5" />
               Advanced Filters
             </h2>
-            <button onClick={onClose} className="btn-ghost p-1">
+            <button type="button" onClick={onClose} className="btn-ghost p-1">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -159,7 +159,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <label className="typography-body font-medium mb-3 block">Status</label>
               <div className="flex flex-wrap gap-2">
                 {STATUS_OPTIONS.map((option) => (
-                  <button
+                  <button type="button"
                     key={option.value}
                     onClick={() => handleMultiSelectChange('status', option.value)}
                     className={`px-3 py-1 text-xs rounded-full transition-all ${
@@ -179,7 +179,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <label className="typography-body font-medium mb-3 block">Priority</label>
               <div className="flex flex-wrap gap-2">
                 {PRIORITY_OPTIONS.map((option) => (
-                  <button
+                  <button type="button"
                     key={option.value}
                     onClick={() => handleMultiSelectChange('priority', option.value)}
                     className={`px-3 py-1 text-xs rounded-full transition-all ${
@@ -231,7 +231,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {availableTags.map((tag) => (
-                    <button
+                    <button type="button"
                       key={tag}
                       onClick={() => handleMultiSelectChange('tags', tag)}
                       className={`px-3 py-1 text-xs rounded-full transition-all ${
@@ -275,7 +275,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-6 border-t border-gray-200 mt-6">
-            <button
+            <button type="button"
               onClick={handleClear}
               disabled={!hasActiveFilters}
               className="btn-ghost text-sm disabled:opacity-50"
@@ -283,10 +283,10 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               Clear All
             </button>
             <div className="flex items-center gap-3 mobile-stack">
-              <button onClick={onClose} className="btn-secondary mobile-friendly-button touch-target mobile-full-width" aria-label="Cancel filter changes">
+              <button type="button" onClick={onClose} className="btn-secondary mobile-friendly-button touch-target mobile-full-width" aria-label="Cancel filter changes">
                 Cancel
               </button>
-              <button onClick={handleApply} className="btn-primary mobile-friendly-button touch-target mobile-full-width" aria-label="Apply selected filters">
+              <button type="button" onClick={handleApply} className="btn-primary mobile-friendly-button touch-target mobile-full-width" aria-label="Apply selected filters">
                 Apply Filters
               </button>
             </div>

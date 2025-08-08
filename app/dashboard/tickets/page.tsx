@@ -28,26 +28,14 @@ import {
   AlertTriangle,
   AlertCircle,
 } from "lucide-react";
-import { Badge } from "@/components/unified-ui/components/Badge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/Button-unified";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/unified-ui/components/Card";
-import { Input } from "@/components/unified-ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/unified-ui/components/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/unified-ui/components/Tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/unified-ui/components/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Page, PageHeader, PageHeaderRow, PageTitle, PageToolbar, PageContent } from "@/components/ui/page-shell";
 
 interface TicketData {
   id: string;
@@ -442,13 +430,10 @@ export default function TicketsPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge
-                          variant={statusConfig.badge as any}
-                          className="capitalize rounded-full"
-                          leftIcon={<StatusIcon className="h-3 w-3" />}
-                        >
+                        <span className="inline-flex items-center gap-1 capitalize rounded-full px-2 py-0.5 text-xs" data-variant={statusConfig.badge}>
+                          <StatusIcon className="h-3 w-3" />
                           {ticket.status.replace('_', ' ')}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>
                         <Badge

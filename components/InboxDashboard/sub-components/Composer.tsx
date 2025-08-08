@@ -220,7 +220,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
   }, []);
 
   return (
-    <div ref={composerRef} className="w-full bg-[var(--ds-color-surface)] border-t border-[var(--ds-color-border)] relative" data-testid="composer">
+    <div ref={composerRef} className="w-full bg-[var(--ds-color-surface)] border-t border-[var(--ds-color-border)] relative sticky bottom-0 z-20" data-testid="composer">
       {/* Drag overlay */}
       {isDragOver && (
         <div className="absolute inset-0 z-10 flex items-center justify-center border-2 border-dashed border-[var(--ds-color-primary)] bg-[var(--ds-color-primary-alpha)] bg-opacity-90" data-testid="composer-drag-overlay">
@@ -343,7 +343,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
                   accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx"
                   data-testid="composer-file-input"
                 />
-                <button
+                <button type="button"
                   className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   tabIndex={0}
                   aria-label="Attach files"
@@ -353,7 +353,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
               </label>
 
               {/* Image Upload */}
-              <button
+              <button type="button"
                 className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 title="Upload image"
                 aria-label="Upload image"
@@ -408,6 +408,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
 
             {/* Right: Send button */}
             <button
+              type="button"
               onClick={handleSubmit}
               disabled={!newMessage.trim() || isSending || isSubmitting || isOverLimit}
               className={`px-4 py-2 rounded-lg font-medium transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none ${

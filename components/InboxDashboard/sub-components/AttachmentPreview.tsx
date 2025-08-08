@@ -55,7 +55,7 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment
               }`}
             >
               {/* Remove button */}
-              <button
+              <button type="button"
                 onClick={() => removeAttachment(attachment.id)}
                 className="absolute -right-2 -top-2 z-10 rounded-ds-full bg-gray-600 spacing-1 text-white transition-colors hover:bg-gray-700"
                 aria-label="Remove attachment"
@@ -108,7 +108,7 @@ export const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment
                     {hasError && (
                       <div className="flex items-center space-x-spacing-sm">
                         <span className="text-tiny text-red-600">Upload failed</span>
-                        <button
+                        <button type="button"
                           onClick={() => retryUpload(attachment.id)}
                           className="flex items-center space-x-1 text-tiny text-red-600 underline hover:text-red-700"
                         >

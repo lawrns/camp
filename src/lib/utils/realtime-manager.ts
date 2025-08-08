@@ -105,13 +105,13 @@ class RealtimeManager {
   ): string {
     switch (type) {
       case "conversations":
-        return `bcast:conversations:${organizationId}`;
+        return `org:${organizationId}:conversations`;
       case "messages":
-        return `cf-org-conv-bcast-${organizationId}-${conversationId}`;
+        return `org:${organizationId}:conversation:${conversationId}`;
       case "widget":
-        return `cf-org-widget-bcast-${organizationId}-${conversationId}`;
+        return `org:${organizationId}:conversation:${conversationId}`;
       default:
-        return `cf-org-${type}-bcast-${organizationId}`;
+        return `org:${organizationId}:${type}`;
     }
   }
 
@@ -195,7 +195,17 @@ export function useRealtimeChannel(
   organizationId: string,
   conversationId?: string
 ) {
-  const channelName = `cf-org-${type}-bcast-${organizationId}${conversationId ? `-${conversationId}` : ""}`;
+  const channelName = (() => {
+    switch (type) {
+      case "conversations":
+        return `org:${organizationId}:conversations`;
+      case "messages":
+      case "widget":
+        return `org:${organizationId}:conversation:${conversationId ?? ""}`;
+      default:
+        return `org:${organizationId}:${type}`;
+    }
+  })();
 
   const getChannel = () => {
     return realtimeManager.getChannel(type, organizationId, conversationId);

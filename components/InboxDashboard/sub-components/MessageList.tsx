@@ -15,6 +15,7 @@ interface MessageListProps {
   error?: string | null;
   typingUsers: string[];
   onlineUsers: string[];
+  onRetry?: () => void;
 }
 
 /**
@@ -27,6 +28,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   error,
   typingUsers,
   onlineUsers,
+  onRetry,
 }) => {
   const [hoveredMessage, setHoveredMessage] = useState<string | null>(null);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -177,7 +179,8 @@ export const MessageList: React.FC<MessageListProps> = ({
               <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Messages</h3>
               <p className="text-gray-600 mb-4">{error}</p>
               <button
-                onClick={() => window.location.reload()}
+                type="button"
+                onClick={() => (onRetry ? onRetry() : null)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Retry

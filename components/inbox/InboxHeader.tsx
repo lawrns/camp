@@ -2,54 +2,28 @@
 
 import React, { useState } from "react";
 import { 
-  Bell, 
-  Keyboard, 
-  Search, 
-  Filter,
-  Settings,
+  Bell,
   Menu,
   X
 } from "lucide-react";
 import { useGreeting, useUserName } from "@/hooks/useGreeting";
 import { useAuth } from "@/hooks/useAuth";
 import { 
-  headerButtonClasses, 
-  searchInputClasses, 
+  headerButtonClasses,
   mobileClasses 
 } from "@/lib/utils/badge-styles";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 interface InboxHeaderProps {
-  onSearch?: (query: string) => void;
-  onFilter?: () => void;
   onNotifications?: () => void;
-  onShortcuts?: () => void;
-  onSettings?: () => void;
 }
 
-export function InboxHeader({
-  onSearch,
-  onFilter,
-  onNotifications,
-  onShortcuts,
-  onSettings
-}: InboxHeaderProps) {
+export function InboxHeader({ onNotifications }: InboxHeaderProps) {
   const { user } = useAuth();
   const greeting = useGreeting();
   const userName = useUserName(user);
-  const [searchQuery, setSearchQuery] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showSearchDialog, setShowSearchDialog] = useState(false);
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    onSearch?.(query);
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSearch(searchQuery);
-    setShowSearchDialog(false);
-  };
+  
 
   return (
     <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
@@ -64,54 +38,29 @@ export function InboxHeader({
           </p>
         </div>
 
-        {/* Right side: Desktop controls */}
-        <div className={`flex items-center gap-2 sm:gap-4 ${mobileClasses.hidden}`}>
-          {/* Search */}
-          <div className={searchInputClasses.container}>
-            <Search className={searchInputClasses.icon} />
-            <input
-              type="text"
-              placeholder="Search conversations..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className={searchInputClasses.input}
-            />
-          </div>
-
-          {/* Filters */}
-          <button 
-            onClick={onFilter}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Filter className="h-4 w-4" />
-            <span>Filters</span>
-          </button>
-
-          {/* Notifications */}
+        {/* Right side: Avatar with dropdown and notifications */}
+        <div className={`flex items-center gap-2 sm:gap-3 ${mobileClasses.hidden}`}>
           <button 
             onClick={onNotifications}
             className={headerButtonClasses.notification}
+            aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
           </button>
-
-          {/* Keyboard Shortcuts */}
-          <button 
-            onClick={onShortcuts}
-            className={headerButtonClasses.base}
-            title="Keyboard shortcuts"
-          >
-            <Keyboard className="h-5 w-5" />
-          </button>
-
-          {/* Settings */}
-          <button 
-            onClick={onSettings}
-            className={headerButtonClasses.base}
-          >
-            <Settings className="h-5 w-5" />
-          </button>
+          {/* Avatar dropdown */}
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <button aria-label="User menu" className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold select-none hover:bg-gray-300">
+                {userName?.charAt(0) ?? "U"}
+              </button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content align="end" sideOffset={8} className="z-50 rounded-md border border-gray-200 bg-white shadow-md py-1">
+              <DropdownMenu.Item onSelect={(e) => { e.preventDefault(); onNotifications?.(); }} className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Notifications
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
 
         {/* Mobile menu button */}
@@ -123,53 +72,17 @@ export function InboxHeader({
         </button>
       </div>
 
-      {/* Mobile search bar */}
-      <div className={`mt-4 ${mobileClasses.visible}`}>
-        <div className={searchInputClasses.container}>
-          <Search className={searchInputClasses.icon} />
-          <input
-            type="text"
-            placeholder="Search conversations..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className={searchInputClasses.input}
-          />
-        </div>
-      </div>
+      {/* No mobile search/filters here; search and filters live in Conversation List */}
 
-      {/* Mobile menu */}
+      {/* Mobile menu: only notifications for now */}
       {showMobileMenu && (
         <div className={`mt-4 ${mobileClasses.visible} space-y-2`}>
-          <button 
-            onClick={onFilter}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Filter className="h-4 w-4" />
-            <span>Filters</span>
-          </button>
-
           <button 
             onClick={onNotifications}
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <Bell className="h-4 w-4" />
             <span>Notifications</span>
-          </button>
-
-          <button 
-            onClick={onShortcuts}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Keyboard className="h-4 w-4" />
-            <span>Keyboard Shortcuts</span>
-          </button>
-
-          <button 
-            onClick={onSettings}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Settings className="h-4 w-4" />
-            <span>Settings</span>
           </button>
         </div>
       )}

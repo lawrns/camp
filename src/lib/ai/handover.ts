@@ -159,19 +159,32 @@ export class AIHandoverService {
         })
         .eq("id", conversationId);
 
-      // 4. Notify agents via real-time
-      await this.supabase.channel(`org:${organizationId}:agents`).send({
-        type: "broadcast",
-        event: "handover_created",
-        payload: {
+      // 4. Notify via standardized realtime channels
+      try {
+        const { broadcastToChannel } = await import('@/lib/realtime/standardized-realtime');
+        const { UNIFIED_CHANNELS, UNIFIED_EVENTS } = await import('@/lib/realtime/unified-channel-standards');
+        const payload = {
           handoverId: handover.id,
           conversationId,
+          organizationId,
           urgency: handoverResult.urgency,
           reason: handoverResult.reason,
           assignedAgentId,
           timestamp: new Date().toISOString(),
-        },
-      });
+        };
+        // Organization-wide notification
+        await broadcastToChannel(
+          UNIFIED_CHANNELS.organization(organizationId),
+          UNIFIED_EVENTS.AI_HANDOVER_REQUESTED,
+          payload
+        );
+        // Conversation-specific notification (handover channel)
+        await broadcastToChannel(
+          UNIFIED_CHANNELS.conversationHandover(organizationId, conversationId),
+          UNIFIED_EVENTS.AI_HANDOVER_REQUESTED,
+          payload
+        );
+      } catch {}
 
       // 5. Log activity
       await this.supabase.from("activity_events").insert({

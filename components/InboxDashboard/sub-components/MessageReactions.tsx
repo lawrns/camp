@@ -121,6 +121,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
       <div className="flex items-center space-x-1 opacity-0 transition-opacity group-hover:opacity-100">
         <div className="relative">
           <button
+            type="button"
             onClick={() => setShowEmojiPicker(true)}
             className="hover:bg-background hover:text-foreground flex items-center space-x-1 rounded-ds-full px-2 py-1 text-tiny text-[var(--fl-color-text-muted)] transition-colors"
             aria-label="Add reaction"
@@ -133,7 +134,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
             <div className="bg-background absolute bottom-full left-0 z-50 mb-2 rounded-ds-lg border border-[var(--fl-color-border)] spacing-3 shadow-card-deep">
               <div className="mb-2 grid grid-cols-6 gap-1">
                 {QUICK_REACTIONS.map((emoji) => (
-                  <button
+                  <button type="button"
                     key={emoji}
                     onClick={() => handleEmojiPickerSelect(emoji)}
                     className="hover:bg-background flex h-8 w-8 items-center justify-center rounded text-base transition-colors"
@@ -147,7 +148,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
               <div className="border-t border-[var(--fl-color-border)] pt-2">
                 <div className="grid max-h-24 grid-cols-10 gap-1 overflow-y-auto">
                   {EMOJI_PICKER_REACTIONS.map((emoji) => (
-                    <button
+                   <button type="button"
                       key={emoji}
                       onClick={() => handleEmojiPickerSelect(emoji)}
                       className="hover:bg-background flex h-6 w-6 items-center justify-center rounded text-sm transition-colors"
@@ -159,7 +160,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
                 </div>
               </div>
 
-              <button
+               <button type="button"
                 onClick={() => setShowEmojiPicker(false)}
                 className="hover:text-foreground absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded text-gray-400"
                 aria-label="Close emoji picker"
@@ -184,6 +185,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
           onMouseLeave={() => setShowReactionTooltip(null)}
         >
           <button
+            type="button"
             onClick={() => handleReactionClick(reaction.emoji)}
             className={`flex items-center space-x-1 rounded-ds-full px-2 py-1 text-xs transition-all ${
               reaction.hasReacted
@@ -209,6 +211,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
       {/* Add reaction button */}
       <div className="relative">
         <button
+          type="button"
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           className="hover:bg-background hover:text-foreground flex h-7 w-7 items-center justify-center rounded-ds-full text-gray-400 transition-colors"
           aria-label="Add reaction"
@@ -221,7 +224,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
           <div className="bg-background absolute bottom-full left-0 z-50 mb-2 rounded-ds-lg border border-[var(--fl-color-border)] spacing-3 shadow-card-deep">
             <div className="mb-2 grid grid-cols-6 gap-1">
               {QUICK_REACTIONS.map((emoji) => (
-                <button
+                <button type="button"
                   key={emoji}
                   onClick={() => handleEmojiPickerSelect(emoji)}
                   className="hover:bg-background flex h-8 w-8 items-center justify-center rounded text-base transition-colors"
@@ -235,7 +238,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
             <div className="border-t border-[var(--fl-color-border)] pt-2">
               <div className="grid max-h-24 grid-cols-10 gap-1 overflow-y-auto">
                 {EMOJI_PICKER_REACTIONS.map((emoji) => (
-                  <button
+                <button type="button"
                     key={emoji}
                     onClick={() => handleEmojiPickerSelect(emoji)}
                     className="hover:bg-background flex h-6 w-6 items-center justify-center rounded text-sm transition-colors"
@@ -247,7 +250,7 @@ export const MessageReactions: React.FC<MessageReactionsProps> = ({
               </div>
             </div>
 
-            <button
+            <button type="button"
               onClick={() => setShowEmojiPicker(false)}
               className="hover:text-foreground absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded text-gray-400"
               aria-label="Close emoji picker"

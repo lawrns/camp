@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
-import { supabase } from '@/lib/supabase';
+import { createWidgetReadReceiptService } from '@/src/services/widgetReadReceiptService';
 
 // Widget read receipts API - handles message delivery tracking
 
@@ -18,32 +18,15 @@ export const POST = optionalWidgetAuth(async (request: NextRequest, context: unk
       );
     }
 
-    // Initialize Supabase service role client
-    const supabaseClient = supabase.admin();
-
-    // Create or update read receipt
-    const receiptData = {
-      message_id: messageId,
-      conversation_id: conversationId,
-      user_id: 'visitor', // Widget users are always visitors
-      read_at: status === 'read' ? new Date().toISOString() : null,
-    };
-
-    const { data: receipt, error } = await supabaseClient
-      .from('widget_read_receipts')
-      .upsert(receiptData, {
-        onConflict: 'message_id,user_id'
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('[Widget Read Receipts API] Database error:', error);
-      return NextResponse.json(
-        { error: 'Failed to update read receipt', code: 'DATABASE_ERROR' },
-        { status: 500 }
-      );
-    }
+    // Persist read receipts in message metadata for consistency
+    const service = createWidgetReadReceiptService(organizationId);
+    await service.markMessagesAsRead({
+      messageIds: [messageId],
+      conversationId,
+      organizationId,
+      readerId: 'visitor',
+      readerType: 'visitor',
+    });
 
     // Broadcast read receipt to real-time channels
     try {
@@ -63,7 +46,7 @@ export const POST = optionalWidgetAuth(async (request: NextRequest, context: unk
       // Broadcast to conversation-specific channel
       await broadcastToChannel(
         UNIFIED_CHANNELS.conversation(organizationId, conversationId),
-        UNIFIED_EVENTS.READ_RECEIPT_UPDATED,
+        UNIFIED_EVENTS.READ_RECEIPT,
         receiptPayload
       );
 
@@ -105,35 +88,9 @@ export const GET = optionalWidgetAuth(async (request: NextRequest, context: unkn
       );
     }
 
-    // Initialize Supabase service role client
-    const supabaseClient = supabase.admin();
-
-    // Build query
-    let query = supabaseClient
-      .from('widget_read_receipts')
-      .select('*')
-      .eq('conversation_id', conversationId)
-      .eq('organization_id', organizationId);
-
-    if (messageId) {
-      query = query.eq('message_id', messageId);
-    }
-
-    const { data: receipts, error } = await query;
-
-    if (error) {
-      console.error('[Widget Read Receipts API] Database error:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch read receipts', code: 'DATABASE_ERROR' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({
-      receipts: receipts || [],
-      conversationId,
-      organizationId
-    });
+    const service = createWidgetReadReceiptService(organizationId);
+    const receiptsByMessage = await service.getReadReceipts(conversationId, messageId ?? undefined);
+    return NextResponse.json({ receipts: receiptsByMessage, conversationId, organizationId });
 
   } catch (error) {
     console.error('[Widget Read Receipts API] Unexpected error:', error);

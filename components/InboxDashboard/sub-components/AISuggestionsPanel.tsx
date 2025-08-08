@@ -69,7 +69,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
           <Sparkles className="mr-2 h-4 w-4 text-purple-600" />
           AI Suggestions
         </h3>
-        <button onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close AI suggestions">
+        <button type="button" onClick={onClose} className="hover:text-foreground text-gray-400" aria-label="Close AI suggestions">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -98,7 +98,7 @@ export const AISuggestionsPanel: React.FC<AISuggestionsPanelProps> = ({
               const IconComponent = style.icon;
 
               return (
-                <button
+                <button type="button"
                   key={suggestion.id}
                   onClick={() => onUseSuggestion(suggestion)}
                   className={`w-full rounded-ds-lg border spacing-3 text-left transition-all hover:shadow-sm ${style.border} ${style.bg} hover:bg-opacity-80`}

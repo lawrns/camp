@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { getAvatarPath } from "@/lib/utils/avatar";
-import { Clock, Download, Eye, Heart, MoreHorizontal, CornerUpLeft, Share, ThumbsUp } from "lucide-react";
+import { Download, Heart, MoreHorizontal, CornerUpLeft, Share, ThumbsUp } from "lucide-react";
 import * as React from "react";
 import { useState, memo } from "react";
 import type { Message } from "../types";
@@ -23,7 +23,7 @@ interface MessageRowProps {
  */
 export const MessageRow: React.FC<MessageRowProps> = memo(({
   message,
-  selectedConversation,
+  selectedConversation: _selectedConversation,
   hoveredMessage,
   setHoveredMessage,
   style,
@@ -31,14 +31,13 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   onReact,
   onShare,
 }) => {
-  const { user } = useAuth();
+  const { /* user */ } = useAuth();
   const [showReactions, setShowReactions] = useState(false);
   const [showMessageMenu, setShowMessageMenu] = useState(false);
 
   // Determine message positioning based on sender_type
-  const isFromAgent = message.senderType === 'agent' || message.senderType === 'operator';
-  const isFromCustomer = message.senderType === 'customer' || message.senderType === 'visitor';
-  const isFromAI = message.senderType === 'ai';
+  const isFromAgent = message.senderType === 'agent';
+  const isFromCustomer = message.senderType === 'visitor';
   const isHovered = hoveredMessage === message.id;
 
   // Format timestamp
@@ -56,11 +55,11 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   };
 
   // Handle file download
-  const handleFileDownload = (attachment: unknown) => {
-    if (attachment.url) {
+  const handleFileDownload = (attachment: { url?: string; name?: string }) => {
+    if (attachment && attachment.url) {
       const link = document.createElement("a");
       link.href = attachment.url;
-      link.download = attachment.name;
+      link.download = attachment.name || "file";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -68,11 +67,11 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
   };
 
   // Render attachment
-  const renderAttachment = (attachment: unknown) => (
+  const renderAttachment = (attachment: { id: string; type?: string; url?: string; name?: string; size?: number }) => (
     <div key={attachment.id} className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-3" data-testid="message-attachment">
       <div className="flex items-center gap-2" data-testid="attachment-header">
         <div className="flex-shrink-0">
-          {attachment.type?.startsWith("image/") ? (
+          {attachment.type && attachment.type.startsWith("image/") ? (
             <img
               src={attachment.url}
               alt={attachment.name}
@@ -88,10 +87,11 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
         <div className="min-w-0 flex-1" data-testid="attachment-details">
           <p className="text-sm font-medium text-gray-900 truncate" data-testid="attachment-name">{attachment.name}</p>
           <p className="text-xs text-gray-500" data-testid="attachment-size">
-            {attachment.size ? `${(attachment.size / 1024).toFixed(1)} KB` : "Unknown size"}
+            {typeof attachment.size === 'number' ? `${(attachment.size / 1024).toFixed(1)} KB` : "Unknown size"}
           </p>
         </div>
         <button
+          type="button"
           onClick={() => handleFileDownload(attachment)}
           className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
           title="Download file"
@@ -117,8 +117,8 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
       {!isFromAgent && (
         <div className="flex-shrink-0" data-testid="message-avatar">
           <img
-            src={getAvatarPath(message.senderName, "customer")}
-            alt={message.senderName}
+            src={getAvatarPath(message.senderName || "", "customer")}
+            alt={message.senderName || "Customer"}
             className="h-8 w-8 rounded-ds-full object-cover"
           />
         </div>
@@ -150,18 +150,18 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
         {isFromAgent && (
           <div className="flex items-center justify-end mt-1">
             <span className="typography-metadata flex items-center gap-1 text-xs text-gray-500">
-              {(message as unknown).read_status === 'sending' && <span className="animate-pulse">Sending...</span>}
-              {(message as unknown).read_status === 'sent' && <span>✓</span>}
-              {(message as unknown).read_status === 'delivered' && <span>✓✓</span>}
+              {(message as any).read_status === 'sending' && <span className="animate-pulse">Sending...</span>}
+              {(message as any).read_status === 'sent' && <span>✓</span>}
+              {(message as any).read_status === 'delivered' && <span>✓✓</span>}
               {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
         )}
 
         {/* Message reactions display */}
-        {(message as unknown).reactions && (message as unknown).reactions.length > 0 && (
+        {Array.isArray((message as any).reactions) && (message as any).reactions.length > 0 && (
           <div className={`flex items-center gap-1 mt-1 ${isFromAgent ? "justify-end" : "justify-start"}`}>
-            {(message as unknown).reactions.map((reaction: unknown, index: number) => (
+            {(message as any).reactions.map((reaction: any, index: number) => (
               <button
                 key={index}
                 className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-full text-xs transition-colors"
@@ -177,6 +177,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
         {/* Message actions */}
         <div className={`flex items-center gap-1 mt-1 ${isFromAgent ? "justify-end" : "justify-start"}`} data-testid="message-actions">
           <button
+            type="button"
             onClick={() => onReply?.(message)}
             className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Reply"
@@ -185,6 +186,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             <CornerUpLeft className="h-3 w-3" />
           </button>
           <button
+            type="button"
             onClick={() => onReact?.(message.id, "like")}
             className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Like"
@@ -193,6 +195,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             <ThumbsUp className="h-3 w-3" />
           </button>
           <button
+            type="button"
             onClick={() => onReact?.(message.id, "heart")}
             className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Heart"
@@ -201,6 +204,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             <Heart className="h-3 w-3" />
           </button>
           <button
+            type="button"
             onClick={() => onShare?.(message)}
             className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="Share"
@@ -209,6 +213,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             <Share className="h-3 w-3" />
           </button>
           <button
+            type="button"
             onClick={() => setShowMessageMenu(!showMessageMenu)}
             className="hover:text-foreground rounded p-1 text-gray-400 transition-colors"
             title="More options"
@@ -231,7 +236,8 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
           <div className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-3 shadow-card-base" data-testid="message-reactions-panel">
             <div className="flex items-center gap-2" data-testid="reactions-panel-header">
               <span className="text-sm font-medium text-gray-900">Add reaction</span>
-              <button
+                <button
+                  type="button"
                 onClick={() => setShowReactions(false)}
                 className="ml-auto hover:bg-background rounded p-1 text-gray-400 transition-colors"
                 data-testid="close-reactions"
@@ -242,6 +248,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
             <div className="flex items-center gap-2 mt-2" data-testid="reactions-options">
               {["👍", "❤️", "😊", "🎉", "👏", "🔥"].map((emoji) => (
                 <button
+                  type="button"
                   key={emoji}
                   onClick={() => {
                     onReact?.(message.id, emoji);
@@ -262,6 +269,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
           <div className="bg-background mt-2 rounded-ds-lg border border-[var(--fl-color-border)] p-3 shadow-card-base" data-testid="message-menu">
             <div className="space-y-1" data-testid="message-menu-options">
               <button
+                type="button"
                 onClick={() => {
                   onReply?.(message);
                   setShowMessageMenu(false);
@@ -272,6 +280,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
                 Reply
               </button>
               <button
+                type="button"
                 onClick={() => {
                   onShare?.(message);
                   setShowMessageMenu(false);
@@ -282,6 +291,7 @@ export const MessageRow: React.FC<MessageRowProps> = memo(({
                 Share
               </button>
               <button
+                type="button"
                 onClick={() => setShowMessageMenu(false)}
                 className="hover:bg-background rounded p-2 text-sm transition-colors w-full text-left"
                 data-testid="menu-cancel"
