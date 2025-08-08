@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
 import { UNIFIED_EVENTS, UNIFIED_CHANNELS } from "@/lib/realtime/unified-channel-standards";
 
 interface TypingIndicatorProps {
@@ -30,7 +30,7 @@ export function AdvancedTypingIndicator({
 
   useEffect(() => {
     // Use direct Supabase subscription with UNIFIED_EVENTS
-    const supabase = createClientComponentClient();
+    const supabase = consolidatedSupabase.browser();
     const channel = supabase.channel(UNIFIED_CHANNELS.conversationTyping(organizationId, conversationId));
 
     // Subscribe to typing start events

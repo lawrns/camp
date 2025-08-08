@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from '@supabase/ssr';
 import { User } from '@supabase/supabase-js';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { Card, CardContent } from '@/components/ui/card';

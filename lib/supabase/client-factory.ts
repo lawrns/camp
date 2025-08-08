@@ -11,7 +11,7 @@
 import type { Database } from "@/types/supabase";
 import { createBrowserClient as createSSRBrowserClient, createServerClient as createSSRServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseJSClient } from "@supabase/supabase-js";
-import { createServerComponentClient as createAuthHelpersServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import removed: migrate off '@supabase/auth-helpers-nextjs'
 
 // Client types
 export type ClientType = 'browser' | 'widget' | 'service' | 'server' | 'server-component';
@@ -281,9 +281,7 @@ const createServerComponentClient = (config: ClientConfig): ClientResult => {
   try {
     const instanceId = generateInstanceId('server-component');
     
-    const client = createAuthHelpersServerComponentClient<Database>({ 
-      cookies: () => config.cookies || { getAll: () => [], setAll: () => {} }
-    });
+    const client = createSSRServerClient<Database>(getEnvVars().url, getEnvVars().anonKey, { cookies: { getAll() { return config.cookies?.getAll?.() || []; }, setAll(cookiesToSet: any[]) { try { cookiesToSet.forEach(({ name, value, options }) => { config.cookies?.set?.(name, value, options); }); } catch {} } } });
     
     clientRegistry.set(instanceId, client);
     

@@ -6,7 +6,7 @@
  * proper Row Level Security (RLS) and organization isolation.
  */
 
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createRouteHandlerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase/consolidated-exports';
 import { validateOrganizationId, validateUserId } from '@/lib/utils/validation';

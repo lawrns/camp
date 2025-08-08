@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Realtime Connection Test</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Supabase Realtime Connection Test</h1>
+    <div id="status">Initializing...</div>
+    <div id="log"></div>
+    
+    <script>
+        const log = (message) => {
+            console.log(message);
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += '<div>' + new Date().toISOString() + ': ' + message + '</div>';
+        };
+        
+        const updateStatus = (status) => {
+            document.getElementById('status').textContent = status;
+            log('Status: ' + status);
+        };
+        
+        async function testRealtimeConnection() {
+            try {
+                updateStatus('Creating Supabase client...');
+                
+                const { createClient } = supabase;
+                const client = createClient(
+                    'https://yvntokkncxbhapqjesti.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2bnRva2tuY3hiaGFwcWplc3RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0ODUxNTQsImV4cCI6MjA2MDA2MTE1NH0.iJ4C4AHk0bfBmISvbSekGIAXn7puFL0lGbBwqBd6XTs',
+                    {
+                        realtime: {
+                            params: {
+                                eventsPerSecond: 10,
+                                apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2bnRva2tuY3hiaGFwcWplc3RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0ODUxNTQsImV4cCI6MjA2MDA2MTE1NH0.iJ4C4AHk0bfBmISvbSekGIAXn7puFL0lGbBwqBd6XTs',
+                                log_level: 'debug',
+                                vsn: '1.0.0'
+                            },
+                            heartbeatIntervalMs: 25000,
+                            reconnectAfterMs: function(tries) { return Math.min(tries * 1000, 30000); },
+                            timeout: 15000
+                        }
+                    }
+                );
+                
+                updateStatus('Creating channel...');
+                const channelName = 'test-browser-' + Date.now();
+                log('Channel name: ' + channelName);
+                
+                const channel = client.channel(channelName, {
+                    config: { broadcast: { self: true } }
+                });
+                
+                let connected = false;
+                let timeout;
+                
+                channel.on('broadcast', { event: 'test' }, function(payload) {
+                    log('✅ Broadcast received: ' + JSON.stringify(payload));
+                    connected = true;
+                    updateStatus('SUCCESS: Realtime connection working!');
+                    clearTimeout(timeout);
+                    client.removeChannel(channel);
+                });
+                
+                updateStatus('Subscribing to channel...');
+                channel.subscribe(function(status) {
+                    log('📡 Channel status: ' + status);
+                    if (status === 'SUBSCRIBED') {
+                        updateStatus('Subscribed! Sending test broadcast...');
+                        log('🚀 Sending test broadcast...');
+                        channel.send({
+                            type: 'broadcast',
+                            event: 'test',
+                            payload: { message: 'Hello from browser test', timestamp: Date.now() }
+                        });
+                    } else if (status === 'CHANNEL_ERROR') {
+                        updateStatus('❌ Channel error occurred');
+                        log('❌ Channel error occurred');
+                        clearTimeout(timeout);
+                    } else if (status === 'TIMED_OUT') {
+                        updateStatus('❌ Channel subscription timed out');
+                        log('❌ Channel subscription timed out');
+                        clearTimeout(timeout);
+                    }
+                });
+                
+                timeout = setTimeout(function() {
+                    if (!connected) {
+                        updateStatus('❌ Realtime connection test failed - timeout after 15s');
+                        log('❌ Realtime connection test failed - timeout after 15s');
+                        client.removeChannel(channel);
+                    }
+                }, 15000);
+                
+            } catch (error) {
+                updateStatus('❌ Error: ' + error.message);
+                log('❌ Error: ' + error.message);
+                console.error('Full error:', error);
+            }
+        }
+        
+        // Start test when page loads
+        window.addEventListener('load', testRealtimeConnection);
+    </script>
+</body>
+</html>

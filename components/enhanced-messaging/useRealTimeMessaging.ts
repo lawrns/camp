@@ -10,7 +10,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
 import { MessageData } from './EnhancedMessageBubble';
 import { TypingUser, PresenceUser } from './PresenceIndicator';
 import { Notification } from './NotificationSystem';
@@ -49,7 +49,7 @@ export interface RealTimeMessagingActions {
 }
 
 export function useRealTimeMessaging(config: RealTimeMessagingConfig) {
-  const supabase = createClientComponentClient();
+  const supabase = consolidatedSupabase.browser();
   
   // State
   const [state, setState] = useState<RealTimeMessagingState>({

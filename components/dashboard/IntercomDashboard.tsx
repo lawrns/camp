@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics';
 import { useOrganizationMembers } from '@/hooks/useOrganizationMembers';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { supabase as consolidatedSupabase } from '@/lib/supabase/consolidated-exports';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { Card, CardContent } from '@/components/ui/card';
 import { IntercomMetricCard } from './IntercomMetricCard';
@@ -72,7 +72,7 @@ export function IntercomDashboard() {
     if (!user?.organizationId) return;
 
     try {
-      const supabaseClient = createClientComponentClient();
+      const supabaseClient = consolidatedSupabase.browser();
       
       // Get recent conversations
       const { data: recentConversations } = await supabaseClient
