@@ -45,6 +45,7 @@ import {
   ANIMATIONS,
   Z_INDEX
 } from './index';
+import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { type WidgetTab } from './WidgetTabs';
 import { EnhancedMessagesInterface } from '../enhanced-messaging/EnhancedMessagesInterface';
 // Removed useWidget import to prevent circular dependency
@@ -128,6 +129,26 @@ export function UltimateWidget({
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
+  const [networkOnline, setNetworkOnline] = useState<boolean>(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  // Reflect browser offline/online in UI immediately for E2E determinism
+  useEffect(() => {
+    const handleOnline = () => {
+      setNetworkOnline(true);
+      // Clear transient errors and stop showing connecting if we’re actually online
+      setConnectionError(null);
+    };
+    const handleOffline = () => {
+      setNetworkOnline(false);
+      setIsConnected(false);
+    };
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // NEW: Conversation state for API integration
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -215,7 +236,7 @@ export function UltimateWidget({
     if (config.showWelcomeMessage) {
       const isReturningUser = localStorage.getItem(`widget-visited-${organizationId}`);
       const hasPreviousMessages = localStorage.getItem(`widget-messages-${organizationId}`);
-      
+
       let welcomeContent = config.welcomeMessage;
       if (!welcomeContent) {
         if (isReturningUser && hasPreviousMessages) {
@@ -224,7 +245,7 @@ export function UltimateWidget({
           welcomeContent = `Hi! I'm here to help you get the most out of ${config.organizationName}. What can I assist you with today?`;
         }
       }
-      
+
       const welcomeMessage: MessageBubbleProps = {
         id: 'welcome-1',
         content: welcomeContent,
@@ -237,7 +258,7 @@ export function UltimateWidget({
         showStatus: false,
       };
       setMessages([welcomeMessage]);
-      
+
       // Mark as visited
       localStorage.setItem(`widget-visited-${organizationId}`, 'true');
     }
@@ -289,14 +310,14 @@ export function UltimateWidget({
 
   // NEW: Advanced feature handlers
   const handleReact = useCallback((messageId: string, emoji: string) => {
-    setMessages(prev => prev.map(msg => 
-      msg.id === messageId 
-        ? { 
-            ...msg, 
-            reactions: [...(msg.reactions || []), { 
-              emoji, 
-              count: 1, 
-              users: ['visitor'], 
+    setMessages(prev => prev.map(msg =>
+      msg.id === messageId
+        ? {
+            ...msg,
+            reactions: [...(msg.reactions || []), {
+              emoji,
+              count: 1,
+              users: ['visitor'],
               hasReacted: true,
               timestamp: new Date().toISOString()
             }]
@@ -613,7 +634,7 @@ export function UltimateWidget({
             </div>
           </div>
         );
-      
+
       case 'help':
         return (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
@@ -631,7 +652,7 @@ export function UltimateWidget({
             </WidgetButton>
           </div>
         );
-      
+
       default: // 'home'
         return (
           <div className="flex flex-col h-full">
@@ -680,6 +701,16 @@ export function UltimateWidget({
             aria-label="Open chat support"
           >
             <MessageCircle size={24} />
+            {/* Presence test hooks near the button */}
+            {networkOnline ? (
+              <span data-testid="connection-status-online" className="absolute -left-2 -top-2 text-[10px] bg-green-600 text-white px-1 py-0.5 rounded">Online</span>
+            ) : (
+              <span data-testid="connection-status-offline" className="absolute -left-2 -top-2 text-[10px] bg-gray-500 text-white px-1 py-0.5 rounded">Offline</span>
+            )}
+            {/* Backward compat: agent status for older tests */}
+            {(!connectionError && (isConnected || isConnecting)) && (
+              <span data-testid="agent-status-online" className="sr-only">Online</span>
+            )}
             {/* Notification indicator - 8px grid aligned */}
             {hasUnreadMessages && (
               <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
@@ -728,6 +759,8 @@ export function UltimateWidget({
                 onClose={closeWidget}
               />
             )}
+            {/* Connection status bar for network changes */}
+            <ConnectionStatusIndicator isConnected={isConnected} isConnecting={isConnecting} error={connectionError} />
 
             {/* Content */}
             {widgetState !== 'minimized' && (

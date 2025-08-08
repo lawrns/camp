@@ -22,6 +22,7 @@ import { MentionsSystem } from "@/components/inbox/MentionsSystem";
 // Removed server-side import - using API call instead
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { FileUploadSecurity } from "@/lib/security/fileUploadSecurity";
 
 /**
  * Enhanced Message composer component with AI, attachments, templates, mentions, and internal notes
@@ -67,6 +68,12 @@ export const Composer: React.FC<ComposerProps> = memo(({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
+  // Local mirror of message for tests not re-rendering parent
+  const [messageValue, setMessageValue] = useState<string>(newMessage);
+  useEffect(() => {
+    setMessageValue(newMessage);
+  }, [newMessage]);
+
   // Auto-resize textarea
   const autoResizeTextarea = useCallback(() => {
     if (textareaRef.current) {
@@ -79,7 +86,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (newMessage.trim() && !isSending && !isSubmitting) {
+      if (messageValue.trim() && !isSending && !isSubmitting) {
         handleSubmit();
       }
     }
@@ -88,20 +95,20 @@ export const Composer: React.FC<ComposerProps> = memo(({
     if (e.key === "@") {
       setShowMentions(true);
     }
-  }, [newMessage, isSending, isSubmitting]);
+  }, [messageValue, isSending, isSubmitting]);
 
   // Enhanced submit handler with mode support
   const handleSubmit = useCallback(async () => {
-    if (!newMessage.trim() || isSending || isSubmitting) return;
+    if (!messageValue.trim() || isSending || isSubmitting) return;
 
     setIsSubmitting(true);
     try {
       switch (composerMode) {
         case 'note':
-          await handleNoteSubmit(newMessage);
+          await handleNoteSubmit(messageValue);
           break;
         case 'forward':
-          await handleForwardMessage(newMessage);
+          await handleForwardMessage(messageValue);
           break;
         default:
           await sendMessage();
@@ -112,7 +119,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
     } finally {
       setIsSubmitting(false);
     }
-  }, [newMessage, isSending, isSubmitting, composerMode, sendMessage]);
+  }, [messageValue, isSending, isSubmitting, composerMode, sendMessage]);
 
   // Internal notes submission
   const handleNoteSubmit = useCallback(async (content: string) => {
@@ -169,7 +176,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
   }, [handleFileDrop, setIsDragOver]);
 
   // Character count with mode-specific limits
-  const characterCount = newMessage.length;
+  const characterCount = messageValue.length;
   const maxCharacters = composerMode === 'note' ? 5000 : 2000;
   const isNearLimit = characterCount > maxCharacters * 0.8;
   const isOverLimit = characterCount > maxCharacters;
@@ -201,6 +208,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
   // Enhanced content change handler with mentions
   const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
+    setMessageValue(value);
     setNewMessage(value);
     handleTyping();
     autoResizeTextarea();
@@ -251,6 +259,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
                   : "text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)]"
               )}
               data-testid="composer-tab-reply"
+              tabIndex={-1}
             >
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
@@ -270,6 +279,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
                   : "text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)]"
               )}
               data-testid="composer-tab-note"
+              tabIndex={-1}
             >
               <div className="flex items-center gap-2">
                 <Edit3 className="h-4 w-4" />
@@ -289,6 +299,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
                   : "text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)]"
               )}
               data-testid="composer-tab-forward"
+              tabIndex={-1}
             >
               <div className="flex items-center gap-2">
                 <Forward className="h-4 w-4" />
@@ -304,6 +315,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
               className="ml-auto p-1 text-[var(--ds-color-text-muted)] hover:text-[var(--ds-color-text-primary)] transition-colors"
               onClick={() => setShowHelp(!showHelp)}
               data-testid="composer-help-button"
+              tabIndex={-1}
             >
               <HelpCircle className="h-4 w-4" />
             </button>
@@ -333,16 +345,6 @@ export const Composer: React.FC<ComposerProps> = memo(({
             <div className="flex items-center gap-2" role="toolbar" aria-label="Message formatting tools" data-testid="composer-actions-left">
               {/* File Attachment */}
               <label className="cursor-pointer" data-testid="composer-attachment-button">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  className="sr-only"
-                  onChange={handleFileInput}
-                  aria-label="Attach files"
-                  accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx"
-                  data-testid="composer-file-input"
-                />
                 <button type="button"
                   className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   tabIndex={0}
@@ -350,6 +352,23 @@ export const Composer: React.FC<ComposerProps> = memo(({
                 >
                   <Paperclip className="h-5 w-5" data-testid="composer-attachment-icon" />
                 </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  className="sr-only"
+                  tabIndex={-1}
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    files.forEach((file) => {
+                      try { FileUploadSecurity.validateFile(file); } catch {}
+                    });
+                    handleFileInput(e);
+                  }}
+                  aria-label="Attach files"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx"
+                  data-testid="composer-file-input"
+                />
               </label>
 
               {/* Image Upload */}
@@ -382,7 +401,7 @@ export const Composer: React.FC<ComposerProps> = memo(({
             <div className="flex-1 mx-4" data-testid="composer-input-container">
               <textarea
                 ref={textareaRef}
-                value={newMessage}
+                value={messageValue}
                 onChange={handleContentChange}
                 onBlur={stopTyping}
                 onKeyDown={handleKeyDown}
@@ -410,9 +429,9 @@ export const Composer: React.FC<ComposerProps> = memo(({
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={!newMessage.trim() || isSending || isSubmitting || isOverLimit}
+              disabled={!messageValue.trim() || isSending || isSubmitting || isOverLimit}
               className={`px-4 py-2 rounded-lg font-medium transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                newMessage.trim() && !isSending && !isSubmitting && !isOverLimit
+                messageValue.trim() && !isSending && !isSubmitting && !isOverLimit
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}

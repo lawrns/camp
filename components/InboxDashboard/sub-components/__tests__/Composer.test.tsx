@@ -10,13 +10,13 @@ jest.mock('@/hooks/useAuth', () => ({
   })
 }));
 
-// Mock file upload security
-const mockValidateFile = jest.fn();
+// Mock file upload security (avoid hoist init issues)
 jest.mock('@/lib/security/fileUploadSecurity', () => ({
   FileUploadSecurity: {
-    validateFile: mockValidateFile
+    validateFile: jest.fn()
   }
 }));
+const { FileUploadSecurity } = jest.requireMock('@/lib/security/fileUploadSecurity');
 
 const mockProps = {
   newMessage: '',
@@ -110,7 +110,7 @@ describe('Composer Component', () => {
     });
 
     it('validates file types and size limits', async () => {
-      mockValidateFile.mockReturnValue({
+      FileUploadSecurity.validateFile.mockReturnValue({
         isValid: false,
         errors: ['File type not allowed'],
         warnings: []
@@ -123,11 +123,11 @@ describe('Composer Component', () => {
 
       await userEvent.upload(fileInput, file);
 
-      expect(mockValidateFile).toHaveBeenCalledWith(file);
+      expect(FileUploadSecurity.validateFile).toHaveBeenCalledWith(file);
     });
 
     it('accepts valid file types', async () => {
-      mockValidateFile.mockReturnValue({
+      FileUploadSecurity.validateFile.mockReturnValue({
         isValid: true,
         errors: [],
         warnings: []
@@ -140,7 +140,7 @@ describe('Composer Component', () => {
 
       await userEvent.upload(fileInput, file);
 
-      expect(mockValidateFile).toHaveBeenCalledWith(file);
+      expect(FileUploadSecurity.validateFile).toHaveBeenCalledWith(file);
       expect(mockProps.handleFileInput).toHaveBeenCalled();
     });
   });
@@ -270,7 +270,7 @@ describe('Composer Component', () => {
     });
 
     it('handles file upload errors gracefully', async () => {
-      mockValidateFile.mockReturnValue({
+      FileUploadSecurity.validateFile.mockReturnValue({
         isValid: false,
         errors: ['File too large'],
         warnings: []
@@ -284,7 +284,7 @@ describe('Composer Component', () => {
       await userEvent.upload(fileInput, largeFile);
 
       // Should show error message (implementation depends on error handling UI)
-      expect(mockValidateFile).toHaveBeenCalledWith(largeFile);
+      expect(FileUploadSecurity.validateFile).toHaveBeenCalledWith(largeFile);
     });
   });
 

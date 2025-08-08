@@ -252,6 +252,15 @@ test.describe('Bidirectional Communication E2E', () => {
   test('should handle presence updates bidirectionally', async () => {
     test.setTimeout(TEST_TIMEOUT);
 
+    // Ensure widget is loaded and visible on customer page
+    const widgetLoaded = await testContext.customerPage.locator('[data-testid="widget-message-input"]').count();
+    if (widgetLoaded === 0) {
+      await testContext.customerPage.goto('/');
+      await testContext.customerPage.waitForLoadState('networkidle');
+      await testContext.customerPage.click('[data-testid="widget-button"]');
+      await testContext.customerPage.waitForSelector('[data-testid="widget-panel"]');
+    }
+
     // ========================================
     // 1. VERIFY AGENT ONLINE STATUS
     // ========================================
@@ -326,6 +335,15 @@ test.describe('Bidirectional Communication E2E', () => {
 
   test('should handle connection interruption and recovery', async () => {
     test.setTimeout(TEST_TIMEOUT);
+
+    // Ensure widget is loaded and visible on customer page
+    const hasInput = await testContext.customerPage.locator('[data-testid="widget-message-input"]').count();
+    if (hasInput === 0) {
+      await testContext.customerPage.goto('/');
+      await testContext.customerPage.waitForLoadState('networkidle');
+      await testContext.customerPage.click('[data-testid="widget-button"]');
+      await testContext.customerPage.waitForSelector('[data-testid="widget-panel"]');
+    }
 
     // ========================================
     // 1. SIMULATE CONNECTION INTERRUPTION

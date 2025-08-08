@@ -64,7 +64,7 @@ export default function KnowledgePage() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   // Real tRPC queries
-  const { data: documentsData, isLoading: documentsLoading, refetch: refetchDocuments } = api.mailbox.knowledge.list.useQuery(
+  const { data: documentsData, isLoading: documentsLoading } = api.mailbox.knowledge.list.useQuery(
     {
       mailboxSlug: "test-mailbox-dev",
       search: searchTerm || undefined,
@@ -90,7 +90,7 @@ export default function KnowledgePage() {
   );
 
   // Transform API data to component format
-  const documents: KnowledgeDocument[] = (documentsData?.documents || []).map(doc => ({
+  const documents: KnowledgeDocument[] = (documentsData?.documents || []).map((doc: any) => ({
     id: doc.id,
     title: doc.title,
     content: doc.content,
@@ -246,9 +246,7 @@ export default function KnowledgePage() {
     // setDocuments(prev => [newDoc, ...prev]); // This line was removed as per the edit hint
   };
 
-  const handleDeleteDocument = (documentId: string) => {
-    // setDocuments(prev => prev.filter(doc => doc.id !== documentId)); // This line was removed as per the edit hint
-  };
+  const handleDeleteDocument = (_documentId: string) => {};
 
   if (loading) {
     return (

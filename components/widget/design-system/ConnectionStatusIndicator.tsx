@@ -65,7 +65,12 @@ export function ConnectionStatusIndicator({
   const statusConfig = getStatusConfig();
 
   if (!statusConfig) {
-    return null;
+    // When connected, expose a visible test hook for presence
+    return (
+      <div className="px-4 py-1 text-center">
+        <span data-testid="connection-status-online" className="inline-block text-xs text-green-600">online</span>
+      </div>
+    );
   }
 
   return (
@@ -82,6 +87,13 @@ export function ConnectionStatusIndicator({
           className
         )}
       >
+        {/* E2E hooks for connection status */}
+        {!isConnected && !isConnecting && !error && (
+          <span data-testid="connection-status-offline" className="sr-only">offline</span>
+        )}
+        {isConnecting && (
+          <span data-testid="connection-status-connecting" className="sr-only">connecting</span>
+        )}
         <div className="flex items-center justify-center space-x-2">
           <motion.div
             animate={isConnecting ? { scale: [1, 1.2, 1] } : {}}

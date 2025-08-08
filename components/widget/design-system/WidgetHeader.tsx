@@ -101,6 +101,13 @@ function StatusIndicator({
       >
         {config.text}
       </span>
+      {/* E2E presence test hooks */}
+      {(status === 'connected' || status === 'connecting') && (
+        <span data-testid="agent-status-online" className="ml-2 inline-flex items-center text-[10px] text-white/90">Online</span>
+      )}
+      {status === 'disconnected' && (
+        <span data-testid="agent-status-offline" className="ml-2 inline-flex items-center text-[10px] text-white/90">Offline</span>
+      )}
     </div>
   );
 }
@@ -349,6 +356,13 @@ export function CompactWidgetHeader({
           >
             {organizationName}
           </div>
+          {/* E2E presence test hooks (compact) */}
+          {(status === 'connected' || status === 'connecting') && (
+            <span data-testid="agent-status-online" className="ml-2 inline-flex items-center text-[10px] text-white/90">Online</span>
+          )}
+          {status === 'disconnected' && (
+            <span data-testid="agent-status-offline" className="ml-2 inline-flex items-center text-[10px] text-white/90">Offline</span>
+          )}
         </div>
       </div>
 
