@@ -6,6 +6,7 @@ import { AuthProviders } from './app-backup/client-providers';
 import { initializeMonitoring } from '@/lib/monitoring/init';
 import type { Metadata } from 'next';
 import { ClientConsoleManager } from '@/components/system/ClientConsoleManager';
+import { DevOverlayDisabler } from '@/components/system/DevOverlayDisabler';
 
 // Initialize monitoring for production
 if (typeof window !== 'undefined') {
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ClientConsoleManager />
+        <DevOverlayDisabler />
         <ThemeProvider>
           <AuthProviders>
             <ConditionalNavigation />

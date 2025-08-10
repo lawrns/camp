@@ -80,6 +80,25 @@ export default defineConfig({
     extraHTTPHeaders: {
       'Accept-Language': 'en-US,en;q=0.9',
     },
+
+    /* Environment variables for E2E testing */
+    launchOptions: {
+      env: {
+        DISABLE_DEV_OVERLAY: 'true',
+        E2E_TESTING: 'true',
+        NEXT_PUBLIC_E2E_TESTING: 'true',
+      },
+      // Additional Chrome flags to prevent overlay interference
+      args: [
+        '--disable-dev-shm-usage',
+        '--disable-extensions',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--disable-features=TranslateUI',
+        '--disable-ipc-flooding-protection',
+      ],
+    },
   },
 
   /* Configure projects for major browsers */
@@ -178,12 +197,14 @@ export default defineConfig({
 
   /* Enable web server for testing */
   webServer: {
-    command: 'E2E_MOCK=true NEXT_PUBLIC_E2E_MOCK=true NEXT_PUBLIC_SUPABASE_URL=http://localhost:1234 NEXT_PUBLIC_SUPABASE_ANON_KEY=test-key npm run dev',
+    command: 'DISABLE_DEV_OVERLAY=true E2E_MOCK=true NEXT_PUBLIC_E2E_MOCK=true NEXT_PUBLIC_SUPABASE_URL=http://localhost:1234 NEXT_PUBLIC_SUPABASE_ANON_KEY=test-key npm run dev',
     url: 'http://localhost:3001',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {
       NODE_ENV: 'test',
+      DISABLE_DEV_OVERLAY: 'true', // Disable NextJS dev overlay for E2E tests
+      E2E_TESTING: 'true', // Flag to indicate E2E testing mode
       NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:1234',
       NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-key',
     },

@@ -157,12 +157,14 @@
     "version": "1.54.1",
     "workers": 1,
     "webServer": {
-      "command": "E2E_MOCK=true NEXT_PUBLIC_E2E_MOCK=true NEXT_PUBLIC_SUPABASE_URL=http://localhost:1234 NEXT_PUBLIC_SUPABASE_ANON_KEY=test-key npm run dev",
+      "command": "DISABLE_DEV_OVERLAY=true E2E_MOCK=true NEXT_PUBLIC_E2E_MOCK=true NEXT_PUBLIC_SUPABASE_URL=http://localhost:1234 NEXT_PUBLIC_SUPABASE_ANON_KEY=test-key npm run dev",
       "url": "http://localhost:3001",
       "reuseExistingServer": true,
       "timeout": 120000,
       "env": {
         "NODE_ENV": "test",
+        "DISABLE_DEV_OVERLAY": "true",
+        "E2E_TESTING": "true",
         "NEXT_PUBLIC_SUPABASE_URL": "http://localhost:1234",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY": "test-key"
       }
@@ -191,7 +193,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22523,
+                  "duration": 3456,
                   "errors": [],
                   "stdout": [
                     {
@@ -215,7 +217,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-08-10T00:21:32.481Z",
+                  "startTime": "2025-08-10T00:44:21.293Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -231,21 +233,21 @@
       ]
     },
     {
-      "title": "tests/widget-simple.spec.ts",
-      "file": "tests/widget-simple.spec.ts",
+      "title": "tests/dev-overlay-solution-test.spec.ts",
+      "file": "tests/dev-overlay-solution-test.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Widget Simple Test",
-          "file": "tests/widget-simple.spec.ts",
-          "line": 3,
+          "title": "Dev Overlay Solution Test",
+          "file": "tests/dev-overlay-solution-test.spec.ts",
+          "line": 9,
           "column": 6,
           "specs": [
             {
-              "title": "should open widget and send message",
-              "ok": true,
+              "title": "should verify dashboard access with overlay disabler",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -258,23 +260,73 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2417,
-                      "errors": [],
-                      "stdout": [],
+                      "status": "failed",
+                      "duration": 2921,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"/dashboard/inbox\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3001/login\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"/dashboard/inbox\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3001/login\"\u001b[39m\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dev-overlay-solution-test.spec.ts:141:24",
+                        "location": {
+                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dev-overlay-solution-test.spec.ts",
+                          "column": 24,
+                          "line": 141
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 139 |\u001b[39m     \n \u001b[90m 140 |\u001b[39m     \u001b[90m// The test passes if we can access the dashboard without overlay interference\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 141 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'/dashboard/inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 142 |\u001b[39m     \n \u001b[90m 143 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ Dashboard access test completed'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 144 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dev-overlay-solution-test.spec.ts",
+                            "column": 24,
+                            "line": 141
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"/dashboard/inbox\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3001/login\"\u001b[39m\n\n\u001b[0m \u001b[90m 139 |\u001b[39m     \n \u001b[90m 140 |\u001b[39m     \u001b[90m// The test passes if we can access the dashboard without overlay interference\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 141 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'/dashboard/inbox'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 142 |\u001b[39m     \n \u001b[90m 143 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m'✅ Dashboard access test completed'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 144 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dev-overlay-solution-test.spec.ts:141:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 Testing dashboard access with dev overlay disabler\n"
+                        },
+                        {
+                          "text": "📍 Dashboard URL: http://localhost:3001/login\n"
+                        },
+                        {
+                          "text": "📊 Dashboard elements found: {\n  hasInboxDashboard: \u001b[33mfalse\u001b[39m,\n  hasConversationList: \u001b[33mfalse\u001b[39m,\n  hasSearchInput: \u001b[33mfalse\u001b[39m,\n  hasFilterButtons: \u001b[33mfalse\u001b[39m,\n  hasStatusDropdown: \u001b[33mfalse\u001b[39m,\n  bodyText: \u001b[32m'Welcome to Campfire\\n'\u001b[39m +\n    \u001b[32m'\\n'\u001b[39m +\n    \u001b[32m'Sign in to your account to access the AI-powered support platform\\n'\u001b[39m +\n    \u001b[32m'\\n'\u001b[39m +\n    \u001b[32m'Email\\n'\u001b[39m +\n    \u001b[32m'Password\\n'\u001b[39m +\n    \u001b[32m'Sign In\\n'\u001b[39m +\n    \u001b[32m\"Don't have an account? Sign up\"\u001b[39m\n}\n"
+                        }
+                      ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-10T00:21:55.621Z",
+                      "startTime": "2025-08-10T00:44:25.276Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dev-overlay-solution-2cf14-ccess-with-overlay-disabler-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dev-overlay-solution-2cf14-ccess-with-overlay-disabler-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dev-overlay-solution-2cf14-ccess-with-overlay-disabler-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dev-overlay-solution-test.spec.ts",
+                        "column": 24,
+                        "line": 141
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "7eb290c96b4ed4b7b648-e6f98c1d6e8497fd5e32",
-              "file": "tests/widget-simple.spec.ts",
-              "line": 4,
+              "id": "8c1cec367d904a3e2f83-e760a82e1eb027a1bd79",
+              "file": "tests/dev-overlay-solution-test.spec.ts",
+              "line": 105,
               "column": 7
             }
           ]
@@ -284,11 +336,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-10T00:21:31.989Z",
-    "duration": 26178.426000000003,
-    "expected": 2,
+    "startTime": "2025-08-10T00:44:13.697Z",
+    "duration": 14694.11,
+    "expected": 1,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

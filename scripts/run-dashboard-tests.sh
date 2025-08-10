@@ -69,11 +69,18 @@ run_e2e_tests() {
     echo ""
     echo "🌐 Running Dashboard E2E Tests"
     echo "==============================="
-    
+
+    # Set environment variables to disable dev overlay
+    export DISABLE_DEV_OVERLAY=true
+    export E2E_TESTING=true
+    export NEXT_PUBLIC_E2E_TESTING=true
+
+    print_status "INFO" "Environment configured for E2E testing (dev overlay disabled)"
+
     # Check if server is running
     if ! curl -s http://localhost:3001 > /dev/null; then
         print_status "WARNING" "Development server not running on port 3001"
-        print_status "INFO" "Please start the server with: npm run dev"
+        print_status "INFO" "Please start the server with: DISABLE_DEV_OVERLAY=true npm run dev"
         return 1
     fi
     

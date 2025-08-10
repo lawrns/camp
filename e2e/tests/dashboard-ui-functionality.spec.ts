@@ -4,16 +4,22 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { disableDevOverlay, forceClick } from '../utils/dev-overlay-disabler';
 
 test.describe('Dashboard UI Functionality', () => {
   
   // Helper function to login and navigate to dashboard
   const loginToDashboard = async (page: any) => {
+    // Apply dev overlay disabler first
+    await disableDevOverlay(page);
+
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
     await page.fill('[data-testid="email-input"]', 'jam@jam.com');
     await page.fill('[data-testid="password-input"]', 'password123');
-    await page.click('[data-testid="login-button"]');
+
+    // Use force click to bypass overlay interference
+    await forceClick(page, '[data-testid="login-button"]');
     await page.waitForLoadState('networkidle');
     await page.goto('/dashboard/inbox');
     await page.waitForLoadState('networkidle');

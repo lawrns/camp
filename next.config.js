@@ -109,6 +109,22 @@ const nextConfig = {
   
   // Webpack configuration
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // E2E TESTING FIX: Disable dev overlay webpack entries
+    if (dev && process.env.DISABLE_DEV_OVERLAY === 'true') {
+      // Remove dev overlay entries that cause pointer event interception
+      if (config.entry && typeof config.entry === 'object') {
+        Object.keys(config.entry).forEach(key => {
+          if (Array.isArray(config.entry[key])) {
+            config.entry[key] = config.entry[key].filter(entry =>
+              !entry.includes('next-dev') &&
+              !entry.includes('dev-overlay') &&
+              !entry.includes('error-overlay')
+            );
+          }
+        });
+      }
+    }
+
     // Add custom webpack configurations here
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -201,6 +217,16 @@ const nextConfig = {
   devIndicators: {
     position: 'bottom-right',
   },
+
+  // E2E TESTING FIX: Disable dev overlay when running E2E tests
+  // This prevents the NextJS dev overlay from intercepting pointer events
+  // and blocking Playwright interactions during testing
+  ...(process.env.DISABLE_DEV_OVERLAY === 'true' && {
+    devIndicators: {
+      buildActivity: false,
+      buildActivityPosition: 'bottom-right',
+    },
+  }),
   
   // SWC minification is now default in Next.js 15
   

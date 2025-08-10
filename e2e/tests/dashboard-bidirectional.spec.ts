@@ -4,6 +4,7 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { disableDevOverlay, forceClick } from '../utils/dev-overlay-disabler';
 
 test.describe('Dashboard Bidirectional Communication', () => {
   

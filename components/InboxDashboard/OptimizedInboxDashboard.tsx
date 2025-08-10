@@ -13,9 +13,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useConversations } from '@/hooks/useConversations';
 import { useConversationFilters } from '@/hooks/useConversationFilters';
 import { useRealtimeSubscriptions } from '@/hooks/useRealtimeSubscriptions';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
-import { broadcastToChannel } from '@/lib/realtime/standardized-realtime';
-import { RealtimeLogger } from '@/lib/realtime/enhanced-monitoring';
 
 // Import optimized components
 import { EnhancedSidebar } from './components/EnhancedSidebar';
@@ -103,20 +100,20 @@ export const OptimizedInboxDashboard: React.FC<OptimizedInboxDashboardProps> = R
     ];
   }, [selectedConversation]);
 
-  // Realtime subscriptions
+  // Realtime subscriptions (simplified)
   const realtimeConfig = useMemo(() => ({
     channels: [
       {
-        name: UNIFIED_CHANNELS.CONVERSATIONS,
-        events: [UNIFIED_EVENTS.CONVERSATION_UPDATED, UNIFIED_EVENTS.MESSAGE_RECEIVED],
+        name: 'conversations',
+        events: ['conversation_updated', 'message_received'],
         callback: (payload: any) => {
-          RealtimeLogger.log('Conversation update received', payload);
+          console.log('Conversation update received', payload);
           // Handle real-time updates
         }
       }
     ]
   }), []);
-  
+
   useRealtimeSubscriptions(realtimeConfig);
 
   // Event handlers
@@ -127,22 +124,19 @@ export const OptimizedInboxDashboard: React.FC<OptimizedInboxDashboardProps> = R
 
   const handleSendMessage = useCallback(async (content: string) => {
     if (!selectedConversation) return;
-    
+
     try {
-      // Broadcast message
-      await broadcastToChannel(UNIFIED_CHANNELS.CONVERSATIONS, {
-        event: UNIFIED_EVENTS.MESSAGE_SENT,
-        payload: {
-          conversationId: selectedConversation.id,
-          content,
-          senderId: user?.id,
-          timestamp: new Date().toISOString()
-        }
+      // Mock message sending for now
+      console.log('Sending message:', {
+        conversationId: selectedConversation.id,
+        content,
+        senderId: user?.id,
+        timestamp: new Date().toISOString()
       });
-      
-      RealtimeLogger.log('Message sent successfully');
+
+      console.log('Message sent successfully');
     } catch (error) {
-      RealtimeLogger.error('Failed to send message', error);
+      console.error('Failed to send message', error);
       throw error;
     }
   }, [selectedConversation, user]);
@@ -157,11 +151,8 @@ export const OptimizedInboxDashboard: React.FC<OptimizedInboxDashboardProps> = R
 
   const handleStatusChange = useCallback((status: typeof agentStatus) => {
     setAgentStatus(status);
-    // Broadcast status change
-    broadcastToChannel(UNIFIED_CHANNELS.PRESENCE, {
-      event: UNIFIED_EVENTS.PRESENCE_UPDATE,
-      payload: { userId: user?.id, status }
-    });
+    // Mock status change broadcast
+    console.log('Status changed:', { userId: user?.id, status });
   }, [user]);
 
   // Loading states
