@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '@/lib/realtime/unified-channel-standards';
 import { optionalWidgetAuth, getOrganizationId } from '@/lib/auth/widget-supabase-auth';
-import { createWidgetReadReceiptService } from '@/src/services/widgetReadReceiptService';
+import { createWidgetReadReceiptService } from '@/services/widgetReadReceiptService';
 
 // Widget read receipts API - handles message delivery tracking
 

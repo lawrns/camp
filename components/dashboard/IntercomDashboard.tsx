@@ -13,6 +13,7 @@ import { IntercomTimelineList } from './IntercomTimelineList';
 import { IntercomAlertStack } from './IntercomAlertStack';
 import { IntercomAgentPresencePanel } from './IntercomAgentPresencePanel';
 import { MemoryMonitor } from '@/components/MemoryMonitor';
+import { StatusDropdown } from './StatusDropdown';
 import { 
   ChatBubbleLeftRightIcon,
   ClockIcon,
@@ -419,9 +420,9 @@ export function IntercomDashboard() {
         "container-dashboard py-6 space-y-8 transition-opacity duration-500",
         isVisible ? "opacity-100" : "opacity-0"
       )}>
-        {/* Hero Metrics Section */}
-        <section className="space-y-6">
-          <div className="text-center space-y-2">
+        {/* Header with Status Dropdown */}
+        <section className="flex justify-between items-center">
+          <div className="text-center space-y-2 flex-1">
             <h1 className="text-3xl font-bold text-gray-900 font-heading">
               Welcome back, {user?.firstName || 'Agent'}
             </h1>
@@ -429,6 +430,19 @@ export function IntercomDashboard() {
               Here's what's happening with your team today
             </p>
           </div>
+          <div className="flex items-center gap-4">
+            <StatusDropdown
+              currentStatus="online"
+              onStatusChange={(status) => {
+                console.log('[Dashboard] Status changed to:', status);
+                // TODO: Implement real status update via Supabase Realtime
+              }}
+            />
+          </div>
+        </section>
+
+        {/* Hero Metrics Section */}
+        <section className="space-y-6">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {metricCards.map((metric, index) => (

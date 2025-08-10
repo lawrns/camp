@@ -6,6 +6,7 @@ import { safeMapConversations, mapDatabaseConversation } from "@/lib/data/conver
 import { cleanupRealtimeChannel } from "@/lib/realtime/cleanup-utils";
 import { conversationDebug, performanceTimer } from "@/lib/utils/debug";
 import { ComponentFetch } from "@/lib/utils/fetch-with-abort";
+import { shouldDisableRealtime } from "@/lib/utils/e2e";
 
 export interface ConversationFilters {
   status?: string;
@@ -162,6 +163,11 @@ export function useConversations(options: UseConversationsOptions = {}) {
   useEffect(() => {
     if (!organizationId) return;
 
+    // Skip realtime in E2E mode to avoid WebSocket errors
+    if (shouldDisableRealtime()) {
+      return; // UI falls back to polling via queries
+    }
+
     const channel = supabase
       .browser()
       .channel(`conversations:${organizationId}`)
@@ -261,12 +267,7 @@ export function useConversations(options: UseConversationsOptions = {}) {
       .subscribe();
 
     return () => {
-      // Use enhanced cleanup utility to prevent memory leaks
-      cleanupRealtimeChannel(channel, {
-        timeout: 3000, // 3 second timeout for unsubscribe
-        forceRemove: true, // Force remove if unsubscribe fails
-        logErrors: true, // Log cleanup process
-      });
+      cleanupRealtimeChannel(channel, { timeout: 1500, forceRemove: true, logErrors: false });
     };
   }, [queryClient, organizationId]);
 

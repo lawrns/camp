@@ -94,6 +94,10 @@ export type { Database } from "@/types/supabase";
 
 // Environment validation
 const validateSupabaseEnv = () => {
+  // Skip validation in E2E mock or test environments
+  if (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test') {
+    return;
+  }
   const requiredEnvVars = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"];
 
   const missing = requiredEnvVars.filter((envVar) => !process.env[envVar]);

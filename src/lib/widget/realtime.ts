@@ -104,7 +104,7 @@ export class WidgetRealtimeClient {
       },
       body: JSON.stringify({
         conversationId,
-        message: content,
+        content,
       }),
     });
 
@@ -168,8 +168,8 @@ export class WidgetRealtimeClient {
         },
       });
 
-    } catch (error) {
-
+    } catch (_error) {
+      // Intentionally ignore broadcast failures on widget
     }
   }
 
@@ -195,8 +195,8 @@ export class WidgetRealtimeClient {
         },
       });
 
-    } catch (error) {
-
+    } catch (_error) {
+      // Ignore typing broadcast failures
     }
   }
 
@@ -219,8 +219,8 @@ export class WidgetRealtimeClient {
         },
       });
 
-    } catch (error) {
-
+    } catch (_error) {
+      // Ignore read receipt broadcast failures
     }
   }
 }

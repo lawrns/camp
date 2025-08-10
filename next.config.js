@@ -191,9 +191,9 @@ const nextConfig = {
   // Compression
   compress: true,
   
-  // Power by header
-  poweredByHeader: false,
-  
+  // Powered by header is set once below.
+
+
   // React strict mode
   reactStrictMode: true,
 

@@ -178,13 +178,13 @@ export default defineConfig({
 
   /* Enable web server for testing */
   webServer: {
-    command: 'npm run dev',
+    command: 'E2E_MOCK=true NEXT_PUBLIC_E2E_MOCK=true NEXT_PUBLIC_SUPABASE_URL=http://localhost:1234 NEXT_PUBLIC_SUPABASE_ANON_KEY=test-key npm run dev',
     url: 'http://localhost:3001',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
     env: {
       NODE_ENV: 'test',
-      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://test-supabase.com',
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:1234',
       NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-key',
     },
   },

@@ -68,6 +68,10 @@ export function getBrowserClient() {
     // Server environment: Use getClient which handles this properly
     return getClient();
   }
+  // E2E MOCK: return a stubbed client that never reaches external Supabase
+  if (process.env.NEXT_PUBLIC_E2E_MOCK === 'true' || (typeof process !== 'undefined' && (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test'))) {
+    return createMockBrowserClient();
+  }
   return getBrowserClientInternal();
 }
 
@@ -131,12 +135,184 @@ function getBrowserClientInternal() {
   return browserClient;
 }
 
+// ----------------------------------------------------------------------------
+// E2E MOCK BROWSER CLIENT
+// ----------------------------------------------------------------------------
+function createMockBrowserClient(): any {
+  const storePromise = import("@/lib/testing/e2e-mock-store");
+
+  const mockChannel = () => {
+    const channel = {
+      on() { return channel; },
+      subscribe: async () => {
+        // Return a subscription object with proper unsubscribe method
+        return {
+          status: 'ok',
+          unsubscribe: async () => ({ status: 'ok' })
+        };
+      },
+      send: async () => ({ status: 'ok' }),
+      unsubscribe: async () => ({ status: 'ok' }),
+    };
+    return channel;
+  };
+
+  const buildQuery = (table: string) => {
+    const filters: Record<string, any> = {};
+    let _limit: number | undefined;
+    let _offset = 0;
+    let _ascending = true;
+    let _orderCol = 'created_at';
+    let _selectColumns = '*';
+
+    const executeQuery = async () => {
+      const store = await storePromise;
+      try {
+        let data: any[] = [];
+        if (table === 'conversations') {
+          const orgId = filters['organization_id'] || store.getTestOrgId();
+          data = store.listConversations(orgId);
+          // apply pagination and ordering
+          data = data.sort((a, b) => _ascending ? (a[_orderCol] || '').localeCompare(b[_orderCol] || '') : (b[_orderCol] || '').localeCompare(a[_orderCol] || ''));
+          data = data.slice(_offset, _limit ? _offset + _limit : undefined);
+        } else if (table === 'messages') {
+          const orgId = filters['organization_id'] || store.getTestOrgId();
+          const convId = filters['conversation_id'];
+          data = convId ? store.listMessages(orgId, convId, { ascending: _ascending, limit: _limit, offset: _offset }) : [];
+        } else if (table === 'organization_members') {
+          const orgId = filters['organization_id'] || store.getTestOrgId();
+          data = [{ user_id: filters['user_id'] || (process.env.E2E_USER_ID || '6f9916c7-3575-4a81-b58e-624ab066bebc'), organization_id: orgId, role: 'admin', status: 'active' }];
+        } else if (table === 'profiles') {
+          data = [];
+        }
+        return { data, error: null };
+      } catch (e) {
+        return { data: null, error: e as any };
+      }
+    };
+
+    const queryBuilder = {
+      select(columns?: string) {
+        _selectColumns = columns || '*';
+        // Return a new object that has both query methods AND can be awaited
+        const selectBuilder = {
+          eq(col: string, val: any) { filters[col] = val; return selectBuilder; },
+          gte(col: string, val: any) { filters[col] = { gte: val }; return selectBuilder; },
+          lt(col: string, val: any) { filters[col] = { lt: val }; return selectBuilder; },
+          lte(col: string, val: any) { filters[col] = { lte: val }; return selectBuilder; },
+          neq(col: string, val: any) { filters[col] = { neq: val }; return selectBuilder; },
+          in(col: string, vals: any[]) { filters[col] = { in: vals }; return selectBuilder; },
+          or(_expression: string) { /* no-op filter support for E2E */ return selectBuilder; },
+          order(col: string, opts?: { ascending?: boolean }) { _orderCol = col; _ascending = opts?.ascending ?? true; return selectBuilder; },
+          limit(n: number) { _limit = n; return selectBuilder; },
+          range(from: number, to: number) { _offset = from; _limit = (to - from + 1); return selectBuilder; },
+          single: async () => {
+            const res = await executeQuery();
+            return { data: res.data ? res.data[0] : null, error: res.error };
+          },
+          then: (resolve: any, reject: any) => executeQuery().then(resolve, reject),
+          catch: (reject: any) => executeQuery().catch(reject),
+        };
+        return selectBuilder;
+      },
+      eq(col: string, val: any) { filters[col] = val; return queryBuilder; },
+      gte(col: string, val: any) { filters[col] = { gte: val }; return queryBuilder; },
+      lt(col: string, val: any) { filters[col] = { lt: val }; return queryBuilder; },
+      lte(col: string, val: any) { filters[col] = { lte: val }; return queryBuilder; },
+      neq(col: string, val: any) { filters[col] = { neq: val }; return queryBuilder; },
+      in(col: string, vals: any[]) { filters[col] = { in: vals }; return queryBuilder; },
+      or(_expression: string) { /* no-op filter support for E2E */ return queryBuilder; },
+      order(col: string, opts?: { ascending?: boolean }) { _orderCol = col; _ascending = opts?.ascending ?? true; return queryBuilder; },
+      limit(n: number) { _limit = n; return queryBuilder; },
+      range(from: number, to: number) { _offset = from; _limit = (to - from + 1); return queryBuilder; },
+      single: async () => {
+        const res = await executeQuery();
+        return { data: res.data ? res.data[0] : null, error: res.error };
+      },
+      insert: async (payload: any) => {
+        const store = await storePromise;
+        try {
+          if (table === 'messages') {
+            const msg = store.addMessage({
+              conversationId: payload.conversation_id,
+              organizationId: payload.organization_id || store.getTestOrgId(),
+              content: payload.content,
+              senderType: payload.sender_type || 'visitor',
+              senderId: payload.sender_id || null,
+              senderEmail: payload.sender_email || null,
+              senderName: payload.sender_name || null,
+              messageType: payload.message_type || 'text',
+              contentType: payload.content_type || 'text',
+              metadata: payload.metadata || {},
+            });
+            return { data: [msg], error: null };
+          }
+          return { data: null, error: null };
+        } catch (e) {
+          return { data: null, error: e as any };
+        }
+      },
+      update: async () => ({ data: null, error: null }),
+      delete: async () => ({ data: null, error: null }),
+    };
+
+    return queryBuilder;
+  };
+
+  const authApi = {
+    getSession: async () => {
+      const tokenCookie = document.cookie.split(/;\s*/).find(c => c.startsWith('sb-auth-token='));
+      return { data: { session: tokenCookie ? {} : null }, error: tokenCookie ? null : { message: 'no session' } } as any;
+    },
+    getUser: async () => {
+      return { data: { user: { id: process.env.E2E_USER_ID || '6f9916c7-3575-4a81-b58e-624ab066bebc', email: 'jam@jam.com', user_metadata: { organization_id: (window as any).CampfireWidgetConfig?.organizationId || 'b5e80170-004c-4e82-a88c-3e2166b169dd' }, app_metadata: {} } }, error: null } as any;
+    },
+    refreshSession: async () => ({ data: { session: { access_token: 'mock', refresh_token: 'mock', expires_in: 3600 } }, error: null } as any),
+    signInWithPassword: async () => ({ data: { user: { id: 'mock' } }, error: null } as any),
+    updateUser: async () => ({ data: { user: { id: 'mock' } }, error: null } as any),
+    onAuthStateChange: (callback: (event: string, session: any) => void) => {
+      // Mock auth state change - immediately call with signed in state
+      setTimeout(() => {
+        callback('SIGNED_IN', {
+          access_token: 'mock-token',
+          user: {
+            id: process.env.E2E_USER_ID || '6f9916c7-3575-4a81-b58e-624ab066bebc',
+            email: 'jam@jam.com',
+            user_metadata: { organization_id: (window as any).CampfireWidgetConfig?.organizationId || 'b5e80170-004c-4e82-a88c-3e2166b169dd' }
+          }
+        });
+      }, 100);
+
+      // Return unsubscribe function
+      return {
+        data: { subscription: { unsubscribe: () => {} } },
+        error: null
+      };
+    },
+  };
+
+  const client = {
+    channel: (_name: string) => mockChannel(),
+    getChannel: (_name: string) => null, // Return null to indicate channel doesn't exist
+    removeChannel: (_channel: any) => ({ status: 'ok' }),
+    from: (table: string) => buildQuery(table),
+    auth: authApi,
+  };
+
+  return client;
+}
+
 /**
  * Get widget client (browser-side only)
  */
 function getWidgetClient() {
   if (typeof window === "undefined") {
     throw new Error("Widget client can only be used in browser environment");
+  }
+
+  // E2E MOCK: return mock client for widget
+  if (process.env.NEXT_PUBLIC_E2E_MOCK === 'true' || (typeof process !== 'undefined' && (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test'))) {
+    return createMockBrowserClient();
   }
 
   const env = getEnv();

@@ -48,7 +48,7 @@ export const conversationsRouter = createTRPCRouter({
         `
         )
         .eq("organization_id", ctx.organizationId)
-        .order("lastMessageAt", { ascending: false })
+        .order("last_message_at", { ascending: false })
         .range(input.offset, input.offset + input.limit - 1);
 
       if (input.status) {

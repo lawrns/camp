@@ -71,7 +71,7 @@ export function AvatarGroup({ avatars, maxVisible = 3, size = "md", className }:
   return (
     <div className={cn("flex -space-x-2", className)}>
       {visibleAvatars.map((avatar, index) => (
-        <Avatar key={index} {...avatar} className="transition-all duration-200 hover:z-10" />
+        <Avatar key={avatar.src || avatar.name || avatar.alt || `avatar-${index}`} {...avatar} className="transition-all duration-200 hover:z-10" />
       ))}
 
       {remainingCount > 0 && (

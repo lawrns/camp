@@ -96,13 +96,13 @@ const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTrig
     const renderAsChild = asChild || autoDetectAsChild;
 
     if (renderAsChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
+      return React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         ref,
         ...props,
         onClick: handleClick,
         "aria-expanded": open,
         "aria-haspopup": true,
-        className: `${className} ${(children as React.ReactElement<any>).props.className || ""}`.trim(),
+        className: `${className} ${(children as React.ReactElement<Record<string, unknown>>).props.className || ""}`.trim(),
       });
     }
     return (

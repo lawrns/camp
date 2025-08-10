@@ -301,7 +301,17 @@ test.describe('Bidirectional Communication E2E', () => {
     const testMessage = `E2E_TEST: Delivery status test ${Date.now()}`;
 
     // ========================================
-    // 1. SEND MESSAGE AND TRACK STATUS
+    // 1. SETUP CUSTOMER WIDGET
+    // ========================================
+    await testContext.customerPage.goto('/');
+    await testContext.customerPage.waitForLoadState('networkidle');
+
+    // Open widget
+    await testContext.customerPage.click('[data-testid="widget-button"]');
+    await testContext.customerPage.waitForSelector('[data-testid="widget-message-input"]');
+
+    // ========================================
+    // 2. SEND MESSAGE AND TRACK STATUS
     // ========================================
 
     // Customer sends message

@@ -12,6 +12,38 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
+    // E2E MOCK: Return session from mock cookie without Supabase
+    if (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test') {
+      const cookieHeader = request.headers.get('cookie') || '';
+      const cookies = cookieHeader.split(/;\s*/).map(c => c.trim());
+      const authCookie = cookies.find(c => c.startsWith('sb-auth-token='));
+      if (authCookie) {
+        try {
+          const raw = decodeURIComponent(authCookie.split('=')[1] || '');
+          if (raw.startsWith('base64-')) {
+            const sessionData = JSON.parse(Buffer.from(raw.substring(7), 'base64').toString());
+            const user = sessionData.user || { id: 'mock-user', email: 'jam@jam.com', user_metadata: { organization_id: process.env.E2E_ORG_ID || 'b5e80170-004c-4e82-a88c-3e2166b169dd' } };
+            return NextResponse.json({
+              success: true,
+              authenticated: true,
+              user: {
+                id: user.id,
+                email: user.email,
+                displayName: user.email?.split('@')[0] || 'Test User',
+                organizationId: user.user_metadata?.organization_id || user.app_metadata?.organization_id,
+              },
+              session: {
+                isValid: true,
+                expiresAt: new Date(Date.now() + 3600_000).toISOString(),
+              },
+            });
+          }
+        } catch {
+          // ignore
+        }
+      }
+      return NextResponse.json({ success: false, authenticated: false }, { status: 401 });
+    }
     // ENHANCED DEBUGGING: Log all request details
     const authHeader = request.headers.get("authorization");
     const cookieHeader = request.headers.get("cookie");

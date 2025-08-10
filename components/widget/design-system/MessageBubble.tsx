@@ -197,15 +197,15 @@ export function MessageBubble({
 
     switch (status) {
       case 'sending':
-        return <span style={iconStyle}>⏳</span>;
+        return <span style={iconStyle} data-testid="status-pending">⏳</span>;
       case 'sent':
-        return <span style={iconStyle}>✓</span>;
+        return <span style={iconStyle} data-testid="status-sent">✓</span>;
       case 'delivered':
-        return <span style={iconStyle}>✓✓</span>;
+        return <span style={iconStyle} data-testid="status-delivered">✓✓</span>;
       case 'read':
-        return <span style={{ ...iconStyle, color: COLORS.primary[500] }}>✓✓</span>;
+        return <span style={{ ...iconStyle, color: COLORS.primary[500] }} data-testid="status-read">✓✓</span>;
       case 'failed':
-        return <span style={{ ...iconStyle, color: '#ef4444' }}>⚠</span>;
+        return <span style={{ ...iconStyle, color: '#ef4444' }} data-testid="status-failed">⚠</span>;
       default:
         return null;
     }

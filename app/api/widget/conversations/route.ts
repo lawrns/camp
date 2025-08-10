@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceClient } from '@/lib/supabase/server';
+import { isE2EMock, listConversations, createConversation, getTestOrgId } from '@/lib/testing/e2e-mock-store';
 import { mapApiConversationToDbInsert, mapDbConversationsToApi } from '@/lib/utils/db-type-mappers';
 import { generateUniqueVisitorName } from '@/lib/utils/nameGenerator';
 import type { ConversationCreateRequest } from '@/types/unified';
@@ -17,6 +18,32 @@ export async function GET(request: NextRequest) {
         { error: 'Organization ID is required' },
         { status: 400 }
       );
+    }
+
+    // E2E mock path: return conversations from in-memory store
+    if (isE2EMock()) {
+      const orgId = organizationId || getTestOrgId();
+      const convs = listConversations(orgId);
+      return NextResponse.json({
+        conversations: convs.map((c) => ({
+          id: c.id,
+          customerId: null,
+          customerEmail: c.customer_email,
+          customerName: c.customer_name,
+          subject: c.subject,
+          status: c.status,
+          priority: c.priority,
+          channel: c.channel || 'web',
+          assignedToUserId: c.assigned_to_user_id || null,
+          createdAt: c.created_at,
+          updatedAt: c.updated_at,
+          lastMessageAt: c.last_message_at,
+          unreadCount: c.unread_count || 0,
+          tags: c.tags || [],
+          metadata: c.metadata || {},
+        })),
+        count: convs.length,
+      });
     }
 
     // Use service client for widget operations to ensure access
@@ -71,6 +98,39 @@ export async function POST(request: NextRequest) {
     // Validate required fields - provide default email for widget users
     if (!body.customerEmail) {
       body.customerEmail = 'anonymous@widget.com';
+    }
+
+    // E2E mock path: create conversation in-memory
+    if (isE2EMock()) {
+      const conv = createConversation({
+        organizationId,
+        customerEmail: body.customerEmail || 'anonymous@widget.com',
+        customerName: body.customerName || null,
+        subject: body.subject || null,
+        status: 'open',
+        priority: 'medium',
+        metadata: body.metadata || {},
+      });
+      return NextResponse.json({
+        conversation: {
+          id: conv.id,
+          customerId: null,
+          customerEmail: conv.customer_email,
+          customerName: conv.customer_name,
+          subject: conv.subject,
+          status: conv.status,
+          priority: conv.priority,
+          channel: conv.channel || 'web',
+          assignedToUserId: conv.assigned_to_user_id || null,
+          createdAt: conv.created_at,
+          updatedAt: conv.updated_at,
+          lastMessageAt: conv.last_message_at,
+          unreadCount: conv.unread_count || 0,
+          tags: conv.tags || [],
+          metadata: conv.metadata || {},
+        },
+        success: true,
+      });
     }
 
     // CRITICAL FIX: Use service client for widget operations to bypass RLS

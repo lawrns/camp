@@ -1,6 +1,7 @@
 import { useAuth } from "./useAuth";
 import { useCallback, useEffect, useState } from "react";
 import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from "@/lib/realtime/unified-channel-standards";
+import { shouldDisableRealtime } from "@/lib/utils/e2e";
 
 export interface Message {
     id: string;
@@ -258,6 +259,12 @@ export function useMessages(
 
         // Load initial messages
         loadMessages();
+
+        // Skip realtime setup in E2E_MOCK mode
+        if (shouldDisableRealtime()) {
+            console.log('[useMessages] Skipping realtime setup in E2E_MOCK mode');
+            return;
+        }
 
         // Set up Supabase realtime subscription using UNIFIED channel naming standards
         const channelName = UNIFIED_CHANNELS.conversation(organizationId, conversationId);

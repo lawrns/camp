@@ -97,6 +97,49 @@ export async function extractAuthFromRequest(req: NextRequest): Promise<{
 }> {
   const supabaseAdmin = supabase.admin();
 
+  // E2E MOCK: Short-circuit all external validation and build user from cookies
+  if (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test') {
+    const cookieHeader = req.headers.get("cookie") || "";
+    const cookies = cookieHeader.split(/;\s*/).map((c: unknown) => String(c).trim());
+    let accessToken: string | null = null;
+    let sessionUser: any = null;
+    // Find sb-auth-token (base64-encoded JSON)
+    const authCookie = cookies.find((c) => c.startsWith('sb-auth-token='));
+    if (authCookie) {
+      try {
+        const raw = decodeURIComponent(authCookie.split('=')[1] || '');
+        if (raw.startsWith('base64-')) {
+          const parsed = JSON.parse(Buffer.from(raw.substring(7), 'base64').toString());
+          accessToken = parsed.access_token || null;
+          sessionUser = parsed.user || null;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    // Fallback to sb-access-token for token only
+    if (!accessToken) {
+      const at = cookies.find((c) => c.startsWith('sb-access-token='));
+      if (at) {
+        try { accessToken = decodeURIComponent(at.split('=')[1]); } catch { /* ignore */ }
+      }
+    }
+    const orgId = sessionUser?.app_metadata?.organization_id || sessionUser?.user_metadata?.organization_id || process.env.E2E_ORG_ID || 'b5e80170-004c-4e82-a88c-3e2166b169dd';
+    const user: SupabaseUser = {
+      id: sessionUser?.id || (process.env.E2E_USER_ID || '6f9916c7-3575-4a81-b58e-624ab066bebc'),
+      email: sessionUser?.email || 'jam@jam.com',
+      user_metadata: { ...(sessionUser?.user_metadata || {}), organization_id: orgId },
+      app_metadata: { ...(sessionUser?.app_metadata || {}), organization_id: orgId },
+      aud: 'authenticated',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      phone: '',
+      role: 'authenticated',
+      identities: [],
+    } as unknown as SupabaseUser;
+    return { success: true, user, organizationId: orgId };
+  }
+
   // SECURITY: Development bypass - STRICTLY LIMITED to development environment
   // Multiple layers of protection against production bypass attempts
   const testOrgId = req.headers.get("X-Test-Organization-ID");

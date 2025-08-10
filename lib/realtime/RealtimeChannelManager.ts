@@ -1,7 +1,8 @@
 // Unified Real-time Channel Manager for Campfire v2
 // Manages Supabase real-time channels for bidirectional widget-dashboard communication
 
-import { createClient, RealtimeChannel } from '@supabase/supabase-js';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
 interface ChannelConfig {
   organizationId: string;
@@ -46,14 +47,9 @@ export class RealtimeChannelManager {
   private maxReconnectAttempts = 5;
   private heartbeatInterval = 25000; // 25 seconds to prevent idle timeouts
 
-  constructor(supabaseUrl: string, supabaseKey: string) {
-    this.supabase = createClient(supabaseUrl, supabaseKey, {
-      realtime: {
-        params: {
-          eventsPerSecond: 10,
-        },
-      },
-    });
+  constructor(supabaseUrl?: string, supabaseKey?: string) {
+    // Use centralized client that respects E2E_MOCK mode
+    this.supabase = supabase.browser();
   }
 
   /**

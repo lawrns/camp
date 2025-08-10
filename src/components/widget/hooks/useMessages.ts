@@ -72,8 +72,8 @@ export function useMessages(
             const data = await response.json();
             console.log("[useMessages] Raw API response:", data);
 
-            // The API returns the messages array directly, not wrapped in a messages property
-            const messagesArray = Array.isArray(data) ? data : [];
+            // Support both { messages: [] } and [] shapes
+            const messagesArray = Array.isArray(data) ? data : Array.isArray(data?.messages) ? data.messages : [];
             console.log("[useMessages] Messages array:", messagesArray);
             console.log("[useMessages] Messages count:", messagesArray.length);
 
@@ -162,18 +162,19 @@ export function useMessages(
                 console.log("[useMessages] API response:", result);
 
                 // Validate the API response structure
-                if (!result || !result.id) {
+                const resultMessage = result?.message || result;
+                if (!resultMessage || !resultMessage.id) {
                     console.error("[useMessages] Invalid API response structure:", result);
                     throw new Error("Invalid response from server - missing message ID");
                 }
 
                 // The API returns the message directly, not wrapped in a message property
                 const confirmedMessage: Message = {
-                    id: result.id,
-                    content: result.content || content.trim(),
+                    id: resultMessage.id,
+                    content: resultMessage.content || content.trim(),
                     senderType: "visitor", // We know this is a visitor message
                     senderName: "You",
-                    timestamp: result.createdAt || new Date().toISOString(),
+                    timestamp: resultMessage.createdAt || new Date().toISOString(),
                     read_status: "sent",
                     attachments: [],
                     conversation_id: conversationId,

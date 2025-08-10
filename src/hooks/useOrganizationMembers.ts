@@ -115,6 +115,13 @@ export function useOrganizationMembers(organizationId: string) {
 
     // Set up real-time subscription for member updates
     const supabaseClient = supabase.browser();
+
+    // Skip realtime in E2E mode
+    if (process.env.NEXT_PUBLIC_E2E_MOCK === 'true' || process.env.E2E_MOCK === 'true') {
+      console.log('[useOrganizationMembers] Skipping realtime setup in E2E mode');
+      return () => {};
+    }
+
     const subscription = supabaseClient
       .channel("organization_members_changes")
       .on(
@@ -133,7 +140,10 @@ export function useOrganizationMembers(organizationId: string) {
       .subscribe();
 
     return () => {
-      subscription.unsubscribe();
+      // CRITICAL FIX: Add proper null checking for subscription cleanup
+      if (subscription && typeof subscription.unsubscribe === 'function') {
+        subscription.unsubscribe();
+      }
     };
   }, [organizationId]);
 

@@ -2,7 +2,6 @@
   "name": "campfire-v2",
   "version": "0.1.0",
   "private": true,
-
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
     "build": "npm run projects:build && npm run security:validate && next build",
@@ -57,7 +56,9 @@
     "test:ultimate-widget:accessibility": "npx playwright test e2e/tests/ultimate-widget-accessibility.spec.ts",
     "tokens:validate": "node scripts/validate-design-tokens.js",
     "tokens:fix": "node scripts/validate-design-tokens.js --fix",
-    "tokens:check": "node scripts/validate-design-tokens.js --verbose"
+    "tokens:check": "node scripts/validate-design-tokens.js --verbose",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.23",
@@ -153,6 +154,11 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.54.1",
+    "@storybook/addon-a11y": "^8.6.14",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-interactions": "^8.6.14",
+    "@storybook/nextjs": "^8.6.14",
+    "@storybook/test": "^8.6.14",
     "@tailwindcss/container-queries": "^0.1.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",

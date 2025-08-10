@@ -8,6 +8,7 @@ import { useConversationStats } from "@/hooks/useConversationStats";
 import { useRealtime } from "@/hooks/useRealtime";
 import { Bot } from "lucide-react";
 import * as React from "react";
+import { isE2EMode } from "@/lib/utils/e2e";
 import { useCallback, useRef, useState } from "react";
 // Import utilities
 import { fallbackAISuggestions } from "./constants/messageTemplates";
@@ -89,13 +90,43 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
   const { isConnected, connectionStatus, error: realtimeError } = realtimeState;
   const { sendMessage, broadcastTyping: startTyping, disconnect: stopTyping } = realtimeActions;
 
-  // Fetch conversations using the useConversations hook
+  // Fetch conversations using the useConversations hook or E2E API
   const { conversations: rawConversations, isLoading: conversationsLoading, error: conversationsError } = useConversations();
+
+  // E2E mode: fetch from API instead of Supabase hook
+  const [e2eConversations, setE2eConversations] = React.useState<unknown[]>([]);
+  const [e2eLoading, setE2eLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isE2EMode() && user?.organizationId) {
+      console.log('[E2E] Starting conversation fetch for org:', user.organizationId);
+      setE2eLoading(true);
+      fetch('/api/dashboard/conversations')
+        .then(res => {
+          console.log('[E2E] API response status:', res.status);
+          return res.json();
+        })
+        .then(data => {
+          console.log('[E2E] Fetched conversations from API:', data);
+          console.log('[E2E] Conversations count:', data.conversations?.length || 0);
+          setE2eConversations(data.conversations || []);
+        })
+        .catch(err => console.error('[E2E] Failed to fetch conversations:', err))
+        .finally(() => setE2eLoading(false));
+    }
+  }, [user?.organizationId]);
 
   // Process conversations with our name generation and other fixes
   const conversations = React.useMemo(() => {
-    return (rawConversations || []).map(mapConversation);
-  }, [rawConversations]);
+    const sourceConversations = isE2EMode() ? e2eConversations : rawConversations;
+    console.log('[E2E] Processing conversations:', {
+      isE2EMode: isE2EMode(),
+      e2eCount: e2eConversations?.length || 0,
+      rawCount: rawConversations?.length || 0,
+      sourceCount: sourceConversations?.length || 0
+    });
+    return (sourceConversations || []).map(mapConversation);
+  }, [rawConversations, e2eConversations]);
 
   // Fetch conversation statistics
   const { data: stats, isLoading: statsLoading, error: statsError } = useConversationStats();
@@ -221,9 +252,9 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = ({ className = "" }
     [organizationId, setMessages]
   );
 
-  // Derived loading states
-  const loadingConversations = !isConnected;
-  const loadingMessages = !isConnected;
+  // Derived loading states decoupled from realtime connection
+  const loadingConversations = isE2EMode() ? e2eLoading : !!conversationsLoading;
+  const loadingMessages = !!messagesLoading;
 
   // Typing handlers for standardized system
   const handleTyping = useCallback(() => {

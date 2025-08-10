@@ -5,28 +5,14 @@
  * for use in the auth provider and other authentication contexts.
  */
 
-import { createClient } from '@supabase/supabase-js';
-
-// Get Supabase configuration from environment
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+import { supabase } from '@/lib/supabase';
 
 /**
  * Create a Supabase client for authentication
+ * Uses centralized client that respects E2E_MOCK mode
  */
 export const createAuthClient = () => {
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
-    },
-  });
+  return supabase.browser();
 };
 
 /**

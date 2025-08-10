@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceClient } from '@/lib/supabase/server';
+import { isE2EMock, listMessages as listMockMessages, addMessage as addMockMessage } from '@/lib/testing/e2e-mock-store';
 import { mapApiMessageToDbInsert, mapDbMessagesToApi } from '@/lib/utils/db-type-mappers';
 import { getSharedConversationChannel } from '@/lib/services/shared-conversation-service';
 // Define the request type inline
@@ -27,6 +28,28 @@ export async function GET(request: NextRequest) {
         { error: 'Conversation ID and Organization ID are required' },
         { status: 400 }
       );
+    }
+
+    // E2E mock path
+    if (isE2EMock()) {
+      const messages = listMockMessages(organizationId, conversationId, { ascending: true, limit: 100 });
+      return NextResponse.json({
+        messages: messages.map(m => ({
+          id: m.id,
+          conversationId: m.conversation_id,
+          organizationId: m.organization_id,
+          content: m.content,
+          senderType: m.sender_type,
+          senderId: m.sender_id || undefined,
+          senderEmail: m.sender_email || undefined,
+          senderName: m.sender_name || undefined,
+          messageType: m.message_type || 'text',
+          createdAt: m.created_at,
+          updatedAt: m.updated_at || undefined,
+          metadata: m.metadata || {},
+        })),
+        count: messages.length,
+      });
     }
 
     // Use service client for widget operations to ensure access
@@ -74,11 +97,20 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const organizationId = request.headers.get('x-organization-id');
+    let organizationId = request.headers.get('x-organization-id');
 
+    // In E2E mock or permissive mode, allow orgId from body
+    if (!organizationId) {
+      try {
+        const tmpBody: Partial<MessageCreateRequest> & { organizationId?: string } = await request.json().catch(() => ({} as any));
+        if (tmpBody?.organizationId) {
+          organizationId = tmpBody.organizationId;
+        }
+      } catch {}
+    }
     if (!organizationId) {
       return NextResponse.json(
-        { error: 'Organization ID header is required' },
+        { error: 'Organization ID is required' },
         { status: 400 }
       );
     }
@@ -91,6 +123,40 @@ export async function POST(request: NextRequest) {
         { error: 'Content and conversation ID are required' },
         { status: 400 }
       );
+    }
+
+    // E2E mock path
+    if (isE2EMock()) {
+      const message = addMockMessage({
+        conversationId: body.conversationId,
+        organizationId,
+        content: body.content,
+        senderType: (body.senderType as any) || 'visitor',
+        senderId: body.senderId || null,
+        senderEmail: undefined,
+        senderName: body.senderName || null,
+        messageType: body.messageType || 'text',
+        contentType: 'text',
+        metadata: body.metadata || {},
+      });
+      return NextResponse.json({
+        message: {
+          id: message.id,
+          conversationId: message.conversation_id,
+          organizationId: message.organization_id,
+          content: message.content,
+          senderType: message.sender_type,
+          senderId: message.sender_id || undefined,
+          senderEmail: message.sender_email || undefined,
+          senderName: message.sender_name || undefined,
+          messageType: message.message_type || 'text',
+          createdAt: message.created_at,
+          updatedAt: message.updated_at || undefined,
+          metadata: message.metadata || {},
+        },
+        success: true,
+        channel: `org:${organizationId}:conv:${body.conversationId}`,
+      });
     }
 
     // Use service client for widget operations to ensure access
@@ -135,7 +201,7 @@ export async function POST(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('conversations')
       .update({
-        lastMessageAt: new Date().toISOString(), // FIXED: snake_case to match dashboard query
+        last_message_at: new Date().toISOString(), // Fixed: Use snake_case column name
         updated_at: new Date().toISOString(),
       })
       .eq('id', body.conversationId);

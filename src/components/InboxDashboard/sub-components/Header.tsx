@@ -4,6 +4,8 @@ import { Icon, Icons } from '@/lib/icons/standardized-icons';
 import * as React from "react";
 import { useState } from "react";
 import type { HeaderProps } from "../types";
+import { StatusDropdown } from '@/components/dashboard/StatusDropdown';
+
 
 /**
  * Header component with search, filters, and shortcuts
@@ -189,6 +191,15 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex items-center space-x-3">
+          {/* Agent Presence Status Dropdown for E2E */}
+          <StatusDropdown
+            currentStatus="online"
+            onStatusChange={(status) => {
+              // Stored in localStorage by StatusDropdown for widget to pick up
+              console.log('[Inbox Header] Agent status now:', status);
+            }}
+          />
+
           {/* Status Filter */}
           <div className="relative">
             <select

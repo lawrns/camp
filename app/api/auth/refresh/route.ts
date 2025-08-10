@@ -10,6 +10,33 @@ import { generateCsrfToken } from "@/lib/middleware/securityHeaders";
  */
 export async function POST(request: NextRequest) {
   try {
+    // E2E MOCK: synthesize refresh without external calls
+    if (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test') {
+      const cookieStore = await cookies();
+      // Ensure we have an auth token to base the refresh on
+      const authCookie = cookieStore.get(AUTH_COOKIE_NAMES.AUTH_TOKEN)?.value;
+      if (!authCookie) {
+        return NextResponse.json({ error: 'No session found' }, { status: 401 });
+      }
+      const newSession = {
+        access_token: `mock-access-${Date.now()}`,
+        refresh_token: `mock-refresh-${Date.now()}`,
+        expiresAt: Math.floor(Date.now() / 1000) + 3600,
+        token_type: 'bearer',
+      } as const;
+      await setAuthCookies({
+        access_token: newSession.access_token,
+        refresh_token: newSession.refresh_token,
+        expiresAt: newSession.expiresAt,
+        token_type: newSession.token_type,
+      } as any);
+      const csrfToken = generateCsrfToken();
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const response = NextResponse.json({ success: true, session: newSession });
+      response.headers.set('X-CSRF-Token', csrfToken);
+      response.headers.set('X-Session-ID', sessionId);
+      return response;
+    }
     const cookieStore = await cookies();
 
     // Try to get refresh token from cookies first

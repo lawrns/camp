@@ -4,6 +4,26 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = withAuth(async (request: NextRequest, context, { user, organizationId, scopedClient: supabase }) => {
   try {
+    // E2E MOCK: return synthesized user without DB calls
+    if (process.env.E2E_MOCK === 'true' || process.env.NODE_ENV === 'test') {
+      const userOrgId = organizationId || user.user_metadata?.organization_id || 'b5e80170-004c-4e82-a88c-3e2166b169dd';
+      const response = NextResponse.json({
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.email?.split('@')[0],
+          organizationId: userOrgId,
+          organizationRole: 'admin',
+          organization: { id: userOrgId, name: 'Test Organization' },
+          createdAt: user.created_at,
+          lastSignInAt: user.last_sign_in_at,
+          user_metadata: user.user_metadata,
+        },
+        session: { isValid: true, expiresAt: new Date(Date.now() + 3600_000).toISOString() },
+      });
+      return applySecurityHeaders(response);
+    }
 
     // Get user's organization membership
     const { data: membership } = await supabase

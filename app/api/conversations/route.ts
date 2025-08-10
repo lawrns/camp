@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { withAuth, AuthenticatedUser } from '@/lib/auth/route-auth';
+import { isE2EMock, listConversations } from '@/lib/testing/e2e-mock-store';
 import { mapDbConversationToApi, mapDbConversationsToApi } from '@/lib/utils/db-type-mappers';
 
 export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser) => {
@@ -10,6 +11,12 @@ export const GET = withAuth(async (request: NextRequest, user: AuthenticatedUser
     const status = searchParams.get('status');
     const limit = parseInt(searchParams.get('limit') || '50');
     const offset = parseInt(searchParams.get('offset') || '0');
+
+    // E2E MOCK: serve conversations from in-memory store
+    if (isE2EMock()) {
+      const convs = listConversations(user.organizationId).slice(offset, offset + limit);
+      return NextResponse.json(mapDbConversationsToApi(convs as any));
+    }
 
     // Initialize Supabase client
     const cookieStore = await cookies();
@@ -75,6 +82,27 @@ export const POST = withAuth(async (request: NextRequest, user: AuthenticatedUse
         },
         { status: 400 }
       );
+    }
+
+    if (isE2EMock()) {
+      const { createConversation, addMessage } = await import('@/lib/testing/e2e-mock-store');
+      const conv = createConversation({
+        organizationId: user.organizationId,
+        customerEmail,
+        customerName,
+        subject,
+      });
+      if (initialMessage) {
+        addMessage({
+          conversationId: conv.id,
+          organizationId: user.organizationId,
+          content: initialMessage,
+          senderType: 'visitor',
+          senderEmail: customerEmail,
+          senderName: customerName,
+        });
+      }
+      return NextResponse.json(mapDbConversationToApi(conv as any), { status: 201 });
     }
 
     // Initialize Supabase client

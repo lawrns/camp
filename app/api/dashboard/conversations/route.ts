@@ -1,19 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase as supabaseFactory } from '@/lib/supabase';
 import { cookies } from 'next/headers';
-import { supabase } from '@/lib/supabase/consolidated-exports';
+import { isE2EMock, listConversations } from '@/lib/testing/e2e-mock-store';
+
+
+// Narrow user type for handler
+interface DashboardUser {
+  userId: string;
+  organizationId: string;
+  email: string | null;
+  name: string | null;
+}
+
 
 // Custom cookie parser that handles both base64 and JSON formats
-function createCompatibleCookieStore() {
+async function createCompatibleCookieStore() {
   const cookieStore = cookies();
-  
+
   return {
     get: (name: string) => {
       const cookie = cookieStore.get(name);
       if (!cookie) return undefined;
-      
+
       let value = cookie.value;
-      
+
       // Handle base64-encoded cookies
       if (typeof value === 'string' && value.startsWith('base64-')) {
         try {
@@ -26,13 +36,13 @@ function createCompatibleCookieStore() {
           return undefined;
         }
       }
-      
+
       return { name: cookie.name, value };
     },
     getAll: () => {
       return cookieStore.getAll().map(cookie => {
         let value = cookie.value;
-        
+
         // Handle base64-encoded cookies
         if (typeof value === 'string' && value.startsWith('base64-')) {
           try {
@@ -43,7 +53,7 @@ function createCompatibleCookieStore() {
             console.warn('[Dashboard Auth] Failed to decode base64 cookie:', cookie.name, error);
           }
         }
-        
+
         return { ...cookie, value };
       });
     },
@@ -53,27 +63,41 @@ function createCompatibleCookieStore() {
 }
 
 // Authentication wrapper for dashboard endpoints (FIXED: removed async from function declaration)
-function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResponse>) {
+function withAuth(handler: (req: NextRequest, user: DashboardUser) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       console.log('[Dashboard Conversations API] Starting authentication...');
-      
+
+      // E2E Mock mode - return mock auth context
+      if (isE2EMock()) {
+        console.log('[Dashboard Conversations API] Using E2E mock auth');
+        const mockUser: DashboardUser = {
+          userId: 'mock-user-id',
+          organizationId: 'b5e80170-004c-4e82-a88c-3e2166b169dd',
+          email: 'test@example.com',
+          name: 'Test User'
+        };
+        return handler(request, mockUser);
+      }
+
       // Use compatible cookie store that handles base64 format
-      const compatibleCookieStore = createCompatibleCookieStore();
-      const supabaseClient = supabaseFactory.server(compatibleCookieStore as any);
+      const compatibleCookieStore = await createCompatibleCookieStore();
+      const supabaseClient = supabaseFactory.server(
+        compatibleCookieStore as Parameters<typeof supabaseFactory.server>[0]
+      );
 
       console.log('[Dashboard Conversations API] Supabase client created with compatible cookie store, getting session...');
 
       // Require authentication for dashboard endpoints
       const { data: { session }, error: authError } = await supabaseClient.auth.getSession();
-      
+
       console.log('[Dashboard Conversations API] Session result:', {
         hasSession: !!session,
         hasError: !!authError,
         userId: session?.user?.id,
         errorMessage: authError?.message
       });
-      
+
       if (authError || !session) {
         console.log('[Dashboard Conversations API] Authentication failed');
         return NextResponse.json(
@@ -85,7 +109,7 @@ function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResp
       // Get user organization
       const organizationId = session.user.user_metadata?.organization_id;
       console.log('[Dashboard Conversations API] Organization ID:', organizationId);
-      
+
       if (!organizationId) {
         console.log('[Dashboard Conversations API] No organization ID found');
         return NextResponse.json(
@@ -121,10 +145,10 @@ function withAuth(handler: (req: NextRequest, user: unknown) => Promise<NextResp
   };
 }
 
-export const GET = withAuth(async (request: NextRequest, user: unknown) => {
+export const GET = withAuth(async (request: NextRequest, user: DashboardUser) => {
   try {
     console.log('[Dashboard Conversations API] Starting conversations fetch for organization:', user.organizationId);
-    
+
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '50');
     const offset = parseInt(searchParams.get('offset') || '0');
@@ -133,41 +157,66 @@ export const GET = withAuth(async (request: NextRequest, user: unknown) => {
 
     console.log('[Dashboard Conversations API] Query params:', { limit, offset, status, priority });
 
-    // Initialize Supabase client with error handling
-    let supabaseClient;
-    try {
-      supabaseClient = supabase.admin();
-      console.log('[Dashboard Conversations API] Supabase client initialized');
-    } catch (clientError) {
-      console.error('[Dashboard Conversations API] Failed to initialize Supabase client:', clientError);
-      return NextResponse.json(
-        { error: 'Database connection failed', code: 'DATABASE_CONNECTION_ERROR' },
-        { status: 500 }
-      );
+    // E2E mock path
+    if (isE2EMock()) {
+      const convs = listConversations(user.organizationId);
+      const conversationsWithMessages = convs.map(conv => ({
+        id: conv.id,
+        customerId: null,
+        customerEmail: conv.customer_email,
+        customerName: conv.customer_name || conv.customer_email?.split('@')[0] || 'Unknown Customer',
+        subject: conv.subject,
+        status: conv.status,
+        priority: conv.priority,
+        channel: conv.channel || 'web',
+        assignedToUserId: conv.assigned_to_user_id || null,
+        createdAt: conv.created_at,
+        updatedAt: conv.updated_at,
+        lastMessageAt: conv.last_message_at,
+        unreadCount: conv.unread_count || 0,
+        tags: conv.tags || [],
+      }));
+
+      const response = {
+        conversations: conversationsWithMessages,
+        pagination: {
+          limit,
+          offset,
+          total: conversationsWithMessages.length,
+          hasMore: conversationsWithMessages.length === limit,
+        },
+      };
+
+      return NextResponse.json(response);
     }
+
+    // Initialize Supabase client bound to the authenticated user (RLS applies)
+    const supabaseClient = supabaseFactory.server(await createCompatibleCookieStore() as Parameters<typeof supabaseFactory.server>[0]);
 
     // Build query for conversations - prioritize those with messages
     let query = supabaseClient
       .from('conversations')
       .select(`
         id,
-        customer_id,
-        customer_email,
-        customer_name,
+        customerId:customer_id,
+        customerEmail:customer_email,
+        customerName:customer_name,
         subject,
         status,
         priority,
         channel,
-        assigned_agent,
-        created_at,
-        updated_at,
-        last_message_at,
-        unread_count,
+        assignedToUserId:assigned_to_user_id,
+        createdAt:created_at,
+        updatedAt:updated_at,
+        lastMessageAt:last_message_at,
+        unreadCount:unread_count,
         tags
       `)
       .eq('organization_id', user.organizationId)
-      .not('lastMessageAt', 'is', null) // Only conversations with messages
-      .order('lastMessageAt', { ascending: false });
+      .not('last_message_at', 'is', null) // Only conversations with messages
+      .order('last_message_at', { ascending: false })
+      .order('updated_at', { ascending: false })
+      .order('id', { ascending: false });
 
     // Apply filters
     if (status !== 'all') {
@@ -198,7 +247,7 @@ export const GET = withAuth(async (request: NextRequest, user: unknown) => {
       (conversations || []).map(async (conv) => {
         const { data: messages } = await supabaseClient
           .from('messages')
-          .select('content, created_at, senderType, senderName')
+          .select('content, createdAt:created_at, senderType:sender_type, senderName:sender_name')
           .eq('conversation_id', conv.id)
           .order('created_at', { ascending: false })
           .limit(1);
@@ -206,10 +255,21 @@ export const GET = withAuth(async (request: NextRequest, user: unknown) => {
         const lastMessage = messages?.[0];
 
         return {
-          ...conv,
-          lastMessage: lastMessage?.content || 'Message content unavailable',
-          lastMessageAt: lastMessage?.created_at || conv.lastMessageAt,
-          customerName: conv.customerName || conv.customerEmail?.split('@')[0] || 'Unknown Customer'
+          id: conv.id,
+          customerId: conv.customerId,
+          customerEmail: conv.customerEmail,
+          customerName: conv.customerName || conv.customerEmail?.split('@')[0] || 'Unknown Customer',
+          subject: conv.subject,
+          status: conv.status,
+          priority: conv.priority,
+          channel: conv.channel,
+          assignedToUserId: conv.assignedToUserId,
+          createdAt: conv.createdAt,
+          updatedAt: conv.updatedAt,
+          lastMessageAt: lastMessage?.createdAt || conv.lastMessageAt,
+          unreadCount: conv.unreadCount,
+          tags: conv.tags,
+          lastMessage: lastMessage?.content || 'Message content unavailable'
         };
       })
     );

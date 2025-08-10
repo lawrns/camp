@@ -113,18 +113,23 @@ export function useRealtime(config: RealtimeConfig): [RealtimeState, RealtimeAct
   const configRef = useRef(config);
   const { isMobile } = useBreakpoint();
 
-  // Mobile-specific throttling
-  const throttleDelay = isMobile ? 1000 : 100; // 1s on mobile vs 100ms on desktop
+  // Mobile-specific throttling - stabilized to prevent infinite re-renders
+  const throttleDelayRef = useRef(isMobile ? 1000 : 100);
   const lastUpdateRef = useRef<number>(0);
 
-  // Throttled state update function
+  // Update throttle delay only when mobile state actually changes
+  useEffect(() => {
+    throttleDelayRef.current = isMobile ? 1000 : 100;
+  }, [isMobile]);
+
+  // Throttled state update function - stable reference
   const throttledSetState = useCallback((updater: (prev: RealtimeState) => RealtimeState) => {
     const now = Date.now();
-    if (now - lastUpdateRef.current >= throttleDelay) {
+    if (now - lastUpdateRef.current >= throttleDelayRef.current) {
       setState(updater);
       lastUpdateRef.current = now;
     }
-  }, [throttleDelay]);
+  }, []); // Empty dependency array - stable reference
 
   // Update config ref when config changes
   useEffect(() => {

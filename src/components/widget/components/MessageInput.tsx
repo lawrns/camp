@@ -158,7 +158,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             disabled={disabled}
             className="w-full resize-none border-0 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder-gray-500 outline-none disabled:cursor-not-allowed"
             maxLength={1000}
-            data-testid="message-input"
+            data-testid="widget-message-input"
           />
           {message.length > 800 && (
             <div className="absolute -top-6 right-0 text-tiny text-gray-400">{message.length}/1000</div>

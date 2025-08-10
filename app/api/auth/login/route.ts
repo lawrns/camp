@@ -38,6 +38,29 @@ export const POST = withPublic(async (request: NextRequest) => {
       return createErrorResponse("Email and password are required", 400, "MISSING_CREDENTIALS");
     }
 
+    // E2E MOCK: short-circuit real auth when running tests without DB
+    const { isE2EMock, createMockSession } = await import('@/lib/testing/e2e-mock-store');
+    if (isE2EMock()) {
+      const { AUTH_COOKIE_NAMES, getCookieOptions, createSessionCookieValue } = await import("@/lib/auth/cookie-utils");
+      const sessionPayload = createMockSession(email);
+      const response = NextResponse.json({ success: true, data: sessionPayload });
+      const cookieExpiration = 60 * 60 * 24 * 7;
+      response.cookies.set(AUTH_COOKIE_NAMES.ACCESS_TOKEN, sessionPayload.session.access_token, getCookieOptions(cookieExpiration));
+      response.cookies.set(AUTH_COOKIE_NAMES.REFRESH_TOKEN, sessionPayload.session.refresh_token, getCookieOptions(cookieExpiration));
+      response.cookies.set(
+        AUTH_COOKIE_NAMES.AUTH_TOKEN,
+        createSessionCookieValue({
+          access_token: sessionPayload.session.access_token,
+          refresh_token: sessionPayload.session.refresh_token,
+          expires_at: sessionPayload.session.expiresAt,
+          token_type: sessionPayload.session.token_type,
+          user: sessionPayload.user,
+        }),
+        { ...getCookieOptions(cookieExpiration), httpOnly: false }
+      );
+      return response;
+    }
+
     // Get cookies for server-side session management
     const { cookies } = await import("next/headers");
     const { supabase } = await import("@/lib/supabase");

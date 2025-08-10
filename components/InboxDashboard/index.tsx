@@ -768,6 +768,7 @@ export const InboxDashboard: React.FC<InboxDashboardProps> = memo(({
                   ? 'bg-accent border-l-primary'
                   : getPriorityColor(conversation.priority || 'low')
               } ${conversation.unreadCount > 0 ? 'bg-accent/30' : ''}`}
+              data-testid="conversation"
             >
               <div className="flex items-start space-x-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-white font-semibold text-sm">

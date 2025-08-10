@@ -1,6 +1,6 @@
 import * as React from "react";
 
-interface CommandProps extends React.HTMLAttributes<HTMLDivElement> {}
+type CommandProps = React.HTMLAttributes<HTMLDivElement>;
 
 interface CommandGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   heading?: string;

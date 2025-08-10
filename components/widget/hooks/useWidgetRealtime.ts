@@ -15,9 +15,7 @@
 
 import { useRealtime } from '../../../hooks/useRealtime';
 import { WidgetMessage, MessageStatus } from '../../../types/entities/message';
-import { useEffect } from 'react';
-import { subscribeToChannel } from '../../../lib/realtime/standardized-realtime';
-import { UNIFIED_CHANNELS, UNIFIED_EVENTS } from '../../../lib/realtime/unified-channel-standards';
+import { useEffect, useRef } from 'react';
 
 interface WidgetRealtimeConfig {
   organizationId: string;
@@ -44,79 +42,38 @@ export function useWidgetRealtime(config: WidgetRealtimeConfig) {
   });
 
   // CRITICAL FIX: Add missing callback handling for widget message reception
+  // Use refs to avoid infinite re-renders from function dependencies
+  const onMessageRef = useRef(config.onMessage);
+  const onTypingRef = useRef(config.onTyping);
+  const onConnectionChangeRef = useRef(config.onConnectionChange);
+
+  // Update refs when callbacks change
   useEffect(() => {
-    if (!config.conversationId || !config.organizationId) return;
+    onMessageRef.current = config.onMessage;
+    onTypingRef.current = config.onTyping;
+    onConnectionChangeRef.current = config.onConnectionChange;
+  }, [config.onMessage, config.onTyping, config.onConnectionChange]);
 
-    console.log('[Widget Realtime] Setting up message callbacks for:', {
-      organizationId: config.organizationId,
-      conversationId: config.conversationId
-    });
-
-    const unsubscribers: (() => void)[] = [];
-
-    // Subscribe to messages using unified channels
-    if (config.onMessage) {
-      const messageUnsubscriber = subscribeToChannel(
-        UNIFIED_CHANNELS.conversation(config.organizationId, config.conversationId),
-        UNIFIED_EVENTS.MESSAGE_CREATED,
-        (payload) => {
-          console.log('[Widget Realtime] 📨 Received agent message:', payload);
-          if (payload.payload?.message && config.onMessage) {
-            config.onMessage(payload.payload.message);
-          }
-        }
-      );
-      unsubscribers.push(messageUnsubscriber);
-    }
-
-    // Subscribe to typing indicators
-    if (config.onTyping) {
-      const typingStartUnsubscriber = subscribeToChannel(
-        UNIFIED_CHANNELS.conversationTyping(config.organizationId, config.conversationId),
-        UNIFIED_EVENTS.TYPING_START,
-        (payload) => {
-          if (config.onTyping) {
-            config.onTyping(true, payload.payload?.userName);
-          }
-        }
-      );
-      unsubscribers.push(typingStartUnsubscriber);
-
-      const typingStopUnsubscriber = subscribeToChannel(
-        UNIFIED_CHANNELS.conversationTyping(config.organizationId, config.conversationId),
-        UNIFIED_EVENTS.TYPING_STOP,
-        (payload) => {
-          if (config.onTyping) {
-            config.onTyping(false, payload.payload?.userName);
-          }
-        }
-      );
-      unsubscribers.push(typingStopUnsubscriber);
-    }
-
-    return () => {
-      console.log('[Widget Realtime] 🧹 Cleaning up message subscriptions');
-      unsubscribers.forEach(unsubscribe => unsubscribe());
-    };
-  }, [config.conversationId, config.organizationId, config.onMessage, config.onTyping]);
+  // NOTE: unified hook internally manages subscriptions. We only mirror state changes via refs.
 
   // Notify connection changes
   useEffect(() => {
-    if (config.onConnectionChange) {
-      config.onConnectionChange(realtimeState.isConnected);
+    if (onConnectionChangeRef.current) {
+      onConnectionChangeRef.current(realtimeState.isConnected);
     }
-  }, [realtimeState.isConnected, config.onConnectionChange]);
+  }, [realtimeState.isConnected]); // Removed function dependency
 
   // Return compatibility interface
   return {
     isConnected: realtimeState.isConnected,
     connectionStatus: realtimeState.connectionStatus as ConnectionStatus,
     sendTypingIndicator: (isTyping: boolean) => {
-      if (isTyping) {
-        realtimeActions.startTyping();
-      } else {
-        realtimeActions.stopTyping();
-      }
+      // FIXED: Use correct broadcastTyping method from unified realtime
+      realtimeActions.broadcastTyping(isTyping);
+    },
+    sendMessage: (message: any) => {
+      // FIXED: Add missing sendMessage method that UltimateWidget expects
+      return realtimeActions.sendMessage(message);
     },
     sendReadReceipt: (messageId: string) => {
       // Implement read receipt logic if needed

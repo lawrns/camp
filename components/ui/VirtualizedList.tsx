@@ -18,7 +18,7 @@ interface VirtualizedListItem {
   height?: number;
 }
 
-interface VirtualizedListProps<T = any> {
+interface VirtualizedListProps<T = unknown> {
   items: VirtualizedListItem[];
   itemHeight?: number | ((index: number, item: VirtualizedListItem) => number);
   containerHeight: number;
