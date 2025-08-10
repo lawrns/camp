@@ -191,7 +191,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1673,
+                  "duration": 22523,
                   "errors": [],
                   "stdout": [
                     {
@@ -215,7 +215,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-08-10T00:07:58.777Z",
+                  "startTime": "2025-08-10T00:21:32.481Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -231,21 +231,21 @@
       ]
     },
     {
-      "title": "tests/dashboard-ui-functionality.spec.ts",
-      "file": "tests/dashboard-ui-functionality.spec.ts",
+      "title": "tests/widget-simple.spec.ts",
+      "file": "tests/widget-simple.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Dashboard UI Functionality",
-          "file": "tests/dashboard-ui-functionality.spec.ts",
-          "line": 8,
+          "title": "Widget Simple Test",
+          "file": "tests/widget-simple.spec.ts",
+          "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "should render all main inbox interface elements",
-              "ok": false,
+              "title": "should open widget and send message",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -258,257 +258,13 @@
                     {
                       "workerIndex": 1,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 11757,
-                      "error": {
-                        "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"inbox-dashboard\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inbox-dashboard\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"inbox-dashboard\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inbox-dashboard\"]')\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts:27:29",
-                        "location": {
-                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                          "column": 29,
-                          "line": 27
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 25 |\u001b[39m     \u001b[90m// Check main dashboard container\u001b[39m\n \u001b[90m 26 |\u001b[39m     \u001b[36mconst\u001b[39m dashboard \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"inbox-dashboard\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 27 |\u001b[39m     \u001b[36mawait\u001b[39m expect(dashboard)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 28 |\u001b[39m     \n \u001b[90m 29 |\u001b[39m     \u001b[90m// Check conversation list container\u001b[39m\n \u001b[90m 30 |\u001b[39m     \u001b[36mconst\u001b[39m conversationList \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"conversation-list-container\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                            "column": 29,
-                            "line": 27
-                          },
-                          "message": "Error: \u001b[31mTimed out 10000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('[data-testid=\"inbox-dashboard\"]')\nExpected: visible\nReceived: <element(s) not found>\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inbox-dashboard\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 25 |\u001b[39m     \u001b[90m// Check main dashboard container\u001b[39m\n \u001b[90m 26 |\u001b[39m     \u001b[36mconst\u001b[39m dashboard \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"inbox-dashboard\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 27 |\u001b[39m     \u001b[36mawait\u001b[39m expect(dashboard)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 28 |\u001b[39m     \n \u001b[90m 29 |\u001b[39m     \u001b[90m// Check conversation list container\u001b[39m\n \u001b[90m 30 |\u001b[39m     \u001b[36mconst\u001b[39m conversationList \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"conversation-list-container\"]'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts:27:29\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:00.937Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-c7108-in-inbox-interface-elements-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-c7108-in-inbox-interface-elements-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-c7108-in-inbox-interface-elements-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                        "column": 29,
-                        "line": 27
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-028eace80588caa2b919",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 22,
-              "column": 7
-            },
-            {
-              "title": "should implement and test status dropdown functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1724,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ Status dropdown not found - needs implementation\n"
-                        },
-                        {
-                          "text": "📍 Header area found: false\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:13.078Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-3324ff1a5f536a382bd1",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 53,
-              "column": 7
-            },
-            {
-              "title": "should test conversation search and filtering",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1611,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ Search input not found\n"
-                        },
-                        {
-                          "text": "⚠️ Filter \"All\": not found\n"
-                        },
-                        {
-                          "text": "⚠️ Filter \"Unread\": not found\n"
-                        },
-                        {
-                          "text": "⚠️ Filter \"Unassigned\": not found\n"
-                        },
-                        {
-                          "text": "⚠️ Filter \"AI Managed\": not found\n"
-                        },
-                        {
-                          "text": "⚠️ Filter \"Human Managed\": not found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:14.905Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-f2406bb2dab8d8fd94a3",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 89,
-              "column": 7
-            },
-            {
-              "title": "should test conversation management actions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1582,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ No conversations found for management testing\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:16.520Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-96ab5d05d76ce2511b2f",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 136,
-              "column": 7
-            },
-            {
-              "title": "should test message view and interaction",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1610,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ No conversations available for message testing\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:18.106Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-bd5f12a56943a24a423e",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 168,
-              "column": 7
-            },
-            {
-              "title": "should test customer details panel",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1598,
+                      "duration": 2417,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-08-10T00:08:19.719Z",
+                      "startTime": "2025-08-10T00:21:55.621Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -516,171 +272,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "7721e5ffa266295aec32-f7e25b6863f13fcf8250",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 207,
-              "column": 7
-            },
-            {
-              "title": "should test bulk actions and conversation organization",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1579,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ Not enough conversations for bulk actions testing\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:21.321Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-845f325ba351e115d1f5",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 243,
-              "column": 7
-            },
-            {
-              "title": "should test responsive design and mobile compatibility",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3100,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "⚠️ Desktop (1920x1080): layout issues\n"
-                        },
-                        {
-                          "text": "⚠️ Tablet (768x1024): layout issues\n"
-                        },
-                        {
-                          "text": "📱 Mobile menu: not found\n"
-                        },
-                        {
-                          "text": "⚠️ Mobile (375x667): layout issues\n"
-                        },
-                        {
-                          "text": "📱 Mobile menu: not found\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:22.903Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-3b1d2861c9ddda9d40c3",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 287,
-              "column": 7
-            },
-            {
-              "title": "should test keyboard navigation and accessibility",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 11686,
-                      "error": {
-                        "message": "TimeoutError: locator.getAttribute: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"conversation\"]').first()\u001b[22m\n",
-                        "stack": "TimeoutError: locator.getAttribute: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"conversation\"]').first()\u001b[22m\n\n    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts:350:42",
-                        "location": {
-                          "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                          "column": 42,
-                          "line": 350
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 348 |\u001b[39m     \u001b[36mconst\u001b[39m firstConv \u001b[33m=\u001b[39m conversations\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 349 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 350 |\u001b[39m     \u001b[36mconst\u001b[39m hasAriaLabel \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'aria-label'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 351 |\u001b[39m     \u001b[36mconst\u001b[39m hasRole \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'role'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 352 |\u001b[39m     \u001b[36mconst\u001b[39m hasTabIndex \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'tabIndex'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 353 |\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                            "column": 42,
-                            "line": 350
-                          },
-                          "message": "TimeoutError: locator.getAttribute: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"conversation\"]').first()\u001b[22m\n\n\n\u001b[0m \u001b[90m 348 |\u001b[39m     \u001b[36mconst\u001b[39m firstConv \u001b[33m=\u001b[39m conversations\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n \u001b[90m 349 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 350 |\u001b[39m     \u001b[36mconst\u001b[39m hasAriaLabel \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'aria-label'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 351 |\u001b[39m     \u001b[36mconst\u001b[39m hasRole \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'role'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 352 |\u001b[39m     \u001b[36mconst\u001b[39m hasTabIndex \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m firstConv\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'tabIndex'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 353 |\u001b[39m\u001b[0m\n\u001b[2m    at /Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts:350:42\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-08-10T00:08:26.006Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-99b8b-avigation-and-accessibility-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-99b8b-avigation-and-accessibility-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/lukatenbosch/Downloads/campfire-v2/test-results/tests-dashboard-ui-functio-99b8b-avigation-and-accessibility-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/lukatenbosch/Downloads/campfire-v2/e2e/tests/dashboard-ui-functionality.spec.ts",
-                        "column": 42,
-                        "line": 350
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "7721e5ffa266295aec32-68ea6ad2ef8a040246b4",
-              "file": "tests/dashboard-ui-functionality.spec.ts",
-              "line": 319,
+              "id": "7eb290c96b4ed4b7b648-e6f98c1d6e8497fd5e32",
+              "file": "tests/widget-simple.spec.ts",
+              "line": 4,
               "column": 7
             }
           ]
@@ -690,11 +284,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-08-10T00:07:58.435Z",
-    "duration": 39290.471,
-    "expected": 8,
+    "startTime": "2025-08-10T00:21:31.989Z",
+    "duration": 26178.426000000003,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 0,
     "flaky": 0
   }
 }

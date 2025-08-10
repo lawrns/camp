@@ -13,7 +13,7 @@
 "use client";
 
 import React, { Suspense } from "react";
-import InboxDashboard from "@/components/InboxDashboard/index";
+import { OptimizedInboxDashboard } from "@/components/InboxDashboard/OptimizedInboxDashboard";
 import { AuthGuard } from "@/components/auth/auth-guard";
 
 export default React.memo(function InboxPage(): React.ReactElement {
@@ -55,13 +55,8 @@ export default React.memo(function InboxPage(): React.ReactElement {
     <AuthGuard>
       <div id="inbox-root" className="h-screen flex flex-col overflow-hidden">
         <Suspense fallback={<div className="flex items-center justify-center h-full">Loading inbox...</div>}>
-          <InboxDashboard
+          <OptimizedInboxDashboard
             className="h-full w-full"
-            initialSearchQuery={searchQuery}
-            showAdvancedFilters={showAdvancedFilters}
-            setShowAdvancedFilters={setShowAdvancedFilters}
-            showShortcuts={showShortcuts}
-            setShowShortcuts={setShowShortcuts}
           />
         </Suspense>
       </div>

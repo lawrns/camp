@@ -28,6 +28,13 @@ import { useRealtimeSubscriptions } from "./hooks/useRealtimeSubscriptions";
 import { useInboxState } from "./hooks/useInboxState";
 import { getAvatarPath } from "@/lib/utils/avatar";
 
+// Import optimized components for performance
+import { EnhancedSidebar } from "./components/EnhancedSidebar";
+import { EnhancedConversationList } from "./components/EnhancedConversationList";
+import { EnhancedConversationView } from "./components/EnhancedConversationView";
+import { EnhancedCustomerDetails } from "./components/EnhancedCustomerDetails";
+import { StatusDropdown } from "./components/StatusDropdown";
+
 // Import AI components (DASHBOARD-SIDE ONLY)
 
 interface InboxDashboardProps {
