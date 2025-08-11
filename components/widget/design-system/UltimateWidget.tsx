@@ -421,13 +421,33 @@ export function UltimateWidget({
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Failed to create conversation: ${response.status}`);
-      }
+      let newConversationId: string | null = null;
 
-      const result = await response.json();
-      // CRITICAL FIX: Auth endpoint returns conversationId directly
-      const newConversationId = result.conversationId;
+      if (response.ok) {
+        const result = await response.json();
+        // CRITICAL FIX: Auth endpoint returns conversationId directly
+        newConversationId = result.conversationId || null;
+      } else {
+        console.warn('[UltimateWidget] /api/widget/auth failed, falling back to /api/widget/conversations', response.status);
+        // Fallback: create conversation via conversations endpoint
+        const convRes = await fetch('/api/widget/conversations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Organization-ID': organizationId,
+          },
+          body: JSON.stringify({
+            customerName: 'Test Customer',
+            subject: 'Widget Conversation',
+            metadata: { widget_session: true }
+          })
+        });
+        if (!convRes.ok) {
+          throw new Error(`Failed to create conversation (fallback): ${convRes.status}`);
+        }
+        const convJson = await convRes.json();
+        newConversationId = convJson?.conversation?.id || null;
+      }
 
       if (newConversationId) {
         setConversationId(newConversationId);
